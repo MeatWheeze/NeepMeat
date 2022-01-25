@@ -1,4 +1,4 @@
-package com.neepmeat.realistic_fluid.block;
+package com.neep.neepmeat.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
