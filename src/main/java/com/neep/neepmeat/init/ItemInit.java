@@ -1,5 +1,6 @@
-package com.neep.neepmeat;
+package com.neep.neepmeat.init;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.BaseItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;

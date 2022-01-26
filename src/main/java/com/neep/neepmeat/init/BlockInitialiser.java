@@ -1,6 +1,8 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.PipeBlock;
+import com.neep.neepmeat.block.PumpBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -21,6 +23,7 @@ public class BlockInitialiser
 
     public static Block TEST;
     public static Block PIPE;
+    public static Block PUMP;
 
     public static Block registerBlock(String id, Block block)
     {
@@ -32,6 +35,7 @@ public class BlockInitialiser
 //        FLOWING_TEST = registerBlock("fluid_test", new FluidTestBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
         PIPE = registerBlock("pipe", new PipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+        PUMP = registerBlock("pump", new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
         FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());

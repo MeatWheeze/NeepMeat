@@ -1,16 +1,11 @@
 package com.neep.neepmeat;
 
-import com.neep.neepmeat.block.BlockInitialiser;
+import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.enums.WireConnection;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.data.client.model.*;
-import net.minecraft.item.Items;
-import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 
 public class RealisticFluidClient implements ModInitializer
