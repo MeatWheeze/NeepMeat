@@ -3,17 +3,22 @@ package com.neep.neepmeat.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import net.minecraft.block.*;
-import net.minecraft.block.enums.WireConnection;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.LiteralText;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 import java.util.Map;
@@ -33,6 +38,8 @@ public class PipeBlock extends BaseBlock
     public static final BooleanProperty UP_CONNECTION = Properties.UP;
     public static final BooleanProperty DOWN_CONNECTION = Properties.DOWN;
 
+    private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
+
     public static final Map<Direction, BooleanProperty> DIR_TO_CONNECTION = (new ImmutableMap.Builder<Direction, BooleanProperty>()
             .put(Direction.NORTH, NORTH_CONNECTION)
             .put(Direction.EAST, EAST_CONNECTION)
@@ -40,6 +47,15 @@ public class PipeBlock extends BaseBlock
             .put(Direction.WEST, WEST_CONNECTION)
             .put(Direction.DOWN, DOWN_CONNECTION)
             .put(Direction.UP, UP_CONNECTION)
+    ).build();
+
+    public static final Map<Direction, VoxelShape> DIR_SHAPES = (new ImmutableMap.Builder<Direction, VoxelShape>()
+            .put(Direction.NORTH, Block.createCuboidShape(4, 4, 0, 12, 12, 5))
+            .put(Direction.EAST, Block.createCuboidShape(11, 4, 4, 16, 12, 12))
+            .put(Direction.SOUTH, Block.createCuboidShape(4, 4, 11, 12, 12, 16))
+            .put(Direction.WEST, Block.createCuboidShape(0, 4, 4, 5, 12, 12))
+            .put(Direction.UP, Block.createCuboidShape(4, 11, 4, 12, 16, 12))
+            .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 8))
     ).build();
 
     public PipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -58,6 +74,25 @@ public class PipeBlock extends BaseBlock
                 .with(WEST_CONNECTION, false)
                 .with(UP_CONNECTION, false)
                 .with(DOWN_CONNECTION, false));
+
+        for (BlockState state : this.getStateManager().getStates())
+        {
+            SHAPES.put(state, getShapeForState(state));
+        }
+
+    }
+
+    public VoxelShape getShapeForState(BlockState state)
+    {
+        VoxelShape shape = Block.createCuboidShape(4, 4, 4, 12, 12, 12);
+        for (Direction direction : Direction.values())
+        {
+            if (state.get(DIR_TO_CONNECTION.get(direction)))
+            {
+                shape = VoxelShapes.union(shape, DIR_SHAPES.get(direction));
+            }
+        }
+        return shape;
     }
 
     @Override
@@ -69,7 +104,14 @@ public class PipeBlock extends BaseBlock
     @Override
     public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return VoxelShapes.empty();
+        return SHAPES.get(state);
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
+    {
+//        return VoxelShapes.cuboid(0f, 0f, 0f, 1f, 1.0f, 1f);
+        return SHAPES.get(state);
     }
 
     @Override
@@ -112,11 +154,12 @@ public class PipeBlock extends BaseBlock
         {
             state = state.with(SOUTH_CONNECTION, true);
         }
-        if (!up && nNS && nEW && nUD)
+//        System.out.println("up: " + up + ", nNS: " + nNS + ", nEW: " + nEW + ", nUD: " + nUD);
+        if (!up && nNS && nEW)
         {
             state = state.with(UP_CONNECTION, true);
         }
-        if (!down && nNS && nEW && nUD)
+        if (!down && nNS && nEW)
         {
             state = state.with(DOWN_CONNECTION, true);
         }
@@ -199,6 +242,36 @@ public class PipeBlock extends BaseBlock
     {
         BlockState targetState = world.getBlockState(pos.offset(direction));
         return canConnectTo(targetState);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (!player.getAbilities().allowModifyWorld)
+        {
+            return ActionResult.PASS;
+        }
+        if (!world.isClient)
+        {
+            Vec3d hitPos = hit.getPos();
+            Direction direction = hit.getSide();
+            boolean connected = state.get(DIR_TO_CONNECTION.get(direction));
+//            if (!connected)
+//            {
+////                System.out.println(hitPos.subtract(hit.getBlockPos()));
+//            }
+//            else
+//            {
+//
+//            }
+//            System.out.println(connected);
+//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), false), Block.NOTIFY_ALL);
+////            world.setBlockState(pos, Blocks.DIRT.getDefaultState());
+
+//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), false), Block.NOTIFY_ALL);
+            return ActionResult.PASS;
+//        }
+        }
+        return ActionResult.PASS;
     }
 
     @Override
