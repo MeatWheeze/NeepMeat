@@ -15,5 +15,6 @@ public class NeepMeat implements ModInitializer {
 
 		LOGGER.info("Hello Fabric world!");
 		BlockInitialiser.registerBlocks();
+		ItemInit.registerItems();
 	}
 }
