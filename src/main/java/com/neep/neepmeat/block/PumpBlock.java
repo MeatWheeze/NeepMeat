@@ -8,6 +8,10 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -16,7 +20,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, DirectionalFluidAcceptor
+public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, DirectionalFluidAcceptor, FluidNodeProvider
 {
     public PumpBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -40,7 +44,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
     checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> ticker, World world)
     {
-        return expectedType == givenType && !world.isClient? (BlockEntityTicker<A>) ticker : null;
+        return expectedType == givenType && !world.isClient ? (BlockEntityTicker<A>) ticker : null;
     }
 
     @Override
@@ -53,5 +57,16 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
     public boolean connectInDirection(BlockState state, Direction direction)
     {
         return state.get(FACING).equals(direction) || state.get(FACING).getOpposite().equals(direction);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);
+        if (!world.isClient)
+        {
+            be.update(state, world);
+        }
+        return ActionResult.SUCCESS;
     }
 }

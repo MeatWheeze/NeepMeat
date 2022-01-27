@@ -1,24 +1,54 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.block.FluidNodeProvider;
+import com.neep.neepmeat.block.PumpBlock;
+import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PumpBlockEntity extends BlockEntity
 {
+    private FluidNetwork network = null;
+    private Map<Direction, FluidNetwork> sides = new HashMap<>();
+
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.PUMP_BLOCK_ENTITY, pos, state);
+
+        // Create fluid interfaces in connection directions
+        if (state.getBlock() instanceof FluidNodeProvider)
+        {
+            for (Direction direction : Direction.values())
+            {
+                if (((FluidNodeProvider) state.getBlock()).connectInDirection(state, direction))
+                {
+                    sides.put(direction, new FluidNetwork(direction, pos));
+                }
+            }
+        }
     }
 
     private int number = 7;
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
+    }
 
+    public void update(BlockState state, World world)
+    {
+        if (network == null)
+        {
+            network = new FluidNetwork(state.get(PumpBlock.FACING), pos);
+        }
+        network.refresh(world);
     }
 
     @Override
