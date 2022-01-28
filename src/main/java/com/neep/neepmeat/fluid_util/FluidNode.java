@@ -1,6 +1,8 @@
 package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.block.FluidAcceptor;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -17,13 +19,15 @@ public class FluidNode
     private final BlockPos pos;
     public float pressure = 4;
     public FluidAcceptor.AcceptorModes mode;
-    private FluidNetwork2 network = null;
+    private FluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
+    private final Storage<FluidVariant> storage;
 
-    public FluidNode(BlockPos pos, Direction face, FluidAcceptor.AcceptorModes mode)
+    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode)
     {
         this.face = face;
         this.pos = pos;
+        this.storage = storage;
         this.mode = mode;
     }
 
@@ -33,7 +37,7 @@ public class FluidNode
         return "\n" + this.pos.toString() + " " + face;
     }
 
-    public void setNetwork(FluidNetwork2 network)
+    public void setNetwork(FluidNetwork network)
     {
         this.network = network;
         distances.clear();
@@ -51,7 +55,7 @@ public class FluidNode
     {
         if (network == null)
         {
-            network = new FluidNetwork2(world);
+            network = new FluidNetwork(world);
         }
         network.rebuild(pos, face);
     }
