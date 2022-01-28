@@ -126,7 +126,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         boolean bl7;
         boolean bl = isNotConnected(state);
-        state = this.getConnections(world, this.getDefaultState(), pos);
+        state = this.getConnectedState(world, this.getDefaultState(), pos);
         if (bl && isNotConnected(state))
         {
             return state;
@@ -233,7 +233,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 ;
     }
 
-    private BlockState getConnections(BlockView world, BlockState state, BlockPos pos)
+    private BlockState getConnectedState(BlockView world, BlockState state, BlockPos pos)
     {
         for (Direction direction : Direction.values())
         {

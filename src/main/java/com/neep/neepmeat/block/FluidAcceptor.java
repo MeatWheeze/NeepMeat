@@ -31,6 +31,7 @@ public interface FluidAcceptor
 
     enum AcceptorModes
     {
+        NONE,
         INSERT_ONLY,
         EXTRACT_ONLY,
         INSERT_EXTRACT
