@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.security.cert.Extension;
 import java.util.*;
 
 public class FluidNetwork2
@@ -27,7 +28,7 @@ public class FluidNetwork2
     {
         discoverNodes(startPos, face);
         buildPressures();
-        tick();
+//        tick();
     }
 
     public void tick()
@@ -45,61 +46,71 @@ public class FluidNetwork2
 
     public void buildPressures()
     {
-        System.out.println("pipes: " + networkPipes.keySet());
-        for (FluidNode node : connectedNodes)
+//        System.out.println("pipes: " + networkPipes.keySet());
+        try
         {
-            node.setNetwork(this);
-
-            // add initial location to queue
-            // iterate through queue
-            //      calculate pressure based on distance (assuming that pressure drops to 0 at level 10)
-            //      store pressure somehow
-            //      get adjacent pipes
-            //      add adjacent pipes to queue
-            //      remove item from queue
-
-            List<BlockPos> nextSet = new ArrayList<>();
-            List<BlockPos> visited = new ArrayList<>();
-
-            pipeQueue.clear();
-            pipeQueue.add(node.getPos().offset(node.getFace()));
-
-            for (int i = 0; i < 10; ++i)
+            for (FluidNode node : connectedNodes)
             {
-//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
-                for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
+                node.setNetwork(this);
+
+                // add initial location to queue
+                // iterate through queue
+                //      calculate pressure based on distance (assuming that pressure drops to 0 at level 10)
+                //      store pressure somehow
+                //      get adjacent pipes
+                //      add adjacent pipes to queue
+                //      remove item from queue
+
+                List<BlockPos> nextSet = new ArrayList<>();
+                List<BlockPos> visited = new ArrayList<>();
+
+                pipeQueue.clear();
+                pipeQueue.add(node.getPos().offset(node.getFace()));
+
+                for (int i = 0; i < 10; ++i)
                 {
-                    BlockPos current = iterator.next();
-                    networkPipes.get(current).setDistance(i + 1);
-                    visited.add(current);
-//                    System.out.println(current);
-                    for (Direction direction : networkPipes.get(current).connections)
+//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
+                    for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
                     {
-                        if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
+                        BlockPos current = iterator.next();
+                        networkPipes.get(current).setDistance(i + 1);
+                        visited.add(current);
+//                    System.out.println(current);
+                        for (Direction direction : networkPipes.get(current).connections)
                         {
-                            nextSet.add(current.offset(direction));
+                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
+                            {
+                                nextSet.add(current.offset(direction));
 
 //                            networkPipes.get(current).addPressure(node.getPressure() * (10f - (float) i) / 10f);
 //                            System.out.println(i);
+                            }
                         }
+                        iterator.remove();
                     }
-                    iterator.remove();
+                    pipeQueue.addAll(nextSet);
+                    nextSet.clear();
                 }
-                pipeQueue.addAll(nextSet);
-                nextSet.clear();
-            }
 //            System.out.println(networkPipes.values());
 
-            // TODO: optimise further
-            for (FluidNode node1 : connectedNodes)
-            {
-                if (node1.equals(node))
+                // TODO: optimise further
+                for (FluidNode node1 : connectedNodes)
                 {
-                    continue;
+                    if (node1.equals(node))
+                    {
+                        continue;
+                    }
+                    // thing here
+//                    System.out.println(node1);
+//                int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
+                    int distanceToNode = 1;
+                    node.distances.put(node1, distanceToNode);
                 }
-                int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
-                node.distances.put(node1, distanceToNode);
             }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
         }
     }
 
@@ -140,7 +151,7 @@ public class FluidNetwork2
                             if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
-                                networkPipes.put(next, new PipeSegment(next, state2));
+                                networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
                             }
                         }
                         else if (state2.getBlock() instanceof FluidNodeProvider)
@@ -158,7 +169,7 @@ public class FluidNetwork2
             }
             pipeQueue.addAll(nextSet);
         }
-        System.out.println("targets: " + connectedNodes);
+//        System.out.println("targets: " + connectedNodes);
     }
 
 }

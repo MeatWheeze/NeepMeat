@@ -41,7 +41,6 @@ public class FluidNode
 
     public void tick(World world)
     {
-//        rebuildNetwork(world);
         if (network != null)
         {
             network.tick();
@@ -74,6 +73,11 @@ public class FluidNode
 
     public void transmitFluid(FluidNode node)
     {
+        if (distances.get(node) == null)
+        {
+            System.out.println("transmit null");
+            return;
+        }
         float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
 //        System.out.println(node + ", " + distances.get(node) + ", " + pressureGradient);
     }

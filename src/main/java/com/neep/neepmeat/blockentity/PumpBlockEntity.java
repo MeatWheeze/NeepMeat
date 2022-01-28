@@ -43,7 +43,7 @@ public class PumpBlockEntity extends BlockEntity
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
         // TODO: work out why this could be null
-        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
+//        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
     }
 
     public void update(BlockState state, World world)
