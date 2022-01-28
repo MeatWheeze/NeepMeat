@@ -15,6 +15,7 @@ public class PipeSegment extends Pair<BlockPos, Float>
     List<Direction> connections = new ArrayList<>();
     private float pressure;
     private int distance;
+    private boolean visited;
 
     public PipeSegment(BlockPos pos)
     {
@@ -80,5 +81,15 @@ public class PipeSegment extends Pair<BlockPos, Float>
     public void setDistance(int distance)
     {
         this.distance = distance;
+    }
+
+    public boolean isVisited()
+    {
+        return visited;
+    }
+
+    public void setVisited(boolean visited)
+    {
+        this.visited = visited;
     }
 }

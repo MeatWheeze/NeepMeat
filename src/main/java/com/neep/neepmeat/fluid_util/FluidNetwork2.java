@@ -14,9 +14,9 @@ public class FluidNetwork2
 {
     private World world;
 
-    private List<FluidNode> connectedNodes = new ArrayList<>();
+    private HashSet<FluidNode> connectedNodes = new HashSet<>();
 //    private List<PipeSegment> networkPipes = new ArrayList<>();
-    private Map<BlockPos, PipeSegment> networkPipes = new LinkedHashMap<>();
+    private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
     private List<BlockPos> pipeQueue = new ArrayList<>();
 
     public FluidNetwork2(World world)
@@ -53,16 +53,28 @@ public class FluidNetwork2
             {
                 node.setNetwork(this);
 
-                // add initial location to queue
-                // iterate through queue
-                //      calculate pressure based on distance (assuming that pressure drops to 0 at level 10)
-                //      store pressure somehow
-                //      get adjacent pipes
-                //      add adjacent pipes to queue
-                //      remove item from queue
+//                PipeSegment pos = networkPipes.get(node.getPos().offset(node.getFace()));
+//                pos.
+
+//                BlockPos last = null;
+//                int distance = 0;
+//                for (Iterator<BlockPos> iterator = networkPipes.keySet().iterator(); iterator.hasNext();)
+//                {
+//                    BlockPos current = iterator.next();
+//                    if (last == null)
+//                    {
+//                        last = current;
+//                        networkPipes.get(last).setDistance(distance);
+//                        current = iterator.next();
+//                    }
+//
+//                    if (current.isWithinDistance(last, 1.1))
+//
+//                    last = current;
+//                }
 
                 List<BlockPos> nextSet = new ArrayList<>();
-                List<BlockPos> visited = new ArrayList<>();
+                networkPipes.values().forEach((segment) -> segment.setVisited(false));
 
                 pipeQueue.clear();
                 pipeQueue.add(node.getPos().offset(node.getFace()));
@@ -74,16 +86,13 @@ public class FluidNetwork2
                     {
                         BlockPos current = iterator.next();
                         networkPipes.get(current).setDistance(i + 1);
-                        visited.add(current);
-//                    System.out.println(current);
+                        networkPipes.get(current).setVisited(true);
                         for (Direction direction : networkPipes.get(current).connections)
                         {
-                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
+                            if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
+//                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
                             {
                                 nextSet.add(current.offset(direction));
-
-//                            networkPipes.get(current).addPressure(node.getPressure() * (10f - (float) i) / 10f);
-//                            System.out.println(i);
                             }
                         }
                         iterator.remove();
@@ -91,7 +100,6 @@ public class FluidNetwork2
                     pipeQueue.addAll(nextSet);
                     nextSet.clear();
                 }
-//            System.out.println(networkPipes.values());
 
                 // TODO: optimise further
                 for (FluidNode node1 : connectedNodes)
@@ -102,8 +110,8 @@ public class FluidNetwork2
                     }
                     // thing here
 //                    System.out.println(node1);
-//                int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
-                    int distanceToNode = 1;
+                int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
+//                    int distanceToNode = 1;
                     node.distances.put(node1, distanceToNode);
                 }
             }
