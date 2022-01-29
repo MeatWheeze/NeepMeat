@@ -2,9 +2,18 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.maths.NMMaths;
+import com.neep.neepmeat.maths.NMVec2f;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -20,6 +29,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,51 +134,52 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 
     private BlockState getPlacementState(BlockView world, BlockState state, BlockPos pos)
     {
-        boolean bl7;
         boolean bl = isNotConnected(state);
         state = this.getConnectedState(world, this.getDefaultState(), pos);
         if (bl && isNotConnected(state))
         {
             return state;
         }
-        boolean north = state.get(NORTH_CONNECTION);
-        boolean south = state.get(SOUTH_CONNECTION);
-        boolean east = state.get(EAST_CONNECTION);
-        boolean west = state.get(WEST_CONNECTION);
-        boolean up = state.get(UP_CONNECTION);
-        boolean down = state.get(DOWN_CONNECTION);
-        boolean nNS = !north && !south;
-        boolean nEW = !east && !west;
-        boolean nUD = !up && !down;
-        if (!west && nNS & nUD)
-        {
-            state = state.with(WEST_CONNECTION, true);
-        }
-        if (!east && nNS && nUD)
-        {
-            state = state.with(EAST_CONNECTION, true);
-        }
-        if (!north && nEW && nUD)
-        {
-            state = state.with(NORTH_CONNECTION, true);
-        }
-        if (!south && nEW && nUD)
-        {
-            state = state.with(SOUTH_CONNECTION, true);
-        }
-//        System.out.println("up: " + up + ", nNS: " + nNS + ", nEW: " + nEW + ", nUD: " + nUD);
-        if (!up && nNS && nEW)
-        {
-            state = state.with(UP_CONNECTION, true);
-        }
-        if (!down && nNS && nEW)
-        {
-            state = state.with(DOWN_CONNECTION, true);
-        }
+
+//        boolean north = state.get(NORTH_CONNECTION);
+//        boolean south = state.get(SOUTH_CONNECTION);
+//        boolean east = state.get(EAST_CONNECTION);
+//        boolean west = state.get(WEST_CONNECTION);
+//        boolean up = state.get(UP_CONNECTION);
+//        boolean down = state.get(DOWN_CONNECTION);
+//        boolean nNS = !north && !south;
+//        boolean nEW = !east && !west;
+//        boolean nUD = !up && !down;
+//        if (!west && nNS & nUD)
+//        {
+//            state = state.with(WEST_CONNECTION, true);
+//        }
+//        if (!east && nNS && nUD)
+//        {
+//            state = state.with(EAST_CONNECTION, true);
+//        }
+//        if (!north && nEW && nUD)
+//        {
+//            state = state.with(NORTH_CONNECTION, true);
+//        }
+//        if (!south && nEW && nUD)
+//        {
+//            state = state.with(SOUTH_CONNECTION, true);
+//        }
+////        System.out.println("up: " + up + ", nNS: " + nNS + ", nEW: " + nEW + ", nUD: " + nUD);
+//        if (!up && nNS && nEW)
+//        {
+//            state = state.with(UP_CONNECTION, true);
+//        }
+//        if (!down && nNS && nEW)
+//        {
+//            state = state.with(DOWN_CONNECTION, true);
+//        }
         return state;
     }
 
     @Override
+    // TODO: Remove things from here.
     public void prepare(BlockState state, WorldAccess world, BlockPos pos, int flags, int maxUpdateDepth)
     {
         BlockPos.Mutable mutable = new BlockPos.Mutable();
@@ -192,17 +203,30 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         BlockState targetState = world.getBlockState(pos.offset(direction));
-        boolean connection = canConnectTo(targetState, direction.getOpposite());
+        boolean connection = canConnectTo(targetState, direction.getOpposite(), (World) world, neighborPos);
+//        if (!world.isClient())
+//        {
+//            System.out.println(direction);
+//            connection = connection || enforceApiConnections((World) world, pos, state, direction);
+//        }
 
         if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
         {
             return state.with(DIR_TO_CONNECTION.get(direction), connection);
         }
-        return this.getPlacementState(world, this.getDefaultState().with(DIR_TO_CONNECTION.get(direction), connection), pos);
+//        return this.getPlacementState(world, state.with(DIR_TO_CONNECTION.get(direction), connection), pos);
+        return state.with(DIR_TO_CONNECTION.get(direction), connection);
     }
 
-    // TODO: Add other things
-    public boolean canConnectTo(BlockState state, Direction direction)
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        System.out.println(pos);
+        enforceApiConnections(world, pos, state);
+    }
+
+    // Only takes into account other pipes, connections to fluid containers are enforced later.
+    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
         if (state.getBlock() instanceof FluidAcceptor)
         {
@@ -241,39 +265,85 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             if (property) continue;
             BlockPos adjPos = pos.offset(direction);
             BlockState adjState = world.getBlockState(adjPos);
-            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite()));
+            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos));
         }
         return state;
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (!player.getAbilities().allowModifyWorld)
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        enforceApiConnections(world, pos, state);
+    }
+
+    private void enforceApiConnections(World world, BlockPos pos, BlockState state)
+    {
+        if (!world.isClient)
+        {
+            // Connect to fluid containers after placing
+            for (Direction direction : Direction.values())
+            {
+                if (canConnectApi(world, pos, state, direction))
+                {
+                    world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), true), Block.NOTIFY_ALL);
+                }
+            }
+        }
+    }
+
+    private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
+    {
+        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+        return storage != null;
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+//        if (!player.getAbilities().allowModifyWorld)
+//        {
+//            return ActionResult.PASS;
+//        }
+        // There must be an easier way to do this.
+        if (player.getStackInHand(hand).getItem() instanceof BlockItem
+                && (((BlockItem) player.getStackInHand(hand).getItem()).getBlock().equals(BlockInitialiser.PIPE)))
         {
             return ActionResult.PASS;
         }
         if (!world.isClient)
         {
-            Vec3d hitPos = hit.getPos();
             Direction direction = hit.getSide();
-            boolean connected = state.get(DIR_TO_CONNECTION.get(direction));
-//            if (!connected)
-//            {
-////                System.out.println(hitPos.subtract(hit.getBlockPos()));
-//            }
-//            else
-//            {
-//
-//            }
-//            System.out.println(connected);
-//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), false), Block.NOTIFY_ALL);
-////            world.setBlockState(pos, Blocks.DIRT.getDefaultState());
 
-//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), false), Block.NOTIFY_ALL);
-            return ActionResult.PASS;
+            Vec3d hitPos = hit.getPos();
+            NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
+            System.out.println(relative);
+
+            Direction changeDirection = direction;
+            if (!relative.isWithin(0.5f, 0.5f, 0.25f))
+            {
+                // X axis case
+                if (relative.getY() > 0.75)
+                    changeDirection = Direction.SOUTH;
+                if (relative.getY() < 0.25)
+                    changeDirection = Direction.NORTH;
+                if (relative.getX() < 0.25)
+                    changeDirection = Direction.DOWN;
+                if (relative.getX() > 0.75)
+                    changeDirection = Direction.UP;
+
+                switch (direction.getAxis())
+                {
+                    case Y -> changeDirection = changeDirection.rotateClockwise(Direction.Axis.Z);
+                    case Z -> changeDirection = NMMaths.swapDirections(changeDirection.rotateClockwise(Direction.Axis.Y));
+                }
+            }
+            boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection));
+            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), !connected));
+
+            return ActionResult.SUCCESS;
 //        }
         }
-        return ActionResult.PASS;
+        return ActionResult.SUCCESS;
     }
 
     public static Pair<List<BlockPos>, List<BlockPos>> findNodes(BlockPos pos, Direction fromDirection, List<BlockPos> visited, World world, int level)
