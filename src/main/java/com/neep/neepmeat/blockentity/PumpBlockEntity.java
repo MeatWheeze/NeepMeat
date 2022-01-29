@@ -21,6 +21,10 @@ import java.util.Map;
 
 public class PumpBlockEntity extends BlockEntity implements Storage<FluidVariant>
 {
+
+    // Create positive pressure at front, negative pressure at rear.
+    // When fluid storage is directly in front, redirect insertions to neighboring storage.
+
     private Map<Direction, FluidNode> sides = new HashMap<>();
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
@@ -72,6 +76,18 @@ public class PumpBlockEntity extends BlockEntity implements Storage<FluidVariant
     public FluidNode getNode(Direction direction)
     {
         return sides.get(direction);
+    }
+
+    @Override
+    public boolean supportsExtraction()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean supportsInsertion()
+    {
+        return true;
     }
 
     @Override
