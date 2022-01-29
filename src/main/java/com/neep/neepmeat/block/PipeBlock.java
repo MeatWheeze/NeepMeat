@@ -285,9 +285,10 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             {
                 if (canConnectApi(world, pos, state, direction))
                 {
-                    world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction), true), Block.NOTIFY_ALL);
+                    state = state.with(DIR_TO_CONNECTION.get(direction), true);
                 }
             }
+            world.setBlockState(pos, state, Block.NOTIFY_ALL);
         }
     }
 
@@ -305,8 +306,9 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 //            return ActionResult.PASS;
 //        }
         // There must be an easier way to do this.
-        if (player.getStackInHand(hand).getItem() instanceof BlockItem
-                && (((BlockItem) player.getStackInHand(hand).getItem()).getBlock().equals(BlockInitialiser.PIPE)))
+//        if (player.getStackInHand(hand).getItem() instanceof BlockItem
+//                && (((BlockItem) player.getStackInHand(hand).getItem()).getBlock().equals(BlockInitialiser.PIPE)))
+        if (!player.getStackInHand(hand).equals(ItemStack.EMPTY))
         {
             return ActionResult.PASS;
         }

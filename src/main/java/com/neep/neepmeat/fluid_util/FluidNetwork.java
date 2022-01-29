@@ -168,23 +168,26 @@ public class FluidNetwork
                                 networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
                             }
                         }
-//                        else if (state2.getBlock() instanceof FluidNodeProvider)
-//                        {
-//                            FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
-//                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
-//                            {
-////                                System.out.println("target: " + next.toString());
-//                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
-//                            }
-//                        }
+                        else if (state2.getBlock() instanceof FluidNodeProvider)
+                        {
+                            FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
+                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
+                            {
+//                                System.out.println("target: " + next.toString());
+                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
+                            }
+                        }
                         else if (state2.hasBlockEntity())
                         {
-                            System.out.println(next);
                             {
                                 BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
                                 Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
-//                                Storage<FluidVariant> storage = cache.find(direction.getOpposite());
-                                System.out.println(storage);
+                                if (storage != null)
+                                {
+                                    FluidNode node = new FluidNode(next, direction.getOpposite(), storage, FluidAcceptor.AcceptorModes.INSERT_EXTRACT, 0);
+                                    System.out.println(node);
+                                    connectedNodes.add(node);
+                                }
                             }
                         }
                     }

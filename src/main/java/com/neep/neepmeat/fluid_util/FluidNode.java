@@ -23,7 +23,7 @@ public class FluidNode
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
-    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode)
+    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode, float pressure)
     {
         this.face = face;
         this.pos = pos;
