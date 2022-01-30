@@ -54,8 +54,8 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
-//        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
-//        be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
+        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
+        be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
     }
 
     public void update(BlockState state, World world)

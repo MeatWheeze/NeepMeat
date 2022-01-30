@@ -97,18 +97,28 @@ public class FluidNode
 
         float r = 0.5f;
 
-        // I don't know what this does.
+        // This is supposed to calculate sum(r^4 / L)
         AtomicReference<Float> sum = new AtomicReference<>((float) 0);
         distances.values().forEach((distance) -> sum.updateAndGet(v -> (v + ((float) Math.pow(r, 4) / (float) distance))));
 //
-        float branchFlow = 500 * (pressure - node.getPressure()) * (float) ((Math.pow(r, 4) / distances.get(node)) / sum.get());
+        float branchFlow = 500 * (pressure) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get());
+//        System.out.println(branchFlow);
 
 //        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
 //        float flow = - 4050 * pressureGradient / distances.values().size();
 
-        long transferAmount = (branchFlow) > 0 ? (long) branchFlow : 0;
+//        long transferAmount = (branchFlow) > 0 ? (long) branchFlow : 0;
 //        long transferAmount = (flow) > 0 ? (long) flow : 0;
-        long amountMoved = StorageUtil.move(storage, node.storage, variant -> true,  transferAmount, null);
+        long amountMoved = 0;
+        if (branchFlow >= 0)
+        {
+            amountMoved = StorageUtil.move(storage, node.storage, variant -> true, (long) branchFlow, null);
+        }
+        else
+        {
+            amountMoved = StorageUtil.move(node.storage, storage, variant -> true, (long) - branchFlow, null);
+
+        }
 //        System.out.print(node + ", " + node.getPressure() + ", amount: " + amountMoved);
     }
 
