@@ -4,15 +4,18 @@ import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
+import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.WorldView;
 
-public class BaseFacingBlock extends FacingBlock
+public class BaseHorFacingBlock extends HorizontalFacingBlock
 {
     BaseBlockItem blockItem;
 
-    public BaseFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
@@ -22,7 +25,8 @@ public class BaseFacingBlock extends FacingBlock
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlayerLookDirection());
+        return context.getSide().getAxis().isVertical() ? getDefaultState() :
+                this.getDefaultState().with(FACING, context.getSide().getOpposite());
     }
 
     @Override
@@ -31,4 +35,13 @@ public class BaseFacingBlock extends FacingBlock
         builder.add(FACING);
     }
 
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+    {
+//        Direction direction = state.get(FACING);
+//        BlockPos blockPos = pos.offset(direction.getOpposite());
+//        BlockState blockState = world.getBlockState(blockPos);
+//        return blockState.isSideSolidFullSquare(world, blockPos, direction);
+        return state.hasBlockEntity();
+    }
 }
