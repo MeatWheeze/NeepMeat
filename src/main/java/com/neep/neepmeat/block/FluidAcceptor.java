@@ -31,10 +31,23 @@ public interface FluidAcceptor
 
     enum AcceptorModes
     {
-        NONE,
-        INSERT_ONLY,
-        EXTRACT_ONLY,
-        INSERT_EXTRACT
+
+        NONE(0),
+        INSERT_ONLY(-5),
+        EXTRACT_ONLY(5),
+        INSERT_EXTRACT(0);
+
+        private final float pressure;
+
+        public float getPressure()
+        {
+            return pressure;
+        }
+
+        AcceptorModes(float pressure)
+        {
+            this.pressure = pressure;
+        }
     }
 
 }

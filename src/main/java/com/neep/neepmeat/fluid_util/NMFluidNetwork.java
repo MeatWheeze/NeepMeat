@@ -39,7 +39,6 @@ public class NMFluidNetwork
 
     public void tick()
     {
-//        System.out.println(connectedNodes);
         for (FluidNode node : connectedNodes)
         {
             for (FluidNode targetNode : connectedNodes)
@@ -116,10 +115,9 @@ public class NMFluidNetwork
                     {
                         continue;
                     }
-                    // thing here
                     int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
-
                     node.distances.put(node1, distanceToNode);
+//                    node.distances.put(node1, 1);
                 }
             }
         }

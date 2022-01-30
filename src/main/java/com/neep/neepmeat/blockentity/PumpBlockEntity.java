@@ -35,14 +35,15 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
         buffer = new FluidBuffer(this, FluidConstants.BLOCK);
         // Create fluid interfaces in connection directions
-        if (state.getBlock() instanceof FluidNodeProvider)
+        if (state.getBlock() instanceof FluidNodeProvider nodeProvider)
         {
             for (Direction direction : Direction.values())
             {
-                FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
+//                FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
                 if (nodeProvider.connectInDirection(state, direction))
                 {
-                    sides.put(direction, new FluidNode(pos, direction, this.getBuffer(null), nodeProvider.getDirectionMode(state, direction), 5));
+                    FluidAcceptor.AcceptorModes mode = nodeProvider.getDirectionMode(state, direction);
+                    sides.put(direction, new FluidNode(pos, direction, this.getBuffer(null), mode, mode.getPressure()));
                     sideModes.put(direction, nodeProvider.getDirectionMode(state, direction));
                 }
             }
@@ -53,13 +54,14 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
-        // TODO: work out why this could be null
-        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
+//        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
+//        be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
     }
 
     public void update(BlockState state, World world)
     {
         sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
+        sides.get(state.get(PumpBlock.FACING).getOpposite()).rebuildNetwork(world);
     }
 
     @Override
