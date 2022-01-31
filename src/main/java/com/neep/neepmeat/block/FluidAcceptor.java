@@ -33,20 +33,22 @@ public interface FluidAcceptor
     {
 
         NONE(0),
-        INSERT_ONLY(-5),
-        EXTRACT_ONLY(5),
+        PULL(-1),
+        PUSH(1),
+        INSERT_ONLY(0),
+        EXTRACT_ONLY(0),
         INSERT_EXTRACT(0);
 
-        private final float pressure;
+        private final float flow;
 
-        public float getPressure()
+        public float getFlow()
         {
-            return pressure;
+            return flow;
         }
 
         AcceptorModes(float pressure)
         {
-            this.pressure = pressure;
+            this.flow = pressure;
         }
     }
 

@@ -67,11 +67,11 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
 //        return state.get(FACING).equals(direction)
         if (state.get(FACING).equals(direction))
         {
-            return AcceptorModes.EXTRACT_ONLY;
+            return AcceptorModes.PUSH;
         }
         else if (state.get(FACING).equals(direction.getOpposite()))
         {
-            return AcceptorModes.INSERT_ONLY;
+            return AcceptorModes.PULL;
         }
         return AcceptorModes.NONE;
     }

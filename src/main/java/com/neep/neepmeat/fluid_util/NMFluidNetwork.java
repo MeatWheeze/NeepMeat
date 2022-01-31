@@ -2,11 +2,13 @@ package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -17,14 +19,34 @@ import java.util.*;
 public class NMFluidNetwork
 {
     private World world;
+    public static int UPDATE_DISTANCE = 5;
     private HashSet<FluidNode> connectedNodes = new HashSet<>();
 //    private List<PipeSegment> networkPipes = new ArrayList<>();
     private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
     private List<BlockPos> pipeQueue = new ArrayList<>();
 
+    // My pet memory leak.
+    public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
+
+    static
+    {
+        ServerTickEvents.END_SERVER_TICK.register(NMFluidNetwork::tickNetwork);
+    }
+
+    private static void tickNetwork(MinecraftServer minecraftServer)
+    {
+        LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+    }
+
+    public static void tickNetwork(ServerWorld world)
+    {
+
+    }
+
     public NMFluidNetwork(World world)
     {
         this.world = world;
+        LOADED_NETWORKS.add(this);
     }
 
     public void rebuild(BlockPos startPos, Direction face)
@@ -33,12 +55,13 @@ public class NMFluidNetwork
         {
             discoverNodes(startPos, face);
             buildPressures();
-        tick();
+            tick();
         }
     }
 
     public void tick()
     {
+//        buildPressures();
         for (FluidNode node : connectedNodes)
         {
 //            System.out.println(node);
@@ -87,7 +110,7 @@ public class NMFluidNetwork
                 pipeQueue.clear();
                 pipeQueue.add(node.getPos().offset(node.getFace()));
 
-                for (int i = 0; i < 10; ++i)
+                for (int i = 0; i < UPDATE_DISTANCE; ++i)
                 {
 //                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
                     for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
@@ -112,7 +135,7 @@ public class NMFluidNetwork
                 // TODO: optimise further
                 for (FluidNode node1 : connectedNodes)
                 {
-                    if (node1.equals(node))
+                    if (node1.equals(node) || node1.mode == FluidAcceptor.AcceptorModes.NONE)
                     {
                         continue;
                     }
@@ -138,11 +161,10 @@ public class NMFluidNetwork
         List<BlockPos> nextSet = new ArrayList<>();
 
         networkPipes.put(startPos.offset(face), new PipeSegment(startPos.offset(face), world.getBlockState(startPos.offset(face))));
-//            visitedPipes.put(start, 10f);
         pipeQueue.add(startPos.offset(face));
 
         // Pipe search depth
-        for (int i = 0; i < 10; ++i)
+        for (int i = 0; i < UPDATE_DISTANCE; ++i)
         {
             nextSet.clear();
             for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
