@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNode;
+import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.blockentity.PumpBlockEntity;
