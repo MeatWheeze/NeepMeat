@@ -1,10 +1,11 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.block.FluidAcceptor;
+import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
 import com.neep.neepmeat.fluid_util.FluidBuffer;
 import com.neep.neepmeat.fluid_util.FluidNode;
+import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
@@ -25,9 +26,9 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     // Creates positive pressure at front, negative pressure at rear.
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
-    private Map<Direction, FluidNode> sides = new HashMap<>();
-    private Map<Direction, FluidAcceptor.AcceptorModes> sideModes = new HashMap<>();
-    private FluidBuffer buffer;
+    private final Map<Direction, AcceptorModes > sideModes = new HashMap<>();
+    private final FluidBuffer buffer;
+    private NMFluidNetwork network;
     private boolean needsUpdate;
     private boolean isActive;
 
@@ -45,21 +46,37 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 //                FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
                 if (nodeProvider.connectInDirection(state, direction))
                 {
-                    FluidAcceptor.AcceptorModes mode = nodeProvider.getDirectionMode(state, direction);
-                    sides.put(direction, new FluidNode(pos, direction, this.getBuffer(null), mode, mode.getFlow()));
+                    AcceptorModes mode = nodeProvider.getDirectionMode(state, direction);
+//                    sides.put(direction, new FluidNode(pos, direction, this.getBuffer(null), mode, mode.getFlow()));
                     sideModes.put(direction, mode);
                 }
             }
         }
     }
 
-    private int number = 7;
+    @Override
+    public void markRemoved()
+    {
+        super.markRemoved();
+//        sides.clear();
+//        update(getCachedState(), getWorld());
+    }
+
+    @Override
+    public void setWorld(World world)
+    {
+        super.setWorld(world);
+    }
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
+        if (be.isRemoved())
+        {
+            be.setNeedsUpdate(true);
+        }
         if (be.needsUpdate)
         {
-            be.update(be.getCachedState(), be.getWorld());
+//            be.update(be.getCachedState(), be.getWorld());
         }
         if (!world.isReceivingRedstonePower(pos))
         {
@@ -73,35 +90,39 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
         }
     }
 
+    public void createNetwork()
+    {
+        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING));
+        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING).getOpposite());
+    }
+
     public void setActive(boolean active)
     {
         if (active != isActive)
         {
             update(getCachedState(), getWorld());
         }
+
+        BlockState blockState = getCachedState();
+
         if (!active)
         {
-            sides.get(getCachedState().get(PumpBlock.FACING)).setMode(FluidAcceptor.AcceptorModes.NONE);
-            sides.get(getCachedState().get(PumpBlock.FACING).getOpposite()).setMode(FluidAcceptor.AcceptorModes.NONE);
+            sideModes.replace(blockState.get(PumpBlock.FACING), AcceptorModes.NONE);
+            sideModes.replace(blockState.get(PumpBlock.FACING).getOpposite(), AcceptorModes.NONE);
         }
         else
         {
-            sides.get(getCachedState().get(PumpBlock.FACING)).setMode(FluidAcceptor.AcceptorModes.PUSH);
-            sides.get(getCachedState().get(PumpBlock.FACING).getOpposite()).setMode(FluidAcceptor.AcceptorModes.PULL);
+            sideModes.replace(blockState.get(PumpBlock.FACING), AcceptorModes.PUSH);
+            sideModes.replace(blockState.get(PumpBlock.FACING).getOpposite(), AcceptorModes.PULL);
         }
         this.isActive = active;
     }
 
     public void update(BlockState state, World world)
     {
-        sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
-        sides.get(state.get(PumpBlock.FACING).getOpposite()).rebuildNetwork(world);
-//        System.out.println(sides.values().forEach(););
-//        sides.values().forEach(System.out::println);
-        for (FluidNode node : sides.values())
-        {
-//            System.out.println(node.mode);
-        }
+//        sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
+//        sides.get(state.get(PumpBlock.FACING).getOpposite()).rebuildNetwork(world);
+        createNetwork();
         needsUpdate = false;
     }
 
@@ -122,14 +143,15 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
     public FluidNode getNode(Direction direction)
     {
-        return sides.get(direction);
+        Direction facing = getCachedState().get(PumpBlock.FACING);
+        return new FluidNode(pos, direction, this.getBuffer(direction), sideModes.get(direction), 2);
     }
 
     @Override
     @Nullable
     public FluidBuffer getBuffer(Direction direction)
     {
-//        return sideModes.get(direction) != FluidAcceptor.AcceptorModes.NONE
+//        return sideModes.get(direction) != FluidAcceptor.AcceptorModes NONE
 //                || direction == null ? buffer : null;
         return buffer;
     }

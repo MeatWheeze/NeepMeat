@@ -1,6 +1,5 @@
 package com.neep.neepmeat.fluid_util;
 
-import com.neep.neepmeat.block.FluidAcceptor;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -21,18 +20,18 @@ public class FluidNode
     private final Direction face;
     private final BlockPos pos;
     public float flow;
-    public FluidAcceptor.AcceptorModes mode;
+    public AcceptorModes mode;
     private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
-    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode, float flow)
+    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
         this.face = face;
         this.pos = pos;
         this.storage = storage;
         this.mode = mode;
-        this.flow = flow;
+        this.flow = mode.getFlow() * flowMultiplier;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class FluidNode
         return "\n" + this.pos.toString() + " " + face;
     }
 
-    public void setMode(FluidAcceptor.AcceptorModes mode)
+    public void setMode(AcceptorModes mode)
     {
         this.mode = mode;
         this.flow = mode.getFlow();
@@ -49,6 +48,10 @@ public class FluidNode
 
     public void setNetwork(NMFluidNetwork network)
     {
+        if (!(this.network == null) && !this.network.equals(network))
+        {
+            this.network.removeNode(this);
+        }
         this.network = network;
         distances.clear();
     }
@@ -65,9 +68,9 @@ public class FluidNode
     {
         if (network == null)
         {
-            network = new NMFluidNetwork(world);
+//            network = new NMFluidNetwork(world, pos, face);
         }
-        network.rebuild(pos, face);
+//        network.rebuild(pos, face);
     }
 
     public Direction getFace()
@@ -88,8 +91,8 @@ public class FluidNode
     public void transmitFluid(FluidNode node)
     {
         if (distances.get(node) == null
-                || node.mode == FluidAcceptor.AcceptorModes.NONE
-                || this.mode == FluidAcceptor.AcceptorModes.NONE)
+                || node.mode == AcceptorModes.NONE
+                || this.mode == AcceptorModes.NONE)
         {
 //            System.out.println("transmit null");
             return;
