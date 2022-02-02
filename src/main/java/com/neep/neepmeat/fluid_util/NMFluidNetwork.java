@@ -21,6 +21,7 @@ import java.util.function.Supplier;
 public class NMFluidNetwork
 {
     private World world;
+    public final long uid; // Unique identifier for every network
     private BlockPos origin;
     private Direction originFace;
     public static int UPDATE_DISTANCE = 5;
@@ -43,14 +44,24 @@ public class NMFluidNetwork
         this.world = world;
         this.origin = origin;
         this.originFace = direction;
+        this.uid = nextUid();
+    }
+
+    private static long currentUid = 0;
+
+    public static long nextUid()
+    {
+        return ++currentUid;
     }
 
     public static Optional<NMFluidNetwork> tryCreateNetwork(World world, BlockPos pos, Direction direction)
     {
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
         network.rebuild(pos, direction);
+//        System.out.println("creating network " + network.uid);
         if (network.isValid())
         {
+//            System.out.println("network " + network.uid + " is valid");
             LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
@@ -66,6 +77,18 @@ public class NMFluidNetwork
     public String toString()
     {
         return "\nFluidNetwork at " + (origin).toString();
+    }
+    @Override
+    public boolean equals(Object object)
+    {
+        if (!(object instanceof NMFluidNetwork network))
+        {
+            return false;
+        }
+        return network.connectedNodes.equals(connectedNodes)
+                && network.origin.equals(origin)
+                && network.originFace.equals(originFace)
+                && network.uid == uid;
     }
 
     public static void validateAll()
@@ -88,7 +111,7 @@ public class NMFluidNetwork
                 ++count;
             }
         }
-//        System.out.println(count + " " + connectedNodes2.size());
+//        System.out.println(count + " " + connectedNodes.size());
         return connectedNodes.size() - count >= 2;
     }
 
@@ -111,6 +134,7 @@ public class NMFluidNetwork
             discoverNodes(startPos, face);
             if (!validate())
                 return;
+//            System.out.println(uid + " setting nodes");
             connectedNodes.forEach((node) -> node.get().setNetwork(this));
 //            buildPressures();
 //            tick();
@@ -206,6 +230,7 @@ public class NMFluidNetwork
                         continue;
                     }
                     int distanceToNode = networkPipes.get(node1.getPos()).getDistance();
+//                    System.out.println(distanceToNode);
                     node.distances.put(node1, distanceToNode);
 //                    node.distances.put(node1, 1);
                 }
@@ -296,6 +321,10 @@ public class NMFluidNetwork
 
     public void removeNode(NodePos pos)
     {
+        Supplier<FluidNode> node = FluidNetwork.NETWORK.getNodeSupplier(pos);
+//        System.out.println("trying to remove " + node + " from " + uid +  ", contains: " + connectedNodes.contains(node));
+//        System.out.println(connectedNodes);
         connectedNodes.remove(FluidNetwork.NETWORK.getNodeSupplier(pos));
+        validate();
     }
 }

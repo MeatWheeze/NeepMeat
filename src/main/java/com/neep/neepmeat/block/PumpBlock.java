@@ -1,8 +1,10 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
+import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import com.neep.neepmeat.fluid_util.node.NodePos;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.blockentity.PumpBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
@@ -23,6 +25,9 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashSet;
+import java.util.function.Supplier;
 
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, DirectionalFluidAcceptor, FluidNodeProvider
 {
@@ -93,14 +98,30 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         {
             if (!player.isSneaking())
             {
-                be.update(state, world);
+//                be.update(state, world);
+                HashSet<Supplier<FluidNode>> test = new HashSet<>();
+
+                NodePos pos1 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
+                NodePos pos2 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
+                FluidNetwork.NodeSupplier supplier1 = new FluidNetwork.NodeSupplier(pos1);
+                FluidNetwork.NodeSupplier supplier2 = new FluidNetwork.NodeSupplier(pos2);
+
+                test.add(supplier1);
+
+                System.out.println(test.contains(supplier2));
             }
             else
             {
 //                System.out.println(NMFluidNetwork.LOADED_NETWORKS);
                 for (NMFluidNetwork network : NMFluidNetwork.LOADED_NETWORKS)
                 {
-                    System.out.println(network.connectedNodes);
+//                    System.out.println(network.connectedNodes);
+                    System.out.print("\n" + network.uid + " nodes: ");
+                    for (Supplier<FluidNode> supplier : network.connectedNodes)
+                    {
+                        System.out.print(supplier.get());
+                    }
+                    System.out.print("\n");
                 }
 //                PumpBlockEntity.tick(world, pos, state, be);
 //                be.sides.get(state.get(PumpBlock.FACING)).tick(world);

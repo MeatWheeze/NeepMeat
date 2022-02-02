@@ -342,39 +342,39 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     // TODO: Major code reduction may be possible
     public void createStorageNodes(World world, BlockPos pos, BlockState state)
     {
-        for (Direction direction : Direction.values())
+        if (!world.isClient)
         {
-            Storage<FluidVariant> storage;
-            if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
-                && state.get(DIR_TO_CONNECTION.get(direction)))
+            for (Direction direction : Direction.values())
             {
-                FluidNode node;
-                BlockState state1 = world.getBlockState(pos.offset(direction));
-                if (state1.getBlock() instanceof FluidNodeProvider provider)
+                Storage<FluidVariant> storage;
+                if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
+                        && state.get(DIR_TO_CONNECTION.get(direction)))
                 {
-                    node = new FluidNode(pos, direction, storage, provider.getDirectionMode(state1, direction.getOpposite()), 2);
-                }
-                else
+                    FluidNode node;
+                    BlockState state1 = world.getBlockState(pos.offset(direction));
+                    if (state1.getBlock() instanceof FluidNodeProvider provider)
+                    {
+                        node = new FluidNode(pos, direction, storage, provider.getDirectionMode(state1, direction.getOpposite()), 2);
+                    } else
+                    {
+                        node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
+                    }
+                    updateNetwork(pos, node, false);
+                } else
                 {
-                    node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
+                    FluidNetwork.NETWORK.removeNode(new NodePos(pos, direction));
                 }
-                updateNetwork(pos, node, false);
             }
-            else
+            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+            if (net.isPresent())
             {
-                FluidNetwork.NETWORK.removeNode(new NodePos(pos, direction));
-            }
-        }
-        Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
-        if (net.isPresent())
-        {
-            for (Supplier<FluidNode> supplier : net.get().connectedNodes)
-            {
+                for (Supplier<FluidNode> supplier : net.get().connectedNodes)
+                {
 //                System.out.println(supplier.get());
+                }
+            } else
+            {
             }
-        }
-        else
-        {
         }
     }
 
@@ -387,7 +387,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         }
         else
         {
-            FluidNetwork.NETWORK.removeNode(new NodePos(node), node);
+            FluidNetwork.NETWORK.updateNode(new NodePos(node), node);
 //            FluidNetwork.NETWORK.updateSegment(pos, new PipeSegment(pos, state));
         }
     }
