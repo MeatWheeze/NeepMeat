@@ -23,7 +23,7 @@ public class FluidNode
     private final BlockPos pos;
     public float flow;
     public AcceptorModes mode;
-//    private NMFluidNetwork network = null;
+    private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
@@ -50,11 +50,22 @@ public class FluidNode
 
     public void setNetwork(NMFluidNetwork network)
     {
-//        if (!(this.network == null) && !this.network.equals(network))
-//        {
-//            this.network.removeNode(this);
-//        }
-//        this.network = network;
+        if (!(this.network == null) && !this.network.equals(network))
+        {
+            this.network.removeNode(new NodePos(pos, face));
+        }
+        this.network = network;
+        distances.clear();
+    }
+
+    // Removed node from and revalidates the network
+    public void onRemove()
+    {
+        System.out.println("removed " + this);
+        if (!(this.network == null))
+        {
+            network.removeNode(new NodePos(pos, face));
+        }
         distances.clear();
     }
 
@@ -125,6 +136,7 @@ public class FluidNode
         if (branchFlow >= 0)
         {
             amountMoved = StorageUtil.move(storage, node.storage, variant -> true, (long) branchFlow, null);
+//            System.out.println(amountMoved);
         }
         else
         {

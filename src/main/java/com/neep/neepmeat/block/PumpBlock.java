@@ -97,7 +97,11 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
             }
             else
             {
-                System.out.println(NMFluidNetwork.LOADED_NETWORKS);
+//                System.out.println(NMFluidNetwork.LOADED_NETWORKS);
+                for (NMFluidNetwork network : NMFluidNetwork.LOADED_NETWORKS)
+                {
+                    System.out.println(network.connectedNodes);
+                }
 //                PumpBlockEntity.tick(world, pos, state, be);
 //                be.sides.get(state.get(PumpBlock.FACING)).tick(world);
             }
