@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_util;
 
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -34,6 +35,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
     {
 //        NbtCompound compound1 = new NbtCompound();
         compound.putLong("amount", amount);
+        compound.put("resource", resource.toNbt());
 
 //        compound.put("buffer", compound1);
         return compound;
@@ -42,6 +44,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
     public void readNBT(NbtCompound compound)
     {
         this.amount = compound.getLong("amount");
+        this.resource = FluidVariant.fromNbt((NbtCompound) compound.get("resource"));
     }
 
     @Override
@@ -73,6 +76,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
             amount += inserted;
             return inserted;
         }
+        syncIfPossible();
         return 0;
     }
 
@@ -94,6 +98,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
             amount -= extracted;
             return extracted;
         }
+        syncIfPossible();
         return 0;
     }
 
@@ -130,6 +135,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
     public void setCapacity(int capacity)
     {
         this.capacity = capacity;
+        syncIfPossible();
     }
 
     @Override
@@ -143,5 +149,13 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
     {
         resource = snapshot.resource();
         amount = snapshot.amount();
+    }
+
+    public void syncIfPossible()
+    {
+        if (parent instanceof BlockEntityClientSerializable serializable)
+        {
+            serializable.sync();
+        }
     }
 }

@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "com.neep.neepmeat.NeepMeat"
+    ],
+    "client": [
+      "com.neep.neepmeat.NeepMeat"
     ]
   },
   "mixins": [

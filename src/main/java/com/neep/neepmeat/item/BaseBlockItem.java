@@ -1,5 +1,6 @@
 package com.neep.neepmeat.item;
 
+import com.neep.neepmeat.ItemGroups;
 import com.neep.neepmeat.init.ItemInit;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -21,7 +22,7 @@ public class BaseBlockItem extends BlockItem implements BaseItem
 
     public BaseBlockItem(Block block, String itemName, int itemMaxStack, boolean hasLore)
     {
-        super(block, new FabricItemSettings().maxCount(itemMaxStack));
+        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(ItemGroups.GENERAL));
         this.name = itemName;
         this.hasLore = hasLore;
         ItemInit.ITEMS.add(this);

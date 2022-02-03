@@ -1,14 +1,14 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 
-public class MachineBlockEntity extends BlockEntity
+public class TestBlockEntity extends BlockEntity
 {
-    public MachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public TestBlockEntity(BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(BlockEntityInitialiser.TEST_BLOCK_ENTITY, pos, state);
     }
 }

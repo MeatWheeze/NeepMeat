@@ -1,15 +1,15 @@
 {
   "variants": {
     "axis=x": {
-      "model": "neepmeat:block/basic_tank",
+      "model": "neepmeat:block/basic_glass_tank",
       "x": 90,
       "y": 90
     },
     "axis=y": {
-      "model": "neepmeat:block/basic_tank"
+      "model": "neepmeat:block/basic_glass_tank"
     },
     "axis=z": {
-      "model": "neepmeat:block/basic_tank",
+      "model": "neepmeat:block/basic_glass_tank",
       "x": 90
     }
   }
