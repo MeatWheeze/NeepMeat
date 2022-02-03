@@ -77,7 +77,8 @@ public class BloodFluid extends RealisticFluid
             BlockPos targetPos = fluidPos.offset(direction, 1);
             BlockState targetState = world.getBlockState(targetPos);
             int targetLevel = targetState.getFluidState().getLevel();
-            if (canFill(world, targetPos, targetState, this) && (targetLevel < state.getLevel()) && state.getLevel() > 1)
+            if (canFill(world, targetPos, targetState, this) && (targetLevel < state.getLevel())
+                    && (state.getLevel() > 1 || direction == Direction.DOWN))
             {
                 posList.add(targetPos);
             }
@@ -92,11 +93,15 @@ public class BloodFluid extends RealisticFluid
 //            return Integer.compare(level1, level2);
 //        });
 
+        // Distribute fluid across list of positions
         int level = state.getLevel();
-        Iterator<BlockPos> iterator = posList.iterator();
-        while (level > 1 && iterator.hasNext())
+        for (BlockPos blockPos : posList)
         {
-            BlockPos pos = iterator.next();
+            // Break if there is too little fluid, but also allow flowing down
+            if (!(level > 1 || fluidPos.offset(Direction.DOWN).equals(blockPos)))
+                break;
+
+            BlockPos pos = blockPos;
             BlockState targetState = world.getBlockState(pos);
             int targetLevel = targetState.getFluidState().getLevel();
 
@@ -110,8 +115,8 @@ public class BloodFluid extends RealisticFluid
 //                world.setBlockState(pos, this.getFlowing(targetLevel + 1, false).getBlockState(), Block.NOTIFY_ALL);
 //                --level;
 //            }
-              world.setBlockState(pos, this.getFlowing(targetLevel + 1, false).getBlockState(), Block.NOTIFY_ALL);
-              --level;
+            world.setBlockState(pos, this.getFlowing(targetLevel + 1, false).getBlockState(), Block.NOTIFY_ALL);
+            --level;
 
         }
         if (level != state.getLevel())
