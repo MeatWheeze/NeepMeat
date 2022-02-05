@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -24,6 +25,7 @@ public class NMFluidNetwork
     public final long uid; // Unique identifier for every network
     private BlockPos origin;
     private Direction originFace;
+    private boolean loading = true;
     public static int UPDATE_DISTANCE = 10;
 
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
@@ -153,8 +155,10 @@ public class NMFluidNetwork
 
     public void tick()
     {
+        if (loading)
+            return;
+
         buildPressures();
-//        rebuild(origin, originFace);
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;
@@ -169,7 +173,7 @@ public class NMFluidNetwork
                 {
                     continue;
                 }
-                node.transmitFluid(targetNode);
+                node.transmitFluid((ServerWorld) world, targetNode);
             }
         }
     }
@@ -290,7 +294,7 @@ public class NMFluidNetwork
                             Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
                             if (storage != null)
                             {
-                                Supplier<FluidNode> node = FluidNetwork.NETWORK.getNodeSupplier(new NodePos(current, direction));
+                                Supplier<FluidNode> node = FluidNetwork.INSTANCE.getNodeSupplier(new NodePos(current, direction));
                                 if (node.get() != null)
                                 {
                                     connectedNodes.add(node);
@@ -321,10 +325,10 @@ public class NMFluidNetwork
 
     public void removeNode(NodePos pos)
     {
-        Supplier<FluidNode> node = FluidNetwork.NETWORK.getNodeSupplier(pos);
+        Supplier<FluidNode> node = FluidNetwork.INSTANCE.getNodeSupplier(pos);
 //        System.out.println("trying to remove " + node + " from " + uid +  ", contains: " + connectedNodes.contains(node));
 //        System.out.println(connectedNodes);
-        connectedNodes.remove(FluidNetwork.NETWORK.getNodeSupplier(pos));
+        connectedNodes.remove(FluidNetwork.INSTANCE.getNodeSupplier(pos));
         validate();
     }
 }

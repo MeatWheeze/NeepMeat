@@ -10,7 +10,7 @@ import net.minecraft.util.registry.Registry;
 
 public class BlockEntityInitialiser
 {
-    public static BlockEntityType<?> TEST_BLOCK_ENTITY;
+    public static BlockEntityType<?> NODE_BLOCK_ENTITY;
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
@@ -33,9 +33,9 @@ public class BlockEntityInitialiser
                 FabricBlockEntityTypeBuilder.create(GlassTankBlockEntity::new, BlockInitialiser.GLASS_TANK)
                         .build());
 
-        TEST_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+        NODE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 NeepMeat.NAMESPACE + "test_block_entity",
-                FabricBlockEntityTypeBuilder.create(TestBlockEntity::new, (Block) BlockInitialiser.TANK)
+                FabricBlockEntityTypeBuilder.create(NodeContainerBlockEntity::new, BlockInitialiser.PIPE)
                         .build());
 
 //        FluidStorage.SIDED.registerSelf(PUMP_BLOCK_ENTITY);

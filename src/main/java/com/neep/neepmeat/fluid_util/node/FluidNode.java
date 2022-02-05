@@ -2,44 +2,102 @@ package com.neep.neepmeat.fluid_util.node;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /*
-    An interface for fluid networks associated with a FluidNodeProvider's face.
+    An interface for fluid networks associated with a
  */
 @SuppressWarnings("UnstableApiUsage")
 public class FluidNode
 {
     private final Direction face;
     private final BlockPos pos;
+    private final NodePos nodePos;
     public float flow;
+    public float flowMultiplier;
     public AcceptorModes mode;
     private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
-    private final Storage<FluidVariant> storage;
+    private Storage<FluidVariant> storage;
+
+    public boolean needsDeferredLoading;
 
     public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
         this.face = face;
         this.pos = pos;
+        this.nodePos = new NodePos(pos, face);
         this.storage = storage;
         this.mode = mode;
+        this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
+    }
+
+    public FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier)
+    {
+        this.face = face;
+        this.pos = pos;
+        this.nodePos = new NodePos(pos, face);
+        this.mode = mode;
+        this.flowMultiplier = flowMultiplier;
+        this.flow = mode.getFlow() * flowMultiplier;
+        this.storage = null;
+        this.needsDeferredLoading = true;
     }
 
     @Override
     public String toString()
     {
-        return "\n" + this.pos.toString() + " " + face;
+        return "\n" + this.pos.toString() + " " + face + " storage: " + storage;
+    }
+
+    public static FluidNode fromNbt(NbtCompound nbt)
+    {
+        BlockPos pos = BlockPos.fromLong(nbt.getLong("position"));
+        Direction face = Direction.byId(nbt.getInt("direction"));
+        AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
+        float flowMultiplier = nbt.getFloat("multiplier");
+
+       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier);
+//       node.loadDeferred(world);
+       return node;
+    }
+
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        nbt.putInt("direction", face.getId());
+        nbt.putLong("position", pos.asLong());
+        nbt.putInt("mode", mode.getId());
+        nbt.putFloat("multiplier", flowMultiplier);
+        return nbt;
+    }
+
+    public void loadDeferred(ServerWorld world)
+    {
+        if (!world.getServer().isOnThread())
+        {
+            return;
+        }
+        Storage<FluidVariant> storage;
+        if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
+        {
+            this.storage = storage;
+            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+            this.needsDeferredLoading = false;
+        }
     }
 
     public void setMode(AcceptorModes mode)
@@ -107,12 +165,34 @@ public class FluidNode
         return pos;
     }
 
+    public NodePos getNodePos()
+    {
+        return this.nodePos;
+    }
+
     public float getFlow()
     {
         return flow;
     }
 
-    public void transmitFluid(FluidNode node)
+    public Storage<FluidVariant> getStorage(ServerWorld world)
+    {
+        if (!world.getServer().isOnThread())
+        {
+            return null;
+        }
+        if (storage != null)
+        {
+            return storage;
+        }
+        else
+        {
+//            loadDeferred(world);
+        }
+        return null;
+    }
+
+    public void transmitFluid(ServerWorld world, FluidNode node)
     {
         if (distances.get(node) == null
                 || node.mode == AcceptorModes.NONE
@@ -146,12 +226,12 @@ public class FluidNode
         long amountMoved = 0;
         if (branchFlow >= 0)
         {
-            amountMoved = StorageUtil.move(storage, node.storage, variant -> true, (long) branchFlow, null);
+            amountMoved = StorageUtil.move(getStorage(world), node.getStorage(world), variant -> true, (long) branchFlow, null);
 //            System.out.println(amountMoved);
         }
         else
         {
-            amountMoved = StorageUtil.move(node.storage, storage, variant -> true, (long) - branchFlow, null);
+            amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - branchFlow, null);
 
         }
 //        System.out.print(node + ", " + node.getPressure() + ", amount: " + amountMoved);
