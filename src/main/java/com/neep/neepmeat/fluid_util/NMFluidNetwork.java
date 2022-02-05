@@ -36,10 +36,6 @@ public class NMFluidNetwork
     // My pet memory leak.
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    static
-    {
-        ServerTickEvents.END_SERVER_TICK.register(NMFluidNetwork::tickNetwork);
-    }
 
     private NMFluidNetwork(World world, BlockPos origin, Direction direction)
     {
@@ -60,19 +56,12 @@ public class NMFluidNetwork
     {
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
         network.rebuild(pos, direction);
-//        System.out.println("creating network " + network.uid);
         if (network.isValid())
         {
-//            System.out.println("network " + network.uid + " is valid");
             LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
         return Optional.empty();
-    }
-
-    private static void tickNetwork(MinecraftServer minecraftServer)
-    {
-        LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 
     @Override
@@ -153,10 +142,15 @@ public class NMFluidNetwork
         this.world = world;
     }
 
+    public World getWorld()
+    {
+        return world;
+    }
+
     public void tick()
     {
-        if (loading)
-            return;
+//        if (loading)
+//            return;
 
         buildPressures();
         for (Supplier<FluidNode> supplier : connectedNodes)
