@@ -1,0 +1,77 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_post"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_side"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_side",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_side_alt"
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_side_alt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "north": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_noside"
+      }
+    },
+    {
+      "when": {
+        "east": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_noside_alt"
+      }
+    },
+    {
+      "when": {
+        "south": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_noside_alt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "west": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/pane/mesh_panel_noside",
+        "y": 270
+      }
+    }
+  ]
+}

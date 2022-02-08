@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.base;
 
 import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;

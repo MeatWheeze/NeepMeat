@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.blockentity.NodeContainerBlockEntity;
+import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
@@ -37,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Supplier;
 
 public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityProvider
 {
