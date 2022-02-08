@@ -126,7 +126,7 @@ public class NMFluidNetwork
             if (!validate())
                 return;
 //            System.out.println(uid + " setting nodes");
-            connectedNodes.forEach((node) -> node.get().setNetwork(this));
+            connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
 //            buildPressures();
 //            tick();
         }
@@ -222,14 +222,16 @@ public class NMFluidNetwork
                 // TODO: optimise further
                 for (Supplier<FluidNode> supplier1 : connectedNodes)
                 {
-                    FluidNode node1 = supplier1.get();
-                    if (node1 == null || node1.equals(node) || node1.mode == AcceptorModes.NONE)
+                    FluidNode targetNode = supplier1.get();
+                    if (targetNode == null
+                            || targetNode.equals(node)
+                            || node.mode == AcceptorModes.NONE)
                     {
                         continue;
                     }
-                    int distanceToNode = networkPipes.get(node1.getPos()).getDistance();
+                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
 //                    System.out.println(distanceToNode);
-                    node.distances.put(node1, distanceToNode);
+                    node.distances.put(targetNode, distanceToNode);
 //                    node.distances.put(node1, 1);
                 }
             }
@@ -249,8 +251,6 @@ public class NMFluidNetwork
         // List of pipes to be searched in next iteration
         List<BlockPos> nextSet = new ArrayList<>();
 
-//        networkPipes.put(startPos.offset(face), new PipeSegment(startPos.offset(face), world.getBlockState(startPos.offset(face))));
-//        pipeQueue.add(startPos.offset(face));
         pipeQueue.add(startPos);
         networkPipes.put(startPos, new PipeSegment(startPos));
 
