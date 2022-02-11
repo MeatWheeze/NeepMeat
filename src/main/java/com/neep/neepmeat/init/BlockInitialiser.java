@@ -39,6 +39,7 @@ public class BlockInitialiser
     public static Block TANK;
     public static Block GLASS_TANK;
     public static Block FLUID_METER;
+    public static Block FLUID_PORT;
 
     public static FlowableFluid FLOWING_BLOOD;
     public static FlowableFluid STILL_BLOOD;
@@ -62,7 +63,7 @@ public class BlockInitialiser
         TANK = registerBlock("basic_tank", new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         GLASS_TANK = registerBlock("basic_glass_tank", new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         FLUID_METER = registerBlock("fluid_meter", new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
-
+        FLUID_PORT = registerBlock("fluid_port", new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         // --- Fluids ---
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
