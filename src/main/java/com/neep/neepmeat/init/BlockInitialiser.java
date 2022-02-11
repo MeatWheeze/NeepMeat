@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.base.BaseBuildingBlock;
 import com.neep.neepmeat.block.base.BasePaneBlock;
+import com.neep.neepmeat.block.base.FluidPipeBlock;
 import com.neep.neepmeat.block.base.NMBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
@@ -59,7 +60,7 @@ public class BlockInitialiser
         MESH_PANE = registerBlock("mesh_panel", new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
 
         // --- General Blocks ---
-        PIPE = registerBlock("pipe", new PipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        PIPE = registerBlock("pipe", new FluidPipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         IRON_PIPE = registerBlock("iron_pipe", new PipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         // --- Transfer ---
