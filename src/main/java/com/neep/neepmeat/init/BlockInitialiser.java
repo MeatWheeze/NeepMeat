@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.ibm.icu.impl.CollectionSet;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
+import com.neep.neepmeat.block.base.BaseBuildingBlock;
 import com.neep.neepmeat.block.base.BasePaneBlock;
 import com.neep.neepmeat.block.base.NMBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
@@ -28,6 +29,8 @@ public class BlockInitialiser
     public static final Map<String, NMBlock> BLOCKS = new HashMap<>();
 
     public static Block MESH_PANE;
+
+    public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
 
     public static Block TEST;
     public static Block PIPE;
