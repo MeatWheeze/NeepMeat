@@ -3,19 +3,12 @@ package com.neep.neepmeat.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.block.base.BaseBlock;
-import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
 import com.neep.neepmeat.maths.NMMaths;
 import com.neep.neepmeat.maths.NMVec2f;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -33,12 +26,10 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
-import java.util.Optional;
 
-public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityProvider
+public class PipeBlock extends BaseBlock implements FluidAcceptor
 {
 //    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = PipeProperties.NORTH_CONNECTION;
 //    public static final EnumProperty<PipeConnection> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
@@ -134,7 +125,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
         return this.getPlacementState(ctx.getWorld(), this.getDefaultState(), ctx.getBlockPos());
     }
 
-    private BlockState getPlacementState(BlockView world, BlockState state, BlockPos pos)
+    protected BlockState getPlacementState(BlockView world, BlockState state, BlockPos pos)
     {
         boolean bl = isNotConnected(state);
         state = this.getConnectedState(world, this.getDefaultState(), pos);
@@ -206,30 +197,17 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient())
-        {
-            connection = connection || canConnectApi((World) world, pos, state, direction);
-        }
+//        if (!world.isClient())
+//        {
+//            connection = connection || canConnectApi((World) world, pos, state, direction);
+//        }
 
         if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
         {
             return state.with(DIR_TO_CONNECTION.get(direction), connection);
         }
-//        return this.getPlacementState(world, state.with(DIR_TO_CONNECTION.get(direction), connection), pos);
+
         return state.with(DIR_TO_CONNECTION.get(direction), connection);
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
-    {
-        BlockState state2 = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
-//        if (!state.equals(state2)) // Storage detected
-//        {
-            // Dirty bodge for now. Might change if it works.
-            createStorageNodes(world, pos, state2);
-//        }
-
     }
 
     // Only takes into account other pipes, connections to fluid containers are enforced later.
@@ -242,7 +220,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
         return false;
     }
 
-    private static boolean isNotConnected(BlockState state)
+    protected static boolean isNotConnected(BlockState state)
     {
         return !state.get(NORTH_CONNECTION)
                 && !state.get(SOUTH_CONNECTION)
@@ -253,7 +231,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
                 ;
     }
 
-    private static boolean isFullyConnected(BlockState state)
+    protected static boolean isFullyConnected(BlockState state)
     {
         return state.get(NORTH_CONNECTION)
                 && state.get(SOUTH_CONNECTION)
@@ -287,41 +265,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
         }
     }
 
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
-    {
-        BlockState updatedState = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-        createStorageNodes(world, pos, updatedState);
-//        world.addBlockEntity(new NodeContainerBlockEntity(pos, state));
-//        BlockEntity be = world.getBlockEntity(pos);
-//        System.out.println(be);
-    }
-
-    // Creates blockstate connections to fluid containers after placing
-    private BlockState enforceApiConnections(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
-            BlockState state2 = state;
-            for (Direction direction : Direction.values())
-            {
-                if (canConnectApi(world, pos, state, direction))
-                {
-                    state2 = state2.with(DIR_TO_CONNECTION.get(direction), true);
-                }
-            }
-            return state2;
-        }
-        return state;
-    }
-
-    private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
-    {
-        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
-        return storage != null;
-    }
-
     public void removeStorageNodes(World world, BlockPos pos)
     {
         for (Direction direction : Direction.values())
@@ -332,49 +275,16 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
         }
     }
 
-    // TODO: Major code reduction may be possible
-    public void createStorageNodes(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
-            for (Direction direction : Direction.values())
-            {
-                Storage<FluidVariant> storage;
-                if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
-                        && state.get(DIR_TO_CONNECTION.get(direction)))
-                {
-                    FluidNode node;
-                    BlockState nextPos = world.getBlockState(pos.offset(direction));
-                    if (nextPos.getBlock() instanceof FluidNodeProvider provider)
-                    {
-                        node = new FluidNode(pos, direction, storage, provider.getDirectionMode(nextPos, direction.getOpposite()), 2);
-                    }
-                    else
-                    {
-                        node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
-                    }
-                    updateNetwork(world, pos, node, false);
-                } else
-                {
-                    FluidNetwork.INSTANCE.removeNode(world, new NodePos(pos, direction));
-                }
-            }
-            // TODO: avoid creating that will fail immediately
-            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
-        }
-    }
 
     public void updateNetwork(World world, BlockPos pos, FluidNode node, boolean removed)
     {
         if (removed)
         {
             FluidNetwork.INSTANCE.removeNode(world, new NodePos(node));
-//            FluidNetwork.NETWORK.removeSegment(pos);
         }
         else
         {
             FluidNetwork.INSTANCE.updateNode(world, new NodePos(node), node);
-//            FluidNetwork.NETWORK.updateSegment(pos, new PipeSegment(pos, state));
         }
     }
 
@@ -434,10 +344,4 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
         builder.add(NORTH_CONNECTION, EAST_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION);
     }
 
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
-    {
-        return null;
-    }
 }
