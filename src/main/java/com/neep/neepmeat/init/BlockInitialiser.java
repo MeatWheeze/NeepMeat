@@ -34,6 +34,7 @@ public class BlockInitialiser
 
     public static Block TEST;
     public static Block PIPE;
+    public static Block IRON_PIPE;
     public static Block PUMP;
     public static Block TANK;
     public static Block GLASS_TANK;
@@ -52,11 +53,11 @@ public class BlockInitialiser
     {
 
         // --- Building Blocks ---
-
         MESH_PANE = registerBlock("mesh_panel", new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
 
         // --- General Blocks ---
         PIPE = registerBlock("pipe", new PipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        IRON_PIPE = registerBlock("iron_pipe", new PipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         PUMP = registerBlock("pump", new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         TANK = registerBlock("basic_tank", new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         GLASS_TANK = registerBlock("basic_glass_tank", new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
