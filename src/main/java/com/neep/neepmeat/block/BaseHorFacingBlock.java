@@ -3,7 +3,6 @@ package com.neep.neepmeat.block;
 import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
