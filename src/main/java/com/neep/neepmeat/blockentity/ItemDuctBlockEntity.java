@@ -1,7 +1,9 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.ItemDuctBlock;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -22,13 +24,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.HopperScreenHandler;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.spongepowered.asm.service.ITransformer;
 
 import java.util.Iterator;
 import java.util.List;
@@ -42,6 +44,7 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int transferCooldown = -1;
     private long lastTickTime;
+    private BlockApiCache<Storage<ItemVariant>, Direction> cache;
 
     public ItemDuctBlockEntity(BlockPos pos, BlockState state)
     {
@@ -106,18 +109,25 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     @Override
     protected Text getContainerName()
     {
-        return new TranslatableText("container.hopper");
+        return new TranslatableText(NeepMeat.NAMESPACE + ":container.item_duct");
+    }
+
+    public void updateApiCache(BlockPos pos, BlockState state)
+    {
+        if (getWorld() == null || !(getWorld() instanceof ServerWorld))
+            return;
+
+        Direction direction = state.get(ItemDuctBlock.FACING);
+        cache = BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) getWorld(), pos.offset(direction));
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, ItemDuctBlockEntity blockEntity)
     {
         --blockEntity.transferCooldown;
-//        System.out.println(blockEntity.transferCooldown);
         blockEntity.lastTickTime = world.getTime();
         if (!blockEntity.needsCooldown())
         {
             blockEntity.setCooldown(8);
-//            insertAndExtract(world, pos, state, blockEntity, () -> HopperBlockEntity.extract(world, blockEntity));
             insertTick(world, pos, state, blockEntity);
         }
     }
@@ -126,7 +136,13 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     {
 
         Direction targetDirection = state.get(ItemDuctBlock.FACING);
-        Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(targetDirection), targetDirection.getOpposite());
+//        Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(targetDirection), targetDirection.getOpposite());
+        if (be.cache == null)
+        {
+            be.updateApiCache(pos, state);
+        }
+
+        Storage<ItemVariant> storage = be.cache.find(targetDirection);
 
         if (storage == null)
             return false;

@@ -1,7 +1,5 @@
-package com.neep.neepmeat.block.base;
+package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.block.FluidNodeProvider;
-import com.neep.neepmeat.block.PipeBlock;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;

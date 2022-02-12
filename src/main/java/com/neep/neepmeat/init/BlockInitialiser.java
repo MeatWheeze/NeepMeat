@@ -1,11 +1,10 @@
 package com.neep.neepmeat.init;
 
-import com.ibm.icu.impl.CollectionSet;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.base.BaseBuildingBlock;
 import com.neep.neepmeat.block.base.BasePaneBlock;
-import com.neep.neepmeat.block.base.FluidPipeBlock;
+import com.neep.neepmeat.block.FluidPipeBlock;
 import com.neep.neepmeat.block.base.NMBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
@@ -20,9 +19,7 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class BlockInitialiser
