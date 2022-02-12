@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
+import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -13,9 +14,11 @@ import net.minecraft.block.entity.HopperBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -85,6 +88,25 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         if (blockEntity instanceof ItemBufferBlockEntity be)
         {
             onEntityCollided(world, pos, state, entity, be);
+        }
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (state.getBlock() != newState.getBlock())
+        {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+
+            // Scatter contents in world
+            if (blockEntity instanceof ItemBufferBlockEntity be)
+            {
+                SimpleInventory inv = new SimpleInventory();
+                inv.addStack(be.getResource().toStack((int) be.getAmount()));
+                ItemScatterer.spawn(world, pos, inv);
+                world.updateComparators(pos,this);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
         }
     }
 
