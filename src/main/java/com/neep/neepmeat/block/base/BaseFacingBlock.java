@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.base;
 
 import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;
@@ -8,15 +8,17 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.Direction;
 
-public class BaseFacingBlock extends FacingBlock
+public class BaseFacingBlock extends FacingBlock implements NMBlock
 {
     BaseBlockItem blockItem;
+    private String registryName;
 
     public BaseFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        this.registryName = itemName;
     }
 
     @Override
@@ -31,4 +33,9 @@ public class BaseFacingBlock extends FacingBlock
         builder.add(FACING);
     }
 
+    @Override
+    public String getRegistryName()
+    {
+        return registryName;
+    }
 }

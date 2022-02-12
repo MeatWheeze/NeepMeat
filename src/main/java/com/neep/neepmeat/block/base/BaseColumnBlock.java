@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.base;
 
 import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;
@@ -9,15 +9,23 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.Direction;
 
-public class BaseColumnBlock extends PillarBlock
+public class BaseColumnBlock extends PillarBlock implements NMBlock
 {
     BaseBlockItem blockItem;
+    private String regsitryName;
 
     public BaseColumnBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
 //        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        this.regsitryName = itemName;
+    }
+
+    @Override
+    public String getRegistryName()
+    {
+        return regsitryName;
     }
 
 //    @Override

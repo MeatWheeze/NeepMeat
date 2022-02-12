@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.base;
 
 import com.neep.neepmeat.item.BaseBlockItem;
 import net.minecraft.block.Block;
@@ -10,15 +10,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
 
-public class BaseHorFacingBlock extends HorizontalFacingBlock
+public class BaseHorFacingBlock extends HorizontalFacingBlock implements NMBlock
 {
     BaseBlockItem blockItem;
+    private String registryName;
 
     public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        this.registryName = itemName;
     }
 
     @Override
@@ -43,5 +45,11 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock
 //        return blockState.isSideSolidFullSquare(world, blockPos, direction);
         return true;
 //        return state.hasBlockEntity();
+    }
+
+    @Override
+    public String getRegistryName()
+    {
+        return registryName;
     }
 }
