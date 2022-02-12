@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.item.Item;
@@ -30,6 +31,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -136,7 +138,6 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     {
 
         Direction targetDirection = state.get(ItemDuctBlock.FACING);
-//        Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(targetDirection), targetDirection.getOpposite());
         if (be.cache == null)
         {
             be.updateApiCache(pos, state);
@@ -145,18 +146,32 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
         Storage<ItemVariant> storage = be.cache.find(targetDirection);
 
         if (storage == null)
+        {
+            if (world.getBlockState(pos.offset(targetDirection)).isAir())
+            {
+                Transaction transaction = Transaction.openOuter();
+
+                BlockPos pos2 = pos.offset(targetDirection);
+                Vec3d pos3 = new Vec3d(pos2.getX() + 0.5,
+                        pos2.getY() + (targetDirection.getAxis().isHorizontal() ? 0.1 : 0.5),
+                        pos2.getZ() + 0.5);
+                ItemEntity item = new ItemEntity(world, pos3.getX(), pos3.getY(), pos3.getZ(), be.getResource().toStack((int) be.getAmount()),
+                        0, 0, 0);
+                be.extract(be.getResource(), be.getAmount(), transaction);
+                world.spawnEntity(item);
+
+                transaction.commit();
+                return true;
+            }
             return false;
+        }
 
         Transaction transaction = Transaction.openOuter();
 
         long transferAmount = 0;
         if (storage.supportsInsertion() && be.supportsExtraction() && !be.getResource().isBlank())
         {
-//            transferAmount = storage.insert()
-            ItemVariant variant = be.getResource();
             transferAmount = StorageUtil.move(be, storage, type -> true, 1, transaction);
-//            be.setCooldown(20);
-//            System.out.println("pos: " + be.getPos() + " transferAmount " + transferAmount);
         }
 
         transaction.commit();
