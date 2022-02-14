@@ -32,7 +32,6 @@ import net.minecraft.util.math.Vec3f;
 public class ItemBufferRenderer implements BlockEntityRenderer<ItemBufferBlockEntity>
 {
     Model model;
-    float currentOffset = 0;
 
     public ItemBufferRenderer(BlockEntityRendererFactory.Context context)
     {
@@ -40,17 +39,17 @@ public class ItemBufferRenderer implements BlockEntityRenderer<ItemBufferBlockEn
     }
 
     @Override
-    public void render(ItemBufferBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
+    public void render(ItemBufferBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
         matrices.push();
 
-        ItemStack stack = blockEntity.getResource().toStack((int) blockEntity.getAmount());
+        ItemStack stack = be.getResource().toStack((int) be.getAmount());
 
-        float delta = 0.01f;
+        float delta = 0.1f;
 
-        currentOffset = MathHelper.lerp(delta, currentOffset, blockEntity.getAmount() <= 0 ? 0f : 1f);
-        matrices.translate(0.5, 0.25f + currentOffset, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((blockEntity.getWorld().getTime() + tickDelta) * 1));
+        be.stackRenderDelta = MathHelper.lerp(delta, be.stackRenderDelta, be.getAmount() <= 0 ? 0.3f : 0f);
+        matrices.translate(0.5, 0.25f + be.stackRenderDelta, 0.5);
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((be.getWorld().getTime() + tickDelta) * 1));
 
         MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
 
