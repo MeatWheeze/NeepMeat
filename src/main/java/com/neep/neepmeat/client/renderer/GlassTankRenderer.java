@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.NeepMeatClient;
+import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.blockentity.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.fluid_util.FluidBuffer;
@@ -23,8 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-
-import java.awt.*;
 
 public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEntity>
 {

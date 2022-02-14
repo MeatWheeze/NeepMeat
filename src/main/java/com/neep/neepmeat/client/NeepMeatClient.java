@@ -1,5 +1,6 @@
-package com.neep.neepmeat;
+package com.neep.neepmeat.client;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.GlassTankRenderer;
 import com.neep.neepmeat.client.renderer.ItemBufferRenderer;

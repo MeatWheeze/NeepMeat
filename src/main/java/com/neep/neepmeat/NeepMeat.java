@@ -1,5 +1,6 @@
 package com.neep.neepmeat;
 
+import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.ItemInit;
