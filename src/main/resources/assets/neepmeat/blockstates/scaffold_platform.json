@@ -1,7 +1,7 @@
 {
   "variants": {
     "bottom=false": {
-      "model": "neepmeat:block/scaffold_platform"
+      "model": "neepmeat:block/scaffold_test"
     },
     "bottom=true": {
       "model": "neepmeat:block/scaffold_bottom"

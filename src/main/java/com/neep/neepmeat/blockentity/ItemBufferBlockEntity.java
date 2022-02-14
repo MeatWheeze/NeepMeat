@@ -39,6 +39,8 @@ public class ItemBufferBlockEntity extends BlockEntity implements
     private SnapshotParticipant<ResourceAmount<ItemVariant>> snapshot =
             new ResourceSnapshotParticipant<>(this::getResource, this::getAmount, this::setResource, this::setAmount);
 
+    public float stackRenderDelta; // Used by the renderer
+
     public ItemBufferBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, pos, state);
