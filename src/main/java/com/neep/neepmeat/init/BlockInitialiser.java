@@ -28,6 +28,7 @@ public class BlockInitialiser
 
     public static Block MESH_PANE;
     public static Block SCAFFOLD_PLATFORM;
+    public static Block SCAFFOLD_STAIRS;
     public static Block RUSTED_BARS;
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
@@ -69,6 +70,7 @@ public class BlockInitialiser
         MESH_PANE = registerBlock(new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTED_BARS = registerBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("scaffold_platform", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         // --- General Blocks ---
         PIPE = registerBlock(new FluidPipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
