@@ -2,9 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
-import com.neep.neepmeat.block.base.BaseBuildingBlock;
-import com.neep.neepmeat.block.base.BasePaneBlock;
-import com.neep.neepmeat.block.base.NMBlock;
+import com.neep.neepmeat.block.base.*;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -30,8 +28,10 @@ public class BlockInitialiser
     public static Block SCAFFOLD_STAIRS;
     public static Block SCAFFOLD_TRAPDOOR;
     public static Block RUSTED_BARS;
+    public static Block RUSTY_VENT;
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
 
     public static Block TEST;
     public static Block PIPE;
@@ -72,6 +72,7 @@ public class BlockInitialiser
         SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("rusted_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         SCAFFOLD_TRAPDOOR = registerBlock(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
+        RUSTY_VENT = registerBlock(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
 
         // --- General Blocks ---
         PIPE = registerBlock(new FluidPipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
