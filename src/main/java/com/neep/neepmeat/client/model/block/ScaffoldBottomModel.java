@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.SideShapeType;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
@@ -24,6 +25,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
+import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -102,7 +104,10 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
         // Janky scaffolding rendering.
         for (Direction direction : Direction.values())
         {
-            if (blockView.getBlockState(pos.offset(direction)).isOf(Blocks.AIR))
+//            if (blockView.getBlockState(pos.offset(direction)).isOf(Blocks.AIR))
+//            if (!state.isSideSolid(blockView, pos, direction, SideShapeType.FULL))
+            BlockState state1 = blockView.getBlockState(pos.offset(direction));
+            if (!state1.isSideSolidFullSquare(blockView, pos, direction.getOpposite()))
             {
                 context.meshConsumer().accept(SIDES[direction.getId()]);
                 context.meshConsumer().accept(SIDES_INV[direction.getId()]);
