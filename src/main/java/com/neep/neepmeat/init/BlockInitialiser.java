@@ -25,7 +25,9 @@ public class BlockInitialiser
 
     public static Block MESH_PANE;
     public static Block SCAFFOLD_PLATFORM;
+    public static Block BLUE_SCAFFOLD;
     public static Block SCAFFOLD_STAIRS;
+    public static Block BLUE_SCAFFOLD_STAIRS;
     public static Block SCAFFOLD_TRAPDOOR;
     public static Block RUSTED_BARS;
     public static Block RUSTY_VENT;
@@ -73,7 +75,11 @@ public class BlockInitialiser
         RUSTY_VENT = registerBlock(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
         MESH_PANE = registerBlock(new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTED_BARS = registerBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
+
+        // --- Scaffolding
         SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        BLUE_SCAFFOLD = registerBlock(new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        BLUE_SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("blue_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("rusted_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         SCAFFOLD_TRAPDOOR = registerBlock(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
 
