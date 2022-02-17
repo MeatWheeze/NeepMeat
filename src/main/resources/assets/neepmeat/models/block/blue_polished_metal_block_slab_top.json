@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/slab_top",
+  "textures": {
+    "bottom": "neepmeat:block/blue_polished_metal_block",
+    "top": "neepmeat:block/blue_polished_metal_block",
+    "side": "neepmeat:block/blue_polished_metal_block"
+  }
+}

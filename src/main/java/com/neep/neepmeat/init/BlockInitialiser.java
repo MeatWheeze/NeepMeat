@@ -36,8 +36,9 @@ public class BlockInitialiser
 
     public static Block SLOPE_TEST;
 
-    public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
-    public static Block RUSTED_IRON_BLOCK = new BaseBuildingBlock("rusted_iron_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block RUSTED_IRON_BLOCK = new BaseBuildingBlock("rusted_iron_block", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock("blue_polished_metal_block", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
 
     public static Block TEST;
