@@ -3,6 +3,7 @@ package com.neep.neepmeat.client;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
+import com.neep.neepmeat.client.model.block.SlopeTest;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
@@ -54,5 +55,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider
         // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_bottom"), () -> new ScaffoldBottomModel(
                 new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side")));
+
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
     }
 }

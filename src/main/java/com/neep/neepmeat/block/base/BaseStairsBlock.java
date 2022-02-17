@@ -11,7 +11,7 @@ public class BaseStairsBlock extends StairsBlock implements NMBlock
     protected int maxStack;
     protected BlockItem blockItem;
 
-    protected BaseStairsBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
+    public BaseStairsBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
     {
         super(baseBlockState, settings);
         this.registryName = blockName;
