@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client.model.block;
 
 import com.mojang.datafixers.util.Pair;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -11,6 +10,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,16 +47,22 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     private final Mesh[] SIDES = new Mesh[6];
     private final Mesh[] SIDES_INV = new Mesh[6];
 
-    public ScaffoldTopModel(Identifier sideTexture, Identifier topTexture)
+    private Mesh outerMesh;
+    private Mesh innerMesh;
+    private final Block block;
+
+    public ScaffoldTopModel(Identifier sideTexture, Identifier topTexture, Block block)
     {
         SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, sideTexture);
         SPRITE_IDS[1] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, topTexture);
+        this.block = block;
     }
 
-    public ScaffoldTopModel(String namespace, String registryName)
+    public ScaffoldTopModel(String namespace, String registryName, Block block)
     {
         SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(namespace, registryName + "_side"));
         SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(namespace, registryName + "_top"));
+        this.block = block;
     }
 
     @Override
@@ -83,23 +88,27 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
         // Build the mesh using the Renderer API
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
+        MeshBuilder builder = renderer.meshBuilder();
+        QuadEmitter emitter = builder.getEmitter();
+
+        // Create outer faces
         for(Direction direction : Direction.values())
         {
-            MeshBuilder builder = renderer.meshBuilder();
-            QuadEmitter emitter = builder.getEmitter();
 
             int spriteIdx = direction == Direction.UP || direction == Direction.DOWN ? 1 : 0;
-            // Add a new face to the mesh
-//            emitter.pos(0, new Vec3f(0, 0, 0));
-//            emitter.pos(1, new Vec3f(0, 1, 0));
-//            emitter.pos(2, new Vec3f(1, 0, 0));
-//            emitter.pos(3, new Vec3f(0, 0, 1));
+
             emitter.square(direction, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
             emitter.spriteBake(0, SPRITES[spriteIdx], MutableQuadView.BAKE_LOCK_UV);
             emitter.spriteColor(0, -1, -1, -1, -1);
             emitter.emit();
 
-            SIDES[direction.getId()] = builder.build();
+        }
+        outerMesh = builder.build();
+
+        // Create inner faces
+        for(Direction direction : Direction.values())
+        {
+            int spriteIdx = direction == Direction.UP || direction == Direction.DOWN ? 1 : 0;
 
             emitter.square(direction.getOpposite(), 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
             emitter.nominalFace(direction);
@@ -107,8 +116,8 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
             emitter.spriteColor(0, -1, -1, -1, -1);
             emitter.emit();
 
-            SIDES_INV[direction.getId()] = builder.build();
         }
+        innerMesh = builder.build();
 
         JsonUnbakedModel defaultBlockModel = (JsonUnbakedModel) loader.getOrLoadModel(DEFAULT_BLOCK_MODEL);
         transformation = defaultBlockModel.getTransformations();
@@ -126,35 +135,60 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
         // Janky scaffolding rendering.
-        for (Direction direction : Direction.values())
-        {
-            if (!blockView.getBlockState(pos.offset(direction)).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
-            {
-                context.meshConsumer().accept(SIDES[direction.getId()]);
-                context.meshConsumer().accept(SIDES_INV[direction.getId()]);
-            }
-        }
-//        context.meshConsumer().accept(mesh);
-//        QuadEmitter emitter = context.getEmitter();
-//        mesh.forEach((quadView -> {
-//            if (blockView.getBlockState(pos.offset(quadView.nominalFace())).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
+//        for (Direction direction : Direction.values())
+//        {
+//            if (!blockView.getBlockState(pos.offset(direction)).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
 //            {
-//                emitter.cullFace(quadView.nominalFace());
-//                context.meshConsumer().accept(SIDES[quadView.nominalFace().getId()]);
+//                context.pushTransform(quad ->
+//                {
+//                    for (int i = 0; i < 4; ++i)
+//                    {
+//                        Vec3f vert = quad.copyPos(i, null);
+//                        vert.add(-0.5f, -0.5f, -0.5f);
+//                        vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(direction.asRotation()));
+//                        vert.add(0.5f, 0.5f, 0.5f);
+//                    }
+//                    return true;
+//                });
+//                context.meshConsumer().accept(SIDES[0]);
+//                context.popTransform();
 //            }
-//        }));
-//        context.meshConsumer().accept(mesh);
 
-//        for (ListIterator it = mesh.)
+//        context.pushTransform(quad ->
+//        {
+//            Direction face = quad.nominalFace();
+//            if (blockView.getBlockState(pos.offset(face)).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
+//            {
+//                return false;
+//            }
+//            for (int i = 0; i < 4; ++i)
+//            {
+//                Vec3f vert = quad.copyPos(i, null);
+//                vert.add(-0.5f, -0.5f, -0.5f);
+//                vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(face.asRotation()));
+//                vert.add(0.5f, 0.5f, 0.5f);
+//            }
+//            return true;
+//        });
+
+        context.pushTransform(quad -> getFaces(quad, blockView, pos, block));
+        context.meshConsumer().accept(outerMesh);
+        context.meshConsumer().accept(innerMesh);
+        context.popTransform();
+
+    }
+
+    public static boolean getFaces(MutableQuadView quad, BlockRenderView blockView, BlockPos pos, Block block)
+    {
+        Direction face = quad.nominalFace();
+        BlockPos newPos = pos.offset(face);
+        return !blockView.getBlockState(newPos).isOf(block);
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
     {
-        for (Direction direction : Direction.values())
-        {
-            context.meshConsumer().accept(SIDES[direction.getId()]);
-        }
+        context.meshConsumer().accept(outerMesh);
     }
 
     @Override
