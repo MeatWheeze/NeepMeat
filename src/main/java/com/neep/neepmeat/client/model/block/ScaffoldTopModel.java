@@ -53,6 +53,12 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
         SPRITE_IDS[1] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, topTexture);
     }
 
+    public ScaffoldTopModel(String namespace, String registryName)
+    {
+        SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(namespace, registryName + "_side"));
+        SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(namespace, registryName + "_top"));
+    }
+
     @Override
     public Collection<Identifier> getModelDependencies()
     {

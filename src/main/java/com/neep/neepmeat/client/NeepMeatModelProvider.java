@@ -30,16 +30,18 @@ public class NeepMeatModelProvider implements ModelResourceProvider
     static
     {
         // Block
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), () -> new ScaffoldTopModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")));
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top"), () -> new ScaffoldTopModel(
+//                NeepMeat.NAMESPACE, "block/rusted_metal_scaffold"));
+                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top")));
         // Item
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"), () -> new ScaffoldTopModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")));
+//                NeepMeat.NAMESPACE, "rusted_metal_scaffold"));
+                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top")));
         // Block
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_bottom"), () -> new ScaffoldBottomModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")));
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_bottom"), () -> new ScaffoldBottomModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side")));
 
         // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top"), () -> new ScaffoldTopModel(
