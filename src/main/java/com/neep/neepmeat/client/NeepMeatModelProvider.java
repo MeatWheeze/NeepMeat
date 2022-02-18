@@ -66,4 +66,5 @@ public class NeepMeatModelProvider implements ModelResourceProvider
 
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
     }
+
 }
