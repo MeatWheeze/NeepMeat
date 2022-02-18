@@ -1,0 +1,8 @@
+{
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "neepmeat:block/yellow_metal_scaffold_side",
+    "top": "neepmeat:block/yellow_metal_scaffold_top",
+    "side": "neepmeat:block/yellow_metal_scaffold_side"
+  }
+}
