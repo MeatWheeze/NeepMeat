@@ -2,8 +2,8 @@
   "__comment__": "This file was automatically created by mcresources",
   "parent": "block/slab_top",
   "textures": {
-    "bottom": "neepmeat:block/scaffold",
-    "top": "neepmeat:block/scaffold",
-    "side": "neepmeat:block/scaffold"
+    "bottom": "neepmeat:block/rusted_metal_scaffold_top",
+    "top": "neepmeat:block/rusted_metal_scaffold_top",
+    "side": "neepmeat:block/rusted_metal_scaffold_side"
   }
 }
