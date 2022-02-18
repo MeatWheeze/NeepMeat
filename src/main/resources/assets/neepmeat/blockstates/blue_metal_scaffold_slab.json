@@ -2,13 +2,13 @@
   "__comment__": "This file was automatically created by mcresources",
   "variants": {
     "type=bottom": {
-      "model": "neepmeat:block/rusted_metal_scaffold_slab"
+      "model": "neepmeat:block/blue_metal_scaffold_slab"
     },
     "type=top": {
-      "model": "neepmeat:block/rusted_scaffold_slab_top"
+      "model": "neepmeat:block/blue_metal_scaffold_slab_top"
     },
     "type=double": {
-      "model": "neepmeat:block/rusted_metal_scaffold_top"
+      "model": "neepmeat:block/blue_metal_scaffold_top"
     }
   }
 }
