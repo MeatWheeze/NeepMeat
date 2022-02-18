@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverrideList;
@@ -182,7 +183,8 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     {
         Direction face = quad.nominalFace();
         BlockPos newPos = pos.offset(face);
-        return !blockView.getBlockState(newPos).isOf(block);
+        BlockState newState = blockView.getBlockState(newPos);
+        return !(newState.isOf(block) || newState.isSideSolidFullSquare(blockView, newPos, face.getOpposite()));
     }
 
     @Override
