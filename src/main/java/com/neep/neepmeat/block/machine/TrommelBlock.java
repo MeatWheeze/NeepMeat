@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.machine;
 
 import com.neep.neepmeat.block.base.BaseHorFacingBlock;
 import com.neep.neepmeat.blockentity.TrommelBlockEntity;

@@ -3,6 +3,8 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.base.*;
+import com.neep.neepmeat.block.machine.FluidDrainBlock;
+import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -24,13 +26,6 @@ public class BlockInitialiser
     public static final Map<String, NMBlock> BLOCKS = new HashMap<>();
 
     public static Block MESH_PANE;
-
-//    public static Block SCAFFOLD_PLATFORM;
-//    public static Block SCAFFOLD_STAIRS;
-//    public static Block BLUE_SCAFFOLD;
-//    public static Block BLUE_SCAFFOLD_STAIRS;
-//    public static Block YELLOW_SCAFFOLD;
-//    public static Block YELLOW_SCAFFOLD_STAIRS;
 
     public static Block SCAFFOLD_TRAPDOOR;
     public static Block RUSTED_BARS;
@@ -62,6 +57,7 @@ public class BlockInitialiser
     public static Block PUMP;
     public static Block TROMMEL;
     public static Block TROMMEL_CENTRE;
+    public static Block FLUID_DRAIN;
 
     public static FlowableFluid FLOWING_BLOOD;
     public static FlowableFluid STILL_BLOOD;
@@ -109,13 +105,16 @@ public class BlockInitialiser
         TROMMEL = registerBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
         TROMMEL_CENTRE = registerBlock(new BaseDummyBlock("trommel_centre", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
-        // --- Transfer ---
+        // --- Fluid Transfer ---
         PUMP = registerBlock(new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         TANK = registerBlock(new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         ITEM_BUFFER = registerBlock(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
         GLASS_TANK = registerBlock(new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         FLUID_METER = registerBlock(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         FLUID_PORT = registerBlock(new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        FLUID_DRAIN = registerBlock(new FluidDrainBlock("fluid_drain", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+
+        // --- Item Transfer ---
         ITEM_DUCT = registerBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
 
         // --- Fluids ---
