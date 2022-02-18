@@ -11,7 +11,7 @@ public class BaseSlabBlock extends SlabBlock implements NMBlock
     protected int maxStack;
     protected BlockItem blockItem;
 
-    protected BaseSlabBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
+    public BaseSlabBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
     {
         super(settings);
         this.registryName = blockName;

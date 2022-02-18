@@ -16,7 +16,6 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.rmi.MarshalException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,10 +24,14 @@ public class BlockInitialiser
     public static final Map<String, NMBlock> BLOCKS = new HashMap<>();
 
     public static Block MESH_PANE;
-    public static Block SCAFFOLD_PLATFORM;
-    public static Block BLUE_SCAFFOLD;
-    public static Block SCAFFOLD_STAIRS;
-    public static Block BLUE_SCAFFOLD_STAIRS;
+
+//    public static Block SCAFFOLD_PLATFORM;
+//    public static Block SCAFFOLD_STAIRS;
+//    public static Block BLUE_SCAFFOLD;
+//    public static Block BLUE_SCAFFOLD_STAIRS;
+//    public static Block YELLOW_SCAFFOLD;
+//    public static Block YELLOW_SCAFFOLD_STAIRS;
+
     public static Block SCAFFOLD_TRAPDOOR;
     public static Block RUSTED_BARS;
     public static Block CAUTION_BLOCK;
@@ -40,6 +43,9 @@ public class BlockInitialiser
     public static Block RUSTED_IRON_BLOCK = new BaseBuildingBlock("rusted_iron_block", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock("blue_polished_metal_block", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+
+    public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE));
 
     public static Block TEST;
     public static Block PIPE;
@@ -86,10 +92,13 @@ public class BlockInitialiser
         SLOPE_TEST = registerBlock(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
         // --- Scaffolding
-        SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-        BLUE_SCAFFOLD = registerBlock(new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-        BLUE_SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("blue_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-        SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("rusted_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("rusted_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        BLUE_SCAFFOLD = registerBlock(new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        BLUE_SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("blue_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        YELLOW_SCAFFOLD = registerBlock(new MetalScaffoldingBlock("yellow_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        YELLOW_SCAFFOLD_STAIRS = registerBlock(new MetalScaffoldingStairs("yellow_metal_scaffold_stairs", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+
         SCAFFOLD_TRAPDOOR = registerBlock(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
 
         // --- General Blocks ---
