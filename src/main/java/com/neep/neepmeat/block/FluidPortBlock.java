@@ -27,7 +27,7 @@ public class FluidPortBlock extends BaseFacingBlock implements DirectionalFluidA
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-            return this.getDefaultState().with(FACING, context.getPlayerLookDirection().getOpposite());
+            return this.getDefaultState().with(FACING, context.getSide());
     }
 
     @Override
@@ -36,23 +36,4 @@ public class FluidPortBlock extends BaseFacingBlock implements DirectionalFluidA
         return state.get(FACING) == direction;
     }
 
-////    @Override
-////    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
-////    {
-////        return BOUNDING_SHAPES.get(state.get(FACING));
-//    }
-
-//    @Override
-//    public VoxelShape getShapeForState(BlockState state)
-//    {
-//        VoxelShape shape = Block.createCuboidShape(4, 4, 4, 12, 12, 12);
-//        for (Direction direction : Direction.values())
-//        {
-//            if (state.get(DIR_TO_CONNECTION.get(direction)))
-//            {
-//                shape = VoxelShapes.union(shape, DIR_SHAPES.get(direction));
-//            }
-//        }
-//        return shape;
-//    }
 }
