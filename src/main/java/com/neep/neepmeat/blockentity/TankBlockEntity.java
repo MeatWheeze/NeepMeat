@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class TankBlockEntity extends BlockEntity implements FluidBufferProvider
 {
-    private final FluidBuffer buffer;
+    protected final FluidBuffer buffer;
 
     public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {

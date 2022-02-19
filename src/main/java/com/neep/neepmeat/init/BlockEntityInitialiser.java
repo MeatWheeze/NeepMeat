@@ -19,7 +19,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
-    public static BlockEntityType<TrommelBlockEntity> FLUID_DRAIN;
+    public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
 
 
     public static void initialiseBlockEntities()
@@ -61,7 +61,7 @@ public class BlockEntityInitialiser
 
         FLUID_DRAIN = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 NeepMeat.NAMESPACE + "fluid_drain_block_entity",
-                FabricBlockEntityTypeBuilder.create(TrommelBlockEntity::new, BlockInitialiser.TROMMEL)
+                FabricBlockEntityTypeBuilder.create(FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN)
                         .build());
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);

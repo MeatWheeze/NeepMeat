@@ -3,10 +3,13 @@ package com.neep.neepmeat.block.machine;
 import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.blockentity.FluidDrainBlockEntity;
 import com.neep.neepmeat.blockentity.TankBlockEntity;
+import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -41,5 +44,18 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
             }
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Nullable
+    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
+    checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> ticker, World world)
+    {
+        return expectedType == givenType && !world.isClient ? (BlockEntityTicker<A>) ticker : null;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return checkType(type, BlockEntityInitialiser.FLUID_DRAIN, FluidDrainBlockEntity::serverTick, world);
     }
 }
