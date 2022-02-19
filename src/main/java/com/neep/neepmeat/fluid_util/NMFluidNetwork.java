@@ -54,6 +54,7 @@ public class NMFluidNetwork
 
     public static Optional<NMFluidNetwork> tryCreateNetwork(World world, BlockPos pos, Direction direction)
     {
+//        System.out.println("trying fluid network at " + pos);
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
         network.rebuild(pos, direction);
         if (network.isValid())
@@ -178,8 +179,6 @@ public class NMFluidNetwork
     {
         try
         {
-            // Set networks before updating distances.
-
             for (Supplier<FluidNode> supplier : connectedNodes)
             {
                 FluidNode node = supplier.get();
@@ -202,6 +201,7 @@ public class NMFluidNetwork
                         BlockPos current = iterator.next();
                         networkPipes.get(current).setDistance(i + 1);
                         networkPipes.get(current).setVisited(true);
+//                        System.out.println(networkPipes.get(current).getDistance() + ", " + networkPipes.get(current).connections);
                         for (Direction direction : networkPipes.get(current).connections)
                         {
                             if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
@@ -227,7 +227,7 @@ public class NMFluidNetwork
                         continue;
                     }
                     int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
-//                    System.out.println(distanceToNode);
+//                    System.out.print(node + ",\n " + distanceToNode + "\n");
                     node.distances.put(targetNode, distanceToNode);
 //                    node.distances.put(node1, 1);
                 }
@@ -249,7 +249,7 @@ public class NMFluidNetwork
         List<BlockPos> nextSet = new ArrayList<>();
 
         pipeQueue.add(startPos);
-        networkPipes.put(startPos, new PipeSegment(startPos));
+        networkPipes.put(startPos, new PipeSegment(startPos, world.getBlockState(startPos)));
 
         // Pipe search depth
         for (int i = 0; i < UPDATE_DISTANCE; ++i)
