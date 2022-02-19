@@ -2,14 +2,24 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.block.base.BaseFacingBlock;
+import com.neep.neepmeat.blockentity.FluidPortBlockEntity;
+import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class FluidPortBlock extends BaseFacingBlock implements DirectionalFluidAcceptor
+public class FluidPortBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
@@ -27,13 +37,33 @@ public class FluidPortBlock extends BaseFacingBlock implements DirectionalFluidA
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-            return this.getDefaultState().with(FACING, context.getSide());
+            return this.getDefaultState().with(FACING, context.getSide().getOpposite());
     }
 
     @Override
-    public boolean connectInDirection(BlockState state, Direction direction)
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        return state.get(FACING) == direction;
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if (world.getBlockEntity(pos) instanceof ItemDuctBlockEntity be)
+        {
+            be.updateApiCache(pos, state);
+        }
     }
 
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (world.getBlockEntity(pos) instanceof ItemDuctBlockEntity be)
+        {
+            be.updateApiCache(pos, state);
+        }
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new FluidPortBlockEntity(pos, state);
+    }
 }

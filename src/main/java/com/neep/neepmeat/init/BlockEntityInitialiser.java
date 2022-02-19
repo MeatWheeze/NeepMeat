@@ -20,6 +20,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
+    public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
 
 
     public static void initialiseBlockEntities()
@@ -64,8 +65,14 @@ public class BlockEntityInitialiser
                 FabricBlockEntityTypeBuilder.create(FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN)
                         .build());
 
+        FLUID_PORT = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                NeepMeat.NAMESPACE + "fluid_port_block_entity",
+                FabricBlockEntityTypeBuilder.create(FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT)
+                        .build());
+
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
+        FluidStorage.SIDED.registerSelf(FLUID_PORT);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
