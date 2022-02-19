@@ -235,7 +235,12 @@ public class FluidNode
         AtomicReference<Float> sum = new AtomicReference<>((float) 0);
         distances.values().forEach((distance) -> sum.updateAndGet(v -> (v + ((float) Math.pow(r, 4) / (float) distance))));
 //
-        float branchFlow = 500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get());
+
+        // Hazen-Williams approximation for gravity-driven flow of water
+        float S = getPos().getY() - node.getPos().getY();
+        double Q = 100 * Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852);
+
+        float branchFlow = (float) (500 * (flow + Q) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get()));
 //        System.out.println(branchFlow);
 
 //        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
