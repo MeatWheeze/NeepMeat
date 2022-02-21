@@ -251,13 +251,16 @@ public class FluidNode
         // Hazen-Williams approximation for gravity-driven flow of water
         float S = getTargetY() - node.getTargetY();
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
-        double gravityFlowIn = 50 * Math.pow((Math.abs(S) * Math.pow(130f, 1.852) * Math.pow(100e-3, 4.8704)) / 10.67f, 1 / 1.852f);
-        gravityFlowIn = 0;
-//        System.out.println(gravityFlowIn);
-        // Causes NaNs. Why???
+//        double gravityFlowIn = 50 * Math.pow((Math.abs(S) * Math.pow(130f, 1.852) * Math.pow(100e-3, 4.8704)) / 10.67f, 1 / 1.852f);
+//        gravityFlowIn = S < 0 ? 0 : gravityFlowIn;
+//        gravityFlowIn = ((Double) gravityFlowIn).isNaN() ? 0 : gravityFlowIn;
+//        gravityFlowIn = 0;
+        // My linear approximation of the Hazen-Williams approximation
+        double gravityFlowIn = S < -1 ? 0 : 0.5 * S;
+//        System.out.println(S);
 
-        float insertBranchFlow = (float) (500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
-        float extractBranchFlow = (float) (500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
+        float insertBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
+        float extractBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
         long amountMoved = 0;
         if (insertBranchFlow >= 0)
