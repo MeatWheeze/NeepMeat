@@ -3,11 +3,12 @@ package com.neep.neepmeat.fluid_util.node;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
-import com.sun.jna.platform.win32.WinUser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +18,7 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /*
     An interface for fluid networks associated with a
@@ -243,18 +244,35 @@ public class FluidNode
 
         for (int dist : distances.values())
         {
-//            if (node.storage.simulateInsert(getStorage(world).))
+            Transaction transaction =Transaction.openOuter();
+            Iterable<StorageView<FluidVariant>> iterable = storage.iterable(transaction);
+            AtomicInteger insert = new AtomicInteger();
+            AtomicInteger extract = new AtomicInteger();
+            iterable.forEach((view) -> {
+                FluidVariant resource;
+                if (!(resource = view.getResource()).isBlank())
+                {
+                    if (storage.simulateInsert(resource, 1, transaction) > 0)
+                    {
+                        insert.incrementAndGet();
+                    }
+                    if (storage.simulateInsert(resource, 1, transaction) > 0)
+                    {
+                        extract.incrementAndGet();
+                    }
+                }
+            });
+            transaction.abort();
+            if (insert.get() > 1)
                 sumIn += Math.pow(r, 4) / (float) dist;
+
+            if (extract.get() > 1)
                 sumOut += Math.pow(r, 4) / (float) dist;
         }
 
         // Hazen-Williams approximation for gravity-driven flow of water
         float S = getTargetY() - node.getTargetY();
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
-//        double gravityFlowIn = 50 * Math.pow((Math.abs(S) * Math.pow(130f, 1.852) * Math.pow(100e-3, 4.8704)) / 10.67f, 1 / 1.852f);
-//        gravityFlowIn = S < 0 ? 0 : gravityFlowIn;
-//        gravityFlowIn = ((Double) gravityFlowIn).isNaN() ? 0 : gravityFlowIn;
-//        gravityFlowIn = 0;
         // My linear approximation of the Hazen-Williams approximation
         double gravityFlowIn = S < -1 ? 0 : 0.5 * S;
 //        System.out.println(S);
