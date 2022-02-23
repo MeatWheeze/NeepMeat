@@ -232,7 +232,6 @@ public class FluidNode
         }
 
         // Here is the most realistic flow rate calculation that you have ever seen.
-        // Laminar Poiseuille flow: Q = (R^4 pi) / (8 * µ) * dP/dX.
 
         // Geometrical solution for velocity in branched pipes:
         // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
@@ -242,6 +241,7 @@ public class FluidNode
         float sumIn = 0;
         float sumOut = 0;
 
+        // First we calculate sum(r^4 / L_i), discounting full containers.
         for (FluidNode distanceNode : distances.keySet())
         {
             Transaction transaction = Transaction.openOuter();
@@ -252,16 +252,16 @@ public class FluidNode
             {
                 for (StorageView<FluidVariant> targetView : distanceNode.storage.iterable(transaction))
                 {
-                    if (targetView.getAmount() >= targetView.getAmount() && targetView.getResource().equals(view.getResource()))
+                    if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()))
                     {
+//                        System.out.println(targetView.getAmount() + ", " + targetView.getCapacity() + ", " + targetView.getResource());
                         canInsert = true;
                     }
                 }
             }
-
             transaction.abort();
-            System.out.println(canInsert);
-//            if (canInsert)
+
+            if (canInsert)
             {
                 sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
             }
@@ -270,11 +270,10 @@ public class FluidNode
                 sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
         }
 
-        float S = getTargetY() - node.getTargetY();
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
         // My linear approximation of the Hazen-Williams approximation
-        double gravityFlowIn = S < -1 ? 0 : 0.5 * S;
-//        System.out.println(S);
+        float h = getTargetY() - node.getTargetY();
+        double gravityFlowIn = h < -1 ? 0 : 0.5 * h;
 
         float insertBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
         float extractBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
