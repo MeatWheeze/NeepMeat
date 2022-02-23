@@ -1,6 +1,5 @@
 package com.neep.neepmeat.fluid_util;
 
-import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.PipeBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Pair;
@@ -29,7 +28,7 @@ public class PipeSegment extends Pair<BlockPos, Float>
         {
             for (Direction direction : Direction.values())
             {
-                if (state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)))
+                if (state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE)
                 {
                     connections.add(direction);
                 }

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
+import com.neep.neepmeat.fluid_util.PipeConnection;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.Direction;
 
@@ -10,7 +11,7 @@ public interface FluidAcceptor
     {
         if (state.getBlock() instanceof PipeBlock)
         {
-            return state.get(PipeBlock.DIR_TO_CONNECTION.get(direction));
+            return state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
         }
         else if (state.getBlock() instanceof FluidAcceptor)
         {

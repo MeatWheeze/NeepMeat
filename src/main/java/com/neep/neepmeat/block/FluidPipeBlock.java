@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import com.neep.neepmeat.fluid_util.PipeConnection;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -58,12 +59,12 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
             connection = connection || canConnectApi((World) world, pos, state, direction);
         }
 
-        if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
+        if (connection == (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE) && !isFullyConnected(state))
         {
-            return state.with(DIR_TO_CONNECTION.get(direction), connection);
+            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.SIDE);
         }
 
-        return state.with(DIR_TO_CONNECTION.get(direction), connection);
+        return state.with(DIR_TO_CONNECTION.get(direction), connection ? PipeConnection.SIDE : PipeConnection.NONE);
     }
 
     @Nullable
@@ -83,7 +84,7 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
             {
                 if (canConnectApi(world, pos, state, direction))
                 {
-                    state2 = state2.with(DIR_TO_CONNECTION.get(direction), true);
+                    state2 = state2.with(DIR_TO_CONNECTION.get(direction), PipeConnection.SIDE);
                 }
             }
             return state2;
@@ -100,7 +101,7 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
             {
                 Storage<FluidVariant> storage;
                 if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
-                        && state.get(DIR_TO_CONNECTION.get(direction)))
+                        && state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE)
                 {
                     FluidNode node;
                     BlockState nextPos = world.getBlockState(pos.offset(direction));
