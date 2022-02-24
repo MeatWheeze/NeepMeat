@@ -252,7 +252,7 @@ public class FluidNode
             {
                 for (StorageView<FluidVariant> targetView : distanceNode.storage.iterable(transaction))
                 {
-                    if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()))
+                    if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()) || targetView.getAmount() <= 0)
                     {
 //                        System.out.println(targetView.getAmount() + ", " + targetView.getCapacity() + ", " + targetView.getResource());
                         canInsert = true;
