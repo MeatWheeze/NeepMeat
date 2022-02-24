@@ -15,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -123,7 +124,7 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
                     updateNetwork(world, pos, node, false);
                 } else
                 {
-                    FluidNetwork.INSTANCE.removeNode(world, new NodePos(pos, direction));
+                    FluidNetwork.getInstance((ServerWorld) world).removeNode(world, new NodePos(pos, direction));
                 }
             }
             // TODO: avoid creating that will fail immediately

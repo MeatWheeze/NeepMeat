@@ -22,10 +22,9 @@ public class NodeContainerBlockEntity extends BlockEntity
     public void setWorld(World world)
     {
         super.setWorld(world);
-        if (getWorld() instanceof ServerWorld serverWorld)
+        if (getWorld() instanceof ServerWorld serverWorld && queuedNbt != null)
         {
-//            FluidNetwork.INSTANCE.getNodes(getPos()).forEach((node) -> node.loadDeferred((ServerWorld) world));
-//            FluidNetwork.INSTANCE.readNodes(serverWorld, getPos(), queuedNbt);
+            FluidNetwork.getInstance(getWorld()).readNodes(getPos(), queuedNbt, serverWorld);
         }
 
     }
@@ -35,7 +34,6 @@ public class NodeContainerBlockEntity extends BlockEntity
     {
         super.readNbt(nbt);
         queuedNbt = nbt.copy();
-        FluidNetwork.INSTANCE.readNodes(getPos(), nbt);
 
     }
 
@@ -43,7 +41,7 @@ public class NodeContainerBlockEntity extends BlockEntity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt = FluidNetwork.INSTANCE.writeNodes(getPos(), nbt);
+        nbt = FluidNetwork.getInstance(getWorld()).writeNodes(getPos(), nbt);
         return nbt;
     }
 }

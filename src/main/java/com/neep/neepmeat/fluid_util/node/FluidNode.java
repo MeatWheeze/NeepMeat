@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /*
     An interface for fluid networks associated with a
@@ -53,8 +52,8 @@ public class FluidNode
         this.flow = mode.getFlow() * flowMultiplier;
     }
 
-    // From NBT
-    public FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier, long networkId)
+    // For deferred loading.
+    protected FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world)
     {
         this.face = face;
         this.pos = pos;
@@ -66,8 +65,7 @@ public class FluidNode
         this.storage = null;
         this.needsDeferredLoading = true;
 
-        FluidNetwork.QUEUED_NODES.add(this);
-
+        FluidNetwork.getInstance(world).queueNode(this);
     }
 
     @Override
@@ -76,7 +74,8 @@ public class FluidNode
         return "\n" + this.pos.toString() + " " + face + " storage: " + storage;
     }
 
-    public static FluidNode fromNbt(NbtCompound nbt)
+    // Load a node from NBT data
+    public static FluidNode fromNbt(NbtCompound nbt, ServerWorld world)
     {
         BlockPos pos = BlockPos.fromLong(nbt.getLong("position"));
         Direction face = Direction.byId(nbt.getInt("direction"));
@@ -84,8 +83,7 @@ public class FluidNode
         long networkId = nbt.getLong("network_id");
         float flowMultiplier = nbt.getFloat("multiplier");
 
-       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier, networkId);
-//       node.loadDeferred(world);
+       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier, networkId, world);
        return node;
     }
 
@@ -128,8 +126,8 @@ public class FluidNode
         }
         else
         {
-            // Remove invalid nodes
-            FluidNetwork.INSTANCE.removeNode(world, nodePos);
+            // Remove nodes with no connected storage that are not queued for deferred loading
+            FluidNetwork.getInstance(world).removeNode(world, nodePos);
         }
     }
 

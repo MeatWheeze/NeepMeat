@@ -14,6 +14,7 @@ import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -267,7 +268,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
 //            NodePos nodePos = new NodePos(pos.offset(direction), direction.getOpposite());
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.INSTANCE.removeNode(world, nodePos);
+            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
         }
     }
 
@@ -276,11 +277,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         if (removed)
         {
-            FluidNetwork.INSTANCE.removeNode(world, new NodePos(node));
+            FluidNetwork.getInstance(world).removeNode(world, new NodePos(node));
         }
         else
         {
-            FluidNetwork.INSTANCE.updateNode(world, new NodePos(node), node);
+            FluidNetwork.getInstance(world).updateNode(world, new NodePos(node), node);
         }
     }
 
@@ -296,7 +297,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
             if (player.isSneaking())
             {
-                System.out.println(FluidNetwork.INSTANCE.getNodes(pos));
+                System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
                 System.out.println("block entity: " + world.getBlockEntity(pos));
                 return ActionResult.SUCCESS;
             }
