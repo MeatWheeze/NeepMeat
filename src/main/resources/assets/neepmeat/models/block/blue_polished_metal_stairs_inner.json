@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "neepmeat:block/blue_polished_metal",
+    "top": "neepmeat:block/blue_polished_metal",
+    "side": "neepmeat:block/blue_polished_metal"
+  }
+}
