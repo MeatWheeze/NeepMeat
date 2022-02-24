@@ -195,15 +195,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-//        if (!world.isClient())
-//        {
-//            connection = connection || canConnectApi((World) world, pos, state, direction);
-//        }
 
-//        if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
-        if (connection == (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE))
+        // Already connected in direction
+        if (connection && (state.get(DIR_TO_CONNECTION.get(direction)).isConnected()))
         {
-            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.NONE);
+            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.SIDE);
         }
 
         return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.NONE);
@@ -329,7 +325,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 }
             }
             boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnection.SIDE;
-            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), PipeConnection.FORCED));
+            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnection.FORCED : PipeConnection.SIDE));
 
             return ActionResult.SUCCESS;
 //        }
@@ -341,7 +337,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH_CONNECTION, EAST_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION);
-//        builder.add(ooer);
     }
 
 }
