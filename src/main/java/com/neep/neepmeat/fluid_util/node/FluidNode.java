@@ -126,6 +126,11 @@ public class FluidNode
             this.storage = storage;
             this.needsDeferredLoading = false;
         }
+        else
+        {
+            // Remove invalid nodes
+            FluidNetwork.INSTANCE.removeNode(world, nodePos);
+        }
     }
 
     public void setMode(AcceptorModes mode)
@@ -216,7 +221,7 @@ public class FluidNode
         }
         else
         {
-//            loadDeferred(world);
+            load(world);
         }
         return null;
     }
@@ -248,9 +253,9 @@ public class FluidNode
 
             boolean canInsert = false;
 
-            for (StorageView<FluidVariant> view : this.storage.iterable(transaction))
+            for (StorageView<FluidVariant> view : this.getStorage(world).iterable(transaction))
             {
-                for (StorageView<FluidVariant> targetView : distanceNode.storage.iterable(transaction))
+                for (StorageView<FluidVariant> targetView : distanceNode.getStorage(world).iterable(transaction))
                 {
                     if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()) || targetView.getAmount() <= 0)
                     {
@@ -288,18 +293,6 @@ public class FluidNode
             amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - extractBranchFlow, null);
 
         }
-    }
-
-    public static void flow(Storage<FluidVariant> from, Storage<FluidVariant> to)
-    {
-//        try (Transaction outerTransaction = Transaction.openOuter())
-//        {
-//            StorageUtil.move(from, to, )
-//             (A) some transaction operations
-//             (C) even more operations
-//            outerTransaction.commit(); // This is an outer transaction: changes (A), (B) and (C) are applied.
-//        }
-        // If we hadn't committed the outerTransaction, all changes (A), (B) and (C) would have been reverted.
     }
 
     public boolean canInsert()

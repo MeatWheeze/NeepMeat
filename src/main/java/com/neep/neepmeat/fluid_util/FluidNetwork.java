@@ -72,6 +72,7 @@ public class FluidNetwork
         }
         if (nodes.get(pos) != null)
         {
+            // Ensure that node is removed from connected networks
             nodes.get(pos).onRemove();
             nodes.remove(pos);
             NMFluidNetwork.validateAll();

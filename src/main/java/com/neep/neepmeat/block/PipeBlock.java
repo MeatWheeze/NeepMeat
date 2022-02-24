@@ -287,16 +287,17 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        System.out.println(player.getStackInHand(hand));
+//        System.out.println(player.getStackInHand(hand));
         if (!player.getStackInHand(hand).isEmpty())
         {
-            System.out.println("fail");
             return ActionResult.PASS;
         }
         if (!world.isClient)
         {
             if (player.isSneaking())
             {
+                System.out.println(FluidNetwork.INSTANCE.getNodes(pos));
+                System.out.println("block entity: " + world.getBlockEntity(pos));
                 return ActionResult.SUCCESS;
             }
             Direction direction = hit.getSide();
