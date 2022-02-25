@@ -113,7 +113,6 @@ public class RealisticFluid extends FlowableFluid
         if (fluidstate.isEmpty() && state.isOf(Blocks.AIR))
         {
             world.setBlockState(pos, fluid.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
-            System.out.println("emptu");
             return;
         }
 

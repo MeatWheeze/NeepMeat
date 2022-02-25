@@ -5,6 +5,7 @@ import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
@@ -51,9 +52,14 @@ public class FluidDrainBlockEntity extends TankBlockEntity
             long transferred = this.buffer.insert(FluidVariant.of(((FlowableFluid) fluidState.getFluid()).getStill()), targetAmount, transaction);
             if (transferred >= targetAmount)
             {
-                if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
+
+                if (world.getFluidState(sourcePos).getFluid() instanceof RealisticFluid realisticFluid)
                 {
-//                world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
+                    world.setBlockState(sourcePos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+                    transaction.commit();
+                }
+                else if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
+                {
                     drainable.tryDrainFluid(world, sourcePos, fluidBlockState);
                     transaction.commit();
                 }
