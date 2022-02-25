@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
+import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -47,7 +48,7 @@ public class FluidDrainBlockEntity extends TankBlockEntity
             Transaction transaction = Transaction.openOuter();
             BlockState fluidBlockState = world.getBlockState(sourcePos);
             long targetAmount = world.getFluidState(sourcePos).getLevel() * FluidConstants.BUCKET / 8;
-            long transferred = this.buffer.insert(FluidVariant.of(fluidState.getFluid()), targetAmount, transaction);
+            long transferred = this.buffer.insert(FluidVariant.of(((FlowableFluid) fluidState.getFluid()).getStill()), targetAmount, transaction);
             if (transferred >= targetAmount)
             {
                 if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)

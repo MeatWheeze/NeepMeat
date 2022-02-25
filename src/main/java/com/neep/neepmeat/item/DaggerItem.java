@@ -28,7 +28,7 @@ public class DaggerItem extends BaseSwordItem
         {
             BlockPos pos = target.getBlockPos();
 //                world.setBlockState(target.getBlockPos(), BlockInitialiser.STILL_BLOOD.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
-            RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), BlockInitialiser.STILL_BLOOD);
+            RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), BlockInitialiser.FLOWING_BLOOD);
         }
         return true;
     }
