@@ -103,7 +103,7 @@ public class FluidNode
         {
             return;
         }
-        load(world);
+//        load(world);
         Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
     }
 
@@ -127,7 +127,7 @@ public class FluidNode
         else
         {
             // Remove nodes with no connected storage that are not queued for deferred loading
-            FluidNetwork.getInstance(world).removeNode(world, nodePos);
+//            FluidNetwork.getInstance(world).removeNode(world, nodePos);
         }
     }
 
@@ -162,7 +162,7 @@ public class FluidNode
         return network;
     }
 
-    // Removed node from and revalidates the network
+    // Removes node from and revalidates the network
     public void onRemove()
     {
         System.out.println("removed " + this);
@@ -172,14 +172,6 @@ public class FluidNode
             network = null;
         }
         distances.clear();
-    }
-
-    public void tick(World world)
-    {
-//        if (network != null)
-//        {
-//            network.tick();
-//        }
     }
 
     public Direction getFace()
@@ -276,7 +268,7 @@ public class FluidNode
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
         // My linear approximation of the Hazen-Williams approximation
         float h = getTargetY() - node.getTargetY();
-        double gravityFlowIn = h < -1 ? 0 : 0.5 * h;
+        double gravityFlowIn = h < -1 ? 0 : 0.4 * h;
 
         float insertBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
         float extractBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
