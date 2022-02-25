@@ -4,23 +4,11 @@ import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.block.base.BaseSlabBlock;
 import com.neep.neepmeat.block.base.BaseStairsBlock;
 import com.neep.neepmeat.block.base.NMBlock;
-import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.NMFluidNetwork;
-import com.neep.neepmeat.fluid_util.node.FluidNode;
-import com.neep.neepmeat.fluid_util.node.NodePos;
 import com.neep.neepmeat.init.BlockInitialiser;
-import com.neep.neepmeat.item.BaseBlockItem;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -29,9 +17,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterloggable
 {

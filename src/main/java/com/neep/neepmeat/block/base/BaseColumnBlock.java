@@ -1,13 +1,7 @@
 package com.neep.neepmeat.block.base;
 
-import com.neep.neepmeat.item.BaseBlockItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
+import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.PillarBlock;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.state.StateManager;
-import net.minecraft.util.math.Direction;
 
 public class BaseColumnBlock extends PillarBlock implements NMBlock
 {

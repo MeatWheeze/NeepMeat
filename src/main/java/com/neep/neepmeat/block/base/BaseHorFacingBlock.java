@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.base;
 
-import com.neep.neepmeat.item.BaseBlockItem;
+import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.base;
 
 import com.neep.neepmeat.init.BlockInitialiser;
-import com.neep.neepmeat.item.BaseBlockItem;
+import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.Block;
 
 public class BaseBuildingBlock extends Block implements NMBlock

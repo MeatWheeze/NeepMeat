@@ -74,7 +74,7 @@ public class BlockInitialiser
     {
         if (!(block instanceof Block))
         {
-            throw new IllegalStateException("tried to register something that wasn't a block.");
+            throw new IllegalArgumentException("tried to register something that wasn't a block.");
         }
         return Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, block.getRegistryName()), (Block) block);
     }
