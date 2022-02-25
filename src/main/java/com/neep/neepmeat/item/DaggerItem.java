@@ -1,11 +1,14 @@
 package com.neep.neepmeat.item;
 
+import com.neep.neepmeat.fluid.BloodFluid;
+import com.neep.neepmeat.fluid.RealisticFluid;
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.item.base.BaseSwordItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class DaggerItem extends BaseSwordItem
@@ -23,10 +26,9 @@ public class DaggerItem extends BaseSwordItem
         World world = target.getEntityWorld();
         if (target.isDead() && !world.isClient)
         {
-            if (world.getBlockState(target.getBlockPos()).isOf(Blocks.AIR))
-            {
-                world.setBlockState(target.getBlockPos(), BlockInitialiser.STILL_BLOOD.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
-            }
+            BlockPos pos = target.getBlockPos();
+//                world.setBlockState(target.getBlockPos(), BlockInitialiser.STILL_BLOOD.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
+            RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), BlockInitialiser.STILL_BLOOD);
         }
         return true;
     }

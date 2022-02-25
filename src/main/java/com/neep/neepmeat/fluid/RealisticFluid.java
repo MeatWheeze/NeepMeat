@@ -2,6 +2,7 @@ package com.neep.neepmeat.fluid;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
@@ -10,8 +11,11 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
+
+import java.util.concurrent.Flow;
 
 public class RealisticFluid extends FlowableFluid
 {
@@ -98,5 +102,23 @@ public class RealisticFluid extends FlowableFluid
     public int getLevel(FluidState state)
     {
         return 0;
+    }
+
+    public static void incrementLevel(World world, BlockPos pos, BlockState state, FlowableFluid fluid)
+    {
+        FluidState fluidstate = world.getFluidState(pos);
+        if (!fluidstate.isEmpty() && !fluidstate.getFluid().equals(fluid))
+            return;
+
+        if (fluidstate.isEmpty() && state.isOf(Blocks.AIR))
+        {
+//            world.setBlockState(pos, fluid.getStill().getDefaultState().with(LEVEL, 1).getBlockState(), Block.NOTIFY_ALL);
+//            return;
+        }
+
+        int level = fluidstate.getLevel();
+        System.out.println(level);
+//        world.setBlockState(pos, fluid.getFlowing(8, false).getBlockState(), Block.NOTIFY_ALL);
+        world.setBlockState(pos, fluid.getFlowing().getDefaultState().with(LEVEL, 2).getBlockState(), Block.NOTIFY_ALL);
     }
 }

@@ -124,52 +124,6 @@ public class BloodFluid extends RealisticFluid
             BlockState newState = level > 0 ? this.getFlowing(level, false).getBlockState() : Blocks.AIR.getDefaultState();
             world.setBlockState(fluidPos, newState, Block.NOTIFY_ALL);
         }
-//        int i = Math.min(posList.size(), state.getLevel());
-//
-//        for(BlockPos pos : posList)
-//        {
-//            if (i <= 0)
-//            {
-//                break;
-//            }
-//
-//            BlockState targetState = world.getBlockState(pos);
-//            int targetLevel = targetState.getFluidState().getLevel();
-//
-//            if (targetState.isAir())
-//            {
-//                world.setBlockState(pos, this.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
-//                --i;
-//            } else if (targetState.getFluidState().getFluid().equals(this) && state.getLevel() > targetLevel + 1)
-//            {
-//                world.setBlockState(pos, this.getFlowing(targetLevel + 1, false).getBlockState(), Block.NOTIFY_ALL);
-//                --i;
-//            }
-//        }
-//
-//        int nextLevel = state.getLevel() - posList.size();
-//        if (nextLevel > 0)
-//        {
-////                world.setBlockState(fluidPos, this.getFlowing().getDefaultState().with(LEVEL, state.getLevel() - i).getBlockState(), Block.NOTIFY_ALL);
-//            world.setBlockState(fluidPos, this.getFlowing(nextLevel, false).getBlockState(), Block.NOTIFY_ALL);
-//        }
-//        else
-//        {
-//            world.setBlockState(fluidPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-//        }
-
-//        BlockState blockState = world.getBlockState(fluidPos);
-//        BlockPos downPos = fluidPos.down();
-//        BlockState downState = world.getBlockState(downPos);
-//        FluidState fluidState = this.getUpdatedState(world, downPos, downState);
-//        if (this.canFlow(world, fluidPos, blockState, Direction.DOWN, downPos, downState, world.getFluidState(downPos), fluidState.getFluid())) {
-//            this.flow(world, downPos, downState, Direction.DOWN, fluidState);
-//            if (this.getNearby(world, fluidPos) >= 3) {
-//                this.moveThing(world, fluidPos, state, blockState);
-//            }
-//        } else if (state.isStill() || !this.method_15736(world, fluidState.getFluid(), fluidPos, blockState, downPos, downState)) {
-//            this.moveThing(world, fluidPos, state, blockState);
-//        }
     }
 
     private int getNearby(WorldView world, BlockPos pos) {
@@ -244,6 +198,33 @@ public class BloodFluid extends RealisticFluid
 
     public static class Flowing extends BloodFluid
     {
+        public Flowing()
+        {
+            setDefaultState(getStateManager().getDefaultState().with(LEVEL, 8));
+        }
+
+        @Override
+        protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder)
+        {
+            super.appendProperties(builder);
+            builder.add(LEVEL);
+        }
+
+        @Override
+        public int getLevel(FluidState fluidState)
+        {
+            return fluidState.get(LEVEL);
+        }
+
+        @Override
+        public boolean isStill(FluidState fluidState)
+        {
+            return true;
+        }
+    }
+
+    public static class Still extends BloodFluid
+    {
         @Override
         protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder)
         {
@@ -261,21 +242,6 @@ public class BloodFluid extends RealisticFluid
         public boolean isStill(FluidState fluidState)
         {
             return false;
-        }
-    }
-
-    public static class Still extends BloodFluid
-    {
-        @Override
-        public int getLevel(FluidState fluidState)
-        {
-            return 8;
-        }
-
-        @Override
-        public boolean isStill(FluidState fluidState)
-        {
-            return true;
         }
     }
 }
