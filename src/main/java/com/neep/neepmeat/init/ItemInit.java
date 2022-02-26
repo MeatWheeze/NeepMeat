@@ -24,21 +24,21 @@ public class ItemInit
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
 
-    public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from zombie flesh and ganglia
 //    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("crude_integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
-    public static Item INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Organism Parts
-    public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static void putItem(String id, NMItem item)
     {
@@ -61,7 +61,7 @@ public class ItemInit
     {
 //        ROUGH.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 //        ROUGH.get("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        ROUGH.get("brain", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        CRUDE.get("integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+        ROUGH.get("brain", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+        CRUDE.get("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     }
 }

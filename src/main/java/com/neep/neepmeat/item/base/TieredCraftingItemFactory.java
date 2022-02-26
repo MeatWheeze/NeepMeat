@@ -11,11 +11,11 @@ public class TieredCraftingItemFactory
         this.prefixes = prefixes;
     }
 
-    public Void get(String registryName, Item.Settings settings)
+    public Void get(String registryName, boolean hasLore, Item.Settings settings)
     {
         for (String prefix : prefixes)
         {
-            BaseCraftingItem item = new BaseCraftingItem(registryName + "_" + prefix, settings);
+            BaseCraftingItem item = new BaseCraftingItem(registryName + "_" + prefix, hasLore, settings);
         }
         return null;
     }

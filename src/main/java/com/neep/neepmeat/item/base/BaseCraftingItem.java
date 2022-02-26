@@ -9,9 +9,9 @@ public class BaseCraftingItem extends BaseItem implements NMItem
 {
     private final String registryName;
 
-    public BaseCraftingItem(String registryName, Settings settings)
+    public BaseCraftingItem(String registryName, boolean hasLore, Settings settings)
     {
-        super(registryName, settings);
+        super(registryName, hasLore, settings);
         this.registryName = registryName;
         ItemInit.putItem(registryName, this);
     }
