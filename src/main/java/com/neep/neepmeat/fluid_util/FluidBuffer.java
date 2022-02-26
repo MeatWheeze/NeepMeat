@@ -20,10 +20,10 @@ import java.util.Iterator;
 public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements Storage<FluidVariant>, SingleSlotStorage<FluidVariant>
 {
 
-    private long capacity;
-    private FluidVariant resource = FluidVariant.blank();
-    private long amount = 0;
-    private BlockEntity parent;
+    protected long capacity;
+    protected FluidVariant resource = FluidVariant.blank();
+    protected long amount = 0;
+    private final BlockEntity parent;
 
     public FluidBuffer(BlockEntity parent, long capacity)
     {
