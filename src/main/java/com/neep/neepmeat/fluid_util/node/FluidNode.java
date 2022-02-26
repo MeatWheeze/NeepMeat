@@ -65,6 +65,7 @@ public class FluidNode
         this.storage = null;
         this.needsDeferredLoading = true;
 
+        System.out.println("-------- adding to queue");
         FluidNetwork.getInstance(world).queueNode(this);
     }
 
@@ -139,7 +140,7 @@ public class FluidNode
 
     public void setNetwork(ServerWorld world, NMFluidNetwork network)
     {
-        load(world);
+//        load(world);
         setNetwork(network);
     }
 
@@ -205,15 +206,11 @@ public class FluidNode
         {
             return null;
         }
-        if (storage != null)
-        {
-            return storage;
-        }
-        else
+        if (storage == null)
         {
             load(world);
         }
-        return null;
+        return storage;
     }
 
     public void transmitFluid(ServerWorld world, FluidNode node)

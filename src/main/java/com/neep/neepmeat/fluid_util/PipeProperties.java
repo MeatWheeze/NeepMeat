@@ -4,10 +4,10 @@ import net.minecraft.state.property.EnumProperty;
 
 public class PipeProperties
 {
-    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = EnumProperty.of("north", PipeConnection.class);
-    public static final EnumProperty<PipeConnection> SOUTH_CONNECTION = EnumProperty.of("south", PipeConnection.class);
-    public static final EnumProperty<PipeConnection> EAST_CONNECTION = EnumProperty.of("east", PipeConnection.class);
-    public static final EnumProperty<PipeConnection> WEST_CONNECTION = EnumProperty.of("west", PipeConnection.class);
-    public static final EnumProperty<PipeConnection> UP_CONNECTION = EnumProperty.of("up", PipeConnection.class);
-    public static final EnumProperty<PipeConnection> DOWN_CONNECTION = EnumProperty.of("down", PipeConnection.class);
+    public static final EnumProperty<PipeConnectionType> NORTH_CONNECTION = EnumProperty.of("north", PipeConnectionType.class);
+    public static final EnumProperty<PipeConnectionType> SOUTH_CONNECTION = EnumProperty.of("south", PipeConnectionType.class);
+    public static final EnumProperty<PipeConnectionType> EAST_CONNECTION = EnumProperty.of("east", PipeConnectionType.class);
+    public static final EnumProperty<PipeConnectionType> WEST_CONNECTION = EnumProperty.of("west", PipeConnectionType.class);
+    public static final EnumProperty<PipeConnectionType> UP_CONNECTION = EnumProperty.of("up", PipeConnectionType.class);
+    public static final EnumProperty<PipeConnectionType> DOWN_CONNECTION = EnumProperty.of("down", PipeConnectionType.class);
 }

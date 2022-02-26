@@ -2,33 +2,30 @@ package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.block.PipeBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PipeSegment extends Pair<BlockPos, Float>
+public class PipeState
 {
     List<Direction> connections = new ArrayList<>();
     private float pressure;
     private int distance;
     private boolean visited;
 
-    public PipeSegment(BlockPos pos)
+    public PipeState(BlockPos pos)
     {
-        super(pos, 0f);
 
     }
-    public PipeSegment(BlockPos pos, BlockState state)
+    public PipeState(BlockPos pos, BlockState state)
     {
-        super(pos, 0f);
         if (state.getBlock() instanceof PipeBlock)
         {
             for (Direction direction : Direction.values())
             {
-                if (state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE)
+                if (state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 {
                     connections.add(direction);
                 }
@@ -46,20 +43,15 @@ public class PipeSegment extends Pair<BlockPos, Float>
     // Ignore pressures when testing equality.
     public boolean equals(Object o)
     {
-        if (o == this)
+        if (o == this) // ?????
         {
             return true;
         }
-        if (o instanceof PipeSegment)
+        if (o instanceof PipeState state)
         {
-            return ((PipeSegment) o).getPos().equals(getPos());
+            return getDistance() == state.getDistance() && isVisited() == state.isVisited() && connections.equals(state.connections);
         }
         return false;
-    }
-
-    public BlockPos getPos()
-    {
-        return this.getLeft();
     }
 
     public float getPressure()
