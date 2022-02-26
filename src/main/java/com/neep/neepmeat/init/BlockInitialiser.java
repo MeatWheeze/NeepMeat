@@ -21,6 +21,7 @@ import net.minecraft.util.registry.Registry;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class BlockInitialiser
 {
     public static final Map<String, NMBlock> BLOCKS = new HashMap<>();
