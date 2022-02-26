@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
+import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -21,6 +22,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
     public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
+    public static BlockEntityType<IntegratorEggBlockEntity> INTEGRATOR_EGG;
 
 
     public static void initialiseBlockEntities()
@@ -68,6 +70,11 @@ public class BlockEntityInitialiser
         FLUID_PORT = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 NeepMeat.NAMESPACE + "fluid_port_block_entity",
                 FabricBlockEntityTypeBuilder.create(FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT)
+                        .build());
+
+        INTEGRATOR_EGG = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                NeepMeat.NAMESPACE + "integrator_egg",
+                FabricBlockEntityTypeBuilder.create(IntegratorEggBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG)
                         .build());
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);

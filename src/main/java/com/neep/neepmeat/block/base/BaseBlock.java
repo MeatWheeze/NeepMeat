@@ -9,11 +9,11 @@ public class BaseBlock extends Block implements NMBlock
     public BaseBlockItem blockItem;
     private String registryName;
 
-    public BaseBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
-        this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
-        this.registryName = itemName;
+        this.blockItem = new BaseBlockItem(this, registryName, itemMaxStack, hasLore);
+        this.registryName = registryName;
     }
 
     public BlockItem getBlockItem()
