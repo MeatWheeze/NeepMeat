@@ -3,13 +3,18 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+
+import java.util.function.Supplier;
 
 public class BlockEntityInitialiser
 {
@@ -24,58 +29,24 @@ public class BlockEntityInitialiser
     public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
     public static BlockEntityType<IntegratorEggBlockEntity> INTEGRATOR_EGG;
 
+    public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
+    {
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+                FabricBlockEntityTypeBuilder.create(factory, block).build());
+    }
 
     public static void initialiseBlockEntities()
     {
-        PUMP_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "pump_block_entity",
-                FabricBlockEntityTypeBuilder.create(PumpBlockEntity::new, BlockInitialiser.PUMP)
-                        .build());
-
-        TANK_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "tank_block_entity",
-                FabricBlockEntityTypeBuilder.create(TankBlockEntity::new, BlockInitialiser.TANK)
-                        .build());
-
-        GLASS_TANK_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "glass_tank_block_entity",
-                FabricBlockEntityTypeBuilder.create(GlassTankBlockEntity::new, BlockInitialiser.GLASS_TANK)
-                        .build());
-
-        NODE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "test_block_entity",
-                FabricBlockEntityTypeBuilder.create(NodeContainerBlockEntity::new, BlockInitialiser.PIPE)
-                        .build());
-
-        ITEM_DUCT_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "item_duct_block_entity",
-                FabricBlockEntityTypeBuilder.create(ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT)
-                        .build());
-
-        ITEM_BUFFER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "item_buffer_block_entity",
-                FabricBlockEntityTypeBuilder.create(ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER)
-                        .build());
-
-        TROMMEL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "trommel_block_entity",
-                FabricBlockEntityTypeBuilder.create(TrommelBlockEntity::new, BlockInitialiser.TROMMEL)
-                        .build());
-
-        FLUID_DRAIN = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "fluid_drain_block_entity",
-                FabricBlockEntityTypeBuilder.create(FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN)
-                        .build());
-
-        FLUID_PORT = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "fluid_port_block_entity",
-                FabricBlockEntityTypeBuilder.create(FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT)
-                        .build());
-
-        INTEGRATOR_EGG = Registry.register(Registry.BLOCK_ENTITY_TYPE,
-                NeepMeat.NAMESPACE + "integrator_egg",
-                FabricBlockEntityTypeBuilder.create(IntegratorEggBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG)
-                        .build());
+        PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, BlockInitialiser.PUMP);
+        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, BlockInitialiser.TANK);
+        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, BlockInitialiser.GLASS_TANK);
+        NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, BlockInitialiser.PIPE);
+        ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT);
+        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER);
+        TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, BlockInitialiser.TROMMEL);
+        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN);
+        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT);
+        INTEGRATOR_EGG = registerBlockEntity("integrator_egg", IntegratorEggBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
