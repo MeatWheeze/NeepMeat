@@ -19,19 +19,15 @@ public class ItemInit
 {
     public static Map<String, NMItem> ITEMS = new LinkedHashMap<>();
 
-    public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.GENERAL));
 
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
 
+    public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    // Made from zombie flesh and ganglia
-//    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("crude_integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-
     // Made from machine fluid
-    public static Item INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Organism Parts
