@@ -1,0 +1,6 @@
+{
+  "parent": "neepmeat:item/generated",
+  "textures": {
+    "layer0": "neepmeat:item/animal_heart"
+  }
+}

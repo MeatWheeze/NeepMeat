@@ -58,14 +58,15 @@ public class FluidNetwork
 
     public static void tickNetwork(ServerWorld world)
     {
-//        System.out.println("tick: " + world.getRegistryKey());
-        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.listIterator(); it.hasNext();)
+        List<FluidNode> removal = new ArrayList<>();
+        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.iterator(); it.hasNext();)
         {
             FluidNode node = it.next();
             node.loadDeferred(world);
-            it.remove();
+//            it.remove();
+            removal.add(node);
         }
-//        WORLD_NETWORKS.get(world).queuedNodes.removeIf(node -> node.getStorage(world) != null);
+        WORLD_NETWORKS.get(world).queuedNodes.removeAll(removal);
         NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 
@@ -77,7 +78,6 @@ public class FluidNetwork
             network = new FluidNetwork(world);
             WORLD_NETWORKS.put(world, network);
         }
-        System.out.println(" --------------------- world: " + world + ", net: " + network);
     }
 
     private static void startWorld(MinecraftServer server, ServerWorld world)
