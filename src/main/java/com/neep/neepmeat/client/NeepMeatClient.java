@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.GlassTankRenderer;
+import com.neep.neepmeat.client.renderer.IntegratorEggRenderer;
 import com.neep.neepmeat.client.renderer.ItemBufferRenderer;
 import com.neep.neepmeat.client.renderer.TrommelRenderer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
@@ -39,6 +40,8 @@ public class NeepMeatClient
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
 
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
+
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR_EGG, IntegratorEggRenderer::new);
 
         FluidRenderHandlerRegistry.INSTANCE.register(BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
                 new Identifier("minecraft:block/water_still"),
