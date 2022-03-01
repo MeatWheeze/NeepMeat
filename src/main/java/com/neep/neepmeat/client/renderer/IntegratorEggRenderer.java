@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -20,23 +20,34 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
-public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorEggBlockEntity>
+import java.util.Random;
+
+public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
-        super(new IntegratorEggModel<IntegratorEggBlockEntity>());
+        super(new IntegratorEggModel<IntegratorBlockEntity>());
     }
 
     @Override
-    public void render(IntegratorEggBlockEntity blockEntity, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
+    public void render(IntegratorBlockEntity blockEntity, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
+    {
+        if (!blockEntity.isFullyGrown)
+        {
+            renderEgg(matrices, blockEntity, vertexConsumers);
+        }
+        else
+        {
+            matrices.push();
+            matrices.translate(0, 1 + Math.sin((blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
+            super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
+            matrices.pop();
+        }
+    }
+
+    public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
     {
         matrices.push();
-        matrices.translate(0, 1 + Math.sin((float) (blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
-        super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
-        matrices.pop();
-
-        matrices.push();
-
         matrices.push();
         if (blockEntity.canGrow())
         {
@@ -48,23 +59,24 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorEggBlockEn
 
         BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
         int overlay = 0;
-//        manager.getModelRenderer().render(
-//                blockEntity.getWorld(),
-//                manager.getModel(blockEntity.getCachedState()),
-//                blockEntity.getCachedState(),
-//                blockEntity.getPos(),
-//                matrices,
-//                vertexConsumers.getBuffer(RenderLayer.getCutout()),
-//                true,
-//                new Random(1),
-//                0,
-//                overlay
-//        );
+        manager.getModelRenderer().render(
+                blockEntity.getWorld(),
+                manager.getModel(blockEntity.getCachedState()),
+                blockEntity.getCachedState(),
+                blockEntity.getPos(),
+                matrices,
+                vertexConsumers.getBuffer(RenderLayer.getCutout()),
+                true,
+                new Random(1),
+                0,
+                overlay
+        );
         matrices.pop();
 
-        FluidBuffer buffer = blockEntity.getBuffer(null);
+        WritableFluidBuffer buffer = blockEntity.getInputBuffer();
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
-        FluidVariant fluid = blockEntity.getBuffer(null).getResource();
+        FluidVariant fluid = buffer.getResource();
+
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
         IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);

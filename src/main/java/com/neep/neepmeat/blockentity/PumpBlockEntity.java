@@ -3,7 +3,7 @@ package com.neep.neepmeat.blockentity;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
+public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_util.FluidBuffer.FluidBufferProvider
 {
 
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
     private final Map<Direction, AcceptorModes > sideModes = new HashMap<>();
-    private final FluidBuffer buffer;
+    private final WritableFluidBuffer buffer;
     private NMFluidNetwork network;
     private boolean needsUpdate;
     private boolean isActive;
@@ -36,7 +36,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
         super(BlockEntityInitialiser.PUMP_BLOCK_ENTITY, pos, state);
 
         this.needsUpdate = true;
-        buffer = new FluidBuffer(this, FluidConstants.BLOCK);
+        buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
         // Create fluid interfaces in connection directions
         if (state.getBlock() instanceof FluidNodeProvider nodeProvider)
         {
@@ -148,7 +148,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
     @Override
     @Nullable
-    public FluidBuffer getBuffer(Direction direction)
+    public WritableFluidBuffer getBuffer(Direction direction)
     {
 //        return sideModes.get(direction) != FluidAcceptor.AcceptorModes NONE
 //                || direction == null ? buffer : null;
