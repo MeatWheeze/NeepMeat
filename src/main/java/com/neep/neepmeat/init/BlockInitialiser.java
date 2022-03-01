@@ -8,10 +8,7 @@ import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FluidBlock;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
@@ -65,6 +62,7 @@ public class BlockInitialiser
     public static Block FLUID_DRAIN;
 
     public static Block INTEGRATOR_EGG;
+    public static Block TANK_WALL;
 
     public static FlowableFluid FLOWING_BLOOD;
     public static FlowableFluid STILL_BLOOD;
@@ -117,6 +115,9 @@ public class BlockInitialiser
 
         // --- Integrator ---
         INTEGRATOR_EGG = registerBlock(new IntegratorEggBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.SLIME)));
+//        TANK_WALL = registerBlock(new TankWallBlock("clear_tank_wall", 64, true, FabricBlockSettings.copyOf(Blocks.GLASS).strength(4.0f).sounds(BlockSoundGroup.GLASS)));
+        TANK_WALL = registerBlock(new TankWallBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
+//        TANK_WALL = registerBlock("clear_tank_wall", new GlassBlock(AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
 
         // --- Fluids ---
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());

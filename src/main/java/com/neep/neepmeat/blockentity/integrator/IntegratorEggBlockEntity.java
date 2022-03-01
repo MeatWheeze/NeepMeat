@@ -23,6 +23,7 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
 
     protected int growthTimeRemaining = 1000;
     protected final TypedFluidBuffer buffer;
+    int totalTime = 10;
 
     public IntegratorEggBlockEntity(BlockPos pos, BlockState state)
     {
@@ -34,6 +35,7 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
+        tag.putInt("growth_remaining", growthTimeRemaining);
         tag = buffer.writeNBT(tag);
         return tag;
     }
@@ -42,6 +44,7 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
+        growthTimeRemaining = tag.getInt("growth_remaining");
         buffer.readNBT(tag);
     }
 
@@ -59,14 +62,13 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
 
     public static void serverTick(World world, BlockPos blockPos, BlockState blockState, IntegratorEggBlockEntity be)
     {
-//        be.grow();
+        be.grow();
     }
 
-    int totalTime = 10;
 
     public boolean canGrow()
     {
-        return growthTimeRemaining > 0;
+        return growthTimeRemaining > 0 && buffer.getAmount() >= FluidConstants.BUCKET / totalTime / 20;
     }
 
     public void grow()
@@ -74,12 +76,12 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
         if (!canGrow())
             return;
 
-        --growthTimeRemaining;
         long decrement = FluidConstants.BUCKET / totalTime / 20;
         Transaction transaction = Transaction.openOuter();
         long transferred = buffer.extract(buffer.getResource(), decrement, transaction);
         if (transferred == decrement)
         {
+            --growthTimeRemaining;
             transaction.commit();
         }
         else
