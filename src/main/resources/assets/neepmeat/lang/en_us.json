@@ -53,6 +53,8 @@
   "block.neepmeat.rusted_bars": "Rusted Metal Bars",
 
   "block.neepmeat.caution_block": "Caution Stripes",
+  "block.neepmeat.caution_block_slab": "Caution Stripes Slab",
+  "block.neepmeat.caution_block_stairs": "Caution Stripes Stairs",
 
   "block.neepmeat.pipe": "Fluid Pipe",
 
@@ -68,6 +70,8 @@
   "block.neepmeat.fluid_drain": "Fluid Drain",
 
   "block.neepmeat.item_duct": "Hopper Extension",
+
+  "block.neepmeat.rusty_panel": "Rusty Panel",
 
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
