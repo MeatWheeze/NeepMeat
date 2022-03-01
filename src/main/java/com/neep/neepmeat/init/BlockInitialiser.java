@@ -29,6 +29,7 @@ public class BlockInitialiser
     public static Block RUSTED_BARS;
     public static Block RUSTY_VENT;
     public static Block RUSTY_PANEL;
+    public static Block RUSTY_GRATE;
 
     public static Block SLOPE_TEST;
 
@@ -91,6 +92,7 @@ public class BlockInitialiser
         MESH_PANE = registerBlock(new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTED_BARS = registerBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTY_PANEL = registerBlock(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        RUSTY_GRATE = registerBlock(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         SLOPE_TEST = registerBlock(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
