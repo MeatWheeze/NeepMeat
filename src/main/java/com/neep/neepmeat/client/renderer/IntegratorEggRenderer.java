@@ -8,30 +8,33 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.BlockRenderManager;
-import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
+import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
-import java.util.Random;
-
-public class IntegratorEggRenderer implements BlockEntityRenderer<IntegratorEggBlockEntity>
+public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorEggBlockEntity>
 {
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
+        super(new IntegratorEggModel<IntegratorEggBlockEntity>());
     }
 
     @Override
-    public void render(IntegratorEggBlockEntity blockEntity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
+    public void render(IntegratorEggBlockEntity blockEntity, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
     {
+        matrices.push();
+        matrices.translate(0, 1 + Math.sin((float) (blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
+        super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
+        matrices.pop();
+
         matrices.push();
 
         matrices.push();
@@ -44,18 +47,19 @@ public class IntegratorEggRenderer implements BlockEntityRenderer<IntegratorEggB
         }
 
         BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
-        manager.getModelRenderer().render(
-                blockEntity.getWorld(),
-                manager.getModel(blockEntity.getCachedState()),
-                blockEntity.getCachedState(),
-                blockEntity.getPos(),
-                matrices,
-                vertexConsumers.getBuffer(RenderLayer.getCutout()),
-                true,
-                new Random(1),
-                0,
-                overlay
-        );
+        int overlay = 0;
+//        manager.getModelRenderer().render(
+//                blockEntity.getWorld(),
+//                manager.getModel(blockEntity.getCachedState()),
+//                blockEntity.getCachedState(),
+//                blockEntity.getPos(),
+//                matrices,
+//                vertexConsumers.getBuffer(RenderLayer.getCutout()),
+//                true,
+//                new Random(1),
+//                0,
+//                overlay
+//        );
         matrices.pop();
 
         FluidBuffer buffer = blockEntity.getBuffer(null);
@@ -63,7 +67,7 @@ public class IntegratorEggRenderer implements BlockEntityRenderer<IntegratorEggB
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
-        renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
+        IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
 
         matrices.pop();
     }
