@@ -23,6 +23,6 @@ public enum PipeConnectionType implements StringIdentifiable
 
     public boolean isConnected()
     {
-        return this != NONE;
+        return this == SIDE;
     }
 }
