@@ -1,4 +1,4 @@
-package com.neep.neepmeat.blockentity;
+package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;

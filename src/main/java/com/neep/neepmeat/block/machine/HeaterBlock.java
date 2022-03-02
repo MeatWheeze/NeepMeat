@@ -1,9 +1,13 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.neepmeat.block.base.BaseBlock;
-import com.neep.neepmeat.blockentity.fluid.FluidDrainBlockEntity;
+import com.neep.neepmeat.block.base.BaseFacingBlock;
+import com.neep.neepmeat.block.base.NMBlock;
+import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
+import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -19,31 +23,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
+public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public FluidDrainBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public HeaterBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FluidDrainBlockEntity(pos, state);
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-        if (!world.isClient)
-        {
-            if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
-            {
-                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
-            }
-        }
-        return ActionResult.SUCCESS;
+        return BlockEntityInitialiser.HEATER.instantiate(pos, state);
     }
 
     @Nullable
@@ -56,6 +47,21 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.FLUID_DRAIN, FluidDrainBlockEntity::serverTick, world);
+        System.out.println(type.supports(state));
+        return checkType(type, BlockEntityInitialiser.HEATER, HeaterBlockEntity::serverTick, world);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (!world.isClient)
+        {
+            System.out.println(world.getBlockEntity(pos));
+            if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
+            {
+                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+            }
+        }
+        return ActionResult.SUCCESS;
     }
 }

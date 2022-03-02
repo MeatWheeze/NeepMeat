@@ -1,4 +1,4 @@
-package com.neep.neepmeat.blockentity;
+package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;

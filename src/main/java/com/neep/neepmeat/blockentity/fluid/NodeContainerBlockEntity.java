@@ -1,4 +1,4 @@
-package com.neep.neepmeat.blockentity;
+package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
