@@ -1,13 +1,12 @@
 package com.neep.neepmeat.fluid;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -15,6 +14,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Flow;
 
 public class RealisticFluid extends FlowableFluid
@@ -120,5 +121,67 @@ public class RealisticFluid extends FlowableFluid
         System.out.println("level: " + level);
 //        world.setBlockState(pos, fluid.getFlowing(8, false).getBlockState(), Block.NOTIFY_ALL);
         world.setBlockState(pos, fluid.getFlowing(level + 1, false).getBlockState(), Block.NOTIFY_ALL);
+    }
+
+    protected void tryFlow(WorldAccess world, BlockPos fluidPos, FluidState state)
+    {
+        if (state.isEmpty())
+        {
+            return;
+        }
+
+        // Try to distribute current level across surrounding blocks.
+
+        List<BlockPos> posList = new ArrayList<>();
+        for (Direction direction : new Direction[]{Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST})
+        {
+            BlockPos targetPos = fluidPos.offset(direction, 1);
+            BlockState targetState = world.getBlockState(targetPos);
+            int targetLevel = targetState.getFluidState().getLevel();
+            if (canFill(world, targetPos, targetState, this) && (targetLevel < state.getLevel())
+                    && (state.getLevel() > 1 || direction == Direction.DOWN))
+            {
+                posList.add(targetPos);
+            }
+        }
+
+        // Prioritise neighbours with lower fluid levels.
+        // Distribute fluid across list of positions
+        int level = state.getLevel();
+        for (BlockPos blockPos : posList)
+        {
+            // Break if there is too little fluid, but also allow flowing down
+            if (!(level > 1 || fluidPos.offset(Direction.DOWN).equals(blockPos)))
+                break;
+
+            BlockPos pos = blockPos;
+            BlockState targetState = world.getBlockState(pos);
+            int targetLevel = targetState.getFluidState().getLevel();
+
+            world.setBlockState(pos, this.getFlowing(targetLevel + 1, false).getBlockState(), Block.NOTIFY_ALL);
+            --level;
+
+        }
+        if (level != state.getLevel())
+        {
+            BlockState newState = level > 0 ? this.getFlowing(level, false).getBlockState() : Blocks.AIR.getDefaultState();
+            world.setBlockState(fluidPos, newState, Block.NOTIFY_ALL);
+        }
+    }
+
+    private boolean canFill(BlockView world, BlockPos pos, BlockState state, Fluid fluid)
+    {
+        Block block = state.getBlock();
+        if (block instanceof FluidFillable) {
+            return ((FluidFillable)((Object)block)).canFillWithFluid(world, pos, state, fluid);
+        }
+        if (block instanceof DoorBlock || state.isIn(BlockTags.SIGNS) || state.isOf(Blocks.LADDER) || state.isOf(Blocks.SUGAR_CANE) || state.isOf(Blocks.BUBBLE_COLUMN)) {
+            return false;
+        }
+        Material material = state.getMaterial();
+        if (material == Material.PORTAL || material == Material.STRUCTURE_VOID || material == Material.UNDERWATER_PLANT || material == Material.REPLACEABLE_UNDERWATER_PLANT) {
+            return false;
+        }
+        return !material.blocksMovement();
     }
 }

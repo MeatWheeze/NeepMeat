@@ -31,7 +31,8 @@ public class BaseItem extends Item implements NMItem
     }
 
     @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
+    {
         if (hasLore)
         {
             tooltip.add(new TranslatableText("item." + NeepMeat.NAMESPACE + "." + getRegistryName() + ".lore").formatted(Formatting.GRAY));

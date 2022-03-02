@@ -5,7 +5,7 @@ import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.fluid_util.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_util.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.FluidInitialiser;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.fluid.WaterFluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -142,7 +141,7 @@ public class IntegratorBlockEntity extends BlockEntity implements
         Transaction transaction = Transaction.openOuter();
         if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= conversionAmount)
         {
-            long extracted = inputBuffer.extract(FluidVariant.of(BlockInitialiser.STILL_BLOOD), conversionAmount, transaction);
+            long extracted = inputBuffer.extract(FluidVariant.of(FluidInitialiser.STILL_BLOOD), conversionAmount, transaction);
             long inserted = outputBuffer.insert(FluidVariant.of(Fluids.WATER), extracted, transaction);
         }
         transaction.commit();

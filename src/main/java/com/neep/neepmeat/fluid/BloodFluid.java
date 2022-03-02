@@ -1,6 +1,7 @@
 package com.neep.neepmeat.fluid;
 
 import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.FluidInitialiser;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
@@ -22,25 +23,25 @@ public class BloodFluid extends RealisticFluid
     @Override
     public Fluid getStill()
     {
-        return BlockInitialiser.STILL_BLOOD;
+        return FluidInitialiser.STILL_BLOOD;
     }
 
     @Override
     public Fluid getFlowing()
     {
-        return BlockInitialiser.FLOWING_BLOOD;
+        return FluidInitialiser.FLOWING_BLOOD;
     }
 
     @Override
     public Item getBucketItem()
     {
-        return BlockInitialiser.BLOOD_BUCKET;
+        return FluidInitialiser.BLOOD_BUCKET;
     }
 
     @Override
     protected BlockState toBlockState(FluidState fluidState)
     {
-        return BlockInitialiser.TEST.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+        return FluidInitialiser.BLOOD.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
     }
 
     @Override
