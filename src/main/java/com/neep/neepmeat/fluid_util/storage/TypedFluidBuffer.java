@@ -12,16 +12,36 @@ import java.util.function.Predicate;
 public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<FluidVariant>, SingleSlotStorage<FluidVariant>
 {
     protected Predicate<FluidVariant> validTypes;
+    protected Mode mode;
 
-    public TypedFluidBuffer(BlockEntity parent, long capacity, Predicate<FluidVariant> validTypes)
+    public TypedFluidBuffer(BlockEntity parent, long capacity, Predicate<FluidVariant> validTypes, Mode mode)
     {
         super(parent, capacity);
         this.validTypes = validTypes;
+        this.mode = mode;
     }
 
     @Override
     public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
+        if (!mode.canInsert())
+            return 0;
+
+        return insertDirect(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+        if (!mode.canExtract())
+            return 0;
+
+        return extractDirect(resource, maxAmount, transaction);
+    }
+
+    public long insertDirect(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+
         if (!validTypes.test(resource))
             return 0;
 
@@ -43,9 +63,9 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
         return 0;
     }
 
-    @Override
-    public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    public long extractDirect(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
+
         if (getResource() == null || getResource().isBlank() || getAmount() <= 0)
         {
             amount = 0;
@@ -62,5 +82,34 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
         }
         syncIfPossible();
         return 0;
+    }
+
+    @Override
+    public boolean supportsInsertion()
+    {
+        return mode.canInsert();
+    }
+
+    @Override
+    public boolean supportsExtraction()
+    {
+        return mode.canExtract();
+    }
+
+    public enum Mode
+    {
+        INSERT_EXTRACT,
+        INSERT_ONLY,
+        EXTRACT_ONLY;
+
+        boolean canInsert()
+        {
+            return this == INSERT_EXTRACT || this == INSERT_ONLY;
+        }
+
+        boolean canExtract()
+        {
+            return this == INSERT_EXTRACT || this == EXTRACT_ONLY;
+        }
     }
 }

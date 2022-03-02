@@ -1,14 +1,12 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.block.base.BaseFacingBlock;
-import com.neep.neepmeat.block.base.NMBlock;
-import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -52,14 +50,19 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     }
 
     @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        ((HeaterBlockEntity) world.getBlockEntity(pos)).refreshCache(world, pos, state);
+    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (!world.isClient)
         {
-            System.out.println(world.getBlockEntity(pos));
-            if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
+            if (world.getBlockEntity(pos) instanceof HeaterBlockEntity be)
             {
-                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+                player.sendMessage(Text.of(((float) be.inputBuffer.getAmount() / FluidConstants.BUCKET) + ", " + ((float) be.outputBuffer.getAmount()) / FluidConstants.BUCKET), true);
             }
         }
         return ActionResult.SUCCESS;

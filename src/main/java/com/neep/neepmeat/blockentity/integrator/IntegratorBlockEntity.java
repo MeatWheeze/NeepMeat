@@ -39,8 +39,8 @@ public class IntegratorBlockEntity extends BlockEntity implements
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.INTEGRATOR, pos, state);
-        inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.getFluid() instanceof BloodFluid);
-        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> true);
+        inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(FluidInitialiser.STILL_BLOOD), TypedFluidBuffer.Mode.INSERT_ONLY);
+        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(FluidInitialiser.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 
@@ -141,8 +141,8 @@ public class IntegratorBlockEntity extends BlockEntity implements
         Transaction transaction = Transaction.openOuter();
         if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= conversionAmount)
         {
-            long extracted = inputBuffer.extract(FluidVariant.of(FluidInitialiser.STILL_BLOOD), conversionAmount, transaction);
-            long inserted = outputBuffer.insert(FluidVariant.of(Fluids.WATER), extracted, transaction);
+            long extracted = inputBuffer.extractDirect(FluidVariant.of(FluidInitialiser.STILL_BLOOD), conversionAmount, transaction);
+            long inserted = outputBuffer.insertDirect(FluidVariant.of(FluidInitialiser.STILL_ENRICHED_BLOOD), extracted, transaction);
         }
         transaction.commit();
     }

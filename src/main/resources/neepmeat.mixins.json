@@ -4,7 +4,7 @@
   "package": "com.neep.neepmeat.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "FurnaceMixin"
+    "FurnaceAccessor"
   ],
   "client": [
     "ExampleMixin"
