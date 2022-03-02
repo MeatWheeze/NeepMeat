@@ -136,6 +136,8 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
 
     private static boolean insertTick(World world, BlockPos pos, BlockState state, ItemDuctBlockEntity be)
     {
+        if (be.getResource().isBlank())
+            return false;
 
         Direction targetDirection = state.get(ItemDuctBlock.FACING);
         if (be.cache == null)
@@ -145,6 +147,7 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
 
         Storage<ItemVariant> storage = be.cache.find(targetDirection);
 
+        // Spawn item entities at open ends
         if (storage == null)
         {
             if (world.getBlockState(pos.offset(targetDirection)).isAir())

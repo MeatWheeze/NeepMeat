@@ -152,20 +152,6 @@ public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
         }
     }
 
-//    @Override
-//    protected BlockState getConnectedState(BlockView world, BlockState state, BlockPos pos)
-//    {
-//        for (Direction direction : Direction.values())
-//        {
-//            boolean property = state.get(DIR_TO_CONNECTION.get(direction));
-//            if (property) continue;
-//            BlockPos adjPos = pos.offset(direction);
-//            BlockState adjState = world.getBlockState(adjPos);
-//            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos));
-//        }
-//        return state;
-//    }
-
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
