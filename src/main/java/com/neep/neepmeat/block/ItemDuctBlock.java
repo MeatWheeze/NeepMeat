@@ -129,7 +129,7 @@ public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
             return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.SIDE);
         }
 
-        return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
+        return state.with(DIR_TO_CONNECTION.get(direction), connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE);
     }
 
     @Override
