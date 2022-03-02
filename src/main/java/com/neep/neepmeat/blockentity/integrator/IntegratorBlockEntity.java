@@ -118,7 +118,7 @@ public class IntegratorBlockEntity extends BlockEntity implements
     {
         long decrement = FluidConstants.BUCKET / totalTime / 20;
         Transaction transaction = Transaction.openOuter();
-        long transferred = buffer.extract(inputBuffer.getResource(), decrement, transaction);
+        long transferred = inputBuffer.extractDirect(inputBuffer.getResource(), decrement, transaction);
         if (transferred == decrement)
         {
             --growthTimeRemaining;
