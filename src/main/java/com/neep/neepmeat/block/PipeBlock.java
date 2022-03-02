@@ -35,18 +35,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 {
     public static final BooleanProperty ooer = BooleanProperty.of("abc");
     public static final EnumProperty<PipeConnectionType> NORTH_CONNECTION = EnumProperty.of("north", PipeConnectionType.class);
-//    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = PipeProperties.NORTH_CONNECTION;
     public static final EnumProperty<PipeConnectionType> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
     public static final EnumProperty<PipeConnectionType> SOUTH_CONNECTION = PipeProperties.SOUTH_CONNECTION;
     public static final EnumProperty<PipeConnectionType> WEST_CONNECTION = PipeProperties.WEST_CONNECTION;
     public static final EnumProperty<PipeConnectionType> UP_CONNECTION = PipeProperties.UP_CONNECTION;
     public static final EnumProperty<PipeConnectionType> DOWN_CONNECTION = PipeProperties.DOWN_CONNECTION;
-//    public static final BooleanProperty NORTH_CONNECTION = Properties.NORTH;
-//    public static final BooleanProperty EAST_CONNECTION = Properties.EAST;
-//    public static final BooleanProperty SOUTH_CONNECTION = Properties.SOUTH;
-//    public static final BooleanProperty WEST_CONNECTION = Properties.WEST;
-//    public static final BooleanProperty UP_CONNECTION = Properties.UP;
-//    public static final BooleanProperty DOWN_CONNECTION = Properties.DOWN;
 
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
@@ -191,7 +184,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     }
 
     @Override
-    // TODO: enforce api connections
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
@@ -205,7 +197,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
     }
 
-    // Only takes into account other pipes, connections to fluid containers are enforced later.
+    // Only takes into account other pipes, connections to storages are enforced later.
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
         if (state.getBlock() instanceof FluidAcceptor)

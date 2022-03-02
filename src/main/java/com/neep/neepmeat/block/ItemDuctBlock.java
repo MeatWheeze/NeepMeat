@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
+import com.neep.neepmeat.fluid_util.PipeConnectionType;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.minecraft.block.Block;
@@ -25,6 +26,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
@@ -114,6 +116,20 @@ public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
+    {
+        boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
+
+        // Already connected in direction
+        if (connection && (state.get(DIR_TO_CONNECTION.get(direction)).isConnected()))
+        {
+            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.SIDE);
+        }
+
+        return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
     }
 
     @Override
