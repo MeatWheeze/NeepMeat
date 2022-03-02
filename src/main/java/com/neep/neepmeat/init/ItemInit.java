@@ -25,6 +25,8 @@ public class ItemInit
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item COPPER_COIL = new BaseCraftingItem("copper_coil", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item BIOELECTRIC_ORGAN = new BaseCraftingItem("bioelectric_organ", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

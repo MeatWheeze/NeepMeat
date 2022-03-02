@@ -92,6 +92,11 @@
   "item.neepmeat.internal_components": "Biomechanical Components",
   "item.neepmeat.internal_components.lore": "Arcane mechanisms, sealed in skin never to see the light of day.",
 
+  "item.neepmeat.bioelectric_organ": "Bioelectric Organ",
+  "item.neepmeat.bioelectric_organ.lore": "Zap!",
+
+  "item.neepmeat.copper_coil": "Copper Coil",
+
   "item.neepmeat.brain_rough": "Rough Brain",
   "item.neepmeat.brain_rough.lore": "It will never see thoughts again, but it may still be of use.",
   "item.neepmeat.brain_pristine": "Pristine Brain",
