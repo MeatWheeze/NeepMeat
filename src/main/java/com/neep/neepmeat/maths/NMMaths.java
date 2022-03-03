@@ -1,6 +1,8 @@
 package com.neep.neepmeat.maths;
 
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
 import static net.minecraft.util.math.Direction.*;
@@ -30,23 +32,44 @@ public class NMMaths
     {
         switch (direction)
         {
-            case UP:
-            {
+            case UP -> {
                 return EAST;
             }
-            case DOWN:
-            {
+            case DOWN -> {
                 return WEST;
             }
-            case EAST:
-            {
+            case EAST -> {
                 return DOWN;
             }
-            case WEST:
-            {
+            case WEST -> {
                 return UP;
             }
         }
         throw new IllegalStateException("Unable to get X-rotated facing of " + direction);
     }
+
+    public static Vec2f flatten(Vec3d vec)
+    {
+        return new Vec2f((float) vec.getX(), (float) vec.getZ());
+    }
+
+    public static float getAngle(Vec3d v1, Vec3d v2)
+    {
+        return (float) Math.acos(v1.dotProduct(v2) / (v1.length() * v2.length()));
+    }
+
+    public static float getAngle(Vec2f v1)
+    {
+        return (float) ((float) Math.atan2(v1.x, v1.y) + Math.PI);
+    }
+
+    public static float angleLerp(float delta, float x1, float x2)
+    {
+        // StackOverflow magic
+        var CS = (1 - delta) * Math.cos(x1) + delta * Math.cos(x2);
+        var SN = (1 - delta) * Math.sin(x1) + delta * Math.sin(x2);
+        var C = Math.atan2(SN, CS);
+        return (float) C;
+    }
+
 }

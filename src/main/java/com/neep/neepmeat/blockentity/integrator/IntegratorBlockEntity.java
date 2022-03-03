@@ -35,6 +35,8 @@ public class IntegratorBlockEntity extends BlockEntity implements
     public boolean isFullyGrown = false;
     protected TypedFluidBuffer inputBuffer;
     protected TypedFluidBuffer outputBuffer;
+    public float facing = 0f;
+    public float targetFacing = 0f;
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
