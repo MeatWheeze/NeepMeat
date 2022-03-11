@@ -55,6 +55,7 @@ public class BlockInitialiser
     public static Block ITEM_BUFFER;
     public static Block FLUID_METER;
     public static Block FLUID_PORT;
+    public static Block SPIGOT;
 
     public static Block ITEM_DUCT;
     public static Block IRON_PIPE;
@@ -110,6 +111,7 @@ public class BlockInitialiser
         FLUID_METER = registerBlock(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         FLUID_PORT = registerBlock(new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         FLUID_DRAIN = registerBlock(new FluidDrainBlock("fluid_drain", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        SPIGOT = registerBlock(new SpigotBlock("spigot", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         // --- Item Transfer ---
         ITEM_DUCT = registerBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));

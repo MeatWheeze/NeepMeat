@@ -30,6 +30,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
+    public static BlockEntityType<SpigotBlockEntity> SPIGOT;
 
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -50,6 +51,7 @@ public class BlockEntityInitialiser
         FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT);
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, BlockInitialiser.HEATER);
+        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, BlockInitialiser.SPIGOT);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
