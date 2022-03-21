@@ -6,11 +6,8 @@ import com.neep.neepmeat.block.base.*;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.block.machine.TrommelBlock;
-import com.neep.neepmeat.fluid.BloodFluid;
-import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
-import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -30,6 +27,7 @@ public class BlockInitialiser
     public static Block RUSTY_VENT;
     public static Block RUSTY_PANEL;
     public static Block RUSTY_GRATE;
+    public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 
     public static Block SLOPE_TEST;
 
@@ -92,6 +90,7 @@ public class BlockInitialiser
         RUSTED_BARS = registerBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTY_PANEL = registerBlock(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         RUSTY_GRATE = registerBlock(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+//        GREY_SMOOTH_TILE = registerBlock(new BaseBlock("smooth_tile_grey", 64, false, FabricBlockSettings.of(Material.STONE).strength(4.0f).sounds(BlockSoundGroup.STONE)));
 
         SLOPE_TEST = registerBlock(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
