@@ -1,4 +1,4 @@
-{
+A
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"texture_size": [32, 32],
@@ -42,6 +42,7 @@
 			"scale": [0.4, 0.4, 0.4]
 		},
 		"ground": {
+			"translation": [0, 1.5, 0],
 			"scale": [0.28516, 0.28516, 0.28516]
 		},
 		"gui": {

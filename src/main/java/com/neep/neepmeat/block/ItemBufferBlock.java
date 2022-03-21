@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
 {
-    protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 1.0, 15.0);
+    protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
     public ItemBufferBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
