@@ -5,6 +5,7 @@ import com.neep.neepmeat.init.FluidInitialiser;
 import com.neep.neepmeat.item.base.BaseSwordItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -12,7 +13,7 @@ public class DaggerItem extends BaseSwordItem
 {
     public DaggerItem(String registryName, Settings settings)
     {
-        super(registryName, settings.maxDamage(128));
+        super(registryName, ToolMaterials.GOLD, 4, 1f, settings.maxDamage(128));
     }
 
     @Override

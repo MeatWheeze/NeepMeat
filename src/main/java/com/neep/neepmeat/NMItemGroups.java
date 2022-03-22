@@ -1,6 +1,7 @@
 package com.neep.neepmeat;
 
 import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.ItemInit;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
@@ -15,5 +16,9 @@ public class NMItemGroups
 
     public static final ItemGroup INGREDIENTS = FabricItemGroupBuilder.build(
             new Identifier(NeepMeat.NAMESPACE, "ingredients"),
-            () -> new ItemStack(Blocks.COBBLESTONE));
+            () -> new ItemStack(ItemInit.INTERNAL_COMPONENTS));
+
+    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
+            new Identifier(NeepMeat.NAMESPACE, "weapons"),
+            () -> new ItemStack(ItemInit.SLASHER));
 }

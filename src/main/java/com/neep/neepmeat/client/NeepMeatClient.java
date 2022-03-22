@@ -3,13 +3,14 @@ package com.neep.neepmeat.client;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.base.BasePaintedBlock;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.client.renderer.GlassTankRenderer;
-import com.neep.neepmeat.client.renderer.IntegratorEggRenderer;
-import com.neep.neepmeat.client.renderer.ItemBufferRenderer;
-import com.neep.neepmeat.client.renderer.TrommelRenderer;
+import com.neep.neepmeat.client.model.SwordModel;
+import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.FluidInitialiser;
+import com.neep.neepmeat.init.ItemInit;
+import com.neep.neepmeat.item.CheeseCleaverItem;
+import com.neep.neepmeat.item.SlasherItem;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -21,6 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +45,20 @@ public class NeepMeatClient
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
+
+        GeoItemRenderer.registerItemRenderer(ItemInit.SLASHER, new SwordRenderer<>(new SwordModel<>(
+                NeepMeat.NAMESPACE,
+                "geo/slasher.geo.json",
+                "textures/item/slasher.png",
+                "animations/slasher.animation.json"
+        )));
+
+        GeoItemRenderer.registerItemRenderer(ItemInit.CHEESE_CLEAVER, new SwordRenderer<>(new SwordModel<>(
+                NeepMeat.NAMESPACE,
+                "geo/cheese_cleaver.geo.json",
+                "textures/item/cheese_cleaver.png",
+                "animations/cheese_cleaver.animation.json"
+        )));
 
         // Fluid textures
         FluidRenderHandlerRegistry.INSTANCE.register(FluidInitialiser.STILL_BLOOD, FluidInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
