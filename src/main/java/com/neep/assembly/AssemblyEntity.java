@@ -1,5 +1,6 @@
 package com.neep.assembly;
 
+import com.neep.neepmeat.init.BlockInitialiser;
 import com.sun.jna.platform.mac.SystemB;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -9,11 +10,14 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -45,8 +49,8 @@ public class AssemblyEntity extends Entity
 
         this.setBoundingBox(getBounds());
 
-        blocks.set(0, 0, 0, Blocks.DIRT.getDefaultState());
-        updatePalette();
+//        blocks.set(0, 0, 0, Blocks.DIRT.getDefaultState());
+//        blocks.set(0, 0, 0, BlockInitialiser.SCAFFOLD_PLATFORM.getDefaultState());
 
     }
 
@@ -145,6 +149,17 @@ public class AssemblyEntity extends Entity
     public Box getBounds()
     {
         return Box.of(new Vec3d(0, 0, 0), 1, 2, 1);
+    }
+
+    public ActionResult interact(PlayerEntity player, Hand hand)
+    {
+        blocks.set(0, 0, 0, Assembly.PLATFORM.getDefaultState());
+        blocks.set(0, 1, 0, Assembly.PLATFORM.getDefaultState());
+        blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
+        blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
+        updatePalette();
+        System.out.println(getPalette().get(1, 1, 0));
+        return ActionResult.SUCCESS;
     }
 
     @Override
