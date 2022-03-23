@@ -29,6 +29,7 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 		FluidInitialiser.initialiseFluids();
 		ItemInit.registerItems();
 		BlockEntityInitialiser.initialiseBlockEntities();
+
 		FluidNetwork.registerEvents();
 	}
 

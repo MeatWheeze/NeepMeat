@@ -19,10 +19,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.neep.neepmeat.NeepMeat"
+      "com.neep.neepmeat.NeepMeat",
+      "com.neep.assembly.Assembly"
     ],
     "client": [
-      "com.neep.neepmeat.NeepMeat"
+      "com.neep.neepmeat.NeepMeat",
+      "com.neep.assembly.Assembly"
     ]
   },
   "mixins": [
