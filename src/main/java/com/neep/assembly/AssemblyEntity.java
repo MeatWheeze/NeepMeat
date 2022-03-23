@@ -1,36 +1,27 @@
 package com.neep.assembly;
 
-import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
-import org.apache.logging.log4j.Level;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 public class AssemblyEntity extends Entity
@@ -41,25 +32,17 @@ public class AssemblyEntity extends Entity
 
     public BlockState state;
     public PalettedContainer<BlockState> blocks;
-//    protected boolean needsPaletteUpdate;
+    protected boolean needsBoxUpdate;
 
     public AssemblyEntity(EntityType<?> type, World world)
     {
         super(type, world);
 
         this.state = Blocks.STONE.getDefaultState();
-//        this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
-//                Block.STATE_IDS,
-//                NbtHelper::toBlockState,
-//                NbtHelper::fromBlockState,
-//                Blocks.AIR.getDefaultState());
 
         this.updatePalette();
-        this.setBoundingBox(getBounds());
-
-//        blocks.set(0, 0, 0, Blocks.DIRT.getDefaultState());
-//        blocks.set(0, 0, 0, BlockInitialiser.SCAFFOLD_PLATFORM.getDefaultState());
-
+//        this.setBoundingBox(calculateBoundingBox());
+        this.needsBoxUpdate = true;
     }
 
     public AssemblyEntity(World world)
@@ -75,7 +58,6 @@ public class AssemblyEntity extends Entity
     @Override
     protected void initDataTracker()
     {
-//        this.dataTracker.startTracking(SLEEPING_POSITION, Optional.empty());
         this.dataTracker.startTracking(BLOCK, Optional.empty());
         this.dataTracker.startTracking(PALETTE, writePalette(new NbtCompound()));
     }
@@ -134,13 +116,11 @@ public class AssemblyEntity extends Entity
     public void tick()
     {
         super.tick();
-
-        if (!getEntityWorld().isClient)
+        if (this.needsBoxUpdate)
         {
-            this.state = world.getBlockState(getBlockPos().down(1));
-            dataTracker.set(BLOCK, Optional.of(state));
+            this.setBoundingBox(calculateBoundingBox());
+            this.needsBoxUpdate = false;
         }
-//        this.setBoundingBox(getBounds());
     }
 
     @Override

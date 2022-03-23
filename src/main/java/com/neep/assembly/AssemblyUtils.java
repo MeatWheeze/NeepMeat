@@ -32,7 +32,7 @@ public class AssemblyUtils
         {
             for (BlockPos pos : queue)
             {
-                System.out.println(pos);
+//                System.out.println(pos);
                 for (Direction dir : Direction.values())
                 {
                     BlockPos newPos = pos.offset(dir);
@@ -63,7 +63,7 @@ public class AssemblyUtils
             {
                 for (int k = 0; k < 16; ++k)
                 {
-                    System.out.println(i + ", " + j + ", " + k);
+//                    System.out.println(i + ", " + j + ", " + k);
                     BlockState state = states.get(i, j, k);
                     BlockPos pos = new BlockPos(i, j, k).add(origin);
                     if (world.getBlockState(pos).isAir())
