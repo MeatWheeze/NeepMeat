@@ -29,7 +29,7 @@ public class AssemblyRenderer extends EntityRenderer<AssemblyEntity>
     public void render(AssemblyEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light)
     {
         matrices.push();
-        matrices.translate(-0.5, -1, -0.5);
+        matrices.translate(0, 0, 0);
 
         PalettedContainer<BlockState> container = entity.getPalette();
 
