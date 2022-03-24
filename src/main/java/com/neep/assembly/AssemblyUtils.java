@@ -32,7 +32,6 @@ public class AssemblyUtils
         {
             for (BlockPos pos : queue)
             {
-//                System.out.println(pos);
                 for (Direction dir : Direction.values())
                 {
                     BlockPos newPos = pos.offset(dir);
@@ -120,7 +119,7 @@ public class AssemblyUtils
         {
             BlockPos pos1 = pos.subtract(start);
             BlockState state = world.getBlockState(pos);
-            assembly.blocks.set(pos1.getX(), pos1.getY(), pos1.getZ(), state);
+            assembly.setState(pos1.getX(), pos1.getY(), pos1.getZ(), state);
             world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
 //            System.out.println("eeeeee");
         }

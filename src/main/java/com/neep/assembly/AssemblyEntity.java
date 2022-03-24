@@ -1,5 +1,7 @@
 package com.neep.assembly;
 
+import com.neep.assembly.storage.AssemblyContainer;
+import com.sun.jna.platform.win32.Variant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,6 +27,7 @@ import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
@@ -32,6 +35,8 @@ import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -41,19 +46,18 @@ public class AssemblyEntity extends Entity
     private static final TrackedData<Optional<BlockState>> BLOCK = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.OPTIONAL_BLOCK_STATE);
     private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.TAG_COMPOUND);
 
-    public BlockState state;
-    public PalettedContainer<BlockState> blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+    public AssemblyContainer blocks = new AssemblyContainer(FALLBACK_PALETTE,
         Block.STATE_IDS,
         NbtHelper::toBlockState,
         NbtHelper::fromBlockState,
             Blocks.AIR.getDefaultState());
     protected boolean needsBoxUpdate;
 
+    protected List<Vec3i> anchorPositions = new ArrayList<>();
+
     public AssemblyEntity(EntityType<?> type, World world)
     {
         super(type, world);
-
-        this.state = Blocks.STONE.getDefaultState();
 
 //        this.updatePalette();
 //        this.setBoundingBox(calculateBoundingBox());
@@ -68,7 +72,7 @@ public class AssemblyEntity extends Entity
 
     public static boolean canAssemble(BlockState state)
     {
-        return state.isOf(Assembly.PLATFORM);
+        return state.isOf(Assembly.PLATFORM) || state.isOf(Assembly.ANCHOR);
     }
 
     @Override
@@ -162,8 +166,12 @@ public class AssemblyEntity extends Entity
             this.needsBoxUpdate = false;
         }
 
-        setVelocity(0.0, 0.0, 0);
-        this.move(MovementType.SELF, (getVelocity()));
+//        setVelocity(0.0, 0.0, 0);
+//        this.move(MovementType.SELF, (getVelocity()));
+
+        for (Vec3i pos : anchorPositions)
+        {
+        }
     }
 
     @Override
@@ -271,7 +279,7 @@ public class AssemblyEntity extends Entity
         double dy = 0;
         double dz = 0;
 
-        PalettedContainer<BlockState> states = getPalette();
+        AssemblyContainer states = getPalette();
         if (states == null)
         {
             return new Box(0, 0, 0, 1, 1, 1);
@@ -372,32 +380,31 @@ public class AssemblyEntity extends Entity
         return BoatEntity.canCollide(this, other);
     }
 
-//    public void setBlocks(List<BlockPos> posList, List<BlockState> stateList)
-//    {
-//        PalettedContainer<BlockState> states = getPalette();
-//        for (int i = 0; i < posList.size(); ++i)
-//        {
-//            BlockPos pos =
-//            states.set(posList.get(i))
-//        }
-//    }
-
     public BlockState getState()
     {
 //        return dataTracker.get(BLOCK).orElseGet(Blocks.COAL_ORE::getDefaultState);
         return Blocks.COAL_ORE.getDefaultState();
     }
 
+    public BlockState setState(int x, int y, int z, BlockState state)
+    {
+        if (state.isOf(Assembly.ANCHOR))
+        {
+            anchorPositions.add(new Vec3i(x, y, z));
+        }
+        return this.blocks.set(x, y, z, state);
+    }
+
     public void initPalette()
     {
-        this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+        this.blocks = new AssemblyContainer(FALLBACK_PALETTE,
                 Block.STATE_IDS,
                 NbtHelper::toBlockState,
                 NbtHelper::fromBlockState,
                 Blocks.AIR.getDefaultState());
     }
 
-    public PalettedContainer<BlockState> getPalette()
+    public AssemblyContainer getPalette()
     {
         NbtCompound nbt;
         if ((nbt = dataTracker.get(PALETTE)) != null);
