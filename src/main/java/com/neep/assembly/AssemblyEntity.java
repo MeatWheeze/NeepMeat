@@ -136,7 +136,7 @@ public class AssemblyEntity extends Entity
             this.needsBoxUpdate = false;
         }
 
-        setVelocity(0.0, 0.0, 0);
+        setVelocity(0.0, 0.1, 0);
         this.move(MovementType.SELF, (getVelocity()));
     }
 
