@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
+import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.base.*;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
@@ -64,6 +65,8 @@ public class BlockInitialiser
     public static Block TROMMEL_CENTRE;
     public static Block FLUID_DRAIN;
 
+    public static Block LINEAR_RAIL;
+
     public static Block INTEGRATOR_EGG;
     public static Block TANK_WALL;
 
@@ -116,6 +119,9 @@ public class BlockInitialiser
 
         // --- Item Transfer ---
         ITEM_DUCT = registerBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
+
+        // --- Assembly ---
+        LINEAR_RAIL = registerBlock(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
         // --- Integrator ---
         INTEGRATOR_EGG = registerBlock(new IntegratorEggBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.SLIME)));

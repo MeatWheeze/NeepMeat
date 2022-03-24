@@ -11,7 +11,7 @@ import net.minecraft.util.math.Direction;
 public class BaseFacingBlock extends FacingBlock implements NMBlock
 {
     BaseBlockItem blockItem;
-    private String registryName;
+    private final String registryName;
 
     public BaseFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {

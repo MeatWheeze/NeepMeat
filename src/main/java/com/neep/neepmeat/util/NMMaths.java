@@ -1,7 +1,6 @@
-package com.neep.neepmeat.maths;
+package com.neep.neepmeat.util;
 
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 

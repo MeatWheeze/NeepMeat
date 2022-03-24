@@ -137,8 +137,6 @@ public class AssemblyEntity extends Entity
         }
 
         setVelocity(0.0, 0.0, 0);
-//        this.movementMultiplier = new Vec3d(1, 1, 1);
-//        setPos(getX(), getY() + 0.05, getZ());
         this.move(MovementType.SELF, (getVelocity()));
     }
 
