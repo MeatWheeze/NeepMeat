@@ -153,55 +153,58 @@ public class AssemblyEntity extends Entity
             this.setVelocity(Vec3d.ZERO);
         }
 
-        if ((vec3d = this.adjustMovementForCollisions(movement)).lengthSquared() > 1.0E-7)
+        if (true)
         {
-            this.setPosition(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
-            Vec3d finalMovement = movement;
-//            if (false)
+            if ((vec3d = this.adjustMovementForCollisions(movement)).lengthSquared() > 1.0E-7)
             {
-            world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.1, 0), (t) -> true).forEach(
-                    entity -> {
+                this.setPosition(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
+                Vec3d finalMovement = movement;
+//                if (false)
+                {
+                    world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.1, 0), (t) -> true).forEach(
+                            entity ->
+                            {
 //                        entity.move(MovementType.PISTON, finalMovement);
 //                        entity.set(finalMovement.x, finalMovement.y, finalMovement.z);
 //                        entity.setVelocity(finalMovement.add(entity.getVelocity().x, 0, entity.getVelocity().z));
-                        if (false)
-                            entity.setPosition(getPos().add(0.5, 0.5, 0));
-                        if (true)
-                        {
-                            entity.setOnGround(true);
-                            entity.setVelocity(finalMovement);
-                        }
+                                if (false)
+                                    entity.setPosition(getPos().add(0.5, 0.5, 0));
+                                if (true)
+                                {
+                                    entity.setOnGround(true);
+                                    entity.setVelocity(finalMovement);
+                                }
 //                        System.out.println(entity);
-                    }
-            );
+                            }
+                    );
+                }
             }
-        }
 
-        this.world.getProfiler().pop();
-        this.world.getProfiler().push("rest");
-        this.horizontalCollision = !MathHelper.approximatelyEquals(movement.x, vec3d.x) || !MathHelper.approximatelyEquals(movement.z, vec3d.z);
-        this.verticalCollision = movement.y != vec3d.y;
-
-        this.onGround = this.verticalCollision && movement.y < 0.0;
-
-        if (this.isRemoved())
-        {
             this.world.getProfiler().pop();
-            return;
-        }
-        Vec3d vec3d2 = this.getVelocity();
-        if (movement.x != vec3d.x)
-        {
-            this.setVelocity(0.0, vec3d2.y, vec3d2.z);
-        }
-        if (movement.z != vec3d.z)
-        {
-            this.setVelocity(vec3d2.x, vec3d2.y, 0.0);
-        }
+            this.world.getProfiler().push("rest");
+            this.horizontalCollision = !MathHelper.approximatelyEquals(movement.x, vec3d.x) || !MathHelper.approximatelyEquals(movement.z, vec3d.z);
+            this.verticalCollision = movement.y != vec3d.y;
 
-        this.tryCheckBlockCollision();
-        float d = this.getVelocityMultiplier();
-        this.setVelocity(this.getVelocity().multiply(d, 1.0, d));
+            if (this.isRemoved())
+            {
+                this.world.getProfiler().pop();
+                return;
+            }
+
+            Vec3d vec3d2 = this.getVelocity();
+            if (movement.x != vec3d.x)
+            {
+                this.setVelocity(0.0, vec3d2.y, vec3d2.z);
+            }
+            if (movement.z != vec3d.z)
+            {
+                this.setVelocity(vec3d2.x, vec3d2.y, 0.0);
+            }
+
+            this.tryCheckBlockCollision();
+            float d = this.getVelocityMultiplier();
+            this.setVelocity(this.getVelocity().multiply(d, 1.0, d));
+        }
 
         this.world.getProfiler().pop();
     }
