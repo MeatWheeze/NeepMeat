@@ -1,11 +1,11 @@
 package com.neep.assembly;
 
+import com.neep.assembly.block.AnchorBlock;
+import com.neep.assembly.block.IRail;
 import com.neep.assembly.storage.AssemblyContainer;
-import com.sun.jna.platform.win32.Variant;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.ShapeContext;
+import com.neep.neepmeat.block.actuator.LinearRailBlock;
+import com.neep.neepmeat.util.LinearDirection;
+import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -24,16 +24,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.collection.ReusableStream;
 import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
-import net.minecraft.world.chunk.PalettedContainer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +49,7 @@ public class AssemblyEntity extends Entity
             Blocks.AIR.getDefaultState());
     protected boolean needsBoxUpdate;
 
-    protected List<Vec3i> anchorPositions = new ArrayList<>();
+    protected List<BlockPos> anchorPositions = new ArrayList<>();
 
     public AssemblyEntity(EntityType<?> type, World world)
     {
@@ -110,23 +106,12 @@ public class AssemblyEntity extends Entity
         {
             blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
+        updateAnchorPositions();
    }
 
     public NbtCompound writePalette(NbtCompound nbt)
     {
-//        if (blocks == null && !world.isClient)
-//        {
-//            initPalette();
-//            return nbt;
-//        }
-//        else if (world.isClient)
-//        {
-//            blocks = getPalette();
-//            initPalette();
-//        }
-
         blocks.write(nbt, "Palette", "BlockStates");
-//        dataTracker.set(PALETTE, writePalette(new NbtCompound()));
         return nbt;
     }
 
@@ -152,6 +137,25 @@ public class AssemblyEntity extends Entity
 //        this.setBoundingBox(getBounds());
     }
 
+    public void updateAnchorPositions()
+    {
+        AssemblyContainer container = getPalette();
+        for (int i = 0; i < 16; ++i)
+        {
+            for (int j = 0; j < 16; ++j)
+            {
+                for (int k = 0; k < 16; ++k)
+                {
+                    BlockState state = container.get(i, j, k);
+                    if (state.getBlock() instanceof AnchorBlock)
+                    {
+                        anchorPositions.add(new BlockPos(i, j, k));
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void tick()
     {
@@ -169,10 +173,33 @@ public class AssemblyEntity extends Entity
 //        setVelocity(0.0, 0.0, 0);
 //        this.move(MovementType.SELF, (getVelocity()));
 
-        for (Vec3i pos : anchorPositions)
+        AssemblyContainer container = getPalette();
+        if (anchorPositions.size() == 1)
         {
+            for (BlockPos pos : anchorPositions)
+            {
+                Direction facing = container.get(pos).get(AnchorBlock.FACING);
+                BlockPos worldPos = pos.add(this.getBlockPos()).offset(facing);
+                BlockState railState;
+                if ((railState = world.getBlockState(worldPos)).getBlock() instanceof IRail)
+                {
+                    Direction railFacing = railState.get(FacingBlock.FACING);
+                    LinearDirection railDir = railState.get(IRail.DIRECTION);
+                    Vec3f vel = railDir == LinearDirection.FORWARDS ? railFacing.getUnitVector() : railFacing.getOpposite().getUnitVector();
+                    vel.multiplyComponentwise(0.1f, 0.1f, -0.1f);
+                    this.setVelocity(vel);
+//                    System.out.println(vel);
+                }
+                else
+                {
+                    this.setVelocity(Vec3d.ZERO);
+                }
+            }
         }
+//        this.move(MovementType.SELF, new Vec3d(0, 0.1, 0));
+        this.move(MovementType.SELF, getVelocity());
     }
+
 
     @Override
     public void move(MovementType movementType, Vec3d movement)
@@ -347,7 +374,7 @@ public class AssemblyEntity extends Entity
     {
 //        if (entity.getBoundingBox().minY <= this.getBoundingBox().minY)
 //        {
-            super.pushAwayFrom(entity);
+//            super.pushAwayFrom(entity);
 //        }
     }
 
@@ -366,7 +393,7 @@ public class AssemblyEntity extends Entity
     @Override
     public boolean isPushable()
     {
-        return true;
+        return false;
     }
 
     public boolean canUsePortals()
@@ -390,7 +417,7 @@ public class AssemblyEntity extends Entity
     {
         if (state.isOf(Assembly.ANCHOR))
         {
-            anchorPositions.add(new Vec3i(x, y, z));
+            anchorPositions.add(new BlockPos(x, y, z));
         }
         return this.blocks.set(x, y, z, state);
     }
@@ -412,6 +439,11 @@ public class AssemblyEntity extends Entity
             readPalette(nbt);
         }
         return this.blocks;
+    }
+
+    public void setVelocity(Vec3f vec)
+    {
+        this.setVelocity(new Vec3d(vec.getX(), vec.getY(), vec.getZ()));
     }
 
 }
