@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.actuator;
 
 import com.neep.assembly.AssemblyEntity;
-import com.neep.neepmeat.block.base.BaseFacingBlock;
+import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.util.LinearDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -18,7 +18,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
-import java.util.List;
 import java.util.Random;
 
 public class LinearRailBlock extends BaseFacingBlock

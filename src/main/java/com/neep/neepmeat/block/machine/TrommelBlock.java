@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.block.base.BaseHorFacingBlock;
+import com.neep.neepmeat.api.block.BaseHorFacingBlock;
 import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;

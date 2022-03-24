@@ -1,24 +1,11 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.block.base.BaseBlock;
-import com.neep.neepmeat.block.base.BaseStairsBlock;
-import com.neep.neepmeat.block.base.NMBlock;
+import com.neep.neepmeat.api.block.BaseStairsBlock;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ScaffoldingBlock;
 import net.minecraft.block.Waterloggable;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
 
 public class MetalScaffoldingStairs extends BaseStairsBlock implements Waterloggable
 {

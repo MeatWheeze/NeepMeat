@@ -1,16 +1,12 @@
-package com.neep.neepmeat.block.base;
+package com.neep.neepmeat.api.block;
 
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.item.BlockItem;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.DyeColor;
-
-import java.util.List;
 
 public class BasePaintedBlock
 {

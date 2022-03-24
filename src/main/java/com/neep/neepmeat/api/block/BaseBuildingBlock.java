@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block.base;
+package com.neep.neepmeat.api.block;
 
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.item.base.BaseBlockItem;

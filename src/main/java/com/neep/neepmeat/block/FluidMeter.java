@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.block.base.BaseHorFacingBlock;
+import com.neep.neepmeat.api.block.BaseHorFacingBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;

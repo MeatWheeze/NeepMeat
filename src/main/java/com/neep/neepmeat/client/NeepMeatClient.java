@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.block.base.BasePaintedBlock;
+import com.neep.neepmeat.api.block.BasePaintedBlock;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
@@ -9,8 +9,6 @@ import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.FluidInitialiser;
 import com.neep.neepmeat.init.ItemInit;
-import com.neep.neepmeat.item.CheeseCleaverItem;
-import com.neep.neepmeat.item.SlasherItem;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
