@@ -11,12 +11,14 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.network.DebugInfoSender;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -48,40 +50,55 @@ public class LinearRailBlock extends BaseFacingBlock implements IRail
         {
             BlockState newState = state.with(DIRECTION, LinearDirection.FORWARDS);
             world.setBlockState(pos, newState);
-//            propagateState(world, pos, newState);
         }
         else
         {
-            if (!world.getBlockState(pos.down()).isOf(this))
+            Direction facing = state.get(FACING);
+            BlockState frontState = world.getBlockState(pos.offset(facing));
+            BlockState backState = world.getBlockState(pos.offset(facing.getOpposite()));
+            if (backState.isOf(this) && backState.get(DIRECTION) == LinearDirection.FORWARDS)
             {
-                BlockState newState = state.with(DIRECTION, LinearDirection.BACKWARDS);
-                world.setBlockState(pos, newState);
-//                propagateState(world, pos, newState);
+                world.setBlockState(pos, state.with(DIRECTION, LinearDirection.FORWARDS));
             }
             else
             {
-                world.setBlockState(pos, world.getBlockState(pos.down()));
+                world.setBlockState(pos, state.with(DIRECTION, LinearDirection.BACKWARDS));
             }
+//            if (world.getBlockState(fromPos).isOf(this))
+//            {
+//                    if ((pos.offset(facing).equals(fromPos) || pos.offset(facing.getOpposite()).equals(fromPos))
+//                    && world.getBlockState(fromPos).get(DIRECTION) != state.get(DIRECTION)
+//                    )
+//                {
+//                    world.setBlockState(pos, world.getBlockState(fromPos));
+//                    System.out.println("update");
+//                }
+//            }
+//                else
+//                {
+//                    BlockState newState = state.with(DIRECTION, LinearDirection.BACKWARDS);
+//                    world.setBlockState(pos, newState);
+//                }
         }
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (!world.isClient && state.isOf(this))
-        {
-            BlockState newState;
-            if (state.get(DIRECTION) == LinearDirection.STOP)
-            {
-                newState = state.with(DIRECTION, LinearDirection.FORWARDS);
-            }
-            else
-            {
-                newState = state.with(DIRECTION, LinearDirection.STOP);
-            }
-            world.setBlockState(pos, newState);
-            propagateState(world, pos, newState);
-        }
-        return ActionResult.SUCCESS;
+//        if (!world.isClient && state.isOf(this))
+//        {
+//            BlockState newState;
+//            if (state.get(DIRECTION) == LinearDirection.STOP)
+//            {
+//                newState = state.with(DIRECTION, LinearDirection.FORWARDS);
+//            }
+//            else
+//            {
+//                newState = state.with(DIRECTION, LinearDirection.STOP);
+//            }
+//            world.setBlockState(pos, newState);
+//            propagateState(world, pos, newState);
+//        }
+        return ActionResult.PASS;
     }
 
     public static BlockPos propagateState(World world, BlockPos start, BlockState state)
@@ -113,13 +130,12 @@ public class LinearRailBlock extends BaseFacingBlock implements IRail
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
     {
-        world.getBlockTickScheduler().schedule(pos, state.getBlock(), 8);
+//        world.getBlockTickScheduler().schedule(pos, state.getBlock(), 8);
     }
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        System.out.println("tick");
         Vec3f vec = state.get(FACING).getUnitVector();
         LinearDirection dir = state.get(DIRECTION);
         Box box = new Box(pos, pos.add(1, 1, 1)).expand(vec.getX(), vec.getY(), vec.getZ());
