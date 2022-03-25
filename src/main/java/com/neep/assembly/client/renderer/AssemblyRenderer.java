@@ -49,7 +49,7 @@ public class AssemblyRenderer extends EntityRenderer<AssemblyEntity>
                         MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
                                 container.get(i, j, k),
 //                                state,
-                                entity.getBlockPos(),
+                                entity.getBlockPos().add(i, j, k),
                                 entity.world, matrices,
                                 vertexConsumers.getBuffer(RenderLayer.getTranslucent()),
                                 false,
