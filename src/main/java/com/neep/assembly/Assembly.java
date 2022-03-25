@@ -2,6 +2,7 @@ package com.neep.assembly;
 
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.client.renderer.AssemblyRenderer;
+import com.neep.assembly.client.renderer.BoatTestRenderer;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import net.fabricmc.api.ClientModInitializer;
@@ -26,6 +27,7 @@ public class Assembly implements ModInitializer, ClientModInitializer
     public static final String NAMESPACE = "assembly";
 
     public static EntityType<AssemblyEntity> ASSEMBLY_ENTITY;
+    public static EntityType<BoatTest> BOAT_TEST;
 
     public static Block PLATFORM = new Block(FabricBlockSettings.of(Material.METAL).strength(4.0f));
     public static Item PLATFORM_ITEM;
@@ -43,6 +45,7 @@ public class Assembly implements ModInitializer, ClientModInitializer
     public void onInitialize()
     {
         ASSEMBLY_ENTITY = registerEntity("assembly", AssemblyEntity::new);
+        BOAT_TEST = registerEntity("boat_test", BoatTest::new);
 
         PLATFORM = Registry.register(Registry.BLOCK, new Identifier(NAMESPACE, "platform"), PLATFORM);
         PLATFORM_ITEM = Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "platform"), new BlockItem(PLATFORM,
@@ -60,5 +63,6 @@ public class Assembly implements ModInitializer, ClientModInitializer
     public void onInitializeClient()
     {
         EntityRendererRegistry.register(ASSEMBLY_ENTITY, AssemblyRenderer::new);
+        EntityRendererRegistry.register(BOAT_TEST, BoatTestRenderer::new);
     }
 }
