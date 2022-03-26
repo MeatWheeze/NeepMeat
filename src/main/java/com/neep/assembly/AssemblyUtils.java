@@ -7,6 +7,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.PalettedContainer;
@@ -127,5 +128,15 @@ public class AssemblyUtils
         NeepMeat.LOGGER.printf(Level.INFO, "Assembly at: %s", start);
         assembly.setPos(start.getX(), start.getY(), start.getZ());
         world.spawnEntity(assembly);
+    }
+
+    public static Vec3d getAxisUnitVector(Direction.Axis axis)
+    {
+        return switch (axis)
+        {
+            case X -> new Vec3d(1, 0, 0);
+            case Y -> new Vec3d(0, 1, 0);
+            case Z -> new Vec3d(0, 0, 1);
+        };
     }
 }
