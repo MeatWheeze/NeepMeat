@@ -46,7 +46,7 @@ public class AssemblyEntity extends Entity
         Block.STATE_IDS,
         NbtHelper::toBlockState,
         NbtHelper::fromBlockState,
-            Blocks.AIR.getDefaultState());
+        Blocks.AIR.getDefaultState());
     protected boolean needsBoxUpdate;
 
     protected List<BlockPos> anchorPositions = new ArrayList<>();
@@ -247,6 +247,7 @@ public class AssemblyEntity extends Entity
         }
         else
         {
+//            this.moveEntities(this.getVelocity());
             this.setVelocity(Vec3d.ZERO);
 //            this.move(MovementType.SELF, this.getVelocity());
         }
@@ -256,95 +257,69 @@ public class AssemblyEntity extends Entity
         List<LivingEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true);
         for (LivingEntity entity : entities)
         {
-//            if (world.isClient)
-//            {
-                Box box = entity.getBoundingBox();
-                Box thisBox = this.getBoundingBox();
-                Box intersect = thisBox.intersection(box);
-                Vec3d vel = entity.getVelocity();
+            Box box = entity.getBoundingBox();
+            Box thisBox = this.getBoundingBox();
+            Box intersect = thisBox.intersection(box);
+            Vec3d vel = entity.getVelocity();
 
-                Direction.Axis axis = Direction.Axis.Y;
-                double xArea = intersect.getYLength() * intersect.getZLength();
-                double yArea = intersect.getXLength() * intersect.getZLength();
-                double zArea = intersect.getXLength() * intersect.getYLength();
-//                System.out.println("x: " + xArea + " y: " + yArea + " z: " + zArea);
+            Direction.Axis axis = Direction.Axis.Y;
+            double xArea = intersect.getYLength() * intersect.getZLength();
+            double yArea = intersect.getXLength() * intersect.getZLength();
+            double zArea = intersect.getXLength() * intersect.getYLength();
 
-                if (xArea > Math.max(yArea, zArea))
-                    axis = Direction.Axis.X;
-                if (yArea > Math.max(xArea, zArea))
-                    axis = Direction.Axis.Y;
-                if (zArea > Math.max(xArea, yArea))
-                    axis = Direction.Axis.Z;
 
-                double dist1 = thisBox.getMax(axis) - box.getMin(axis); // Positive direction
-                double dist2 = box.getMax(axis) - thisBox.getMin(axis); // Negative direction
+            if (xArea > Math.max(yArea, zArea))
+                axis = Direction.Axis.X;
+            if (yArea > Math.max(xArea, zArea))
+                axis = Direction.Axis.Y;
+            if (zArea > Math.max(xArea, yArea))
+                axis = Direction.Axis.Z;
+
+            double dist1 = thisBox.getMax(axis) - box.getMin(axis); // Positive direction
+            double dist2 = box.getMax(axis) - thisBox.getMin(axis); // Negative direction
 //                    System.out.println("dist1: " + dist1 + " dist2: " + dist2);
 
-                if (dist1 > 0 && dist2 > dist1)
-                {
-                    Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(dist1);
-                    entity.setPosition(entity.getPos().add(vec));
-                    entity.setOnGround(true);
+            if (dist1 > 0 && dist2 > dist1)
+            {
+                Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(dist1);
+                entity.setPosition(entity.getPos().add(vec));
+                entity.setOnGround(true);
 
-                    // Prevent falling when vertical
-                    if (entity.getVelocity().getComponentAlongAxis(axis) < 0)
-                    {
-                        entity.setVelocity(entity.getVelocity().multiply(1, this.getVelocity().y == 0 ? 0 : 0.9, 1));
+                // Prevent falling when vertical
+                if (entity.getVelocity().getComponentAlongAxis(axis) < 0)
+                {
+                    entity.setVelocity(entity.getVelocity().multiply(1, this.getVelocity().y == 0 ? 0 : 0.9, 1));
 //                        entity.setVelocity(getVelocity().x, getVelocity().y, getVelocity().z);
 //                        entity.fallDistance = 0;
-                    }
-                    if (axis.isVertical())
-                    {
+                }
+                if (axis.isVertical())
+                {
 //                        entity.setPosition(entity.getPos().add(this.getVelocity()));
 //                        entity.addVelocity(getVelocity().x, getVelocity().y, getVelocity().z);
-                    }
-                    break;
                 }
-                if (dist2 > 0 && dist1 > dist2)
-                {
-                    Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(-dist2);
-                    entity.setPosition(entity.getPos().add(vec));
-                    break;
-                }
-                entity.setOnGround(true);
-                System.out.println(entity.isOnGround());
-//            }
-
-//            double distance = this.getBoundingBox().maxY - box.minY;
-//            if (distance > 0)
-//            {
-//                entity.setPosition(entity.getPos().add(0, distance, 0));
-//                entity.setOnGround(true);
-//                entity.fallDistance = 0;
-//            }
+                break;
+            }
+            if (dist2 > 0 && dist1 > dist2)
+            {
+                Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(-dist2);
+                entity.setPosition(entity.getPos().add(vec));
+                break;
+            }
+            entity.setOnGround(true);
         }
 
 //        this.moveEntities();
         this.checkBlockCollision();
     }
 
-    public void moveEntities()
+    public void moveEntities(Vec3d movement)
     {
         world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true).forEach(
                 entity ->
                 {
-                    if (false)
-                        entity.setPosition(getPos().add(0.5, 0.5, 0));
-                    if (world.isClient)
-                    {
-                        if (delta == 0)
-                            return;
-
-                        double d = entity.getX() + dx / (double) this.delta;
-                        double e = entity.getY() + dy / (double) this.delta;
-                        double f = entity.getZ() + dz / (double) this.delta;
-                        System.out.println(dy);
-//                        System.out.println(entity);
-                        entity.setPosition(entity.getPos().add(0, e, 0));
-//                        entity.setVelocity(getVelocity());
-//                        entity.setVelocity(new Vec3d(0, 1, 0));
-                        entity.setOnGround(true);
-                    }
+                    entity.setVelocity(movement);
+                    entity.setOnGround(true);
+////                                    System.out.println(finalMovement);
                 }
         );
     }
@@ -390,14 +365,11 @@ public class AssemblyEntity extends Entity
                         entity.setPosition(getPos().add(0.5, 0.5, 0));
                     if (world.isClient)
                     {
-                        if (delta == 0)
-                            return;
-
 //                        double d = entity.getX() + dx / (double) this.delta;
 //                        double e = entity.getY() + dy / (double) this.delta;
 //                        double f = entity.getZ() + dz / (double) this.delta;
 
-                        double v = d + e + f;
+//                        double v = d + e + f;
 
 //                        entity.setPosition(entity.getPos().add(dx, dy, dz));
 //                        entity.setPos(entity.getX(), this.getY() + 2, entity.getZ());
