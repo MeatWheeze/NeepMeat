@@ -1,16 +1,20 @@
 {
   "big_lever_on": {
     "subtitle": "subtitles.neepmeat.big_lever_on",
-    "category":"record",
     "sounds": [
       "neepmeat:big_lever_on"
     ]
   },
   "big_lever_off": {
     "subtitle": "subtitles.neepmeat.big_lever_off",
-    "category":"record",
     "sounds": [
       "neepmeat:big_lever_off"
+    ]
+  },
+  "click": {
+    "subtitle": "subtitles.neepmeat.click",
+    "sounds": [
+      "neepmeat:click"
     ]
   },
   "fusion_fire": {

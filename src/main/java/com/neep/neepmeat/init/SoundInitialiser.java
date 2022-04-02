@@ -15,6 +15,7 @@ public class SoundInitialiser
 
     public static SoundEvent BIG_LEVER_ON = registerSound("big_lever_on");
     public static SoundEvent BIG_LEVER_OFF = registerSound("big_lever_off");
+    public static SoundEvent CLICK = registerSound("click");
 
     public static SoundEvent registerSound(String path)
     {

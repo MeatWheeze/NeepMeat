@@ -64,7 +64,11 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
         matrices.translate(0, -0.2, 0);
 //        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
         boolean switched = !be.getWorld().getBlockState(be.getPos()).get(BigLeverBlock.POWERED);
-        float angle = (float) be.tickCounter / be.activeTicks * 20;
+        float angle = 20;
+
+        if (be.activeTicks > 0)
+            angle = (float) be.tickCounter / be.activeTicks * 20;
+
         be.leverDelta = (float) MathHelper.lerp(0.1, be.leverDelta, switched ? 0 : angle);
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.leverDelta));
         matrices.translate(0, 0.2, 0);
