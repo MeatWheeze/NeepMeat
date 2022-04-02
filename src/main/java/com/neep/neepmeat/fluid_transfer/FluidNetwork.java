@@ -1,8 +1,8 @@
-package com.neep.neepmeat.fluid_util;
+package com.neep.neepmeat.fluid_transfer;
 
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
-import com.neep.neepmeat.fluid_util.node.FluidNode;
-import com.neep.neepmeat.fluid_util.node.NodePos;
+import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.block.BlockState;

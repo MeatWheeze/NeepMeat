@@ -1,7 +1,7 @@
 package com.neep.neepmeat;
 
 import com.neep.neepmeat.client.NeepMeatClient;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
+import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.init.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;

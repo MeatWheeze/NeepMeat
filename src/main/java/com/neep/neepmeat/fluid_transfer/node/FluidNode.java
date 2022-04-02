@@ -1,8 +1,8 @@
-package com.neep.neepmeat.fluid_util.node;
+package com.neep.neepmeat.fluid_transfer.node;
 
-import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -13,9 +13,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.spongepowered.asm.mixin.Interface;
 
 import java.util.HashMap;
 import java.util.Map;

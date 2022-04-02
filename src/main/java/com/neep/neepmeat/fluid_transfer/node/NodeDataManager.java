@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_util.node;
+package com.neep.neepmeat.fluid_transfer.node;
 
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.nbt.NbtCompound;

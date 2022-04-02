@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
+import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;

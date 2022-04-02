@@ -1,9 +1,9 @@
-package com.neep.neepmeat.fluid_util;
+package com.neep.neepmeat.fluid_transfer;
 
 import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
-import com.neep.neepmeat.fluid_util.node.FluidNode;
-import com.neep.neepmeat.fluid_util.node.NodePos;
+import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

@@ -1,11 +1,11 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.NMFluidNetwork;
-import com.neep.neepmeat.fluid_util.PipeConnectionType;
-import com.neep.neepmeat.fluid_util.node.FluidNode;
-import com.neep.neepmeat.fluid_util.node.NodePos;
+import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
+import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
