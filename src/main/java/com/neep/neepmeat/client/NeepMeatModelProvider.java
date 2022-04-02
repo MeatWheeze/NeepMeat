@@ -5,20 +5,20 @@ import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import com.neep.neepmeat.client.model.block.SlopeTest;
 import com.neep.neepmeat.init.BlockInitialiser;
-import net.fabricmc.fabric.api.client.model.ModelProviderContext;
-import net.fabricmc.fabric.api.client.model.ModelProviderException;
-import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
+import net.fabricmc.fabric.api.client.model.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
+import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class NeepMeatModelProvider implements ModelResourceProvider
+public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelProvider
 {
 
     public static final Map<Identifier, Supplier<UnbakedModel>> MODELS = new HashMap<>();
@@ -81,5 +81,11 @@ public class NeepMeatModelProvider implements ModelResourceProvider
         MODELS.put(topId, () -> new ScaffoldTopModel(sideTexture, topTexture, block));
         MODELS.put(itemId, () -> new ScaffoldTopModel(sideTexture, topTexture, block));
         MODELS.put(bottomId, () -> new ScaffoldBottomModel(sideTexture, block));
+    }
+
+    @Override
+    public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
+    {
+
     }
 }
