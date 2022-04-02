@@ -19,7 +19,7 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class ItemInit
 {
-    public static Map<String, NMItem> ITEMS = new LinkedHashMap<>();
+    public static Map<Identifier, NMItem> ITEMS = new LinkedHashMap<>();
 
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
@@ -42,20 +42,20 @@ public class ItemInit
     public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static void putItem(String id, NMItem item)
+    public static void putItem(String path, NMItem item)
     {
         if (!(item instanceof Item))
         {
             throw new IllegalArgumentException("tried to queue a non-item for item registration");
         }
-        ITEMS.put(id, item);
+        ITEMS.put(new Identifier(NeepMeat.NAMESPACE, path), item);
     }
 
     public static void registerItems()
     {
-        for (NMItem item : ITEMS.values())
+        for (Map.Entry<Identifier, NMItem> entry : ITEMS.entrySet())
         {
-            Registry.register(Registry.ITEM, new Identifier(NeepMeat.NAMESPACE, item.getRegistryName()), (Item) item);
+            Registry.register(Registry.ITEM, entry.getKey(), (Item) entry.getValue());
         }
     }
 
