@@ -2,14 +2,27 @@ package com.neep.neepmeat.block.redstone;
 
 import com.neep.neepmeat.api.block.NMBlock;
 import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.SoundInitialiser;
 import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.enums.WallMountLocation;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityProvider
@@ -35,33 +48,45 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-        switch ((WallMountLocation)state.get(FACE)) {
-            case FLOOR: {
-                switch (state.get(FACING).getAxis()) {
-                    case X: {
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        switch (state.get(FACE))
+        {
+            case FLOOR:
+            {
+                switch (state.get(FACING).getAxis())
+                {
+                    case X:
+                    {
                         return FLOOR_X_AXIS_SHAPE;
                     }
                 }
                 return FLOOR_Z_AXIS_SHAPE;
             }
-            case WALL: {
-                switch (state.get(FACING)) {
-                    case EAST: {
+            case WALL:
+            {
+                switch (state.get(FACING))
+                {
+                    case EAST:
+                    {
                         return EAST_WALL_SHAPE;
                     }
-                    case WEST: {
+                    case WEST:
+                    {
                         return WEST_WALL_SHAPE;
                     }
-                    case SOUTH: {
+                    case SOUTH:
+                    {
                         return SOUTH_WALL_SHAPE;
                     }
                 }
                 return NORTH_WALL_SHAPE;
             }
         }
-        switch (state.get(FACING).getAxis()) {
-            case X: {
+        switch (state.get(FACING).getAxis())
+        {
+            case X:
+            {
                 return CEILING_X_AXIS_SHAPE;
             }
         }
@@ -84,5 +109,41 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return new BigLeverBlockEntity(pos, state);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+        BlockState blockState = this.togglePower(state, world, pos);
+        ((BigLeverBlockEntity) world.getBlockEntity(pos)).togglePower();
+
+        world.emitGameEvent(player, blockState.get(POWERED) ? GameEvent.BLOCK_SWITCH : GameEvent.BLOCK_UNSWITCH, pos);
+        return ActionResult.CONSUME;
+    }
+
+    @Nullable
+    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
+    checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> ticker, World world)
+    {
+        return expectedType == givenType && !world.isClient ? (BlockEntityTicker<A>) ticker : null;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return checkType(type, BlockEntityInitialiser.BIG_LEVER, BigLeverBlockEntity::serverTick, world);
+    }
+
+    public void setPowered(World world, BlockPos pos, boolean powered)
+    {
+        BlockState state = world.getBlockState(pos).with(POWERED, powered);
+        world.setBlockState(pos, state, Block.NOTIFY_ALL);
+
+        world.updateNeighborsAlways(pos, this);
+        world.updateNeighborsAlways(pos.offset(LeverBlock.getDirection(state).getOpposite()), this);
+
+        if (powered)
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundInitialiser.BIG_LEVER_ON, SoundCategory.HOSTILE, 1f, 0.8f);
+        else
+            world.playSound(null, pos, SoundInitialiser.BIG_LEVER_OFF, SoundCategory.HOSTILE, 1f, 0.9f);
     }
 }
