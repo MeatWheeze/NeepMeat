@@ -1,10 +1,15 @@
 package com.neep.neepmeat.fluid_transfer;
 
+import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -117,7 +122,8 @@ public class FluidNetwork
         return out;
     }
 
-    private void updateNode(NodePos pos, FluidNode node)
+    // Replace the node at a position with a new one, preserving the network reference
+    private void replaceNode(NodePos pos, FluidNode node)
     {
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
         FluidNode presentNode;
@@ -127,7 +133,7 @@ public class FluidNetwork
         }
         nodes.put(pos, node);
 
-        System.out.println("Node updated: " + nodes.get(pos));
+        System.out.println("Node replaced: " + nodes.get(pos));
     }
 
     private void removeNode(NodePos pos)
@@ -181,13 +187,52 @@ public class FluidNetwork
         }
     }
 
-    public void updateNode(World world, NodePos pos, FluidNode node)
+    public void updatePosition(World world, NodePos pos)
     {
         if (!(world instanceof ServerWorld serverWorld))
         {
             return;
         }
-        updateNode(pos, node);
+
+        // Get connected storage, remove node if there isn't one
+        Storage<FluidVariant> storage;
+        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null)
+        {
+            removeNode(world, pos);
+            return;
+        }
+
+        // Get acceptor mode if present
+        AcceptorModes mode = AcceptorModes.INSERT_EXTRACT;
+        Block block = world.getBlockState(pos.facingBlock()).getBlock();
+        if (block instanceof FluidNodeProvider provider)
+        {
+            mode = provider.getDirectionMode(world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
+        }
+
+        Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
+        FluidNode node;
+        if ((node = nodes.get(pos)) == null)
+        {
+            // Create new node with params
+            node = new FluidNode(pos, storage, mode, 1);
+            nodes.put(pos, node);
+        }
+
+        node.setMode(mode);
+        node.setStorage(storage);
+
+        System.out.println("Node updated: " + nodes.get(pos));
+
+    }
+
+    public void replaceNode(World world, NodePos pos, FluidNode node)
+    {
+        if (!(world instanceof ServerWorld serverWorld))
+        {
+            return;
+        }
+        replaceNode(pos, node);
         validatePos(serverWorld, pos.pos);
     }
 
@@ -236,7 +281,7 @@ public class FluidNetwork
         return nbt;
     }
 
-    // Extracts fluid nodes and adds them to the world's network
+    // Extracts fluid nodes from nbt and adds them to the world's network
     public void readNodes(BlockPos pos, NbtCompound nbt, ServerWorld world)
     {
         List<FluidNode> nodes = new ArrayList<>();

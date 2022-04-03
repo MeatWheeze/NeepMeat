@@ -42,9 +42,22 @@ public class FluidNode
 
     public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
+        // TODO: remove redundant fields
         this.face = face;
         this.pos = pos;
         this.nodePos = new NodePos(pos, face);
+        this.storage = storage;
+        this.mode = mode;
+        this.flowMultiplier = flowMultiplier;
+        this.flow = mode.getFlow() * flowMultiplier;
+    }
+
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
+    {
+        // TODO: remove redundant fields
+        this.pos = nodePos.pos;
+        this.face = nodePos.face;
+        this.nodePos = nodePos;
         this.storage = storage;
         this.mode = mode;
         this.flowMultiplier = flowMultiplier;
@@ -134,6 +147,11 @@ public class FluidNode
             // Remove nodes with no connected storage that are not queued for deferred loading
 //            FluidNetwork.getInstance(world).removeNode(world, nodePos);
         }
+    }
+
+    public void setStorage(Storage<FluidVariant> storage)
+    {
+        this.storage = storage;
     }
 
     public void setMode(AcceptorModes mode)

@@ -100,34 +100,22 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
         return state;
     }
 
-    // TODO: Major code reduction may be possible
     public void createStorageNodes(World world, BlockPos pos, BlockState state)
     {
         if (!world.isClient)
         {
             for (Direction direction : Direction.values())
             {
-                Storage<FluidVariant> storage;
-                if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
-                        && state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
+                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 {
-                    FluidNode node;
-                    BlockState nextPos = world.getBlockState(pos.offset(direction));
-                    if (nextPos.getBlock() instanceof FluidNodeProvider provider)
-                    {
-                        node = new FluidNode(pos, direction, storage, provider.getDirectionMode(nextPos, direction.getOpposite()), 2);
-                    }
-                    else
-                    {
-                        node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
-                    }
-                    updateNetwork(world, pos, node, false);
-                } else
+                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
+                }
+                else
                 {
-                    FluidNetwork.getInstance((ServerWorld) world).removeNode(world, new NodePos(pos, direction));
+                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
                 }
             }
-            // TODO: avoid creating that will fail immediately
+            // TODO: avoid creating instances that will fail immediately
             Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
         }
     }

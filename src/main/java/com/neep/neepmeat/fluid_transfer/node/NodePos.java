@@ -11,22 +11,14 @@ public class NodePos
     public final BlockPos pos;
     public final Direction face;
 
-//    public NodePos(long pos, Direction face)
-//    {
-//        this.pos = pos;
-//        this.face = face;
-//    }
-
     public NodePos(BlockPos pos, Direction face)
     {
-//        this.pos = ChunkSectionPos.toLong(pos);
         this.pos = pos;
         this.face = face;
     }
 
     public NodePos(FluidNode node)
     {
-//        this.pos = node.getPos().asLong();
         this.pos = node.getPos();
         this.face = node.getFace();
     }
@@ -61,4 +53,8 @@ public class NodePos
         return ChunkSectionPos.from(pos).toChunkPos();
     }
 
+    public BlockPos facingBlock()
+    {
+        return pos.offset(face);
+    }
 }
