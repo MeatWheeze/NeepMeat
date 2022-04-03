@@ -242,7 +242,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         }
         return state;
     }
-
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
@@ -257,29 +256,14 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         for (Direction direction : Direction.values())
         {
-//            NodePos nodePos = new NodePos(pos.offset(direction), direction.getOpposite());
             NodePos nodePos = new NodePos(pos, direction);
             FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
-        }
-    }
-
-
-    public void updateNetwork(World world, BlockPos pos, FluidNode node, boolean removed)
-    {
-        if (removed)
-        {
-            FluidNetwork.getInstance(world).removeNode(world, new NodePos(node));
-        }
-        else
-        {
-            FluidNetwork.getInstance(world).replaceNode(world, new NodePos(node), node);
         }
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        System.out.println(player.getStackInHand(hand));
         if (!player.getStackInHand(hand).isEmpty())
         {
             return ActionResult.PASS;

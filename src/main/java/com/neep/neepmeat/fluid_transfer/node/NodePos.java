@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_transfer.node;
 
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -17,10 +18,11 @@ public class NodePos
         this.face = face;
     }
 
-    public NodePos(FluidNode node)
+    public static NodePos fromNbt(NbtCompound nbt)
     {
-        this.pos = node.getPos();
-        this.face = node.getFace();
+        BlockPos pos = BlockPos.fromLong(nbt.getLong("pos"));
+        Direction face = Direction.byId(nbt.getInt("face"));
+        return new NodePos(pos, face);
     }
 
     @Override
@@ -56,5 +58,12 @@ public class NodePos
     public BlockPos facingBlock()
     {
         return pos.offset(face);
+    }
+
+    public NbtCompound toNbt(NbtCompound nbt)
+    {
+        nbt.putLong("pos", pos.asLong());
+        nbt.putInt("face", face.getId());
+        return nbt;
     }
 }
