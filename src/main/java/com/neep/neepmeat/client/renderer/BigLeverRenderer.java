@@ -1,14 +1,11 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.eliotlash.mclib.math.functions.limit.Min;
 import com.neep.neepmeat.api.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
-import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.client.MinecraftClient;
@@ -20,9 +17,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
@@ -70,6 +65,7 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
             angle = (float) be.tickCounter / be.activeTicks * 20;
 
         be.leverDelta = (float) MathHelper.lerp(0.1, be.leverDelta, switched ? 0 : angle);
+//        be.leverDelta = switched ? 0 : angle;
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.leverDelta));
         matrices.translate(0, 0.2, 0);
         matrices.translate(-0.5, -0.5, -0.5);
