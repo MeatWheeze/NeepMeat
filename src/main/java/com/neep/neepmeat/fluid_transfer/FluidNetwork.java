@@ -252,7 +252,7 @@ public class FluidNetwork
         putNodes(nodes, pos);
     }
 
-    public Supplier<FluidNode> getNodeSupplier(NodePos pos)
+    public NodeSupplier getNodeSupplier(NodePos pos)
     {
         return new NodeSupplier(pos, world);
     }
@@ -296,6 +296,11 @@ public class FluidNetwork
         public FluidNode get()
         {
             return getInstance(world).getOrCreateMap(pos.toChunkPos()).get(pos);
+        }
+
+        public boolean exists()
+        {
+            return get() != null;
         }
     }
 

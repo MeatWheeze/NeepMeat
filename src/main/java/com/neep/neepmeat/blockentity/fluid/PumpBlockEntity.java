@@ -3,6 +3,8 @@ package com.neep.neepmeat.blockentity.fluid;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
+import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
@@ -18,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
 public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
@@ -37,16 +40,15 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         this.needsUpdate = true;
         buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
+
         // Create fluid interfaces in connection directions
         if (state.getBlock() instanceof FluidNodeProvider nodeProvider)
         {
             for (Direction direction : Direction.values())
             {
-//                FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
                 if (nodeProvider.connectInDirection(state, direction))
                 {
                     AcceptorModes mode = nodeProvider.getDirectionMode(state, direction);
-//                    sides.put(direction, new FluidNode(pos, direction, this.getBuffer(null), mode, mode.getFlow()));
                     sideModes.put(direction, mode);
                 }
             }
@@ -57,8 +59,6 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     public void markRemoved()
     {
         super.markRemoved();
-//        sides.clear();
-//        update(getCachedState(), getWorld());
     }
 
     @Override
@@ -75,25 +75,16 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         }
         if (be.needsUpdate)
         {
-//            be.update(be.getCachedState(), be.getWorld());
         }
         if (!world.isReceivingRedstonePower(pos))
         {
             be.setActive(true);
-//            be.sides.get(state.get(PumpBlock.FACING)).tick(world);
-//            be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
         }
         else
         {
             be.setActive(false);
         }
     }
-
-//    public void createNetwork()
-//    {
-//        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING));
-//        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING).getOpposite());
-//    }
 
     public void setActive(boolean active)
     {
@@ -104,24 +95,46 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         BlockState blockState = getCachedState();
 
+        Direction facing = blockState.get(PumpBlock.FACING);
+        FluidNetwork.NodeSupplier node;
+        NodePos front = new NodePos(getPos().offset(facing), facing.getOpposite());
+        NodePos back = new NodePos(getPos().offset(facing.getOpposite()), facing);
+
         if (!active)
         {
-            sideModes.replace(blockState.get(PumpBlock.FACING), AcceptorModes.NONE);
-            sideModes.replace(blockState.get(PumpBlock.FACING).getOpposite(), AcceptorModes.NONE);
+            sideModes.replace(facing, AcceptorModes.NONE);
+            sideModes.replace(facing.getOpposite(), AcceptorModes.NONE);
+
+            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
+            {
+                node.get().setMode(AcceptorModes.NONE);
+            }
+            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
+            {
+                node.get().setMode(AcceptorModes.NONE);
+            }
         }
         else
         {
-            sideModes.replace(blockState.get(PumpBlock.FACING), AcceptorModes.PUSH);
-            sideModes.replace(blockState.get(PumpBlock.FACING).getOpposite(), AcceptorModes.PULL);
+            sideModes.replace(facing, AcceptorModes.PUSH);
+            sideModes.replace(facing.getOpposite(), AcceptorModes.PULL);
+
+            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
+            {
+                node.get().setMode(AcceptorModes.PUSH);
+            }
+            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
+            {
+                node.get().setMode(AcceptorModes.PULL);
+            }
+
         }
+
         this.isActive = active;
     }
 
     public void update(BlockState state, World world)
     {
-//        sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
-//        sides.get(state.get(PumpBlock.FACING).getOpposite()).rebuildNetwork(world);
-//        createNetwork();
         needsUpdate = false;
     }
 
