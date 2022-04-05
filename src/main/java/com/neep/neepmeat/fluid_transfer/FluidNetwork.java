@@ -33,6 +33,7 @@ public class FluidNetwork
     public List<FluidNode> queuedNodes = new ArrayList<>();
     public final Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
     protected final ServerWorld world;
+    public NetworkLookup networkLookup;
 
     protected FluidNetwork(ServerWorld world)
     {

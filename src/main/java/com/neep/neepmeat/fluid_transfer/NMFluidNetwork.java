@@ -12,6 +12,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -80,6 +81,16 @@ public class NMFluidNetwork
                 && network.origin.equals(origin)
                 && network.originFace.equals(originFace)
                 && network.uid == uid;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+                .append(uid)
+                .append(originFace.getId())
+                .append(origin.hashCode())
+                .build();
     }
 
     public static void validateAll()
