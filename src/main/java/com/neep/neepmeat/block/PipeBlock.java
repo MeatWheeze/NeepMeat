@@ -6,14 +6,11 @@ import com.neep.neepmeat.api.block.BaseBlock;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.PipeProperties;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.NMMaths;
 import com.neep.neepmeat.util.NMVec2f;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -125,40 +122,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             return state;
         }
 
-//        boolean north = state.get(NORTH_CONNECTION);
-//        boolean south = state.get(SOUTH_CONNECTION);
-//        boolean east = state.get(EAST_CONNECTION);
-//        boolean west = state.get(WEST_CONNECTION);
-//        boolean up = state.get(UP_CONNECTION);
-//        boolean down = state.get(DOWN_CONNECTION);
-//        boolean nNS = !north && !south;
-//        boolean nEW = !east && !west;
-//        boolean nUD = !up && !down;
-//        if (!west && nNS & nUD)
-//        {
-//            state = state.with(WEST_CONNECTION, true);
-//        }
-//        if (!east && nNS && nUD)
-//        {
-//            state = state.with(EAST_CONNECTION, true);
-//        }
-//        if (!north && nEW && nUD)
-//        {
-//            state = state.with(NORTH_CONNECTION, true);
-//        }
-//        if (!south && nEW && nUD)
-//        {
-//            state = state.with(SOUTH_CONNECTION, true);
-//        }
-////        System.out.println("up: " + up + ", nNS: " + nNS + ", nEW: " + nEW + ", nUD: " + nUD);
-//        if (!up && nNS && nEW)
-//        {
-//            state = state.with(UP_CONNECTION, true);
-//        }
-//        if (!down && nNS && nEW)
-//        {
-//            state = state.with(DOWN_CONNECTION, true);
-//        }
         return state;
     }
 
@@ -242,24 +205,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         }
         return state;
     }
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
-    {
-        if (!state.isOf(newState.getBlock()))
-        {
-            removeStorageNodes(world, pos);
-            world.removeBlockEntity(pos);
-        }
-    }
-
-    public void removeStorageNodes(World world, BlockPos pos)
-    {
-        for (Direction direction : Direction.values())
-        {
-            NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
-        }
-    }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
@@ -280,7 +225,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 
             Vec3d hitPos = hit.getPos();
             NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
-//            System.out.println(relative);
 
             Direction changeDirection = direction;
             if (!relative.isWithin(0.5f, 0.5f, 0.25f))
@@ -302,10 +246,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 }
             }
             boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnectionType.SIDE;
-            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnectionType.FORCED : PipeConnectionType.SIDE));
+            BlockState newState = state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnectionType.FORCED : PipeConnectionType.SIDE);
+            world.setBlockState(pos, newState);
+            onConnectionUpdate(world, state, newState, pos, player);
 
             return ActionResult.SUCCESS;
-//        }
         }
         return ActionResult.SUCCESS;
     }
@@ -314,6 +259,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH_CONNECTION, EAST_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION);
+    }
+
+    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
+    {
+
     }
 
 }

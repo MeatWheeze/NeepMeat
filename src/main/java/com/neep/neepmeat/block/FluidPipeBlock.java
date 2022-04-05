@@ -1,10 +1,8 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -14,8 +12,12 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -31,14 +33,35 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
         super(itemName, itemMaxStack, hasLore, settings);
     }
 
+    public static void removeStorageNodes(World world, BlockPos pos)
+    {
+        for (Direction direction : Direction.values())
+        {
+            NodePos nodePos = new NodePos(pos, direction);
+            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
+        }
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()))
+        {
+            removeStorageNodes(world, pos);
+            world.removeBlockEntity(pos);
+        }
+    }
+
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         BlockState state2 = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
-        // Dirty bodge for now. Might change if it works.
-        createStorageNodes(world, pos, state2);
+        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        {
+            createStorageNodes(world, pos, state2);
+        }
 
     }
 
@@ -73,6 +96,17 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
         // I don't know what this bit was for.
 
         return state.with(DIR_TO_CONNECTION.get(direction), connection1);
+    }
+
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
+    {
+        createStorageNodes(world, pos, newState);
     }
 
     @Nullable
