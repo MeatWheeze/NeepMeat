@@ -33,6 +33,7 @@ public class NMFluidNetwork
     private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
+    // TODO: Find a way to remove unloaded networks from this
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
 
     private NMFluidNetwork(World world, BlockPos origin, Direction direction)
@@ -137,6 +138,8 @@ public class NMFluidNetwork
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
                 return;
+
+//            buildPressures();
 //            System.out.println(uid + " setting nodes");
 //            buildPressures();
 //            tick();
@@ -217,8 +220,7 @@ public class NMFluidNetwork
 
                 for (int i = 0; i < UPDATE_DISTANCE; ++i)
                 {
-//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
-                    for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
+                    for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
                     {
                         BlockPos current = iterator.next();
                         networkPipes.get(current).setDistance(i + 1);

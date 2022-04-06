@@ -74,7 +74,7 @@ public class FluidNetwork
         }
         WORLD_NETWORKS.get(world).queuedNodes.removeAll(removal);
 
-        NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+//        NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 
     protected static void createNetwork(ServerWorld world)

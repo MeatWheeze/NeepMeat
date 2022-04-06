@@ -269,6 +269,7 @@ public class FluidNode
                 {
                     if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()) || targetView.getAmount() <= 0)
                     {
+//                        System.out.println(node.getPos());
 //                        System.out.println(targetView.getAmount() + ", " + targetView.getCapacity() + ", " + targetView.getResource());
                         canInsert = true;
                     }
@@ -286,10 +287,14 @@ public class FluidNode
 
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
 
-        float insertBranchFlow = (float) (500 * (this.flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
-        float extractBranchFlow = (float) (500 * (this.flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
+        float Q = this.getFlow() + node.getFlow();
+        if (getFlow() < 0)
+            System.out.println(getFlow() + " " + getPos());
+//        System.out.println(node.getFlow());
+        float insertBranchFlow = (float) (10500 * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
+        float extractBranchFlow = (float) (10500 * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
-        long amountMoved = 0;
+        long amountMoved;
         if (insertBranchFlow >= 0)
         {
             amountMoved = StorageUtil.move(getStorage(world), node.getStorage(world), variant -> true, (long) insertBranchFlow, null);
