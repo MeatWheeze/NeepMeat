@@ -109,7 +109,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
 //
 //                System.out.println(test.contains(supplier2));
 
-                NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+//                NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
             }
             else
             {
