@@ -165,7 +165,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         if (state.getBlock() instanceof FluidAcceptor)
         {
-            return ((FluidAcceptor) state.getBlock()).connectInDirection(state, direction);
+            return ((FluidAcceptor) state.getBlock()).connectInDirection(world, pos, state, direction);
         }
         return false;
     }

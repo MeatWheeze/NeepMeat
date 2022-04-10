@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluidNetwork
 {
-    private World world;
+    private ServerWorld world;
     public final long uid; // Unique identifier for every network
     private BlockPos origin;
     private Direction originFace;
@@ -36,7 +36,7 @@ public class NMFluidNetwork
     // TODO: Find a way to remove unloaded networks from this
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    private NMFluidNetwork(World world, BlockPos origin, Direction direction)
+    private NMFluidNetwork(ServerWorld world, BlockPos origin, Direction direction)
     {
         this.world = world;
         this.origin = origin;
@@ -51,7 +51,7 @@ public class NMFluidNetwork
         return ++currentUid;
     }
 
-    public static Optional<NMFluidNetwork> tryCreateNetwork(World world, BlockPos pos, Direction direction)
+    public static Optional<NMFluidNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
     {
         System.out.println("trying fluid network at " + pos);
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
@@ -151,7 +151,7 @@ public class NMFluidNetwork
 
     }
 
-    public void setWorld(World world)
+    public void setWorld(ServerWorld world)
     {
         this.world = world;
     }
@@ -246,7 +246,8 @@ public class NMFluidNetwork
                     FluidNode targetNode = supplier1.get();
                     if (targetNode == null
                             || targetNode.equals(node)
-                            || node.mode == AcceptorModes.NONE)
+//                            || node.getMode(world) == AcceptorModes.NONE)
+                    )
                     {
                         continue;
                     }
@@ -290,7 +291,7 @@ public class NMFluidNetwork
                     BlockState state1 = world.getBlockState(current);
                     BlockState state2 = world.getBlockState(next);
 
-                    if (FluidAcceptor.isConnectedIn(state1, direction) && !visited.contains(next))
+                    if (FluidAcceptor.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
                     {
                         visited.add(next);
 //                        System.out.println(next);
@@ -299,7 +300,7 @@ public class NMFluidNetwork
                                 && !(state2.getBlock() instanceof FluidNodeProvider))
                         {
                             // Next block is connected in opposite direction
-                            if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
+                            if (FluidAcceptor.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
                                 networkPipes.put(next, new PipeState(next.toImmutable(), state2));

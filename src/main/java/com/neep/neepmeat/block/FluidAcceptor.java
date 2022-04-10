@@ -2,11 +2,13 @@ package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 public interface FluidAcceptor
 {
-    static boolean isConnectedIn(BlockState state, Direction direction)
+    static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof PipeBlock)
         {
@@ -15,17 +17,17 @@ public interface FluidAcceptor
         else if (state.getBlock() instanceof FluidAcceptor)
         {
             FluidAcceptor acceptor = (FluidAcceptor) state.getBlock();
-            return acceptor.connectInDirection(state, direction);
+            return acceptor.connectInDirection(world, pos, state, direction);
         }
         return false;
     }
 
-    default boolean connectInDirection(BlockState state, Direction direction)
+    default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return true;
     }
 
-    default AcceptorModes getDirectionMode(BlockState state, Direction direction)
+    default AcceptorModes getDirectionMode(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return AcceptorModes.INSERT_EXTRACT;
     }

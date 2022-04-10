@@ -150,7 +150,7 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
                 }
             }
             // TODO: avoid creating instances that will fail immediately
-            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
         }
     }
 
