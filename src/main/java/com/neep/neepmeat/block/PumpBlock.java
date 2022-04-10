@@ -1,17 +1,15 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.api.block.BaseFacingBlock;
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
+import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -41,6 +39,17 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         return VoxelShapes.cuboid(0f, 0f, 0f, 1f, 1.0f, 1f);
     }
 
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
+        {
+            boolean powered = world.isReceivingRedstonePower(pos);
+            System.out.println("powered: " + powered);
+            be.setActive(powered);
+        }
+    }
+
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
@@ -48,45 +57,27 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         return new PumpBlockEntity(pos, state);
     }
 
-    @Nullable
-    protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
-    checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> ticker, World world)
-    {
-        return expectedType == givenType && !world.isClient ? (BlockEntityTicker<A>) ticker : null;
-    }
-
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return checkType(type, BlockEntityInitialiser.PUMP_BLOCK_ENTITY, PumpBlockEntity::tick, world);
-    }
-
-    @Override
-    public boolean connectInDirection(BlockState state, Direction direction)
+    public boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return state.get(FACING).equals(direction) || state.get(FACING).getOpposite().equals(direction);
     }
 
     @Override
-    public AcceptorModes getDirectionMode(BlockState state, Direction direction)
+    public AcceptorModes getDirectionMode(World world, BlockPos pos, BlockState state, Direction direction)
     {
-//        return state.get(FACING).equals(direction)
-        if (state.get(FACING).equals(direction))
+        if (world.getBlockEntity(pos) instanceof PumpBlockEntity pump)
         {
-            return AcceptorModes.PUSH;
-        }
-        else if (state.get(FACING).equals(direction.getOpposite()))
-        {
-            return AcceptorModes.PULL;
+            if (direction == state.get(FACING))
+            {
+                return pump.frontMode;
+            }
+            if (direction == state.get(FACING).getOpposite())
+            {
+                return pump.backMode;
+            }
         }
         return AcceptorModes.NONE;
-    }
-
-    @Override
-    public FluidNode getNode(World world, BlockPos pos, Direction direction)
-    {
-        PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);
-        return be.getNode(direction);
     }
 
     @Override
@@ -131,15 +122,4 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         }
         return ActionResult.SUCCESS;
     }
-
-
-
-//    @Override
-//    public void addAllAttributes(World world, BlockPos pos, BlockState state, AttributeList<?> to) {
-//        Direction facing = state.get(FACING);
-//        if (to.getSearchDirection() == facing) {
-//            to.offer(EmptyFluidExtractable.SUPPLIER);
-//        }
-//    }
-
 }

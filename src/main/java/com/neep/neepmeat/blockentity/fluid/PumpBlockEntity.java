@@ -1,13 +1,11 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
+import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
@@ -20,25 +18,23 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
 public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
 {
-
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
-    private final Map<Direction, AcceptorModes > sideModes = new HashMap<>();
-    private final WritableFluidBuffer buffer;
-    private NMFluidNetwork network;
-    private boolean needsUpdate;
+    public final Map<Direction, AcceptorModes > sideModes = new HashMap<>();
+    protected final WritableFluidBuffer buffer;
     private boolean isActive;
+
+    public AcceptorModes frontMode = AcceptorModes.PUSH;
+    public AcceptorModes backMode = AcceptorModes.PULL;
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.PUMP_BLOCK_ENTITY, pos, state);
 
-        this.needsUpdate = true;
         buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
 
         // Create fluid interfaces in connection directions
@@ -46,10 +42,11 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         {
             for (Direction direction : Direction.values())
             {
-                if (nodeProvider.connectInDirection(state, direction))
+                if (nodeProvider.connectInDirection(world, pos, state, direction))
                 {
-                    AcceptorModes mode = nodeProvider.getDirectionMode(state, direction);
-                    sideModes.put(direction, mode);
+//                    AcceptorModes mode = nodeProvider.getDirectionMode(world, pos, state, direction);
+//                    sideModes.put(direction, mode);
+//                    setActive(false);
                 }
             }
         }
@@ -65,25 +62,6 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     public void setWorld(World world)
     {
         super.setWorld(world);
-    }
-
-    public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
-    {
-        if (be.isRemoved())
-        {
-            be.setNeedsUpdate(true);
-        }
-        if (be.needsUpdate)
-        {
-        }
-        if (!world.isReceivingRedstonePower(pos))
-        {
-            be.setActive(true);
-        }
-        else
-        {
-            be.setActive(false);
-        }
     }
 
     public void setActive(boolean active)
@@ -102,31 +80,37 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         if (!active)
         {
-            sideModes.replace(facing, AcceptorModes.NONE);
-            sideModes.replace(facing.getOpposite(), AcceptorModes.NONE);
+//            sideModes.replace(facing, AcceptorModes.NONE);
+//            sideModes.replace(facing.getOpposite(), AcceptorModes.NONE);
 
-            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
-            {
-                node.get().setMode(AcceptorModes.NONE);
-            }
-            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
-            {
-                node.get().setMode(AcceptorModes.NONE);
-            }
+            frontMode = AcceptorModes.NONE;
+            backMode = AcceptorModes.NONE;
+
+//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
+//            {
+//                node.get().setMode(AcceptorModes.NONE);
+//            }
+//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
+//            {
+//                node.get().setMode(AcceptorModes.NONE);
+//            }
         }
         else
         {
-            sideModes.replace(facing, AcceptorModes.PUSH);
-            sideModes.replace(facing.getOpposite(), AcceptorModes.PULL);
+//            sideModes.replace(facing, AcceptorModes.PUSH);
+//            sideModes.replace(facing.getOpposite(), AcceptorModes.PULL);
 
-            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
-            {
-                node.get().setMode(AcceptorModes.PUSH);
-            }
-            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
-            {
-                node.get().setMode(AcceptorModes.PULL);
-            }
+            frontMode = AcceptorModes.PUSH;
+            backMode = AcceptorModes.PULL;
+
+//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
+//            {
+//                node.get().setMode(AcceptorModes.PUSH);
+//            }
+//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
+//            {
+//                node.get().setMode(AcceptorModes.PULL);
+//            }
 
         }
 
@@ -135,7 +119,6 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
     public void update(BlockState state, World world)
     {
-        needsUpdate = false;
     }
 
     @Override
@@ -153,12 +136,6 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         buffer.readNBT(tag);
     }
 
-    public FluidNode getNode(Direction direction)
-    {
-        Direction facing = getCachedState().get(PumpBlock.FACING);
-        return new FluidNode(pos.offset(direction.getOpposite()), direction.getOpposite(), this.getBuffer(direction), sideModes.get(direction.getOpposite()), 2);
-    }
-
     @Override
     @Nullable
     public WritableFluidBuffer getBuffer(Direction direction)
@@ -171,6 +148,5 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     @Override
     public void setNeedsUpdate(boolean needsUpdate)
     {
-        this.needsUpdate = needsUpdate;
     }
 }

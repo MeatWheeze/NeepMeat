@@ -208,7 +208,7 @@ public class FluidNetwork
         Block block = world.getBlockState(pos.facingBlock()).getBlock();
         if (block instanceof FluidNodeProvider provider)
         {
-            mode = provider.getDirectionMode(world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
+            mode = provider.getDirectionMode(world, pos.pos, world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
         }
 
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
@@ -224,7 +224,6 @@ public class FluidNetwork
         node.setStorage(storage);
 
         System.out.println("Node updated: " + nodes.get(pos));
-
     }
 
     public void replaceNode(World world, NodePos pos, FluidNode node)
