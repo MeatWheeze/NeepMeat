@@ -14,9 +14,8 @@ public interface FluidAcceptor
         {
             return state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
         }
-        else if (state.getBlock() instanceof FluidAcceptor)
+        else if (state.getBlock() instanceof FluidAcceptor acceptor)
         {
-            FluidAcceptor acceptor = (FluidAcceptor) state.getBlock();
             return acceptor.connectInDirection(world, pos, state, direction);
         }
         return false;

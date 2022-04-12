@@ -81,6 +81,11 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
     }
 
     @Override
+    public boolean isStorage()
+    {
+        return true;
+    }
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);

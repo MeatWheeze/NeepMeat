@@ -197,7 +197,8 @@ public class FluidNetwork
 
         // Get connected storage, remove node if there isn't one
         Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null)
+        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null
+                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof FluidNodeProvider))
         {
             removeNode(world, pos);
             return;
@@ -206,9 +207,11 @@ public class FluidNetwork
         // Get acceptor mode if present
         AcceptorModes mode = AcceptorModes.INSERT_EXTRACT;
         Block block = world.getBlockState(pos.facingBlock()).getBlock();
+        boolean isStorage = true;
         if (block instanceof FluidNodeProvider provider)
         {
             mode = provider.getDirectionMode(world, pos.pos, world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
+            isStorage = provider.isStorage();
         }
 
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
@@ -216,12 +219,13 @@ public class FluidNetwork
         if ((node = nodes.get(pos)) == null)
         {
             // Create new node with params
-            node = new FluidNode(pos, storage, mode, 1);
+            node = new FluidNode(pos, storage, mode, 1, isStorage);
             nodes.put(pos, node);
         }
 
         node.setMode(mode);
         node.setStorage(storage);
+        validatePos(serverWorld, pos.pos);
 
         System.out.println("Node updated: " + nodes.get(pos));
     }
