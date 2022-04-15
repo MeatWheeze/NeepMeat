@@ -1,11 +1,9 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -14,7 +12,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -24,11 +21,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
-public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
+public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
-    public FluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public PneumaticTubeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings);
     }
@@ -38,7 +33,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
         }
     }
 
@@ -58,9 +52,9 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         BlockState state2 = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
-        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        if (!(world.getBlockState(fromPos).getBlock() instanceof PneumaticTubeBlock))
         {
-            createStorageNodes(world, pos, state2);
+//            createStorageNodes(world, pos, state2);
         }
 
     }
@@ -70,7 +64,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-        createStorageNodes(world, pos, updatedState);
+//        createStorageNodes(world, pos, updatedState);
     }
 
     @Override
@@ -84,7 +78,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 
         // Check if neighbour is forced
         boolean neighbourForced = false;
-        if (neighborState.getBlock() instanceof FluidPipeBlock)
+        if (neighborState.getBlock() instanceof PneumaticTubeBlock)
         {
             neighbourForced = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
         }
@@ -94,7 +88,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                 : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
         // I don't know what this bit was for.
-
         return state.with(DIR_TO_CONNECTION.get(direction), connection1);
     }
 
@@ -116,13 +109,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         return null;
     }
 
-    // Only takes into account other pipes, connections to storages are enforced later.
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFluidPipe)
+        if (state.getBlock() instanceof IItemPipe pipe)
         {
-            return ((IFluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return pipe.connectInDirection(world, pos, state, direction);
         }
         return false;
     }
@@ -153,21 +145,18 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             {
                 if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 {
-                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
                 }
                 else
                 {
-                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
                 }
             }
             // TODO: avoid creating instances that will fail immediately
-            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
         }
     }
 
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
-        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+        Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;
     }
 }

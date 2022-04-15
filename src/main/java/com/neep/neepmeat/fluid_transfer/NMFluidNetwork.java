@@ -1,7 +1,7 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.FluidAcceptor;
-import com.neep.neepmeat.block.FluidNodeProvider;
+import com.neep.neepmeat.block.IFluidPipe;
+import com.neep.neepmeat.block.IFluidNodeProvider;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -264,16 +264,16 @@ public class NMFluidNetwork
                     BlockState state1 = world.getBlockState(current);
                     BlockState state2 = world.getBlockState(next);
 
-                    if (FluidAcceptor.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
+                    if (IFluidPipe.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
                     {
                         visited.add(next);
 //                        System.out.println(next);
                         // Check that target is a pipe and not a fluid block entity
-                        if (state2.getBlock() instanceof FluidAcceptor
-                                && !(state2.getBlock() instanceof FluidNodeProvider))
+                        if (state2.getBlock() instanceof IFluidPipe
+                                && !(state2.getBlock() instanceof IFluidNodeProvider))
                         {
                             // Next block is connected in opposite direction
-                            if (FluidAcceptor.isConnectedIn(world, next, state2, direction.getOpposite()))
+                            if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
                                 networkPipes.put(next, new PipeState(next.toImmutable(), state2));
@@ -291,7 +291,7 @@ public class NMFluidNetwork
                                 }
                             }
                         }
-                        else if (state2.getBlock() instanceof FluidNodeProvider)
+                        else if (state2.getBlock() instanceof IFluidNodeProvider)
                         {
                             Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
                             if (node.get() != null)

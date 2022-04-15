@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.block.FluidNodeProvider;
+import com.neep.neepmeat.block.IFluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
@@ -38,7 +38,7 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
 
         // Create fluid interfaces in connection directions
-        if (state.getBlock() instanceof FluidNodeProvider nodeProvider)
+        if (state.getBlock() instanceof IFluidNodeProvider nodeProvider)
         {
             for (Direction direction : Direction.values())
             {

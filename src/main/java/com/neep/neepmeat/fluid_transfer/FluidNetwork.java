@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.FluidNodeProvider;
+import com.neep.neepmeat.block.IFluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
@@ -198,7 +198,7 @@ public class FluidNetwork
         // Get connected storage, remove node if there isn't one
         Storage<FluidVariant> storage;
         if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null
-                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof FluidNodeProvider))
+                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof IFluidNodeProvider))
         {
             removeNode(world, pos);
             return;
@@ -208,7 +208,7 @@ public class FluidNetwork
         AcceptorModes mode = AcceptorModes.INSERT_EXTRACT;
         Block block = world.getBlockState(pos.facingBlock()).getBlock();
         boolean isStorage = true;
-        if (block instanceof FluidNodeProvider provider)
+        if (block instanceof IFluidNodeProvider provider)
         {
             mode = provider.getDirectionMode(world, pos.pos, world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
             isStorage = provider.isStorage();

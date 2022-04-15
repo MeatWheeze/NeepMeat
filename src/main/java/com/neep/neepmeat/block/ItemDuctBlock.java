@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
+public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.FACING;
 

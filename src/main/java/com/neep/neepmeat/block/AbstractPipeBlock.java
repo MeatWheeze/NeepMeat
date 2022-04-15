@@ -12,7 +12,6 @@ import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -28,9 +27,8 @@ import net.minecraft.world.WorldAccess;
 
 import java.util.Map;
 
-public class PipeBlock extends BaseBlock implements FluidAcceptor
+public abstract class AbstractPipeBlock extends BaseBlock
 {
-    public static final BooleanProperty ooer = BooleanProperty.of("abc");
     public static final EnumProperty<PipeConnectionType> NORTH_CONNECTION = EnumProperty.of("north", PipeConnectionType.class);
     public static final EnumProperty<PipeConnectionType> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
     public static final EnumProperty<PipeConnectionType> SOUTH_CONNECTION = PipeProperties.SOUTH_CONNECTION;
@@ -58,7 +56,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 12))
     ).build();
 
-    public PipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public AbstractPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings);
         this.setDefaultState(this.stateManager.getDefaultState()
@@ -160,15 +158,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
     }
 
-    // Only takes into account other pipes, connections to storages are enforced later.
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
-    {
-        if (state.getBlock() instanceof FluidAcceptor)
-        {
-            return ((FluidAcceptor) state.getBlock()).connectInDirection(world, pos, state, direction);
-        }
-        return false;
-    }
+    public abstract boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos);
 
     protected static boolean isNotConnected(BlockState state)
     {
@@ -198,7 +188,8 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         for (Direction direction : Direction.values())
         {
             PipeConnectionType property = state.get(DIR_TO_CONNECTION.get(direction));
-            if (property == PipeConnectionType.SIDE) continue;
+            if (property == PipeConnectionType.SIDE)
+                continue;
             BlockPos adjPos = pos.offset(direction);
             BlockState adjState = world.getBlockState(adjPos);
             state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos) ? PipeConnectionType.SIDE : PipeConnectionType.NONE);

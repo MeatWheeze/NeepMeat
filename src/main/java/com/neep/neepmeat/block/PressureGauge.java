@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.Map;
 
-public class PressureGauge extends BaseFacingBlock implements FluidNodeProvider
+public class PressureGauge extends BaseFacingBlock implements IFluidNodeProvider
 {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
