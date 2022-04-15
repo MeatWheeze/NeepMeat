@@ -46,6 +46,7 @@ public class NeepMeatClient
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.BIG_LEVER, BigLeverRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
 
         GeoItemRenderer.registerItemRenderer(ItemInit.SLASHER, new SwordRenderer<>(new SwordModel<>(
                 NeepMeat.NAMESPACE,
