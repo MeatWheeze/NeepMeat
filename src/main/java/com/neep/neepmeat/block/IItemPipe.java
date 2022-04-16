@@ -6,6 +6,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 public interface IItemPipe
 {
     static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
@@ -19,6 +22,12 @@ public interface IItemPipe
             return acceptor.connectInDirection(world, pos, state, direction);
         }
         return false;
+    }
+
+    static Iterable<Direction> getConnections(BlockState state)
+    {
+        // Streams are good, aren't they?
+        return Arrays.stream(Direction.values()).filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).collect(Collectors.toList());
     }
 
     default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)

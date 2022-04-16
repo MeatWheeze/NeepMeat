@@ -3,6 +3,8 @@ package com.neep.neepmeat.block;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.util.GeneralUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -10,6 +12,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -118,6 +122,12 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
             return pipe.connectInDirection(world, pos, state, direction);
         }
         return false;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return GeneralUtils.checkType(type, BlockEntityInitialiser.PNEUMATIC_PIPE, PneumaticPipeBlockEntity::serverTick, world);
     }
 
     // Creates blockstate connections to fluid containers after placing

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
-import com.neep.neepmeat.util.PipeOffset;
+import com.neep.neepmeat.util.ItemInPipe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -10,7 +10,9 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 
 public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implements BlockEntityRenderer<T>
 {
@@ -28,17 +30,20 @@ public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implement
         matrices.translate(0.5, 0.5, 0.5);
 
         long time = be.getWorld().getTime();
-        float t = (time % 50) / 50f;
+//        float t = (time % 100) / 100f;
 
-        for (Pair<PipeOffset, ItemStack> pair : be.getItems())
+//        System.out.println(be.getItems().size());
+        for (ItemInPipe offset : be.getItems())
         {
-            ItemStack stack = pair.getRight();
-            PipeOffset offset = pair.getLeft();
-            offset.step(t);
+            ItemStack stack = offset.getItemStack();
+//            offset.step(0.0f);
             matrices.push();
 
-            matrices.translate(offset.x, offset.y, offset.z);
+            Vec3d interp = offset.interpolate(tickDelta);
+//            System.out.println(tickDelta);
+            matrices.translate(interp.x, interp.y, interp.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
             renderer.renderItem(stack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
 
             matrices.pop();
