@@ -27,15 +27,13 @@ public class ItemInPipe
         this.out = out;
         this.progress = 0;
         this.itemStack = itemStack;
-        this.speed = 0.05f;
+        this.speed = 0.2f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
     }
 
     public static Vec3d directionUnit(Direction direction)
     {
-//        Vec3d vec = new Vec3d(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
-//        return vec.subtract(vec.multiply(0.5));
         return new  Vec3d(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
     }
 
@@ -57,7 +55,7 @@ public class ItemInPipe
         progress = (pipeTicks) * speed;
     }
 
-    public Vec3d update(float prog)
+    public Vec3d getPosition(float prog)
     {
         float inFactor = 1 - prog;
         float outFactor = prog;
@@ -71,21 +69,6 @@ public class ItemInPipe
             vec = directionUnit(out).multiply(outFactor - 0.5);
         }
         return vec;
-    }
-
-    public Vec3d interpolate(float tickDelta)
-    {
-//        set(update(progress));
-//        Vec3d vec = update(progress).lerp(update(progress + speed), tickDelta);
-//        return new Vec3d(x, y, z);
-//        return new Vec3d(x + speed * tickDelta, y, z);
-//        return new Vec3d(x + speed * tickDelta, y + speed * tickDelta, z + speed * tickDelta);
-
-//        deltaVec = deltaVec.lerp(update(progress), 0.01);
-        progress = (pipeTicks + tickDelta) * speed;
-//        progress = pipeTicks * speed;
-//        return update(progress + speed * tickDelta);
-        return update(progress);
     }
 
     public void reset(Direction in, Direction out, long tickStart)
@@ -103,7 +86,6 @@ public class ItemInPipe
     {
         nbt.putInt("in", in.getId());
         nbt.putInt("out", out.getId());
-//        nbt.putFloat("progress", progress);
         nbt.putLong("tick_start", tickStart);
         nbt.putLong("tick_end", tickEnd);
 
@@ -121,9 +103,8 @@ public class ItemInPipe
         ItemStack stack = ItemStack.fromNbt(nbt.getCompound("item"));
         long tickStart = nbt.getLong("tick_start");
 
-        ItemInPipe offset = new ItemInPipe(in, out, stack, tickStart);
-//        offset.progress = nbt.getFloat("progress");
+        ItemInPipe item = new ItemInPipe(in, out, stack, tickStart);
 
-        return offset;
+        return item;
     }
 }

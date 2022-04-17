@@ -7,6 +7,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public interface IItemPipe
@@ -24,10 +26,10 @@ public interface IItemPipe
         return false;
     }
 
-    static Iterable<Direction> getConnections(BlockState state)
+    static List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
         // Streams are good, aren't they?
-        return Arrays.stream(Direction.values()).filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).collect(Collectors.toList());
+        return Arrays.stream(Direction.values()).filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).filter(forbidden).collect(Collectors.toList());
     }
 
     default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)

@@ -46,7 +46,11 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         if (!state.isOf(newState.getBlock()))
         {
-            removeStorageNodes(world, pos);
+            if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+            {
+                be.dropItems();
+            }
+//            removeStorageNodes(world, pos);
             world.removeBlockEntity(pos);
         }
     }
