@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "neepmeat:block/pipe_centre"
+        "model": "neepmeat:block/rusty_pipe/pipe_centre"
       }
     },
     {
@@ -10,7 +10,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side"
+        "model": "neepmeat:block/rusty_pipe/pipe_side"
       }
     },
     {
@@ -18,7 +18,7 @@
         "south": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side_alt"
+        "model": "neepmeat:block/rusty_pipe/pipe_side_alt"
       }
     },
     {
@@ -26,7 +26,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side_alt",
+        "model": "neepmeat:block/rusty_pipe/pipe_side_alt",
         "y": 270
       }
     },
@@ -35,7 +35,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side",
+        "model": "neepmeat:block/rusty_pipe/pipe_side",
         "y": 270
       }
     },
@@ -45,7 +45,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side",
+        "model": "neepmeat:block/rusty_pipe/pipe_side",
         "y": 270
       }
     },
@@ -54,7 +54,7 @@
         "up": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side",
+        "model": "neepmeat:block/rusty_pipe/pipe_side",
         "y": 270,
         "x": 270
       }
@@ -64,7 +64,7 @@
         "down": "true"
       },
       "apply": {
-        "model": "neepmeat:block/pipe_side_alt",
+        "model": "neepmeat:block/rusty_pipe/pipe_side_alt",
         "y": 270,
         "x": 270
       }
