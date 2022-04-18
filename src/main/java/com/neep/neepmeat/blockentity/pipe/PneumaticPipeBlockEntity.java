@@ -197,8 +197,14 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         }
         else if (state1.isAir())
         {
-            Entity itemEntity = new ItemEntity(world, pos1.getX() + 0.5, pos1.getY() + 0.1, pos1.getZ() + 0.5, item.getItemStack(),
-                    item.out.getOffsetX() * item.speed, item.out.getOffsetY() * item.speed, item.out.getOffsetZ() * item.speed);
+            Direction out = item.out;
+            double offset = 0.2;
+            Entity itemEntity = new ItemEntity(world,
+                    pos1.getX() + 0.5 - offset * out.getOffsetX(),
+                    pos1.getY() + 0.1 - offset * out.getOffsetY(),
+                    pos1.getZ() + 0.5 - offset * out.getOffsetZ(),
+                    item.getItemStack(),
+                    out.getOffsetX() * item.speed, out.getOffsetY() * item.speed, out.getOffsetZ() * item.speed);
             world.spawnEntity(itemEntity);
             it.remove();
             success = true;

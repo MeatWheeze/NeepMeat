@@ -52,6 +52,10 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+//        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
+//        {
+//            be.shuttle = 5;
+//        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 

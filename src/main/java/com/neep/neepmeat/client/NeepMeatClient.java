@@ -47,6 +47,7 @@ public class NeepMeatClient
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.BIG_LEVER, BigLeverRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_PUMP, ItemPumpRenderer::new);
 
         GeoItemRenderer.registerItemRenderer(ItemInit.SLASHER, new SwordRenderer<>(new SwordModel<>(
                 NeepMeat.NAMESPACE,
@@ -101,6 +102,7 @@ public class NeepMeatClient
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.PUMP);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.RUSTED_BARS);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), BlockInitialiser.PNEUMATIC_TUBE);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), BlockInitialiser.ITEM_PUMP);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.SCAFFOLD_PLATFORM);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) BlockInitialiser.SCAFFOLD_PLATFORM.stairs);
