@@ -4,7 +4,7 @@ import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.block.IItemPipe;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.util.GeneralUtils;
+import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
@@ -23,6 +23,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
 public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvider, IItemPipe
 {
     public ItemPumpBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
@@ -40,7 +44,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return GeneralUtils.checkType(type, BlockEntityInitialiser.ITEM_PUMP, ItemPumpBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, BlockEntityInitialiser.ITEM_PUMP, ItemPumpBlockEntity::serverTick, world);
     }
 
     @Override
@@ -63,12 +67,23 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
     {
-        return 0;
+        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
+        {
+//            be.
+        }
+        return 1;
     }
 
     @Override
     public boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return direction.equals(state.get(FACING)) || direction.equals(state.get(FACING).getOpposite());
+    }
+
+    @Override
+    public List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    {
+        Direction facing = state.get(FACING);
+        return List.of(facing, facing.getOpposite()).stream().filter(forbidden).collect(Collectors.toList());
     }
 }

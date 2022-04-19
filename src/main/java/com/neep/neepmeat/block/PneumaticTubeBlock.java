@@ -1,11 +1,10 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.util.GeneralUtils;
+import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -28,6 +27,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
+import java.util.function.Predicate;
 
 public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
@@ -103,6 +105,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         return state.with(DIR_TO_CONNECTION.get(direction), connection1);
     }
 
+
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (player.isSneaking())
@@ -137,7 +140,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return GeneralUtils.checkType(type, BlockEntityInitialiser.PNEUMATIC_PIPE, PneumaticPipeBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, BlockEntityInitialiser.PNEUMATIC_PIPE, PneumaticPipeBlockEntity::serverTick, world);
     }
 
     // Creates blockstate connections to fluid containers after placing

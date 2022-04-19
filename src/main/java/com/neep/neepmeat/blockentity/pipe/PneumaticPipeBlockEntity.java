@@ -1,6 +1,8 @@
 package com.neep.neepmeat.blockentity.pipe;
 
 import com.neep.neepmeat.block.IItemPipe;
+import com.neep.neepmeat.block.machine.ItemPumpBlock;
+import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -127,7 +129,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {
             Direction out;
-            List<Direction> connections = IItemPipe.getConnections(state, direction -> direction != in);
+            List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
             Random rand = world.getRandom();
             if (!connections.isEmpty())
@@ -143,6 +145,11 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
             be.items.add(item);
             return 1;
         }
+        else if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
+        {
+            if (be.getCachedState().get(ItemPumpBlock.FACING) == in.getOpposite())
+                return be.forwardItem(item.getResourceAmount());
+        }
         return 0;
     }
 
@@ -150,7 +157,8 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
     {
         Direction out;
         Direction in = item.out;
-        List<Direction> connections = IItemPipe.getConnections(state, direction -> direction != in);
+
+        List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
         Random rand = world.getRandom();
         if (!connections.isEmpty())
@@ -173,9 +181,10 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
         boolean success = false;
         Storage<ItemVariant> storage;
-        if (block instanceof IItemPipe)
+        if (block instanceof IItemPipe pipe)
         {
             if (IItemPipe.isConnectedIn(world, pos, state, item.out))
+//            if (pipe.getConnections(state1, IItemPipe::all).contains(item.out))
             {
                 if (insert(item, world, state1, pos1, item.out.getOpposite()) > 0)
                 {
