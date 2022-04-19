@@ -78,7 +78,10 @@
   "block.neepmeat.pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",
 
+  "block.neepmeat.pneumatic_pipe": "Pneumatic Pipe",
+
   "block.neepmeat.pump": "Redstone Pump",
+  "block.neepmeat.item_pump": "Item Pump",
 
   "block.neepmeat.basic_tank": "Basic Tank",
   "block.neepmeat.glass_tank": "Glass Tank",
