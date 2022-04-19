@@ -50,7 +50,10 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-
+        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be && !world.isClient)
+        {
+            be.markNeedsRefresh();
+        }
     }
 
     @Override
@@ -67,6 +70,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
     {
+        System.out.println("oooooooo");
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
 //            be.

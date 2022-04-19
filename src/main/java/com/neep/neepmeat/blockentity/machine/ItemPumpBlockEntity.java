@@ -17,8 +17,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -35,7 +35,8 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     // Client only
     public double offset;
 
-    List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
+    protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
+    protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
 
     public ItemPumpBlockEntity(BlockEntityType<ItemPumpBlockEntity> type, BlockPos pos, BlockState state)
     {
@@ -50,6 +51,12 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
 
     public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, ItemPumpBlockEntity be)
     {
+        if (be.needsRefresh)
+        {
+            Direction face = state.get(ItemPumpBlock.FACING).getOpposite();
+            updateRetrievalCache((ServerWorld) world, pos, face, be);
+        }
+
         if (be.shuttle > 0)
         {
             --be.shuttle;
@@ -84,11 +91,6 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
             }
             else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
             {
-//                if (be.needsRefresh)
-//                {
-                    Direction face = facing.getOpposite();
-                    updateRetrievalCache(world, pos, face, be);
-//                }
 //                else
                 {
                     for (RetrievalTarget<ItemVariant> target : be.retrievalCache)
@@ -121,11 +123,25 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         }
     }
 
+    public void markNeedsRefresh()
+    {
+        this.needsRefresh = true;
+    }
+
     public long forwardItem(ResourceAmount<ItemVariant> amount)
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         BlockPos newPos = pos.offset(facing);
         BlockState state = world.getBlockState(newPos);
+
+        Storage<ItemVariant> storage;
+        if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
+        {
+            Transaction transaction = Transaction.openOuter();
+            long transferred = storage.insert(amount.resource(), amount.amount(), transaction);
+            transaction.commit();
+            return transferred;
+        }
         if (state.getBlock() instanceof IItemPipe pipe)
         {
             return pipe.insert(world, newPos, state, facing.getOpposite(), amount);
@@ -135,7 +151,6 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
 
     public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target)
     {
-        System.out.println(target.getFace());
         BlockPos newPos = target.getPos().offset(target.getFace());
         BlockState state = world.getBlockState(newPos);
         if (state.getBlock() instanceof IItemPipe pipe)
@@ -146,9 +161,10 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         return 0;
     }
 
-    public static void updateRetrievalCache(World world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
+    public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
     {
         be.retrievalCache = MiscUitls.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
+        be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
         be.needsRefresh = false;
     }
 
