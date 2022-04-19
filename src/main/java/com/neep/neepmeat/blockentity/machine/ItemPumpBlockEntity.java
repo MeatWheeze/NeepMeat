@@ -31,12 +31,14 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
 {
     public int shuttle;
     public boolean needsRefresh;
+    public boolean active;
 
     // Client only
     public double offset;
 
     protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
     protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
+    protected List<ResourceAmount<ItemVariant>> extractionQueue = new ArrayList<>();
 
     public ItemPumpBlockEntity(BlockEntityType<ItemPumpBlockEntity> type, BlockPos pos, BlockState state)
     {
@@ -63,7 +65,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
             be.sync();
         }
 
-        if (world.getTime() % 10 == 0)
+        if (world.getTime() % 10 == 0 && be.active)
         {
             Direction facing = state.get(BaseFacingBlock.FACING);
 
@@ -91,33 +93,53 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
             }
             else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
             {
-//                else
+                for (RetrievalTarget<ItemVariant> target : be.retrievalCache)
                 {
-                    for (RetrievalTarget<ItemVariant> target : be.retrievalCache)
+                    Storage<ItemVariant> targetStorage = target.find();
+
+                    Transaction transaction = Transaction.openOuter();
+
+                    Storage<ItemVariant> facingStorage = be.insertionCache.find(facing);
+
+                    ResourceAmount<ItemVariant> extractable;
+                    if (facingStorage != null)
                     {
-                        Storage<ItemVariant> storage1 = target.find();
-
-                        Transaction transaction = Transaction.openOuter();
-                        ResourceAmount<ItemVariant> extractable = StorageUtil.findExtractableContent(storage1, transaction);
-
-                        if (extractable == null)
-                        {
-                            transaction.abort();
-                            continue;
-                        }
-
-                        long transferred = storage1.extract(extractable.resource(), 16, transaction);
-                        long forwarded = be.forwardRetrieval(new ResourceAmount<>(extractable.resource(), transferred), target);
-
-                        if (forwarded < 1)
-                        {
-                            transaction.abort();
-                            continue;
-                        }
-                        be.shuttle = 3;
-                        be.sync();
-                        transaction.commit();
+                        Transaction inner = transaction.openNested();
+                        extractable = StorageUtil.findExtractableContent(targetStorage,
+                                itemVariant -> facingStorage.insert(itemVariant, Long.MAX_VALUE, inner) > 0, inner);
+                        inner.abort();
                     }
+                    else
+                    {
+                        extractable = StorageUtil.findExtractableContent(targetStorage, transaction);
+                    }
+
+                    if (extractable == null)
+                    {
+                        transaction.abort();
+                        continue;
+                    }
+
+                    long transferable = be.canForward(extractable, transaction);
+                    if (transferable < 1)
+                    {
+                        transaction.abort();
+                        continue;
+                    }
+
+                    // TODO: change max amount
+                    long extracted = targetStorage.extract(extractable.resource(), Math.min(transferable, 16), transaction);
+                    extractable = new ResourceAmount<>(extractable.resource(), extracted);
+                    long forwarded = be.forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target);
+
+                    if (forwarded < 1)
+                    {
+                        transaction.abort();
+                        continue;
+                    }
+                    be.shuttle = 3;
+                    be.sync();
+                    transaction.commit();
                 }
             }
         }
@@ -126,6 +148,11 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     public void markNeedsRefresh()
     {
         this.needsRefresh = true;
+    }
+
+    public void updateRedstone(boolean redstone)
+    {
+        this.active = redstone;
     }
 
     public long forwardItem(ResourceAmount<ItemVariant> amount)
@@ -166,6 +193,17 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         be.retrievalCache = MiscUitls.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
         be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
         be.needsRefresh = false;
+    }
+
+    public long canForward(ResourceAmount<ItemVariant> amount, Transaction transaction)
+    {
+        Direction facing = getCachedState().get(ItemPumpBlock.FACING);
+        Storage<ItemVariant> storage;
+        if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
+        {
+            return storage.simulateInsert(amount.resource(), amount.amount(), transaction);
+        }
+        return amount.amount();
     }
 
     @Override

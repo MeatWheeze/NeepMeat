@@ -195,14 +195,12 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         }
         else if ((storage = ItemStorage.SIDED.find(world, pos1, item.out.getOpposite())) != null)
         {
-            Transaction t = Transaction.openOuter();
-            long transferred = storage.insert(ItemVariant.of(item.getItemStack()), item.getItemStack().getCount(), t);
-            if (transferred > 0)
+            // Bounce if the entire stack was not used
+            if (pipeToStorage(item, storage) == -1)
             {
                 it.remove();
                 success = true;
             }
-            t.commit();
         }
         else if (state1.isAir())
         {
@@ -224,6 +222,24 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 //            insert(item, world, state, pos, item.out);
 //            item.reset(item.out, item.in, world.getTime());
         }
+    }
+
+    public long pipeToStorage(ItemInPipe item, Storage<ItemVariant> storage)
+    {
+        Transaction t = Transaction.openOuter();
+        long transferred = storage.insert(item.getResourceAmount().resource(), item.getResourceAmount().amount(), t);
+        if (transferred > 0)
+        {
+            t.commit();
+            if (transferred == item.getItemStack().getCount())
+            {
+                return -1;
+            }
+            item.decrement((int) transferred);
+            return transferred;
+        }
+        t.abort();
+        return 0;
     }
 
     public void dropItems()

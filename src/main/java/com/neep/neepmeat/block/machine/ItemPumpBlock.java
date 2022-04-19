@@ -53,6 +53,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be && !world.isClient)
         {
             be.markNeedsRefresh();
+            be.updateRedstone(world.isReceivingRedstonePower(pos));
         }
     }
 
@@ -70,7 +71,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
     {
-        System.out.println("oooooooo");
+        System.out.println("fix this please");
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
 //            be.
