@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=true": {
+      "model": "neepmeat:block/buffer/buffer_on"
+    },
+    "powered=false": {
+      "model": "neepmeat:block/buffer/buffer_off"
+    }
+  }
+}

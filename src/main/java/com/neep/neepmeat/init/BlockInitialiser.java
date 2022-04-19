@@ -47,7 +47,6 @@ public class BlockInitialiser
     public static Block RUSTED_BARS = queueBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTY_PANEL = queueBlock(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block RUSTY_GRATE = queueBlock(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-//        GREY_SMOOTH_TILE = registerBlock(new BaseBlock("smooth_tile_grey", 64, false, FabricBlockSettings.of(Material.STONE).strength(4.0f).sounds(BlockSoundGroup.STONE)));
 
     public static Block SLOPE_TEST = queueBlock(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
@@ -66,6 +65,7 @@ public class BlockInitialiser
     public static Block TANK = queueBlock(new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block GLASS_TANK = queueBlock(new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block ITEM_BUFFER = queueBlock(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
+    public static Block BUFFER = queueBlock(new BufferBlock("buffer", 64, true, FabricBlockSettings.of(Material.WOOD).strength(4.0f).sounds(BlockSoundGroup.WOOD)));
     public static Block FLUID_METER = queueBlock(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block PRESSURE_GAUGE = queueBlock(new PressureGauge("pressure_gauge", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block FLUID_PORT = queueBlock(new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
