@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -81,7 +82,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
                 }
 
                 long transferred = storage.extract(extractable.resource(), 16, transaction);
-                long forwarded = be.forwardItem(new ResourceAmount<>(extractable.resource(), transferred));
+                long forwarded = be.forwardItem(new ResourceAmount<>(extractable.resource(), transferred), transaction);
                 if (forwarded < 1)
                 {
                     transaction.abort();
@@ -155,7 +156,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         this.active = redstone;
     }
 
-    public long forwardItem(ResourceAmount<ItemVariant> amount)
+    public long forwardItem(ResourceAmount<ItemVariant> amount, TransactionContext transaction)
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         BlockPos newPos = pos.offset(facing);
@@ -164,9 +165,10 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-            Transaction transaction = Transaction.openOuter();
-            long transferred = storage.insert(amount.resource(), amount.amount(), transaction);
-            transaction.commit();
+//            Transaction transaction = Transaction.getCurrentUnsafe();
+            Transaction nested = transaction.openNested();
+            long transferred = storage.insert(amount.resource(), amount.amount(), nested);
+            nested.commit();
             return transferred;
         }
         if (state.getBlock() instanceof IItemPipe pipe)

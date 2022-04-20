@@ -125,7 +125,6 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
     public static long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
     {
-        Storage<ItemVariant> storage;
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {
             Direction out;
@@ -148,7 +147,12 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         else if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
             if (be.getCachedState().get(ItemPumpBlock.FACING) == in.getOpposite())
-                return be.forwardItem(item.getResourceAmount());
+            {
+                Transaction transaction = Transaction.openOuter();
+                long transferred = be.forwardItem(item.getResourceAmount(), transaction);
+                transaction.commit();
+                return transferred;
+            }
         }
         return 0;
     }
