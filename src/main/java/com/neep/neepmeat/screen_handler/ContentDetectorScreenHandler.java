@@ -1,38 +1,42 @@
 package com.neep.neepmeat.screen_handler;
 
+import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ArrayPropertyDelegate;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
+
+import javax.swing.text.AbstractDocument;
 
 public class ContentDetectorScreenHandler extends ScreenHandler
 {
     private final Inventory inventory;
+    public PropertyDelegate delegate;
 
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
     public ContentDetectorScreenHandler(int syncId, PlayerInventory playerInventory)
     {
-        this(syncId, playerInventory, new SimpleInventory(9));
+        this(syncId, playerInventory, new SimpleInventory(9), new ArrayPropertyDelegate(2));
     }
 
-    //This constructor gets called from the BlockEntity on the server without calling the other constructor first, the server knows the inventory of the container
-    //and can therefore directly provide it as an argument. This inventory will then be synced to the client.
-    public ContentDetectorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory)
+    public ContentDetectorScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, PropertyDelegate delegate)
     {
-        super(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, syncId);
+        super(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, syncId);
         checkSize(inventory, 9);
         this.inventory = inventory;
-        //some inventories do custom logic when a player opens it.
-        inventory.onOpen(playerInventory.player);
+        this.delegate = delegate;
 
-        //This will place the slot in the correct locations for a 3x3 Grid. The slots exist on both server and client!
-        //This will not render the background of the slots however, this is the Screens job
+        inventory.onOpen(playerInventory.player);
+        this.addProperties(delegate);
+
         int m;
         int l;
         //Our inventory
@@ -56,13 +60,30 @@ public class ContentDetectorScreenHandler extends ScreenHandler
         {
             this.addSlot(new Slot(playerInventory, m, 8 + m * 18, 142));
         }
-
     }
 
     @Override
     public boolean canUse(PlayerEntity player)
     {
         return this.inventory.canPlayerUse(player);
+    }
+
+    @Override
+    public boolean onButtonClick(PlayerEntity player, int id)
+    {
+        if (id > 100)
+        {
+            return false;
+        }
+        ContentDetectorBehaviour.cycleDelegate(id, this.delegate);
+        return true;
+    }
+
+    @Override
+    public void setProperty(int id, int value)
+    {
+        super.setProperty(id, value);
+        this.sendContentUpdates();
     }
 
     // Shift + Player Inv Slot
@@ -94,11 +115,20 @@ public class ContentDetectorScreenHandler extends ScreenHandler
             else
             {
                 slot.markDirty();
-                System.out.println("oooooooo");
             }
         }
 
         return newStack;
+    }
+
+    public int getCountMode()
+    {
+        return delegate.get(ContentDetectorBehaviour.DEL_COUNT);
+    }
+
+    public int getBehaviourMode()
+    {
+        return delegate.get(ContentDetectorBehaviour.DEL_BEHAVIOUR);
     }
 }
 

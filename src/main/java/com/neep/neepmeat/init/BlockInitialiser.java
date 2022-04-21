@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.block.*;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
+import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
@@ -15,7 +16,6 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 

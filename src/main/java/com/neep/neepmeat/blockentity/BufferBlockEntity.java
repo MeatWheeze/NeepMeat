@@ -80,7 +80,6 @@ public class BufferBlockEntity extends BlockEntity implements
     public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
         InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
-        System.out.println(storage);
         return storage.insert(resource, maxAmount, transaction);
     }
 
