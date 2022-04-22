@@ -5,11 +5,14 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+
+import java.util.List;
 
 public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHandler>
 {
@@ -50,28 +53,38 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
         this.client.interactionManager.clickButton(this.handler.syncId, id);
     }
 
-    public void updateButtons()
-    {
-
-    }
-
     @Override
     protected void init()
     {
         super.init();
 
-        this.behaviourButton = new CyclingButtonWidget(this.x + 20, this.y + 15, 32,
-                32, 0, 0, 32, 3, COUNT_WIDGET, 32, 128, Text.of("uwu"), button ->
+        this.behaviourButton = new CyclingButtonWidget(this.x + 20, this.y + 16, 32,
+                16, 0, 8, 32, 3, COUNT_WIDGET, 32, 128, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(ContentDetectorBehaviour.DEL_COUNT);
-//            ((CyclingButtonWidget) button).setIndex(handler.delegate.get(ContentDetectorBehaviour.DEL_COUNT));
+        },
+        (buttonWidget, matrices, mouseX, mouseY) ->
+        {
+            renderTooltip(matrices, Text.of("Stack Condition"), mouseX, mouseY);
         });
 
-        this.countButton = new CyclingButtonWidget(this.x + 20, this.y + 40, 32, 32, 0, 0,
-                32, 1, BEHAVIOUR_WIDGET, 32, 64, Text.of("uwu"), button ->
+        this.countButton = new CyclingButtonWidget(this.x + 20, this.y + 54, 32, 16, 0, 8,
+                32, 1, BEHAVIOUR_WIDGET, 32, 64, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(ContentDetectorBehaviour.DEL_BEHAVIOUR);
-//            ((CyclingButtonWidget) button).setIndex(handler.delegate.get(ContentDetectorBehaviour.DEL_BEHAVIOUR));
+        },
+        (buttonWidget, matrices, mouseX, mouseY) ->
+        {
+//            renderTooltip(matrices, Text.of("owo"), mouseX, mouseY);
+            switch (((CyclingButtonWidget) buttonWidget).index)
+            {
+                case 0:
+                    renderTooltip(matrices, List.of(Text.of("Regulate"), Text.of("Stays powered until all filter items have left")), mouseX, mouseY);
+                    break;
+                case 1:
+                    renderTooltip(matrices, List.of(Text.of("Absolute"), Text.of("Stays powered only while conditions are met")), mouseX, mouseY);
+
+            }
         });
 
 

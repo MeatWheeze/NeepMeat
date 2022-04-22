@@ -99,10 +99,10 @@ public class BufferBlockEntity extends BlockEntity implements
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
         InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
-        if (getCachedState().get(BufferBlock.POWERED))
-        {
-            return Collections.emptyIterator();
-        }
+//        if (getCachedState().get(BufferBlock.POWERED))
+//        {
+//            return Collections.emptyIterator();
+//        }
         return storage.iterator(transaction);
     }
 }

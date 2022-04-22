@@ -1,6 +1,9 @@
 package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
@@ -18,12 +21,13 @@ public class CyclingButtonWidget extends ButtonWidget
     protected final int th;
     protected final int vOffset;
     protected final int maxIndex;
-
     protected int index;
+    protected final MousePressAction onPress;
 
-    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, PressAction onPress)
+    @Environment(value= EnvType.CLIENT)
+    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, MousePressAction onPress, TooltipSupplier tooltipSupplier)
     {
-        super(x, y, width, height, message, onPress);
+        super(x, y, width, height, message, button -> {},tooltipSupplier);
 
         this.texture = texture;
         this.u = u;
@@ -33,6 +37,8 @@ public class CyclingButtonWidget extends ButtonWidget
         this.vOffset = vOffset;
         this.maxIndex = maxIndex;
         this.index = 0;
+
+        this.onPress = onPress;
     }
 
     @Override
@@ -44,8 +50,41 @@ public class CyclingButtonWidget extends ButtonWidget
         TexturedButtonWidget.drawTexture(matrices, this.x, this.y, this.u, this.v + this.vOffset * this.index, this.width, this.height, this.tw, this.th);
         if (this.isHovered())
         {
-            this.renderTooltip(matrices, mouseX, mouseY);
+            super.renderTooltip(matrices, mouseX, mouseY);
         }
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        if (!this.active || !this.visible)
+        {
+            return false;
+        }
+        if (this.isValidClickButton(button) && (this.clicked(mouseX, mouseY)))
+        {
+            this.playDownSound(MinecraftClient.getInstance().getSoundManager());
+//            this.onClick(mouseX, mouseY);
+            this.onPress(button);
+            return true;
+        }
+        return false;
+    }
+
+    public void onPress(int mouseButton)
+    {
+        this.onPress.press(this, mouseButton);
+    }
+
+    @Override
+    protected boolean isValidClickButton(int button)
+    {
+        return button == 0 || button == 1;
+    }
+
+    public void renderTooltip(MatrixStack matrixStack, int x, int y)
+    {
+//        System.out.println("ooooooo");
     }
 
     public void setIndex(int index)
@@ -63,5 +102,11 @@ public class CyclingButtonWidget extends ButtonWidget
         {
             index = 0;
         }
+    }
+
+    @Environment(value= EnvType.CLIENT)
+    public interface MousePressAction
+    {
+        void press(ButtonWidget button, int mouseButton);
     }
 }

@@ -22,12 +22,10 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
@@ -38,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -52,7 +50,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     public static final String NBT_COUNT_MODE = "count_mode";
     public static final String NBT_BEHAVIOUR_MODE = "behaviour_mode";
 
-    public ImplementedInventory inventory = new ContentDetectorInventory();
+    public ImplementedInventory filterInventory = new ContentDetectorInventory();
 
     protected BlockApiCache<Storage<ItemVariant>, Direction> cache;
     protected boolean powered;
@@ -104,7 +102,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        inventory.writeNbt(tag);
+        filterInventory.writeNbt(tag);
         tag.putBoolean(NBT_POWERED, powered);
         tag.putInt(NBT_MODE, mode);
         tag.putInt(NBT_COUNT_MODE, countMode);
@@ -116,7 +114,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-        inventory.readNbt(tag);
+        filterInventory.readNbt(tag);
         powered = tag.getBoolean(NBT_POWERED);
         mode = tag.getInt(NBT_MODE);
         countMode = tag.getInt(NBT_COUNT_MODE);
@@ -133,20 +131,20 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new ContentDetectorScreenHandler(syncId, inv, this.inventory, modeDelegate);
+        return new ContentDetectorScreenHandler(syncId, inv, this.filterInventory, modeDelegate);
     }
 
     @Override
     public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
         return storage.insert(resource, maxAmount, transaction);
     }
 
     @Override
     public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
         if (getCachedState().get(BufferBlock.POWERED))
         {
             return 0;
@@ -157,7 +155,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     @Override
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
-        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
         return storage.iterator(transaction);
     }
 
@@ -172,34 +170,51 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
 
     public boolean observeStorage()
     {
-        System.out.println(countMode);
         Direction facing = getCachedState().get(ContentDetectorBlock.FACING);
         Storage<ItemVariant> observedStorage;
         if (cache != null && (observedStorage = cache.find(facing.getOpposite())) != null)
         {
             Transaction transaction = Transaction.openOuter();
 
-            List<ItemStack> filterStacks = inventory.getItems().stream().filter(stack -> !stack.isEmpty()).collect(Collectors.toList());
-            List<ItemStack> observedStacks = StreamSupport.stream(observedStorage.iterable(transaction).spliterator(), false)
-                    .map(ItemUtils::mutateView)
-                    .filter(ItemUtils::validStack)
+            // Get a list of ItemVariants in the filter with no duplicates
+            List<ItemVariant> variants = StreamSupport.stream(InventoryStorage.of(filterInventory, facing).iterable(transaction).spliterator(), false)
+                    .filter(ItemUtils::notBlank)
+                    .map(StorageView::getResource)
+                    .distinct()
                     .collect(Collectors.toList());
 
-            Predicate<ItemStack> predicate = switch (countMode)
+            // Determine the check to perform
+            FilterUtils.Filter filter = switch (countMode)
                     {
-                        case 1 -> FilterUtils.matchOperator(filterStacks, ((obs, filt) -> obs < filt));
-                        case 2 -> FilterUtils.matchOperator(filterStacks, ((obs, filt) -> obs > filt));
-                        case 3 -> FilterUtils.matchOperator(filterStacks, ((obs, filt) -> obs == filt));
-                        default -> FilterUtils.matchItem(filterStacks);
+                        case ContentDetectorBehaviour.STORAGE_GREATER -> ((obs, filt) -> obs < filt);
+                        case ContentDetectorBehaviour.STORAGE_LESS -> ((obs, filt) -> obs > filt);
+                        case ContentDetectorBehaviour.STORAGE_EQUALS -> ((obs, filt) -> obs == filt);
+                        default -> ((obs, filt) -> true);
                     };
 
-            int size = observedStacks.stream().filter(predicate).collect(Collectors.toList()).size();
+            List<?> filtered = variants.stream().filter(variant ->
+            {
+                Optional<Long> observedView = ItemUtils.totalAmount(InventoryStorage.of(filterInventory, facing.getOpposite()), variant, transaction);
+                Optional<Long> filterView = ItemUtils.totalAmount(observedStorage, variant, transaction);
+
+                if (observedView.isPresent() && filterView.isPresent())
+                {
+                    return filter.test(filterView.get(), observedView.get());
+                }
+                return false;
+            }).collect(Collectors.toList());
+
+            int size = filtered.size();
+            int size2 = StreamSupport.stream(observedStorage.iterable(transaction).spliterator(), false)
+                    .map(StorageView::getResource)
+                    .filter(FilterUtils.containsVariant(variants))
+                    .collect(Collectors.toList()).size();
 
             if (behaviourMode == 0)
             {
                 if (mode == 0) // Waiting for stacks to arrive
                 {
-                    if (size == filterStacks.size() && size != 0)
+                    if (size == variants.size() && size != 0)
                     {
                         powered = true;
                         mode = 1;
@@ -207,7 +222,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
                 }
                 else if (mode == 1) // Waiting for stacks to leave
                 {
-                    if (size == 0)
+                    if (size2 == 0)
                     {
                         powered = false;
                         mode = 0;
@@ -216,7 +231,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
             }
             else if (behaviourMode == 1)
             {
-                powered = size == filterStacks.size();
+                powered = size == variants.size();
             }
 
             transaction.commit();

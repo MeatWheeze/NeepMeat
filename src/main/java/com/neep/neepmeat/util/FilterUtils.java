@@ -1,25 +1,38 @@
 package com.neep.neepmeat.util;
 
-import net.minecraft.item.ItemStack;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.stream.StreamSupport;
 
 public class FilterUtils
 {
     @FunctionalInterface
     public interface Filter
     {
-        boolean test(int i1, int i2);
+        boolean test(long i1, long i2);
     }
 
-    public static Predicate<ItemStack> matchItem(List<ItemStack> list)
+    public static Predicate<ItemVariant> containsVariant(List<ItemVariant> list)
     {
-        return stack -> ItemUtils.containsItem(list, stack);
+        return list::contains;
     }
 
-    public static Predicate<ItemStack> matchOperator(List<ItemStack> list, Filter filter)
+    public static Predicate<StorageView<ItemVariant>> matchVariant(List<StorageView<ItemVariant>> list)
+    {
+        return view -> ItemUtils.containsResource(list, view.getResource());
+    }
+
+    public static Predicate<StorageView<ItemVariant>> matchOperator(List<StorageView<ItemVariant>> list, Filter filter)
     {
         return stack -> ItemUtils.contains(list, stack, filter);
     }
+
 }
