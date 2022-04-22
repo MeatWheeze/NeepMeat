@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -98,6 +99,10 @@ public class BufferBlockEntity extends BlockEntity implements
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
         InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        if (getCachedState().get(BufferBlock.POWERED))
+        {
+            return Collections.emptyIterator();
+        }
         return storage.iterator(transaction);
     }
 }
