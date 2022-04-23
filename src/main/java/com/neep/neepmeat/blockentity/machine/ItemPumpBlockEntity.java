@@ -6,6 +6,7 @@ import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
+import com.sun.jna.platform.win32.Wincon;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -31,10 +32,13 @@ import java.util.List;
 public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
     public static final String NBT_ACTIVE = "active";
+    public static final String NBT_COOLDOWN = "cooldown";
+
+    public int cooldown;
+    public boolean active;
 
     public int shuttle;
     public boolean needsRefresh;
-    public boolean active;
 
     // Client only
     public double offset;
@@ -43,7 +47,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
     protected List<ResourceAmount<ItemVariant>> extractionQueue = new ArrayList<>();
 
-    public ItemPumpBlockEntity(BlockEntityType<ItemPumpBlockEntity> type, BlockPos pos, BlockState state)
+    public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
         this.needsRefresh = true;
@@ -54,8 +58,9 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         super(BlockEntityInitialiser.ITEM_PUMP, pos, state);
     }
 
-    public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, ItemPumpBlockEntity be)
+    public static void serverTick(World world, BlockPos pos, BlockState state, ItemPumpBlockEntity be)
     {
+        be.cooldown = Math.max(be.cooldown - 1, 0);
         if (be.needsRefresh)
         {
             Direction face = state.get(ItemPumpBlock.FACING).getOpposite();
@@ -68,8 +73,9 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
             be.sync();
         }
 
-        if (world.getTime() % 10 == 0 && be.active)
+        if (be.cooldown == 0 && be.active)
         {
+            be.cooldown = 10;
             Direction facing = state.get(BaseFacingBlock.FACING);
 
             Storage<ItemVariant> storage;
@@ -167,7 +173,6 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-//            Transaction transaction = Transaction.getCurrentUnsafe();
             Transaction nested = transaction.openNested();
             long transferred = storage.insert(amount.resource(), amount.amount(), nested);
             nested.commit();
@@ -188,7 +193,6 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         {
             return pipe.insert(world, newPos, state, target.getFace().getOpposite(), amount);
         }
-
         return 0;
     }
 
@@ -228,6 +232,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     {
         super.writeNbt(tag);
         tag.putBoolean(NBT_ACTIVE, active);
+        tag.putInt(NBT_COOLDOWN, cooldown);
         return tag;
     }
 
@@ -236,6 +241,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     {
         super.readNbt(tag);
         this.active = tag.getBoolean(NBT_ACTIVE);
+        this.cooldown = tag.getInt(NBT_COOLDOWN);
     }
 
 }

@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
@@ -25,19 +26,23 @@ public class BlockEntityInitialiser
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
-    public static BlockEntityType<BufferBlockEntity> BUFFER;
     public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
+
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
     public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
     public static BlockEntityType<SpigotBlockEntity> SPIGOT;
+
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
+
     public static BlockEntityType<PneumaticPipeBlockEntity> PNEUMATIC_PIPE;
+    public static BlockEntityType<BufferBlockEntity> BUFFER;
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
+    public static BlockEntityType<EjectorBlockEntity> EJECTOR;
 
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -64,11 +69,11 @@ public class BlockEntityInitialiser
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, BlockInitialiser.BIG_LEVER);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, BlockInitialiser.PNEUMATIC_TUBE);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, BlockInitialiser.ITEM_PUMP);
+        EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, BlockInitialiser.EJECTOR);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
-//        ItemStorage.SIDED.registerSelf(PNEUMATIC_PIPE);
         FluidStorage.SIDED.registerSelf(FLUID_PORT);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
