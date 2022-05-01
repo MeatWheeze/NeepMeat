@@ -65,6 +65,10 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
 //        {
 //            be.shuttle = 5;
 //        }
+        if (!world.isClient)
+        {
+//            ((ItemPumpBlockEntity) world.getBlockEntity(pos)).markNeedsRefresh();
+        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
