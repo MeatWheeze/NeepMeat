@@ -2,7 +2,7 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.ItemDuctBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -49,7 +49,7 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
 
     public ItemDuctBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.ITEM_DUCT_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.ITEM_DUCT_BLOCK_ENTITY, pos, state);
 
     }
 

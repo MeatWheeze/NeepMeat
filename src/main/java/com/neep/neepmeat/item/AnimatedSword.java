@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.neepmeat.item.base.BaseSwordItem;
+import com.neep.meatlib.item.BaseSwordItem;
 import net.minecraft.item.ToolMaterial;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.network.ISyncable;

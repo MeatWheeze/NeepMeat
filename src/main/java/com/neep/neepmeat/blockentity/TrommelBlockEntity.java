@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -37,7 +37,7 @@ public class TrommelBlockEntity extends BlockEntity implements
 
     public TrommelBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.TROMMEL_BLOCK_ENTITY, pos, state);
         capacity = 64;
     }
 

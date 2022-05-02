@@ -1,8 +1,8 @@
 package com.neep.neepmeat.block.content_detector;
 
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.ContentDetectorBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -144,7 +144,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, BlockEntityInitialiser.CONTENT_DETECTOR, ContentDetectorBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, NMBlockEntities.CONTENT_DETECTOR, ContentDetectorBlockEntity::serverTick, world);
     }
 
     @Override

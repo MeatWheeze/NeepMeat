@@ -1,10 +1,10 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -65,7 +65,7 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.ITEM_DUCT_BLOCK_ENTITY, ItemDuctBlockEntity::serverTick, world);
+        return checkType(type, NMBlockEntities.ITEM_DUCT_BLOCK_ENTITY, ItemDuctBlockEntity::serverTick, world);
     }
 
     @Override
@@ -78,7 +78,7 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if(player.getStackInHand(hand).isOf(((BaseBlock) (BlockInitialiser.ITEM_DUCT)).getBlockItem()))
+        if(player.getStackInHand(hand).isOf(((BaseBlock) (NMBlocks.ITEM_DUCT)).getBlockItem()))
         {
             return ActionResult.PASS;
         }

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -39,7 +39,7 @@ public class ItemBufferBlockEntity extends BlockEntity implements
 
     public ItemBufferBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, pos, state);
         capacity = 64;
     }
 

@@ -1,19 +1,19 @@
-package com.neep.neepmeat.api.block;
+package com.neep.meatlib.block;
 
-import com.neep.neepmeat.item.base.BaseBlockItem;
+import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.SlabBlock;
+import net.minecraft.block.StairsBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseSlabBlock extends SlabBlock implements NMBlock
+public class BaseStairsBlock extends StairsBlock implements NMBlock
 {
     protected String registryName;
     protected int maxStack;
     protected BlockItem blockItem;
 
-    public BaseSlabBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
+    public BaseStairsBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
     {
-        super(settings);
+        super(baseBlockState, settings);
         this.registryName = blockName;
         this.maxStack = itemMaxStack;
         this.blockItem = new BaseBlockItem(this, blockName, itemMaxStack, false);

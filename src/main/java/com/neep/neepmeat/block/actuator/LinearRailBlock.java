@@ -2,7 +2,7 @@ package com.neep.neepmeat.block.actuator;
 
 import com.neep.assembly.AssemblyEntity;
 import com.neep.assembly.block.IRail;
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.util.LinearDirection;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

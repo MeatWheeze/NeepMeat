@@ -1,9 +1,8 @@
 package com.neep.neepmeat.blockentity.machine;
 
-import com.neep.neepmeat.api.block.BaseFacingBlock;
-import com.neep.neepmeat.block.IItemPipe;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -14,10 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +32,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity implements BlockEnti
 
     public EjectorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.EJECTOR, pos, state);
+        super(NMBlockEntities.EJECTOR, pos, state);
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, EjectorBlockEntity be)

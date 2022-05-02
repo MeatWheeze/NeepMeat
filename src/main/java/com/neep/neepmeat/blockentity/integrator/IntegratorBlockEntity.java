@@ -3,8 +3,8 @@ package com.neep.neepmeat.blockentity.integrator;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.TypedFluidBuffer;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.FluidInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -44,9 +44,9 @@ public class IntegratorBlockEntity extends BlockEntity implements
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.INTEGRATOR, pos, state);
-        inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(FluidInitialiser.STILL_BLOOD), TypedFluidBuffer.Mode.INSERT_ONLY);
-        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(FluidInitialiser.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
+        super(NMBlockEntities.INTEGRATOR, pos, state);
+        inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_BLOOD), TypedFluidBuffer.Mode.INSERT_ONLY);
+        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 
@@ -148,8 +148,8 @@ public class IntegratorBlockEntity extends BlockEntity implements
         Transaction transaction = Transaction.openOuter();
         if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= conversionAmount)
         {
-            long extracted = inputBuffer.extractDirect(FluidVariant.of(FluidInitialiser.STILL_BLOOD), conversionAmount, transaction);
-            long inserted = outputBuffer.insertDirect(FluidVariant.of(FluidInitialiser.STILL_ENRICHED_BLOOD), extracted, transaction);
+            long extracted = inputBuffer.extractDirect(FluidVariant.of(NMFluids.STILL_BLOOD), conversionAmount, transaction);
+            long inserted = outputBuffer.insertDirect(FluidVariant.of(NMFluids.STILL_ENRICHED_BLOOD), extracted, transaction);
         }
         transaction.commit();
     }

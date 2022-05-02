@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid.RealisticFluid;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -27,7 +27,7 @@ public class FluidDrainBlockEntity extends TankBlockEntity
 
     public FluidDrainBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.FLUID_DRAIN, pos, state);
+        super(NMBlockEntities.FLUID_DRAIN, pos, state);
     }
 
     public boolean needsCooldown()

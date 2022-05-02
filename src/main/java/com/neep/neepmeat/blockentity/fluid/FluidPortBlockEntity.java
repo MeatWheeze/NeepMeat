@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.block.FluidPortBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -31,7 +31,7 @@ public class FluidPortBlockEntity extends BlockEntity implements Storage<FluidVa
 
     public FluidPortBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.FLUID_PORT, pos, state);
+        super(NMBlockEntities.FLUID_PORT, pos, state);
     }
 
     @Override

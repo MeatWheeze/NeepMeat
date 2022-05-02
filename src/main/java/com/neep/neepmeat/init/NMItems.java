@@ -1,25 +1,17 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.CheeseCleaverItem;
 import com.neep.neepmeat.item.DaggerItem;
-import com.neep.neepmeat.item.NMItem;
 import com.neep.neepmeat.item.SlasherItem;
-import com.neep.neepmeat.item.base.BaseCraftingItem;
-import com.neep.neepmeat.item.base.TieredCraftingItemFactory;
+import com.neep.meatlib.item.BaseCraftingItem;
+import com.neep.meatlib.item.TieredCraftingItemFactory;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @SuppressWarnings("unused")
-public class ItemInit
+public class NMItems
 {
-    public static Map<Identifier, NMItem> ITEMS = new LinkedHashMap<>();
 
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
@@ -41,23 +33,6 @@ public class ItemInit
     public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-
-    public static void putItem(String path, NMItem item)
-    {
-        if (!(item instanceof Item))
-        {
-            throw new IllegalArgumentException("tried to queue a non-item for item registration");
-        }
-        ITEMS.put(new Identifier(NeepMeat.NAMESPACE, path), item);
-    }
-
-    public static void registerItems()
-    {
-        for (Map.Entry<Identifier, NMItem> entry : ITEMS.entrySet())
-        {
-            Registry.register(Registry.ITEM, entry.getKey(), (Item) entry.getValue());
-        }
-    }
 
     static
     {

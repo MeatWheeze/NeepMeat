@@ -1,10 +1,10 @@
 package com.neep.neepmeat.block.redstone;
 
-import com.neep.neepmeat.api.block.NMBlock;
+import com.neep.meatlib.block.NMBlock;
 import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.SoundInitialiser;
-import com.neep.neepmeat.item.base.BaseBlockItem;
+import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -153,7 +153,7 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.BIG_LEVER, BigLeverBlockEntity::serverTick, world);
+        return checkType(type, NMBlockEntities.BIG_LEVER, BigLeverBlockEntity::serverTick, world);
     }
 
     public void setPowered(World world, BlockPos pos, boolean powered)

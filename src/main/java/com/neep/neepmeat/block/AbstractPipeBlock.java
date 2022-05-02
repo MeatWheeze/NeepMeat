@@ -2,8 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.api.block.BaseBlock;
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.PipeProperties;
 import com.neep.neepmeat.util.NMMaths;

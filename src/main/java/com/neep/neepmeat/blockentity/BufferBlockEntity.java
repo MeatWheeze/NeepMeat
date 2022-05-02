@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.block.BufferBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.BufferInventory;
 import com.neep.neepmeat.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
@@ -13,23 +13,17 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.Generic3x3ContainerScreenHandler;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -41,7 +35,7 @@ public class BufferBlockEntity extends BlockEntity implements
 
     public BufferBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.BUFFER, pos, state);
+        super(NMBlockEntities.BUFFER, pos, state);
     }
 
     public BufferBlockEntity(BlockEntityType<BufferBlockEntity> type, BlockPos pos, BlockState state)

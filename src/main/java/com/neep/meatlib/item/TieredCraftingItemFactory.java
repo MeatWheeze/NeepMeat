@@ -1,4 +1,4 @@
-package com.neep.neepmeat.item.base;
+package com.neep.meatlib.item;
 
 import net.minecraft.item.Item;
 

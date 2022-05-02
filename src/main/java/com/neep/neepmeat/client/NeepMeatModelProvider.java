@@ -4,10 +4,9 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import com.neep.neepmeat.client.model.block.SlopeTest;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.client.model.*;
 import net.minecraft.block.Block;
-import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -49,28 +48,28 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
                 new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"),
                 RUSTED_SCAFFOLD_SIDE,
                 RUSTED_SCAFFOLD_TOP,
-                BlockInitialiser.SCAFFOLD_PLATFORM);
+                NMBlocks.SCAFFOLD_PLATFORM);
 
         putScaffoldModels(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top"),
                 new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_bottom"),
                 new Identifier(NeepMeat.NAMESPACE, "item/blue_metal_scaffold"),
                 BLUE_SCAFFOLD_SIDE,
                 BLUE_SCAFFOLD_TOP,
-                BlockInitialiser.BLUE_SCAFFOLD);
+                NMBlocks.BLUE_SCAFFOLD);
 
         putScaffoldModels(new Identifier(NeepMeat.NAMESPACE, "block/yellow_metal_scaffold_top"),
                 new Identifier(NeepMeat.NAMESPACE, "block/yellow_metal_scaffold_bottom"),
                 new Identifier(NeepMeat.NAMESPACE, "item/yellow_metal_scaffold"),
                 YELLOW_SCAFFOLD_SIDE,
                 YELLOW_SCAFFOLD_TOP,
-                BlockInitialiser.YELLOW_SCAFFOLD);
+                NMBlocks.YELLOW_SCAFFOLD);
 
         putScaffoldModels(new Identifier(NeepMeat.NAMESPACE, "block/clear_tank_wall"),
                 new Identifier(NeepMeat.NAMESPACE, "block/clear_tank_wall"),
                 new Identifier(NeepMeat.NAMESPACE, "item/clear_tank_wall"),
                 CLEAR_TANK_SIDE,
                 CLEAR_TANK_TOP,
-                BlockInitialiser.YELLOW_SCAFFOLD);
+                NMBlocks.YELLOW_SCAFFOLD);
 
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
     }

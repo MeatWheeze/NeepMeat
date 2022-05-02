@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidPortBlockEntity;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import net.minecraft.block.Block;

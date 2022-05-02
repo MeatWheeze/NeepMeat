@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -23,7 +23,7 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
     public TankBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.TANK_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.TANK_BLOCK_ENTITY, pos, state);
         this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
     }
 

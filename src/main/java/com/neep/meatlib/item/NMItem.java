@@ -1,4 +1,4 @@
-package com.neep.neepmeat.item;
+package com.neep.meatlib.item;
 
 public interface NMItem
 {

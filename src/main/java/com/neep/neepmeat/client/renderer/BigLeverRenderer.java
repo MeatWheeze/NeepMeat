@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.api.block.BaseHorFacingBlock;
+import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;

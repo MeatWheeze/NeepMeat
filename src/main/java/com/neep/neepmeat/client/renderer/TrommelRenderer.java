@@ -1,10 +1,10 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.api.block.BaseHorFacingBlock;
+import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
@@ -39,7 +39,7 @@ public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntit
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
         matrices.translate(-0.5, -0.5, -0.5);
         MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
-                BlockInitialiser.TROMMEL_CENTRE.getDefaultState(),
+                NMBlocks.TROMMEL_CENTRE.getDefaultState(),
                 be.getPos(),
                 be.getWorld(),
                 matrices,

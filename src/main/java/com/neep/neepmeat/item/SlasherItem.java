@@ -1,8 +1,5 @@
 package com.neep.neepmeat.item;
 
-import com.neep.neepmeat.init.ItemInit;
-import com.neep.neepmeat.item.base.BaseItem;
-import com.neep.neepmeat.item.base.BaseSwordItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -10,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
