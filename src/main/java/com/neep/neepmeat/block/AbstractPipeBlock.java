@@ -209,10 +209,9 @@ public abstract class AbstractPipeBlock extends BaseBlock
             Direction direction = hit.getSide();
             if (player.isSneaking())
             {
-                System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
-                System.out.println("block entity: " + world.getBlockEntity(pos));
-                return ActionResult.SUCCESS;
-//                direction = direction.getOpposite();
+//                System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
+//                System.out.println("block entity: " + world.getBlockEntity(pos));
+                direction = direction.getOpposite();
             }
 
             Vec3d hitPos = hit.getPos();
