@@ -71,9 +71,9 @@ public class WritableFluidBuffer extends SnapshotParticipant<ResourceAmount<Flui
         {
             this.updateSnapshots(transaction);
             amount += inserted;
+            syncIfPossible();
             return inserted;
         }
-        syncIfPossible();
         return 0;
     }
 
@@ -93,9 +93,9 @@ public class WritableFluidBuffer extends SnapshotParticipant<ResourceAmount<Flui
         {
             this.updateSnapshots(transaction);
             amount -= extracted;
+            syncIfPossible();
             return extracted;
         }
-        syncIfPossible();
         return 0;
     }
 
@@ -150,6 +150,7 @@ public class WritableFluidBuffer extends SnapshotParticipant<ResourceAmount<Flui
 
     public void syncIfPossible()
     {
+        System.out.println("syncing");
         if (parent instanceof BlockEntityClientSerializable serializable)
         {
             serializable.sync();
