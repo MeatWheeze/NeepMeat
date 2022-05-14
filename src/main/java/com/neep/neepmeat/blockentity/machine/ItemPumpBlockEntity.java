@@ -75,83 +75,110 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
         if (be.cooldown == 0 && be.active)
         {
             be.cooldown = 10;
-            Direction facing = state.get(BaseFacingBlock.FACING);
+            be.transferTick();
+        }
+    }
 
-            Storage<ItemVariant> storage;
-            if ((storage = ItemStorage.SIDED.find(world, pos.offset(facing.getOpposite()), facing)) != null)
+    public boolean transferTick()
+    {
+        BlockState state = getCachedState();
+        Direction facing = state.get(BaseFacingBlock.FACING);
+
+        Storage<ItemVariant> storage;
+        if ((storage = ItemStorage.SIDED.find(world, pos.offset(facing.getOpposite()), facing)) != null)
+        {
+            Transaction transaction = Transaction.openOuter();
+            ResourceAmount<ItemVariant> extractable = StorageUtil.findExtractableContent(storage, transaction);
+            if (extractable == null)
             {
-                Transaction transaction = Transaction.openOuter();
-                ResourceAmount<ItemVariant> extractable = StorageUtil.findExtractableContent(storage, transaction);
-                if (extractable == null)
-                {
-                    transaction.abort();
-                    return;
-                }
+                transaction.abort();
+                return false;
+            }
 
-                long transferred = storage.extract(extractable.resource(), 16, transaction);
-                long forwarded = be.forwardItem(new ResourceAmount<>(extractable.resource(), transferred), transaction);
-                if (forwarded < 1)
-                {
-                    transaction.abort();
-                    return;
-                }
-                be.shuttle = 3;
-                be.sync();
+            long transferred = storage.extract(extractable.resource(), 16, transaction);
+            long forwarded = forwardItem(new ResourceAmount<>(extractable.resource(), transferred), transaction);
+            if (forwarded < 1)
+            {
+                transaction.abort();
+                return false;
+            }
+            succeed();
+            transaction.commit();
+        }
+        else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
+        {
+            Transaction transaction = Transaction.openOuter();
+            if (retrieve(transaction))
+            {
+                succeed();
                 transaction.commit();
             }
-            else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
+            else
             {
-//                System.out.println(be.retrievalCache);
-                for (RetrievalTarget<ItemVariant> target : be.retrievalCache)
-                {
-                    Storage<ItemVariant> targetStorage = target.find();
-
-                    Transaction transaction = Transaction.openOuter();
-
-                    Storage<ItemVariant> facingStorage = be.insertionCache.find(facing);
-
-                    ResourceAmount<ItemVariant> extractable;
-                    if (facingStorage != null)
-                    {
-                        Transaction inner = transaction.openNested();
-                        extractable = StorageUtil.findExtractableContent(targetStorage,
-                                itemVariant -> facingStorage.insert(itemVariant, Long.MAX_VALUE, inner) > 0, inner);
-                        inner.abort();
-                    }
-                    else
-                    {
-                        extractable = StorageUtil.findExtractableContent(targetStorage, transaction);
-                    }
-
-                    if (extractable == null)
-                    {
-                        transaction.abort();
-                        continue;
-                    }
-
-                    long transferable = be.canForward(extractable, transaction);
-                    if (transferable < 1)
-                    {
-                        transaction.abort();
-                        continue;
-                    }
-
-                    // TODO: change max amount
-                    long extracted = targetStorage.extract(extractable.resource(), Math.min(transferable, 16), transaction);
-                    extractable = new ResourceAmount<>(extractable.resource(), extracted);
-                    long forwarded = be.forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target);
-
-                    if (forwarded < 1)
-                    {
-                        transaction.abort();
-                        continue;
-                    }
-                    be.shuttle = 3;
-                    be.sync();
-                    transaction.commit();
-                }
+                transaction.abort();
             }
         }
+        return true;
+    }
+
+    public boolean retrieve(Transaction transaction)
+    {
+        Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+
+        boolean success = false;
+        for (RetrievalTarget<ItemVariant> target : retrievalCache)
+        {
+            Storage<ItemVariant> targetStorage = target.find();
+
+            Transaction nested1 = transaction.openNested();
+
+            ResourceAmount<ItemVariant> extractable;
+            Storage<ItemVariant> facingStorage = insertionCache.find(facing);
+            if (facingStorage != null)
+            {
+                Transaction nested2 = transaction.openNested();
+                extractable = StorageUtil.findExtractableContent(targetStorage,
+                        itemVariant -> facingStorage.insert(itemVariant, Long.MAX_VALUE, nested2) > 0, nested2);
+                nested2.abort();
+            }
+            else
+            {
+                extractable = StorageUtil.findExtractableContent(targetStorage, nested1);
+            }
+
+            if (extractable == null)
+            {
+                nested1.abort();
+                continue;
+            }
+
+            long transferable = canForward(extractable, nested1);
+            if (transferable < 1)
+            {
+                nested1.abort();
+                continue;
+            }
+
+            // TODO: change max amount
+            long extracted = targetStorage.extract(extractable.resource(), Math.min(transferable, 16), nested1);
+            extractable = new ResourceAmount<>(extractable.resource(), extracted);
+            long forwarded = forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target);
+
+            if (forwarded < 1)
+            {
+                nested1.abort();
+                continue;
+            }
+            nested1.commit();
+            success = true;
+        }
+        return success;
+    }
+
+    public void succeed()
+    {
+        this.shuttle = 3;
+        sync();
     }
 
     public void markNeedsRefresh()
