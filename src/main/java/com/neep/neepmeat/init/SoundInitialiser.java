@@ -17,6 +17,14 @@ public class SoundInitialiser
     public static SoundEvent BIG_LEVER_OFF = registerSound("big_lever_off");
     public static SoundEvent CLICK = registerSound("click");
 
+    public static SoundEvent FUSION_FIRE = registerSound("big_lever_off");
+    public static SoundEvent FUSION_HIT = registerSound("big_lever_off");
+    public static SoundEvent RELOAD = registerSound("click");
+
+    public static SoundEvent HAND_CANNON_FIRE = registerSound("big_lever_off");
+    public static SoundEvent HAND_CANNON_HIT = registerSound("big_lever_off");
+    public static SoundEvent HAND_CANNON_RELOAD = registerSound("click");
+
     public static SoundEvent registerSound(String path)
     {
         Identifier id = new Identifier(NeepMeat.NAMESPACE, path);

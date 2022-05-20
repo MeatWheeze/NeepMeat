@@ -3,11 +3,7 @@ package com.neep.assembly;
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.client.renderer.AssemblyRenderer;
 import com.neep.assembly.client.renderer.BoatTestRenderer;
-import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -47,7 +43,7 @@ public class Assembly implements ModInitializer, ClientModInitializer
     @Override
     public void onInitialize()
     {
-        MeatLib.setNamespace(NAMESPACE);
+//        MeatLib.setNamespace(NAMESPACE);
         ASSEMBLY_ENTITY = registerEntity("assembly", AssemblyEntity::new);
         BOAT_TEST = registerEntity("boat_test", BoatTest::new);
 

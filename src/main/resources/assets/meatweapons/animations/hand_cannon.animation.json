@@ -1,0 +1,130 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.hand_cannon.fire": {
+			"loop": true,
+			"animation_length": 0.52,
+			"override_previous_animation": true,
+			"anim_time_update": "0",
+			"bones": {
+				"bone": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [-20, 0, 0]
+						},
+						"0.24": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [0, 0, 2.5]
+						},
+						"0.36": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"muzle_flash": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, -0.2]
+						},
+						"0.04": {
+							"vector": [0, -1, -1.7]
+						},
+						"0.24": {
+							"vector": [0, 0.1, -0.3]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.04": {
+							"vector": [17.35, 16.6, 1]
+						},
+						"0.24": {
+							"vector": [1, 1, 1]
+						}
+					}
+				},
+				"bone4": {
+					"position": {
+						"0.24": {
+							"vector": [0, 0, 0]
+						},
+						"0.36": {
+							"vector": [0, 0, -2]
+						},
+						"0.48": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		},
+		"animation.hand_cannon.reload_r": {
+			"animation_length": 0.96,
+			"bones": {
+				"bone": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [-10, -25, 0]
+						},
+						"0.68": {
+							"vector": [-10, -25, 0]
+						},
+						"0.96": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.96": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"magazine": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, 0]
+						},
+						"0.56": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, 0]
+						},
+						"0.32": {
+							"vector": [0, -5.41644, 0.95506]
+						},
+						"0.56": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}

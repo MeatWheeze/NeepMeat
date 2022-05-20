@@ -1,0 +1,38 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.machine_pistol.fire": {
+			"animation_length": 0.44,
+			"bones": {
+				"body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [-7.5, 0, 0],
+							"easing": "easeOutExpo"
+						},
+						"0.28": {
+							"vector": [0, 0, 0],
+							"easing": "easeInOutQuart"
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [0, 0, 1]
+						},
+						"0.28": {
+							"vector": [0, 0, 0],
+							"easing": "easeOutSine"
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

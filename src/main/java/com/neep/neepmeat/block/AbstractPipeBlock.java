@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.PipeProperties;
 import com.neep.neepmeat.util.NMMaths;
@@ -199,6 +200,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        System.out.println(ItemRegistry.ITEMS);
         if (!player.getStackInHand(hand).isEmpty())
         {
             return ActionResult.PASS;
