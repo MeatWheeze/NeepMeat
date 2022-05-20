@@ -1,6 +1,6 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.entity.PlasmaEntity;
+import com.neep.meatweapons.entity.PlasmaProjectileEntity;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -123,7 +123,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
                         }
 
                         // Create projectile.
-                        PlasmaEntity bullet = new PlasmaEntity(world, pos.x, pos.y, pos.z, vx, vy, vz);
+                        PlasmaProjectileEntity bullet = new PlasmaProjectileEntity(world, pos.x, pos.y, pos.z, vx, vy, vz);
                         bullet.setOwner(player);
                         world.spawnEntity(bullet);
 

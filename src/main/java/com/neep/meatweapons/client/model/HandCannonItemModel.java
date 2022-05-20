@@ -2,7 +2,6 @@ package com.neep.meatweapons.client.model;
 
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.HandCannonItem;
-import com.neep.meatweapons.item.MachinePistolItem;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 

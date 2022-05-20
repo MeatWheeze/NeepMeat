@@ -14,16 +14,16 @@ import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.world.World;
 
-public class PlasmaEntity extends PersistentProjectileEntity
+public class PlasmaProjectileEntity extends PersistentProjectileEntity
 {
     int liveTime = 0;
 
-    public PlasmaEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world)
+    public PlasmaProjectileEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world)
     {
         super(entityType, world);
     }
 
-    public PlasmaEntity(World world, double x, double y, double z, double vx, double vy, double vz)
+    public PlasmaProjectileEntity(World world, double x, double y, double z, double vx, double vy, double vz)
     {
         super(MeatWeapons.PLASMA, x, y, z, world);
         this.setVelocity(vx, vy, vz);

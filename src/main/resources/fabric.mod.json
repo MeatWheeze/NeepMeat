@@ -26,11 +26,13 @@
     ],
     "client": [
       "com.neep.neepmeat.NeepMeat",
-      "com.neep.assembly.Assembly"
+      "com.neep.assembly.Assembly",
+      "com.neep.meatweapons.client.MWClient"
     ]
   },
   "mixins": [
-    "neepmeat.mixins.json"
+    "neepmeat.mixins.json",
+    "meatweapons.mixins.json"
   ],
 
   "depends": {

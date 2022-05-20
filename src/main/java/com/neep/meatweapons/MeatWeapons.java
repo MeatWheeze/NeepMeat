@@ -5,7 +5,7 @@ import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.BulletEntity;
 import com.neep.meatweapons.entity.CannonBulletEntity;
-import com.neep.meatweapons.entity.PlasmaEntity;
+import com.neep.meatweapons.entity.PlasmaProjectileEntity;
 import com.neep.meatweapons.item.FusionCannonItem;
 import com.neep.meatweapons.item.HandCannonItem;
 import com.neep.meatweapons.item.MachinePistolItem;
@@ -25,7 +25,7 @@ public class MeatWeapons implements ModInitializer
 {
     public static final String NAMESPACE = "meatweapons";
 
-    public static EntityType<PlasmaEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaEntity::new));
+    public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
 

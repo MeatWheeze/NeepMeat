@@ -200,7 +200,6 @@ public abstract class AbstractPipeBlock extends BaseBlock
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        System.out.println(ItemRegistry.ITEMS);
         if (!player.getStackInHand(hand).isEmpty())
         {
             return ActionResult.PASS;
