@@ -4,7 +4,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 
-public class BaseBlock extends Block implements NMBlock
+public class BaseBlock extends Block implements IMeatBlock
 {
     public BaseBlockItem blockItem;
     private String registryName;

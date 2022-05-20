@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
 
-public class BaseHorFacingBlock extends HorizontalFacingBlock implements NMBlock
+public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBlock
 {
     BaseBlockItem blockItem;
     private String registryName;

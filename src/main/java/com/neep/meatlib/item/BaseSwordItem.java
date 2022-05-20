@@ -4,7 +4,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 
-public class BaseSwordItem extends SwordItem implements NMItem
+public class BaseSwordItem extends SwordItem implements IMeatItem
 {
     private final String registryName;
 
@@ -12,7 +12,7 @@ public class BaseSwordItem extends SwordItem implements NMItem
     {
         super(material, attackDamage, speed, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(getRegistryName(), this);
+        ItemRegistry.queueItem(this, getRegistryName());
     }
 
     @Override

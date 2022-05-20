@@ -15,17 +15,17 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BaseBlockItem extends BlockItem implements NMItem
+public class BaseBlockItem extends BlockItem implements IMeatItem
 {
     private final String name;
     private final boolean hasLore;
 
-    public BaseBlockItem(Block block, String itemName, int itemMaxStack, boolean hasLore)
+    public BaseBlockItem(Block block, String registryName, int itemMaxStack, boolean hasLore)
     {
         super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
-        this.name = itemName;
+        this.name = registryName;
         this.hasLore = hasLore;
-        ItemRegistry.queueItem(getRegistryName(), this);
+        ItemRegistry.queueItem(this, getRegistryName());
     }
 
     @Override

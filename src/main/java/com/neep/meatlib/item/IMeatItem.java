@@ -1,6 +1,6 @@
 package com.neep.meatlib.item;
 
-public interface NMItem
+public interface IMeatItem
 {
     String getRegistryName();
 }

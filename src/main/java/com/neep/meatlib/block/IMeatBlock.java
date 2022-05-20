@@ -1,6 +1,6 @@
 package com.neep.meatlib.block;
 
-public interface NMBlock
+public interface IMeatBlock
 {
     String getRegistryName();
 }

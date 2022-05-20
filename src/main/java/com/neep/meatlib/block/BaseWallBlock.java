@@ -4,7 +4,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.WallBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseWallBlock extends WallBlock implements NMBlock
+public class BaseWallBlock extends WallBlock implements IMeatBlock
 {
     protected String registryName;
     protected int maxStack;
