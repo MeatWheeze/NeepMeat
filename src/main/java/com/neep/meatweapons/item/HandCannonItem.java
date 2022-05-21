@@ -5,6 +5,12 @@ import com.neep.meatweapons.entity.CannonBulletEntity;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
+import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +19,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -58,6 +65,14 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, WeakTwoH
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
+        if (world.isClient)
+        {
+//            Renderer renderer = RendererAccess.INSTANCE.getRenderer();
+//            MeshBuilder meshBuilder = renderer.meshBuilder();
+//            QuadEmitter emitter = meshBuilder.getEmitter().square(Direction.UP, 1, 1, 0, 0, 2).emit();
+//            MinecraftClient.getInstance().
+        }
+
         ItemStack itemStack = user.getStackInHand(hand);
 //        user.setCurrentHand(hand);
         fire(world, user, itemStack);
