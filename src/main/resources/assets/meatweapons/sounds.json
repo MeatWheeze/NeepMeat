@@ -1,0 +1,40 @@
+{
+  "fusion_fire": {
+  "subtitle": "subtitles.meatweapons.fusion_fire",
+    "sounds": [
+      "meatweapons:fusion_fire"
+    ]
+  },
+  "fusion_reload": {
+    "subtitle": "subtitles.meatweapons.fusion_reload",
+    "sounds": [
+      "meatweapons:fusion_reload"
+    ]
+  },
+  "hand_cannon_fire": {
+    "subtitle": "subtitles.meatweapons.hand_cannon_fire",
+    "sounds": [
+      "meatweapons:hand_cannon_fire"
+    ]
+  },
+  "hand_cannon_reload": {
+    "subtitle": "subtitles.meatweapons.hand_cannon_reload",
+    "sounds": [
+      "meatweapons:hand_cannon_reload"
+    ]
+  },
+  "compound_injector": {
+    "subtitle": "subtitles.meatweapons.compound_injector",
+    "sounds": [
+      "meatweapons:compound_injector"
+    ]
+  },
+  "plasma_hit": {
+    "subtitle": "subtitles.meatweapons.plasma_hit",
+    "sounds": [
+      "meatweapons:plasma_hit"
+    ]
+  }
+}
+
+

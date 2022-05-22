@@ -35,7 +35,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
     {
         super("fusion", Items.DIRT, 16, 10, false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.FUSION_FIRE);
-        this.sounds.put(GunSounds.RELOAD, SoundInitialiser.FUSION_HIT);
+        this.sounds.put(GunSounds.RELOAD, SoundInitialiser.RELOAD);
     }
 
     @Override
