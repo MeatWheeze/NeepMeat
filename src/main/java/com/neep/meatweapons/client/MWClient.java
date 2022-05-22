@@ -49,13 +49,9 @@ public class MWClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-
         BeamPacket.registerReceiver();
-
         registerEntityModels();
         registerAnimations();
-
-        BeamRenderer.init();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.neep.meatweapons.particle;
 
 import com.google.common.collect.Maps;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -64,7 +65,7 @@ public abstract class GraphicsEffect
     }
 
     @Environment(value=EnvType.CLIENT)
-    public abstract void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers);
+    public abstract void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta);
 
     public boolean isDead()
     {
@@ -81,13 +82,14 @@ public abstract class GraphicsEffect
             EFFECTS.forEach(GraphicsEffect::tick);
         });
 
-        WorldRenderEvents.BEFORE_ENTITIES.register(ctx ->
+        WorldRenderEvents.AFTER_ENTITIES.register(ctx ->
         {
             MatrixStack matrices = ctx.matrixStack();
             VertexConsumerProvider consumers = ctx.consumers();
 
-            EFFECTS.forEach(((effect) ->
-                    effect.render(ctx.camera(), matrices, consumers)));
+//            RenderSystem.enableBlend();
+//            RenderSystem.enableDepthTest();
+            EFFECTS.forEach(((effect) -> effect.render(ctx.camera(), matrices, consumers, ctx.tickDelta())));
         });
     }
 

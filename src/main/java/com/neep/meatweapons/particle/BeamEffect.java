@@ -43,13 +43,17 @@ public class BeamEffect extends GraphicsEffect
     }
 
     @Override
-    public void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers)
+    public void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta)
     {
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(LAYER_TEST);
-        BeamRenderer.renderBeam(matrices, consumer, camera.getPos(), startPos, endPos, 255, 255, 255,
-//                maxTime > 0 ? (int) (255f * (maxTime - time) / maxTime) : 255, 0.5f);
-                maxTime > 0 ? (int) (255f * (maxTime - time + 1) / maxTime) : 255, 0.5f);
+        Vec3d beam = (endPos.subtract(startPos));
+        Vec3d norm = beam.normalize();
+        float x = (maxTime - time + 2 - tickDelta) / (float) maxTime;
+        BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
+//                startPos.add(norm.multiply(beam.length() * (1 - x))), endPos, 123, 171, 254,
+                startPos, endPos, 123, 171, 254,
+                maxTime > 0 ? (int) (255f * x) : 255, 0.5f);
         matrices.pop();
     }
 

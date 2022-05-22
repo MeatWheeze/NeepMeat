@@ -1,44 +1,22 @@
 package com.neep.meatweapons.client;
 
-import com.neep.meatweapons.MeatWeapons;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.Matrix3f;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 
 import java.nio.FloatBuffer;
 
 @Environment(value= EnvType.CLIENT)
 public class BeamRenderer
 {
-    public static void init()
-    {
-        WorldRenderEvents.BEFORE_ENTITIES.register((ctx) ->
-        {
-//            MatrixStack matrices = ctx.matrixStack();
-//
-//            float thickness = 0.5f;
-//
-//            matrices.push();
-//            Vec3d pos = ctx.camera().getPos();
-//
-//            Vec3d offset = p0.subtract(pos);
-//            matrices.translate(offset.x, offset.y, offset.z);
-//
-//            VertexConsumer vertexConsumer = ctx.consumers().getBuffer(LAYER_TEST);
-//
-//            renderBeam(matrices, vertexConsumer, p0, p1, 255, 255, 255, thickness);
-//            matrices.pop();
-
-        });
-    }
-
     public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, int r, int g, int b, int a, float t)
     {
         matrices.push();
