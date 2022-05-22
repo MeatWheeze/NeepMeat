@@ -1,6 +1,6 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.entity.PlasmaProjectileEntity;
+import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -36,7 +36,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
 
     public FusionCannonItem()
     {
-        super("fusion", Items.DIRT, 16, 10, false, new FabricItemSettings());
+        super("fusion", MeatWeapons.BALLISTIC_CARTRIDGE, 16, 10, false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.FUSION_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.RELOAD);
     }
@@ -66,7 +66,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-//        user.setCurrentHand(hand);
         fire(world, user, user.getStackInHand(hand));
 
         ItemStack stack = user.getStackInHand(hand);
@@ -94,6 +93,17 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
         return new Vec3f(0.56f, 0, 0);
     }
 
+    @Override
+    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    {
+        boolean sneak = player.isSneaking();
+        return new Vec3d(
+                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? -0.25 : 0.1,
+                .5);
+    }
+
+    @Override
     public void fire(World world, PlayerEntity player, ItemStack stack)
     {
         {
@@ -108,31 +118,14 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
                         double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
                         double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (rand.nextFloat() - 0.5);
 
-                        // Convert pitch and yaw to look vector.
-//                        double mult = 5; // Multiplier for bullet speed.
-//                        double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
-//                        double vy = mult * -Math.sin(pitch) + player.getVelocity().getY();
-//                        double vz = mult * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
-
                         // Get projectile starting position and direction.
-                        boolean sneak = player.isSneaking();
                         Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-                        {
-                            Vec3d transform = new Vec3d(
-                                    sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-                                    sneak ? -0.25 : 0.1,
-                                    .5).rotateX((float) -pitch).rotateY((float) -yaw);
-                            pos = pos.add(transform);
-                        }
+                        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
+                        pos = pos.add(transform);
 
                         Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
                         Optional<LivingEntity> target = this.hitScan(player, pos, end, 20);
                         target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 3));
-
-                        // Create projectile.
-//                        PlasmaProjectileEntity bullet = new PlasmaProjectileEntity(world, pos.x, pos.y, pos.z, vx, vy, vz);
-//                        bullet.setOwner(player);
-//                        world.spawnEntity(bullet);
 
                         // Play fire sound
                         playSound(world, player, GunSounds.FIRE_PRIMARY);

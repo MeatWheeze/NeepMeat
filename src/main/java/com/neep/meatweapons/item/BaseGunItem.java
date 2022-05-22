@@ -3,16 +3,14 @@ package com.neep.meatweapons.item;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.BeamRenderer;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
+import com.neep.meatweapons.particle.GraphicsEffect;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -21,12 +19,7 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -41,7 +34,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -112,6 +104,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         return TypedActionResult.fail(itemStack);
     }
 
+    @Override
     public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference)
     {
         if (cursorStackReference.get().getItem().equals(ammunition) && stack.getDamage() != 0)
@@ -127,12 +120,13 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
 
     public abstract Vec3f getAimOffset();
 
+    public abstract Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
+
     // Should only be called on server.
     public void reload(PlayerEntity user, ItemStack stack)
     {
         user.getItemCooldownManager().set(this, 7);
         ItemStack ammo = getStack(this.ammunition, user);
-        // If ammunition was found in inventory.
         if (ammo != null)
         {
             stack.setDamage(0);
@@ -140,17 +134,15 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
 
             if (!user.world.isClient)
             {
+                // Do not sync reload animation with other players; it looks silly.
                 final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) user.world);
                 GeckoLibNetwork.syncAnimation(user, this, id, ANIM_RELOAD);
-                // Do not sync reload animation with other players; it looks silly.
 
-                // Play sound
                 playSound(user.world, user, GunSounds.RELOAD);
             }
         }
     }
 
-    // TODO: Currently reaches through blocks.
     public List<EntityHitResult> getRayTargets(PlayerEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
     {
         World world = caster.world;
@@ -194,18 +186,18 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             }
 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-            syncBeamEffect((ServerWorld) world, start, hitPos, 100);
+            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 9, GraphicsEffects.BEAM, 100);
 
             return Optional.ofNullable((LivingEntity) entity);
         }
         return Optional.empty();
     }
 
-    public static void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, double radius)
+    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, int maxTime, GraphicsEffect.Factory type, double showRadius)
     {
-        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, radius))
+        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, new Vec3d(0, 0, 0), 9, MWNetwork.EFFECT_ID);
+            Packet<?> packet = BeamPacket.create(world, type, pos, end,velocity, maxTime, MWNetwork.EFFECT_ID);
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }

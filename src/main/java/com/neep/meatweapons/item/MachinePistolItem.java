@@ -82,6 +82,16 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
         return new Vec3f(0.0f, 0, 0);
     }
 
+    @Override
+    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    {
+        boolean sneak = player.isSneaking();
+        return new Vec3d(
+                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? -1.15 : 1.5,
+                .5);
+    }
+
     public void fire(World world, PlayerEntity player, ItemStack stack)
     {
         {

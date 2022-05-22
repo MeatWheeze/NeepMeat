@@ -1,7 +1,5 @@
 package com.neep.meatweapons.particle;
 
-import com.google.common.collect.Maps;
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -15,40 +13,33 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class GraphicsEffect
 {
     @Environment(value=EnvType.CLIENT)
-//    public static Map<ClientWorld, List<GraphicsEffect>> MAP = Maps.newIdentityHashMap();
     public static List<GraphicsEffect> EFFECTS = new ArrayList<>();
-
-//    @Environment(value=EnvType.CLIENT)
-//    public static List<GraphicsEffect> getOrCreate(ClientWorld world)
-//    {
-//        List<GraphicsEffect> effects;
-//        if ((effects = MAP.get(world)) == null)
-//        {
-//            effects = new ArrayList<>();
-//            MAP.put(world, effects);
-//        }
-//        return effects;
-//    }
 
     @Environment(value=EnvType.CLIENT)
     public static void addEffect(GraphicsEffect effect)
     {
-//        getOrCreate(effect.world).add(effect);
         EFFECTS.add(effect);
     }
 
     protected ClientWorld world;
     protected long time;
     public boolean alive = true;
+    protected Vec3d start;
+    protected Vec3d end;
+    protected Vec3d velocity;
+    protected int maxTime;
 
-    public GraphicsEffect(ClientWorld world)
+    public GraphicsEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, int maxTime)
     {
         this.world = world;
+        this.start = start;
+        this.end = end;
+        this.velocity = velocity;
+        this.maxTime = maxTime;
     }
 
     public ClientWorld getWorld()
