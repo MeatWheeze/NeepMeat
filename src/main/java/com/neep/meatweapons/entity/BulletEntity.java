@@ -2,7 +2,7 @@ package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.network.BulletEntityPacket;
-import com.neep.meatweapons.network.NetworkInitialiser;
+import com.neep.meatweapons.network.MWNetwork;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -30,7 +30,7 @@ public class BulletEntity extends PersistentProjectileEntity
     @Override
     public Packet createSpawnPacket()
     {
-        return BulletEntityPacket.create(this, NetworkInitialiser.SPAWN_ID);
+        return BulletEntityPacket.create(this, MWNetwork.SPAWN_ID);
     }
 
     @Override

@@ -102,7 +102,6 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                             target.get().damage(DamageSource.player(player), 2);
 //                            entity.hurtTime = entity.maxHurtTime = 0;
                             entity.timeUntilRegen = 0;
-                            System.out.println(target.get().hurtTime);
                         }
 
                         playSound(world, player, GunSounds.FIRE_PRIMARY);
