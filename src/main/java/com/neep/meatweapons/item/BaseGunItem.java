@@ -190,10 +190,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
 
             Vec3d hitPos;
             hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-//            world.addParticle(ParticleTypes.ANGRY_VILLAGER, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
-            BeamRenderer.p0 = pos;
-            BeamRenderer.p1 = hitPos;
-            System.out.println(hitPos);
+            // Send packet here
 
             return Optional.ofNullable((LivingEntity) entity);
         }

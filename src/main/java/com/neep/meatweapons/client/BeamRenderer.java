@@ -17,11 +17,6 @@ import java.nio.FloatBuffer;
 @Environment(value= EnvType.CLIENT)
 public class BeamRenderer
 {
-    public static final Identifier TEX_TEST = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
-    public static final RenderLayer LAYER_TEST = RenderLayer.getEntityTranslucent(TEX_TEST);
-    public static Vec3d p0 = new Vec3d(10, 10, 10);
-    public static Vec3d p1 = new Vec3d(20, 20, 20);
-
     public static void init()
     {
         WorldRenderEvents.BEFORE_ENTITIES.register((ctx) ->
@@ -97,13 +92,6 @@ public class BeamRenderer
                 0f,         0f,                         0f,                         1f
         };
 
-//        float[] floats = new float[]{
-//                ca, -sa, 0, 0,
-//                sa, ca, 0, 0,
-//                0, 0, 1, 0,
-//                0, 0, 0, 1
-//        };
-
         // Some unnecessary jank because Matrix4f is final and there are no useful constructors.
         FloatBuffer buffer = FloatBuffer.allocate(16);
         buffer.put(floats);
@@ -130,21 +118,5 @@ public class BeamRenderer
                 .light(light)
                 .normal(normalMatrix, 0.0f, 1.0f, 0.0f)
                 .next();
-    }
-
-    private static float percentage(int value, int max)
-    {
-        return (float)value / (float)max;
-    }
-
-    private static void fishingRodTest(float x, float y, float z, VertexConsumer buffer, MatrixStack.Entry normal, float f, float g) {
-        float h = x * f;
-        float i = y * (f * f + f) * 0.5f + 0.25f;
-        float j = z * f;
-        float k = x * g - h;
-        float l = y * (g * g + g) * 0.5f + 0.25f - i;
-        float m = z * g - j;
-        float n = MathHelper.sqrt(k * k + l * l + m * m);
-        buffer.vertex(normal.getModel(), h, i, j).color(0, 0, 0, 255).normal(normal.getNormal(), k / n, l / n, m / n).next();
     }
 }
