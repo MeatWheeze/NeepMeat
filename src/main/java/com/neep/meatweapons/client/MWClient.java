@@ -9,6 +9,8 @@ import com.neep.meatweapons.client.renderer.PlasmaEntityRenderer;
 import com.neep.meatweapons.network.BulletEntityPacket;
 import com.neep.meatweapons.network.NetworkInitialiser;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -23,6 +25,7 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 import java.util.UUID;
 
+@Environment(value= EnvType.CLIENT)
 public class MWClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_BULLET_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "bullet"), "main");
@@ -56,6 +59,8 @@ public class MWClient implements ClientModInitializer
     {
         registerEntityModels();
         registerAnimations();
+
+
         BeamRenderer.init();
     }
 

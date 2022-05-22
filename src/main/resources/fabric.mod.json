@@ -43,5 +43,10 @@
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "loom:injected_interfaces": {
+      "net/minecraft/client/world/ClientWorld": ["com/neep/meatweapons/client/IEffectProvider"]
+    }
   }
 }

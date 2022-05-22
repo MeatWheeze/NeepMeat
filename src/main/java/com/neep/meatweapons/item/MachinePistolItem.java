@@ -2,9 +2,12 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
+import com.neep.meatweapons.particle.BeamEffect;
+import com.neep.meatweapons.particle.GraphicsEffect;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -63,6 +66,12 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
     {
         ItemStack itemStack = user.getStackInHand(hand);
         fire(world, user, itemStack);
+
+        if (world.isClient)
+        {
+//            GraphicsEffect.addEffect(new BeamEffect((ClientWorld) user.world, user.getPos(), user.getPos().add(0, 3, 0), 40));
+        }
+
         return TypedActionResult.fail(itemStack);
     }
 

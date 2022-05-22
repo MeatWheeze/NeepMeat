@@ -1,6 +1,8 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatweapons.MeatWeapons;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
@@ -12,6 +14,7 @@ import net.minecraft.util.math.*;
 
 import java.nio.FloatBuffer;
 
+@Environment(value= EnvType.CLIENT)
 public class BeamRenderer
 {
     public static final Identifier TEX_TEST = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
@@ -23,56 +26,55 @@ public class BeamRenderer
     {
         WorldRenderEvents.BEFORE_ENTITIES.register((ctx) ->
         {
-            MatrixStack matrices = ctx.matrixStack();
-
-            float thickness = 0.5f;
-
-            matrices.push();
-            Vec3d pos = ctx.camera().getPos();
-
-//            Vec3d p1 = new Vec3d(10, 10, 10);
-//            Vec3d p2 = new Vec3d(20, 7, 2);
-
-            Vec3d offset = p0.subtract(pos);
-            matrices.translate(offset.x, offset.y, offset.z);
-
-            VertexConsumer vertexConsumer = ctx.consumers().getBuffer(LAYER_TEST);
-
-            renderBeam(matrices, vertexConsumer, p0, p1, 255, 255, 255, thickness);
-            matrices.pop();
+//            MatrixStack matrices = ctx.matrixStack();
+//
+//            float thickness = 0.5f;
+//
+//            matrices.push();
+//            Vec3d pos = ctx.camera().getPos();
+//
+//            Vec3d offset = p0.subtract(pos);
+//            matrices.translate(offset.x, offset.y, offset.z);
+//
+//            VertexConsumer vertexConsumer = ctx.consumers().getBuffer(LAYER_TEST);
+//
+//            renderBeam(matrices, vertexConsumer, p0, p1, 255, 255, 255, thickness);
+//            matrices.pop();
 
         });
     }
 
-    public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d p0, Vec3d p1, int r, int g, int b, float t)
+    public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, int r, int g, int b, int a, float t)
     {
         matrices.push();
         Vec3d beam = p1.subtract(p0);
 
-        // Create transform for world to vector space
+        Vec3d offset = p0.subtract(cameraPos);
+        matrices.translate(offset.x, offset.y, offset.z);
+
+        // Transform from world to local space
         Matrix4f transform = new Matrix4f();
         transform.loadIdentity();
         float time = MinecraftClient.getInstance().world.getTime() + MinecraftClient.getInstance().getTickDelta();
         beam.normalize();
         transform.multiply(rotationMatrix((float) Math.atan2(beam.getX(), beam.getZ()), 0, (float) Math.asin(-beam.getY() / beam.length())));
-//        transform.multiply(rotationMatrix(time /40 , 0, (float) Math.asin(-beam.getY() / beam.length())));
 
         matrices.method_34425(transform);
 
         MatrixStack.Entry entry = matrices.peek();
-        Matrix4f matrix4f = entry.getModel();
-        Matrix3f matrix3f = entry.getNormal();
+        Matrix4f model = entry.getModel();
+        Matrix3f normal = entry.getNormal();
         int light = 255;
 
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(0, -t / 2, 0), 0, 1); // p0
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(0, -t / 2, beam.length()), 1, 1); // p1
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(0, t / 2, beam.length()), 1, 0); // p1
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(0, t / 2, 0), 0, 0); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, -t / 2, 0), 0, 1); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, -t / 2, beam.length()), 1, 1); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, t / 2, beam.length()), 1, 0); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, t / 2, 0), 0, 0); // p0
 
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(-t / 2, 0, 0), 0, 1); // p0
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(-t / 2, 0, beam.length()), 1, 1); // p1
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(t / 2, 0, beam.length()), 1, 0); // p1
-        vertex(vertexConsumer, matrix4f, matrix3f, light, new Vec3d(t / 2, 0, 0), 0, 0); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(-t / 2, 0, 0), 0, 1); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(-t / 2, 0, beam.length()), 1, 1); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(t / 2, 0, beam.length()), 1, 0); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(t / 2, 0, 0), 0, 0); // p0
 
         matrices.pop();
     }
@@ -119,10 +121,10 @@ public class BeamRenderer
         return new Vec3f(pitch, yaw, 0);
     }
 
-    public static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normalMatrix, int light, Vec3d pos, int u, int v)
+    public static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normalMatrix, int r, int g, int b, int a, int light, Vec3d pos, int u, int v)
     {
         buffer.vertex(matrix, (float) pos.x, (float) pos.y, (float) pos.z)
-                .color(255, 255, 255, 255)
+                .color(r, g, b, a)
                 .texture(u, v)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)

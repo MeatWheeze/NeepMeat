@@ -7,7 +7,8 @@
   ],
   "client": [
     "HeldItemRendererMixin",
-    "PlayerEntityRendererMixin"
+    "PlayerEntityRendererMixin",
+    "MixinClientWorld"
   ],
   "injectors": {
     "defaultRequire": 1
