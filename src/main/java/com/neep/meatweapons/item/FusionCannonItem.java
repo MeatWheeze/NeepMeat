@@ -131,7 +131,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTw
 
                     Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
                     Optional<LivingEntity> target = this.hitScan(player, pos, end, 20);
-                    target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 3));
+                    target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
 
                     // Play fire sound
                     playSound(world, player, GunSounds.FIRE_PRIMARY);

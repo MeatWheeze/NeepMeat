@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
@@ -121,17 +122,25 @@ public class LMGItem extends BaseGunItem implements IAnimatable
                         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
                         pos = pos.add(transform);
 
-                        Vec3d end = pos.add(player.getRotationVec(1).multiply(20));
-                        Optional<LivingEntity> target = this.hitScan(player, pos, end, 100);
+                        double d = 0.2;
+                        Vec3d perturb = new Vec3d(rand.nextFloat() - 0.5, rand.nextFloat() - 0.5, rand.nextFloat() - 0.5)
+                                .multiply(d);
+                        Vec3d end = pos.add(player.getRotationVec(1)
+                                .add(perturb)
+                                .multiply(40));
+                        Optional<LivingEntity> target = this.hitScan(player, pos, end, 40);
                         if (target.isPresent())
                         {
                             LivingEntity entity = target.get();
-                            target.get().damage(DamageSource.player(player), 1);
+                            target.get().damage(BulletDamageSource.create(player, 0.1f), 1);
                             entity.timeUntilRegen = 0;
                         }
 
                         playSound(world, player, GunSounds.FIRE_PRIMARY);
-                        stack.setDamage(stack.getDamage() + 1);
+                        if (!player.isCreative())
+                        {
+                            stack.setDamage(stack.getDamage() + 1);
+                        }
 
                         final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
                         GeckoLibNetwork.syncAnimation(player, this, id, ANIM_FIRE);
