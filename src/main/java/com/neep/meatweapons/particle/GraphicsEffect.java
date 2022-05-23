@@ -54,6 +54,11 @@ public abstract class GraphicsEffect
         if (!this.alive)
             return;
 
+        if (maxTime > 0 && time > maxTime)
+        {
+            this.remove();
+        }
+
         ++time;
     }
 
@@ -63,6 +68,11 @@ public abstract class GraphicsEffect
     public boolean isDead()
     {
         return !alive;
+    }
+
+    public void remove()
+    {
+        this.alive = false;
     }
 
     static

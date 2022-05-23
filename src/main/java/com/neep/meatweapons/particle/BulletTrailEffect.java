@@ -8,10 +8,13 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 
-public class BulletTrailEffect extends BeamEffect
+import java.util.Random;
+
+public class BulletTrailEffect extends GraphicsEffect
 {
     public static final Identifier TRAIL_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/bullet_trail.png");
     public static final RenderLayer TRAIL_LAYER = RenderLayer.getEntityTranslucent(TRAIL_TEXTURE);
@@ -19,6 +22,15 @@ public class BulletTrailEffect extends BeamEffect
     public BulletTrailEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
         super(world, start, end, velocity, scale, maxTime);
+    }
+
+    @Override
+    public void tick()
+    {
+        super.tick();
+
+        Random random = new Random(time);
+        world.addParticle(ParticleTypes.SMOKE, end.x, end.y, end.z, 0, 0 , 0);
     }
 
     @Override

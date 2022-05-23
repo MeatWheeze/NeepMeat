@@ -10,7 +10,6 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
@@ -32,15 +31,8 @@ public class BeamEffect extends GraphicsEffect
     {
         super.tick();
 
-        if (maxTime > 0 && time > maxTime)
-        {
-            this.remove();
-        }
-
         Random random = new Random(time);
         world.addParticle(ParticleTypes.ENCHANTED_HIT, end.x, end.y, end.z, random.nextFloat() - 0.5, random.nextFloat() - 0.5 , random.nextFloat() - 0.5);
-//        Vec3d beam = end.subtract(start);
-//        world.addParticle(ParticleTypes.ENCHANTED_HIT, start.x, start.y, start.z, beam.x, beam.y, beam.z);
     }
 
     @Override
@@ -57,10 +49,4 @@ public class BeamEffect extends GraphicsEffect
         matrices.pop();
 
     }
-
-    public void remove()
-    {
-        this.alive = false;
-    }
-
 }
