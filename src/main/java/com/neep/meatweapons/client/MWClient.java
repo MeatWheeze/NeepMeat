@@ -46,6 +46,7 @@ public class MWClient implements ClientModInitializer
         GeoItemRenderer.registerItemRenderer(MeatWeapons.HAND_CANNON, new BaseGunRenderer<>(new HandCannonItemModel()));
         GeoItemRenderer.registerItemRenderer(MeatWeapons.FUSION_CANNON, new BaseGunRenderer<>(new FusionCannonItemModel()));
         GeoItemRenderer.registerItemRenderer(MeatWeapons.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
+        GeoItemRenderer.registerItemRenderer(MeatWeapons.LMG, new BaseGunRenderer<>(new LMGItemModel()));
     }
 
     @Override
