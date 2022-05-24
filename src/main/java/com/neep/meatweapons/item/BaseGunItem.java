@@ -33,6 +33,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -108,8 +109,8 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     {
         if (cursorStackReference.get().getItem().equals(ammunition) && stack.getDamage() != 0)
         {
-            this.reload(player, stack);
-            cursorStackReference.get().decrement(1);
+            this.reload(player, stack, cursorStackReference.get());
+//            cursorStackReference.get().decrement(1);
             return true;
         }
         return false;
@@ -120,14 +121,14 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     public abstract Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
 
     // Should only be called on server.
-    public void reload(PlayerEntity user, ItemStack stack)
+    public void reload(PlayerEntity user, ItemStack stack, @Nullable ItemStack ammoStack)
     {
         user.getItemCooldownManager().set(this, 7);
-        ItemStack ammo = getStack(this.ammunition, user);
-        if (ammo != null)
+        ammoStack = ammoStack == null ? getStack(this.ammunition, user) : ammoStack;
+        if (ammoStack != null || ammoStack != null)
         {
             stack.setDamage(0);
-            ammo.decrement(1);
+            ammoStack.decrement(1);
 
             if (!user.world.isClient)
             {

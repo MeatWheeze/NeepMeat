@@ -158,7 +158,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
                     } else
                     {
                         // Try to reload
-                        this.reload(player, stack);
+                        this.reload(player, stack, null);
                     }
                 }
             }

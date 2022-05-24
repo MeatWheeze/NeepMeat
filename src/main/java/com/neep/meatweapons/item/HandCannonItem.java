@@ -128,13 +128,9 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
                     }
                 } else // Weapon is out of ammunition.
                 {
-                    if (world.isClient)
+                    if (!world.isClient)
                     {
-                        // Play empty sound.
-                    }
-                    else
-                    {
-                        this.reload(player, stack);
+                        this.reload(player, stack, null);
                     }
                 }
             }
