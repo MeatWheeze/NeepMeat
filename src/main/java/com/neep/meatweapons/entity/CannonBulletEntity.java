@@ -1,7 +1,7 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.network.BulletEntityPacket;
+import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.network.MWNetwork;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -30,7 +30,7 @@ public class CannonBulletEntity extends PersistentProjectileEntity
     @Override
     public Packet createSpawnPacket()
     {
-        return BulletEntityPacket.create(this, MWNetwork.SPAWN_ID);
+        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
     }
 
     @Override
@@ -62,17 +62,4 @@ public class CannonBulletEntity extends PersistentProjectileEntity
     {
             return new ItemStack(Items.ARROW);
     }
-//    @Override
-//    protected void initDataTracker()
-//    {
-//
-//    }
-
-//    @Override
-//    public Packet<?> createSpawnPacket()
-//    {
-//        return null;
-//    }
-
-//    @Override
 }

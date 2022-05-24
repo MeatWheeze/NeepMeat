@@ -1,7 +1,7 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.network.BulletEntityPacket;
+import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.network.MWNetwork;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.minecraft.entity.EntityType;
@@ -33,7 +33,7 @@ public class PlasmaProjectileEntity extends PersistentProjectileEntity
     @Override
     public Packet createSpawnPacket()
     {
-        return BulletEntityPacket.create(this, MWNetwork.SPAWN_ID);
+        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
     }
 
     @Override

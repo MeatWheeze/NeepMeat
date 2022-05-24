@@ -16,7 +16,7 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.UUID;
 
-public class BulletEntityPacket
+public class ProjectileSpawnPacket
 {
     public static Packet<?> create(Entity e, Identifier packetID)
     {
