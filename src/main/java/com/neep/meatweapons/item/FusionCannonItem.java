@@ -14,7 +14,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -36,7 +35,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Optional;
 
-public class FusionCannonItem extends BaseGunItem implements IAnimatable, WeakTwoHanded
+public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakTwoHanded, IAimable
 {
     public AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller1";

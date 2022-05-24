@@ -25,7 +25,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class HandCannonItem extends BaseGunItem implements IAnimatable
+public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
 {
     public AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
