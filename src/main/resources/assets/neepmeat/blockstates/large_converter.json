@@ -1,0 +1,10 @@
+{
+"variants": {
+  "type=unassembled": {
+    "model": "neepmeat:block/caution_block"
+  },
+  "type=assembled": {
+    "model": "neepmeat:block/large_converter"
+  }
+}
+}
