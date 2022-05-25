@@ -16,9 +16,11 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -30,6 +32,11 @@ public class NeepMeatClient
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
 
     public static List<BasePaintedBlock.PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
+
+    public static final Identifier CHARGED_WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_flowing");
+    public static final Identifier CHARGED_WORK_FLUID= new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_still");
+    public static final Identifier WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_flowing");
+    public static final Identifier WORK_FLUID = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_still");
 
     public static void registerRenderers()
     {
@@ -75,6 +82,27 @@ public class NeepMeatClient
                 0xbb1d1d
         ));
 
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_WORK_FLUID, NMFluids.FLOWING_WORK_FLUID, new SimpleFluidRenderHandler(
+                CHARGED_WORK_FLUID,
+                CHARGED_WORK_FLUID,
+                0x999999
+        ));
+
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CHARGED_WORK_FLUID, NMFluids.FLOWING_CHARGED_WORK_FLUID, new SimpleFluidRenderHandler(
+                CHARGED_WORK_FLUID,
+                CHARGED_WORK_FLUID,
+                0xFFFFFF
+        ));
+
+        //if you want to use custom textures they needs to be registered.
+        //In this example this is unnecessary because the vanilla water textures are already registered.
+        //To register your custom textures use this method.
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
+        {
+            registry.register(CHARGED_WORK_FLUID);
+            registry.register(CHARGED_WORK_FLUID_FLOWING);
+        });
+
         // Coloured blocks
         for (BasePaintedBlock.PaintedBlock block : COLOURED_BLOCKS)
         {
@@ -82,20 +110,10 @@ public class NeepMeatClient
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getColour(), block.asItem());
         }
 
-//        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE);
-//        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE.asItem());
-
         // Fluids
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_ENRICHED_BLOOD, NMFluids.FLOWING_ENRICHED_BLOOD);
 
-        //if you want to use custom textures they needs to be registered.
-        //In this example this is unnecessary because the vanilla water textures are already registered.
-        //To register your custom textures use this method.
-        //ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) -> {
-        //    registry.register(new Identifier("modid:block/custom_fluid_still"));
-        //    registry.register(new Identifier("modid:block/custom_fluid_flowing"));
-        //});
 
         // Block cutouts
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.GLASS_TANK);
