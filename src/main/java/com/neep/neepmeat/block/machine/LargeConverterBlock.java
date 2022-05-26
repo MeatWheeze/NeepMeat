@@ -1,7 +1,10 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.blockentity.LargeConverterBlockEntity;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -9,6 +12,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -106,6 +111,12 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
         builder.add(TYPE);
     }
 
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUitls.checkType(type, NMBlockEntities.LARGE_CONVERTER, LargeConverterBlockEntity::serverTick, world);
+    }
+
     public boolean checkValid(World world, BlockPos pos)
     {
         BlockPos corner = findCorner(world, pos, this, LargeConverterBlock::notAssembled, 1);
@@ -179,7 +190,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
     {
         if (isAssembled(state))
         {
-            return NMBlockEntities.LARGE_CONVERTER.instantiate(pos, state);
+//            return NMBlockEntities.LARGE_CONVERTER.instantiate(pos, state);
         }
         return null;
     }

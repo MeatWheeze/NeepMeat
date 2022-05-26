@@ -3,9 +3,14 @@ package com.neep.neepmeat.inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
-public class BufferInventory implements ImplementedInventory
+public class GeneralInventory implements ImplementedInventory
 {
-    protected DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    protected DefaultedList<ItemStack> items;
+
+    public GeneralInventory(int size)
+    {
+        this.items = DefaultedList.ofSize(size, ItemStack.EMPTY);
+    }
 
     @Override
     public DefaultedList<ItemStack> getItems()

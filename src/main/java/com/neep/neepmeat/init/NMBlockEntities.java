@@ -33,6 +33,9 @@ public class NMBlockEntities
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
+
+    public static BlockEntityType<LargeConverterBlockEntity> CONVERTER;
+    public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
     public static BlockEntityType<LargeConverterBlockEntity> LARGE_CONVERTER;
 
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
@@ -74,19 +77,23 @@ public class NMBlockEntities
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
-        LARGE_CONVERTER = registerBlockEntity("large_converter", LargeConverterBlockEntity::new, NMBlocks.LARGE_CONVERTER);
+
+        CONVERTER = registerBlockEntity("converter", LargeConverterBlockEntity::new, NMBlocks.CONVERTER);
+        CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
+//        LARGE_CONVERTER = registerBlockEntity("large_converter", LargeConverterBlockEntity::new, NMBlocks.LARGE_CONVERTER);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_PORT);
-//        FluidStorage.SIDED.registerSelf(LARGE_CONVERTER);
+
+        ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
             if (be instanceof FluidBuffer.FluidBufferProvider provider)
             {
-                return (Storage<FluidVariant>) provider.getBuffer(direction);
+                return provider.getBuffer(direction);
             }
             return null;
         });
