@@ -11,7 +11,9 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -34,8 +36,8 @@ public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity>
     public long doWork(long amount, Transaction transaction)
     {
         Transaction nested = transaction.openNested();
-        long extracted = inputBuffer.extractDirect(NMFluids.CHARGED, amount, transaction);
-        long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, extracted, transaction);
+        long extracted = inputBuffer.extractDirect(NMFluids.CHARGED, amount, nested);
+        long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, extracted, nested);
         if (extracted == amount && inserted == amount)
         {
             nested.commit();
@@ -83,5 +85,16 @@ public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity>
     public void fromClientTag(NbtCompound nbt)
     {
         readNbt(nbt);
+    }
+
+    public void onUse(PlayerEntity player, Hand hand)
+    {
+
+    }
+
+    public void clearBuffers()
+    {
+        this.inputBuffer.clear();
+        this.outputBuffer.clear();
     }
 }

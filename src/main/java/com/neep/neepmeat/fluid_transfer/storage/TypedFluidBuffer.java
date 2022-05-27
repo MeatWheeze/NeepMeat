@@ -94,6 +94,12 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
         return 0;
     }
 
+    public void clear()
+    {
+        this.amount = 0;
+        this.resource = FluidVariant.blank();
+    }
+
     @Override
     public boolean supportsInsertion()
     {
