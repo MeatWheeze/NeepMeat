@@ -9,6 +9,7 @@ import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -48,15 +49,17 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity<ItemPumpBlockEn
     protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
     protected List<ResourceAmount<ItemVariant>> extractionQueue = new ArrayList<>();
 
+    public static final long USE_AMOUNT = FluidConstants.BUCKET / 150;
+
     public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, USE_AMOUNT * 2, USE_AMOUNT * 2);
         this.needsRefresh = true;
     }
 
     public ItemPumpBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.ITEM_PUMP, pos, state);
+        this(NMBlockEntities.ITEM_PUMP, pos, state);
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, ItemPumpBlockEntity be)
@@ -126,7 +129,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity<ItemPumpBlockEn
     public boolean retrieve(Transaction transaction)
     {
 
-        if (doWork(500, transaction) == 0)
+        if (doWork(USE_AMOUNT, transaction) == 0)
         {
 //            System.out.println(inputBuffer.getAmount());
             return false;

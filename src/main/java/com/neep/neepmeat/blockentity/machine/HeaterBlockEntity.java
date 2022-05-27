@@ -19,12 +19,12 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, 2 * FluidConstants.BUCKET, 2 * FluidConstants.BUCKET);
     }
 
     public HeaterBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.HEATER, pos, state);
+        this(NMBlockEntities.HEATER, pos, state);
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, HeaterBlockEntity blockEntity)
