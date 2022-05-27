@@ -12,7 +12,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class GlassTankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable
+public class GlassTankBlockEntity extends TankBlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable
 {
     private final WritableFluidBuffer buffer;
 
