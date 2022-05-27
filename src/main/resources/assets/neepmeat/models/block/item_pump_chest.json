@@ -1,0 +1,23 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "neepmeat:block/item_pump_chest",
+		"particle": "neepmeat:block/item_pump_chest"
+	},
+	"elements": [
+		{
+			"from": [3, 3, -6.5],
+			"to": [13, 13, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 5, 5], "texture": "#1"},
+				"east": {"uv": [5, 0, 9, 5], "texture": "#1"},
+				"south": {"uv": [0, 5, 5, 10], "texture": "#1"},
+				"west": {"uv": [5, 5, 9, 10], "texture": "#1"},
+				"up": {"uv": [14, 4, 9, 0], "texture": "#1"},
+				"down": {"uv": [14, 4, 9, 8], "texture": "#1"}
+			}
+		}
+	]
+}
