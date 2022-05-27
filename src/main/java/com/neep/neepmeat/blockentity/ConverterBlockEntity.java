@@ -97,7 +97,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
         if (conversionTime > 0)
         {
             Transaction transaction = Transaction.openOuter();
-            long convertAmount = 270;
+            long convertAmount = FluidConstants.BUCKET / 300;
             this.running = convert(convertAmount, transaction) == convertAmount;
             transaction.commit();
         }

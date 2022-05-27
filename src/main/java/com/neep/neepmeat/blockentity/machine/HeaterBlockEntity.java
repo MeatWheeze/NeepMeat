@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -57,9 +58,14 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
 
         Transaction transaction = Transaction.openOuter();
         long amount = FluidConstants.BUCKET / 300;
-        if (doWork(amount, transaction) > 0)
+        if (doWork(amount, transaction) == amount)
         {
-            accessor.setBurnTime(10);
+            accessor.setBurnTime(2);
+            world.setBlockState(pos.add(0, 1, 0), Blocks.DIRT.getDefaultState(), Block.NOTIFY_ALL);
+        }
+        else
+        {
+            world.setBlockState(pos.add(0, 1, 0), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
         }
         transaction.commit();
 //        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
