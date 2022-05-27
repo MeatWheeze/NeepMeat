@@ -2,7 +2,6 @@ package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.mixin.FurnaceAccessor;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -29,7 +28,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
 
     public static void serverTick(World world, BlockPos pos, BlockState state, HeaterBlockEntity blockEntity)
     {
-        blockEntity.doWork(state);
+        blockEntity.tick(state);
     }
 
     public boolean refreshCache(World world, BlockPos pos, BlockState state)
@@ -46,7 +45,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         }
     }
 
-    public void doWork(BlockState state)
+    public void tick(BlockState state)
     {
         if (accessor == null)
         {
@@ -56,20 +55,25 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
             }
         }
 
-        long transfer = FluidConstants.BUCKET / 1000;
-        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
+        Transaction transaction = Transaction.openOuter();
+        long amount = FluidConstants.BUCKET / 300;
+        if (doWork(amount, transaction) > 0)
         {
-            Transaction transaction = Transaction.openOuter();
-            long transferred = inputBuffer.extractDirect(NMFluids.CHARGED, transfer, transaction);
-            long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, transferred, transaction);
-//            System.out.println("furnace");
-            if (transferred >= transfer)
-            {
-                accessor.setBurnTime(10);
-                updateBlockState(accessor, getWorld(), getPos().offset(getCachedState().get(HeaterBlock.FACING)));
-            }
-            transaction.commit();
+            accessor.setBurnTime(10);
         }
+        transaction.commit();
+//        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
+//        {
+//            Transaction transaction = Transaction.openOuter();
+//            long transferred = inputBuffer.extractDirect(NMFluids.CHARGED, transfer, transaction);
+//            long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, transferred, transaction);
+//            if (transferred >= transfer)
+//            {
+//                accessor.setBurnTime(10);
+//                updateBlockState(accessor, getWorld(), getPos().offset(getCachedState().get(HeaterBlock.FACING)));
+//            }
+//            transaction.commit();
+//        }
     }
 
     public static void updateBlockState(FurnaceAccessor accessor, World world, BlockPos pos)
