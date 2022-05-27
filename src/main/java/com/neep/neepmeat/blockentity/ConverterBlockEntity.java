@@ -2,16 +2,22 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.mixin.FurnaceAccessor;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.FurnaceBlockEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -27,6 +33,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
 
     public boolean stage;
     public boolean running;
+    protected long conversionTime;
 
     // Rendering only
     public float renderIn;
@@ -54,19 +61,48 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
         return Optional.ofNullable(FluidStorage.SIDED.find(world, pos, Direction.DOWN));
     }
 
+    public void checkBurnerBlock()
+    {
+        Direction facing = getCachedState().get(HorizontalFacingBlock.FACING).getOpposite();
+        BlockPos burnerPos = pos.offset(facing);
+        if (world.getBlockState(burnerPos).isOf(Blocks.FURNACE))
+        {
+            FurnaceAccessor furnace = (FurnaceAccessor) world.getBlockEntity(burnerPos);
+            if (furnace.getBurnTime() == 0)
+            {
+                ItemStack itemStack = furnace.getInventory().get(1);
+                int time = furnace.callGetFuelTime(itemStack);
+                furnace.setFuelTime(time);
+                furnace.setBurnTime(time);
+                itemStack.decrement(1);
+            }
+            furnace.setCookTime(0);
+            this.conversionTime = furnace.getBurnTime();
+        }
+        else
+        {
+            this.conversionTime = 0;
+        }
+    }
+
     public void tick()
     {
         --cooldown;
-        if (cooldown > 0)
-            return;
+//        if (cooldown > 0)
+//            return;
 
-        cooldown = 2;
+//        cooldown = 2;
 
-        Transaction transaction = Transaction.openOuter();
-        long convertAmount = FluidConstants.BUCKET / 64;
-        this.running = convert(convertAmount, transaction) == convertAmount;
+        checkBurnerBlock();
+        if (conversionTime > 0)
+        {
+            Transaction transaction = Transaction.openOuter();
+            long convertAmount = 270;
+            this.running = convert(convertAmount, transaction) == convertAmount;
+            transaction.commit();
+        }
+        this.running = running && conversionTime > 0;
         this.sync();
-        transaction.commit();
     }
 
     @Override
