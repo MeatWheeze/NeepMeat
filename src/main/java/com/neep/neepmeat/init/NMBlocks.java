@@ -38,6 +38,7 @@ public class NMBlocks
     public static Block RUSTED_BARS = BlockRegistry.queueBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTY_PANEL = BlockRegistry.queueBlock(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block RUSTY_GRATE = BlockRegistry.queueBlock(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block LEADED_GLASS = BlockRegistry.queueBlock(new BaseGlassBlock("leaded_glass", 64, false, FabricBlockSettings.copy(Blocks.GLASS).strength(5.0f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
 
     public static Block SLOPE_TEST = BlockRegistry.queueBlock(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
