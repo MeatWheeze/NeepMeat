@@ -20,11 +20,14 @@ import net.minecraft.world.World;
 
 public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity>
 {
+    public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
+    public static long CAPACITY = 4 * USE_AMOUNT;
+
     protected FurnaceAccessor accessor;
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state, 2 * FluidConstants.BUCKET, 2 * FluidConstants.BUCKET);
+        super(type, pos, state, CAPACITY, CAPACITY);
     }
 
     public HeaterBlockEntity(BlockPos pos, BlockState state)
@@ -34,7 +37,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
 
     public static void serverTick(World world, BlockPos pos, BlockState state, HeaterBlockEntity blockEntity)
     {
-        blockEntity.tick(state);
+        blockEntity.tick();
     }
 
     public boolean refreshCache(World world, BlockPos pos, BlockState state)
@@ -51,7 +54,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         }
     }
 
-    public void tick(BlockState state)
+    public void tick()
     {
         if (accessor == null)
         {
@@ -62,11 +65,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         }
 
         Transaction transaction = Transaction.openOuter();
-        long amount = FluidConstants.BUCKET / 200;
-        long work = doWork(amount, transaction);
-        if (work == amount)
+        long work = doWork(USE_AMOUNT, transaction);
+        if (work == USE_AMOUNT)
         {
-            accessor.setBurnTime(2);
+            accessor.setBurnTime(3);
         }
         transaction.commit();
     }

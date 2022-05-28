@@ -78,7 +78,7 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         else /*if (!world.isClient)*/
         {
-            player.sendMessage(Text.of(Float.toString(getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+            player.sendMessage(Text.of(Long.toString(getBuffer(null).getAmount())), true);
             return true;
         }
         return false;
