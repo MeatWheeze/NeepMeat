@@ -382,6 +382,7 @@ public class FluidNode
             StorageView<FluidVariant> view = it.next();
             if (view.getAmount() < view.getCapacity())
             {
+                nested.abort();
                 return true;
             }
         }
@@ -402,6 +403,7 @@ public class FluidNode
             StorageView<FluidVariant> view = it.next();
             if (view.getAmount() < view.getCapacity())
             {
+                nested.abort();
                 return true;
             }
         }
