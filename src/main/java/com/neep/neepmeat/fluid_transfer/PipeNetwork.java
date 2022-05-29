@@ -1,7 +1,7 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.IFluidPipe;
-import com.neep.neepmeat.block.IFluidNodeProvider;
+import com.neep.neepmeat.block.pipe.IFluidPipe;
+import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.FilterUtils;
@@ -191,6 +191,7 @@ public class PipeNetwork
         return true;
     }
 
+    // This is responsible for transferring the fluid from node to node
     public void tick()
     {
         for (Supplier<FluidNode> supplier : connectedNodes)
@@ -204,11 +205,15 @@ public class PipeNetwork
                 continue;
             }
 
+            // Adjust base flow if this node is in a capillary pipe
+            long baseTransfer = networkPipes.get(node.getPos()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
+
+            // Prevent unpredictable distribution
             long amount = node.firstAmount(world, transaction);
+            long outBaseFlow = Math.min(baseTransfer, amount);
             transaction.abort();
 
-            long baseFlow = Math.min(BASE_TRANSFER, amount);
-
+            // Filter out nodes that will cause crashes, or are unnecessary for the calculation
             Transaction t2 = Transaction.openOuter();
             List<Supplier<FluidNode>> safeNodes = connectedNodes.stream()
                     .filter(targetNode -> validNode(world, node, targetNode))
@@ -235,10 +240,28 @@ public class PipeNetwork
                 float flow = node.getFlow(world) - targetNode.getFlow(world);
 
                 int L = node.getTargetPos().getManhattanDistance(targetNode.getTargetPos());
-                long Q = (long) Math.ceil(
-                        baseFlow * (flow + gravityFlowIn)
-                                * ((Math.pow(r, 2) / L) / (sumDist))
-                );
+
+
+                // Calculate amount of fluid to be transferred
+                long Q;
+                if (networkPipes.get(targetNode.getPos()).isCapillary())
+                {
+                    // Change the target node influx if connected with capillary pipe
+                    long inBaseFlow = networkPipes.get(targetNode.getPos()).isCapillary() ?
+                            Math.min(outBaseFlow, BASE_TRANSFER / 4) : outBaseFlow;
+
+                    // Ignore distance, distribute fluid evenly
+                    Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) / safeNodes.size());
+                    System.out.println(Q);
+                }
+                else
+                {
+                    // Take distance into account
+                    Q = (long) Math.ceil(
+                            outBaseFlow * (flow + gravityFlowIn)
+                                    * ((Math.pow(r, 2) / L) / (sumDist + Math.pow(r, 2) / L))
+                    );
+                }
 
                 long amountMoved;
                 if (Q >= 0)
@@ -262,7 +285,7 @@ public class PipeNetwork
         List<BlockPos> visited = new ArrayList<>();
 
         pipeQueue.add(startPos);
-        networkPipes.put(startPos, new PipeState(startPos, world.getBlockState(startPos)));
+        networkPipes.put(startPos, new PipeState(world.getBlockState(startPos)));
 
         // Pipe search depth
         for (int i = 0; i < UPDATE_DISTANCE; ++i)
@@ -290,7 +313,7 @@ public class PipeNetwork
                             if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
-                                networkPipes.put(next, new PipeState(next.toImmutable(), state2));
+                                networkPipes.put(next, new PipeState(state2));
                             }
                         }
                         else if (state2.hasBlockEntity())

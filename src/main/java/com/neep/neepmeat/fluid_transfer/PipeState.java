@@ -1,9 +1,8 @@
 package com.neep.neepmeat.fluid_transfer;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.block.ICapillaryPipe;
+import com.neep.neepmeat.block.fluid_transport.ICapillaryPipe;
 import net.minecraft.block.BlockState;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
@@ -14,10 +13,9 @@ public class PipeState
     List<Direction> connections = new ArrayList<>();
     protected float pressure;
     protected int distance;
-    protected boolean visited;
     protected boolean capillary;
 
-    public PipeState(BlockPos pos, BlockState state)
+    public PipeState(BlockState state)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
         {
@@ -39,7 +37,6 @@ public class PipeState
     }
 
     @Override
-    // Ignore pressures when testing equality.
     public boolean equals(Object o)
     {
         if (o == this) // ?????
@@ -48,7 +45,7 @@ public class PipeState
         }
         if (o instanceof PipeState state)
         {
-            return getDistance() == state.getDistance() && isVisited() == state.isVisited() && connections.equals(state.connections);
+            return getDistance() == state.getDistance() && connections.equals(state.connections);
         }
         return false;
     }
@@ -76,15 +73,5 @@ public class PipeState
     public void setDistance(int distance)
     {
         this.distance = distance;
-    }
-
-    public boolean isVisited()
-    {
-        return visited;
-    }
-
-    public void setVisited(boolean visited)
-    {
-        this.visited = visited;
     }
 }

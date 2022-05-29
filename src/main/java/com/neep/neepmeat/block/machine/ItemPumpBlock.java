@@ -2,7 +2,7 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
-import com.neep.neepmeat.block.IItemPipe;
+import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
