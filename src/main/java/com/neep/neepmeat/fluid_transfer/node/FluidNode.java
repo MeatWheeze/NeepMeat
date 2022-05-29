@@ -199,6 +199,11 @@ public class FluidNode
         return pos.offset(face).getY();
     }
 
+    public BlockPos getTargetPos()
+    {
+        return pos.offset(face);
+    }
+
     public BlockPos getPos()
     {
         return pos;

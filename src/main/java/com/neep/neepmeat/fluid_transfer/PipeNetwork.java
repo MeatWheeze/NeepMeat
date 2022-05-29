@@ -32,6 +32,8 @@ public class PipeNetwork
     private Direction originFace;
     public static int UPDATE_DISTANCE = 10;
 
+    public static long BASE_TRANSFER = 10500;
+
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
 
     public final Map<BlockPos, PipeState> networkPipes = new HashMap<>();
@@ -206,15 +208,20 @@ public class PipeNetwork
                 continue;
             }
 
-            long maxFlow = 10500;
-
             Transaction transaction = Transaction.openOuter();
             long amount = node.firstAmount(world, transaction);
             transaction.abort();
 
-            long baseFlow = Math.min(maxFlow, amount);
+            long baseFlow = Math.min(BASE_TRANSFER, amount);
 
             List<Supplier<FluidNode>> safeNodes = connectedNodes.stream().filter(targetNode -> thing(world, node, targetNode)).collect(Collectors.toList());
+
+            double r = 0.5d;
+
+            // Calculate sum_i(r^2 / L_i^2)
+            double sumDist = safeNodes.stream()
+                    .map(supplier1 -> supplier1.get().getTargetPos().getManhattanDistance(node.getTargetPos()))
+                    .mapToDouble(i -> Math.pow(r, 2) / i).sum();
 
             for (Supplier<FluidNode> targetSupplier : safeNodes)
             {
@@ -222,15 +229,19 @@ public class PipeNetwork
 
                 float h = node.getTargetY() - targetNode.getTargetY();
                 double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-                float flow = node.getMode(world).getFlow() * node.flowMultiplier -
-                        targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
-                long insertBranchFlow = (long) Math.ceil(baseFlow * (flow + gravityFlowIn) / (safeNodes.size()));
+                float flow = node.getFlow(world) - targetNode.getFlow(world);
+
+                int L = node.getTargetPos().getManhattanDistance(targetNode.getTargetPos());
+                long Q = (long) Math.ceil(
+                        baseFlow * (flow + gravityFlowIn)
+                        * ((Math.pow(r, 2) / L) / (sumDist))
+                );
 
                 long amountMoved;
-                if (insertBranchFlow >= 0)
+                if (Q >= 0)
                 {
                     Transaction t2 = Transaction.openOuter();
-                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, insertBranchFlow, t2);
+                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, Q, t2);
                     t2.commit();
                 }
             }
