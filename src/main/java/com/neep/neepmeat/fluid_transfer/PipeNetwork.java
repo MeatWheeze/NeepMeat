@@ -200,14 +200,15 @@ public class PipeNetwork
     {
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
+            Transaction transaction = Transaction.openOuter();
             FluidNode node;
             if ((node = supplier.get()) == null || supplier.get().getStorage(world) == null
-                    || !supplier.get().isStorage)
+                    || !supplier.get().isStorage || !node.canExtract(world, transaction))
             {
+                transaction.abort();
                 continue;
             }
 
-            Transaction transaction = Transaction.openOuter();
             long amount = node.firstAmount(world, transaction);
             transaction.abort();
 
@@ -241,14 +242,14 @@ public class PipeNetwork
                 int L = node.getTargetPos().getManhattanDistance(targetNode.getTargetPos());
                 long Q = (long) Math.ceil(
                         baseFlow * (flow + gravityFlowIn)
-                        * ((Math.pow(r, 2) / L) / (sumDist))
+                                * ((Math.pow(r, 2) / L) / (sumDist))
                 );
 
                 long amountMoved;
                 if (Q >= 0)
                 {
                     Transaction t3 = Transaction.openOuter();
-                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, Q, t2);
+                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, Q, t3);
                     t3.commit();
                 }
             }
