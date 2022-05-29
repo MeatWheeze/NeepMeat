@@ -4,6 +4,8 @@ import com.neep.neepmeat.block.IFluidPipe;
 import com.neep.neepmeat.block.IFluidNodeProvider;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -19,7 +21,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public class NMFluidNetwork
+public class PipeNetwork
 {
     private ServerWorld world;
     public final long uid; // Unique identifier for every network
@@ -34,9 +36,9 @@ public class NMFluidNetwork
 
     // My pet memory leak.
     // TODO: Find a way to remove unloaded networks from this
-    public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
+    public static List<PipeNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    private NMFluidNetwork(ServerWorld world, BlockPos origin, Direction direction)
+    private PipeNetwork(ServerWorld world, BlockPos origin, Direction direction)
     {
         this.world = world;
         this.origin = origin;
@@ -51,10 +53,10 @@ public class NMFluidNetwork
         return ++currentUid;
     }
 
-    public static Optional<NMFluidNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
+    public static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
     {
         System.out.println("trying fluid network at " + pos);
-        NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
+        PipeNetwork network = new PipeNetwork(world, pos, direction);
         network.rebuild(pos, direction);
         if (network.isValid())
         {
@@ -74,7 +76,7 @@ public class NMFluidNetwork
     @Override
     public boolean equals(Object object)
     {
-        if (!(object instanceof NMFluidNetwork network))
+        if (!(object instanceof PipeNetwork network))
         {
             return false;
         }
@@ -146,7 +148,7 @@ public class NMFluidNetwork
         }
     }
 
-    public void merge(NMFluidNetwork network)
+    public void merge(PipeNetwork network)
     {
 
     }
@@ -175,7 +177,7 @@ public class NMFluidNetwork
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;
-            if ((node = supplier.get()) == null || supplier.get().getStorage((ServerWorld) world) == null)
+            if ((node = supplier.get()) == null || supplier.get().getStorage(world) == null)
             {
                 continue;
             }
@@ -224,9 +226,11 @@ public class NMFluidNetwork
                         continue;
                     }
                     int distanceToNode = node.getNodePos().facingBlock().getManhattanDistance(targetNode.getNodePos().facingBlock());
+                    PipeState pipe = networkPipes.get(targetNode.getPos());
 //                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
 //                    System.out.print(node + ",\n " + distanceToNode + "\n");
-                    node.distances.put(targetNode, distanceToNode);
+                    node.distances.put(targetNode, 1);
+//                    node.distances.put(targetNode, pipe.isCapillary() ? 1 : distanceToNode);
                 }
             }
         }
@@ -313,5 +317,13 @@ public class NMFluidNetwork
         Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(pos);
         connectedNodes.remove(FluidNetwork.getInstance(world).getNodeSupplier(pos));
         validate();
+    }
+
+    static
+    {
+        ServerLifecycleEvents.SERVER_STOPPED.register(server ->
+        {
+            LOADED_NETWORKS.clear();
+        });
     }
 }

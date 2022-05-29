@@ -6,9 +6,9 @@ import java.util.Map;
 
 public class NetworkLookup
 {
-    protected Map<Long, NMFluidNetwork> networks;
+    protected Map<Long, PipeNetwork> networks;
 
-    public NMFluidNetwork put(BlockPos pos, NMFluidNetwork network)
+    public PipeNetwork put(BlockPos pos, PipeNetwork network)
     {
         return networks.put(pos.asLong(), network);
     }

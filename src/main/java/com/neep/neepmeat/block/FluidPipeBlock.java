@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -161,7 +161,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                 }
             }
             // TODO: avoid creating instances that will fail immediately
-            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
+            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
         }
     }
 
