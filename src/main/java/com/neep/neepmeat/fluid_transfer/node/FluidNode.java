@@ -4,11 +4,9 @@ import com.neep.neepmeat.block.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
-import com.neep.neepmeat.util.FilterUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -254,120 +252,6 @@ public class FluidNode
             return acceptor.getDirectionMode(world, target, state, face.getOpposite());
         }
         return AcceptorModes.INSERT_EXTRACT;
-    }
-
-    public void transmitFluid(ServerWorld world, FluidNode node)
-    {
-//        System.out.println(node.getNodePos().facingBlock() + ", " + node.getMode(world));
-        if (distances.get(node) == null
-                || node.getMode(world) == AcceptorModes.NONE || node.getMode(world) == AcceptorModes.PUSH
-                || this.getMode(world) == AcceptorModes.NONE
-                || !node.isStorage
-                || !this.isStorage
-                )
-        {
-            return;
-        }
-
-        AcceptorModes mode = this.getMode(world);
-        float flow = mode.getFlow() * flowMultiplier;
-
-        // Here is the most realistic flow rate calculation that you have ever seen.
-
-        float h = getTargetY() - node.getTargetY();
-        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-//        double gravityFlowIn = 0;
-
-        // Geometrical solution for velocity in branched pipes:
-        // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
-
-        float r = 0.5f;
-
-        // Calculate sum(r^4 / L_i), discounting full containers.
-        for (FluidNode distanceNode : distances.keySet())
-        {
-            if (distanceNode.getStorage(world) == null)
-            {
-                continue;
-            }
-
-            Transaction transaction = Transaction.openOuter();
-
-            boolean notFull = false;
-            boolean notEmpty = false;
-
-            for (StorageView<FluidVariant> view : this.getStorage(world).iterable(transaction))
-            {
-                for (StorageView<FluidVariant> targetView : distanceNode.getStorage(world).iterable(transaction))
-                {
-                    if (targetView.getAmount() < targetView.getCapacity() && (targetView.getResource().equals(view.getResource()) || targetView.isResourceBlank()) || targetView.getAmount() <= 0)
-                    {
-                        notFull = true;
-                    }
-                    if (targetView.getAmount() > 0 && (targetView.getResource().equals(view.getResource()) || view.isResourceBlank()))
-                    {
-                        notEmpty = true;
-                    }
-                }
-            }
-            transaction.abort();
-
-            if (notFull)
-            {
-//                sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
-            }
-            if (notEmpty)
-            {
-//                sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
-            }
-        }
-
-        // TODO: Fix getFlow()
-        float Q = this.getMode(world).getFlow() * this.flowMultiplier -
-                node.getMode(world).getFlow() * node.flowMultiplier;
-
-        long maxFlow = 10500;
-
-        Transaction t1 = Transaction.openOuter();
-        long moved = StorageUtil.move(getStorage(world), node.getStorage(world), FilterUtils::any, Long.MAX_VALUE, t1);
-        t1.abort();
-
-//        long baseFlow = Math.min(maxFlow, this.getStorage(world).simulateExtract(NMFluids.UNCHARGED, maxFlow, null));
-//        long baseFlow = Math.min(maxFlow, moved);
-        long baseFlow = moved;
-//        float insertBranchFlow = (float) (((float) baseFlow * (Q + gravityFlowIn)) / distances.size());
-        long insertBranchFlow = (long) (baseFlow * (Q + Math.ceil(gravityFlowIn)) / (distances.size()));
-//        System.out.println(Math.ceil(gravityFlowIn));
-//        float insertBranchFlow = (float) (baseFlow * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
-//        float extractBranchFlow = (float) (baseFlow * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
-
-        long amountMoved = 0;
-        Transaction transaction = Transaction.openOuter();
-        if (insertBranchFlow >= 0)
-        {
-            amountMoved = StorageUtil.move(getStorage(world), node.getStorage(world), FilterUtils::any, insertBranchFlow, transaction);
-//            if (amountMoved == (long) insertBranchFlow)
-//            {
-//                transaction.commit();
-//            }
-//            else
-//            {
-//                transaction.abort();
-//            }
-        }
-        transaction.commit();
-//        if (false)
-//        {
-//            amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - extractBranchFlow, transaction);
-//            if (amountMoved == (long) - extractBranchFlow)
-//            {
-//                transaction.commit();
-//            }
-//            else
-//            {
-//                transaction.abort();
-//            }
-//        }
     }
 
     public boolean canInsert(ServerWorld world, TransactionContext transaction)
