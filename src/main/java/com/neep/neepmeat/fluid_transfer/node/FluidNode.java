@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -31,44 +32,39 @@ public class FluidNode
     private final Direction face;
     private final BlockPos pos;
     private final NodePos nodePos;
-    public float flow;
     public float flowMultiplier;
     private PipeNetwork network = null;
     public long networkId;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private Storage<FluidVariant> storage;
 
-    private boolean canInsert;
-    private boolean canExtract;
     public boolean isStorage;
 
     public boolean needsDeferredLoading;
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier, boolean isStorage)
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, float flowMultiplier, boolean isStorage)
     {
-        this(nodePos, storage, mode, flowMultiplier);
+        this(nodePos, storage, flowMultiplier);
         this.isStorage = isStorage;
     }
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, float flowMultiplier)
     {
         this.pos = nodePos.pos;
         this.face = nodePos.face;
         this.nodePos = nodePos;
         this.storage = storage;
         this.flowMultiplier = flowMultiplier;
-        this.flow = mode.getFlow() * flowMultiplier;
         this.isStorage = true;
     }
 
     // For deferred loading only.
-    protected FluidNode(NodePos pos, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world, boolean isStorage)
+    protected FluidNode(NodePos pos, float flowMultiplier, long networkId, ServerWorld world, boolean isStorage)
     {
         this.face = pos.face;
         this.pos = pos.pos;
         this.nodePos = pos;
         this.flowMultiplier = flowMultiplier;
-        this.flow = mode.getFlow() * flowMultiplier;
         this.networkId = networkId;
         this.storage = null;
         this.isStorage = isStorage;
@@ -93,7 +89,7 @@ public class FluidNode
         float flowMultiplier = nbt.getFloat("multiplier");
         boolean isStorage = nbt.getBoolean("is_storage");
 
-        return new FluidNode(pos, mode, flowMultiplier, networkId, world, isStorage);
+        return new FluidNode(pos, flowMultiplier, networkId, world, isStorage);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
@@ -130,6 +126,7 @@ public class FluidNode
         findStorage(world);
     }
 
+
     public void findStorage(ServerWorld world)
     {
         Storage<FluidVariant> storage;
@@ -150,9 +147,10 @@ public class FluidNode
         this.storage = storage;
     }
 
+    // TODO: Find out what this does
     public void setMode(AcceptorModes mode)
     {
-        this.flow = mode.getFlow();
+//        this.flow = mode.getFlow();
     }
 
     public void setNetwork(ServerWorld world, PipeNetwork network)
@@ -211,9 +209,9 @@ public class FluidNode
         return this.nodePos;
     }
 
-    public float getFlow()
+    public float getFlow(ServerWorld world)
     {
-        return flow;
+        return getMode(world).getFlow() * this.flowMultiplier;
     }
 
     public Storage<FluidVariant> getStorage(ServerWorld world)
@@ -229,7 +227,8 @@ public class FluidNode
         return storage;
     }
 
-    public long firstAmount(ServerWorld world, Transaction transaction)
+    // Gets a quick and dirty idea of the tank's contents
+    public long firstAmount(ServerWorld world, TransactionContext transaction)
     {
         Transaction inner = transaction.openNested();
         for (StorageView<FluidVariant> view : getStorage(world).iterable(inner))
@@ -264,8 +263,6 @@ public class FluidNode
         {
             return;
         }
-
-
 
         AcceptorModes mode = this.getMode(world);
         float flow = mode.getFlow() * flowMultiplier;
@@ -368,23 +365,42 @@ public class FluidNode
 //        }
     }
 
-    public boolean canInsert()
+    public boolean canInsert(ServerWorld world, TransactionContext transaction)
     {
-        return canInsert;
+        Storage<FluidVariant> storage;
+        if (!(storage = getStorage(world)).supportsInsertion())
+            return false;
+        Transaction nested = transaction.openNested();
+        Iterator<StorageView<FluidVariant>> it = storage.iterator(nested);
+        while (it.hasNext())
+        {
+            StorageView<FluidVariant> view = it.next();
+            if (view.getAmount() < view.getCapacity())
+            {
+                return true;
+            }
+        }
+        nested.abort();
+        return false;
     }
 
-    public void setCanInsert(boolean canInsert)
+    public boolean canExtract(ServerWorld world, TransactionContext transaction)
     {
-        this.canInsert = canInsert;
-    }
+        Storage<FluidVariant> storage;
+        if (!(storage = getStorage(world)).supportsExtraction())
+            return false;
 
-    public boolean canExtract()
-    {
-        return canExtract;
-    }
-
-    public void setCanExtract(boolean canExtract)
-    {
-        this.canExtract = canExtract;
+        Transaction nested = transaction.openNested();
+        Iterator<StorageView<FluidVariant>> it = storage.iterator(nested);
+        while (it.hasNext())
+        {
+            StorageView<FluidVariant> view = it.next();
+            if (view.getAmount() < view.getCapacity())
+            {
+                return true;
+            }
+        }
+        nested.abort();
+        return false;
     }
 }
