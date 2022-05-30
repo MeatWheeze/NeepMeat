@@ -86,16 +86,20 @@
   "block.neepmeat.pneumatic_pipe": "Pneumatic Pipe",
 
   "block.neepmeat.pump": "Redstone Pump",
+
   "block.neepmeat.item_pump": "Item Pump",
+  "block.neepmeat.exector": "Ejector",
+  "block.neepmeat.buffer": "Buffer",
+  "block.neepmeat.content_detector": "Content Detector",
 
   "block.neepmeat.basic_tank": "Basic Tank",
-  "block.neepmeat.glass_tank": "Glass Tank",
+  "block.neepmeat.basic_glass_tank": "Glass Tank",
+  "block.neepmeat.fluid_buffer": "Fluid Buffer",
+  "block.neepmeat.fluid_port": "Fluid Port",
+  "block.neepmeat.fluid_drain": "Fluid Drain",
+  "block.neepmeat.converter": "Fuel Transducer",
 
   "block.neepmeat.item_buffer": "Item Platform",
-
-  "block.neepmeat.fluid_port": "Fluid Port",
-
-  "block.neepmeat.fluid_drain": "Fluid Drain",
 
   "block.neepmeat.item_duct": "Hopper Extension",
 
@@ -136,6 +140,11 @@
   "item.neepmeat.integration_charge_crude.lore": "Brings life, but in what state?",
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
   "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
+
+  "block.neepmeat.work_fluid": "Work Fluid",
+  "block.neepmeat.charged_work_fluid": "Charged Work Fluid",
+  "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
+  "item.neepmeat.charged_work_fluid_bucket": "Charged Work Fluid Bucket",
 
   "item.neepmeat.blood_bucket": "Blood Bucket",
   "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket"
