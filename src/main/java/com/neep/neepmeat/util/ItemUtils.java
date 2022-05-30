@@ -1,11 +1,15 @@
 package com.neep.neepmeat.util;
 
+import com.neep.neepmeat.block.pipe.IFluidPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 
 import java.util.List;
 import java.util.Optional;
@@ -72,5 +76,10 @@ public class ItemUtils
                 .filter(view -> view.getResource().equals(resource))
                 .map(StorageView::getAmount)
                 .reduce(Long::sum);
+    }
+
+    public static boolean playerHoldingPipe(PlayerEntity player, Hand hand)
+    {
+        return player.getStackInHand(hand).getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IFluidPipe;
     }
 }

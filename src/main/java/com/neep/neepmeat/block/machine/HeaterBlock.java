@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.machine;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.Block;
@@ -57,6 +58,9 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (ItemUtils.playerHoldingPipe(player, hand))
+            return ActionResult.PASS;
+
         if (!world.isClient)
         {
             if (world.getBlockEntity(pos) instanceof HeaterBlockEntity be)

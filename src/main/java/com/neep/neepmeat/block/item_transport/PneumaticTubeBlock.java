@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block.item_transport;
 
+import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
@@ -34,7 +35,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
 {
     public PneumaticTubeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)

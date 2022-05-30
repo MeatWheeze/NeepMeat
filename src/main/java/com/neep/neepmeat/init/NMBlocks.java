@@ -12,6 +12,7 @@ import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.block.item_transport.PneumaticTubeBlock;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
+import com.neep.neepmeat.item.FluidComponentItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
@@ -50,9 +51,9 @@ public class NMBlocks
     public static Block SCAFFOLD_TRAPDOOR = BlockRegistry.queueBlock(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
 
     // --- General Blocks ---
-    public static Block PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-    public static Block IRON_PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-    public static Block COPPER_PIPE = BlockRegistry.queueBlock(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block IRON_PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block COPPER_PIPE = BlockRegistry.queueBlock(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
     // --- Machines
     public static Block TROMMEL = BlockRegistry.queueBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
