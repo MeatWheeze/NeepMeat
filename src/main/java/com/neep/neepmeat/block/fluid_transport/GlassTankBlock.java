@@ -24,7 +24,6 @@ public class GlassTankBlock extends TankBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-//        return new BlockEntityInitialiser.GLASS_TANK_BLOCK_ENTITY.createpos, state);
         return new GlassTankBlockEntity(pos, state);
     }
 

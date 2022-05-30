@@ -47,6 +47,7 @@ public class NeepMeatClient
         // BlockEntity renderers
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
+        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
@@ -118,6 +119,7 @@ public class NeepMeatClient
 
         // Block cutouts
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.GLASS_TANK);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.FLUID_BUFFER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MESH_PANE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.PUMP);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.RUSTED_BARS);
