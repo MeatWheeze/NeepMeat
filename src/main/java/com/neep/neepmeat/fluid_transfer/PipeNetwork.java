@@ -171,24 +171,17 @@ public class PipeNetwork
         return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
     }
 
-    public static boolean validNode(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
+    public static boolean validForInsertion(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
         FluidNode targetNode;
-        if ((targetNode = targetSupplier.get()).equals(node)
-                || targetSupplier.get() == null
-                || targetSupplier.get().getStorage(world) == null
-                || !targetSupplier.get().isStorage)
-        {
-            return false;
-        }
-
-        if (targetNode.getMode(world) == AcceptorModes.NONE || targetNode.getMode(world) == AcceptorModes.PUSH
-                || node.getMode(world) == AcceptorModes.NONE
-                )
-        {
-            return false;
-        }
-        return true;
+        return !(targetNode = targetSupplier.get()).equals(node)
+                && targetSupplier.get() != null
+                && targetSupplier.get().getStorage(world) != null
+//                || targetNode.getMode(world) == AcceptorModes.NONE
+//                || targetNode.getMode(world) == AcceptorModes.PUSH
+                && targetNode.getMode(world).canInsert()
+                && node.getMode(world).canExtract();
+//                && node.getMode(world) != AcceptorModes.NONE;
     }
 
     // This is responsible for transferring the fluid from node to node
@@ -216,7 +209,7 @@ public class PipeNetwork
             // Filter out nodes that will cause crashes, or are unnecessary for the calculation
             Transaction t2 = Transaction.openOuter();
             List<Supplier<FluidNode>> safeNodes = connectedNodes.stream()
-                    .filter(targetNode -> validNode(world, node, targetNode))
+                    .filter(targetNode -> validForInsertion(world, node, targetNode))
                     .filter(supplier1 -> supplier1.get().canInsert(world, t2))
                     .collect(Collectors.toList());
             t2.abort();
@@ -252,7 +245,6 @@ public class PipeNetwork
 
                     // Ignore distance, distribute fluid evenly
                     Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) / safeNodes.size());
-                    System.out.println(Q);
                 }
                 else
                 {
