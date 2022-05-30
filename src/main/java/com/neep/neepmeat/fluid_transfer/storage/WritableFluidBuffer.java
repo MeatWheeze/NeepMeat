@@ -16,7 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class WritableFluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements Storage<FluidVariant>, SingleSlotStorage<FluidVariant>, FluidBuffer
+public class WritableFluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements Storage<FluidVariant>, FluidBuffer
 {
 
     protected long capacity;

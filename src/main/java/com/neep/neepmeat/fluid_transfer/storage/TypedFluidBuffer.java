@@ -9,7 +9,7 @@ import net.minecraft.block.entity.BlockEntity;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<FluidVariant>, SingleSlotStorage<FluidVariant>
+public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<FluidVariant>
 {
     protected Predicate<FluidVariant> validTypes;
     protected Mode mode;
