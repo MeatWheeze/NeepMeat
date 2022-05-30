@@ -2,17 +2,25 @@ package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.PillarBlock;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 
 public class BaseColumnBlock extends PillarBlock implements IMeatBlock
 {
-    BaseBlockItem blockItem;
+    BlockItem blockItem;
     private String regsitryName;
 
     public BaseColumnBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
-//        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        this.regsitryName = itemName;
+    }
+
+    public BaseColumnBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    {
+        super(settings);
+        this.blockItem = factory.get(this, itemName, itemMaxStack, hasLore);
         this.regsitryName = itemName;
     }
 
@@ -21,17 +29,5 @@ public class BaseColumnBlock extends PillarBlock implements IMeatBlock
     {
         return regsitryName;
     }
-
-//    @Override
-//    public BlockState getPlacementState(ItemPlacementContext context)
-//    {
-//        return this.getDefaultState().with(FACING, context.getPlayerLookDirection());
-//    }
-
-//    @Override
-//    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
-//    {
-//        builder.add(FACING);
-//    }
 
 }
