@@ -3,6 +3,12 @@ package com.neep.neepmeat.blockentity.fluid;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.network.TankMessagePacket;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.S2CPlayChannelEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -12,6 +18,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -20,6 +27,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
@@ -78,17 +86,16 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
                 return true;
         }
 
-        else /*if (!world.isClient)*/
+        else if (!world.isClient())
         {
-//            player.sendMessage(Text.of(Long.toString(getBuffer(null).getAmount())), true);
-            showContents(player, buffer);
+            showContents((ServerPlayerEntity) player, getPos(), buffer);
             return true;
         }
-        return false;
+        return true;
     }
 
-    public static void showContents(PlayerEntity player, FluidBuffer buffer)
+    public static void showContents(ServerPlayerEntity player, BlockPos pos, FluidBuffer buffer)
     {
-//        player.sendMessage(buffer.getResource().getFluid().
+        TankMessagePacket.send(player, pos, buffer.getAmount(), buffer.getResource());
     }
 }
