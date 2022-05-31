@@ -14,6 +14,5 @@ public interface FluidBuffer extends SingleSlotStorage<FluidVariant>
     interface FluidBufferProvider
     {
         Storage<FluidVariant> getBuffer(Direction direction);
-        void setNeedsUpdate(boolean needsUpdate);
     }
 }

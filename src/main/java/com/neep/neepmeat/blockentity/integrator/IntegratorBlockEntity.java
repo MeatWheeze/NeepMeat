@@ -160,12 +160,6 @@ public class IntegratorBlockEntity extends BlockEntity implements
         return buffer;
     }
 
-    @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-
-    }
-
     private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         event.getController().transitionLengthTicks = 20;

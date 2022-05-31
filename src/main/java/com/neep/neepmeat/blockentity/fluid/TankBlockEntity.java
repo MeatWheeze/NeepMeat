@@ -69,12 +69,6 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         return buffer;
     }
 
-    @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-
-    }
-
     public boolean onUse(PlayerEntity player, Hand hand)
     {
         ItemStack stack = player.getStackInHand(hand);
@@ -90,8 +84,6 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         else if (!world.isClient())
         {
-//            System.out.println(getBuffer(null).getAmount());
-//            System.out.println(buffer.getAmount());
             showContents((ServerPlayerEntity) player, getPos(), getBuffer(null));
             return true;
         }

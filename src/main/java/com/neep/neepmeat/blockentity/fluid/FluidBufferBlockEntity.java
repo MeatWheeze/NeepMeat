@@ -61,12 +61,6 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
         return buffer;
     }
 
-    @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-
-    }
-
     public boolean onUse(PlayerEntity player, Hand hand)
     {
         ItemStack stack = player.getStackInHand(hand);
