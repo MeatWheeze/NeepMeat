@@ -54,7 +54,7 @@ public class NMBlockEntities
                 FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 
-    public static void initialiseBlockEntities()
+    public static void initialise()
     {
         PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);

@@ -43,7 +43,7 @@ public class NMFluids
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
-    public static void initialiseFluids()
+    public static void initialise()
     {
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
         FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());

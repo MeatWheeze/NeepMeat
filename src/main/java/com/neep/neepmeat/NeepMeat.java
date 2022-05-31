@@ -1,11 +1,8 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.init.*;
-import com.neep.neepmeat.network.TankMessagePacket;
-import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,9 +25,11 @@ public class NeepMeat implements ModInitializer
 		NMBlocks blocks = new NMBlocks();
 		NMItems items = new NMItems();
 
-		NMFluids.initialiseFluids();
-		SoundInitialiser.registerSounds();
-		NMBlockEntities.initialiseBlockEntities();
+		NMFluids.initialise();
+		SoundInitialiser.initialise();
+		NMBlockEntities.initialise();
+		NMEntities.initialise();
+
 		ScreenHandlerInit.registerScreenHandlers();
 
 		FluidNetwork.registerEvents();
