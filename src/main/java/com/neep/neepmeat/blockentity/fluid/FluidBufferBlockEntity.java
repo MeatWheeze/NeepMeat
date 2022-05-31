@@ -17,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -75,7 +74,7 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
         }
         else if (!world.isClient())
         {
-            TankBlockEntity.showContents((ServerPlayerEntity) player, pos, buffer);
+            TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, buffer);
             return true;
         }
         return true;

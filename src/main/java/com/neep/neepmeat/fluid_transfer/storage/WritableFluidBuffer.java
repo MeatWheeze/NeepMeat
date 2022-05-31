@@ -3,18 +3,10 @@ package com.neep.neepmeat.fluid_transfer.storage;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
-
-import java.util.Iterator;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> implements FluidBuffer
@@ -22,7 +14,7 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
     protected long capacity;
     private final BlockEntity parent;
 
-    public WritableFluidBuffer(BlockEntity parent, long capacity)
+    public WritableFluidBuffer(@Nullable BlockEntity parent, long capacity)
     {
         this.capacity = capacity;
         this.parent = parent;

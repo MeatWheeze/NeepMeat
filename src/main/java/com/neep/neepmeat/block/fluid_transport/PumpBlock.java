@@ -14,7 +14,6 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -126,11 +125,8 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
                     }
                     System.out.print("\n");
                 }
-//                PumpBlockEntity.tick(world, pos, state, be);
-//                be.sides.get(state.get(PumpBlock.FACING)).tick(world);
             }
-//            player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount())), true);
-            TankBlockEntity.showContents((ServerPlayerEntity) player, pos, be.getBuffer(null));
+            TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
         }
         return ActionResult.SUCCESS;
     }

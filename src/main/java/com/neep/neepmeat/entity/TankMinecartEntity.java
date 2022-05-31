@@ -1,48 +1,35 @@
 package com.neep.neepmeat.entity;
 
-import com.neep.neepmeat.fluid_transfer.FluidBuffer;
+import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.util.Iterator;
+
 @SuppressWarnings("UnstableApiUsage")
-public class TankMinecartEntity extends AbstractMinecartEntity
+public class TankMinecartEntity extends AbstractMinecartEntity implements Storage<FluidVariant>
 {
     public static final String AMOUNT = "amount";
     public static final String RESOURCE = "resource";
 
-    protected long capacity;
-    protected long amount;
     protected FluidVariant resource = FluidVariant.blank();
 
-    public final SingleVariantStorage<FluidVariant> fluidStorage = new SingleVariantStorage<>()
-    {
-        @Override
-        protected FluidVariant getBlankVariant()
-        {
-            return FluidVariant.blank();
-        }
-
-        @Override
-        protected long getCapacity(FluidVariant variant)
-        {
-            return 8 * FluidConstants.BUCKET;
-        }
-
-        @Override
-        protected void onFinalCommit()
-        {
-        }
-    };
+    WritableFluidBuffer buffer = new WritableFluidBuffer(null, 8 * FluidConstants.BUCKET);
 
     public TankMinecartEntity(EntityType<?> entityType, World world)
     {
@@ -62,9 +49,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-
-        nbt.putLong(AMOUNT, amount);
-        nbt.put(RESOURCE, resource.toNbt());
+        buffer.writeNBT(nbt);
 
         return nbt;
     }
@@ -73,9 +58,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-
-        this.amount = nbt.getLong(AMOUNT);
-        this.resource = FluidVariant.fromNbt(nbt.getCompound(RESOURCE));
+        buffer.readNBT(nbt);
     }
 
     @Override
@@ -84,4 +67,30 @@ public class TankMinecartEntity extends AbstractMinecartEntity
         return null;
     }
 
+    @Override
+    public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+        return buffer.insert(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+        return buffer.extract(resource, maxAmount, transaction);
+    }
+
+    @Override
+    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
+    {
+        return buffer.iterator(transaction);
+    }
+
+    public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand)
+    {
+        if (!getEntityWorld().isClient)
+        {
+            TankBlockEntity.showContents((ServerPlayerEntity) player, world, getBlockPos(), buffer);
+        }
+        return ActionResult.SUCCESS;
+    }
 }
