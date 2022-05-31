@@ -4,17 +4,11 @@ import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
@@ -62,7 +56,7 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (buffer.handleInteract(player, hand))
+        if (buffer.handleInteract(world, player, hand))
         {
             return true;
         }
