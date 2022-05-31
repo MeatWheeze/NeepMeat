@@ -62,15 +62,9 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        ItemStack stack = player.getStackInHand(hand);
-        Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
-        if (storage != null)
+        if (buffer.handleInteract(player, hand))
         {
-            if (StorageUtil.move(storage, getBuffer(null), variant -> true, Long.MAX_VALUE, null) > 0)
-                return true;
-
-            if (StorageUtil.move(getBuffer(null), storage, variant -> true, Long.MAX_VALUE, null) > 0)
-                return true;
+            return true;
         }
         else if (!world.isClient())
         {
