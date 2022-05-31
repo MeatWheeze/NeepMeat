@@ -23,11 +23,13 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
 public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
@@ -88,7 +90,9 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         else if (!world.isClient())
         {
-            showContents((ServerPlayerEntity) player, getPos(), buffer);
+//            System.out.println(getBuffer(null).getAmount());
+//            System.out.println(buffer.getAmount());
+            showContents((ServerPlayerEntity) player, getPos(), getBuffer(null));
             return true;
         }
         return true;

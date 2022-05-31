@@ -11,6 +11,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -40,7 +41,7 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
             {
-                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+                TankBlockEntity.showContents((ServerPlayerEntity) player, pos, be.getBuffer(null));
             }
         }
         return ActionResult.SUCCESS;
