@@ -1,6 +1,7 @@
 package com.neep.neepmeat.entity;
 
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
+import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMEntities;
@@ -8,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -16,13 +18,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TankMinecartEntity extends AbstractMinecartEntity implements Storage<FluidVariant>
+public class TankMinecartEntity extends AbstractMinecartEntity implements Storage<FluidVariant>, FluidBuffer.FluidBufferProvider
 {
     public static final String AMOUNT = "amount";
     public static final String RESOURCE = "resource";
@@ -34,14 +37,14 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     public TankMinecartEntity(EntityType<?> entityType, World world)
     {
         super(entityType, world);
-        this.setCustomBlock(NMBlocks.TANK.getDefaultState());
+        this.setCustomBlock(NMBlocks.GLASS_TANK.getDefaultState());
         this.setCustomBlockPresent(true);
     }
 
     public TankMinecartEntity(World world, double x, double y, double z)
     {
         super(NMEntities.TANK_MINECART, world, x, y, z);
-        this.setCustomBlock(NMBlocks.TANK.getDefaultState());
+        this.setCustomBlock(NMBlocks.GLASS_TANK.getDefaultState());
         this.setCustomBlockPresent(true);
     }
 
@@ -96,5 +99,11 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
             TankBlockEntity.showContents((ServerPlayerEntity) player, world, getBlockPos(), buffer);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public SingleVariantStorage<FluidVariant> getBuffer(Direction direction)
+    {
+        return buffer;
     }
 }
