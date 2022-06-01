@@ -25,6 +25,8 @@ public class NMBlockEntities
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
+    public static BlockEntityType<CheckValveBlockEntity> CHECK_VALVE;
+
     public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
@@ -61,6 +63,7 @@ public class NMBlockEntities
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
         NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
+        CHECK_VALVE = registerBlockEntity("check_valve", CheckValveBlockEntity::new, NMBlocks.CHECK_VALVE);
 
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, NMBlocks.ITEM_BUFFER);

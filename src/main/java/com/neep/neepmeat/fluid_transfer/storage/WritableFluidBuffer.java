@@ -56,6 +56,7 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
     {
         return capacity;
     }
+
     @Override
     protected void onFinalCommit()
     {

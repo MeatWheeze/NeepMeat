@@ -16,7 +16,6 @@ public class FluidComponentItem extends BaseBlockItem
     @Override
     public ActionResult useOnBlock(ItemUsageContext context)
     {
-        System.out.println("place");
         ActionResult actionResult = this.place(new ItemPlacementContext(context));
         if (!actionResult.isAccepted() && this.isFood())
         {

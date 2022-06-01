@@ -1,6 +1,7 @@
 package com.neep.neepmeat.fluid_transfer.node;
 
 import com.neep.neepmeat.block.fluid_transport.IDirectionalFluidAcceptor;
+import com.neep.neepmeat.block.fluid_transport.IVariableFlowBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.lwjgl.system.CallbackI;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -214,6 +216,11 @@ public class FluidNode
 
     public float getFlow(ServerWorld world)
     {
+        BlockState state = world.getBlockState(getTargetPos());
+        if (state.getBlock() instanceof IVariableFlowBlock variableFlow)
+        {
+            return variableFlow.getFlow(world, getTargetPos(), state);
+        }
         return getMode(world).getFlow() * this.flowMultiplier;
     }
 
