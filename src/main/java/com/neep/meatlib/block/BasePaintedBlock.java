@@ -28,6 +28,7 @@ public class BasePaintedBlock
         for (DyeColor col : DyeColor.values())
         {
             PaintedBlock block = new PaintedBlock(registryName + "_" + col.getName(), col, settings);
+            // TODO: Fix to make prevent crash on server!
             NeepMeatClient.COLOURED_BLOCKS.add(block);
         }
     }

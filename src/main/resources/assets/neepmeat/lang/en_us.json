@@ -147,5 +147,7 @@
   "item.neepmeat.charged_work_fluid_bucket": "Charged Work Fluid Bucket",
 
   "item.neepmeat.blood_bucket": "Blood Bucket",
-  "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket"
+  "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket",
+
+  "item.neepmeat.tank_minecart": "Tank Minecart"
 }

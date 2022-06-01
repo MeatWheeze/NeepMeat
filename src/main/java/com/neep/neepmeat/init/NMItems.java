@@ -6,6 +6,7 @@ import com.neep.neepmeat.item.DaggerItem;
 import com.neep.neepmeat.item.SlasherItem;
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TieredCraftingItemFactory;
+import com.neep.neepmeat.item.TankMinecartItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 
@@ -15,6 +16,8 @@ public class NMItems
 
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
+
+    public static Item TANK_MINECART = new TankMinecartItem("tank_minecart", new FabricItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
 
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(NMItemGroups.WEAPONS));
