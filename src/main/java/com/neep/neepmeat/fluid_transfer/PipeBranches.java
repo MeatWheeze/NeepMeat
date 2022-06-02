@@ -11,13 +11,15 @@ import java.util.stream.Collectors;
 
 public class PipeBranches extends HashMap<Long, PipeState>
 {
-    public static void test(HashSet<Supplier<FluidNode>> nodes, Map<BlockPos, PipeState> pipes)
+    // TODO: Move pipes into an ArrayList and map each BlockPos to an index
+    public static void test(HashSet<Supplier<FluidNode>> nodes, HashMap<BlockPos, PipeState> pipes)
     {
         if (nodes.size() > 1)
         {
             System.out.println("Yes!");
             List<Supplier<FluidNode>> list = nodes.stream().sequential().collect(Collectors.toList());
 //            findRoute(list.get(0).get().getNodePos(), list.get(1).get().getNodePos(), pipes);
+            findDeadEnds(pipes);
 
         }
         else
@@ -62,6 +64,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
             }
             while (pipes.get(current).connections.size() < 2 && !visited.contains(current));
         }
+
+
     }
 
     public static void findRoute(NodePos fromPos, NodePos toPos, Map<BlockPos, PipeState> pipes)

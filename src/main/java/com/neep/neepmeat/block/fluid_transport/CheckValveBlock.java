@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.blockentity.CheckValveBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
@@ -22,7 +23,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CheckValveBlock extends BaseFacingBlock implements BlockEntityProvider, IFluidNodeProvider, IVariableFlowBlock
+public class CheckValveBlock extends BaseFacingBlock implements IFluidPipe, IVariableFlowBlock
 {
     public static final VoxelShape X_SHAPE = Block.createCuboidShape(0, 4, 4, 16, 12, 12);
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
@@ -89,18 +90,18 @@ public class CheckValveBlock extends BaseFacingBlock implements BlockEntityProvi
         return AcceptorModes.NONE;
     }
 
-    @Override
-    public boolean isStorage()
-    {
-        return false;
-    }
+//    @Override
+//    public boolean isStorage()
+//    {
+//        return false;
+//    }
 
-    @Nullable
-    @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
-    {
-        return new CheckValveBlockEntity(pos, state);
-    }
+//    @Nullable
+//    @Override
+//    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+//    {
+//        return new CheckValveBlockEntity(pos, state);
+//    }
 
     @Override
     public float getFlow(World world, BlockPos pos, BlockState state)
