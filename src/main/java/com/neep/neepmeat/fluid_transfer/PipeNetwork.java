@@ -5,6 +5,7 @@ import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.FilterUtils;
+import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -35,7 +36,7 @@ public class PipeNetwork
 
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
 
-    public final Map<BlockPos, PipeState> networkPipes = new HashMap<>();
+    public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
@@ -140,7 +141,7 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
-            PipeBranches.test(connectedNodes, networkPipes);
+            PipeBranches.test(world, connectedNodes, networkPipes);
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
             {
