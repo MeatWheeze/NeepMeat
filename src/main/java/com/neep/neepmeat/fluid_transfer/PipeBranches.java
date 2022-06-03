@@ -6,6 +6,7 @@ import com.neep.neepmeat.util.IndexedHashMap;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -30,7 +31,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
             NodePos start = list.get(0).get().getNodePos();
             NodePos end = list.get(1).get().getNodePos();
-            Map<BlockPos, Integer> distances = shortestPath(start, end, pipes);
+            Map<BlockPos, Integer> distances = shortestPath(world, start, end, pipes);
             System.out.println(distances);
 //            long flowResult = followPath(world, start, end, 100, distances, pipes);
 //            System.out.println(flowResult);
@@ -60,6 +61,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
     {
         int size = nodes.size();
 
+        // Initialise matrix
         Function<Long, Long>[][] matrix = (Function<Long, Long>[][]) Array.newInstance(Function.class, size, size);
         for (int i = 0; i < size; ++i)
         {
@@ -86,9 +88,16 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
                 NodePos start = fromNode.get().getNodePos();
                 NodePos end = toNode.get().getNodePos();
-                Map<BlockPos, Integer> distances = shortestPath(start, end, pipes);
-                Function<Long, Long> function = followPath(world, start, end, distances, pipes);
-                matrix[i][j] = function;
+                Map<BlockPos, Integer> distances;
+                if ((distances = shortestPath(world, start, end, pipes)) != null)
+                {
+                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
+                    matrix[i][j] = function;
+                }
+                else
+                {
+                    matrix[i][j] = PipeState::zero;
+                }
             }
         }
         return matrix;
@@ -192,11 +201,12 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static Map<BlockPos, Integer> shortestPath(NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static Map<BlockPos, Integer> shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         Map<BlockPos, Integer> distances = new LinkedHashMap<>();
         Queue<BlockPos> queue = new LinkedList<>();
         List<BlockPos> visited = new ArrayList<>();
+        Direction reverse = end.face.getOpposite();
 
         distances.put(end.pos, 0);
         queue.add(end.pos);
@@ -214,7 +224,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
             visited.add(pos);
             queue.remove();
 
-
             PipeState pipe = pipes.get(pos);
 
 
@@ -223,8 +232,16 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 BlockPos offset = pos.offset(connection);
                 if (!visited.contains(offset) && pipes.get(offset) != null)
                 {
+                    // Check if pipe can transfer fluid in the opposite direction
+                    if (!pipes.get(offset).canFluidFlow(connection.getOpposite(), world.getBlockState(offset)))
+                    {
+                        System.out.println(reverse + " false");
+                        continue;
+                    }
+
                     distances.put(offset, dist + 1);
                     queue.add(offset);
+                    reverse = connection;
                 }
             }
         }
@@ -242,7 +259,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
         {
             ++level;
             int dist = distances.get(pos);
-//            System.out.println("current distance: " + dist);
             PipeState pipe = pipes.get(pos);
 
             PipeState.ISpecialPipe special;
@@ -254,13 +270,11 @@ public class PipeBranches extends HashMap<Long, PipeState>
             for (Direction direction : pipe.connections)
             {
                 BlockPos offset = pos.offset(direction);
-//                System.out.println("target distance: " + dist2);
                 Integer dist2 = distances.get(offset);
                 if (pipes.get(offset) != null && dist2 != null && dist2 < dist)
                 {
                     pos = offset;
                     fromDir = direction;
-//                    System.out.println(pos + " " + end.pos);
                 }
             }
         }
