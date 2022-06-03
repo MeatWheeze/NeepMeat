@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_transfer;
 
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.block.fluid_transport.ICapillaryPipe;
 import net.minecraft.block.BlockState;
@@ -7,6 +8,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class PipeState
 {
@@ -28,15 +30,20 @@ public class PipeState
                 }
             }
         }
+        else if (state.getBlock() instanceof BaseFacingBlock facing)
+        {
+            connections.add(state.get(BaseFacingBlock.FACING));
+            connections.add(state.get(BaseFacingBlock.FACING).getOpposite());
+        }
         this.capillary = state.getBlock() instanceof ICapillaryPipe;
-        this.special = null;
+        this.special = state.getBlock() instanceof ISpecialPipe specialPipe ? specialPipe : null;
     }
 
     @Override
     public String toString()
     {
 //        return Float.toString(pressure);
-        return "PipeState{connection=" + connections + "}";
+        return "PipeState{connection=" + connections + ", special:" + special + "}";
     }
 
     @Override
@@ -78,9 +85,13 @@ public class PipeState
         return distance;
     }
 
-    @FunctionalInterface
     public interface ISpecialPipe
     {
-        long apply(boolean bias, long flow);
+        Function<Long, Long> get(Direction bias, BlockState state);
+
+//        default ISpecialPipe andThen(ISpecialPipe next)
+//        {
+//            return (bias, state, flow) -> next.apply(
+//        }
     }
 }
