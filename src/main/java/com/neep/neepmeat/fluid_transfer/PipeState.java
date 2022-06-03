@@ -94,4 +94,9 @@ public class PipeState
 //            return (bias, state, flow) -> next.apply(
 //        }
     }
+
+    public static long zero(long l)
+    {
+        return 0;
+    }
 }

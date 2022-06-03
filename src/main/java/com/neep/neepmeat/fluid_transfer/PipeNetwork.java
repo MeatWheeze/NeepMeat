@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,8 @@ public class PipeNetwork
     public List<Supplier<FluidNode>> connectedNodes = new ArrayList<>();
 
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
+    protected Function<Long, Long>[][] nodeMatrix = null;
+
     private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
@@ -145,8 +148,11 @@ public class PipeNetwork
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
             {
+                return;
             }
 
+            this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
+            PipeBranches.testMatrix(nodeMatrix);
 
         }
     }
