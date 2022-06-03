@@ -43,15 +43,17 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
     public static void testMatrix(Function<Long, Long>[][] matrix)
     {
-        long[][] out = new long[matrix.length][matrix[0].length];
+//        long[][] out = new long[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; ++i)
         {
             for (int j = 0; j < matrix[0].length; ++j)
             {
-                out[i][j] = matrix[i][j].apply(PipeNetwork.BASE_TRANSFER);
+                long out = matrix[i][j].apply(PipeNetwork.BASE_TRANSFER);
+                System.out.print(out + " ");
             }
+            System.out.println();
         }
-        System.out.println(Arrays.deepToString(out));
+//        System.out.println(Arrays.deepToString(out));
     }
 
     public static Function<Long, Long>[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
@@ -253,7 +255,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
             {
                 BlockPos offset = pos.offset(direction);
 //                System.out.println("target distance: " + dist2);
-                if (pipes.get(offset) != null && distances.get(offset) < dist)
+                Integer dist2 = distances.get(offset);
+                if (pipes.get(offset) != null && dist2 != null && dist2 < dist)
                 {
                     pos = offset;
                     fromDir = direction;
