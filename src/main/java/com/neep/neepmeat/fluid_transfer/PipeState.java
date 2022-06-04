@@ -98,7 +98,7 @@ public class PipeState
 
     public interface ISpecialPipe
     {
-        Function<Long, Long> get(Direction bias, BlockState state);
+        Function<Long, Long> getFlowFunction(Direction bias, BlockState state);
 
 //        default ISpecialPipe andThen(ISpecialPipe next)
 //        {

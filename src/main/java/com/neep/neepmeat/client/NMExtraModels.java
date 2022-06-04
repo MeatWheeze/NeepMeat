@@ -15,6 +15,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");
     public static Identifier ITEM_PUMP_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/item_pump_shuttle");
     public static Identifier ITEM_PUMP_CHEST = new Identifier(NeepMeat.NAMESPACE, "block/item_pump_chest");
+    public static Identifier VALVE_WHEEL = new Identifier(NeepMeat.NAMESPACE, "block/valve/wheel");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -22,5 +23,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(BIG_LEVER_HANDLE);
         out.accept(ITEM_PUMP_SHUTTLE);
         out.accept(ITEM_PUMP_CHEST);
+        out.accept(VALVE_WHEEL);
     }
 }
