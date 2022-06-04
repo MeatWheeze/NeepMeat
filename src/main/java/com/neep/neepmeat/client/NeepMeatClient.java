@@ -70,6 +70,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.STOP_VALVE, StopValveRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
