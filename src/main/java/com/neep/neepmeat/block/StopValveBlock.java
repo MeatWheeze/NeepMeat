@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
-import com.neep.neepmeat.blockentity.StopValveBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.item.FluidComponentItem;
@@ -10,7 +9,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -93,6 +91,7 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new StopValveBlockEntity(pos, state);
+//        return new StopValveBlockEntity(pos, state);
+        return null;
     }
 }

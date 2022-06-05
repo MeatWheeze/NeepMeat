@@ -1,32 +1,192 @@
 {
-  "variants": {
-    "facing=east": {
-      "model": "neepmeat:block/stop_valve",
-      "y": 90,
-      "x": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "x": 0,
+        "y": 0
+      }
     },
-    "facing=north": {
-      "model": "neepmeat:block/stop_valve",
-      "y": 0,
-      "x": 0
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "x": 0,
+        "y": 90
+      }
     },
-    "facing=south": {
-      "model": "neepmeat:block/stop_valve",
-      "y": 180,
-      "x": 0
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "y": 180
+      }
     },
-    "facing=west": {
-      "model": "neepmeat:block/stop_valve",
-      "y": -90,
-      "x": 0
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "y": -90
+      }
     },
-    "facing=up": {
-      "model": "neepmeat:block/stop_valve",
-      "x": -90
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "x": -90,
+        "y": 0
+      }
     },
-    "facing=down": {
-      "model": "neepmeat:block/stop_valve",
-      "x": 90
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/stop_valve",
+        "x": 90,
+        "y": 0
+      }
+    },
+
+    {
+      "when": {
+        "facing": "north",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "x": 0,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "x": -90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "open": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel",
+        "x": 90,
+        "y": 0
+      }
+    },
+
+    {
+      "when": {
+        "facing": "north",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "x": 0,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "up",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "x": -90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "down",
+        "open": "false"
+      },
+      "apply": {
+        "model": "neepmeat:block/valve/wheel_rotated",
+        "x": 90,
+        "y": 0
+      }
     }
-  }
+  ]
 }
