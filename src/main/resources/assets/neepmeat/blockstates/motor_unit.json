@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/motor_unit",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/motor_unit",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/motor_unit",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/motor_unit",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up": {
+      "model": "neepmeat:block/motor_unit",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "neepmeat:block/motor_unit",
+      "x": 90
+    }
+  }
+}
