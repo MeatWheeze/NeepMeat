@@ -49,6 +49,7 @@ public class BERenderUtils
         {
             case NORTH:
             {
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
                 break;
             }
             case EAST:
@@ -58,7 +59,6 @@ public class BERenderUtils
             }
             case SOUTH:
             {
-                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
                 break;
             }
             case WEST:
