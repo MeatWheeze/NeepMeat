@@ -36,12 +36,10 @@ public interface IFluidPipe
 
     default boolean createStorageNodes(World world, BlockPos pos, BlockState state)
     {
-        System.out.println("eeeeeeeeeeee");
         if (!world.isClient)
         {
             boolean newNode = false;
             List<Direction> connections = getConnections(state, dir -> true);
-            System.out.println("oooooooo " + connections);
             for (Direction direction : Direction.values())
             {
 //                if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)

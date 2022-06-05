@@ -51,7 +51,6 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        System.out.println(world.getBlockEntity(pos));
         if (!world.isClient())
         {
             world.setBlockState(pos, state.cycle(OPEN));
