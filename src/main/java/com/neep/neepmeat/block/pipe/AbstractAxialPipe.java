@@ -1,16 +1,22 @@
 package com.neep.neepmeat.block.pipe;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFluidPipe
 {
@@ -22,6 +28,7 @@ public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFlui
     {
         super(itemName, itemMaxStack, hasLore, factory, settings);
     }
+
 
     public VoxelShape getShape(BlockState state)
     {
@@ -44,6 +51,44 @@ public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFlui
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
     {
         return getShape(state);
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.isClient())
+            return;
+
+        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        {
+            if (createStorageNodes(world, pos, state))
+                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
+        }
+
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        if (world.isClient())
+            return;
+
+        createStorageNodes(world, pos, state);
+        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        super.onStateReplaced(state, world, pos, newState, moved);
+
+        if (world.isClient())
+            return;
+
+        if (!state.isOf(newState.getBlock()))
+        {
+            removePipe((ServerWorld) world, state, pos);
+        }
     }
 
     @Override

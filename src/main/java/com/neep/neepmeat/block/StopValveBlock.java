@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.blockentity.StopValveBlockEntity;
+import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.Block;
@@ -10,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -51,7 +53,12 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        world.setBlockState(pos, state.cycle(OPEN));
+        System.out.println(world.getBlockEntity(pos));
+        if (!world.isClient())
+        {
+            world.setBlockState(pos, state.cycle(OPEN));
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
+        }
 
         return ActionResult.success(world.isClient);
     }
@@ -59,6 +66,7 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
         if (world.isClient())
             return;
 
@@ -70,6 +78,7 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
                 state = state.with(OPEN, !powered);
             }
             world.setBlockState(pos, state.with(POWERED, powered), Block.NOTIFY_LISTENERS);
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
     }
 

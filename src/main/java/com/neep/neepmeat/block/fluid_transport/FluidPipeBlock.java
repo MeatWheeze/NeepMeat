@@ -2,10 +2,8 @@ package com.neep.neepmeat.block.fluid_transport;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.block.pipe.IFluidPipe;
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -26,8 +24,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
 {
     public FluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
@@ -35,34 +31,31 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         super(itemName, itemMaxStack, hasLore, factory, settings);
     }
 
-    public static void removeStorageNodes(World world, BlockPos pos)
-    {
-        for (Direction direction : Direction.values())
-        {
-            NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
-        }
-    }
-
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        if (world.isClient())
+            return;
+
         if (!state.isOf(newState.getBlock()))
         {
-            removeStorageNodes(world, pos);
-            world.removeBlockEntity(pos);
+            removePipe((ServerWorld) world, state, pos);
         }
     }
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
+        if (world.isClient())
+            return;
+
         BlockState state2 = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
-            createStorageNodes(world, pos, state2);
+            if (createStorageNodes(world, pos, state2))
+                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -72,7 +65,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-        createStorageNodes(world, pos, updatedState);
+        if (!world.isClient())
+        {
+            createStorageNodes(world, pos, updatedState);
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+        }
     }
 
     @Override
@@ -108,7 +105,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
+        if (world.isClient())
+            return;
+
         createStorageNodes(world, pos, newState);
+        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
     }
 
     @Nullable
@@ -145,26 +146,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return state2;
         }
         return state;
-    }
-
-    public void createStorageNodes(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
-            for (Direction direction : Direction.values())
-            {
-                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
-                {
-                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
-                }
-                else
-                {
-                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
-                }
-            }
-            // TODO: avoid creating instances that will fail immediately
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
-        }
     }
 
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)

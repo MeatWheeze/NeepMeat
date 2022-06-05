@@ -1,12 +1,9 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.item.CheeseCleaverItem;
-import com.neep.neepmeat.item.DaggerItem;
-import com.neep.neepmeat.item.SlasherItem;
+import com.neep.neepmeat.item.*;
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TieredCraftingItemFactory;
-import com.neep.neepmeat.item.TankMinecartItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 
@@ -22,6 +19,8 @@ public class NMItems
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(NMItemGroups.WEAPONS));
+
+    public static Item DEBUG = new DebugItem("debug_item", false, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

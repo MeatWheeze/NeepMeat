@@ -124,27 +124,6 @@ public abstract class AbstractPipeBlock extends BaseBlock
     }
 
     @Override
-    // TODO: Remove things from here.
-    public void prepare(BlockState state, WorldAccess world, BlockPos pos, int flags, int maxUpdateDepth)
-    {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        for (Direction direction : Direction.Type.HORIZONTAL)
-        {
-            BlockState blockPos;
-            boolean connection = state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE;
-            if (!connection || world.getBlockState(mutable.set(pos, direction)).isOf(this)) continue;
-            mutable.move(Direction.DOWN);
-
-            mutable.set(pos, direction).move(Direction.UP);
-            blockPos = world.getBlockState(mutable);
-            if (blockPos.isOf(Blocks.OBSERVER)) continue;
-            BlockPos blockPos1 = mutable.offset(direction.getOpposite());
-            BlockState blockState3 = blockPos.getStateForNeighborUpdate(direction.getOpposite(), world.getBlockState(blockPos1), world, mutable, blockPos1);
-            RedstoneWireBlock.replace(blockPos, blockState3, world, mutable, flags, maxUpdateDepth);
-        }
-    }
-
-    @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
