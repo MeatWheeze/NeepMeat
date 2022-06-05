@@ -4,10 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
-import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
-import com.neep.neepmeat.blockentity.machine.LinearOscillatorBlockEntity;
+import com.neep.neepmeat.blockentity.machine.*;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -33,6 +30,7 @@ public class NMBlockEntities
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
+    public static BlockEntityType<MotorBlockEntity> MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
@@ -86,6 +84,7 @@ public class NMBlockEntities
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
         TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
+        MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);

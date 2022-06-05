@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -18,7 +17,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity>
+public class HeaterBlockEntity extends BloodMachineBlockEntity
 {
     public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
     public static long CAPACITY = 4 * USE_AMOUNT;

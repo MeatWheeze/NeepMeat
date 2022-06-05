@@ -44,7 +44,7 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
         super(type, pos, state);
     }
 
-    public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, LinearOscillatorBlockEntity be)
+    public static void serverTick(World world, BlockPos pos, BlockState state, LinearOscillatorBlockEntity be)
     {
         be.tick();
     }
@@ -93,12 +93,14 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
     @Override
     public void readNbt(NbtCompound nbt)
     {
+        super.readNbt(nbt);
         this.maxCooldown = nbt.getInt(NBT_MAX_COOLDOWN);
         this.cooldown = nbt.getInt(NBT_COOLDOWN);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        super.writeNbt(nbt);
         nbt.putInt(NBT_MAX_COOLDOWN, maxCooldown);
         nbt.putInt(NBT_COOLDOWN, cooldown);
         return nbt;

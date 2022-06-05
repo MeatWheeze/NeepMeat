@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.List;
 
-public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity> extends BlockEntity implements FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable
+public abstract class BloodMachineBlockEntity extends BlockEntity implements FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable
 {
     public TypedFluidBuffer inputBuffer;
     public TypedFluidBuffer outputBuffer;
@@ -33,7 +34,7 @@ public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity>
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 
-    public long doWork(long amount, Transaction transaction)
+    public long doWork(long amount, TransactionContext transaction)
     {
         Transaction nested = transaction.openNested();
         long extracted = inputBuffer.extractDirect(NMFluids.CHARGED, amount, nested);
