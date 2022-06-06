@@ -1,4 +1,4 @@
-package com.neep.meatweapons.network;
+package com.neep.meatlib.network;
 
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.MathHelper;
