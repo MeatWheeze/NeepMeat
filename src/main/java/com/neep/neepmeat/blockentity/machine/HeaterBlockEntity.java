@@ -1,21 +1,25 @@
 package com.neep.neepmeat.blockentity.machine;
 
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.mixin.FurnaceAccessor;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.Optional;
 
 public class HeaterBlockEntity extends BloodMachineBlockEntity
 {
@@ -23,6 +27,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
     public static long CAPACITY = 4 * USE_AMOUNT;
 
     protected FurnaceAccessor accessor;
+    protected int copperTime;
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
     {
@@ -57,17 +62,17 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
     {
         if (accessor == null)
         {
-            if (!refreshCache(getWorld(), getPos(), getCachedState()))
-            {
-                return;
-            }
+            refreshCache(getWorld(), getPos(), getCachedState());
         }
 
         Transaction transaction = Transaction.openOuter();
         long work = doWork(USE_AMOUNT, transaction);
         if (work == USE_AMOUNT)
         {
-            accessor.setBurnTime(2);
+            if (accessor != null)
+                accessor.setBurnTime(2);
+
+            heatBlock();
         }
         transaction.commit();
     }
@@ -91,5 +96,50 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         BlockState state = world.getBlockState(pos);
         state = state.with(AbstractFurnaceBlock.LIT, accessor.getBurnTime() > 0);
         world.setBlockState(pos, state, Block.NOTIFY_ALL);
+    }
+
+    public void heatBlock()
+    {
+        BlockPos facingPos = getPos().offset(getCachedState().get(BaseFacingBlock.FACING));
+        BlockState facingState = world.getBlockState(facingPos);
+        if (facingState.getBlock() instanceof OxidizableBlock)
+        {
+            ++copperTime;
+//            getWorld().addParticle(ParticleTypes.LAVA, facingPos.getX() + 0.5, facingPos.getY() + 1.5, facingPos.getZ() + 0.5, 0, 0, 0);
+            if (copperTime == 100)
+            {
+                copperTime = 0;
+                Optional<Block> nextBlock = Oxidizable.getIncreasedOxidationBlock(facingState.getBlock());
+                if (canOxidise(world, facingPos) && nextBlock.isPresent())
+                {
+                    world.setBlockState(facingPos, nextBlock.get().getDefaultState());
+                }
+            }
+        }
+        else
+        {
+            copperTime = 0;
+        }
+    }
+
+    public static boolean canOxidise(World world, BlockPos pos)
+    {
+        for (Direction direction : Direction.values())
+        {
+            BlockPos offset = pos.offset(direction);
+            if (world.getBlockState(offset).isOf(NMFluids.PATINA_TREATMENT))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void checkPatinaState(World world, BlockPos copperPos)
+    {
+        if (world.getBlockState(copperPos).isOf(Blocks.COPPER_BLOCK))
+        {
+
+        }
     }
 }
