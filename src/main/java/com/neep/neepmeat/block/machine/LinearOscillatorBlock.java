@@ -30,7 +30,7 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
     public static final VoxelShape NORTH_SHAPE = Block.createCuboidShape(0, 0, 5, 16, 16 ,16);
     public static final VoxelShape EAST_SHAPE = Block.createCuboidShape(0, 0, 0, 11, 16 ,16);
     public static final VoxelShape SOUTH_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 16 ,11);
-    public static final VoxelShape WEST_SHAPE = Block.createCuboidShape(0, 0, 0, 11, 16 ,16);
+    public static final VoxelShape WEST_SHAPE = Block.createCuboidShape(5, 0, 0, 16, 16 ,16);
     public static final VoxelShape UP_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 11 ,16);
     public static final VoxelShape DOWN_SHAPE = Block.createCuboidShape(0, 5, 0, 16, 16 ,16);
 
@@ -63,8 +63,20 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        System.out.println(world.getBlockEntity(pos));
+        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be)
+        {
+            return ActionResult.success(be.onUse(player, hand));
+        }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be)
+        {
+            be.update(fromPos, state);
+        }
     }
 
     @Nullable

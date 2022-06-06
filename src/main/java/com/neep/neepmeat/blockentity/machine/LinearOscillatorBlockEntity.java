@@ -1,15 +1,19 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.machine.LinearOscillatorBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
@@ -24,11 +28,15 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
     public static final String NBT_COOLDOWN = "cooldown";
     public static final String NBT_MAX_COOLDOWN = "max_cooldown";
 
+    public static long BASE_WORK_AMOUNT = FluidConstants.BUCKET / 16;
+
     public int maxCooldown = 40;
     public int cooldown = 0;
     public float prevExtension = 0f;
     public float extension = 0f;
     public boolean extended = false;
+
+    protected MotorBlockEntity connectedMotor = null;
 
     // Rendering only
     public long extensionTime = 0;
@@ -70,7 +78,14 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
     public void extend()
     {
-        if (!getWorld().isReceivingRedstonePower(getPos()))
+        if (!getWorld().isReceivingRedstonePower(getPos()) || connectedMotor == null)
+            return;
+
+        Transaction transaction = Transaction.openOuter();
+        long converted = connectedMotor.doWork(BASE_WORK_AMOUNT, transaction);
+        transaction.commit();
+
+        if (converted != BASE_WORK_AMOUNT)
             return;
 
         this.cooldown = this.maxCooldown;
@@ -78,7 +93,11 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
         BlockPos facingPos = getPos().offset(facing);
-        getWorld().breakBlock(facingPos, true);
+
+        if (!world.getBlockState(facingPos).isAir() && world.getBlockState(facingPos).getFluidState().isEmpty())
+        {
+            getWorld().breakBlock(facingPos, true);
+        }
 
         Box box = Box.from(BlockBox.create(facingPos, facingPos));
         List<LivingEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, entity -> true);
@@ -88,6 +107,26 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
             double mult = 0.5;
             entity.addVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
         });
+
+    }
+
+    public void update(BlockPos updatePos, BlockState state)
+    {
+        Direction facing = getCachedState().get(LinearOscillatorBlock.FACING);
+        BlockPos backPos = getPos().offset(facing.getOpposite());
+        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be)
+        {
+            this.connectedMotor = be;
+        }
+        else
+        {
+            this.connectedMotor = null;
+        }
+    }
+
+    public boolean onUse(PlayerEntity player, Hand hand)
+    {
+        return false;
     }
 
     @Override
