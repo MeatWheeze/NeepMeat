@@ -50,7 +50,7 @@ public class NeepMeatClient implements ClientModInitializer
         NeepMeatClient.registerRenderers();
 
         TankMessagePacket.registerReciever();
-        ParticleSpawnPacket.registerReciever();
+        ParticleSpawnPacket.registerReceiver();
     }
 
     public static void registerRenderers()

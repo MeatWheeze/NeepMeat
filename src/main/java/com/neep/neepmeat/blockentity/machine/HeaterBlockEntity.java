@@ -121,7 +121,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             ++copperTime;
 //            getWorld().addParticle(ParticleTypes.LAVA, facingPos.getX() + 0.5, facingPos.getY() + 1.5, facingPos.getZ() + 0.5, 0, 0, 0);
             if (copperTime % 5 == 0)
-                spawnOxidiseParticles((ServerWorld) getWorld(), ParticleTypes.DRIPPING_LAVA, facingPos, new Random(world.getTime()), copperTime / 2, 16);
+//                spawnOxidiseParticles((ServerWorld) getWorld(), ParticleTypes.DRIPPING_LAVA, facingPos, new Random(world.getTime()), copperTime / 2, 16);
 
             if (copperTime == 100)
             {
