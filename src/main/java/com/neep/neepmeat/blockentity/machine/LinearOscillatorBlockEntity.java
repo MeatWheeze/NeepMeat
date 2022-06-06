@@ -78,8 +78,14 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
     public void extend()
     {
-        if (!getWorld().isReceivingRedstonePower(getPos()) || connectedMotor == null)
+        if (connectedMotor == null)
             return;
+
+        if (!getWorld().isReceivingRedstonePower(getPos()))
+        {
+            connectedMotor.setRunning(false);
+            return;
+        }
 
         Transaction transaction = Transaction.openOuter();
         long converted = connectedMotor.doWork(BASE_WORK_AMOUNT, transaction);
