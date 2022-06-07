@@ -32,6 +32,7 @@ public class NMBlockEntities
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
     public static BlockEntityType<MotorBlockEntity> MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
+    public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
@@ -86,6 +87,7 @@ public class NMBlockEntities
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
+        DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
@@ -97,6 +99,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerSelf(FLUID_PORT);
 
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
+        ItemStorage.SIDED.registerSelf(DEPLOYER);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
