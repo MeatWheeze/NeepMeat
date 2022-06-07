@@ -27,7 +27,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 
         be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.running ? 1 : 0));
 
-        BERenderUtils.rotateFacing(facing, matrices);
+        BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
         matrices.multiply(Vec3f.NEGATIVE_Z.getRadialQuaternion((be.getWorld().getTime() + tickDelta) * be.currentSpeed));
         matrices.translate(-0.5, -0.5, -0.5);

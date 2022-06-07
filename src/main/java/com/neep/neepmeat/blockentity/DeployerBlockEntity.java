@@ -1,8 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.mojang.authlib.GameProfile;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.DeployerBlock;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
@@ -11,7 +9,6 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.mixin.container.ServerPlayerEntityAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -24,10 +21,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
@@ -35,7 +30,15 @@ import net.minecraft.util.math.Vec3d;
 public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorage<ItemVariant>, BlockEntityClientSerializable
 {
     protected final WritableStackStorage storage;
-    protected int cooldown= 0;
+
+    public float shuttleOffset;
+    public int shuttleTicks;
+
+    protected int cooldown;
+    public boolean shuttle;
+    public long shuttleTime;
+
+    public static final int COOLDOWN = 10;
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -65,14 +68,17 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
 
     public void update(BlockPos fromPos)
     {
-        if (getWorld().isReceivingRedstonePower(fromPos))
+        if (getWorld().getReceivedRedstonePower(getPos()) > 0)
         {
-            deploy((ServerWorld) world);
+//            if (shuttleTime - world.getTime() + COOLDOWN < 0)
+                deploy((ServerWorld) world);
         }
     }
 
     public void deploy(ServerWorld world)
     {
+        syncShuttle();
+
         ServerPlayerEntity fakePlayer = new FakePlayerEntity(world.getServer(), world, pos);
         fakePlayer.setWorld(world);
         fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
@@ -95,6 +101,13 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
 
 //        Box box = new Box(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
 //        System.out.println(world.getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, entity -> true));
+    }
+
+    public void syncShuttle()
+    {
+        this.shuttleTime = world.getTime();
+        this.shuttle = true;
+        sync();
     }
 
     @Override
@@ -169,6 +182,11 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     {
 //       System.out.println("reading client");
         storage.readNbt(tag);
+
+        if (tag.getBoolean("shuttle"))
+        {
+            this.shuttleTime = world.getTime();
+        }
     }
 
     @Override
@@ -176,6 +194,8 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     {
 //        System.out.println("writing server");
         storage.writeNbt(tag);
+        tag.putBoolean("shuttle", shuttle);
+        this.shuttle = false;
         return tag;
     }
 }

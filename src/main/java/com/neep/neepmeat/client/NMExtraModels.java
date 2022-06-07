@@ -18,6 +18,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier VALVE_WHEEL = new Identifier(NeepMeat.NAMESPACE, "block/valve/wheel");
     public static Identifier LO_ARMATURE = new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature");
     public static Identifier MOTOR_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor");
+    public static Identifier DEPLOYER_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/deployer/shuttle");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -28,5 +29,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(VALVE_WHEEL);
         out.accept(LO_ARMATURE);
         out.accept(MOTOR_ROTOR);
+        out.accept(DEPLOYER_SHUTTLE);
     }
 }
