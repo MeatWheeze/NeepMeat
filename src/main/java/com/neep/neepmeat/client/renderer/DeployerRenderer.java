@@ -7,6 +7,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 
 public class DeployerRenderer implements BlockEntityRenderer<DeployerBlockEntity>
@@ -24,8 +25,25 @@ public class DeployerRenderer implements BlockEntityRenderer<DeployerBlockEntity
 
 //        be.stackRenderDelta = MathHelper.lerp(delta, be.stackRenderDelta, be.getAmount() <= 0 ? 0.3f : 0f);
 //        matrices.translate(0.5, 0.25f + be.stackRenderDelta, 0.5);
-        matrices.translate(0.5, 0.5, 0.5);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
+        if (stack.getItem() instanceof BlockItem blockItem)
+        {
+            float scale = 0.4f;
+            matrices.translate(0.5, 0.5, 0.5);
+            matrices.scale(scale, scale, scale);
+            matrices.translate(-0.5, -0.5, -0.5);
+
+            MinecraftClient.getInstance().getBlockRenderManager().renderBlockAsEntity(blockItem.getBlock().getDefaultState(),
+                    matrices,
+                    vertexConsumers,
+                    light,
+                    overlay);
+        }
+        else
+        {
+            matrices.translate(0.5, 0.4, 0.5);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
+        }
+
 
         matrices.pop();
     }
