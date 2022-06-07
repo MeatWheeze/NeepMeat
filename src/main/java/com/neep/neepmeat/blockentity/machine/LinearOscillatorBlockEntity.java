@@ -81,7 +81,8 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
         if (connectedMotor == null)
             return;
 
-        if (!getWorld().isReceivingRedstonePower(getPos()))
+//        if (!getWorld().isReceivingRedstonePower(getPos()))
+        if (getWorld().getReceivedRedstonePower(getPos()) <= 0)
         {
             connectedMotor.setRunning(false);
             return;

@@ -2,9 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"2": "neepmeat:block/linear_oscillator/back",
 		"3": "neepmeat:block/linear_oscillator/side",
 		"4": "neepmeat:block/linear_oscillator/front",
+		"5": "neepmeat:block/motor/back",
 		"particle": "neepmeat:block/linear_oscillator/side"
 	},
 	"elements": [
@@ -14,7 +14,7 @@
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#4"},
 				"east": {"uv": [4.75, 0, 16, 16], "texture": "#3"},
-				"south": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#2"},
+				"south": {"uv": [0, 0, 16, 16], "rotation": 270, "texture": "#5"},
 				"west": {"uv": [4.75, 0, 16, 16], "rotation": 180, "texture": "#3"},
 				"up": {"uv": [4.75, 0, 16, 16], "rotation": 270, "texture": "#3"},
 				"down": {"uv": [4.75, 0, 16, 16], "rotation": 90, "texture": "#3"}
