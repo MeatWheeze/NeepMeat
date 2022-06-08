@@ -33,6 +33,7 @@ public class NMBlockEntities
     public static BlockEntityType<MotorBlockEntity> MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
+    public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
@@ -88,6 +89,7 @@ public class NMBlockEntities
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
+        AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
