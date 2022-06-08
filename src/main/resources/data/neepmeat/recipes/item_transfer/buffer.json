@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iwi",
+    "wcw",
+    "www"
+  ],
+  "key": {
+    "w": {
+      "tag": "minecraft:planks"
+    },
+    "c": {
+      "item": "minecraft:chest"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:buffer",
+    "count": 2
+  }
+}

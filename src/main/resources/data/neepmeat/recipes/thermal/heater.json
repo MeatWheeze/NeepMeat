@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    "iei",
+    "ibi"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:copper_coil"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "e": {
+      "item": "neepmeat:bioelectric_organ"
+    }
+  },
+  "result": {
+    "item": "neepmeat:heater",
+    "count": 1
+  }
+}

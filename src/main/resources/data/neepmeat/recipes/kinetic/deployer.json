@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "iBi",
+    "ipi"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "neepmeat:brain_rough"
+    },
+    "I": {
+      "item": "neepmeat:integration_charge_crude"
+    }
+  },
+  "result": {
+    "item": "neepmeat:deployer",
+    "count": 1
+  }
+}

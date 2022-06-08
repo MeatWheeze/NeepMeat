@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " t ",
+    " m ",
+    "   "
+  ],
+  "key": {
+    "t": {
+      "item": "neepmeat:basic_glass_tank"
+    },
+    "m": {
+      "item": "minecraft:minecart"
+    }
+  },
+  "result": {
+    "item": "neepmeat:tank_minecart",
+    "count": 1
+  }
+}

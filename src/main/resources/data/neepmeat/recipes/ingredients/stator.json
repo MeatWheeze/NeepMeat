@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " c ",
+    "cic",
+    "bcb"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:copper_coil"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "neepmeat:internal_components"
+    }
+  },
+  "result": {
+    "item": "neepmeat:stator",
+    "count": 1
+  }
+}
