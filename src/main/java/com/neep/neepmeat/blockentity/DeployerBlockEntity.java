@@ -1,10 +1,14 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
+import io.netty.handler.codec.bytes.ByteArrayEncoder;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -18,6 +22,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -25,11 +30,14 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorage<ItemVariant>, BlockEntityClientSerializable
+public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorage<ItemVariant>, BlockEntityClientSerializable, IMotorisedBlock
 {
     protected final WritableStackStorage storage;
+
+    protected MotorBlockEntity motor;
 
     public float shuttleOffset;
     public int shuttleTicks;
@@ -38,6 +46,9 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     public boolean shuttle;
     public long shuttleTime;
 
+    protected boolean powered;
+
+    public static long BASE_WORK_AMOUNT = FluidConstants.BUCKET / 64;
     public static final int COOLDOWN = 10;
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -56,6 +67,7 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+        powered = nbt.getBoolean("powered");
     }
 
     @Override
@@ -63,15 +75,37 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
+        nbt.putBoolean("powered", powered);
         return nbt;
     }
 
+    // Oh, Gawd this looks awful. There must be a way of cleaning this up!
     public void update(BlockPos fromPos)
     {
         if (getWorld().getReceivedRedstonePower(getPos()) > 0)
         {
-//            if (shuttleTime - world.getTime() + COOLDOWN < 0)
-                deploy((ServerWorld) world);
+            if (!powered) // Trigger on rising edge
+            {
+                try (Transaction transaction = Transaction.openOuter())
+                {
+                    if (doWork(BASE_WORK_AMOUNT, transaction) == BASE_WORK_AMOUNT)
+                    {
+                        transaction.commit();
+                        deploy((ServerWorld) world);
+                    }
+                    else
+                    {
+                        transaction.abort();
+                    }
+                }
+            }
+            powered = true;
+        }
+        else
+        {
+            powered = false;
+            if (hasMotor())
+                getConnectedMotor().setRunning(false);
         }
     }
 
@@ -197,5 +231,17 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
         tag.putBoolean("shuttle", shuttle);
         this.shuttle = false;
         return tag;
+    }
+
+    @Override
+    public void setConnectedMotor(@Nullable MotorBlockEntity motor)
+    {
+        this.motor = motor;
+    }
+
+    @Override
+    public MotorBlockEntity getConnectedMotor()
+    {
+        return motor;
     }
 }

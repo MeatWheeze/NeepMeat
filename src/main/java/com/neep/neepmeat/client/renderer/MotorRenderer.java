@@ -25,7 +25,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 
         long time = be.getWorld().getTime();
 
-        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.running ? 1 : 0));
+        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.5, be.currentSpeed, be.running ? 1 : 0));
 
         BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);

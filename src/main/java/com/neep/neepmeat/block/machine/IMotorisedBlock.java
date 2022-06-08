@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block.machine;
 
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -9,7 +10,7 @@ import net.minecraft.util.math.Direction;
 
 import javax.annotation.Nullable;
 
-public interface IKineticBlock
+public interface IMotorisedBlock
 {
     void setConnectedMotor(@Nullable MotorBlockEntity motor);
 
@@ -22,14 +23,18 @@ public interface IKineticBlock
 
     default long doWork(long amount, TransactionContext transaction)
     {
-        return getConnectedMotor().doWork(amount, transaction);
+        if (getConnectedMotor() != null)
+            return getConnectedMotor().doWork(amount, transaction);
+        else
+            return -1;
     }
 
     default void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         Direction facing = state.get(LinearOscillatorBlock.FACING);
         BlockPos backPos = pos.offset(facing.getOpposite());
-        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be)
+        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be
+                && world.getBlockState(backPos).get(BaseFacingBlock.FACING) == facing)
         {
             setConnectedMotor(be);
         }

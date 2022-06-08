@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.machine.IKineticBlock;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEntityClientSerializable, IKineticBlock
+public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEntityClientSerializable, IMotorisedBlock
 {
     public static final String NBT_COOLDOWN = "cooldown";
     public static final String NBT_MAX_COOLDOWN = "max_cooldown";
