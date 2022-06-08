@@ -102,6 +102,7 @@ public class NMBlockEntities
 
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
         ItemStorage.SIDED.registerSelf(DEPLOYER);
+        ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {

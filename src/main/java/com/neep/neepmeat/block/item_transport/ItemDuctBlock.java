@@ -18,6 +18,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -80,27 +81,9 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if(player.getStackInHand(hand).isOf(((BaseBlock) (NMBlocks.ITEM_DUCT)).getBlockItem()))
-        {
-            return ActionResult.PASS;
-        }
-        if (world.isClient)
-        {
-            return ActionResult.SUCCESS;
-        }
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof ItemDuctBlockEntity be)
-        {
-////            player.openHandledScreen(be);
-//            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-//
-//            if (screenHandlerFactory != null)
-//            {
-//                player.openHandledScreen(screenHandlerFactory);
-//            }
-            System.out.println(be.getResource());
-        }
-        return ActionResult.CONSUME;
+//        ItemStack handStack = player.getStackInHand(hand);
+//        ((BaseBlock) (NMBlocks.ITEM_DUCT)).getBlockItem();
+        return ActionResult.PASS;
     }
 
     @Override
@@ -113,7 +96,7 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
             // Scatter contents in world
             if (blockEntity instanceof ItemDuctBlockEntity be)
             {
-                ItemScatterer.spawn(world, pos, be);
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), be.getResource().toStack((int) be.getAmount()));
                 world.updateComparators(pos,this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
