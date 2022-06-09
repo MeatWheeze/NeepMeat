@@ -12,6 +12,10 @@ import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.block.item_transport.PneumaticTubeBlock;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
+import com.neep.neepmeat.block.vat.ItemPortBlock;
+import com.neep.neepmeat.block.vat.TankWallBlock;
+import com.neep.neepmeat.block.vat.VatCasingBlock;
+import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -20,6 +24,8 @@ import net.minecraft.sound.BlockSoundGroup;
 @SuppressWarnings("unused")
 public class NMBlocks
 {
+    public static FabricBlockSettings METAL = FabricBlockSettings.of(Material.METAL).hardness(4.0f).sounds(BlockSoundGroup.NETHERITE);
+
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", 64, true, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
@@ -70,6 +76,11 @@ public class NMBlocks
     public static Block CONVERTER_BASE = BlockRegistry.queue(new ConverterBlock.Base("converter_base", 64, false, FabricBlockSettings.copy(CONVERTER)));
 //    public static Block LARGE_CONVERTER = BlockRegistry.queueBlock(new LargeConverterBlock("large_converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
 
+    public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", 64, false, METAL));
+    public static Block TANK_WALL = BlockRegistry.queue(new TankWallBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
+
     // --- Fluid Transfer ---
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
@@ -78,7 +89,7 @@ public class NMBlocks
     public static Block ITEM_BUFFER = BlockRegistry.queue(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
     public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
-    public static Block FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block FLUID_PORT = BlockRegistry.queue(new FluidInterfaceBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
@@ -101,6 +112,5 @@ public class NMBlocks
 
     // --- Integrator ---
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorEggBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.SLIME)));
-    public static Block TANK_WALL = BlockRegistry.queue(new TankWallBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
 
 }

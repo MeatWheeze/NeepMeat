@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.block.fluid_transport.FluidPortBlock;
+import com.neep.neepmeat.block.fluid_transport.FluidInterfaceBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -54,7 +54,7 @@ public class SpigotBlockEntity extends BlockEntity implements Storage<FluidVaria
         {
             updateApiCache(getPos(), getCachedState());
         }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidPortBlock.FACING));
+        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
         if (storage != null)
         {
             return storage.insert(resource, maxAmount, transaction);
@@ -69,7 +69,7 @@ public class SpigotBlockEntity extends BlockEntity implements Storage<FluidVaria
         {
             updateApiCache(getPos(), getCachedState());
         }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidPortBlock.FACING));
+        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
         if (storage != null)
         {
             return storage.extract(resource, maxAmount, transaction);
@@ -84,7 +84,7 @@ public class SpigotBlockEntity extends BlockEntity implements Storage<FluidVaria
         {
             updateApiCache(getPos(), getCachedState());
         }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidPortBlock.FACING));
+        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
         if (storage != null)
         {
             return storage.iterator(transaction);
@@ -97,7 +97,7 @@ public class SpigotBlockEntity extends BlockEntity implements Storage<FluidVaria
         if (getWorld() == null || !(getWorld() instanceof ServerWorld))
             return;
 
-        Direction direction = state.get(FluidPortBlock.FACING);
+        Direction direction = state.get(FluidInterfaceBlock.FACING);
         cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) getWorld(), pos.offset(direction));
     }
 
