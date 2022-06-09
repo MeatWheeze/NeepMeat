@@ -13,7 +13,7 @@ public class BlockRegistry
 {
     public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
 
-    public static Block queueBlock(IMeatBlock block)
+    public static Block queue(IMeatBlock block)
     {
         if (!(block instanceof Block))
         {
@@ -24,7 +24,7 @@ public class BlockRegistry
         return (Block) block;
     }
 
-    public static Block queueBlock(Block block, String registryName)
+    public static Block queue(Block block, String registryName)
     {
         BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
         return block;

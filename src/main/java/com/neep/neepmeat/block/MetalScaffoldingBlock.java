@@ -32,14 +32,14 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
         super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
 
         stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
-        BlockRegistry.queueBlock(stairs);
+        BlockRegistry.queue(stairs);
 
         slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
-        BlockRegistry.queueBlock(slab);
+        BlockRegistry.queue(slab);
 
         this.registryName = registryName;
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
-        BlockRegistry.queueBlock(this);
+        BlockRegistry.queue(this);
     }
 
     public BlockItem getBlockItem()
