@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
@@ -36,6 +37,8 @@ public class NMBlockEntities
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
     public static BlockEntityType<ItemPortBlock.ItemPortBlockEntity> VAT_ITEM_PORT;
+    public static BlockEntityType<IMultiBlock.Entity> VAT_CASING;
+    public static BlockEntityType<IMultiBlock.Entity> VAT_WINDOW;
     public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
@@ -93,6 +96,9 @@ public class NMBlockEntities
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
+
+        VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
+//        VAT_CASING = registerBlockEntity("vat_casing", IMultiBlock.Entity.createFactory(VAT_CASING), NMBlocks.VAT_CASING);
         VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.ItemPortBlockEntity::new, NMBlocks.VAT_ITEM_PORT);
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -15,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class VatControllerBlock extends BaseHorFacingBlock implements IVatStructure, BlockEntityProvider
+public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBlock, BlockEntityProvider, IVatComponent
 {
     public VatControllerBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -29,6 +30,7 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IVatStruct
                 this.getDefaultState().with(FACING, context.getPlayerLookDirection().getOpposite());
     }
 
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (world.getBlockEntity(pos) instanceof VatControllerBlockEntity be)
@@ -41,6 +43,15 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IVatStruct
         }
 
         return ActionResult.PASS;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!newState.isOf(this) && world.getBlockEntity(pos) instanceof VatControllerBlockEntity be && !world.isClient())
+        {
+            be.disassemble((ServerWorld) world);
+        }
     }
 
     @Nullable
