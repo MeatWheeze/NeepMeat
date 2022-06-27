@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
+import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
@@ -98,6 +99,7 @@ public class NMBlockEntities
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
+        VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
 //        VAT_CASING = registerBlockEntity("vat_casing", IMultiBlock.Entity.createFactory(VAT_CASING), NMBlocks.VAT_CASING);
         VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.ItemPortBlockEntity::new, NMBlocks.VAT_ITEM_PORT);
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);

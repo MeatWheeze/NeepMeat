@@ -1,13 +1,12 @@
 package com.neep.neepmeat.block.multiblock;
 
-import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import org.lwjgl.system.CallbackI;
 
 public interface IMultiBlock
 {
@@ -15,19 +14,34 @@ public interface IMultiBlock
     {
         protected BlockPos controllerPos;
 
-        public Entity(BlockPos pos, BlockState state)
-        {
-            this(NMBlockEntities.VAT_CASING, pos, state);
-        }
-
         public Entity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state);
         }
 
-        public static FabricBlockEntityTypeBuilder.Factory<Entity> createFactory(BlockEntityType<?> type)
+        @Override
+        public void readNbt(NbtCompound nbt)
         {
-            return (pos, state) -> new Entity(type, pos, state);
+            super.readNbt(nbt);
+            NbtCompound nbt2 = nbt.getCompound("controller");
+            if (nbt2 != null)
+            {
+                setController(NbtHelper.toBlockPos(nbt2));
+            }
+            else
+            {
+                setController(null);
+            }
+        }
+
+        public NbtCompound writeNbt(NbtCompound nbt)
+        {
+            super.writeNbt(nbt);
+            if (hasController())
+            {
+                nbt.put("controller", NbtHelper.fromBlockPos(controllerPos));
+            }
+            return nbt;
         }
 
         public BlockPos getControllerPos()
@@ -53,6 +67,7 @@ public interface IMultiBlock
         public void setController(BlockPos controllerPos)
         {
             this.controllerPos = controllerPos;
+            this.markDirty();
         }
 
         public boolean hasController()

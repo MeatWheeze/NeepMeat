@@ -3,12 +3,15 @@ package com.neep.neepmeat.block.vat;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -18,6 +21,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBlock, BlockEntityProvider, IVatComponent
 {
+    public static final BooleanProperty ASSEMBLED = BooleanProperty.of("assembled");
+
     public VatControllerBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(registryName, itemMaxStack, hasLore, settings);
@@ -27,7 +32,8 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         return context.getPlayerLookDirection().getAxis().isVertical() ? getDefaultState() :
-                this.getDefaultState().with(FACING, context.getPlayerLookDirection().getOpposite());
+                this.getDefaultState().with(FACING, context.getPlayerLookDirection().getOpposite())
+                        .with(ASSEMBLED, false);
     }
 
     @Override
@@ -35,13 +41,17 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
     {
         if (world.getBlockEntity(pos) instanceof VatControllerBlockEntity be)
         {
-            if (!be.isAssembled() && !world.isClient())
+            if (!be.isAssembled() && !world.isClient() && !player.isSneaking())
             {
                 be.tryAssemble((ServerWorld) world);
             }
+            else if (player.isSneaking())
+            {
+                System.out.println(be.blocks);
+                System.out.println(be.ports);
+            }
             return ActionResult.SUCCESS;
         }
-
         return ActionResult.PASS;
     }
 
@@ -52,6 +62,13 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
         {
             be.disassemble((ServerWorld) world);
         }
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(ASSEMBLED);
     }
 
     @Nullable
