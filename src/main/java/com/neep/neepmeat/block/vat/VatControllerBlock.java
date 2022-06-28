@@ -39,6 +39,7 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        System.out.println(world.getBlockEntity(pos));
         if (world.getBlockEntity(pos) instanceof VatControllerBlockEntity be)
         {
             if (!be.isAssembled() && !world.isClient() && !player.isSneaking())
@@ -62,6 +63,7 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
         {
             be.disassemble((ServerWorld) world, true);
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

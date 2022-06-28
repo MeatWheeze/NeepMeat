@@ -9,10 +9,13 @@ import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.storage.WritableStackStorage;
+import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -21,6 +24,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -32,7 +36,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class VatControllerBlockEntity extends BlockEntity implements IControllerBlockEntity
+public class VatControllerBlockEntity extends BlockEntity implements IControllerBlockEntity, BlockEntityClientSerializable
 {
     protected boolean assembled;
     public List<BlockPos> blocks;
@@ -115,14 +119,26 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
 
     public boolean disassemble(ServerWorld world, boolean replaced)
     {
-        blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> ((IMultiBlock.Entity) be).setController(null));
+        blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> {if (be instanceof IMultiBlock.Entity entity) entity.setController(null);});
         if (!replaced)
             world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, false), Block.NOTIFY_LISTENERS);
         blocks.clear();
         this.assembled = false;
+        dropItems(world);
         markDirty();
         System.out.println("Disassemble");
         return true;
+    }
+
+    protected void dropItems(World world)
+    {
+        Transaction transaction = Transaction.openOuter();
+        for (StorageView<ItemVariant> view : storages.items.iterable(transaction))
+        {
+            ItemScatterer.spawn(world, getPos().getX(), getPos().getY(), getPos().getZ(), view.getResource().toStack((int) view.getAmount()));
+            view.extract(view.getResource(), Long.MAX_VALUE, transaction);
+        }
+        transaction.commit();
     }
 
     public static List<BlockPos> checkValid(ServerWorld world, BlockPos centre)
@@ -216,11 +232,12 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
 
     public Storage<FluidVariant> getFluidStorage()
     {
-        return null;
+        return Storage.empty();
     }
+
     public Storage<ItemVariant> getItemStorage()
     {
-        return null;
+        return storages.items;
     }
 
     public boolean isAssembled()
@@ -243,6 +260,19 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     public void componentBroken(ServerWorld world)
     {
         disassemble(world, false);
+    }
+
+    @Override
+    public void fromClientTag(NbtCompound nbt)
+    {
+        storages.items.readNbt(nbt);
+    }
+
+    @Override
+    public NbtCompound toClientTag(NbtCompound nbt)
+    {
+        storages.items.writeNbt(nbt);
+        return nbt;
     }
 
     protected static class Storages
