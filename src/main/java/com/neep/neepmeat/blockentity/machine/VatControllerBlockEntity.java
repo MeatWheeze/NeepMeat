@@ -1,15 +1,19 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.meatlib.transfer.MultiItemBuffer;
 import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.IVatComponent;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
+import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
+import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -275,27 +279,38 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
         return nbt;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     protected static class Storages
     {
         protected WritableStackStorage itemInput;
         protected WritableStackStorage itemOutput;
         protected MultiItemBuffer items;
 
+        protected WritableFluidBuffer fluidInput;
+        protected WritableFluidBuffer fluidOutput;
+        protected MultiFluidBuffer fluids;
+
         protected Storages(@Nullable BlockEntity parent)
         {
             itemInput = new WritableStackStorage(parent);
             itemOutput = new WritableStackStorage(parent);
             items = new MultiItemBuffer(List.of(itemInput, itemOutput));
+
+            fluidInput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
+            fluidOutput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
+            fluids = new MultiFluidBuffer(List.of(fluidInput, fluidOutput));
         }
 
         public void readNbt(NbtCompound nbt)
         {
             items.readNbt(nbt);
+            fluids.readNbt(nbt);
         }
 
         public NbtCompound writeNbt(NbtCompound nbt)
         {
             items.writeNbt(nbt);
+            fluids.writeNbt(nbt);
             return nbt;
         }
     }
