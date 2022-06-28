@@ -20,18 +20,18 @@ import java.util.Collections;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidPortBlockEntity extends BlockEntity implements Storage<FluidVariant>
+public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<FluidVariant>
 {
     protected BlockApiCache<Storage<FluidVariant>, Direction> cache;
 
-    public FluidPortBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
+    public FluidInterfaceBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
 
-    public FluidPortBlockEntity(BlockPos pos, BlockState state)
+    public FluidInterfaceBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.FLUID_PORT, pos, state);
+        super(NMBlockEntities.FLUID_INTERFACE, pos, state);
     }
 
     @Override

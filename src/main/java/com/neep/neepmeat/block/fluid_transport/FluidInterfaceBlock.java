@@ -2,7 +2,7 @@ package com.neep.neepmeat.block.fluid_transport;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.fluid.FluidPortBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.FluidInterfaceBlockEntity;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -63,6 +63,6 @@ public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityP
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FluidPortBlockEntity(pos, state);
+        return new FluidInterfaceBlockEntity(pos, state);
     }
 }
