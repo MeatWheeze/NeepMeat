@@ -117,6 +117,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(DEPLOYER);
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 
+        ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
+
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
             if (be instanceof FluidBuffer.FluidBufferProvider provider)

@@ -22,6 +22,16 @@ public class VatCasingBlock extends BaseBlock implements IVatComponent, BlockEnt
         super(registryName, itemMaxStack, hasLore, settings);
     }
 
+//    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+//    {
+//        if (world.getBlockEntity(pos) instanceof Entity be && !world.isClient())
+//        {
+//            System.out.println(be.getControllerPos());
+//        }
+//        return  ActionResult.SUCCESS;
+//    }
+
+    @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
         if (world.getBlockEntity(pos) instanceof Entity be && !world.isClient())

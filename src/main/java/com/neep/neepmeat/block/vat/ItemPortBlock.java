@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.multiblock.IPortBlock;
 import com.neep.neepmeat.block.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -18,16 +17,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemPortBlock extends BaseBlock implements IPortBlock<ItemVariant>, IVatComponent, BlockEntityProvider
+@SuppressWarnings("UnstableApiUsage")
+public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVariant>, IVatComponent, BlockEntityProvider
 {
     public ItemPortBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(registryName, itemMaxStack, hasLore, settings);
-    }
-
-    public ItemPortBlock(String registryName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
-    {
-        super(registryName, itemMaxStack, hasLore, factory, settings);
     }
 
     @Override
