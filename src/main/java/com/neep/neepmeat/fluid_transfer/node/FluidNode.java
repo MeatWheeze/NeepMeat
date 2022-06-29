@@ -241,13 +241,13 @@ public class FluidNode
     public long firstAmount(ServerWorld world, TransactionContext transaction)
     {
         Transaction inner = transaction.openNested();
+        long max = 0;
         for (StorageView<FluidVariant> view : getStorage(world).iterable(inner))
         {
-            inner.abort();
-            return view.getAmount();
+            max = Math.max(max, view.getAmount());
         }
         inner.abort();
-        return 0;
+        return max;
     }
 
     public AcceptorModes getMode(ServerWorld world)
