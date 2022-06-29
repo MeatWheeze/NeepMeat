@@ -282,12 +282,14 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     public void fromClientTag(NbtCompound nbt)
     {
         storages.items.readNbt(nbt);
+        storages.fluids.readNbt(nbt);
     }
 
     @Override
     public NbtCompound toClientTag(NbtCompound nbt)
     {
         storages.items.writeNbt(nbt);
+        storages.fluids.writeNbt(nbt);
         return nbt;
     }
 
