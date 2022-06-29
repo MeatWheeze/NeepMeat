@@ -224,6 +224,7 @@ public class PipeNetwork
                 Predicate<Supplier<FluidNode>> predicate = ((Predicate<Supplier<FluidNode>>)
                         (supplier -> validForInsertion(world, node, supplier)))
                         .and(supplier -> supplier.get().canInsert(world, t2));
+
                 safeIndices = new ArrayList<>();
                 for (int j = 0; j < connectedNodes.size(); j++)
                 {
