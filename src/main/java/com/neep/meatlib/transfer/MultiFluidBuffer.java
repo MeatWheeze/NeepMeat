@@ -53,6 +53,12 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         if (!resource.isBlank())
         {
             Slot slot = getOrCreateSlot(resource);
+            if (slot == null)
+            {
+                slot = new Slot(FluidVariant.blank(), this);
+                slots.add(slot);
+            }
+
             long insertedAmount = Math.min(maxAmount, capacity - totalAmount);
             if (insertedAmount > 0)
             {
@@ -92,7 +98,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
                 slot.extract(resource, extractedAmount, transaction);
                 if (slot.getAmount() <= 0)
                 {
-                    slots.remove(resource);
+                    slots.remove(slot);
                 }
             }
             syncIfPossible();
@@ -147,9 +153,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
             if (slot.getResource().equals(variant))
                 return slot;
         }
-        Slot slot = new Slot(FluidVariant.blank(), this);
-        slots.add(slot);
-        return slot;
+        return null;
     }
 
     public void syncIfPossible()
@@ -172,6 +176,11 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
     public long getCapacity()
     {
         return capacity;
+    }
+
+    public long getTotalAmount()
+    {
+        return totalAmount;
     }
 
     public static class Slot extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements SingleSlotStorage<FluidVariant>, StorageView<FluidVariant>
