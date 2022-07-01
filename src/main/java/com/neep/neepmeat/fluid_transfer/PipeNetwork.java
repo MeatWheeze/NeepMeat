@@ -41,7 +41,6 @@ public class PipeNetwork
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     protected Function<Long, Long>[][] nodeMatrix = null;
 
-    private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
     // TODO: Find a way to remove unloaded networks from this
@@ -300,31 +299,34 @@ public class PipeNetwork
     public void discoverNodes(BlockPos startPos, Direction face)
     {
         networkPipes.clear();
-        pipeQueue.clear();
+        Queue<BlockPos> pipeQueue = new LinkedList<>();
         connectedNodes.clear();
 
         // List of pipes to be searched in next iteration
-        List<BlockPos> nextSet = new ArrayList<>();
         List<BlockPos> visited = new ArrayList<>();
 
         pipeQueue.add(startPos);
         networkPipes.put(startPos, new PipeState(world.getBlockState(startPos)));
+        visited.add(startPos);
 
         // Pipe search depth
         for (int i = 0; i < UPDATE_DISTANCE; ++i)
         {
-            nextSet.clear();
-            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
+//            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
+            while (!pipeQueue.isEmpty())
             {
-                BlockPos current = iterator.next();
+                BlockPos current = pipeQueue.poll();
+                BlockState state1 = world.getBlockState(current);
 
-                for (Direction direction : Direction.values())
+                if (!(state1.getBlock() instanceof IFluidPipe))
+                    continue;
+
+                for (Direction direction : ((IFluidPipe) state1.getBlock()).getConnections(state1, dir -> true))
                 {
                     BlockPos next = current.offset(direction);
-                    BlockState state1 = world.getBlockState(current);
                     BlockState state2 = world.getBlockState(next);
 
-                    if (IFluidPipe.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
+                    if (!visited.contains(next))
                     {
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof IFluidPipe
@@ -334,7 +336,7 @@ public class PipeNetwork
                             // Next block is connected in opposite direction
                             if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
-                                nextSet.add(next);
+                                pipeQueue.add(next);
                                 networkPipes.put(next, new PipeState(state2));
                             }
                         }
@@ -360,9 +362,7 @@ public class PipeNetwork
                         }
                     }
                 }
-                iterator.remove();
             }
-            pipeQueue.addAll(nextSet);
         }
 //        System.out.println("special: " + special + "state: " + state);
 //        System.out.println(networkPipes);
