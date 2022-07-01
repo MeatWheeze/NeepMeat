@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -216,7 +217,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
         }
         if (state.getBlock() instanceof IItemPipe pipe)
         {
-            return pipe.insert(world, newPos, state, facing.getOpposite(), amount);
+            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
         }
         return 0;
     }
@@ -227,7 +228,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
         BlockState state = world.getBlockState(newPos);
         if (state.getBlock() instanceof IItemPipe pipe)
         {
-            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), amount);
+            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()));
         }
         return 0;
     }

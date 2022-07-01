@@ -1,5 +1,6 @@
 package com.neep.neepmeat.blockentity.pipe;
 
+import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
@@ -123,7 +124,27 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         be.sync();
     }
 
-    public static long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
+    public long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
+    {
+        Direction out;
+        List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
+
+        Random rand = world.getRandom();
+        if (!connections.isEmpty())
+        {
+            out = connections.get(rand.nextInt(connections.size()));
+        }
+        else
+        {
+            out = in;
+        }
+
+        item.reset(in, out, world.getTime());
+        this.items.add(item);
+        return item.getItemStack().getCount();
+    }
+
+    public static long insert1(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
     {
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {
@@ -179,25 +200,26 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
     public void transfer(Iterator<ItemInPipe> it, ItemInPipe item, BlockPos pos, BlockState state, World world)
     {
-        BlockPos pos1 = pos.offset(item.out);
-        BlockState state1 = world.getBlockState(pos1);
-        Block block = state1.getBlock();
+        BlockPos toPos = pos.offset(item.out);
+        BlockState toState = world.getBlockState(toPos);
+        Block toBlock = toState.getBlock();
 
         boolean success = false;
         Storage<ItemVariant> storage;
-        if (block instanceof IItemPipe pipe)
+        if (toBlock instanceof IItemPipe pipe)
         {
             if (IItemPipe.isConnectedIn(world, pos, state, item.out))
 //            if (pipe.getConnections(state1, IItemPipe::all).contains(item.out))
             {
-                if (insert(item, world, state1, pos1, item.out.getOpposite()) > 0)
+//                if (insert(item, world, toState, toPos, item.out.getOpposite()) > 0)
+                if (((IItemPipe) toBlock).insert(world, toPos, toState, item.out.getOpposite(), item) > 0)
                 {
                     it.remove();
                     success = true;
                 }
             }
         }
-        else if ((storage = ItemStorage.SIDED.find(world, pos1, item.out.getOpposite())) != null)
+        else if ((storage = ItemStorage.SIDED.find(world, toPos, item.out.getOpposite())) != null)
         {
             // Bounce if the entire stack was not used
             if (pipeToStorage(item, storage) == -1)
@@ -206,14 +228,14 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
                 success = true;
             }
         }
-        else if (state1.isAir())
+        else if (toState.isAir())
         {
             Direction out = item.out;
             double offset = 0.2;
             Entity itemEntity = new ItemEntity(world,
-                    pos1.getX() + 0.5 - offset * out.getOffsetX(),
-                    pos1.getY() + 0.1 - offset * out.getOffsetY(),
-                    pos1.getZ() + 0.5 - offset * out.getOffsetZ(),
+                    toPos.getX() + 0.5 - offset * out.getOffsetX(),
+                    toPos.getY() + 0.1 - offset * out.getOffsetY(),
+                    toPos.getZ() + 0.5 - offset * out.getOffsetZ(),
                     item.getItemStack(),
                     out.getOffsetX() * item.speed, out.getOffsetY() * item.speed, out.getOffsetZ() * item.speed);
             world.spawnEntity(itemEntity);
