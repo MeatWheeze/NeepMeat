@@ -250,6 +250,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
                 this.variant = FluidVariant.blank();
 
             transaction.addCloseCallback(((transaction1, result) -> parent.partInsertCallback(transaction1, result, extractedAmount)));
+            parent.syncIfPossible();
             return extractedAmount;
         }
 
