@@ -82,7 +82,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         boolean forced = type == PipeConnectionType.FORCED;
 
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient() && !(neighborState.getBlock() instanceof PneumaticTubeBlock))
+        if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe))
         {
             connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
@@ -110,7 +110,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
-        createStorageNodes(world, pos, newState);
     }
 
     @Nullable
@@ -154,24 +153,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         return state;
     }
 
-    public void createStorageNodes(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
-            for (Direction direction : Direction.values())
-            {
-                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
-                {
-                }
-                else
-                {
-                }
-            }
-            // TODO: avoid creating instances that will fail immediately
-        }
-    }
-
-    private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
+    protected boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;

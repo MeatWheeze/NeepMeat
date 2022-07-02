@@ -9,8 +9,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -23,6 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +77,7 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     }
 
     @Override
-    public boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
+    public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         return direction.equals(state.get(FACING));
     }

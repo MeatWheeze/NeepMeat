@@ -24,7 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-@SuppressWarnings("UnstableApiUsage")
 public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
     protected List<ItemInPipe> items = new ArrayList<>();
@@ -133,9 +132,16 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
     public long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
     {
+        Direction out = getOutputDirection(item, state, world, in);
+        item.reset(in, out, world.getTime());
+        this.items.add(item);
+        return item.getItemStack().getCount();
+    }
+
+    protected Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
+    {
         Direction out;
         List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
-
         Random rand = world.getRandom();
         if (!connections.isEmpty())
         {
@@ -145,10 +151,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         {
             out = in;
         }
-
-        item.reset(in, out, world.getTime());
-        this.items.add(item);
-        return item.getItemStack().getCount();
+        return out;
     }
 
     public void dropItems()
