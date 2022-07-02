@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
+import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
@@ -187,6 +188,7 @@ public class NeepMeatClient implements ClientModInitializer
         // Screens
         ScreenRegistry.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
         ScreenRegistry.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
+        ScreenRegistry.register(ScreenHandlerInit.ROUTER, RouterScreen::new);
 
     }
 }
