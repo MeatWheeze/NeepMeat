@@ -60,7 +60,6 @@ public interface ImplementedInventory extends Inventory
     @Override
     default ItemStack removeStack(int slot)
     {
-//        return Inventories.removeStack(getItems(), slot);
         return removeStack(slot, getItems().get(slot).getCount());
     }
 
