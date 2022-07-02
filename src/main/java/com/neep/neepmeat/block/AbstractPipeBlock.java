@@ -108,11 +108,10 @@ public abstract class AbstractPipeBlock extends BaseBlock
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        return this.getPlacementState(ctx.getWorld(), this.getDefaultState(), ctx.getBlockPos());
-    }
+        World world = ctx.getWorld();
+        BlockState state = this.getDefaultState();
+        BlockPos pos = ctx.getBlockPos();
 
-    protected BlockState getPlacementState(BlockView world, BlockState state, BlockPos pos)
-    {
         boolean bl = isNotConnected(state);
         state = this.getConnectedState(world, this.getDefaultState(), pos);
         if (bl && isNotConnected(state))
