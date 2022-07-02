@@ -3,9 +3,8 @@ package com.neep.neepmeat.block.item_transport;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
+import com.neep.neepmeat.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -24,7 +23,13 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
-        return 1;
+        Direction output = Direction.NORTH;
+        if (direction != output)
+        {
+            TubeUtils.tryTransfer(item, pos, state, output, world);
+            return item.getItemStack().getCount();
+        }
+        return 0;
     }
 
     @Nullable

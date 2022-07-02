@@ -1,17 +1,13 @@
 package com.neep.neepmeat.blockentity.pipe;
 
-import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.block.pipe.IItemPipe;
-import com.neep.neepmeat.block.machine.ItemPumpBlock;
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -118,7 +114,9 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
             item.tick();
             if (item.progress >= 1)
             {
-                be.transfer(it, item, blockPos, blockState, world);
+                long transferred = TubeUtils.tryTransfer(item, blockPos, blockState, item.out, world);
+                if (transferred == -1)
+                    it.remove();
             }
         }
         be.sync();
@@ -142,130 +140,6 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         item.reset(in, out, world.getTime());
         this.items.add(item);
         return item.getItemStack().getCount();
-    }
-
-    public static long insert1(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
-    {
-        if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
-        {
-            Direction out;
-            List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
-
-            Random rand = world.getRandom();
-            if (!connections.isEmpty())
-            {
-                out = connections.get(rand.nextInt(connections.size()));
-            }
-            else
-            {
-                out = in;
-            }
-
-            item.reset(in, out, world.getTime());
-            be.items.add(item);
-            return 1;
-        }
-        else if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
-        {
-            if (be.getCachedState().get(ItemPumpBlock.FACING) == in.getOpposite())
-            {
-                Transaction transaction = Transaction.openOuter();
-                long transferred = be.forwardItem(item.getResourceAmount(), transaction);
-                transaction.commit();
-                return transferred;
-            }
-        }
-        return 0;
-    }
-
-    public static void reset(ItemInPipe item, World world, BlockState state)
-    {
-        Direction out;
-        Direction in = item.out;
-
-        List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
-
-        Random rand = world.getRandom();
-        if (!connections.isEmpty())
-        {
-            out = connections.get(rand.nextInt(connections.size()));
-        }
-        else
-        {
-            out = in;
-        }
-
-        item.reset(in, out, world.getTime());
-    }
-
-    public void transfer(Iterator<ItemInPipe> it, ItemInPipe item, BlockPos pos, BlockState state, World world)
-    {
-        BlockPos toPos = pos.offset(item.out);
-        BlockState toState = world.getBlockState(toPos);
-        Block toBlock = toState.getBlock();
-
-        boolean success = false;
-        Storage<ItemVariant> storage;
-        if (toBlock instanceof IItemPipe pipe)
-        {
-            if (IItemPipe.isConnectedIn(world, pos, state, item.out))
-//            if (pipe.getConnections(state1, IItemPipe::all).contains(item.out))
-            {
-//                if (insert(item, world, toState, toPos, item.out.getOpposite()) > 0)
-                if (((IItemPipe) toBlock).insert(world, toPos, toState, item.out.getOpposite(), item) > 0)
-                {
-                    it.remove();
-                    success = true;
-                }
-            }
-        }
-        else if ((storage = ItemStorage.SIDED.find(world, toPos, item.out.getOpposite())) != null)
-        {
-            // Bounce if the entire stack was not used
-            if (pipeToStorage(item, storage) == -1)
-            {
-                it.remove();
-                success = true;
-            }
-        }
-        else if (toState.isAir())
-        {
-            Direction out = item.out;
-            double offset = 0.2;
-            Entity itemEntity = new ItemEntity(world,
-                    toPos.getX() + 0.5 - offset * out.getOffsetX(),
-                    toPos.getY() + 0.1 - offset * out.getOffsetY(),
-                    toPos.getZ() + 0.5 - offset * out.getOffsetZ(),
-                    item.getItemStack(),
-                    out.getOffsetX() * item.speed, out.getOffsetY() * item.speed, out.getOffsetZ() * item.speed);
-            world.spawnEntity(itemEntity);
-            it.remove();
-            success = true;
-        }
-        if (!success)
-        {
-            reset(item, world, state);
-//            insert(item, world, state, pos, item.out);
-//            item.reset(item.out, item.in, world.getTime());
-        }
-    }
-
-    public long pipeToStorage(ItemInPipe item, Storage<ItemVariant> storage)
-    {
-        Transaction t = Transaction.openOuter();
-        long transferred = storage.insert(item.getResourceAmount().resource(), item.getResourceAmount().amount(), t);
-        if (transferred > 0)
-        {
-            t.commit();
-            if (transferred == item.getItemStack().getCount())
-            {
-                return -1;
-            }
-            item.decrement((int) transferred);
-            return transferred;
-        }
-        t.abort();
-        return 0;
     }
 
     public void dropItems()
