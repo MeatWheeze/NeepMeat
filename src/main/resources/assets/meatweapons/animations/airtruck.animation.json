@@ -1,0 +1,31 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.airtruck.fly": {
+			"loop": true,
+			"bones": {
+				"nacelle_lf": {
+					"rotation": {
+						"vector": ["r_lf", 0, 0]
+					}
+				},
+				"nacelle_rf": {
+					"rotation": {
+						"vector": ["r_rf", 0, 0]
+					}
+				},
+				"nacelle_lb": {
+					"rotation": {
+						"vector": ["r_lb", 0, 0]
+					}
+				},
+				"nacelle_rb": {
+					"rotation": {
+						"vector": ["r_rb", 0, 0]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
