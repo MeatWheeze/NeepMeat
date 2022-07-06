@@ -10,7 +10,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class MWKeys
 {
-    public static KeyBinding AIRTRUCK_FORWARDS;
+    public static KeyBinding AIRTRUCK_DOWN;
 
     public static KeyBinding registerKeyBinding(String namespace, String id, String category, int def)
     {
@@ -22,12 +22,7 @@ public class MWKeys
 
     public static void registerKeybinds()
     {
-        AIRTRUCK_FORWARDS = registerKeyBinding(MeatWeapons.NAMESPACE, "forwards", "movement", GLFW.GLFW_KEY_W);
-//        AIRTRUCK_FORWARDS = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-//                "key.meatweapons.forwards",
-//                InputUtil.Type.KEYSYM,
-//                GLFW.GLFW_KEY_W,
-//                "category.meatweapons.movement"));
+        AIRTRUCK_DOWN = registerKeyBinding(MeatWeapons.NAMESPACE, "forwards", "movement", GLFW.GLFW_KEY_X);
 
         ClientTickEvents.START_CLIENT_TICK.register(client ->
         {
