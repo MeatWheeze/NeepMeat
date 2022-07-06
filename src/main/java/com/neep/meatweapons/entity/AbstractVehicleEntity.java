@@ -46,12 +46,20 @@ extends Entity {
     private double z;
     protected double vehicleYaw;
     protected double vehiclePitch;
+
     protected boolean pressingLeft;
     protected boolean pressingRight;
     protected boolean pressingForward;
     protected boolean pressingBack;
     protected boolean pressingUp;
     protected boolean pressingDown;
+    protected boolean prevForward;
+    protected boolean prevBack;
+    protected boolean prevLeft;
+    protected boolean prevRight;
+    protected boolean prevUp;
+    protected boolean prevDown;
+
     protected double fallVelocity;
     protected boolean powered = true;
 
@@ -255,6 +263,14 @@ extends Entity {
     protected void updateKeys()
     {
         GameOptions options = MinecraftClient.getInstance().options;
+
+        this.prevForward = pressingForward;
+        this.prevBack = pressingBack;
+        this.prevLeft = pressingLeft;
+        this.prevRight = pressingRight;
+        this.prevUp = pressingUp;
+        this.prevDown = pressingDown;
+
         this.pressingForward = options.keyForward.isPressed();
         this.pressingBack = options.keyBack.isPressed();
         this.pressingLeft = options.keyLeft.isPressed();

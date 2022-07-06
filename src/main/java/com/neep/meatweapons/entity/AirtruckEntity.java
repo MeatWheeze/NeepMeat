@@ -1,8 +1,13 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
+import com.neep.neepmeat.init.SoundInitialiser;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -23,6 +28,10 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     protected final float forwardsAccel = 0.004f;
     protected float forwardsVelocity;
 
+    protected boolean accelerating;
+    protected boolean braking;
+    protected short soundStage = 0;
+
     public AirtruckEntity(EntityType<? extends AbstractVehicleEntity> type, World world)
     {
         super(type, world);
@@ -31,6 +40,13 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     public static AirtruckEntity create(World world)
     {
         return new AirtruckEntity(MeatWeapons.AIRTRUCK, world);
+    }
+
+    @Override
+    public void tick()
+    {
+        updateSounds();
+        super.tick();
     }
 
     @Override
@@ -50,11 +66,18 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
         this.setYaw(this.getYaw() + this.yawVelocity);
 
         if (this.pressingForward && !this.pressingBack)
+        {
             this.forwardsVelocity = Math.min(this.forwardsVelocity + forwardsAccel, maxSpeed);
+            this.accelerating = true;
+        }
         else if (!this.pressingForward && this.pressingBack)
+        {
             this.forwardsVelocity = Math.max(this.forwardsVelocity - forwardsAccel, -maxSpeed);
+        }
         else
+        {
             this.forwardsVelocity *= this.velocityDecay;
+        }
 
         if (this.pressingUp)
         {
@@ -67,6 +90,35 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
         this.setVelocity(this.getVelocity().add(MathHelper.sin(-this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity,
                 upVelocity,
                 MathHelper.cos(this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity));
+    }
+
+    protected void updateSounds()
+    {
+        if (pressingForward || pressingBack)
+        {
+            if (Math.abs(this.forwardsVelocity) < 0.9 * maxSpeed)
+            {
+                // Play running sound
+//                if (soundStage == 0)
+//                    world.playSoundFromEntity(null, this, SoundInitialiser.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL, 1, 1);
+            }
+            else
+            {
+                if (soundStage == 0)
+                    soundStage = 1;
+
+                if (soundStage == 1)
+                {
+//                    world.playSoundFromEntity(null, this, SoundInitialiser.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL, 1, 1);
+                }
+            }
+        }
+    }
+
+    public void onSpawnPacket(EntitySpawnS2CPacket packet)
+    {
+        super.onSpawnPacket(packet);
+        MinecraftClient.getInstance().getSoundManager().play(new AirtruckSoundInstance(this));
     }
 
     @Override

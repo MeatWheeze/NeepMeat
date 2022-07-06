@@ -42,6 +42,19 @@
     "sounds": [
       "meatweapons:plasma_hit"
     ]
+  },
+
+  "airtruck_starting": {
+    "subtitle": "subtitles.meatweapons.airtruck_starting",
+    "sounds": [
+      "meatweapons:airtruck_starting"
+    ]
+  },
+  "airtruck_running": {
+    "subtitle": "subtitles.meatweapons.airtruck_running",
+    "sounds": [
+      "meatweapons:airtruck_running"
+    ]
   }
 }
 
