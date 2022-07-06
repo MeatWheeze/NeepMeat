@@ -43,15 +43,18 @@ public class ParticleSpawnPacket
     }
 
     @Environment(value=EnvType.CLIENT)
-    public static void registerReceiver()
+    public static class Client
     {
-//        ClientPlayNetworking.registerGlobalReceiver(PARTICLE_SPAWN, (client, handler, buf, responseSender) ->
-//        {
-//            BlockPos pos = buf.readBlockPos();
-//            int amount = buf.readInt();
-//            Identifier id = buf.readIdentifier();
-//
-//            ParticleUtil.spawnParticle(client.world, pos, (ParticleEffect) Registry.PARTICLE_TYPE.get(id), UniformIntProvider.create(0, 1));
-//        });
+        public static void registerReceiver()
+        {
+    //        ClientPlayNetworking.registerGlobalReceiver(PARTICLE_SPAWN, (client, handler, buf, responseSender) ->
+    //        {
+    //            BlockPos pos = buf.readBlockPos();
+    //            int amount = buf.readInt();
+    //            Identifier id = buf.readIdentifier();
+    //
+    //            ParticleUtil.spawnParticle(client.world, pos, (ParticleEffect) Registry.PARTICLE_TYPE.get(id), UniformIntProvider.create(0, 1));
+    //        });
+        }
     }
 }

@@ -9,24 +9,23 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.client.world.ClientWorld;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
-@Environment(value= EnvType.CLIENT)
 public class BeamEffect extends GraphicsEffect
 {
     public static final Identifier BEAM_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
     public static final RenderLayer BEAM_LAYER = RenderLayer.getEntityTranslucent(BEAM_TEXTURE);
 
-    public BeamEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
+    public BeamEffect(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
         super(world, start, end, velocity, scale, maxTime);
     }
 
+    @Environment(value= EnvType.CLIENT)
     public void tick()
     {
         super.tick();
@@ -43,6 +42,7 @@ public class BeamEffect extends GraphicsEffect
     }
 
     @Override
+    @Environment(value= EnvType.CLIENT)
     public void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta)
     {
         matrices.push();

@@ -37,30 +37,34 @@ public class BeamPacket
     }
 
     @Environment(value= EnvType.CLIENT)
-    public static void registerReceiver()
+    public static class Client
     {
-        ClientPlayNetworking.registerGlobalReceiver(MWNetwork.EFFECT_ID, (client, handler, byteBuf, responseSender) ->
+        public static void registerReceiver()
         {
-            GraphicsEffect.Factory factory = GraphicsEffects.GRAPHICS_EFFECTS.get(byteBuf.readVarInt());
-            Vec3d start = PacketBufUtil.readVec3d(byteBuf);
-            Vec3d end = PacketBufUtil.readVec3d(byteBuf);
-            Vec3d velocity = PacketBufUtil.readVec3d(byteBuf);
-            float scale = byteBuf.readFloat();
-            int maxTime = byteBuf.readInt();
-            Identifier worldId = byteBuf.readIdentifier();
-
-            client.execute(() ->
+            ClientPlayNetworking.registerGlobalReceiver(MWNetwork.EFFECT_ID, (client, handler, byteBuf, responseSender) ->
             {
-                ClientWorld world;
-                if ((world = MinecraftClient.getInstance().world) == null)
-                    throw new IllegalStateException("Tried to spawn effect in a null world!");
+                GraphicsEffect.Factory factory = GraphicsEffects.GRAPHICS_EFFECTS.get(byteBuf.readVarInt());
+                Vec3d start = PacketBufUtil.readVec3d(byteBuf);
+                Vec3d end = PacketBufUtil.readVec3d(byteBuf);
+                Vec3d velocity = PacketBufUtil.readVec3d(byteBuf);
+                float scale = byteBuf.readFloat();
+                int maxTime = byteBuf.readInt();
+                Identifier worldId = byteBuf.readIdentifier();
 
-                if (world.getRegistryKey().getValue().equals(worldId))
+                client.execute(() ->
                 {
-                    GraphicsEffect effect = factory.create(world, start, end, velocity, scale, maxTime);
-                    GraphicsEffect.addEffect(effect);
-                }
+                    ClientWorld world;
+                    if ((world = MinecraftClient.getInstance().world) == null)
+                        throw new IllegalStateException("Tried to spawn effect in a null world!");
+
+                    if (world.getRegistryKey().getValue().equals(worldId))
+                    {
+                        GraphicsEffect effect = factory.create(world, start, end, velocity, scale, maxTime);
+                        GraphicsEffect.addEffect(effect);
+                    }
+                });
             });
-        });
+        }
     }
+
 }

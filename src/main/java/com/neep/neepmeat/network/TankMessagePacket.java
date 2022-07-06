@@ -34,17 +34,20 @@ public class TankMessagePacket
     }
 
     @Environment(value=EnvType.CLIENT)
-    public static void registerReciever()
+    public static class Client
     {
-        ClientPlayNetworking.registerGlobalReceiver(TANK_MESSAGE, (client, handler, buf, responseSender) ->
+        public static void registerReciever()
         {
-            BlockPos pos = buf.readBlockPos();
-            long amount = buf.readLong();
-            FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
-            MutableText text = FluidVariantRendering.getName(resource).shallowCopy();
+            ClientPlayNetworking.registerGlobalReceiver(TANK_MESSAGE, (client, handler, buf, responseSender) ->
+            {
+                BlockPos pos = buf.readBlockPos();
+                long amount = buf.readLong();
+                FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
+                MutableText text = FluidVariantRendering.getName(resource).shallowCopy();
 
-            long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
-            client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + mb + "mb"), true);
-        });
+                long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
+                client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + mb + "mb"), true);
+            });
+        }
     }
 }

@@ -6,8 +6,6 @@ import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
-import com.neep.neepmeat.client.renderer.MotorRenderer;
-import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -15,7 +13,6 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 @Environment(value= EnvType.CLIENT)
@@ -40,7 +37,7 @@ public class MWClient implements ClientModInitializer
         EntityRendererRegistry.INSTANCE.register(MeatWeapons.EXPLODING_SHELL, ShellEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_SHELL_LAYER, PlasmaEntityModel::getTexturedModelData);
 
-        ProjectileSpawnPacket.registerReceiver();
+        ProjectileSpawnPacket.Client.registerReceiver();
     }
 
     public static void registerAnimations()
@@ -58,7 +55,7 @@ public class MWClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        BeamPacket.registerReceiver();
+        BeamPacket.Client.registerReceiver();
         registerEntityModels();
         registerAnimations();
         MWParticles.initClient();

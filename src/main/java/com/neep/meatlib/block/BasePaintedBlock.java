@@ -1,15 +1,19 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.util.DyeColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BasePaintedBlock
 {
+    public static List<PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
+
     public BaseBlockItem blockItem;
     private String registryName;
 
@@ -28,8 +32,8 @@ public class BasePaintedBlock
         for (DyeColor col : DyeColor.values())
         {
             PaintedBlock block = new PaintedBlock(registryName + "_" + col.getName(), col, settings);
-            // TODO: Fix to make prevent crash on server!
-            NeepMeatClient.COLOURED_BLOCKS.add(block);
+            // TODO: Fix to prevent crash on server!
+            COLOURED_BLOCKS.add(block);
         }
     }
 

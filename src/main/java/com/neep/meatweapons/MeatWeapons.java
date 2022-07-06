@@ -5,6 +5,7 @@ import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.*;
+import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.api.ModInitializer;
@@ -69,5 +70,7 @@ public class MeatWeapons implements ModInitializer
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();
         MWParticles.init();
+
+        ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
     }
 }

@@ -13,13 +13,8 @@ import net.minecraft.util.registry.RegistryKey;
 
 public class GraphicsEffects
 {
-//    protected static Map<Identifier, BeamEffect.Factory> BEAMS = new HashMap<>();
-//    private static final Object2IntMap<Identifier> entryToRawId = new Object2IntOpenCustomHashMap<>(Util.identityHashStrategy());
-
-
     public GraphicsEffects(String defaultId, RegistryKey<? extends Registry<BeamEffect.Factory>> key, Lifecycle lifecycle)
     {
-//        super(defaultId, key, lifecycle);
     }
 
     public static DefaultedRegistry<BeamEffect.Factory> GRAPHICS_EFFECTS = FabricRegistryBuilder.createDefaulted(BeamEffect.Factory.class,

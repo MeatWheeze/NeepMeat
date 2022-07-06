@@ -10,6 +10,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ public abstract class GraphicsEffect
         EFFECTS.add(effect);
     }
 
-    protected ClientWorld world;
+    protected World world;
     protected long time;
     public boolean alive = true;
     protected Vec3d start;
@@ -34,7 +35,7 @@ public abstract class GraphicsEffect
     protected int maxTime;
     protected float scale;
 
-    public GraphicsEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
+    public GraphicsEffect(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
         this.world = world;
         this.start = start;
@@ -44,7 +45,7 @@ public abstract class GraphicsEffect
         this.scale = scale;
     }
 
-    public ClientWorld getWorld()
+    public World getWorld()
     {
         return world;
     }
@@ -96,6 +97,6 @@ public abstract class GraphicsEffect
     @FunctionalInterface
     public interface Factory
     {
-        GraphicsEffect create(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime);
+        GraphicsEffect create(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime);
     }
 }
