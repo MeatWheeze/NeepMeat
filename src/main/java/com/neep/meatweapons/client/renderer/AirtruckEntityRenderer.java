@@ -37,6 +37,7 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
+import software.bernie.geckolib3.resource.GeckoLibCache;
 
 import java.awt.*;
 import java.util.Collections;
@@ -86,11 +87,10 @@ public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatabl
         float f7 = this.handleRotationFloat(entity, partialTicks);
         this.applyRotations(entity, stack, f7, f, partialTicks);
 
-        float lastLimbDistance = 0.0F;
-        float limbSwing = 0.0F;
+        GeckoLibCache.getInstance().parser.setValue("r_lf", 90);
 
-        AnimationEvent<T> predicate = new AnimationEvent<T>(entity, limbSwing, lastLimbDistance, partialTicks,
-                !(lastLimbDistance > -0.15F && lastLimbDistance < 0.15F), Collections.singletonList(entityModelData));
+        AnimationEvent<T> predicate = new AnimationEvent<T>(entity, 0, 0, partialTicks,
+                !(0 > -0.15F && 0 < 0.15F), Collections.singletonList(entityModelData));
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entity));
         if (modelProvider instanceof IAnimatableModel)
         {
