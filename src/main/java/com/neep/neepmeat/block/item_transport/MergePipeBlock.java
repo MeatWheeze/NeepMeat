@@ -102,7 +102,7 @@ public class MergePipeBlock extends PneumaticTubeBlock
         }
 
         PipeConnectionType connection1 = forced
-                ? PipeConnectionType.FORCED
+                ? PipeConnectionType.NONE
                 : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
         // I don't know what this bit was for.
