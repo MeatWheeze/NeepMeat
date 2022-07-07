@@ -502,6 +502,8 @@ extends Entity {
 
         this.prevRoll = getRoll();
         this.setRoll((float) (getVelocity().horizontalLength() * yawVelocity));
+//        this.setPitch((float) ((float) getVelocity().getY() * getVelocity().horizontalLength()));
+        this.setPitch((float) ((float) - getVelocity().getY() * getVelocity().horizontalLength() * 10));
         return 0;
     }
 
