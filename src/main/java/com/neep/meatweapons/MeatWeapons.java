@@ -63,7 +63,7 @@ public class MeatWeapons implements ModInitializer
         AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
                 .trackedUpdateRate(1)
                 .forceTrackedVelocityUpdates(true)
-                .dimensions(EntityDimensions.fixed(3F, 2F))
+                .dimensions(EntityDimensions.fixed(3F, 2.2F))
                 .trackRangeBlocks(10)
                 .build());
 
