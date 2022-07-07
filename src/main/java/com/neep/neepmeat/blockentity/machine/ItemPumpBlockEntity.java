@@ -88,6 +88,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
         BlockState state = getCachedState();
         Direction facing = state.get(BaseFacingBlock.FACING);
 
+        // Try to extract from adjacent storage
         Storage<ItemVariant> storage;
         if ((storage = ItemStorage.SIDED.find(world, pos.offset(facing.getOpposite()), facing)) != null)
         {
@@ -101,7 +102,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
 
             long transferred = storage.extract(extractable.resource(), 16, transaction);
             long forwarded = forwardItem(new ResourceAmount<>(extractable.resource(), transferred), transaction);
-            if (forwarded < 1)
+            if (forwarded != -1)
             {
                 transaction.abort();
                 return false;
@@ -109,6 +110,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
             succeed();
             transaction.commit();
         }
+        // Try to retrieve from pipes
         else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
         {
             Transaction transaction = Transaction.openOuter();
