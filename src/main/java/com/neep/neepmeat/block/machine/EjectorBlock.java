@@ -69,7 +69,6 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
-        System.out.println("fix this please");
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
         }

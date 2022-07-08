@@ -1,8 +1,10 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.util.NMMaths;
+import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -14,8 +16,11 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.model.BakedModel;
+import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -63,14 +68,34 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 
             blockEntity.facing = NMMaths.angleLerp(0.03f, blockEntity.facing, blockEntity.targetFacing);
 
+            renderBase(matrices, blockEntity, vertexConsumers);
             matrices.push();
             matrices.translate(0.5d, 0d, 0.5d);
             matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(blockEntity.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
-            matrices.translate(0, 1 + Math.sin((blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
+            matrices.translate(0, 1.8 + Math.sin((blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
             super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
             matrices.pop();
         }
+    }
+
+    public static void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
+    {
+        BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
+        BakedModel handle = BakedModelManagerHelper.getModel(manager, NMExtraModels.INTEGRATOR_BASE);
+        BlockModelRenderer renderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
+        renderer.render(
+                be.getWorld(),
+                handle,
+                be.getCachedState(),
+                be.getPos(),
+                matrices,
+                vertexConsumers.getBuffer(RenderLayer.getCutout()),
+                true,
+                new Random(0),
+                0,
+                0
+        );
     }
 
     public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
