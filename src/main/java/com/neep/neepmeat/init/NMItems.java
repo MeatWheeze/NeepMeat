@@ -37,11 +37,17 @@ public class NMItems
     public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
+    public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item PRISTINE_BRAIN = new BaseCraftingItem("brain_pristine", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
+    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
     static
     {
 //        ROUGH.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 //        ROUGH.get("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        ROUGH.get("brain", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        CRUDE.get("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//        ROUGH.create("brain", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//        CRUDE.create("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     }
 }

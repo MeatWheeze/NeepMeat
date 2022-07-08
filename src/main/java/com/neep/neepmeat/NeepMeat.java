@@ -24,6 +24,7 @@ public class NeepMeat implements ModInitializer
 		MeatLib.setNamespace(NAMESPACE);
 		NMBlocks blocks = new NMBlocks();
 		NMItems items = new NMItems();
+		NMLootTables.init();
 
 		NMFluids.initialise();
 		SoundInitialiser.initialise();

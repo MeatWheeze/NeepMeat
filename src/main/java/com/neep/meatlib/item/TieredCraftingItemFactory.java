@@ -2,6 +2,9 @@ package com.neep.meatlib.item;
 
 import net.minecraft.item.Item;
 
+/**
+ * This was a bloody stupid idea.
+ */
 public class TieredCraftingItemFactory
 {
     protected final String[] prefixes;
@@ -11,7 +14,7 @@ public class TieredCraftingItemFactory
         this.prefixes = prefixes;
     }
 
-    public Void get(String registryName, boolean hasLore, Item.Settings settings)
+    public Void create(String registryName, boolean hasLore, Item.Settings settings)
     {
         for (String prefix : prefixes)
         {
