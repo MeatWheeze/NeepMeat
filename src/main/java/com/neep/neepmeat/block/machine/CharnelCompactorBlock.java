@@ -1,33 +1,34 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.init.NMItems;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
-import net.fabricmc.fabric.impl.transfer.item.ComposterWrapper;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.tag.NMTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.InventoryProvider;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.inventory.SimpleInventory;
-import net.minecraft.item.ItemConvertible;
+import net.minecraft.block.ComposterBlock;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.tag.TagManager;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldAccess;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.WorldEvents;
 
 import java.util.Random;
 
-public class CharnelCompactorBlock extends BaseBlock implements InventoryProvider
+public class CharnelCompactorBlock extends BaseBlock
 {
     public static final IntProperty LEVEL = Properties.LEVEL_8;
 
@@ -36,9 +37,38 @@ public class CharnelCompactorBlock extends BaseBlock implements InventoryProvide
         super(registryName, itemMaxStack, hasLore, settings);
     }
 
-    public static float getIncreaseChance(ItemConvertible item)
+    public static float getIncreaseChance(Item item)
     {
-        return 1;
+//        return Tag;
+        return NMTags.CHARNEL_COMPACTOR.contains(item) ? 1 : 0;
+//        return ItemTags.PIGLIN_FOOD.contains(item) ? 1 : 0;
+    }
+
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        int i = state.get(LEVEL);
+        ItemStack itemStack = player.getStackInHand(hand);
+        float chance = getIncreaseChance(itemStack.getItem());
+        if (i < 8 && chance > 0)
+        {
+            if (i < 7 && !world.isClient)
+            {
+                CharnelCompactorStorage.addLevel(new CharnelCompactorStorage.WorldLocation(world, pos));
+
+                player.incrementStat(Stats.USED.getOrCreateStat(itemStack.getItem()));
+                if (!player.getAbilities().creativeMode)
+                {
+                    itemStack.decrement(1);
+                }
+            }
+            return ActionResult.success(world.isClient);
+        }
+        if (i == 8)
+        {
+            CharnelCompactorStorage.extractOutput(new CharnelCompactorStorage.WorldLocation(world, pos), true);
+            return ActionResult.success(world.isClient);
+        }
+        return ActionResult.PASS;
     }
 
     @Override
@@ -67,21 +97,6 @@ public class CharnelCompactorBlock extends BaseBlock implements InventoryProvide
     }
 
     @Override
-    public SidedInventory getInventory(BlockState state, WorldAccess world, BlockPos pos)
-    {
-        int level = state.get(LEVEL);
-        if (level == 8)
-        {
-            return new Inventory(state, world, pos, new ItemStack(NMItems.CRUDE_INTEGRATION_CHARGE));
-        }
-        if (level < 7)
-        {
-            return new Inventory(state, world, pos, ItemStack.EMPTY);
-        }
-        return new DummyInventory();
-    }
-
-    @Override
     public boolean hasComparatorOutput(BlockState state)
     {
         return true;
@@ -91,144 +106,5 @@ public class CharnelCompactorBlock extends BaseBlock implements InventoryProvide
     public int getComparatorOutput(BlockState state, World world, BlockPos pos)
     {
         return state.get(LEVEL);
-    }
-
-    public static class Inventory extends SimpleInventory implements SidedInventory
-    {
-
-        private final BlockState state;
-        private final WorldAccess world;
-        private final BlockPos pos;
-        private boolean dirty;
-
-        public Inventory(BlockState state, WorldAccess world, BlockPos pos, @NotNull ItemStack outputItem)
-        {
-            super(1);
-            this.state = state;
-            this.world = world;
-            this.pos = pos;
-
-            if (!outputItem.isEmpty())
-            {
-                this.setStack(0, outputItem);
-            }
-        }
-
-        @Override
-        public int getMaxCountPerStack()
-        {
-            return 1;
-        }
-
-        @Override
-        public int[] getAvailableSlots(Direction side)
-        {
-            int[] nArray;
-            if (side == Direction.DOWN && state.get(LEVEL) == 8 || side == Direction.UP && state.get(LEVEL) < 8)
-            {
-                int[] nArray2 = new int[1];
-                nArray = nArray2;
-            }
-            else
-            {
-                nArray = new int[]{};
-            }
-            return nArray;
-        }
-
-        @Override
-        public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir)
-        {
-            boolean out = !this.dirty
-                    && state.get(LEVEL) != 8
-                    && dir == Direction.UP
-                    && getIncreaseChance(stack.getItem()) > 0
-                    && state.get(LEVEL) < 8;
-            out = out;
-            return out;
-        }
-
-        @Override
-        public boolean canExtract(int slot, ItemStack stack, Direction dir)
-        {
-            return !this.dirty
-                && this.state.get(LEVEL) == 8
-                && stack.isOf(NMItems.CRUDE_INTEGRATION_CHARGE);
-        }
-
-        @Override
-        public void markDirty()
-        {
-            ItemStack stack = this.getStack(0);
-            if (this.state.get(LEVEL) == 8 && stack.isEmpty())
-            {
-                empty(this.state, this.world, this.pos);
-                this.dirty = true;
-                return;
-            }
-
-            if (!stack.isEmpty() && this.state.get(LEVEL) < 8)
-            {
-                this.dirty = true;
-                BlockState blockState = CharnelCompactorBlock.addLevel(this.state, this.world, this.pos, stack);
-                this.removeStack(0);
-            }
-        }
-    }
-
-    static class DummyInventory extends SimpleInventory implements SidedInventory
-    {
-        public DummyInventory()
-        {
-            super(0);
-        }
-
-        @Override
-        public int[] getAvailableSlots(Direction side)
-        {
-            return new int[0];
-        }
-
-        @Override
-        public boolean canInsert(int slot, ItemStack stack, @Nullable Direction dir)
-        {
-            return false;
-        }
-
-        @Override
-        public boolean canExtract(int slot, ItemStack stack, Direction dir)
-        {
-            return false;
-        }
-    }
-
-    private static BlockState addLevel(BlockState state, WorldAccess world, BlockPos pos, ItemStack stack)
-    {
-        int level = state.get(LEVEL);
-        float chance = getIncreaseChance(stack.getItem());
-        if (level == 0 && chance > 0.0f || world.getRandom().nextDouble() < chance)
-        {
-            int j = level + 1;
-            BlockState blockState = state.with(LEVEL, j);
-            world.setBlockState(pos, blockState, Block.NOTIFY_ALL);
-            if (j == 7)
-            {
-                world.getBlockTickScheduler().schedule(pos, state.getBlock(), 20);
-            }
-            return blockState;
-        }
-        return state;
-    }
-
-    static BlockState empty(BlockState state, WorldAccess world, BlockPos pos)
-    {
-        BlockState blockState = state.with(LEVEL, 0);
-        world.setBlockState(pos, blockState, Block.NOTIFY_ALL);
-        return blockState;
-    }
-
-    static
-    {
-//        ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> ComposterWrapper.get(world, pos, direction), Blocks.COMPOSTER);
     }
 }
