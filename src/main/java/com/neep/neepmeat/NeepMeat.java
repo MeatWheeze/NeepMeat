@@ -4,7 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.block.machine.CharnelCompactorStorage;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.init.*;
-import com.neep.neepmeat.tag.NMTags;
+import com.neep.neepmeat.datagen.tag.NMTags;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import org.apache.logging.log4j.LogManager;

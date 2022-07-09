@@ -1,4 +1,4 @@
-package com.neep.neepmeat.tag;
+package com.neep.neepmeat.datagen.tag;
 
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.tag.TagRegistry;
