@@ -1,8 +1,8 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BigLeverBlockEntity extends BlockEntity implements BlockEntityClientSerializable
+public class BigLeverBlockEntity extends SyncableBlockEntity
 {
     // Client only
     public float leverDelta = 0;
@@ -83,13 +83,12 @@ public class BigLeverBlockEntity extends BlockEntity implements BlockEntityClien
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt.putInt("active_ticks", activeTicks);
         nbt.putInt("counter", tickCounter);
         nbt.putBoolean("powered", powered);
-        return nbt;
     }
 
     @Override
@@ -99,20 +98,5 @@ public class BigLeverBlockEntity extends BlockEntity implements BlockEntityClien
         this.activeTicks = nbt.getInt("active_ticks");
         this.tickCounter = nbt.getInt("counter");
         this.powered = nbt.getBoolean("powered");
-    }
-
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        this.tickCounter = tag.getInt("counter");
-        this.activeTicks = tag.getInt("active_ticks");
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        tag.putInt("active_ticks", activeTicks);
-        tag.putInt("counter", tickCounter);
-        return tag;
     }
 }

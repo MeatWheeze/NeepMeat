@@ -35,10 +35,9 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        return tag;
     }
 
     @Override

@@ -85,7 +85,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        if (!world.isClient && state.get(POWERED) && world.getBlockTickScheduler().isScheduled(pos, this))
+        if (!world.isClient && state.get(POWERED) && world.getBlockTickScheduler().isQueued(pos, this))
         {
             this.updateNeighbors(world, pos, state.with(POWERED, false));
         }

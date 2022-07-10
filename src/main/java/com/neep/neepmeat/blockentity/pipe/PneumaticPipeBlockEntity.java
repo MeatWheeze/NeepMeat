@@ -1,13 +1,10 @@
 package com.neep.neepmeat.blockentity.pipe;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -24,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntityClientSerializable
+public class PneumaticPipeBlockEntity extends SyncableBlockEntity
 {
     protected List<ItemInPipe> items = new ArrayList<>();
 
@@ -44,7 +41,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
 
@@ -57,8 +54,6 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
         }
 
         tag.put("items", itemList);
-
-        return tag;
     }
 
     @Override
@@ -74,36 +69,6 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
             items.add(ItemInPipe.fromNbt(itemList.getCompound(i)));
         }
     }
-
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        NbtList itemList = (NbtList) tag.get("items");
-//        System.out.println(PipeOffset.fromNbt((NbtCompound) itemList.get(0)).getItemStack());
-        int size = itemList != null ? itemList.size() : 0;
-        items.clear();
-
-        for (int i = 0; i < size; ++i)
-        {
-            items.add(ItemInPipe.fromNbt(itemList.getCompound(i)));
-        }
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        NbtList itemList = new NbtList();
-        for (ItemInPipe offset : items)
-        {
-            NbtCompound nbt1 = new NbtCompound();
-            nbt1 = offset.toNbt(nbt1);
-            itemList.add(nbt1);
-        }
-
-        tag.put("items", itemList);
-        return tag;
-    }
-
     public static void serverTick(World world, BlockPos blockPos, BlockState blockState, PneumaticPipeBlockEntity be)
     {
         if (be.items.isEmpty())

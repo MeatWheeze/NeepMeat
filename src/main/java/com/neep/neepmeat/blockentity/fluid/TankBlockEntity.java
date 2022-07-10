@@ -1,5 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
+public class TankBlockEntity extends SyncableBlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
 {
     protected final WritableFluidBuffer buffer;
 
@@ -35,11 +36,10 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         buffer.writeNbt(tag);
-        return tag;
     }
 
     @Override

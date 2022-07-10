@@ -39,10 +39,9 @@ public class ConverterBaseBlockEntity extends BlockEntity implements Storage<Ite
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        return nbt;
     }
 
     @Override

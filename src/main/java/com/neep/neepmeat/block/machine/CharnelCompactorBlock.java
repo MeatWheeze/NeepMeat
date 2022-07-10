@@ -70,7 +70,7 @@ public class CharnelCompactorBlock extends BaseBlock
     {
         if (state.get(LEVEL) == 7)
         {
-            world.getBlockTickScheduler().schedule(pos, state.getBlock(), 20);
+            world.createAndScheduleBlockTick(pos, state.getBlock(), 20);
         }
     }
 

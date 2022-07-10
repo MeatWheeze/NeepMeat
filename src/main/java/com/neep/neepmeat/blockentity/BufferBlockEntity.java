@@ -44,11 +44,10 @@ public class BufferBlockEntity extends BlockEntity implements
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         inventory.writeNbt(tag);
-        return tag;
     }
 
     @Override

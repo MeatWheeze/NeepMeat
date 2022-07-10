@@ -42,10 +42,9 @@ public class CheckValveBlockEntity extends BlockEntity implements Storage<FluidV
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        return nbt;
     }
 
     @Override

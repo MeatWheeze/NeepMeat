@@ -6,7 +6,6 @@ import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class EjectorBlockEntity extends ItemPumpBlockEntity implements BlockEntityClientSerializable
+public class EjectorBlockEntity extends ItemPumpBlockEntity
 {
     protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
     protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
@@ -144,29 +143,28 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity implements BlockEnti
         return amount.amount();
     }
 
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        super.fromClientTag(tag);
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        super.toClientTag(tag);
-        return tag;
-    }
-
-    @Override
-    public NbtCompound writeNbt(NbtCompound tag)
-    {
-        super.writeNbt(tag);
-        return tag;
-    }
-
-    @Override
-    public void readNbt(NbtCompound tag)
-    {
-        super.readNbt(tag);
-    }
+//    @Override
+//    public void fromClientTag(NbtCompound tag)
+//    {
+//        super.fromClientTag(tag);
+//    }
+//
+//    @Override
+//    public NbtCompound toClientTag(NbtCompound tag)
+//    {
+//        super.toClientTag(tag);
+//        return tag;
+//    }
+//
+//    @Override
+//    public void writeNbt(NbtCompound tag)
+//    {
+//        super.writeNbt(tag);
+//    }
+//
+//    @Override
+//    public void readNbt(NbtCompound tag)
+//    {
+//        super.readNbt(tag);
+//    }
 }

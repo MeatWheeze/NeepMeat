@@ -1,13 +1,12 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -24,7 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEntityClientSerializable, IMotorisedBlock
+@SuppressWarnings("UnstableApiUsage")
+public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     public static final String NBT_COOLDOWN = "cooldown";
     public static final String NBT_MAX_COOLDOWN = "max_cooldown";
@@ -144,19 +144,16 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
         this.cooldown = nbt.getInt(NBT_COOLDOWN);
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt.putInt(NBT_MAX_COOLDOWN, maxCooldown);
         nbt.putInt(NBT_COOLDOWN, cooldown);
-        return nbt;
     }
 
     @Override
     public void fromClientTag(NbtCompound nbt)
     {
-        this.maxCooldown = nbt.getInt(NBT_MAX_COOLDOWN);
-        this.cooldown = nbt.getInt(NBT_COOLDOWN);
         this.prevExtension = nbt.getFloat("prev_extension");
         this.extension= nbt.getFloat("extension");
 
@@ -169,8 +166,6 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
     @Override
     public NbtCompound toClientTag(NbtCompound nbt)
     {
-        nbt.putInt(NBT_MAX_COOLDOWN, maxCooldown);
-        nbt.putInt(NBT_COOLDOWN, cooldown);
         nbt.putLong("world_time", getWorld().getTime());
         nbt.putFloat("prev_extension", prevExtension);
         nbt.putFloat("extension", extension);
