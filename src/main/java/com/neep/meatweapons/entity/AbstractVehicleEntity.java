@@ -75,7 +75,7 @@ extends Entity {
     public AbstractVehicleEntity(EntityType<? extends Entity> entityType, World world)
     {
         super(entityType, world);
-        this.inanimate = true;
+        this.intersectionChecked = true;
         this.health = 15;
     }
 

@@ -1,13 +1,8 @@
 package com.neep.meatlib.transfer;
 
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.CallbackI;
 
 @SuppressWarnings("UnstableApiUsage")
 public class WritableSingleFluidStorage extends SingleVariantStorage<ItemVariant>

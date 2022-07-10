@@ -22,7 +22,6 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
-import net.minecraft.util.collection.ReusableStream;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.*;
 import net.minecraft.util.shape.VoxelShape;
@@ -40,7 +39,7 @@ public class AssemblyEntity extends Entity
 {
     private static final Palette<BlockState> FALLBACK_PALETTE = new IdListPalette<>(Block.STATE_IDS, Blocks.AIR.getDefaultState());
     private static final TrackedData<Optional<BlockState>> BLOCK = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.OPTIONAL_BLOCK_STATE);
-    private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.TAG_COMPOUND);
+    private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
 
     public AssemblyContainer blocks = new AssemblyContainer(FALLBACK_PALETTE,
         Block.STATE_IDS,
@@ -531,7 +530,7 @@ public class AssemblyEntity extends Entity
 //                blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
 //                blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
 //                blocks.set(2, 1, 1, Assembly.PLATFORM.getDefaultState());
-                blocks.set(4, 1, 1, Assembly.PLATFORM.getDefaultState());
+                blocks.swapUnsafe(4, 1, 1, Assembly.PLATFORM.getDefaultState());
             }
             else
             {
@@ -595,7 +594,7 @@ public class AssemblyEntity extends Entity
         {
             anchorPositions.add(new BlockPos(x, y, z));
         }
-        return this.blocks.set(x, y, z, state);
+        return this.blocks.swapUnsafe(x, y, z, state);
     }
 
     public void initPalette()

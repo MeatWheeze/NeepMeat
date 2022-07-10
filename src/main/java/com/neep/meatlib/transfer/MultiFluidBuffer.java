@@ -1,6 +1,5 @@
 package com.neep.meatlib.transfer;
 
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -162,10 +161,10 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         {
             parent.markDirty();
         }
-        if (parent instanceof BlockEntityClientSerializable serializable)
-        {
-            serializable.sync();
-        }
+//        if (parent instanceof BlockEntityClientSerializable serializable)
+//        {
+//            serializable.sync();
+//        }
     }
 
     public List<Slot> getSlots()

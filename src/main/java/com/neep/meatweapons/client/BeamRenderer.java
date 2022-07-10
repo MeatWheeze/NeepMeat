@@ -32,11 +32,11 @@ public class BeamRenderer
         beam.normalize();
         transform.multiply(rotationMatrix((float) Math.atan2(beam.getX(), beam.getZ()), 0, (float) Math.asin(-beam.getY() / beam.length())));
 
-        matrices.method_34425(transform);
+        matrices.multiplyPositionMatrix(transform);
 
         MatrixStack.Entry entry = matrices.peek();
-        Matrix4f model = entry.getModel();
-        Matrix3f normal = entry.getNormal();
+        Matrix4f model = entry.getPositionMatrix();
+        Matrix3f normal = entry.getNormalMatrix();
         int light = 255;
 
         vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, -t / 2, 0), 0, 1); // p0
