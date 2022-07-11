@@ -68,7 +68,7 @@ public class NMBlocks
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
-    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
     public static Block CONVERTER_BASE = BlockRegistry.queue(new ConverterBlock.Base("converter_base", 64, false, FabricBlockSettings.copy(CONVERTER)));
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
@@ -85,7 +85,7 @@ public class NMBlocks
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-    public static Block ITEM_BUFFER = BlockRegistry.queue(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
+    public static Block ITEM_BUFFER = BlockRegistry.queue(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.METAL)));
     public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));

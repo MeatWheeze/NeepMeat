@@ -4,11 +4,12 @@ import com.neep.meatlib.datagen.loot.BlockLootTableProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
-public class DataGen implements DataGeneratorEntrypoint
+public class MeatLibDataGen implements DataGeneratorEntrypoint
 {
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator)
     {
         fabricDataGenerator.addProvider(BlockLootTableProvider::new);
+        fabricDataGenerator.addProvider(BlockTagProvider::new);
     }
 }

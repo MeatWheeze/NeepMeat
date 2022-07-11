@@ -25,7 +25,7 @@
       "com.neep.meatweapons.MeatWeapons"
     ],
     "fabric-datagen": [
-      "com.neep.meatlib.datagen.DataGen"
+      "com.neep.meatlib.datagen.MeatLibDataGen"
     ],
     "client": [
       "com.neep.neepmeat.client.NeepMeatClient",

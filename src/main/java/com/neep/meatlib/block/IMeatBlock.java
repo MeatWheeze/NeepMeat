@@ -1,6 +1,8 @@
 package com.neep.meatlib.block;
 
 import com.neep.neepmeat.datagen.tag.BlockTagProvider;
+import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.tag.BlockTags;
@@ -24,6 +26,11 @@ public interface IMeatBlock
         {
             BlockTagProvider.addToTag(id, (Block) this);
         }
+    }
+
+    default TagKey<Block> getPreferredTool()
+    {
+        return BlockTags.PICKAXE_MINEABLE;
     }
 
     default boolean dropsSelf()

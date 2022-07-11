@@ -9,7 +9,6 @@ public class NMDataGen implements DataGeneratorEntrypoint
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator)
     {
-        System.out.println("datagen                                  -------------------------");
         fabricDataGenerator.addProvider(BlockTagProvider::new);
     }
 }
