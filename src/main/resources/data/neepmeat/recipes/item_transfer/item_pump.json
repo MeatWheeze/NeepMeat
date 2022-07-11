@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "geg",
+    "nin",
+    "npn"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "e": {
+      "item": "neepmeat:ejector"
+    },
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "n": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_pump",
+    "count": 1
+  }
+}
