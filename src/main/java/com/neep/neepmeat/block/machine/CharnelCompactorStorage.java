@@ -34,6 +34,7 @@ import static net.minecraft.util.math.Direction.UP;
 @SuppressWarnings("UnstableApiUsage")
 public class CharnelCompactorStorage extends SnapshotParticipant<Float>
 {
+    // It appears that these are the lengths one must go for avoiding BlockEntities
     private static final Map<WorldLocation, CharnelCompactorStorage> CHARNEL_STORAGES = new MapMaker().concurrencyLevel(1).weakValues().makeMap();
     private static final ItemVariant OUTPUT = ItemVariant.of(NMItems.CRUDE_INTEGRATION_CHARGE);
 
