@@ -2,7 +2,9 @@ package com.neep.meatlib.registry;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.IMeatBlock;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.data.server.BlockLootTableGenerator;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -35,6 +37,11 @@ public class BlockRegistry
         for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
         {
             Registry.register(Registry.BLOCK, entry.getKey(), entry.getValue());
+//            if (entry.getValue() instanceof IMeatBlock meatBlock && meatBlock.dropsSelf())
+//            {
+//                BlockLootTableGenerator.drops(entry.getValue());
+//                FabricBlockLootTableProvider.
+//            }
         }
     }
 }

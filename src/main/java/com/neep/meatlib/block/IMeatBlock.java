@@ -26,6 +26,11 @@ public interface IMeatBlock
         }
     }
 
+    default boolean dropsSelf()
+    {
+        return true;
+    }
+
     @FunctionalInterface
     interface ItemFactory
     {

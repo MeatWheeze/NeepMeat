@@ -1,13 +1,9 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
-import com.neep.neepmeat.init.SoundInitialiser;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
@@ -94,7 +90,7 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     public void onSpawnPacket(EntitySpawnS2CPacket packet)
     {
         super.onSpawnPacket(packet);
-        MinecraftClient.getInstance().getSoundManager().play(new AirtruckSoundInstance(this));
+//        MinecraftClient.getInstance().getSoundManager().play(new AirtruckSoundInstance(this));
     }
 
     @Override
