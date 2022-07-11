@@ -5,13 +5,14 @@ import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagKey;
 
 import java.util.List;
 
-public interface IMeatBlock
+public interface IMeatBlock extends ItemConvertible
 {
     String getRegistryName();
 

@@ -1,27 +1,36 @@
 package com.neep.meatlib.block;
 
+import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
+
+import java.util.function.Consumer;
 
 public class BaseBuildingBlock extends Block implements IMeatBlock
 {
     BaseBlockItem blockItem;
     String registryName;
 
+    public final IMeatBlock slab;
+    public final IMeatBlock stairs;
+    public IMeatBlock wall = null;
+
     public BaseBuildingBlock(String blockName, int itemMaxStack, boolean makeWall, Settings settings)
     {
         super(settings);
 
-        BaseStairsBlock stairs = new BaseStairsBlock(this.getDefaultState(),blockName + "_stairs", itemMaxStack, settings);
+        this.stairs = new BaseStairsBlock(this.getDefaultState(),blockName + "_stairs", itemMaxStack, settings);
         BlockRegistry.queue(stairs);
 
-        BaseSlabBlock slab = new BaseSlabBlock(this.getDefaultState(),blockName + "_slab", itemMaxStack, settings);
+        this.slab = new BaseSlabBlock(this.getDefaultState(),blockName + "_slab", itemMaxStack, settings);
         BlockRegistry.queue(slab);
 
         if (makeWall)
         {
-            BaseWallBlock wall = new BaseWallBlock(blockName + "_wall", itemMaxStack, settings);
+            wall = new BaseWallBlock(blockName + "_wall", itemMaxStack, settings);
             BlockRegistry.queue(wall);
         }
 
@@ -34,5 +43,13 @@ public class BaseBuildingBlock extends Block implements IMeatBlock
     public String getRegistryName()
     {
         return registryName;
+    }
+
+    public void generateRecipes(Consumer<RecipeJsonProvider> exporter)
+    {
+        MeatRecipeProvider.offerSlabRecipe(exporter, this.slab, this);
+        MeatRecipeProvider.offerStairsRecipe(exporter, this.stairs, this);
+        if (wall != null)
+            MeatRecipeProvider.offerWallRecipe(exporter, this.wall, this);
     }
 }

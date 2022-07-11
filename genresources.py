@@ -1,0 +1,25 @@
+#! /usr/bin/env python3
+
+import mcresources
+rm = mcresources.ResourceManager('neepmeat')
+
+blocks = [
+'grey_rough_concrete',
+'yellow_rough_concrete',
+'yellow_tiles',
+'filled_scaffold',
+'caution_block',
+'polished_metal_small_bricks',
+'dirty_red_tiles'
+
+]
+
+for name in blocks:
+    bl = rm.block(name)
+    bl.make_slab()
+    bl.make_stairs()
+    bl.make_wall()
+
+#scaffold_stairs = rm.block('rusted_scaffold')
+#scaffold_stairs.make_stairs()
+#scaffold_stairs.make_slab()
