@@ -20,7 +20,7 @@ public class NMItems
     public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(NMItemGroups.WEAPONS));
 
-    public static Item DEBUG = new DebugItem("debug_item", false, new FabricItemSettings().group(NMItemGroups.GENERAL));
+//    public static Item DEBUG = new DebugItem("debug_item", false, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

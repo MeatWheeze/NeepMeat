@@ -2,6 +2,7 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
@@ -31,7 +32,7 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorage<ItemVariant>, BlockEntityClientSerializable, IMotorisedBlock
+public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, IMotorisedBlock
 {
     protected final WritableStackStorage storage;
 
@@ -206,7 +207,6 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
                 return true;
             }
         }
-
         return false;
     }
 

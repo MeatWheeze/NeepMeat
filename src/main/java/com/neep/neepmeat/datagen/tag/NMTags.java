@@ -1,18 +1,21 @@
 package com.neep.neepmeat.datagen.tag;
 
 import com.neep.neepmeat.NeepMeat;
-import net.fabricmc.fabric.api.tag.TagRegistry;
 import net.minecraft.item.Item;
-import net.minecraft.tag.Tag;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class NMTags
 {
-    public static final Tag<Item> CHARNEL_COMPACTOR = register(NeepMeat.NAMESPACE, "charnel_substrate");
+    public static final TagKey<Item> CHARNEL_COMPACTOR = registerItem(NeepMeat.NAMESPACE, "charnel_substrate");
 
-    private static Tag<Item> register(String namespace, String id)
+    private static TagKey<Item> registerItem(String namespace, String id)
     {
-        return TagRegistry.item(new Identifier(namespace, id));
+//        return RequiredTagListRegistry.register(new Identifier(namespace, id), "charnel_substrate");
+//        return .method_40092(Registry.BLOCK_KEY, new Identifier("fabric", id));
+//        return class_6862.method_40092(Registry.BLOCK_KEY, new Identifier("fabric", id));
+        return TagKey.of(Registry.ITEM_KEY, new Identifier(namespace, id));
     }
 
     public static void init()

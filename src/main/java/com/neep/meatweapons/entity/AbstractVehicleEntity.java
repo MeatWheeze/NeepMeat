@@ -281,11 +281,11 @@ extends Entity {
         this.prevUp = pressingUp;
         this.prevDown = pressingDown;
 
-        this.pressingForward = options.keyForward.isPressed();
-        this.pressingBack = options.keyBack.isPressed();
-        this.pressingLeft = options.keyLeft.isPressed();
-        this.pressingRight = options.keyRight.isPressed();
-        this.pressingUp = options.keyJump.isPressed();
+        this.pressingForward = options.forwardKey.isPressed();
+        this.pressingBack = options.backKey.isPressed();
+        this.pressingLeft = options.leftKey.isPressed();
+        this.pressingRight = options.rightKey.isPressed();
+        this.pressingUp = options.jumpKey.isPressed();
         this.pressingDown = MWKeys.AIRTRUCK_DOWN.isPressed();
     }
 

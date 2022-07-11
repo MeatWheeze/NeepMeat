@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -43,7 +44,7 @@ public class TankMessagePacket
                 BlockPos pos = buf.readBlockPos();
                 long amount = buf.readLong();
                 FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
-                MutableText text = FluidVariantRendering.getName(resource).shallowCopy();
+                MutableText text = FluidVariantAttributes.getName(resource).shallowCopy();
 
                 long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
                 client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + mb + "mb"), true);

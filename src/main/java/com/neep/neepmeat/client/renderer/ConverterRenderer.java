@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.OverlayTexture;
@@ -82,7 +83,7 @@ public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockE
 
         float startY = startXYZ;
         float dist = startY + (endY - startY) * scaleY;
-        if (FluidVariantRendering.fillsFromTop(fluid))
+        if (FluidVariantAttributes.isLighterThanAir(fluid))
         {
             matrices.translate(1, 1, 0);
             matrices.scale(-1, -1, 1);

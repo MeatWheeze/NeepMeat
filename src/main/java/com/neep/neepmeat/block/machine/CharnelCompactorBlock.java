@@ -33,9 +33,7 @@ public class CharnelCompactorBlock extends BaseBlock
 
     public static float getIncreaseChance(Item item)
     {
-//        return Tag;
-        return NMTags.CHARNEL_COMPACTOR.contains(item) ? 1 : 0;
-//        return ItemTags.PIGLIN_FOOD.contains(item) ? 1 : 0;
+        return item.getDefaultStack().isIn(NMTags.CHARNEL_COMPACTOR) ? 1 : 0;
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)

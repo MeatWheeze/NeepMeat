@@ -96,6 +96,6 @@ public class BufferBlockEntity extends BlockEntity implements
 //        {
 //            return Collections.emptyIterator();
 //        }
-        return storage.iterator(transaction);
+        return (Iterator<StorageView<ItemVariant>>) storage.iterator(transaction);
     }
 }

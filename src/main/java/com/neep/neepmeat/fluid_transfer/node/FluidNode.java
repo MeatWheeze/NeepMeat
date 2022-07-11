@@ -267,7 +267,7 @@ public class FluidNode
         if (!(storage = getStorage(world)).supportsInsertion())
             return false;
         Transaction nested = transaction.openNested();
-        Iterator<StorageView<FluidVariant>> it = storage.iterator(nested);
+        Iterator<StorageView<FluidVariant>> it = (Iterator<StorageView<FluidVariant>>) storage.iterator(nested);
         while (it.hasNext())
         {
             StorageView<FluidVariant> view = it.next();
@@ -288,7 +288,7 @@ public class FluidNode
             return false;
 
         Transaction nested = transaction.openNested();
-        Iterator<StorageView<FluidVariant>> it = storage.iterator(nested);
+        Iterator<StorageView<FluidVariant>> it = (Iterator<StorageView<FluidVariant>>) storage.iterator(nested);
         while (it.hasNext())
         {
             StorageView<FluidVariant> view = it.next();

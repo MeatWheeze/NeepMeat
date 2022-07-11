@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -158,7 +159,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         float startY = startXYZ;
 //        float dist = startY + (endY - startY) * scaleY;
         float dist = startY + (endY - startY) * scaleY;
-        if (FluidVariantRendering.fillsFromTop(fluid))
+        if (FluidVariantAttributes.isLighterThanAir(fluid))
         {
             matrices.translate(1, 1, 0);
             matrices.scale(-1, -1, 1);

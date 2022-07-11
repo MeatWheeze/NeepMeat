@@ -86,7 +86,7 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
         Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
         if (storage != null)
         {
-            return storage.iterator(transaction);
+            return (Iterator<StorageView<FluidVariant>>) storage.iterator(transaction);
         }
         return Collections.emptyIterator();
     }
