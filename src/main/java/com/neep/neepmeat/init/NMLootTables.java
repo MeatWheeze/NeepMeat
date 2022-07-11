@@ -5,10 +5,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
 import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
 import net.minecraft.loot.condition.KilledByPlayerLootCondition;
 import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.loot.entry.LeafEntry;
 import net.minecraft.loot.entry.LootPoolEntry;
+import net.minecraft.loot.function.EnchantRandomlyLootFunction;
 import net.minecraft.loot.function.LootingEnchantLootFunction;
 import net.minecraft.loot.function.SetCountLootFunction;
 import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
@@ -18,6 +20,7 @@ import net.minecraft.util.Identifier;
 public class NMLootTables
 {
     private static final Identifier ZOMBIE = EntityType.ZOMBIE.getLootTableId();
+    private static final Identifier DUNGEON = LootTables.SIMPLE_DUNGEON_CHEST;
 
     public static void init()
     {
@@ -38,6 +41,14 @@ public class NMLootTables
                         .conditionally(KilledByPlayerLootCondition.builder());
 
                 tableBuilder.pool(poolBuilder);
+            }
+            if (DUNGEON.equals(id))
+            {
+                LootPool.Builder builder = LootPool.builder()
+                    .rolls(UniformLootNumberProvider.create(0.0f, 1.0f))
+                    .with(ItemEntry.builder(NMBlocks.INTEGRATOR_EGG.asItem()).weight(10));
+
+                tableBuilder.pool(builder);
             }
         });
     }
