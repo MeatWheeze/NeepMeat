@@ -124,8 +124,6 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
             else
                 be.activeTicks = 40;
 
-            System.out.println(be.activeTicks);
-
             world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.7f, 2);
 
 //            Direction facing = state.get(FACING);
