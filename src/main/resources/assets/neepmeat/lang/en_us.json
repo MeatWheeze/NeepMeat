@@ -141,6 +141,9 @@
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
   "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
 
+  "block.neepmeat.charnel_compactor": "Charnel Compactor",
+  "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when blessed by an Integrator.",
+
   "block.neepmeat.work_fluid": "Work Fluid",
   "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
 

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "ici",
+    "iii"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:composter"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:charnel_compactor",
+    "count": 1
+  }
+}
