@@ -136,8 +136,8 @@ public class NeepMeatClient implements ClientModInitializer
         // Coloured blocks
         for (BasePaintedBlock.PaintedBlock block : BasePaintedBlock.COLOURED_BLOCKS)
         {
-            ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getColour(), block);
-            ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getColour(), block.asItem());
+            ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
+            ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
 
         // Fluids

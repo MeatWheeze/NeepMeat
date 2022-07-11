@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:yellow_tiles"
+    },
+    "d": {
+      "item": "neepmeat:blood_bucket"
+    }
+  },
+  "result": {
+    "item": "neepmeat:dirty_red_tiles",
+    "count": 8
+  }
+}

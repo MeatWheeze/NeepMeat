@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:dirty_red_tiles"
+    ]
+  },
+  "criteria": {
+    "has_yellow_tiles": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:yellow_tiles"
+            ]
+          }
+        ]
+      }
+    },
+    "has_blood_bucket": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:blood_bucket"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:dirty_red_tiles"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_yellow_tiles",
+      "has_blood_bucket",
+      "has_the_recipe"
+    ]
+  ]
+}
