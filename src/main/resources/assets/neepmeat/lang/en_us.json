@@ -83,7 +83,9 @@
   "block.neepmeat.pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",
 
-  "block.neepmeat.pneumatic_pipe": "Pneumatic Pipe",
+  "block.neepmeat.item_pipe": "Pneumatic Pipe",
+
+  "block.neepmeat.data_cable": "Data Cable",
 
   "block.neepmeat.pump": "Redstone Pump",
 

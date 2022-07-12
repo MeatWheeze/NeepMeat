@@ -106,6 +106,9 @@ public class NMBlocks
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", 64, true, FabricBlockSettings.copy(Blocks.CHEST)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new ContentDetectorBlock("content_detector", 64, true, FabricBlockSettings.copy(Blocks.OBSERVER)));
 
+    // --- Data ---
+    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", 64, true, FLUID_PIPE_SETTINGS));
+
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
