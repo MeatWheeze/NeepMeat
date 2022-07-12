@@ -1,14 +1,16 @@
 {
-    "textures": {
-        "particle": "neepmeat:block/charnel_compactor/contents_ready",
-        "inside": "neepmeat:/block/charnel_compactor/contents_ready"
-    },
-    "elements": [
-        {   "from": [ 2, 0, 2 ],
-            "to": [ 14, 15, 14 ],
-            "faces": {
-                "up": { "texture": "#inside", "cullface": "up" }
-            }
-        }
-    ]
+	"credit": "Made with Blockbench",
+	"textures": {
+		"inside": "neepmeat:/block/charnel_compactor/contents_ready",
+		"particle": "neepmeat:block/charnel_compactor/contents_ready"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 2],
+			"to": [14, 15, 14],
+			"faces": {
+				"up": {"uv": [2, 2, 14, 14], "texture": "#inside", "cullface": "up"}
+			}
+		}
+	]
 }

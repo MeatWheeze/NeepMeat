@@ -4,8 +4,8 @@
 	"textures": {
 		"top": "neepmeat:block/charnel_compactor/top",
 		"bottom": "neepmeat:block/charnel_compactor/bottom",
-		"particle": "neepmeat:block/charnel_compactor/side",
-		"side": "neepmeat:block/charnel_compactor/side"
+		"side": "neepmeat:block/charnel_compactor/side",
+		"particle": "neepmeat:block/charnel_compactor/bottom"
 	},
 	"elements": [
 		{
