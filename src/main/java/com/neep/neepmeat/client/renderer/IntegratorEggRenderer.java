@@ -44,7 +44,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
     @Override
     public void render(IntegratorBlockEntity blockEntity, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
     {
-        if (!blockEntity.isFullyGrown)
+        if (!blockEntity.isMature)
         {
             renderEgg(matrices, blockEntity, vertexConsumers);
         }
@@ -127,13 +127,13 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         );
         matrices.pop();
 
-        WritableFluidBuffer buffer = blockEntity.getInputBuffer();
-        float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
-        FluidVariant fluid = buffer.getResource();
+//        WritableFluidBuffer buffer = blockEntity.getInputBuffer();
+//        float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
+//        FluidVariant fluid = buffer.getResource();
 
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
-        IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
+//        IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
 
         matrices.pop();
     }

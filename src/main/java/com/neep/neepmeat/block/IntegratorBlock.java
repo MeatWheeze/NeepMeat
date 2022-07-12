@@ -12,6 +12,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -60,7 +61,7 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, I
         {
             if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
             {
-                player.sendMessage(Text.of(be.getInputBuffer().getAmount() / (float) FluidConstants.BUCKET + ", " + be.getOutputBuffer().getAmount() / (float) FluidConstants.BUCKET), true);
+                be.showContents((ServerPlayerEntity) player);
             }
         }
         return ActionResult.SUCCESS;
