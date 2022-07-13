@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=z": {
+      "model": "neepmeat:block/trough/base"
+    },
+    "axis=x": {
+      "model": "neepmeat:block/trough/base",
+      "y": 90
+    }
+  }
+}
