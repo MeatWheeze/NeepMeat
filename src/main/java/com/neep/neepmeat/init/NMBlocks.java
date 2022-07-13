@@ -8,9 +8,11 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.fluid_transport.*;
 import com.neep.neepmeat.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
+import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
+import com.neep.neepmeat.machine.mixer.MixerTopBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
@@ -76,6 +78,7 @@ public class NMBlocks
 
     public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", 64, true, BRASS_BLOCKS));
+    public static Block MIXER_TOP = BlockRegistry.queue(new MixerTopBlock("mixer_top", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
     public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
