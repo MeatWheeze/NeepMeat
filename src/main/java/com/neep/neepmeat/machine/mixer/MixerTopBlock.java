@@ -43,6 +43,7 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
         {
             world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
