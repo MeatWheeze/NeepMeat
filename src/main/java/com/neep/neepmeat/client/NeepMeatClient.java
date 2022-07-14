@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -74,7 +75,7 @@ public class NeepMeatClient implements ClientModInitializer
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER_TOP, MixerRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
 
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
