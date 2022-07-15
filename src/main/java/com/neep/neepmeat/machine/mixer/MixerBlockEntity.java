@@ -65,7 +65,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
             if (direction == Direction.DOWN || direction == Direction.UP)
                 continue;
 
-            BlockPos offset = getPos().offset(direction);
+            BlockPos offset = getPos().up().offset(direction);
             BlockState state = getWorld().getBlockState(offset);
             BlockEntity be = getWorld().getBlockEntity(offset);
             Storage<FluidVariant> storage;

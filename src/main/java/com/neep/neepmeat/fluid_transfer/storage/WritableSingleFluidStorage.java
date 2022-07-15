@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVariant>
 {
     protected long capacity;
+    public float renderLevel;
 
     public WritableSingleFluidStorage(long capacity)
     {
