@@ -4,6 +4,7 @@ import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.item.FluidComponentItem;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -21,7 +22,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
 {
@@ -37,9 +38,9 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     }
 
     @Override
-    public Function<Long, Long> getFlowFunction(Direction bias, BlockState state)
+    public PipeState.FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state)
     {
-        return state.get(OPEN) ? Function.identity() : PipeState::zero;
+        return state.get(OPEN) ? PipeState::identity : PipeState::zero;
     }
 
     @Override

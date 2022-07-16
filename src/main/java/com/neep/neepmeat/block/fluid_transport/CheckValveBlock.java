@@ -7,6 +7,7 @@ import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, IVariableFlowBlock, PipeState.ISpecialPipe
 {
@@ -65,12 +66,13 @@ public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityPro
     }
 
     @Override
-    public Function<Long, Long> getFlowFunction(Direction bias, BlockState state)
+    public PipeState.FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state)
     {
         if (bias == state.get(FACING))
-            return Function.identity();
+            return PipeState::identity;
         else
-            return flow -> 0L;
+            return (variant, flow) -> 0L;
+
     }
 
     @Override

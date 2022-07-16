@@ -3,13 +3,15 @@ package com.neep.neepmeat.fluid_transfer;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.block.fluid_transport.ICapillaryPipe;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import org.apache.logging.log4j.core.jmx.Server;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class PipeState
@@ -98,7 +100,7 @@ public class PipeState
 
     public interface ISpecialPipe
     {
-        Function<Long, Long> getFlowFunction(Direction bias, BlockState state);
+        FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state);
 
 //        default ISpecialPipe andThen(ISpecialPipe next)
 //        {
@@ -108,8 +110,40 @@ public class PipeState
 
     }
 
-    public static long zero(long l)
+    public static long zero(FluidVariant variant, long l)
     {
         return 0;
     }
+
+    public static long identity(FluidVariant variant, long l)
+    {
+        return l;
+    }
+
+    @FunctionalInterface
+    public interface FilterFunction
+    {
+        long applyVariant(FluidVariant variant, long l);
+
+        default FilterFunction andThen(FilterFunction after)
+        {
+            Objects.requireNonNull(after);
+            return (v, l) ->
+            {
+                return after.applyVariant(v, this.applyVariant(v, l));
+            };
+        }
+    }
+
+//    public static class RouteFlowLimit
+//    {
+//        protected FilterFunction variantFilter;
+//        protected Function<Long, Long> flowFunction;
+//
+//        public RouteFlowLimit(FilterFunction variantFilter, Function<Long, Long> flowFunction)
+//        {
+//            this.variantFilter = variantFilter;
+//            this.flowFunction = flowFunction;
+//        }
+//    }
 }
