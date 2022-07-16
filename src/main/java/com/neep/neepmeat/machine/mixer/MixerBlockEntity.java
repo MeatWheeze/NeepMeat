@@ -1,8 +1,11 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.FluidIngredient;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -10,8 +13,10 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -79,13 +84,14 @@ public class MixerBlockEntity extends SyncableBlockEntity
 
     public Storage<FluidVariant> getOutputStorage()
     {
-        BlockPos offset = getPos().down();
-        Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(getWorld(), offset, Direction.UP)) != null)
-        {
-            return storage;
-        }
-        return null;
+//        BlockPos offset = getPos().down();
+//        Storage<FluidVariant> storage;
+//        if ((storage = FluidStorage.SIDED.find(getWorld(), offset, Direction.UP)) != null)
+//        {
+//            return storage;
+//        }
+//        return null;
+        return storage.getFluidOutput();
     }
 
     public void startDutyCycle()
@@ -93,7 +99,9 @@ public class MixerBlockEntity extends SyncableBlockEntity
         if (currentRecipe == null && getOutputStorage() != null)
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING_TYPE, storage, world).orElse(null);
-            if (recipe != null)
+
+            if (recipe != null && getOutputStorage().simulateInsert((FluidVariant) recipe.fluidOutput.resource(),
+                        recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
@@ -138,6 +146,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
 
         nbt.putInt("process_time", processTime);
         nbt.putLong("process_start", processStart);
+        storage.writeNbt(nbt);
     }
 
     @Override
@@ -150,5 +159,30 @@ public class MixerBlockEntity extends SyncableBlockEntity
 
         this.processTime = nbt.getInt("process_time");
         this.processStart = nbt.getLong("process_start");
+        storage.readNbt(nbt);
+    }
+
+    public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, MixerBlockEntity be)
+    {
+        be.tick();
+    }
+
+    public void tick()
+    {
+        if (currentRecipe != null)
+        {
+            spawnMixingParticles(currentRecipe.fluidInput1, 2, 0.2, 0.5);
+            spawnMixingParticles(currentRecipe.fluidInput2, 2, 0.2, 0.5);
+        }
+//        sync();
+    }
+
+    public void spawnMixingParticles(FluidIngredient ingredient, int count, double dy, double speed)
+    {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,
+                    ((Fluid) ingredient.resource().getObject()).getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
+        }
     }
 }

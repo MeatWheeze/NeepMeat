@@ -5,10 +5,20 @@ import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.LootTables;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.List;
 
 public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvider
 {
@@ -47,6 +57,25 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
     {
         return NMBlocks.MIXER.getPickStack(world, pos, state);
+    }
+
+    @Override
+    public boolean dropsSelf()
+    {
+        return false;
+    }
+
+    @Deprecated
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
+    {
+        Identifier identifier = NMBlocks.MIXER.getLootTableId();
+        if (identifier == LootTables.EMPTY) {
+            return Collections.emptyList();
+        }
+        LootContext lootContext = builder.parameter(LootContextParameters.BLOCK_STATE, state).build(LootContextTypes.BLOCK);
+        ServerWorld serverWorld = lootContext.getWorld();
+        LootTable lootTable = serverWorld.getServer().getLootManager().getTable(identifier);
+        return lootTable.generateLoot(lootContext);
     }
 
     @Override
