@@ -19,6 +19,8 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
     @Override
     public void render(MixerBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
+        matrices.push();
+        matrices.translate(0, 1 - 5f / 16f, 0);
         float progress = 0;
         float nextOutput = 0;
         if (be.getCurrentRecipe() != null)
@@ -55,6 +57,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 //                MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var3, outputEnd + scale * 2, outputEnd + 0.5f, outputEnd + 0.5f, 1);
             }
         }
+        matrices.pop();
         matrices.pop();
     }
 }
