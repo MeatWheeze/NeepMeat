@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.MiscUitls;
@@ -64,6 +65,7 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
         if (!world.isClient() && world.getBlockEntity(pos) instanceof MixerBlockEntity be)
         {
             be.startDutyCycle();
+//            System.out.println(((WritableSingleFluidStorage) be.getOutputStorage()).getAmount());
         }
         return ActionResult.SUCCESS;
     }
