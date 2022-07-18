@@ -25,6 +25,7 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
 {
     protected long capacity;
     private final BlockEntity parent;
+    public float renderLevel;
 
     public WritableFluidBuffer(@Nullable BlockEntity parent, long capacity)
     {

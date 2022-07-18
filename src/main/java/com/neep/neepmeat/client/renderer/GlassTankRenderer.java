@@ -24,6 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 
 public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEntity>
 {
@@ -43,8 +44,9 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
 
         WritableFluidBuffer buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
+        buffer.renderLevel = MathHelper.lerp(0.1f, buffer.renderLevel,(buffer.getAmount()) / (float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
-        renderFluidCuboid(vertexConsumers, matrices, fluid, 0.07f, 0.93f, 0.93f, scale);
+        renderFluidCuboid(vertexConsumers, matrices, fluid, 0.07f, 0.93f, 0.93f, buffer.renderLevel);
 
         matrices.pop();
     }
