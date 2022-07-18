@@ -26,7 +26,7 @@ import net.minecraft.util.registry.Registry;
 public class NMBlockEntities
 {
     public static BlockEntityType<?> NODE_BLOCK_ENTITY;
-    public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
+    public static BlockEntityType<PumpBlockEntity> PUMP;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
     public static BlockEntityType<CheckValveBlockEntity> CHECK_VALVE;
@@ -80,7 +80,7 @@ public class NMBlockEntities
     public static void initialise()
     {
         // --- Fluid Transfer ---
-        PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
+        PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
@@ -139,6 +139,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
         FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
+
+        FluidStorage.SIDED.registerForBlockEntity(PumpBlockEntity::getBuffer, PUMP);
 
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getOutputStorage(), MIXER);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
