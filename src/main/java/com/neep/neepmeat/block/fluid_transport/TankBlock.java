@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.fluid_transport;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -22,7 +23,7 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
 {
     public TankBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
     }
 
     @Nullable

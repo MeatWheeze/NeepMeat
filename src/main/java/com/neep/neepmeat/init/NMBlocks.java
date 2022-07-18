@@ -13,6 +13,7 @@ import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.machine.mixer.MixerTopBlock;
+import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
@@ -91,6 +92,7 @@ public class NMBlocks
     public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, true, FLUID_MACHINE_SETTINGS));
+    public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block ITEM_BUFFER = BlockRegistry.queue(new ItemBufferBlock("item_buffer", 64, true, FLUID_MACHINE_SETTINGS));

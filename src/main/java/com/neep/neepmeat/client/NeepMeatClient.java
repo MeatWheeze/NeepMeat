@@ -10,6 +10,8 @@ import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
+import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
+import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -77,6 +79,7 @@ public class NeepMeatClient implements ClientModInitializer
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
 
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
@@ -150,6 +153,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         // Block cutouts
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.GLASS_TANK);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MULTI_TANK);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.FLUID_BUFFER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MESH_PANE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.PUMP);
