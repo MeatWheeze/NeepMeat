@@ -34,7 +34,11 @@ public class MixerBlockEntity extends SyncableBlockEntity
     protected MixingRecipe currentRecipe;
     protected Identifier currentRecipeId;
     protected long processStart;
-    protected int processTime;
+    protected int processLength;
+    protected int progress;
+    protected int cooldownTicks;
+
+    public float bladeAngle;
 
     public MixerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -55,6 +59,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
     {
         this.currentRecipe = recipe;
         this.currentRecipeId = recipe != null ? recipe.id : null;
+        this.cooldownTicks = 10;
     }
 
     public MixingRecipe getCurrentRecipe()
@@ -112,9 +117,9 @@ public class MixerBlockEntity extends SyncableBlockEntity
                     {
                         transaction.commit();
                         setCurrentRecipe(recipe);
-                        this.processTime = recipe.processTime;
+                        this.processLength = recipe.processTime;
                         this.processStart = world.getTime();
-                        world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), processTime);
+//                        world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), processTime);
                     }
                     else
                         transaction.abort();
@@ -147,7 +152,8 @@ public class MixerBlockEntity extends SyncableBlockEntity
         if (currentRecipe != null)
             nbt.putString("current_recipe", currentRecipe.getId().toString());
 
-        nbt.putInt("process_time", processTime);
+        nbt.putInt("progress", progress);
+        nbt.putInt("process_time", processLength);
         nbt.putLong("process_start", processStart);
         storage.writeNbt(nbt);
     }
@@ -158,7 +164,8 @@ public class MixerBlockEntity extends SyncableBlockEntity
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
         readCurrentRecipe();
 
-        this.processTime = nbt.getInt("process_time");
+        this.progress = nbt.getInt("progress");
+        this.processLength = nbt.getInt("process_time");
         this.processStart = nbt.getLong("process_start");
         storage.readNbt(nbt);
     }
@@ -181,6 +188,25 @@ public class MixerBlockEntity extends SyncableBlockEntity
     public void tick()
     {
         readCurrentRecipe();
+        if (currentRecipe != null)
+        {
+            ++progress;
+            if (progress >= this.processLength)
+            {
+                endDutyCycle();
+                this.progress = 0;
+            }
+        }
+        else
+        {
+            ++progress;
+            if (progress >= this.cooldownTicks)
+            {
+                startDutyCycle();
+                this.progress = 0;
+            }
+        }
+
         if (currentRecipe != null)
         {
             spawnMixingParticles(currentRecipe.fluidInput1, 2, 0.2, 0.5);

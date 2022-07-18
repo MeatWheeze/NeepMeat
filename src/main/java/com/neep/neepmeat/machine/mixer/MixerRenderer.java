@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -8,6 +10,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3f;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
@@ -25,7 +28,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         float nextOutput = 0;
         if (be.getCurrentRecipe() != null)
         {
-            progress = (be.getWorld().getTime() + tickDelta - be.processStart) / (float) be.processTime;
+            progress = (be.getWorld().getTime() + tickDelta - be.processStart) / (float) be.processLength;
             nextOutput = progress * be.getCurrentRecipe().fluidOutput.amount();
         }
 
@@ -59,5 +62,12 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         }
         matrices.pop();
         matrices.pop();
+
+        matrices.translate(0.5, 1.5, 0.5);
+        float rotatingAngle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * 100f);
+        be.bladeAngle = MathHelper.lerpAngleDegrees(0.1f, be.bladeAngle, be.currentRecipe == null ? 0 : rotatingAngle);
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
+        matrices.translate(-0.5, -0.5, -0.5);
+        BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
 }
