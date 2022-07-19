@@ -43,6 +43,8 @@ public class NMItems
     public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
+    public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
     static
     {
 //        ROUGH.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
