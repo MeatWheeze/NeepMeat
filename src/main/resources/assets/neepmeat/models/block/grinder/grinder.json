@@ -4,7 +4,8 @@
 	"textures": {
 		"3": "neepmeat:block/grinder/grinder",
 		"5": "neepmeat:block/grinder/tray",
-		"6": "neepmeat:block/grinder/core"
+		"6": "neepmeat:block/grinder/core",
+		"particle": "neepmeat:block/grinder/core"
 	},
 	"elements": [
 		{

@@ -35,6 +35,11 @@ public class ItemInPipe
         this.tickEnd = (long) (tickStart + 1 / speed);
     }
 
+    public ItemInPipe(ItemStack itemStack, long tickStart)
+    {
+        this(null, null, itemStack, tickStart);
+    }
+
     public ItemInPipe(Direction in, Direction out, ItemStack itemStack, long tickStart)
     {
         this.in = in;

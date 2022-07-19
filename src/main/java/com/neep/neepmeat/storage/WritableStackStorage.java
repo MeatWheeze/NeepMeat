@@ -20,6 +20,12 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant>
         this.parent = parent;
     }
 
+    public WritableStackStorage(@Nullable BlockEntity parent, int capacity)
+    {
+        this.parent = parent;
+        this.capacity = capacity;
+    }
+
     @Override
     protected void onFinalCommit()
     {
@@ -66,6 +72,11 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant>
     public ItemStack getAsStack()
     {
         return variant.toStack((int) getAmount());
+    }
+
+    public boolean isEmpty()
+    {
+        return this.amount == 0 || this.variant.isBlank();
     }
 
     @Override

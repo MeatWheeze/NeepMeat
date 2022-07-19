@@ -49,7 +49,7 @@ public class TubeUtils
             world.spawnEntity(itemEntity);
             return -1;
         }
-        else if ((storage = ItemStorage.SIDED.find(world, toPos, out)) != null)
+        else if ((storage = ItemStorage.SIDED.find(world, toPos, out.getOpposite())) != null)
         {
             amountInserted = pipeToStorage(item, storage);
         }

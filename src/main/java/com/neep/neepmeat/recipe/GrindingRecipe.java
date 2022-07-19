@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ItemIngredient;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.GrinderStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
@@ -13,6 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
 
+@SuppressWarnings("UnstableApiUsage")
 public class GrindingRecipe implements Recipe<GrinderStorage>
 {
     protected Identifier id;
@@ -31,7 +34,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     @Override
     public boolean matches(GrinderStorage inventory, World world)
     {
-        return false;
+        return itemInput.test(inventory.getInputStorage());
     }
 
     @Override
@@ -49,7 +52,12 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     @Override
     public ItemStack getOutput()
     {
-        return ItemStack.EMPTY;
+        throw new UnsupportedOperationException("use getItemOutput instead");
+    }
+
+    public ItemIngredient getItemOutput()
+    {
+        return itemOutput;
     }
 
     @Override
@@ -68,6 +76,41 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     public RecipeType<?> getType()
     {
         return NMrecipeTypes.GRINDING;
+    }
+
+    public int getTime()
+    {
+        return processTime;
+    }
+
+    public boolean takeInputs(GrinderStorage storage, TransactionContext transaction)
+    {
+        try (Transaction inner = transaction.openNested())
+        {
+            long extracted = storage.getInputStorage().extract(itemInput.resource(), itemInput.amount(), transaction);
+            if (extracted == itemInput.amount())
+            {
+                inner.commit();
+                return true;
+            }
+            inner.abort();
+        }
+        return false;
+    }
+
+    public boolean ejectOutput(GrinderStorage storage, TransactionContext transaction)
+    {
+        try (Transaction inner = transaction.openNested())
+        {
+            long inserted = storage.getOutputStorage().insert(itemOutput.resource(), itemOutput.amount(), transaction);
+            if (inserted == itemOutput.amount())
+            {
+                inner.commit();
+                return true;
+            }
+            inner.abort();
+        }
+        return false;
     }
 
     public static class Serializer implements RecipeSerializer<GrindingRecipe>
