@@ -14,7 +14,7 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemIngredient extends GenericIngredient<Item>
+public class ItemIngredient extends GenericIngredient<Item, ItemVariant>
 {
     public static final ItemIngredient EMPTY = new ItemIngredient(ItemVariant.blank(), 0);
 
@@ -29,7 +29,7 @@ public class ItemIngredient extends GenericIngredient<Item>
     }
 
     @Override
-    public GenericIngredient<Item> blank()
+    public GenericIngredient<Item, ItemVariant> blank()
     {
         return EMPTY;
     }

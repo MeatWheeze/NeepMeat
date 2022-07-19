@@ -41,7 +41,7 @@ public class FluidFactory
         this.namespace = namespace;
         this.baseName = baseName;
         this.flowingName = "flowing_" + baseName;
-        this.stillName = "still_" + baseName;
+        this.stillName = baseName;
         this.bucketName = baseName + "_bucket";
 
 //        this.still = still;

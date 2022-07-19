@@ -5,11 +5,17 @@ import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -63,11 +69,34 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.pop();
         matrices.pop();
 
+        matrices.push();
         matrices.translate(0.5, 1.5, 0.5);
-        float rotatingAngle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * 100f);
+        float rotatingAngle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * 50f);
         be.bladeAngle = MathHelper.lerpAngleDegrees(0.1f, be.bladeAngle, be.currentRecipe == null ? 0 : rotatingAngle);
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+
+        renderItems(be, matrices, rotatingAngle, 0, outputEnd - 0.4f, 0.2f, vertexConsumers, overlay);
+        matrices.pop();
+    }
+
+    public static void renderItems(MixerBlockEntity be, MatrixStack matrices, float angle, float angleOffset, float fluidHeight, float offset, VertexConsumerProvider vertexConsumers, int overlay)
+    {
+        Transaction transaction = Transaction.openOuter();
+        for (StorageView<ItemVariant> view : be.getItemStorage(null).iterable(transaction))
+        {
+            matrices.push();
+            matrices.multiply(Quaternion.fromEulerXyz(0, (angle * angleOffset * 2) / 20, 0));
+//            float height = (float) ((Math.sin(angle / 20 + angleOffset) + 0.4) / 2 * fluidHeight) + 0.2f;
+            matrices.translate(0.5, fluidHeight, offset);
+
+            ItemVariant var = view.getResource();
+            MinecraftClient.getInstance().getItemRenderer()
+                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
+            angleOffset += Math.PI / 3;
+            matrices.pop();
+        }
+        transaction.abort();
     }
 }

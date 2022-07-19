@@ -56,6 +56,10 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
     {
         if (!newState.isOf(this) && world.getBlockState(pos.up()).isOf(NMBlocks.MIXER_TOP))
         {
+            if (world.getBlockEntity(pos) instanceof MixerBlockEntity be)
+            {
+                be.dropItems();
+            }
             world.setBlockState(pos.up(), Blocks.AIR.getDefaultState());
         }
         super.onStateReplaced(state, world, pos, newState, moved);

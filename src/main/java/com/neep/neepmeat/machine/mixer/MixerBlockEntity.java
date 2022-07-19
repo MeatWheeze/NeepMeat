@@ -8,21 +8,26 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -50,9 +55,14 @@ public class MixerBlockEntity extends SyncableBlockEntity
         this(NMBlockEntities.MIXER, pos, state);
     }
 
-    public Storage<FluidVariant> getFluidStorage(World world, BlockPos pos, BlockState state, Direction direction)
+    public Storage<FluidVariant> getFluidStorage(@Nullable Direction direction)
     {
-        return null;
+        return getOutputStorage();
+    }
+
+    public Storage<ItemVariant> getItemStorage(@Nullable Direction direction)
+    {
+        return storage.getItemInput();
     }
 
     public void setCurrentRecipe(@Nullable MixingRecipe recipe)
@@ -213,6 +223,18 @@ public class MixerBlockEntity extends SyncableBlockEntity
             spawnMixingParticles(currentRecipe.fluidInput2, 2, 0.2, 0.5);
         }
 //        sync();
+    }
+
+    public void dropItems()
+    {
+        Transaction transaction = Transaction.openOuter();
+        Iterator<StorageView<ItemVariant>> it = this.storage.itemInput.iterator(transaction);
+        while (it.hasNext())
+        {
+            StorageView<ItemVariant> view = it.next();
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+        }
+        transaction.commit();
     }
 
     public void spawnMixingParticles(FluidIngredient ingredient, int count, double dy, double speed)
