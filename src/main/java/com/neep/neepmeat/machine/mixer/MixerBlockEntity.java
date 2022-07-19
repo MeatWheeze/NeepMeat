@@ -16,7 +16,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
@@ -116,7 +115,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
     {
         if (currentRecipe == null && getOutputStorage() != null)
         {
-            MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING_TYPE, storage, world).orElse(null);
+            MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
             if (recipe != null && getOutputStorage().simulateInsert((FluidVariant) recipe.fluidOutput.resource(),
                         recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
