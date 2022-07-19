@@ -20,25 +20,25 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A slightly unnecessary, slightly deprecated vestige of where I had even less idea what I was doing.
+ * I would add @Deprecated, but I don't want even more warnings.
+ */
 @SuppressWarnings("UnstableApiUsage")
-public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> implements FluidBuffer
+public class WritableFluidBuffer extends WritableSingleFluidStorage implements FluidBuffer
 {
-    protected long capacity;
     private final BlockEntity parent;
-    public float renderLevel;
 
     public WritableFluidBuffer(@Nullable BlockEntity parent, long capacity)
     {
-        this.capacity = capacity;
+        super(capacity);
         this.parent = parent;
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         nbt.putLong("amount", amount);
         nbt.put("resource", variant.toNbt());
-
-        return nbt;
     }
 
     public void readNbt(NbtCompound nbt)

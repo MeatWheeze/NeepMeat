@@ -27,6 +27,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlockEntity>
@@ -50,7 +51,8 @@ public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlock
         WritableFluidBuffer buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
-        renderFluidCuboid(vertexConsumers, matrices, fluid, 0.1f, 0.19f, 0.93f, scale);
+        buffer.renderLevel = MathHelper.lerp(0.1f, buffer.renderLevel,(buffer.getAmount()) / (float) buffer.getCapacity());
+        renderFluidCuboid(vertexConsumers, matrices, fluid, 0.1f, 0.19f, 0.93f, buffer.renderLevel);
 
         matrices.pop();
     }

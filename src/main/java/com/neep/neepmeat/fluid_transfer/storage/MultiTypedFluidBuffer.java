@@ -35,7 +35,7 @@ public class MultiTypedFluidBuffer extends CombinedStorage<FluidVariant, TypedFl
         for (int i = 0; i < buffers.size(); ++i)
         {
             NbtCompound nbt2 = new NbtCompound();
-            nbt2 = buffers.get(i).writeNbt(nbt2);
+            buffers.get(i).writeNbt(nbt2);
             nbt.put("buffer_" + i, nbt2);
         }
         return nbt;

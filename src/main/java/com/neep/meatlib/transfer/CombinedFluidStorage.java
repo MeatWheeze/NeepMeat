@@ -7,6 +7,9 @@ import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
 
+/**
+ * I had no idea what I was doing when I made this
+ */
 @SuppressWarnings("UnstableApiUsage")
 public class CombinedFluidStorage extends CombinedStorage<FluidVariant, WritableFluidBuffer>
 {
@@ -20,7 +23,7 @@ public class CombinedFluidStorage extends CombinedStorage<FluidVariant, Writable
         for (int i = 0; i < parts.size(); ++i)
         {
             NbtCompound nbt2 = new NbtCompound();
-            nbt2 = parts.get(i).writeNbt(nbt2);
+            parts.get(i).writeNbt(nbt2);
             nbt.put("part_" + i, nbt2);
         }
         return nbt;
