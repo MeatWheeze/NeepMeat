@@ -10,7 +10,6 @@ import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
-import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
@@ -19,13 +18,13 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
@@ -46,7 +45,9 @@ public class NeepMeatClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        NeepMeatClient.registerRenderers();
+        registerRenderers();
+        registerLayers();
+        registerScreens();
 
         TankMessagePacket.Client.registerReciever();
         ParticleSpawnPacket.Client.registerReceiver();
@@ -60,26 +61,25 @@ public class NeepMeatClient implements ClientModInitializer
         NMParticles.Client.init();
 
         // BlockEntity renderers
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
-//        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.STOP_VALVE, StopValveRenderer::new);
-        BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MOTOR, MotorRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.MOTOR, MotorRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
 
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
@@ -130,9 +130,6 @@ public class NeepMeatClient implements ClientModInitializer
                 0xFFFFFF
         ));
 
-        //if you want to use custom textures they needs to be registered.
-        //In this example this is unnecessary because the vanilla water textures are already registered.
-        //To register your custom textures use this method.
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
             registry.register(CHARGED_WORK_FLUID);
@@ -145,13 +142,22 @@ public class NeepMeatClient implements ClientModInitializer
             ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
+    }
 
+    public static void registerScreens()
+    {
+        HandledScreens.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
+        HandledScreens.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
+        HandledScreens.register(ScreenHandlerInit.ROUTER, RouterScreen::new);
+    }
+
+    public static void registerLayers()
+    {
         // Fluids
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_ENRICHED_BLOOD, NMFluids.FLOWING_ENRICHED_BLOOD);
 
-
-        // Block cutouts
+        // Other blocks
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.GLASS_TANK);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MULTI_TANK);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.FLUID_BUFFER);
@@ -190,11 +196,5 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.SLOPE_TEST);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MIXER_TOP);
-
-        // Screens
-        ScreenRegistry.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
-        ScreenRegistry.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
-        ScreenRegistry.register(ScreenHandlerInit.ROUTER, RouterScreen::new);
-
     }
 }
