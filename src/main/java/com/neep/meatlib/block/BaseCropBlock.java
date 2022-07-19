@@ -29,7 +29,7 @@ public class BaseCropBlock extends CropBlock implements IMeatBlock
     public BaseCropBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
-        this.seedsItem = new BaseSeedsItem(this, registryName, itemMaxStack, hasLore);
+        this.seedsItem = new BaseSeedsItem(this, registryName + "_seeds", itemMaxStack, hasLore);
         this.registryName = registryName;
     }
 
@@ -38,6 +38,12 @@ public class BaseCropBlock extends CropBlock implements IMeatBlock
         super(settings);
         this.seedsItem = new BaseSeedsItem(this, registryName, itemMaxStack, hasLore);
         this.registryName = registryName;
+    }
+
+    @Override
+    public boolean dropsSelf()
+    {
+        return false;
     }
 
     @Override
