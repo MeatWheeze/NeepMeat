@@ -1,9 +1,11 @@
-# Fabric Example Mod
+# NeepMeat
+
+A Minecraft mod about rusty machinery, cosmic horror and meat.
 
 ## Setup
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Gradle Java Idea Eclipse blah blah stuff and things
 
 ## License
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This project is licensed under AGPLv2.1. Probably.
