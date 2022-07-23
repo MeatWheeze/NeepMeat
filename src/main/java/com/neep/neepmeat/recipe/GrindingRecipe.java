@@ -49,6 +49,11 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         return false;
     }
 
+    public ItemIngredient getItemInput()
+    {
+        return itemInput;
+    }
+
     @Override
     public ItemStack getOutput()
     {
