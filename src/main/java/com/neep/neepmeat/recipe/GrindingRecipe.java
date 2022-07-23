@@ -21,12 +21,14 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     protected Identifier id;
     protected ItemIngredient itemInput;
     protected ItemIngredient itemOutput;
+    protected float experience;
     protected int processTime;
 
-    public GrindingRecipe(Identifier id, ItemIngredient itemInput, ItemIngredient itemOutput, int processTime)
+    public GrindingRecipe(Identifier id, ItemIngredient itemInput, ItemIngredient itemOutput, float experience, int processTime)
     {
         this.itemInput = itemInput;
         this.itemOutput = itemOutput;
+        this.experience = experience;
         this.processTime = processTime;
         this.id = id;
     }
@@ -108,7 +110,8 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         try (Transaction inner = transaction.openNested())
         {
             long inserted = storage.getOutputStorage().insert(itemOutput.resource(), itemOutput.amount(), transaction);
-            if (inserted == itemOutput.amount())
+            float xpInserted = storage.getXpStorage().insert(experience, transaction);
+            if (inserted == itemOutput.amount() && xpInserted == experience)
             {
                 inner.commit();
                 return true;
@@ -138,8 +141,10 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
             JsonObject outputElement = JsonHelper.getObject(json, "output");
             ItemIngredient itemOutput = ItemIngredient.fromJson(outputElement);
 
+            float experience = JsonHelper.getFloat(json, "experience", 0);
+
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
-            return this.factory.create(id, itemInput, itemOutput, time);
+            return this.factory.create(id, itemInput, itemOutput, experience, time);
         }
 
         @Override
@@ -147,9 +152,10 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         {
             ItemIngredient itemInput = ItemIngredient.fromBuffer(buf);
             ItemIngredient itemOutput = ItemIngredient.fromBuffer(buf);
+            float experience = buf.readFloat();
             int time = buf.readVarInt();
 
-            return this.factory.create(id, itemInput, itemOutput, time);
+            return this.factory.create(id, itemInput, itemOutput, experience, time);
         }
 
         @Override
@@ -157,13 +163,14 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         {
             recipe.itemInput.write(buf);
             recipe.itemOutput.write(buf);
+            buf.writeFloat(recipe.experience);
             buf.writeVarInt(recipe.processTime);
         }
 
         @FunctionalInterface
         public interface RecipeFactory<T extends GrindingRecipe>
         {
-            T create(Identifier var1, ItemIngredient in, ItemIngredient out, int time);
+            T create(Identifier var1, ItemIngredient in, ItemIngredient out, float xp, int time);
         }
     }
 }
