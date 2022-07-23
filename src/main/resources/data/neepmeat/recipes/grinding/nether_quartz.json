@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:nether_quartz_ore",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:nether_quartz",
+    "amount": 2
+  },
+  "experience": 3.5,
+  "processtime": 10
+}
