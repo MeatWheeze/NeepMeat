@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
@@ -80,6 +81,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
 
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
