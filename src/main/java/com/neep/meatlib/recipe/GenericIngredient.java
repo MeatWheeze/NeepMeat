@@ -44,6 +44,8 @@ public abstract class GenericIngredient<T, V extends TransferVariant<T>> impleme
     public abstract GenericIngredient<T, V> blank();
 
     public abstract void write(PacketByteBuf buf);
+//    public abstract GenericIngredient<T> read(PacketByteBuf buf);
+//    public abstract GenericIngredient<T> read(JsonObject json);
 
     public long take(Storage<V> storage, TransactionContext context)
     {

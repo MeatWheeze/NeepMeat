@@ -50,7 +50,7 @@ public class FluidIngredient extends GenericIngredient<Fluid, FluidVariant>
         else
         {
             buf.writeBoolean(true);
-            Fluid fluid = this.getResourceType();
+            Fluid fluid = this.resource.getFluid();
             buf.writeVarInt(Registry.FLUID.getRawId(fluid)); // Fluid ID
             buf.writeLong(this.amount()); // Amount
 
