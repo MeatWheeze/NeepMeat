@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "tag": "minecraft:emerald_ores",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:emerald",
+    "min": 1,
+    "max": 2
+  },
+  "experience": 5,
+  "processtime": 10
+}

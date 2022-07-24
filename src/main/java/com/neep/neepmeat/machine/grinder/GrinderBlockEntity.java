@@ -134,7 +134,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity
         {
             GrindingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
 
-            if (recipe != null && storage.outputStorage.simulateInsert(recipe.getItemOutput().resource(),
+            if (recipe != null && storage.outputStorage.simulateInsert(ItemVariant.of(recipe.getItemOutput().resource()),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
