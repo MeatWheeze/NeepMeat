@@ -6,7 +6,8 @@
   },
   "output": {
     "resource": "minecraft:redstone",
-    "amount": 5
+    "min": 4,
+    "max": 5
   },
   "experience": 2,
   "processtime": 10

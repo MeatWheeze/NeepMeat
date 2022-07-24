@@ -1,14 +1,14 @@
 {
   "type": "neepmeat:grinding",
   "input": {
-    "tag": "minecraft:coal_ores",
+    "resource": "minecraft:smooth_quartz_slab",
     "amount": 1
   },
   "output": {
-    "resource": "minecraft:coal",
+    "resource": "minecraft:quartz",
     "min": 1,
     "max": 2
   },
-  "experience": 2,
+  "experience": 0,
   "processtime": 10
 }
