@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -27,13 +28,15 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
     protected RecipeOutput<Item> itemOutput;
+    protected RecipeOutput<Item> extraOutput;
     protected float experience;
     protected int processTime;
 
-    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutput<Item> itemOutput, float experience, int processTime)
+    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutput<Item> itemOutput, RecipeOutput<Item> extraOutput, float experience, int processTime)
     {
         this.itemInput = itemInput;
         this.itemOutput = itemOutput;
+        this.extraOutput = extraOutput;
         this.experience = experience;
         this.processTime = processTime;
         this.id = id;
@@ -117,9 +120,13 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         try (Transaction inner = transaction.openNested())
         {
             itemOutput.update();
-            long inserted = storage.getOutputStorage().insert(ItemVariant.of(itemOutput.resource()), itemOutput.amount(), transaction);
-            float xpInserted = storage.getXpStorage().insert(experience, transaction);
-            if (inserted == itemOutput.amount() && xpInserted == experience)
+//            long inserted = storage.getOutputStorage().insert(ItemVariant.of(itemOutput.resource()), itemOutput.amount(), transaction);
+
+            boolean bl1 = itemOutput.insertInto(storage.getOutputStorage(), ItemVariant::of, inner);
+            boolean bl2 = extraOutput == null || extraOutput.insertInto(storage.getExtraStorage(), ItemVariant::of, inner);
+            boolean bl3 = storage.getXpStorage().insert(experience, transaction) == experience;
+
+            if (bl1 && bl2 && bl3)
             {
                 inner.commit();
                 return true;
@@ -149,10 +156,18 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
             JsonObject outputElement = JsonHelper.getObject(json, "output");
             RecipeOutput<Item> itemOutput = RecipeOutput.fromJson(Registry.ITEM, outputElement);
 
+            // Extra output is optional in recipe json
+            RecipeOutput<Item> extraOutput = null;
+            if (json.has("extra"))
+            {
+                JsonObject extraElement = JsonHelper.getObject(json, "extra");
+                extraOutput = RecipeOutput.fromJson(Registry.ITEM, extraElement);
+            }
+
             float experience = JsonHelper.getFloat(json, "experience", 0);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
-            return this.factory.create(id, itemInput, itemOutput, experience, time);
+            return this.factory.create(id, itemInput, itemOutput, extraOutput, experience, time);
         }
 
         @Override
@@ -160,10 +175,17 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(Registry.ITEM, buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+
+            RecipeOutput<Item> extraOutput = null;
+            if (buf.readBoolean())
+            {
+                extraOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            }
+
             float experience = buf.readFloat();
             int time = buf.readVarInt();
 
-            return this.factory.create(id, itemInput, itemOutput, experience, time);
+            return this.factory.create(id, itemInput, itemOutput, extraOutput, experience, time);
         }
 
         @Override
@@ -171,6 +193,15 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         {
             recipe.itemInput.write(Registry.ITEM, buf);
             recipe.itemOutput.write(Registry.ITEM, buf);
+
+            // Include extra only if present
+            if (recipe.extraOutput != null)
+            {
+                buf.writeBoolean(true);
+                recipe.extraOutput.write(Registry.ITEM, buf);
+            }
+            else buf.writeBoolean(false);
+
             buf.writeFloat(recipe.experience);
             buf.writeVarInt(recipe.processTime);
         }
@@ -178,7 +209,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends GrindingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out, float xp, int time);
+            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out, @Nullable RecipeOutput<Item> eOut, float xp, int time);
         }
     }
 }
