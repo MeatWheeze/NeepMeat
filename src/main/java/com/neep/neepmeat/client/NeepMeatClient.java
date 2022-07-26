@@ -11,6 +11,7 @@ import com.neep.neepmeat.client.screen.RouterScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
+import com.neep.neepmeat.machine.motor.MotorRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;

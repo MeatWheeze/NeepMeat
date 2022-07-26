@@ -1,8 +1,8 @@
-package com.neep.neepmeat.block.machine;
+package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.block.BaseVertFacingBlock;
-import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;

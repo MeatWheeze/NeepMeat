@@ -19,6 +19,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
     public TypedFluidBuffer inputBuffer;
@@ -28,8 +29,8 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long inCapacity, long outCapacity)
     {
         super(type, pos, state);
-        inputBuffer = new TypedFluidBuffer(this, inCapacity, fluidVariant -> fluidVariant.equals(NMFluids.CHARGED), TypedFluidBuffer.Mode.INSERT_ONLY);
-        outputBuffer = new TypedFluidBuffer(this, outCapacity, fluidVariant -> fluidVariant.equals(NMFluids.UNCHARGED), TypedFluidBuffer.Mode.EXTRACT_ONLY);
+        inputBuffer = new TypedFluidBuffer(inCapacity, fluidVariant -> fluidVariant.equals(NMFluids.CHARGED), TypedFluidBuffer.Mode.INSERT_ONLY, this::sync);
+        outputBuffer = new TypedFluidBuffer(outCapacity, fluidVariant -> fluidVariant.equals(NMFluids.UNCHARGED), TypedFluidBuffer.Mode.EXTRACT_ONLY, this::sync);
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 

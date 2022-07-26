@@ -22,14 +22,6 @@ public class MultiTypedFluidBuffer extends CombinedStorage<FluidVariant, TypedFl
         this.parent = parent;
     }
 
-    public void syncIfPossible()
-    {
-        if (parent instanceof SyncableBlockEntity serializable)
-        {
-            serializable.sync();
-        }
-    }
-
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         for (int i = 0; i < buffers.size(); ++i)

@@ -1,7 +1,8 @@
-package com.neep.neepmeat.client.renderer;
+package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
+import com.neep.neepmeat.client.renderer.BERenderUtils;
+import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;

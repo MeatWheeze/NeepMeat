@@ -14,6 +14,7 @@ import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.machine.mixer.MixerTopBlock;
+import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
