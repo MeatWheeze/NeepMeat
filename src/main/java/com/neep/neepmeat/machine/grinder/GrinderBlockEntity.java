@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.grinder;
 
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
@@ -106,6 +107,11 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
     public void tick()
     {
+        if (getConnectedMotor() == null)
+        {
+            update((ServerWorld) getWorld(), pos, pos, getCachedState());
+        }
+
         readCurrentRecipe();
         if (!storage.getOutputStorage().isEmpty())
         {
@@ -118,7 +124,20 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
         if (currentRecipe != null)
         {
-            ++progress;
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                long workAmount = 90;
+                if (doWork(workAmount, transaction) == workAmount)
+                {
+                    transaction.commit();
+                    ++progress;
+                }
+                else
+                {
+                    transaction.abort();
+                }
+            }
+
             if (progress >= this.processLength)
             {
                 endDutyCycle();
@@ -128,6 +147,8 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         else
         {
             ++progress;
+            setRunning(false);
+
             if (progress >= this.cooldownTicks)
             {
                 startDutyCycle();
@@ -189,6 +210,26 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
         ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
         storage.xpStorage.extract(Float.MAX_VALUE, transaction);
+    }
+
+    @Override
+    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
+    {
+        Direction facing = state.get(GrinderBlock.FACING);
+        for (Direction direction : Direction.values())
+        {
+            if (direction == facing || direction == Direction.UP || direction == Direction.DOWN)
+                continue;
+
+            BlockPos offset = pos.offset(direction);
+            if (world.getBlockEntity(offset) instanceof IMotorBlockEntity be
+                    && world.getBlockState(offset).get(BaseFacingBlock.FACING) == direction.getOpposite())
+            {
+                setConnectedMotor(be);
+                return;
+            }
+        }
+        setConnectedMotor(null);
     }
 
     public static void storageToWorld(World world, Storage<ItemVariant> storage, BlockPos toPos, Direction direction, TransactionContext transaction)

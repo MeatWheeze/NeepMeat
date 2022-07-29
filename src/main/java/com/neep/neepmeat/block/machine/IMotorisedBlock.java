@@ -21,6 +21,14 @@ public interface IMotorisedBlock
         return getConnectedMotor() != null;
     }
 
+    default void setRunning(boolean running)
+    {
+        if (getConnectedMotor() != null)
+        {
+            getConnectedMotor().setRunning(running);
+        }
+    }
+
     default long doWork(long amount, TransactionContext transaction)
     {
         if (getConnectedMotor() != null)
@@ -31,7 +39,7 @@ public interface IMotorisedBlock
 
     default void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
-        Direction facing = state.get(LinearOscillatorBlock.FACING);
+        Direction facing = state.get(BaseFacingBlock.FACING);
         BlockPos backPos = pos.offset(facing.getOpposite());
         if (world.getBlockEntity(backPos) instanceof IMotorBlockEntity be
                 && world.getBlockState(backPos).get(BaseFacingBlock.FACING) == facing)
