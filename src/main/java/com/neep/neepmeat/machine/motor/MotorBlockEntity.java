@@ -20,6 +20,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     public boolean starting;
     public float rotorSpeed = 1f; // rad per tick
     public float currentSpeed = 0;
+    public float angle;
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
