@@ -1,24 +1,64 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-@SuppressWarnings("UnstableApiUsage")
-public class StirlingEngineBlockEntity extends SyncableBlockEntity
+public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
 {
     protected StirlingEngineStorage storage;
 
-    public float speed;
+    public int energyStored;
     public float angle;
 
     protected int burnTime;
-//    protected int fuelTime;
+    protected int fuelTime;
+
+    protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
+    {
+        @Override
+        public int get(int index)
+        {
+            return switch (index)
+                {
+                    case 0 -> burnTime;
+                    case 1 -> fuelTime;
+                    case 2 -> energyStored;
+                    default -> 0;
+                };
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+            switch (index)
+            {
+                case 0 -> burnTime = value;
+                case 1 -> fuelTime = value;
+                case 2 -> energyStored = value;
+            }
+        }
+
+        @Override
+        public int size()
+        {
+            return 3;
+        }
+    };
 
     public StirlingEngineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -36,7 +76,8 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
         nbt.putInt("burn_time", burnTime);
-        nbt.putFloat("speed", speed);
+        nbt.putInt("fuel_time", fuelTime);
+        nbt.putInt("energy", energyStored);
 //        nbt.putInt("fuel_time", fuelTime);
     }
 
@@ -45,7 +86,8 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
         super.readNbt(nbt);
         storage.readNbt(nbt);
         this.burnTime = nbt.getInt("burn_time");
-        this.speed = nbt.getFloat("speed");
+        this.fuelTime = nbt.getInt("fuel_time");
+        this.energyStored = nbt.getInt("energy");
 //        this.fuelTime = nbt.getInt("fuel_time");
     }
 
@@ -55,25 +97,18 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
 
         if (isBurning())
         {
-            speed += 0.001;
+            this.energyStored = Math.min(8192, energyStored + 1);
             sync();
         }
 
         if (burnTime == 0)
         {
-//            this.speed = 0;
-            try (Transaction transaction = Transaction.openOuter())
+            int time;
+            if ((time = storage.decrementFuel()) > 0)
             {
-                int time = 0;
-                if ((time = storage.decrementFuel(transaction)) > 0)
-                {
-                    this.burnTime = time;
-                    transaction.commit();
-                }
-                else transaction.abort();
+                this.burnTime = time;
+                this.fuelTime = time;
             }
-            World world = getWorld();
-            sync();
         }
     }
 
@@ -90,5 +125,25 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
     public StirlingEngineStorage getStorage()
     {
         return storage;
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+        return new TranslatableText("container." + NeepMeat.NAMESPACE + ".stirling_engine");
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
+    {
+        return new StirlingEngineScreenHandler(syncId, inv, storage.inventory, propertyDelegate);
+    }
+
+    public static float energyToSpeed(int energy)
+    {
+        // E=Iw^2. Assume the flywheel has a moment of inertia of 100kgm^2, divide by 20 to get velocity in rad / tick.
+        float w1 = (float) Math.sqrt(2f * energy / 100) / 20;
+        return (float) (w1 * 180 / Math.PI); // Convert to degrees / tick
     }
 }
