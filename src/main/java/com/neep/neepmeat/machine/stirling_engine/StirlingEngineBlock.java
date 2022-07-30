@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,6 +11,9 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -19,9 +23,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityProvider
 {
+    public static final BooleanProperty LIT = Properties.LIT;
+
     public StirlingEngineBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false));
     }
 
     @Override
@@ -36,6 +43,19 @@ public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityP
             }
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()) && !world.isClient)
+        {
+            if (world.getBlockEntity(pos) instanceof StirlingEngineBlockEntity be)
+            {
+                be.getStorage().dropItems(world, pos);
+            }
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override
@@ -57,5 +77,12 @@ public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityP
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return new StirlingEngineBlockEntity(pos, state);
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(LIT);
     }
 }
