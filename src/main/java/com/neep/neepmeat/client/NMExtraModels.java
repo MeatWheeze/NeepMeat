@@ -11,7 +11,6 @@ import java.util.function.Consumer;
 public class NMExtraModels implements ExtraModelProvider
 {
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
-//    public static ResourceManager MANAGER;
 
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");
     public static Identifier ITEM_PUMP_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/item_pump_shuttle");
@@ -23,6 +22,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/agitator_blades");
     public static Identifier MIXER_AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/mixer/agitator");
     public static Identifier INTEGRATOR_BASE = new Identifier(NeepMeat.NAMESPACE, "block/integrator/base");
+    public static Identifier STIRLING_ENGINE_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/stirling_engine/rotor");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -37,5 +37,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(AGITATOR_BLADES);
         out.accept(MIXER_AGITATOR_BLADES);
         out.accept(INTEGRATOR_BASE);
+        out.accept(STIRLING_ENGINE_ROTOR);
     }
 }

@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "neepmeat:block/stirling_engine/base",
+      "x": 90
+    }
+  }
+}

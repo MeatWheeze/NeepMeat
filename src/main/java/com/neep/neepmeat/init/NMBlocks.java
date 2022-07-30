@@ -16,6 +16,7 @@ import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.machine.mixer.MixerTopBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.multitank.MultiTankBlock;
+import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
@@ -71,6 +72,7 @@ public class NMBlocks
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, MACHINE_SETTINGS));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, MACHINE_SETTINGS));
     public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", 64, false, MACHINE_SETTINGS));
+    public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", 64, false, MACHINE_SETTINGS));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", 64, false, MACHINE_SETTINGS));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", 64, false, MACHINE_SETTINGS));
     public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, MACHINE_SETTINGS));
