@@ -9,7 +9,8 @@
   "client": [
     "ExampleMixin",
     "HeldItemRendererMixin",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "BlockModelRendererAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
