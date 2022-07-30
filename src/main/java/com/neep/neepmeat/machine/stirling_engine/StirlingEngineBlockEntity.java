@@ -14,7 +14,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
 {
     protected StirlingEngineStorage storage;
 
-    public float speed = 0;
+    public float speed;
     public float angle;
 
     protected int burnTime;
@@ -36,6 +36,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
         nbt.putInt("burn_time", burnTime);
+        nbt.putFloat("speed", speed);
 //        nbt.putInt("fuel_time", fuelTime);
     }
 
@@ -44,20 +45,8 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
         super.readNbt(nbt);
         storage.readNbt(nbt);
         this.burnTime = nbt.getInt("burn_time");
-//        this.fuelTime = nbt.getInt("fuel_time");
-    }
-
-    @Override
-    public void fromClientTag(NbtCompound nbt)
-    {
         this.speed = nbt.getFloat("speed");
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound nbt)
-    {
-        nbt.putFloat("speed", speed);
-        return nbt;
+//        this.fuelTime = nbt.getInt("fuel_time");
     }
 
     public void tick()
@@ -83,6 +72,8 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity
                 }
                 else transaction.abort();
             }
+            World world = getWorld();
+            sync();
         }
     }
 

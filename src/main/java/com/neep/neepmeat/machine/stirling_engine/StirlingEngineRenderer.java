@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 import com.eliotlash.mclib.utils.MathHelper;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -13,10 +14,15 @@ import net.minecraft.util.math.Vec3f;
 public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngineBlockEntity>
 {
     public double lastFrame;
+    public double currentFrame;
 
     public StirlingEngineRenderer(BlockEntityRendererFactory.Context ctx)
     {
-
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
+        {
+            this.lastFrame = this.currentFrame;
+            return true;
+        }));
     }
 
     @Override
@@ -28,9 +34,9 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
 
         matrices.translate(0.5, 0.5, 0.5);
 
-        float currentFrame = be.getWorld().getTime() + tickDelta;
+        this.currentFrame = be.getWorld().getTime() + tickDelta;
         float delta = (float) (currentFrame - lastFrame);
-        this.lastFrame = currentFrame;
+//        this.lastFrame = currentFrame;
 
         be.angle = MathHelper.wrapDegrees(be.angle + be.speed * delta);
 
