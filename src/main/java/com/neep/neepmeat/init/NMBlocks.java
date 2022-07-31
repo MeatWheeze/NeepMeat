@@ -8,6 +8,7 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.fluid_transport.*;
 import com.neep.neepmeat.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
+import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
@@ -77,6 +78,7 @@ public class NMBlocks
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", 64, false, MACHINE_SETTINGS));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", 64, false, MACHINE_SETTINGS));
     public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, MACHINE_SETTINGS));
+    public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", 64, false, FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
 
     public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
     public static Block CONVERTER_BASE = BlockRegistry.queue(new ConverterBlock.Base("converter_base", 64, false, FabricBlockSettings.copy(CONVERTER)));
