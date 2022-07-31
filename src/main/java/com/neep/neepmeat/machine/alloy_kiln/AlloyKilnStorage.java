@@ -69,4 +69,6 @@ public class AlloyKilnStorage implements NbtSerialisable
     {
         ItemScatterer.spawn(world, pos, inventory);
     }
+
+
 }
