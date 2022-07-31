@@ -2,8 +2,10 @@ package com.neep.meatlib.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -119,6 +121,17 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public Optional<T> getFirstMatching(StorageView<? extends TransferVariant<T>> view)
     {
         return Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
+    }
+
+    public Optional<T> getFirstMatching(Storage<? extends TransferVariant<T>> storage, TransactionContext transaction)
+    {
+        for (StorageView<? extends TransferVariant<T>> view : storage.iterable(transaction))
+        {
+            Optional<T> optional = Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
+            if (optional.isPresent())
+                return optional;
+        }
+        return Optional.empty();
     }
 
     public interface Entry<T>

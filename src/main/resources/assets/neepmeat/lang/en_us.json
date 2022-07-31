@@ -114,10 +114,13 @@
 
   "block.neepmeat.big_lever": "Big Lever",
 
+  "block.neepmeat.router": "Item Router",
+  "block.neepmeat.grinder": "Grinder",
+  "block.neepmeat.alloy_kiln": "Alloy Kiln",
+
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
   "item.neepmeat.animal_heart.lore": "Crude; it lacks any logical design sensibilities.",
-
 
   "item.neepmeat.reanimated_heart": "Reanimated Heart",
   "item.neepmeat.reanimated_heart.lore": "It is said by some that the reanimated exude health.",
@@ -154,6 +157,8 @@
 
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
+  "item.neepmeat.whisper_brass": "Whispering Brass",
+
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when blessed by an Integrator.",
 
@@ -169,5 +174,9 @@
   "item.neepmeat.patina_treatment_bucket": "Patina Treatment Bucket",
   "block.neepmeat.patina_treatment": "Patina Treatment",
 
-  "item.neepmeat.tank_minecart": "Tank Minecart"
+  "item.neepmeat.tank_minecart": "Tank Minecart",
+
+  "container.neepmeat.stirling_engine": "Stirling Engine",
+  "container.neepmeat.router": "Item Router",
+  "container.neepmeat.alloy_kiln": "Alloy Kiln"
 }

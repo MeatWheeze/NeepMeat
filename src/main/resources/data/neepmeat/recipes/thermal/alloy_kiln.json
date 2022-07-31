@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rrr",
+    "r r",
+    "ibi"
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:sandy_bricks"
+    },
+    "b": {
+      "item": "minecraft:blast_furnace"
+    },
+    "r": {
+      "item": "neepmeat:refractory_brick"
+    }
+  },
+  "result": {
+    "item": "neepmeat:alloy_kiln",
+    "count": 1
+  }
+}

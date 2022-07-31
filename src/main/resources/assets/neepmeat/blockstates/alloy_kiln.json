@@ -1,22 +1,43 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "neepmeat:block/alloy_kiln",
+    "facing=east,lit=false": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln",
       "y": 90,
       "x": 0
     },
-    "facing=north": {
-      "model": "neepmeat:block/alloy_kiln",
+    "facing=north,lit=false": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln",
       "y": 0,
       "x": 0
     },
-    "facing=south": {
-      "model": "neepmeat:block/alloy_kiln",
+    "facing=south,lit=false": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln",
       "y": 180,
       "x": 0
     },
-    "facing=west": {
-      "model": "neepmeat:block/alloy_kiln",
+    "facing=west,lit=false": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln",
+      "y": -90,
+      "x": 0
+    },
+
+    "facing=east,lit=true": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln_lit",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,lit=true": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln_lit",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,lit=true": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln_lit",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,lit=true": {
+      "model": "neepmeat:block/alloy_kiln/alloy_kiln_lit",
       "y": -90,
       "x": 0
     }

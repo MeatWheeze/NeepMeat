@@ -68,7 +68,7 @@ public class AlloyKilnScreen extends HandledScreen<AlloyKilnScreenHandler>
 
         int total = handler.getProperty(3);
         int k = (int) ((time / (total + 1f)) * 24);
-        this.drawTexture(matrices, i + 80, j + 35, 176, 14, k, 17);
+        this.drawTexture(matrices, i + 80, j + 36, 176, 14, k, 17);
     }
 
     @Override

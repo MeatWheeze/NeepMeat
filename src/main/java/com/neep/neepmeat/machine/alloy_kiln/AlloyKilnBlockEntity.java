@@ -9,6 +9,7 @@ import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -101,6 +102,8 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
 
     public void tick(World world, BlockPos pos, BlockState state)
     {
+        boolean wasBurning = isBurning();
+
         if (currentRecipe == null)
             readCurrentRecipe();
 
@@ -116,14 +119,18 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         else
         {
             int time;
-            if ((time = storage.decrementFuel()) > 0)
+            if (detectRecipe() && (time = storage.decrementFuel()) > 0)
             {
                 this.fuelTime = time;
                 this.burnTime = time;
+                updateState(world, pos, state);
             }
             else
             {
                 this.cookTime = Math.max(0, this.cookTime - 1);
+
+                if (wasBurning)
+                    updateState(world, pos, state);
             }
         }
 
@@ -131,6 +138,12 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         {
             finishCooking();
         }
+    }
+
+    protected boolean detectRecipe()
+    {
+        return this.currentRecipe != null
+                || world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world).isPresent();
     }
 
     protected void startCooking()
@@ -203,13 +216,18 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     @Override
     public void setBurning()
     {
-
+        this.burnTime = 2;
     }
 
     @Override
     public void updateState(World world, BlockPos pos, BlockState oldState)
     {
-
+        BlockState state = getCachedState();
+        if (state.get(AlloyKilnBlock.LIT) != this.isBurning())
+        {
+            state = state.with(AlloyKilnBlock.LIT, this.isBurning());
+            getWorld().setBlockState(pos, state, Block.NOTIFY_ALL);
+        }
     }
 
     @Override
