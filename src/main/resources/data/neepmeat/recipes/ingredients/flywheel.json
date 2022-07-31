@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "iin",
-    "iin",
-    "nn "
+    " g ",
+    "gig",
+    " g "
   ],
   "key": {
     "i": {
       "item": "minecraft:iron_ingot"
     },
-    "n": {
-      "item": "minecraft:iron_nugget"
+    "g": {
+      "item": "minecraft:gold_ingot"
     }
   },
   "result": {
-    "item": "neepmeat:polished_metal",
-    "count": 2
+    "item": "neepmeat:flywheel",
+    "count": 1
   }
 }

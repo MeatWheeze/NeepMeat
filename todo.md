@@ -21,13 +21,13 @@
 - Add a method for obtaining brains
 - [done] Add recipe for Sacrificial Dagger
 - [done] Add Mixer
-- Add Mixer recipes for Work Fluid and Patina Treatment
+- [done] Add Mixer recipes for Work Fluid and Patina Treatment
 - [done] Change colour of Patina Treatment to cyan
-- Fix Polished Metal recipe
+- [done] Fix Polished Metal recipe
 - Change Work Fluid texture
-- Replace Whisper Wheat textures
+- [done] Replace Whisper Wheat textures
 - Add a source of Whisper Wheat seeds
-- Stirling engine (model can have a little flywheel)
+- [done] Stirling engine (model can have a little flywheel)
 - Add torque shaft
 - Add coloured fluid pipes
 - Create REI plugin
