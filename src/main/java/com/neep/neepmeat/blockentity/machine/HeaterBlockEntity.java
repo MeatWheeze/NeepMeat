@@ -1,26 +1,18 @@
 package com.neep.neepmeat.blockentity.machine;
 
-import com.ibm.icu.text.MessagePattern;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
-import com.neep.meatweapons.network.MWNetwork;
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.mixin.FurnaceAccessor;
+import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.network.Packet;
 import net.minecraft.particle.DefaultParticleType;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -29,18 +21,18 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Optional;
 import java.util.Random;
 
+@SuppressWarnings("UnstableApiUsage")
 public class HeaterBlockEntity extends BloodMachineBlockEntity
 {
     public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
     public static long CAPACITY = 4 * USE_AMOUNT;
 
-    protected FurnaceAccessor accessor;
+    protected IHeatable heatable;
     protected int copperTime;
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
@@ -60,21 +52,21 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
     public boolean refreshCache(World world, BlockPos pos, BlockState state)
     {
-        if (world.getBlockEntity(pos.offset(state.get(HeaterBlock.FACING))) instanceof FurnaceAccessor furnace)
+        if (world.getBlockEntity(pos.offset(state.get(HeaterBlock.FACING))) instanceof IHeatable furnace)
         {
-            accessor = furnace;
+            heatable = furnace;
             return true;
         }
         else
         {
-            accessor = null;
+            heatable = null;
             return false;
         }
     }
 
     public void tick()
     {
-        if (accessor == null)
+        if (heatable == null)
         {
             refreshCache(getWorld(), getPos(), getCachedState());
         }
@@ -83,8 +75,8 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         long work = doWork(USE_AMOUNT, transaction);
         if (work == USE_AMOUNT)
         {
-            if (accessor != null)
-                accessor.setBurnTime(2);
+            if (heatable != null)
+                heatable.setBurning();
 
             heatBlock();
         }
@@ -105,10 +97,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
     }
 
-    public static void updateBlockState(FurnaceAccessor accessor, World world, BlockPos pos)
+    public static void updateBlockState(IHeatable accessor, World world, BlockPos pos)
     {
         BlockState state = world.getBlockState(pos);
-        state = state.with(AbstractFurnaceBlock.LIT, accessor.getBurnTime() > 0);
+        state = state.with(AbstractFurnaceBlock.LIT, accessor.getCurrentBurnTime() > 0);
         world.setBlockState(pos, state, Block.NOTIFY_ALL);
     }
 
@@ -152,7 +144,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         return false;
     }
 
-    protected static void spawnOxidiseParticles(ServerWorld world, DefaultParticleType particle, BlockPos pos, Random random, int amount, int radius)
+    protected static void spawnOxidationParticles(ServerWorld world, DefaultParticleType particle, BlockPos pos, Random random, int amount, int radius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, radius))
         {
