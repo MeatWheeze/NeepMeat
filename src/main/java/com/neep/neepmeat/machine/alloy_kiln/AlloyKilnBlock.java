@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -62,6 +63,19 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return COLLISION_SHAPE;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()) && !world.isClient)
+        {
+            if (world.getBlockEntity(pos) instanceof AlloyKilnBlockEntity be)
+            {
+                be.getStorage().dropItems(world, pos);
+            }
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Nullable

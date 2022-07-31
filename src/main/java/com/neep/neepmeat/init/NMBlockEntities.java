@@ -8,14 +8,13 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
-import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
-import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
-import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
-import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
+import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
+import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
+import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
@@ -158,6 +157,8 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
+
+        ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), ALLOY_KILN);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getFuelStorage(direction), STIRLING_ENGINE);
 
