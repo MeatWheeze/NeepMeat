@@ -40,6 +40,11 @@
   "block.neepmeat.yellow_tiles_stairs": "Yellow Tiles Stairs",
   "block.neepmeat.yellow_tiles_slab": "Yellow Tiles Slab",
 
+  "block.neepmeat.sandy_bricks": "Refractory Bricks",
+  "block.neepmeat.sandy_bricks_stairs": "Refractory Bricks Stairs",
+  "block.neepmeat.sandy_bricks_slab": "Refractory Bricks Slab",
+  "block.neepmeat.sandy_bricks_wall": "Refractory Bricks Wall",
+
   "block.neepmeat.rusted_metal_scaffold": "Rusted Metal Scaffold",
   "block.neepmeat.rusted_metal_scaffold_stairs": "Rusted Metal Scaffold Stairs",
   "block.neepmeat.rusted_metal_scaffold_slab": "Rusted Metal Scaffold Slab",
@@ -113,6 +118,7 @@
   "item.neepmeat.animal_heart": "Rough Heart",
   "item.neepmeat.animal_heart.lore": "Crude; it lacks any logical design sensibilities.",
 
+
   "item.neepmeat.reanimated_heart": "Reanimated Heart",
   "item.neepmeat.reanimated_heart.lore": "It is said by some that the reanimated exude health.",
 
@@ -145,6 +151,8 @@
 
   "item.neepmeat.whisper_flour": "Whisper Flour",
   "item.neepmeat.whisper_flour.lore": "Its grains hold terrible secrets of the cosmos.",
+
+  "item.neepmeat.refractory_brick": "Refractory Brick",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when blessed by an Integrator.",

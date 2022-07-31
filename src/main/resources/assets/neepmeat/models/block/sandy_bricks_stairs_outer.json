@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "neepmeat:block/sandy_bricks",
+    "top": "neepmeat:block/sandy_bricks",
+    "side": "neepmeat:block/sandy_bricks"
+  }
+}
