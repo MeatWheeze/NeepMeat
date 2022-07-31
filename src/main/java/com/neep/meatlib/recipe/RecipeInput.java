@@ -53,7 +53,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
 
         if (entry == null)
         {
-            throw new JsonSyntaxException("");
+            throw new JsonSyntaxException("No resource or tag specified.");
         }
         long amount = JsonHelper.getLong(json, "amount");
 

@@ -38,6 +38,7 @@ public class AlloyKilnScreen extends HandledScreen<AlloyKilnScreenHandler>
         int j = this.y;
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
         drawBurnTime(matrices, i, j);
+        drawProgress(matrices, i, j);
     }
 
     @Override
@@ -56,7 +57,18 @@ public class AlloyKilnScreen extends HandledScreen<AlloyKilnScreenHandler>
 
         int total = handler.getProperty(1);
         int k = (int) ((time / (total + 1f)) * 14);
-        this.drawTexture(matrices, i + 81, j + 38 + 12 - k, 176, 12 - k, 14, k + 1);
+        this.drawTexture(matrices, i + 57, j + 37 + 12 - k, 176, 12 - k, 14, k + 1);
+    }
+
+    public void drawProgress(MatrixStack matrices, int i, int j)
+    {
+        int time = handler.getProperty(2);
+        if (time < 1)
+            return;
+
+        int total = handler.getProperty(3);
+        int k = (int) ((time / (total + 1f)) * 24);
+        this.drawTexture(matrices, i + 80, j + 35, 176, 14, k, 17);
     }
 
     @Override

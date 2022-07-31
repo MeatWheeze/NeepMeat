@@ -68,7 +68,7 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
         if (this.world != null)
         {
             world.markDirty(pos);
-            BlockEntity.markDirty(this.world, this.pos, this.getCachedState());
+//            BlockEntity.markDirty(this.world, this.pos, this.getCachedState());
         }
     }
 }
