@@ -5,7 +5,7 @@ import com.neep.meatlib.block.*;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
-import com.neep.neepmeat.block.fluid_transport.*;
+import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;

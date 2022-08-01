@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.block.StopValveBlock;
-import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.api.block.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.blockentity.StopValveBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.minecraft.client.render.VertexConsumerProvider;

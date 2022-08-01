@@ -2,7 +2,7 @@ package com.neep.neepmeat.fluid_transfer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.block.fluid_transport.ICapillaryPipe;
+import com.neep.neepmeat.transport.block.fluid_transport.ICapillaryPipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -12,7 +12,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 public class PipeState
 {

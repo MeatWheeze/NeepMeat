@@ -1,6 +1,6 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
-import com.neep.neepmeat.block.pipe.IFluidPipe;
+import com.neep.neepmeat.api.block.pipe.IFluidPipe;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block.pipe;
+package com.neep.neepmeat.api.block.pipe;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

@@ -1,13 +1,12 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
-import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.api.block.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.blockentity.CheckValveBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,8 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiFunction;
 
 public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, IVariableFlowBlock, PipeState.ISpecialPipe
 {

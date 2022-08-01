@@ -1,10 +1,9 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.block.pipe.IFluidPipe;
+import com.neep.neepmeat.api.block.pipe.IFluidPipe;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -25,8 +24,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Optional;
 
 public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe, ICapillaryPipe
 {

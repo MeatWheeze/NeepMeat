@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.multitank;
 
-import com.neep.neepmeat.block.fluid_transport.GlassTankBlock;
-import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.GlassTankBlock;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

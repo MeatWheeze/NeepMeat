@@ -1,7 +1,6 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseColumnBlock;
-import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.util.ItemUtils;
@@ -9,7 +8,6 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;

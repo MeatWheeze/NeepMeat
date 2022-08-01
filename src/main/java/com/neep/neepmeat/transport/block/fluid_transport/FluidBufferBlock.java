@@ -1,15 +1,9 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.block.pipe.IFluidPipe;
+import com.neep.neepmeat.api.block.pipe.IFluidPipe;
 import com.neep.neepmeat.blockentity.fluid.FluidBufferBlockEntity;
-import com.neep.neepmeat.blockentity.fluid.GlassTankBlockEntity;
-import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
-import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
-import com.neep.neepmeat.fluid_transfer.PipeProperties;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,10 +11,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

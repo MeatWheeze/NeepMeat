@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
+import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
@@ -82,7 +82,10 @@ public class FluidNetwork
 
         if (world.getTime() % PipeNetwork.TICK_RATE == 0)
         {
-            PipeNetwork.LOADED_NETWORKS.forEach(PipeNetwork::tick);
+            for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
+            {
+                if (network.getWorld().equals(world)) network.tick();
+            }
         }
     }
 
@@ -374,7 +377,7 @@ public class FluidNetwork
 
     public static void registerEvents()
     {
-        ServerTickEvents.END_WORLD_TICK.register(FluidNetwork::tickNetwork);
+        ServerTickEvents.START_WORLD_TICK.register(FluidNetwork::tickNetwork);
         ServerWorldEvents.LOAD.register(FluidNetwork::startWorld);
 //        ServerWorldEvents.UNLOAD.register(((server, world1) -> System.out.println("UNLOAD -----------------------------------------------------------------")));
 //        ServerChunkEvents.CHUNK_LOAD.registter
