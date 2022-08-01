@@ -14,7 +14,7 @@ public enum AcceptorModes
     INSERT_ONLY(3, 0),
     EXTRACT_ONLY(4, 0),
     INSERT_EXTRACT(5, 0),
-    SENSOR(0, 0);
+    SENSOR(6, 0);
 
     private final float flow;
     private final int id;
