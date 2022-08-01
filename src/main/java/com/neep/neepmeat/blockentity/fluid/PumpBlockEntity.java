@@ -133,7 +133,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
         super.writeNbt(tag);
         buffer.writeNbt(tag);
         tag.putInt(FRONT_MODE, frontMode.getId());
-        tag.putInt(BACK_MODE, backMode.getId());
+       tag.putInt(BACK_MODE, backMode.getId());
     }
 
     @Override
