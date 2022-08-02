@@ -83,12 +83,12 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
                 forwarded = be.forwardItem(resourceAmount, transaction);
 
                 // Try entities
-                if (forwarded != -1)
+                if (forwarded != resourceAmount.amount())
                 {
                     forwarded = be.forwardToEntity(resourceAmount, transaction);
                 }
 
-                if (forwarded != -1)
+                if (forwarded != resourceAmount.amount())
                 {
                     transaction.abort();
                     return;

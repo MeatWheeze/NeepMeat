@@ -16,8 +16,11 @@ import net.minecraft.world.World;
 import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("UnstableApiUsage")
 public class TubeUtils
 {
+    /** Handles the movement of an item from a pipe to an adjacent block.
+     */
     // TODO: Cutoff depth
     public static long tryTransfer(ItemInPipe item, BlockPos pos, BlockState state, Direction out, World world)
     {
@@ -33,7 +36,7 @@ public class TubeUtils
 //            if (pipe.getConnections(state1, IItemPipe::all).contains(item.out))
             {
 //                if (insert(item, world, toState, toPos, item.out.getOpposite()) > 0)
-                amountInserted = ((IItemPipe) toBlock).insert(world, toPos, toState, out.getOpposite(), item);
+                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item);
             }
         }
         else if (toState.isAir())
@@ -46,33 +49,38 @@ public class TubeUtils
                     item.getItemStack().copy(),
                     out.getOffsetX() * item.speed, out.getOffsetY() * item.speed, out.getOffsetZ() * item.speed);
             world.spawnEntity(itemEntity);
-            return -1;
+            return item.getCount();
         }
         else if ((storage = ItemStorage.SIDED.find(world, toPos, out.getOpposite())) != null)
         {
             amountInserted = pipeToStorage(item, storage);
         }
-        if (amountInserted == item.getCount())
+
+        // TODO: is this condition necessary?
+        if (amountInserted != item.getCount())
         {
-            return -1;
+            item.decrement((int) amountInserted);
         }
-        else
-        {
-            item.getItemStack().decrement((int) amountInserted);
-            return amountInserted;
-        }
+
+        return amountInserted;
     }
 
+    /**
+     * @param item Pipe item
+     * @param storage The ItemVariant storage to be inserted into
+     * @return The number of items that were inserted
+     */
     public static long pipeToStorage(ItemInPipe item, Storage<ItemVariant> storage)
     {
         Transaction t = Transaction.openOuter();
-        long transferred = storage.insert(item.getResourceAmount().resource(), item.getResourceAmount().amount(), t);
+        long transferred = storage.insert(item.getResourceAmount().resource(), item.getCount(), t);
         if (transferred > 0)
         {
             t.commit();
-            if (transferred == item.getItemStack().getCount())
+            if (transferred == item.getCount())
             {
-                return -1;
+//                item.decrement((int) transferred);
+                return item.getCount();
             }
             item.decrement((int) transferred);
             return transferred;
