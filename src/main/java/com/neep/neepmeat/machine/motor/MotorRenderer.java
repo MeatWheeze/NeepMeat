@@ -38,7 +38,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
         float delta = (currentFrame - lastFrame);
 //        this.lastFrame = currentFrame;
 
-        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.running ? 40 : 0));
+        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.getRunningRate() / (float) be.maxInsertRate * 40));
         be.angle = MathHelper.wrapDegrees(be.angle + be.currentSpeed * delta);
 
         BERenderUtils.rotateFacingSouth(facing, matrices);

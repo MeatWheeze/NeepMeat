@@ -91,10 +91,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             clearBuffers();
             getWorld().playSound(null, getPos(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1f, 1f);
         }
-        player.sendMessage(Text.of((inputBuffer.getAmount())
-                + ", "
-                + (outputBuffer.getAmount())), true);
-        getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
+//        player.sendMessage(Text.of((inputBuffer.getAmount())
+//                + ", "
+//                + (outputBuffer.getAmount())), true);
+//        getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
     }
 
     public static void updateBlockState(IHeatable accessor, World world, BlockPos pos)

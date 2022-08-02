@@ -3,11 +3,16 @@ package com.neep.neepmeat.machine.motor;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.block.BaseVertFacingBlock;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.ActionResult;
@@ -60,6 +65,12 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
         {
             be.update(world, pos, fromPos, state);
         }
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUitls.checkType(type, NMBlockEntities.MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
     }
 
     @Nullable
