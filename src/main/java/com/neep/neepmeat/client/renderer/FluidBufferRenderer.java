@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidBufferBlockEntity;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
@@ -40,7 +41,7 @@ public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlock
         matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(facing.getAxis() == Direction.Axis.X ? 90 : 0));
         matrices.translate(-0.5, -0.5, -0.5);
 
-        WritableFluidBuffer buffer = blockEntity.getBuffer(null);
+        WritableSingleFluidStorage buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
         buffer.renderLevel = MathHelper.lerp(0.1f, buffer.renderLevel,(buffer.getAmount()) / (float) buffer.getCapacity());

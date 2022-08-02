@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 public class WritableStackStorage extends SingleVariantStorage<ItemVariant> implements StorageView<ItemVariant>
 {
     protected int capacity;
-    protected BlockEntity parent;
     protected Runnable callback;
 
     public WritableStackStorage(@Nullable Runnable parent)
@@ -47,7 +46,8 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
 
     public void syncIfPossible()
     {
-        callback.run();
+        if (callback != null)
+            callback.run();
     }
 
     public void setStack(ItemStack stack)

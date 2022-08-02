@@ -1,6 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
@@ -9,6 +10,9 @@ import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -25,7 +29,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
     public final Map<Direction, AcceptorModes > sideModes = new HashMap<>();
-    protected final WritableFluidBuffer buffer;
+    protected final WritableSingleFluidStorage buffer;
     private boolean isActive;
 
     public static final String FRONT_MODE = "front_mode";
@@ -38,7 +42,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     {
         super(NMBlockEntities.PUMP, pos, state);
 
-        buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
+        buffer = new WritableSingleFluidStorage(FluidConstants.BLOCK, this::sync);
 
         // Create fluid interfaces in connection directions
         if (state.getBlock() instanceof IFluidNodeProvider nodeProvider)
@@ -145,7 +149,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
 
 //    @Override
     @Nullable
-    public WritableFluidBuffer getBuffer(Direction direction)
+    public SingleVariantStorage<FluidVariant> getBuffer(Direction direction)
     {
         Direction facing = getCachedState().get(PumpBlock.FACING);
         if (direction == facing || direction == facing.getOpposite() || direction == null)
