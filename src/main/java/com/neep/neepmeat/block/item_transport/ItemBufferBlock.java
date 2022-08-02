@@ -2,6 +2,8 @@ package com.neep.neepmeat.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
+import com.neep.neepmeat.storage.WritableStackStorage;
+import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -15,7 +17,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -23,6 +24,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
@@ -51,21 +53,22 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         if (world.getBlockEntity(pos) instanceof ItemBufferBlockEntity be && !world.isClient)
         {
             ItemStack stack = player.getStackInHand(hand);
-            if (be.isResourceBlank() || be.getResource().matches(stack))
+            WritableStackStorage storage = be.getStorage(null);
+            if ((storage.isEmpty() || storage.getResource().matches(stack)) && !stack.isEmpty())
             {
                 Transaction transaction = Transaction.openOuter();
 
-                long inserted = be.insert(ItemVariant.of(stack), stack.getCount(), transaction);
+                long inserted = storage.insert(ItemVariant.of(stack), stack.getCount(), transaction);
                 stack.decrement((int) inserted);
 
                 transaction.commit();
             }
-            else if (stack.isEmpty() || !be.getResource().matches(stack))
+            else if ((stack.isEmpty() || !storage.getResource().matches(stack)) && !storage.isEmpty())
             {
                 Transaction transaction = Transaction.openOuter();
 
-                player.giveItemStack(be.getResource().toStack((int) be.getAmount()));
-                be.extract(be.getResource(), be.getAmount(), transaction);
+                player.giveItemStack(storage.getAsStack());
+                storage.extract(storage.getResource(), storage.getAmount(), transaction);
 
                 transaction.commit();
             }
@@ -93,7 +96,7 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
 
             if (blockEntity instanceof ItemBufferBlockEntity be)
             {
-                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), be.getResource().toStack((int) be.getAmount()));
+                ItemUtils.scatterItems(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
@@ -110,8 +113,8 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     public int getComparatorOutput(BlockState state, World world, BlockPos pos)
     {
         ItemBufferBlockEntity be = (ItemBufferBlockEntity) world.getBlockEntity(pos);
-        int maxCount = be.getResource().toStack().getMaxCount();
-        return maxCount > 0 ? (int) Math.ceil((float) be.getAmount() / (float) maxCount * 16) : 0;
+        int maxCount = be.getStorage(null).getResource().toStack().getMaxCount();
+        return maxCount > 0 ? (int) Math.ceil((float) be.getStorage(null).getAmount() / (float) maxCount * 16) : 0;
     }
 
     // Add dropped items to inventory
