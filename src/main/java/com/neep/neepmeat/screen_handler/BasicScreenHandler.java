@@ -41,13 +41,13 @@ public abstract class BasicScreenHandler extends ScreenHandler
         {
             for (l = 0; l < 9; ++l)
             {
-                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, startX + 8 + l * 18, startY + m * 18));
+                this.addSlot(new Slot(playerInventory, l + m * 9 + 9, startX + l * 18, startY + m * 18));
             }
         }
 
         for (m = 0; m < 9; ++m)
         {
-            this.addSlot(new Slot(playerInventory, m, startX + 8 + m * 18, startY + 58));
+            this.addSlot(new Slot(playerInventory, m, startX + m * 18, startY + 58));
         }
     }
 
