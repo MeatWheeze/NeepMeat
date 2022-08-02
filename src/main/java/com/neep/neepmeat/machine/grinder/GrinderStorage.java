@@ -24,12 +24,11 @@ public class GrinderStorage extends SimpleInventory
     public GrinderStorage(GrinderBlockEntity parent)
     {
         this.parent = parent;
-        this.inputStorage = new WritableStackStorage(parent)
+        this.inputStorage = new WritableStackStorage(parent::sync)
         {
             @Override
             public boolean canInsert(ItemVariant resource)
             {
-                World world = parent.getWorld();
 //                if (world == null)
                     return true;
 
@@ -38,7 +37,7 @@ public class GrinderStorage extends SimpleInventory
             }
         };
 
-        this.outputStorage = new WritableStackStorage(parent, 32)
+        this.outputStorage = new WritableStackStorage(parent::sync, 32)
         {
             @Override
             public boolean supportsInsertion()
@@ -47,7 +46,7 @@ public class GrinderStorage extends SimpleInventory
             }
         };
 
-        this.extraStorage = new WritableStackStorage(parent, 32)
+        this.extraStorage = new WritableStackStorage(parent::sync, 32)
         {
             @Override
             public boolean supportsInsertion()

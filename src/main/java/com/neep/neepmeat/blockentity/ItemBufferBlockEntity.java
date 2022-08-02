@@ -24,7 +24,7 @@ public class ItemBufferBlockEntity extends SyncableBlockEntity
     public ItemBufferBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.storage = new WritableStackStorage(this);
+        this.storage = new WritableStackStorage(this::sync);
     }
 
     public ItemBufferBlockEntity(BlockPos pos, BlockState state)

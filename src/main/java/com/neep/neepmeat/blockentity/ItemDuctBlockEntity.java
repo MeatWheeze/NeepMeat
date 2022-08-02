@@ -1,6 +1,5 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
@@ -10,27 +9,15 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.ItemEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.HopperScreenHandler;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -43,7 +30,6 @@ import java.util.Iterator;
 public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVariant>
 {
 
-    private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int transferCooldown = -1;
     private BlockApiCache<Storage<ItemVariant>, Direction> cache;
 
@@ -53,7 +39,7 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
     public ItemDuctBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.storage = new WritableStackStorage(this);
+        this.storage = new WritableStackStorage(null);
     }
 
     public ItemDuctBlockEntity(BlockPos pos, BlockState state)

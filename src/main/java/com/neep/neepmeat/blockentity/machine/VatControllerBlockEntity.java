@@ -279,10 +279,10 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
 
         protected MultiFluidBuffer fluids;
 
-        protected Storages(@Nullable BlockEntity parent)
+        protected Storages(SyncableBlockEntity parent)
         {
-            itemInput = new WritableStackStorage(parent);
-            itemOutput = new WritableStackStorage(parent);
+            itemInput = new WritableStackStorage(parent::sync);
+            itemOutput = new WritableStackStorage(parent::sync);
             items = new MultiItemBuffer(List.of(itemInput, itemOutput));
 
 //            fluidInput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
