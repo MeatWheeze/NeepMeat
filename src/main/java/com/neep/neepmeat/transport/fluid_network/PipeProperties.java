@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network;
 
 import net.minecraft.state.property.EnumProperty;
 

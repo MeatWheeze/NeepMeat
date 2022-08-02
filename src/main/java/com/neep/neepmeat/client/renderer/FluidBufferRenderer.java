@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidBufferBlockEntity;
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;

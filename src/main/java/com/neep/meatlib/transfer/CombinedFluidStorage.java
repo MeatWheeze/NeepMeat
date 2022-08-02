@@ -1,6 +1,6 @@
 package com.neep.meatlib.transfer;
 
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.minecraft.nbt.NbtCompound;

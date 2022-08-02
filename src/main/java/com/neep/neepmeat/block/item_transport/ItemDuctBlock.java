@@ -1,12 +1,10 @@
 package com.neep.neepmeat.block.item_transport;
 
-import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
-import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -18,7 +16,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;

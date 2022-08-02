@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.mixer;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
-import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;

@@ -1,8 +1,8 @@
 package com.neep.neepmeat.entity;
 
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
-import com.neep.neepmeat.fluid_transfer.FluidBuffer;
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMItems;

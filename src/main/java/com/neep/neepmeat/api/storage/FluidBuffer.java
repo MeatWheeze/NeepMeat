@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.api.storage;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

@@ -3,7 +3,7 @@ package com.neep.neepmeat.block.item_transport;
 import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
-import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;

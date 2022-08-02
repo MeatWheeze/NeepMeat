@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;

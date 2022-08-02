@@ -1,9 +1,8 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
+import com.neep.neepmeat.transport.fluid_network.ResourceSnapshotParticipant;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -14,14 +13,12 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Iterator;
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TrommelBlockEntity extends SyncableBlockEntity implements

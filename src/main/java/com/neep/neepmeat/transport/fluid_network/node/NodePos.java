@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_transfer.node;
+package com.neep.neepmeat.transport.fluid_network.node;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;

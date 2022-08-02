@@ -3,7 +3,7 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.blockentity.fluid.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;

@@ -1,8 +1,8 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.fluid_network.ResourceSnapshotParticipant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -29,7 +28,7 @@ public class ItemBufferBlockEntity extends SyncableBlockEntity implements
     private ItemVariant resource = ItemVariant.blank();
     private long amount;
     private final int capacity;
-    private SnapshotParticipant<ResourceAmount<ItemVariant>> snapshot =
+    private final SnapshotParticipant<ResourceAmount<ItemVariant>> snapshot =
             new ResourceSnapshotParticipant<>(this::getResource, this::getAmount, this::setResource, this::setAmount);
 
     public float stackRenderDelta; // Used by the renderer

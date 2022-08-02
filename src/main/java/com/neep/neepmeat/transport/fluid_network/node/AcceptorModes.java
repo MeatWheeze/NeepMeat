@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network.node;
 
 import net.minecraft.util.math.MathHelper;
 

@@ -1,11 +1,9 @@
-package com.neep.neepmeat.fluid_transfer.storage;
+package com.neep.neepmeat.api.storage;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.entity.BlockEntity;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Predicate;
 

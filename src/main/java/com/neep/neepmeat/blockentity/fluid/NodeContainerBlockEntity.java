@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

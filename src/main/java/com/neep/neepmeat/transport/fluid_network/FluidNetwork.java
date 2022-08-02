@@ -1,9 +1,10 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -33,7 +34,6 @@ public class FluidNetwork
     public Queue<FluidNode> queuedNodes = new LinkedList<>();
     public final Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
     protected final ServerWorld world;
-    public NetworkLookup networkLookup;
 
     protected FluidNetwork(ServerWorld world)
     {

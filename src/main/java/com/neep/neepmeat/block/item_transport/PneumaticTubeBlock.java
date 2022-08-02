@@ -4,7 +4,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
-import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;

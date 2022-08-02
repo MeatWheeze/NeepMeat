@@ -1,7 +1,7 @@
 package com.neep.neepmeat.api.block.pipe;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.util.math.BlockPos;

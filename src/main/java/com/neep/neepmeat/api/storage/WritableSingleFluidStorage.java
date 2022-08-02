@@ -1,6 +1,5 @@
-package com.neep.neepmeat.fluid_transfer.storage;
+package com.neep.neepmeat.api.storage;
 
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.nbt.NbtCompound;

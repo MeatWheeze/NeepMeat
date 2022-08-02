@@ -1,10 +1,10 @@
 package com.neep.neepmeat.api.block.pipe;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;

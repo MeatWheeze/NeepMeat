@@ -1,8 +1,8 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.api.block.pipe.AbstractAxialPipe;
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeState;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeState;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
