@@ -45,20 +45,14 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
 
         switch (face)
         {
-            case FLOOR:
-                matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI)));
-                break;
-            case WALL:
-                matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI / 2)));
-                break;
-            case CEILING:
-                matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI)));
-                break;
+            case FLOOR -> matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI)));
+            case WALL -> matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI / 2)));
+            case CEILING -> matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI)));
         }
 
         matrices.translate(0, -0.2, 0);
 //        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
-        boolean switched = !be.getWorld().getBlockState(be.getPos()).get(BigLeverBlock.POWERED);
+        boolean switched = !be.getCachedState().get(BigLeverBlock.POWERED);
         float angle = 20;
 
         if (be.activeTicks > 0)
