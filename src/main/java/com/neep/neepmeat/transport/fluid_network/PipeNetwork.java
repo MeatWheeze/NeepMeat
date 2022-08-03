@@ -207,11 +207,18 @@ public class PipeNetwork
     public static boolean validForInsertion(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
         FluidNode targetNode;
-        return !(targetNode = targetSupplier.get()).equals(node)
+        boolean check1 =  !(targetNode = targetSupplier.get()).equals(node)
                 && targetSupplier.get() != null
                 && targetSupplier.get().getStorage(world) != null
                 && targetNode.getMode(world).canInsert()
                 && node.getMode(world).canExtract();
+
+        float h = node.getTargetY() - targetNode.getTargetY();
+        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+        float flow = node.getFlow(world) - targetNode.getFlow(world);
+        double potentialFlow = flow + gravityFlowIn;
+
+        return check1 && potentialFlow > 0;
     }
 
     // This is responsible for transferring the fluid from node to node
@@ -241,7 +248,7 @@ public class PipeNetwork
             long outBaseFlow = Math.min(baseTransfer, amount);
             transaction.abort();
 
-            // Filter out nodes that will cause crashes, or are unnecessary for the calculation
+            // Filter out nodes that will cause crashes or are unnecessary for the calculation
 
             List<Integer> safeIndices;
             List<Supplier<FluidNode>> safeNodes;
