@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
+import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -13,12 +14,23 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+import java.util.Random;
 
 public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
@@ -73,6 +85,28 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
         if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && !world.isClient())
         {
 //            be.update((ServerWorld) world, pos, fromPos, state);
+        }
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
+    {
+        GrindingRecipe recipe;
+        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && (recipe = be.getCurrentRecipe()) != null)
+        {
+//            Item output = recipe.getItemOutput().resource();
+            ItemStack stack1 = be.getStorage().getInputStorage().getResource().toStack(1);
+            ItemStack stack2 = recipe.getItemOutput().resource().getDefaultStack();
+
+            double d = (double) pos.getX() + 0.5;
+            double e = pos.getY() + 0.7;
+            double f = (double) pos.getZ() + 0.5;
+
+            double h = random.nextDouble() * 0.1;
+            double i = random.nextDouble() * 0.1 + 0.2;
+            double j = random.nextDouble() * 0.1;
+
+            world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, stack1.isEmpty() ? stack2 : stack1), d, e, f, h, i, j);
         }
     }
 }

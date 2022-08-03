@@ -66,6 +66,11 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         throw new UnsupportedOperationException("use getItemOutput instead");
     }
 
+    public RecipeInput<Item> getItemInput()
+    {
+        return itemInput;
+    }
+
     public RecipeOutput<Item> getItemOutput()
     {
         return itemOutput;

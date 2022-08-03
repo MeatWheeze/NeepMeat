@@ -20,6 +20,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
@@ -49,6 +50,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
     protected Identifier currentRecipeId;
     protected GrindingRecipe currentRecipe;
+
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
