@@ -31,6 +31,8 @@
 - [done] Fix pumps!
 - [done] Stop duplication glitch when items enter rotuers
 - [done] Standardise router inventory background
+- [done] Make all machines change speed depending on rate of fluid input
+- Make Stirling Engine properly interface with motorised blocks
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks

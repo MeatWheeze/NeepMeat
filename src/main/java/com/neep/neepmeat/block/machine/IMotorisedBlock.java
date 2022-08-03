@@ -5,7 +5,7 @@ import net.minecraft.util.math.Direction;
 
 public interface IMotorisedBlock
 {
-    void tick(IMotorBlockEntity motor);
+    boolean tick(IMotorBlockEntity motor);
 
     void setWorkMultiplier(float multiplier);
 

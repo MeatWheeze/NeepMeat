@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.grinder;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.block.pipe.IItemPipe;
@@ -281,9 +280,10 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     }
 
     @Override
-    public void tick(IMotorBlockEntity motor)
+    public boolean tick(IMotorBlockEntity motor)
     {
         tick();
+        return currentRecipe != null;
     }
 
     @Override
