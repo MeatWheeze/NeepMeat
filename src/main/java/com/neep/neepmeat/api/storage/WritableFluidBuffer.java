@@ -6,8 +6,12 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
@@ -69,6 +73,21 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
         SoundEvent fill = buffer.variant.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
         if (storage != null)
         {
+            if (player.isCreative())
+            {
+                try (Transaction transaction = Transaction.openOuter())
+                {
+                    StorageView<FluidVariant> view = storage.iterator(transaction).next();
+                    if (!view.isResourceBlank())
+                    {
+                        buffer.insert(view.getResource(), view.getAmount(), transaction);
+                        transaction.commit();
+                        return true;
+                    }
+                    transaction.abort();
+                }
+            }
+
             if (StorageUtil.move(storage, buffer, variant -> true, Long.MAX_VALUE, null) > 0)
             {
                 world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);

@@ -5,24 +5,19 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -34,13 +29,17 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
 
     public static long BASE_WORK_AMOUNT = FluidConstants.BUCKET / 16;
 
-    public int maxCooldown = 40;
-    public int cooldown = 0;
+    public static float INCREMENT_MAX = 2;
+    public static float INCREMENT_MIN = 0.1f;
+
+    public int cooldownTicks = 40;
+    public float cooldown = 0;
+    private float cooldownIncrement;
+
     public float prevExtension = 0f;
     public float extension = 0f;
     public boolean extended = false;
-
-    protected IMotorBlockEntity connectedMotor = null;
+    protected boolean running;
 
     // Rendering only
     public long extensionTime = 0;
@@ -56,22 +55,17 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
         super(type, pos, state);
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, LinearOscillatorBlockEntity be)
-    {
-        be.tick();
-    }
-
     public void tick()
     {
-        cooldown = Math.max(0, cooldown - 1);
-        maxCooldown = 40;
+        INCREMENT_MAX = 2;
+        if (!running)
+            return;
+
+        cooldown = Math.max(0, cooldown - cooldownIncrement);
+        cooldownTicks = 40;
 
         if (cooldown <= 0)
         {
-            if (getConnectedMotor() == null)
-            {
-                update((ServerWorld) getWorld(), pos, pos, getCachedState());
-            }
             extend();
         }
         else
@@ -80,29 +74,18 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
         }
 
         prevExtension = extension;
-        extension = cooldown / (float) maxCooldown;
+        extension = cooldown / (float) cooldownTicks;
         sync();
     }
 
     public void extend()
     {
-        if (!hasMotor())
-            return;
-
         if (getWorld().getReceivedRedstonePower(getPos()) <= 0)
         {
-            getConnectedMotor().setRunning(false);
             return;
         }
 
-        Transaction transaction = Transaction.openOuter();
-        long converted = doWork(BASE_WORK_AMOUNT, transaction);
-        transaction.commit();
-
-        if (converted != BASE_WORK_AMOUNT)
-            return;
-
-        this.cooldown = this.maxCooldown;
+        this.cooldown = this.cooldownTicks;
         this.extended = true;
 
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
@@ -147,15 +130,15 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.maxCooldown = nbt.getInt(NBT_MAX_COOLDOWN);
-        this.cooldown = nbt.getInt(NBT_COOLDOWN);
+        this.cooldownTicks = nbt.getInt(NBT_MAX_COOLDOWN);
+        this.cooldown = nbt.getFloat(NBT_COOLDOWN);
     }
 
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putInt(NBT_MAX_COOLDOWN, maxCooldown);
-        nbt.putInt(NBT_COOLDOWN, cooldown);
+        nbt.putInt(NBT_MAX_COOLDOWN, cooldownTicks);
+        nbt.putFloat(NBT_COOLDOWN, cooldown);
     }
 
     @Override
@@ -164,7 +147,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
         this.prevExtension = nbt.getFloat("prev_extension");
         this.extension= nbt.getFloat("extension");
 
-        if (this.cooldown == this.maxCooldown)
+        if (this.cooldown == this.cooldownTicks)
         {
             this.extensionTime = nbt.getLong("world_time");
         }
@@ -180,14 +163,15 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
+    public void tick(IMotorBlockEntity motor)
     {
-        this.connectedMotor = motor;
+        tick();
     }
 
     @Override
-    public IMotorBlockEntity getConnectedMotor()
+    public void setWorkMultiplier(float multiplier)
     {
-        return connectedMotor;
+        this.running = multiplier != 0;
+        this.cooldownIncrement = INCREMENT_MIN + multiplier * (INCREMENT_MAX - INCREMENT_MIN);
     }
 }

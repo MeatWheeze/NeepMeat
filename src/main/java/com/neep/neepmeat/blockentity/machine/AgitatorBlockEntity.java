@@ -11,8 +11,6 @@ import org.jetbrains.annotations.Nullable;
 
 public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
 {
-    protected IMotorBlockEntity motor;
-
     public AgitatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -24,14 +22,14 @@ public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
     }
 
     @Override
-    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
+    public void tick(IMotorBlockEntity motor)
     {
-        this.motor = motor;
+
     }
 
     @Override
-    public IMotorBlockEntity getConnectedMotor()
+    public void setWorkMultiplier(float multiplier)
     {
-        return motor;
+
     }
 }

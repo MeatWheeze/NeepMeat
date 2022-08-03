@@ -3,17 +3,12 @@ package com.neep.neepmeat.block.machine;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.machine.LinearOscillatorBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -76,7 +71,7 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
     {
         if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be && !world.isClient())
         {
-            be.update((ServerWorld) world, pos, fromPos, state);
+//            be.update((ServerWorld) world, pos, fromPos, state);
         }
     }
 
@@ -87,8 +82,8 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
         return new LinearOscillatorBlockEntity(pos, state);
     }
 
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return MiscUitls.checkType(type, NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorBlockEntity::serverTick, world);
-    }
+//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+//    {
+//        return MiscUitls.checkType(type, NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorBlockEntity::serverTick, world);
+//    }
 }

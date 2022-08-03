@@ -44,7 +44,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     protected int processLength;
     protected Identifier currentRecipeId;
     protected GrindingRecipe currentRecipe;
-    protected IMotorBlockEntity connectedMotor;
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -107,11 +106,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
     public void tick()
     {
-        if (getConnectedMotor() == null)
-        {
-            update((ServerWorld) getWorld(), pos, pos, getCachedState());
-        }
-
         readCurrentRecipe();
         if (!storage.getOutputStorage().isEmpty())
         {
@@ -124,19 +118,21 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
         if (currentRecipe != null)
         {
-            try (Transaction transaction = Transaction.openOuter())
-            {
-                long workAmount = 90;
-                if (doWork(workAmount, transaction) == workAmount)
-                {
-                    transaction.commit();
-                    ++progress;
-                }
-                else
-                {
-                    transaction.abort();
-                }
-            }
+//            try (Transaction transaction = Transaction.openOuter())
+//            {
+//                long workAmount = 90;
+//                if (doWork(workAmount, transaction) == workAmount)
+//                {
+//                    transaction.commit();
+//                    ++progress;
+//                }
+//                else
+//                {
+//                    transaction.abort();
+//                }
+//            }
+
+            ++progress;
 
             if (progress >= this.processLength)
             {
@@ -147,7 +143,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         else
         {
             ++progress;
-            setRunning(false);
 
             if (progress >= this.cooldownTicks)
             {
@@ -212,25 +207,25 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         storage.xpStorage.extract(Float.MAX_VALUE, transaction);
     }
 
-    @Override
-    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
-    {
-        Direction facing = state.get(GrinderBlock.FACING);
-        for (Direction direction : Direction.values())
-        {
-            if (direction == facing || direction == Direction.UP || direction == Direction.DOWN)
-                continue;
-
-            BlockPos offset = pos.offset(direction);
-            if (world.getBlockEntity(offset) instanceof IMotorBlockEntity be
-                    && world.getBlockState(offset).get(BaseFacingBlock.FACING) == direction.getOpposite())
-            {
-                setConnectedMotor(be);
-                return;
-            }
-        }
-        setConnectedMotor(null);
-    }
+//    @Override
+//    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
+//    {
+//        Direction facing = state.get(GrinderBlock.FACING);
+//        for (Direction direction : Direction.values())
+//        {
+//            if (direction == facing || direction == Direction.UP || direction == Direction.DOWN)
+//                continue;
+//
+//            BlockPos offset = pos.offset(direction);
+//            if (world.getBlockEntity(offset) instanceof IMotorBlockEntity be
+//                    && world.getBlockState(offset).get(BaseFacingBlock.FACING) == direction.getOpposite())
+//            {
+//                setConnectedMotor(be);
+//                return;
+//            }
+//        }
+//        setConnectedMotor(null);
+//    }
 
     public static void storageToWorld(World world, Storage<ItemVariant> storage, BlockPos toPos, Direction direction, TransactionContext transaction)
     {
@@ -279,20 +274,15 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         }
     }
 
-    public static void serverTick(World world, BlockPos pos,BlockState state, GrinderBlockEntity be)
+    @Override
+    public void tick(IMotorBlockEntity motor)
     {
-        be.tick();
+        tick();
     }
 
     @Override
-    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
+    public void setWorkMultiplier(float multiplier)
     {
-        this.connectedMotor = motor;
-    }
 
-    @Override
-    public IMotorBlockEntity getConnectedMotor()
-    {
-        return connectedMotor;
     }
 }

@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.api.storage.TypedFluidBuffer;
+import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -27,7 +28,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     protected InputStorage inputStorage = new InputStorage();
 
     protected boolean enabled;
-    public final long maxInsertRate = FluidConstants.BUCKET;
+    public long maxRunningRate = FluidConstants.BUCKET;
 
     protected long lastInput;
     protected long runningRate;
@@ -41,7 +42,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         {
             if (enabled)
             {
-                long inserted = Math.min(maxAmount, maxInsertRate - currentInput);
+                long inserted = Math.min(maxAmount, maxRunningRate - currentInput);
                 if (inserted > 0)
                 {
 //                    snapshotParticipant.updateSnapshots(transaction);
@@ -80,7 +81,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         public long getCapacity()
         {
-            return maxInsertRate;
+            return maxRunningRate;
         }
 
         @Override
@@ -137,9 +138,13 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     public void tick()
     {
         enabled = true;
-        this.runningRate = this.inputStorage.currentInput;
-        this.inputStorage.currentInput = 0;
-        sync();
+        if (FluidNetwork.shouldTick(world.getTime()))
+        {
+            this.runningRate = this.inputStorage.currentInput;
+            this.inputStorage.currentInput = 0;
+            long t = world.getTime();
+            sync();
+        }
     }
 
     public long getRunningRate()

@@ -2,9 +2,7 @@ package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
-import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -38,7 +36,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
         float delta = (currentFrame - lastFrame);
 //        this.lastFrame = currentFrame;
 
-        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.getRunningRate() / (float) be.maxInsertRate * 40));
+        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.getRunningRate() / (float) be.maxRunningRate * 40));
         be.angle = MathHelper.wrapDegrees(be.angle + be.currentSpeed * delta);
 
         BERenderUtils.rotateFacingSouth(facing, matrices);

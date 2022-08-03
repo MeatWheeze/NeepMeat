@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
@@ -183,5 +184,17 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
 
+    }
+
+    @Override
+    public void setConnectedBlock(IMotorisedBlock motorised)
+    {
+
+    }
+
+    @Override
+    public IMotorisedBlock getConnectedBlock()
+    {
+        return null;
     }
 }

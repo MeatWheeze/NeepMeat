@@ -15,6 +15,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -34,6 +35,11 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     {
         if (ItemUtils.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
+
+        if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
+        {
+            player.sendMessage(Text.of(Float.toString(be.getRunningRate())), true);
+        }
 
         return ActionResult.SUCCESS;
     }

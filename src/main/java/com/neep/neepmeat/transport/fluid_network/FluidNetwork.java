@@ -71,6 +71,11 @@ public class FluidNetwork
         return getInstance((ServerWorld) world);
     }
 
+    public static boolean shouldTick(long worldTime)
+    {
+        return (worldTime & PipeNetwork.TICK_RATE) == 0;
+    }
+
     public static void tickNetwork(ServerWorld world)
     {
         Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
@@ -80,7 +85,7 @@ public class FluidNetwork
             node.loadDeferred(world);
         }
 
-        if (world.getTime() % PipeNetwork.TICK_RATE == 0)
+        if (shouldTick(world.getTime()))
         {
             for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
             {

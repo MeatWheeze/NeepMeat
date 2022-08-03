@@ -1,15 +1,14 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.blockentity.DeployerBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -42,7 +41,7 @@ public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvide
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
         if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
         {
-            be.update((ServerWorld) world, pos, fromPos, state);
+//            be.update((ServerWorld) world, pos, fromPos, state);
             be.update(fromPos);
         }
     }
