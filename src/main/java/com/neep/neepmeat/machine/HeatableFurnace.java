@@ -22,15 +22,6 @@ public interface HeatableFurnace extends IHeatable
     }
 
     @Override
-    default int getCurrentBurnTime()
-    {
-        return 0;
-    }
-
-    @Override
-    default int getFuelTime() { return 0; }
-
-    @Override
     default int getCookTimeTotal() { return 0; }
 
     @Override

@@ -48,6 +48,11 @@ public class RecipeOutput<T>
         return amount;
     }
 
+    public long maxAmount()
+    {
+        return lootFunction.getMax();
+    }
+
     public void update()
     {
         amount = lootFunction.get(random);

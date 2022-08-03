@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -8,12 +9,15 @@ import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -22,6 +26,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +46,8 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     protected IMotorBlockEntity connectedMotor;
 
     protected AlloyKilnStorage storage;
+
+    protected float heatMultiplier;
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
     {
@@ -112,9 +119,14 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         if (isBurning())
         {
             if (isCooking())
-                this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + 1);
+            {
+                int tickIncrement = (int) Math.floor(heatMultiplier * 3) + 1;
+                this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + tickIncrement);
+            }
             else
+            {
                 startCooking();
+            }
         }
         else
         {
@@ -148,17 +160,18 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
 
     protected void startCooking()
     {
-        Optional<AlloyKilnRecipe> recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world);
-        if (recipe.isPresent())
+        AlloyKilnRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world).orElse(null);
+        if (canAcceptRecipeOutput(recipe, storage.inventory.getItems()))
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (recipe.get().takeInputs(storage, transaction))
+                if (recipe.takeInputs(storage, transaction))
                 {
-                    this.currentRecipe = recipe.get();
-                    this.currentRecipeId = recipe.get().getId();
-                    this.cookTimeTotal = recipe.get().getTime();
+                    this.currentRecipe = recipe;
+                    this.currentRecipeId = recipe.getId();
+                    this.cookTimeTotal = recipe.getTime();
                     transaction.commit();
+                    sync();
                     return;
                 }
                 transaction.abort();
@@ -168,6 +181,30 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         this.currentRecipeId = null;
         this.cookTimeTotal = -1;
         this.cookTime = 0;
+    }
+
+    public static boolean canAcceptRecipeOutput(@Nullable AlloyKilnRecipe recipe, DefaultedList<ItemStack> slots)
+    {
+        if (slots.get(AlloyKilnStorage.INPUT_1).isEmpty()
+                || slots.get(AlloyKilnStorage.INPUT_2).isEmpty() || recipe == null)
+        {
+            return false;
+        }
+        RecipeOutput<Item> output = recipe.getItemOutput();
+        ItemStack outputStack = slots.get(AlloyKilnStorage.OUTPUT);
+        if (outputStack.isEmpty())
+        {
+            return true;
+        }
+        if (!outputStack.isOf(output.resource()))
+        {
+            return false;
+        }
+        if (outputStack.getCount() < outputStack.getMaxCount())
+        {
+            return true;
+        }
+        return outputStack.getCount() < output.maxAmount();
     }
 
     protected void finishCooking()
@@ -185,6 +222,7 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
                     transaction.abort();
                 }
             }
+            sync();
         }
 
         this.currentRecipe = null;
@@ -220,12 +258,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     }
 
     @Override
-    public int getFuelTime()
-    {
-        return fuelTime;
-    }
-
-    @Override
     public void updateState(World world, BlockPos pos, BlockState oldState)
     {
         BlockState state = getCachedState();
@@ -239,19 +271,13 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     @Override
     public void setHeatMultiplier(float multiplier)
     {
-
+        this.heatMultiplier = multiplier;
     }
 
     @Override
     public float getHeatMultiplier()
     {
-        return 0;
-    }
-
-    @Override
-    public int getCurrentBurnTime()
-    {
-        return 0;
+        return heatMultiplier;
     }
 
     @Override

@@ -1,0 +1,16 @@
+{
+  "type": "neepmeat:alloy_smelting",
+  "input1": {
+    "resource": "minecraft:iron_ingot",
+    "amount": 1
+  },
+  "input2": {
+    "resource": "neepmeat:brain_rough",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:flywheel",
+    "amount": 1
+  },
+  "processtime": 200
+}
