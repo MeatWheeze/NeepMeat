@@ -277,10 +277,8 @@ public class PipeNetwork
             // Geometrical solution for flow in branched pipes:
             // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
 
-            // Calculate sum_i(r^2 / L_i^2)
-            double sumDist = safeNodes.stream()
-                    .map(supplier1 -> supplier1.get().getTargetPos().getManhattanDistance(node.getTargetPos()))
-                    .mapToDouble(integer -> Math.pow(r, 2) / integer).sum();
+            double sumDist = safeNodes.stream().mapToDouble(supplier1 -> 1f / supplier1.get().getTargetPos().getManhattanDistance(node.getTargetPos())).sum();
+//                    .mapToDouble(integer -> Math.pow(r, 2) / integer).sum();
 
             for (int j : safeIndices)
             {
@@ -309,9 +307,7 @@ public class PipeNetwork
                 {
                     // Take distance into account
                     Q = (long) Math.ceil(
-                            outBaseFlow * (flow + gravityFlowIn)
-                                    * ((Math.pow(r, 2) / L) / (sumDist + Math.pow(r, 2) / L))
-                    );
+                            outBaseFlow * (flow + gravityFlowIn) * ((1f / L) / (sumDist + (1f / L))));
                 }
 
                 // Apply corresponding thingy
