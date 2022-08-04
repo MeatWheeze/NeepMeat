@@ -245,6 +245,18 @@ public class FluidNode
         return max;
     }
 
+    public long firstCapacity(ServerWorld world, TransactionContext transaction)
+    {
+        Transaction inner = transaction.openNested();
+        long max = 0;
+        for (StorageView<FluidVariant> view : getStorage(world).iterable(inner))
+        {
+            max = Math.max(max, view.getCapacity());
+        }
+        inner.abort();
+        return max;
+    }
+
     public AcceptorModes getMode(ServerWorld world)
     {
         BlockPos target = nodePos.facingBlock();

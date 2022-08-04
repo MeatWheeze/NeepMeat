@@ -21,16 +21,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
 public class PipeNetwork
 {
     private ServerWorld world;
     public final long uid; // Unique identifier for every network
-    private BlockPos origin;
-    private Direction originFace;
-    public static int UPDATE_DISTANCE = 10;
+    private final BlockPos origin;
+    private final Direction originFace;
+    public static int UPDATE_DISTANCE = 20;
 
     public static short TICK_RATE = 2;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
@@ -175,11 +174,6 @@ public class PipeNetwork
         }
     }
 
-    public void merge(PipeNetwork network)
-    {
-
-    }
-
     public boolean isBuilt()
     {
         return isBuilt;
@@ -195,30 +189,32 @@ public class PipeNetwork
         return world;
     }
 
-    int compareNodes(FluidNode node1, FluidNode node2, FluidNode ref)
-    {
-        if (node1.getDistance(ref) == node2.getDistance(ref))
-        {
-            return 0;
-        }
-        return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
-    }
+//    int compareNodes(FluidNode node1, FluidNode node2, FluidNode ref)
+//    {
+//        if (node1.getDistance(ref) == node2.getDistance(ref))
+//        {
+//            return 0;
+//        }
+//        return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
+//    }
 
     public static boolean validForInsertion(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
         FluidNode targetNode;
         boolean check1 =  !(targetNode = targetSupplier.get()).equals(node)
                 && targetSupplier.get() != null
-                && targetSupplier.get().getStorage(world) != null
-                && targetNode.getMode(world).canInsert()
-                && node.getMode(world).canExtract();
+                && targetSupplier.get().getStorage(world) != null;
 
         float h = node.getTargetY() - targetNode.getTargetY();
         double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-        float flow = node.getFlow(world) - targetNode.getFlow(world);
-        double potentialFlow = flow + gravityFlowIn;
 
-        return check1 && potentialFlow > 0;
+        // Pass if the current node is extracting from others OR is inserting into others.
+        boolean activePulling = node.getFlow(world) < 0;
+        boolean activePushing = node.getFlow(world) > 0;
+        boolean targetInsert = targetNode.getMode(world).canInsert();
+        boolean targetExtract = targetNode.getMode(world).canExtract();
+
+        return check1 && (activePulling && targetExtract || activePushing && targetInsert || gravityFlowIn != 0);
     }
 
     // This is responsible for transferring the fluid from node to node
@@ -234,7 +230,7 @@ public class PipeNetwork
             Transaction transaction = Transaction.openOuter();
             FluidNode node;
             if ((node = fromSupplier.get()) == null || fromSupplier.get().getStorage(world) == null
-                    || !fromSupplier.get().isStorage || !node.canExtract(world, transaction))
+                    || !fromSupplier.get().isStorage)
             {
                 transaction.abort();
                 continue;
@@ -245,18 +241,17 @@ public class PipeNetwork
 
             // Prevent unpredictable distribution
             long amount = node.firstAmount(world, transaction);
+            long capacity = node.firstCapacity(world, transaction);
             long outBaseFlow = Math.min(baseTransfer, amount);
+            long inBaseFlow = Math.min(baseTransfer, capacity);
             transaction.abort();
 
             // Filter out nodes that will cause crashes or are unnecessary for the calculation
-
             List<Integer> safeIndices;
             List<Supplier<FluidNode>> safeNodes;
             try (Transaction t2 = Transaction.openOuter())
             {
-                Predicate<Supplier<FluidNode>> predicate = ((Predicate<Supplier<FluidNode>>)
-                        (supplier -> validForInsertion(world, node, supplier)))
-                        .and(supplier -> supplier.get().canInsert(world, t2));
+                Predicate<Supplier<FluidNode>> predicate = (supplier -> validForInsertion(world, node, supplier));
 
                 safeIndices = new ArrayList<>();
                 for (int j = 0; j < connectedNodes.size(); j++)
@@ -264,21 +259,9 @@ public class PipeNetwork
                     if (predicate.test(connectedNodes.get(j)))
                         safeIndices.add(j);
                 }
-
-                // TODO: Get rid of this
-                safeNodes = connectedNodes.stream()
-                        .filter(predicate)
-                        .collect(Collectors.toList());
-                t2.abort();
             }
 
-            double r = 0.5d;
-
-            // Geometrical solution for flow in branched pipes:
-            // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
-
-            double sumDist = safeNodes.stream().mapToDouble(supplier1 -> 1f / supplier1.get().getTargetPos().getManhattanDistance(node.getTargetPos())).sum();
-//                    .mapToDouble(integer -> Math.pow(r, 2) / integer).sum();
+            double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / connectedNodes.get(idx).get().getTargetPos().getManhattanDistance(node.getTargetPos())).sum();
 
             for (int j : safeIndices)
             {
@@ -291,38 +274,22 @@ public class PipeNetwork
 
                 int L = node.getTargetPos().getManhattanDistance(targetNode.getTargetPos());
 
-
-                // Calculate amount of fluid to be transferred
-                long Q;
-                if (networkPipes.get(targetNode.getPos()).isCapillary())
-                {
-                    // Change the target node influx if connected with capillary pipe
-                    long inBaseFlow = networkPipes.get(targetNode.getPos()).isCapillary() ?
-                            Math.min(outBaseFlow, BASE_TRANSFER / 4) : outBaseFlow;
-
-                    // Ignore distance, distribute fluid evenly
-                    Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) / safeIndices.size());
-                }
-                else
-                {
-                    // Take distance into account
-                    Q = (long) Math.ceil(
-                            outBaseFlow * (flow + gravityFlowIn) * ((1f / L) / (sumDist + (1f / L))));
-                }
-
-                // Apply corresponding thingy
-
-//                Q = nodeMatrix[i][j].applyVariant(Q);
-
-//                System.out.println(nodeMatrix[0][1].apply(100L));
-//                System.out.println("i: " + i + ", j: " + j + ", Q: " + Q);
-
                 long amountMoved;
-                if (Q >= 0)
+                double v1 = (1f / L) / (sumDist + (1f / L));
+                if (flow + gravityFlowIn > 0)
                 {
                     Transaction t3 = Transaction.openOuter();
-                    int finalI = i;
+                    final int finalI = i;
+                    long Q = (long) Math.ceil(outBaseFlow * (flow + gravityFlowIn) * v1);
                     amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t3);
+                    t3.commit();
+                }
+                else if (flow + gravityFlowIn < 0)
+                {
+                    Transaction t3 = Transaction.openOuter();
+                    final int finalI = i;
+                    long Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) * v1);
+                    amountMoved = StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, t3);
                     t3.commit();
                 }
             }
@@ -351,7 +318,7 @@ public class PipeNetwork
 //        for (int i = 0; i < UPDATE_DISTANCE; ++i)
 //        {
 //            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
-            while (!pipeQueue.isEmpty() && depth < 20)
+            while (!pipeQueue.isEmpty() && depth < UPDATE_DISTANCE)
             {
                 ++depth;
                 BlockPos current = pipeQueue.poll();
