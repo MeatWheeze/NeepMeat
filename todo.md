@@ -34,10 +34,11 @@
 - [done] Make all machines change speed depending on rate of fluid input
 - [done] Make grinder produce particles
 - [done] Make Stirling Engine properly interface with motorised blocks
-- Make Mixer require a motor
+- [done] Make Mixer require a motor
 - Make Deployer run with a motor
 - Add Etherial Fuel Transducer block
 - Add simple uses for Whisper Wheat (food item, etc.)
+- Remove 'realistic fluids'
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
 - Add torque shaft

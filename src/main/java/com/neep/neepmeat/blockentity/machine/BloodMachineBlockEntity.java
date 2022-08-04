@@ -37,10 +37,15 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     {
         long currentInput;
 
+        public boolean canInsert(FluidVariant variant)
+        {
+            return variant.isOf(Fluids.WATER);
+        }
+
         @Override
         public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
         {
-            if (enabled)
+            if (enabled && canInsert(resource))
             {
                 long inserted = Math.min(maxAmount, maxRunningRate - currentInput);
                 if (inserted > 0)
@@ -63,7 +68,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         public boolean isResourceBlank()
         {
-            return false;
+            return true;
         }
 
         @Override

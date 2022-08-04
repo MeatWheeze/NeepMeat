@@ -19,7 +19,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, IVariableFlowBlock, PipeState.ISpecialPipe
+public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, PipeState.ISpecialPipe
 {
     public CheckValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -50,16 +50,6 @@ public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityPro
             return AcceptorModes.INSERT_ONLY;
         };
         return AcceptorModes.NONE;
-    }
-
-    @Override
-    public float getFlow(World world, BlockPos pos, BlockState state)
-    {
-        if (world.getBlockEntity(pos) instanceof CheckValveBlockEntity be)
-        {
-            return be.getApparentFlow();
-        }
-        return 0;
     }
 
     @Override

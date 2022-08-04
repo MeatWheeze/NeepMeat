@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.function.Supplier;
 
-public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, IDirectionalFluidAcceptor, IFluidNodeProvider
+public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, IVariableFlowBlock, IFluidNodeProvider
 {
     public PumpBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -79,6 +79,12 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
             }
         }
         return AcceptorModes.NONE;
+    }
+
+    @Override
+    public float getFlow(World world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return getDirectionMode(world, pos, state, direction).getFlow() * 0.5f;
     }
 
     @Override
