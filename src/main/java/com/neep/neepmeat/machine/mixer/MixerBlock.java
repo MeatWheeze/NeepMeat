@@ -91,10 +91,4 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
 //            be.endDutyCycle();
 //        }
     }
-
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-    {
-        return MiscUitls.checkType(type, NMBlockEntities.MIXER, MixerBlockEntity::serverTick, world);
-    }
 }
