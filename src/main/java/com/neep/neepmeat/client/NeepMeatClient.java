@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.motor.MotorRenderer;
@@ -85,6 +86,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.STIRLING_ENGINE, StirlingEngineRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
