@@ -36,7 +36,8 @@
 - [done] Make Stirling Engine properly interface with motorised blocks
 - [done] Make Mixer require a motor
 - Make Deployer run with a motor
-- Add Etherial Fuel Transducer block
+- [done] Fix pumps extracting from multiple tanks
+- Add Ethereal Fuel Transducer block
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks
