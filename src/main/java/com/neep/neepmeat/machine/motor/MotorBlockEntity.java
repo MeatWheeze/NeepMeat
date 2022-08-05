@@ -32,15 +32,6 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     }
 
     @Override
-    public long doWork(long amount, TransactionContext transaction)
-    {
-        long converted = super.doWork(amount, transaction);
-        this.running = converted == amount;
-
-        return converted;
-    }
-
-    @Override
     public void setRunning(boolean running)
     {
 
