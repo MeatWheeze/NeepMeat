@@ -37,7 +37,8 @@
 - [done] Make Mixer require a motor
 - Make Deployer run with a motor
 - [done] Fix pumps extracting from multiple tanks
-- Add Ethereal Fuel Transducer block
+- Add Rendering Basin
+- Add Ethereal Alembic
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks
@@ -76,8 +77,6 @@ The Integrator exudes alien microfauna that convert all biotic material into Bod
 
 Ordinary wheat, spliced with members of the unseen biosphere. The rustling of its leaves whispers of the Divine.
 
-GOD IS DEAD! And we used its flesh to fuel a second industrial revolution.
-
 Whisper Wheat can be ground into Whispers From Beyond. These can be processed by an Integrator to get Data.
 
 Dissolving Whisper Flour in water gives Cosmic Fluid.
@@ -104,6 +103,10 @@ Crafting
 - [nyi] Insert the MEAT slurry into trommel to extract MORE ORES!
 - [nyi] Insert MEAT into the trommel to extract DIVINE FLESH
 
+## Ethereal Fuel Production
+
+- [nyi] Heating coal or other fuels in a [nyi] rendering basin will create Ethereal Fuel in an attached [nyi] alembic.
+
 
 ## Late-Game Machinery
 
@@ -114,7 +117,7 @@ Biomass reprocessor
 
 - Pipes and redstone pumps are obtainable from Vanilla resources
 
-- [nyi] Find an Integrator Egg in a dungeon
+- Find an Integrator Egg in a dungeon
 - Offer a bucket of blood to the Intergrator Egg to hatch it
 - Insert flesh into a Charnel Compactor to get Integration Charges
 
