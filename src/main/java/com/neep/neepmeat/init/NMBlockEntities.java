@@ -22,6 +22,7 @@ import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
+import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -82,6 +83,7 @@ public class NMBlockEntities
 
     public static BlockEntityType<CrucibleBlockEntity> CRUCIBLE;
     public static BlockEntityType<AlembicBlockEntity> ALEMBIC;
+    public static BlockEntityType<TransducerBlockEntity> TRANSDUCER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -147,10 +149,13 @@ public class NMBlockEntities
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
-//        LARGE_CONVERTER = registerBlockEntity("large_converter", LargeConverterBlockEntity::new, NMBlocks.LARGE_CONVERTER);
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
         MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
+
+        TRANSDUCER = registerBlockEntity("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
+        FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
+        FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
