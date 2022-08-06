@@ -5,13 +5,16 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -72,26 +75,45 @@ public class CrucibleBlockEntity extends SyncableBlockEntity
         storage.readNbt(nbt);
     }
 
-    public void receiveItem(ItemEntity entity)
+    public static int timeToFluid(int fuelTime)
     {
-        ItemStack fuelStack = entity.getStack();
-        Integer time;
-        if ((time = FuelRegistry.INSTANCE.get(fuelStack.getItem())) != null)
+        return fuelTime * 16;
+    }
+
+    public void receiveItemEntity(ItemEntity entity)
+    {
+        ItemStack stack = entity.getStack();
+        ItemVariant variant = ItemVariant.of(stack);
+        try (Transaction transaction = Transaction.openOuter())
         {
-            try (Transaction transaction = Transaction.openOuter())
+            long decrement = processItem(variant, stack.getCount(), transaction);
+            stack.decrement((int) decrement);
+            transaction.commit();
+        }
+    }
+
+    public long processItem(ItemVariant fuelVariant, long fuelAmount, TransactionContext transaction)
+    {
+        Integer time;
+        Item fuelItem = fuelVariant.getItem();
+        if ((time = FuelRegistry.INSTANCE.get(fuelItem)) != null)
+        {
+            time = timeToFluid(time);
+            try (Transaction inner = transaction.openNested())
             {
                 Storage<FluidVariant> alembic = getOutput();
-                long maxAmount = (long) time * fuelStack.getCount();
+                long maxAmount = (long) time * fuelAmount;
                 FluidVariant variant = FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL);
 
-                long maxInserted = alembic.simulateInsert(variant, maxAmount, transaction);
-                int maxCount = (int) maxInserted / time;
+                // Find maximum number of items that can be inserted
+                long maxInserted = alembic.simulateInsert(variant, maxAmount, inner);
+                int maxCount = (int) Math.floorDiv(maxInserted, time);
 
-                long inserted = alembic.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), (long) maxCount * time, transaction);
-                fuelStack.decrement(maxCount);
-
-                transaction.commit();
+                long fluidInserted = alembic.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), (long) maxCount * time, inner);
+                inner.commit();
+                return maxCount;
             }
         }
+        return 0;
     }
 }

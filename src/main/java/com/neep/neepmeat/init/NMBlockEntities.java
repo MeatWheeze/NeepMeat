@@ -133,7 +133,10 @@ public class NMBlockEntities
         GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
         ALLOY_KILN = registerBlockEntity("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         CRUCIBLE = registerBlockEntity("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
+        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
+        ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUCIBLE);
         ALEMBIC = registerBlockEntity("alembic", AlembicBlockEntity::new, NMBlocks.ALEMBIC);
+        FluidStorage.SIDED.registerForBlockEntity(AlembicBlockEntity::getStorage, ALEMBIC);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
@@ -166,8 +169,6 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
         FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
 
-        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
-        FluidStorage.SIDED.registerForBlockEntity(AlembicBlockEntity::getStorage, ALEMBIC);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
 
