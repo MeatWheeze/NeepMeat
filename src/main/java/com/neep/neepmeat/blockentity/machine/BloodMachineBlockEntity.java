@@ -1,11 +1,13 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.machine.FluidFuelRegistry;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -195,6 +197,11 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     {
 //        return inputStorage;
         return direction == Direction.DOWN ? exhaustStorage : inputStorage;
+    }
+
+    public FluidPump getPump(Direction direction)
+    {
+        return direction == Direction.DOWN ? FluidPump.of(1, true) : null;
     }
 
     @Override

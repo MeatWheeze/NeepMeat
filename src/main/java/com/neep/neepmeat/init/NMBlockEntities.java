@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
@@ -93,6 +94,8 @@ public class NMBlockEntities
     {
         // --- Fluid Transfer ---
         PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
+        FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
+
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
@@ -121,6 +124,7 @@ public class NMBlockEntities
         TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
+        FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
         STIRLING_ENGINE = registerBlockEntity("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);

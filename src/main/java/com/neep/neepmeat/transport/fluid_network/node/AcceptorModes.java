@@ -47,9 +47,19 @@ public enum AcceptorModes
         return VALUES[MathHelper.abs(id % VALUES.length)];
     }
 
+    public static AcceptorModes byFlow(float flow)
+    {
+        return flow > 0 ? PUSH : flow < 0 ? PULL : INSERT_EXTRACT;
+    }
+
     AcceptorModes(int id, float pressure)
     {
         this.flow = pressure;
         this.id = id;
+    }
+
+    public boolean isDriving()
+    {
+        return this == PUSH || this == PULL;
     }
 }
