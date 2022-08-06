@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:rendering",
+  "fluid_input": {
+    "resource": "minecraft:water",
+    "amount": 27000
+  },
+  "item_input": {
+    "resource": "minecraft:coal",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:ethereal_fuel",
+    "amount": 27000
+  }
+}

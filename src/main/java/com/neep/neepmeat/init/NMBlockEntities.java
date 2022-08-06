@@ -13,6 +13,7 @@ import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
+import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
@@ -77,7 +78,9 @@ public class NMBlockEntities
     public static BlockEntityType<GrinderBlockEntity> GRINDER;
     public static BlockEntityType<StirlingEngineBlockEntity> STIRLING_ENGINE;
     public static BlockEntityType<AlloyKilnBlockEntity> ALLOY_KILN;
+
     public static BlockEntityType<CrucibleBlockEntity> CRUCIBLE;
+    public static BlockEntityType<AlembicBlockEntity> ALEMBIC;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -126,6 +129,7 @@ public class NMBlockEntities
         GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
         ALLOY_KILN = registerBlockEntity("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         CRUCIBLE = registerBlockEntity("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
+        ALEMBIC = registerBlockEntity("alembic", AlembicBlockEntity::new, NMBlocks.ALEMBIC);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
@@ -159,6 +163,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
 
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
+        FluidStorage.SIDED.registerForBlockEntity(AlembicBlockEntity::getStorage, ALEMBIC);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
 

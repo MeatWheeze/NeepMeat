@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.RenderingRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 
@@ -23,5 +24,8 @@ public class NMrecipeTypes
 
     public static final RecipeSerializer<AlloyKilnRecipe> ALLOY_KILN_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "alloy_smelting", new AlloyKilnRecipe.Serializer(AlloyKilnRecipe::new, 60));
     public static final RecipeType<AlloyKilnRecipe> ALLOY_SMELTING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "alloy_smelting");
+
+    public static final RecipeSerializer<RenderingRecipe> RENDERING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "rendering", new RenderingRecipe.Serializer(RenderingRecipe::new));
+    public static final RecipeType<RenderingRecipe> RENDERING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "rendering");
 
 }
