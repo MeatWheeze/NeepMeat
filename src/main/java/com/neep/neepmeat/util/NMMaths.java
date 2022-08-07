@@ -47,6 +47,14 @@ public class NMMaths
         throw new IllegalStateException("Unable to get X-rotated facing of " + direction);
     }
 
+    public static double manhattanDistance(Vec3d v1, Vec3d v2)
+    {
+        double d = Math.abs(v2.x - v1.x);
+        double e = Math.abs(v2.y - v1.y);
+        double f = Math.abs(v2.z - v1.z);
+        return d + e + f;
+    }
+
     public static Vec2f flatten(Vec3d vec)
     {
         return new Vec2f((float) vec.getX(), (float) vec.getZ());

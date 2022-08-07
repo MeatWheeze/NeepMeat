@@ -263,7 +263,7 @@ public class PipeNetwork
                 }
             }
 
-            double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / connectedNodes.get(idx).get().getTargetPos().getManhattanDistance(node.getTargetPos())).sum();
+            double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / FluidNode.exactDistance(connectedNodes.get(idx).get(), node)).sum();
 
             for (int j : safeIndices)
             {
@@ -274,10 +274,10 @@ public class PipeNetwork
                 double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
                 float flow = node.getFlow(world) - targetNode.getFlow(world);
 
-                int L = node.getTargetPos().getManhattanDistance(targetNode.getTargetPos());
+                double L = FluidNode.exactDistance(node, targetNode);
 
                 long amountMoved;
-                double v1 = (1f / L) / (sumDist + (1f / L));
+                double v1 = (1f / L) / (sumDist);
                 if (flow + gravityFlowIn > 0)
                 {
                     Transaction t3 = Transaction.openOuter();
