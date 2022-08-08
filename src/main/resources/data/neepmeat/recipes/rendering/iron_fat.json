@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:rendering",
+  "fluid_input": {
+    "resource": "neepmeat:eldritch_enzymes",
+    "amount": 9000
+  },
+  "item_input": {
+    "resource": "minecraft:raw_iron",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:ethereal_fuel",
+    "amount": 27000
+  }
+}

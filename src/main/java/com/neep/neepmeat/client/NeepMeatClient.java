@@ -46,6 +46,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier WORK_FLUID = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_still");
     public static final Identifier ETHEREAL_FUEL_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/ethereal_fuel_flowing");
     public static final Identifier ETHEREAL_FUEL = new Identifier(NeepMeat.NAMESPACE, "block/ethereal_fuel_still");
+    public static final Identifier ELDRITCH_ENZYMES_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/eldritch_enzymes_flowing");
+    public static final Identifier ELDRITCH_ENZYMES = new Identifier(NeepMeat.NAMESPACE, "block/eldritch_enzymes_still");
 
     @Override
     public void onInitializeClient()
@@ -145,12 +147,20 @@ public class NeepMeatClient implements ClientModInitializer
                 0xFFFFFF
         ));
 
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_ELDRITCH_ENZYMES, NMFluids.FLOWING_ELDRITCH_ENZYMES, new SimpleFluidRenderHandler(
+                ELDRITCH_ENZYMES,
+                ELDRITCH_ENZYMES_FLOWING,
+                0x3657a2
+        ));
+
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
             registry.register(CHARGED_WORK_FLUID);
             registry.register(CHARGED_WORK_FLUID_FLOWING);
             registry.register(ETHEREAL_FUEL);
             registry.register(ETHEREAL_FUEL_FLOWING);
+            registry.register(ELDRITCH_ENZYMES);
+            registry.register(ELDRITCH_ENZYMES_FLOWING);
         });
 
         // Coloured blocks
@@ -175,6 +185,7 @@ public class NeepMeatClient implements ClientModInitializer
         // Fluids
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_ENRICHED_BLOOD, NMFluids.FLOWING_ENRICHED_BLOOD);
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), NMFluids.STILL_ELDRITCH_ENZYMES, NMFluids.FLOWING_ELDRITCH_ENZYMES);
 
         // Other blocks
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.GLASS_TANK);

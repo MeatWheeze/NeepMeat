@@ -120,11 +120,13 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
 
     public Optional<T> getFirstMatching(StorageView<? extends TransferVariant<T>> view)
     {
+        cacheMatching();
         return Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
     }
 
     public Optional<T> getFirstMatching(Storage<? extends TransferVariant<T>> storage, TransactionContext transaction)
     {
+        cacheMatching();
         for (StorageView<? extends TransferVariant<T>> view : storage.iterable(transaction))
         {
             Optional<T> optional = Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();

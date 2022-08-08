@@ -39,8 +39,9 @@
 - [done] Fix pumps extracting from multiple tanks
 - [done] Add Rendering Basin
 - [done] Add Ethereal Alembic
-- Fix Fluid Buffer connections
+- [done] Fix Fluid Buffer connections
 - Add simple uses for Whisper Wheat (food item, etc.)
+- Add minimum fuel influx for heater activation
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
@@ -48,10 +49,15 @@
 - Add coloured fluid pipes
 - Create REI plugin
 
+## Ore Processing
+
+- [done] Add crucible and recipes
+- Add dynamic creation of Raw Ore Fat
+
 ## Alloys
-- Add Meat Potato
-- Add Whisper Wheat processing
-- Create MeatBrass ingot
+- Add Meat Potato farming
+- [done] Add Whisper Wheat processing
+- [done] Create Whisper Brass ingot
 - Update item pipe recipes
 
 ## Other
