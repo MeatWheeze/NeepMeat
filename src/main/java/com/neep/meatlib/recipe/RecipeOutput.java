@@ -5,14 +5,17 @@ import com.google.gson.JsonSyntaxException;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -24,6 +27,7 @@ public class RecipeOutput<T>
     protected final float chance;
     protected int amount;
     protected boolean willOutput;
+    protected @Nullable NbtCompound nbt;
 
     public RecipeOutput(@NotNull T resource, int min, int max, float probability)
     {
@@ -59,13 +63,30 @@ public class RecipeOutput<T>
         willOutput = random.nextFloat() < chance;
     }
 
-    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, Function<T, V> variant, TransactionContext transaction)
+//    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, Function<T, V> of, TransactionContext transaction)
+//    {
+//        update();
+//        if (!willOutput)
+//            return true;
+//
+//        V variant = of.apply(resource).
+//        long inserted = storage.insert(of.apply(resource()), amount, transaction);
+//        return inserted == amount;
+//    }
+
+    public void setNbt(NbtCompound nbt)
+    {
+        this.nbt = nbt;
+    }
+
+    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, BiFunction<T, NbtCompound, V> of, TransactionContext transaction)
     {
         update();
         if (!willOutput)
             return true;
 
-        long inserted = storage.insert(variant.apply(resource()), amount, transaction);
+        V variant = of.apply(resource, nbt);
+        long inserted = storage.insert(variant, amount, transaction);
         return inserted == amount;
     }
 
