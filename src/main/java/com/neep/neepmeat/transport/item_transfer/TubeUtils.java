@@ -1,4 +1,4 @@
-package com.neep.neepmeat.item_transfer;
+package com.neep.neepmeat.transport.item_transfer;
 
 import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.util.ItemInPipe;
