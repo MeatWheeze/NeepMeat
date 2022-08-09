@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "i i",
+    "i i",
+    "rbr"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:whisper_brass"
+    },
+    "r": {
+      "item": "neepmeat:refractory_brick"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:crucible",
+    "count": 1
+  }
+}

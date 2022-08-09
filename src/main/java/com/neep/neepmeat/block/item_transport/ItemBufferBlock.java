@@ -81,7 +81,7 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof ItemBufferBlockEntity be)
+        if (blockEntity instanceof ItemBufferBlockEntity be && !world.isClient())
         {
             onEntityCollided(world, pos, state, entity, be);
         }
