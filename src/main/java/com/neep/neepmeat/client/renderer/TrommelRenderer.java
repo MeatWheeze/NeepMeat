@@ -1,10 +1,11 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.blockentity.TrommelBlockEntity;
+import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
@@ -33,27 +34,13 @@ public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntit
         matrices.push();
         Direction facing = be.getCachedState().get(BaseHorFacingBlock.FACING);
 
-        matrices.push();
-        matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(facing.asRotation()));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
+        matrices.translate(0.5, 0.5f, 0.5);
+        matrices.scale(0.9f, 0.9f, 0.85f);
+        Vec3f axis = facing.rotateYClockwise().getUnitVector();
+//        matrices.multiply(axis.getDegreesQuaternion(10));
         matrices.translate(-0.5, -0.5, -0.5);
-        MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
-                NMBlocks.TROMMEL_CENTRE.getDefaultState(),
-                be.getPos(),
-                be.getWorld(),
-                matrices,
-                vertexConsumers.getBuffer(RenderLayer.getCutout()),
-                true,
-                new Random());
-        matrices.pop();
-
-        ItemStack stack = be.getResource().toStack((int) be.getAmount());
-
-//        be.stackRenderDelta = MathHelper.lerp(delta, be.stackRenderDelta, be.getAmount() <= 0 ? 0.3f : 0f);
-        matrices.translate(0.5, 0.25f, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((be.getWorld().getTime() + tickDelta) * 1));
-
+        BERenderUtils.rotateFacing(facing, matrices);
+        BERenderUtils.renderModel(NMExtraModels.TROMMEL_MESH, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 
         matrices.pop();
     }

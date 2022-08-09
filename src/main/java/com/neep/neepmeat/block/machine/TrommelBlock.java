@@ -1,7 +1,8 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.blockentity.TrommelBlockEntity;
+import com.neep.meatlib.block.IMeatBlock;
+import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,25 +17,25 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
+
 public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
     public final VoxelShape[] SHAPES = {
-            VoxelShapes.cuboid(0f, -1d, -1d, 1d, 2d, 2d),
-            VoxelShapes.cuboid(-1f, -1d, 0d, 2d, 2d, 1d)
+            VoxelShapes.cuboid(0f, 0d, 0d, 1d, 1d, 1d),
+            VoxelShapes.cuboid(0f, 0d, 0d, 1d, 1d, 1d)
     };
 
     public TrommelBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
 //        this.setDefaultState(getDefaultState().with(CENTRE, false).with(FACING, Direction.NORTH));
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        Direction direction = context.getPlayerLookDirection();
-        return direction.getAxis().isVertical() ? getDefaultState() :
-                this.getDefaultState().with(FACING, direction);
+        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
     }
 
     @Deprecated
@@ -60,5 +61,22 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(FACING);
+    }
+
+    public static class Top extends Block implements IMeatBlock
+    {
+        private final String registryName;
+
+        public Top(String registryName, Settings settings)
+        {
+            super(settings);
+            this.registryName = registryName;
+        }
+
+        @Override
+        public String getRegistryName()
+        {
+            return registryName;
+        }
     }
 }

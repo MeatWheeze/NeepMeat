@@ -49,7 +49,7 @@ public class NMItems
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static Item GLAND_POTATO = new BaseCraftingItem("flesh_potato", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//    public static Item GLAND_POTATO = new BaseCraftingItem("flesh_potato", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     static
     {
