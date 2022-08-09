@@ -2,10 +2,12 @@ package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.api.block.pipe.IFluidPipe;
 import com.neep.neepmeat.item.FluidComponentItem;
+import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
@@ -80,6 +82,28 @@ public class ItemUtils
             ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
         }
         transaction.commit();
+    }
+
+    public static void singleVariantInteract(PlayerEntity player, Hand hand, SingleVariantStorage<ItemVariant> storage)
+    {
+        ItemStack stack = player.getStackInHand(hand);
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            if ((storage.isResourceBlank() || storage.getResource().matches(stack)) && !stack.isEmpty())
+            {
+                long inserted = storage.insert(ItemVariant.of(stack), stack.getCount(), transaction);
+                stack.decrement((int) inserted);
+                transaction.commit();
+            }
+            else if ((stack.isEmpty() || !storage.getResource().matches(stack)) && !storage.isResourceBlank())
+            {
+                ItemStack giveStack = storage.getResource().toStack((int) storage.getAmount());
+                player.giveItemStack(giveStack);
+                storage.extract(storage.getResource(), storage.getAmount(), transaction);
+                transaction.commit();
+            }
+            else transaction.abort();
+        }
     }
 
     public static ItemStack mutateView(StorageView<ItemVariant> view)

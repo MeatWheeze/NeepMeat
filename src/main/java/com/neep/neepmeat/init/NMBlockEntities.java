@@ -16,6 +16,7 @@ import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
+import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
@@ -85,6 +86,7 @@ public class NMBlockEntities
     public static BlockEntityType<CrucibleBlockEntity> CRUCIBLE;
     public static BlockEntityType<AlembicBlockEntity> ALEMBIC;
     public static BlockEntityType<TransducerBlockEntity> TRANSDUCER;
+    public static BlockEntityType<DumperBlockEntity> DUMPER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -121,6 +123,8 @@ public class NMBlockEntities
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
         ROUTER = registerBlockEntity("router", RouterBlockEntity::new, NMBlocks.ROUTER);
+        DUMPER = registerBlockEntity("dumper", DumperBlockEntity::new, NMBlocks.DUMPER);
+        ItemStorage.SIDED.registerForBlockEntity(DumperBlockEntity::getStorage, DUMPER);
 
         // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);

@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ibi",
+    "wew",
+    "whw"
+  ],
+  "key": {
+    "w": {
+      "tag": "minecraft:planks"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "e": {
+      "item": "minecraft:ender_pearl"
+    },
+    "b": {
+      "item": "neepmeat:brain_rough"
+    }
+  },
+  "result": {
+    "item": "neepmeat:dumper",
+    "count": 1
+  }
+}
