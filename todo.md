@@ -41,6 +41,7 @@
 - [done] Add Ethereal Alembic
 - [done] Fix Fluid Buffer connections
 - Add simple uses for Whisper Wheat (food item, etc.)
+- Balance Transducer and Stirling Engine
 - Add minimum fuel influx for heater activation
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks
@@ -123,6 +124,11 @@ Crafting
 
 - [nyi] Heating coal or other fuels in a [nyi] rendering basin will create Ethereal Fuel in an attached [nyi] alembic.
 
+
+## Sacrificial Dagger
+- Sound event when charging attack
+- Sound event for failed and successful attacks
+- Particles for resulting heart item
 
 ## Late-Game Machinery
 
