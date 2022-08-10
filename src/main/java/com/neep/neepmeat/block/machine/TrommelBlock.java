@@ -2,22 +2,30 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.entity.StructureBlockBlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Set;
+import javax.management.NotCompliantMBeanException;
+import java.util.function.Supplier;
 
 public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
@@ -38,16 +46,86 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
     }
 
-    @Deprecated
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return SHAPES[(state.get(FACING).getAxis().equals(Direction.Axis.X)) ? 0 : 1];
     }
 
     @Deprecated
+    @Override
     public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return state.getOutlineShape(world, pos);
+    }
+
+    @Override
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+    {
+        return true;
+    }
+
+    public static boolean placeStructure(World world, BlockPos pos, TrommelBlockEntity controller, BlockPos origin)
+    {
+        if (!world.isAir(pos)) return false;
+
+        world.setBlockState(pos, NMBlocks.TROMMEL_STRUCTURE.getDefaultState(), Block.NOTIFY_LISTENERS);
+        if (world.getBlockEntity(pos) instanceof StructureBlockEntity be)
+        {
+            be.setController(origin);
+            controller.addStructure(be);
+        }
+        return true;
+    }
+
+    public static Iterable<BlockPos> getVolume(WorldView world, BlockPos origin, Direction facing)
+    {
+        BlockPos pos1 = origin.offset(facing).offset(facing.rotateYCounterclockwise());
+        BlockPos pos2 = origin.up().offset(facing.rotateYClockwise());
+        return BlockPos.iterate(pos1, pos2);
+    }
+
+    public static boolean checkVolume(WorldView world, BlockPos origin, Direction facing)
+    {
+        for (BlockPos p : getVolume(world, origin, facing))
+        {
+            if (!(world.isAir(p) || world.getBlockState(p).isOf(NMBlocks.TROMMEL))) return false;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+    {
+        return super.canPlaceAt(state, world, pos) && checkVolume(world, pos, state.get(FACING).getOpposite());
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        Direction facing = state.get(FACING).getOpposite();
+        if (world.getBlockEntity(pos) instanceof TrommelBlockEntity be)
+        {
+            for (BlockPos p : getVolume(world, pos, facing))
+            {
+                if (world.isAir(p)) placeStructure(world, p, be, pos);
+            }
+        }
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        super.onStateReplaced(state, world, pos, newState, moved);
+        Direction facing = state.get(FACING).getOpposite();
+        for (BlockPos p : getVolume(world, pos, facing))
+        {
+            if (world.getBlockState(p).isOf(NMBlocks.TROMMEL_STRUCTURE))
+            {
+                world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+            }
+        }
     }
 
     @Nullable
@@ -63,13 +141,13 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         builder.add(FACING);
     }
 
-    public static class Top extends Block implements IMeatBlock
+    public static class Structure extends Block implements IMeatBlock, BlockEntityProvider
     {
         private final String registryName;
 
-        public Top(String registryName, Settings settings)
+        public Structure(String registryName, Settings settings)
         {
-            super(settings);
+            super(settings.dropsLike(NMBlocks.TROMMEL).nonOpaque());
             this.registryName = registryName;
         }
 
@@ -77,6 +155,90 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         public String getRegistryName()
         {
             return registryName;
+        }
+
+        @Override
+        public BlockRenderType getRenderType(BlockState state)
+        {
+            return BlockRenderType.INVISIBLE;
+        }
+
+        @Override
+        public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+        {
+            return true;
+        }
+
+        @Override
+        public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos)
+        {
+            return 1.0f;
+        }
+
+        @Override
+        public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
+        {
+            return NMBlocks.TROMMEL.getPickStack(world, pos, state);
+        }
+
+        @Override
+        public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+        {
+            if (world.getBlockEntity(pos) instanceof StructureBlockEntity be)
+            {
+                be.signalBroken(world);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
+
+        @Nullable
+        @Override
+        public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+        {
+            return NMBlockEntities.TROMMEL_STRUCTURE.instantiate(pos, state);
+        }
+    }
+
+    public static class StructureBlockEntity extends BlockEntity
+    {
+        protected BlockPos controllerPos;
+
+        public StructureBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+        {
+            super(type, pos, state);
+        }
+
+        public StructureBlockEntity(BlockPos pos, BlockState state)
+        {
+            this(NMBlockEntities.TROMMEL_STRUCTURE, pos, state);
+        }
+
+        public void setController(BlockPos pos)
+        {
+            this.controllerPos = pos;
+            markDirty();
+        }
+
+        public void signalBroken(World world)
+        {
+            if (controllerPos != null && world.getBlockEntity(controllerPos) instanceof TrommelBlockEntity be)
+            {
+                be.signalBroken();
+            }
+        }
+
+        @Override
+        public void readNbt(NbtCompound nbt)
+        {
+            super.readNbt(nbt);
+            this.controllerPos = NbtHelper.toBlockPos((NbtCompound) nbt.get("controller"));
+        }
+
+        @Override
+        protected void writeNbt(NbtCompound nbt)
+        {
+            super.writeNbt(nbt);
+            nbt.put("controller", NbtHelper.fromBlockPos(this.controllerPos));
         }
     }
 }

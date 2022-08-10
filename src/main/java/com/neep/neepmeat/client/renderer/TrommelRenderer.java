@@ -35,11 +35,11 @@ public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntit
         Direction facing = be.getCachedState().get(BaseHorFacingBlock.FACING);
 
         matrices.translate(0.5, 0.5f, 0.5);
-        matrices.scale(0.9f, 0.9f, 0.85f);
-        Vec3f axis = facing.rotateYClockwise().getUnitVector();
-//        matrices.multiply(axis.getDegreesQuaternion(10));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.rotateFacing(facing, matrices);
+        matrices.scale(1.5f, 1.5f, 1.1f);
+        matrices.translate(-0.5, 0.2, -0.4);
         BERenderUtils.renderModel(NMExtraModels.TROMMEL_MESH, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 
         matrices.pop();

@@ -74,7 +74,7 @@ public class NMBlocks
     // --- Machines
     public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, MACHINE_SETTINGS));
-    public static Block TROMMEL_TOP = BlockRegistry.queue(new TrommelBlock.Top("trommel_top", MACHINE_SETTINGS));
+    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", MACHINE_SETTINGS));
 
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, MACHINE_SETTINGS));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, MACHINE_SETTINGS));

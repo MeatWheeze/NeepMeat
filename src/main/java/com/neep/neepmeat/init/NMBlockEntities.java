@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
+import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
@@ -87,6 +88,7 @@ public class NMBlockEntities
     public static BlockEntityType<AlembicBlockEntity> ALEMBIC;
     public static BlockEntityType<TransducerBlockEntity> TRANSDUCER;
     public static BlockEntityType<DumperBlockEntity> DUMPER;
+    public static BlockEntityType<TrommelBlock.StructureBlockEntity> TROMMEL_STRUCTURE;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -129,6 +131,7 @@ public class NMBlockEntities
         // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
         TROMMEL = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
+        TROMMEL_STRUCTURE = registerBlockEntity("trommel_structure", TrommelBlock.StructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
