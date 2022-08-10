@@ -60,4 +60,5 @@ public class GrindingDisplay extends BasicDisplay
     {
         return NMREIPlugin.GRINDING;
     }
+
 }
