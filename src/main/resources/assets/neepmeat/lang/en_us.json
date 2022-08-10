@@ -209,5 +209,7 @@
 
   "container.neepmeat.stirling_engine": "Stirling Engine",
   "container.neepmeat.router": "Item Router",
-  "container.neepmeat.alloy_kiln": "Alloy Kiln"
+  "container.neepmeat.alloy_kiln": "Alloy Kiln",
+
+  "category.neepmeat.grinding": "Crushing"
 }

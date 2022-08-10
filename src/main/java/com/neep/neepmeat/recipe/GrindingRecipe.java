@@ -76,6 +76,11 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         return itemOutput;
     }
 
+    public RecipeOutput<Item> getAuxOutput()
+    {
+        return extraOutput;
+    }
+
     @Override
     public Identifier getId()
     {
