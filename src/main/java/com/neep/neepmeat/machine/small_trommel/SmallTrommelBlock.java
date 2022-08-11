@@ -125,7 +125,7 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
         {
             Direction facing = state.get(FACING);
             BlockPos offsetPos = pos.offset(facing.getOpposite());
-            if (world.getBlockEntity(offsetPos) instanceof SmallTrommelBlockEntity be)
+            if (direction == Direction.DOWN && world.getBlockEntity(offsetPos) instanceof SmallTrommelBlockEntity be)
             {
                 return be.getOutputFluidStorage();
             }

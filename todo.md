@@ -101,6 +101,8 @@ Elution of a pure mineral fat with Enlightened Water will reveal that which is h
 
 Divinity inspires growth, and this growth can be shepherded to generate resources. Innoculation of an animal with a mixture of Divine Flesh, integration fluid and a fleshly mineral will cause it to develop new tissues that bear the mineral in a latent form. The organism will soon lose mobility, so it must be fed by pumping blood into it. Once maturation is reached, macerated flesh can be rendered to produce Raw Ore fat. 
 
+Something has changed it to an Enlightened form. It exudes the heady scent of the Divine.
+
 
 ## Key Crafting Types
 

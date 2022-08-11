@@ -79,4 +79,11 @@ public class NMMaths
         return (float) C;
     }
 
+    public static float lerpForwards(float dist, float current, float next)
+    {
+        float delta = dist * (next - current);
+        if (delta < 0) return next;
+        return current + delta;
+    }
+
 }
