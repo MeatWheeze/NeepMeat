@@ -32,7 +32,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.translate(0, 1 - 5f / 16f, 0);
         float progress = 0;
         float nextOutput = 0;
-        if (be.getCurrentRecipe() != null)
+        if (be.getCurrentRecipe() != null && be.progressIncrement > MixerBlockEntity.INCREMENT_MIN)
         {
 //            progress = (be.getWorld().getTime() + tickDelta - be.processStart) / (float) be.processLength;
             progress = (be.progress) / be.processLength;
@@ -66,7 +66,9 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.push();
         matrices.translate(0.5, 1.5, 0.5);
         float rotatingAngle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * 50f);
-        be.bladeAngle = MathHelper.lerpAngleDegrees(0.1f, be.bladeAngle, be.currentRecipe == null ? 0 : rotatingAngle);
+        be.bladeAngle = MathHelper.lerpAngleDegrees(0.1f, be.bladeAngle,
+                be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : rotatingAngle
+        );
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);

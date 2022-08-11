@@ -191,7 +191,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
     public void tick()
     {
         readCurrentRecipe();
-        if (currentRecipe != null)
+        if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
         {
             progress = Math.min(processLength, progress + progressIncrement);
             if (progress >= this.processLength)
@@ -211,7 +211,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
             }
         }
 
-        if (currentRecipe != null)
+        if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
         {
             spawnMixingParticles(currentRecipe.fluidInput1, 2, 0.2, 0.5);
             spawnMixingParticles(currentRecipe.fluidInput2, 2, 0.2, 0.5);

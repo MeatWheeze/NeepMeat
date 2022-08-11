@@ -1,7 +1,13 @@
 package com.neep.neepmeat.api.processing;
 
+import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +25,7 @@ public class OreFatRegistry
 
     public static void register(Item item, Integer col, Item result)
     {
-        ENTRIES.put(item, new Entry(col, result));
+        ENTRIES.put(item, new Entry(item, col, result));
     }
 
     public static Entry get(Item item)
@@ -27,7 +33,27 @@ public class OreFatRegistry
         return ENTRIES.get(item);
     }
 
-    public record Entry(Integer col, Item result)
+    public static Entry get(Identifier id)
+    {
+        return ENTRIES.get(Registry.ITEM.get(id));
+    }
+
+    public static Entry getFromVariant(FluidVariant variant)
+    {
+        if (variant.getObject() instanceof OreFatFluidFactory.Main)
+        {
+            NbtCompound nbt = variant.getNbt();
+            String string;
+            if (nbt != null && (string = nbt.getString("item")) != null)
+            {
+                Identifier itemId = new Identifier(string);
+                return get(itemId);
+            }
+        }
+        return null;
+    }
+
+    public record Entry(Item source, Integer col, Item result)
     {
 
     }
