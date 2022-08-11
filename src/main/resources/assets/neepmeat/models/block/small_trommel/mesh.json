@@ -1,0 +1,32 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "neepmeat:block/small_trommel/mesh",
+		"particle": "neepmeat:block/small_trommel/mesh"
+	},
+	"elements": [
+		{
+			"from": [3, 3, -12],
+			"to": [13, 13, 11],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 0, 11.5, 5], "texture": "#0"},
+				"west": {"uv": [0, 0, 11.5, 5], "texture": "#0"},
+				"up": {"uv": [0, 0, 11.5, 5], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 0, 11.5, 5], "rotation": 270, "texture": "#0"}
+			}
+		},
+		{
+			"name": "cube inverted",
+			"from": [13, 13, 11],
+			"to": [3, 3, -12],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
+			"faces": {
+				"east": {"uv": [0, 5, 11.5, 0], "texture": "#0"},
+				"west": {"uv": [0, 5, 11.5, 0], "texture": "#0"},
+				"up": {"uv": [0, 5, 11.5, 0], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [0, 5, 11.5, 0], "rotation": 270, "texture": "#0"}
+			}
+		}
+	]
+}

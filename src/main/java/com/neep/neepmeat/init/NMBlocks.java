@@ -8,6 +8,7 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.block.item_transport.*;
@@ -75,6 +76,8 @@ public class NMBlocks
     public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, MACHINE_SETTINGS));
     public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", MACHINE_SETTINGS));
+    public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", 64, false, MACHINE_SETTINGS));
+    public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_strucrure", MACHINE_SETTINGS));
 
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, MACHINE_SETTINGS));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, MACHINE_SETTINGS));

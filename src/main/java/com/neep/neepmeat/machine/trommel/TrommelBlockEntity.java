@@ -3,10 +3,10 @@ package com.neep.neepmeat.machine.trommel;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -20,13 +20,13 @@ import java.util.List;
 
 public class TrommelBlockEntity extends SyncableBlockEntity implements IControllerBlockEntity
 {
-    protected TrommelStorage storage;
+//    protected TrommelStorage storage;
     protected List<BlockPos> structures = new ArrayList<>();
 
     public TrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        storage = new TrommelStorage(this);
+//        storage = new TrommelStorage(this);
     }
 
     public TrommelBlockEntity(BlockPos pos, BlockState state)
@@ -36,21 +36,22 @@ public class TrommelBlockEntity extends SyncableBlockEntity implements IControll
 
     public TrommelStorage getStorage()
     {
-        return storage;
+//        return storage;
+        return null;
     }
 
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        storage.writeNbt(nbt);
+//        storage.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        storage.readNbt(nbt);
+//        storage.readNbt(nbt);
     }
 
     public void addStructure(TrommelStructureBlockEntity be)

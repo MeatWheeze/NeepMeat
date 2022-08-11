@@ -8,13 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-@SuppressWarnings("UnstableApiUsage")
 public interface IMotorBlockEntity
 {
-    default long doWork(long amount, TransactionContext transaction) {return 0;}
-
-    default void setRunning(boolean running) {}
-
     default void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         Direction facing = state.get(BaseFacingBlock.FACING);
@@ -25,6 +20,8 @@ public interface IMotorBlockEntity
     }
 
     void setConnectedBlock(IMotorisedBlock motorised);
+
+    float getRotorAngle();
 
     IMotorisedBlock getConnectedBlock();
 }

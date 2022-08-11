@@ -22,6 +22,8 @@ import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
+import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
+import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
@@ -89,6 +91,8 @@ public class NMBlockEntities
     public static BlockEntityType<TransducerBlockEntity> TRANSDUCER;
     public static BlockEntityType<DumperBlockEntity> DUMPER;
     public static BlockEntityType<TrommelStructureBlockEntity> TROMMEL_STRUCTURE;
+    public static BlockEntityType<SmallTrommelBlockEntity> SMALL_TROMMEL;
+    public static BlockEntityType<SmallTrommelBlockEntity.Structure> SMALL_TROMMEL_STRUCTURE;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -132,6 +136,12 @@ public class NMBlockEntities
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
         TROMMEL = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         TROMMEL_STRUCTURE = registerBlockEntity("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
+        SMALL_TROMMEL = registerBlockEntity("small_trommel", SmallTrommelBlockEntity::new, NMBlocks.SMALL_TROMMEL);
+        SMALL_TROMMEL_STRUCTURE = registerBlockEntity("small_trommel_structure", SmallTrommelBlockEntity.Structure::new, NMBlocks.SMALL_TROMMEL_STRUCTURE);
+        FluidStorage.SIDED.registerForBlockEntity(SmallTrommelBlockEntity::getInputStorage, SMALL_TROMMEL);
+        FluidStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getFluidStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
+        ItemStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getItemStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
+
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);

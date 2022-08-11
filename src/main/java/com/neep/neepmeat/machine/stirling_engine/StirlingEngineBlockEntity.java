@@ -223,6 +223,12 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
+    public float getRotorAngle()
+    {
+        return angle;
+    }
+
+    @Override
     public IMotorisedBlock getConnectedBlock()
     {
         return cache;
