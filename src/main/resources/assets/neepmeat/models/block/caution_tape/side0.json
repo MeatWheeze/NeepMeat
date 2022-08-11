@@ -1,0 +1,6 @@
+{
+    "parent": "neepmeat:block/caution_tape/side",
+    "textures": {
+        "line": "neepmeat:block/caution_tape/line0"
+    }
+}
