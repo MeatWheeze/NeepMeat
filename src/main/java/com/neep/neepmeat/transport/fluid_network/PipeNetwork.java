@@ -29,7 +29,7 @@ public class PipeNetwork
     public final long uid; // Unique identifier for every network
     private final BlockPos origin;
     private final Direction originFace;
-    public static int UPDATE_DISTANCE = 20;
+    public static int UPDATE_DISTANCE = 50;
 
     public static short TICK_RATE = 2;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
