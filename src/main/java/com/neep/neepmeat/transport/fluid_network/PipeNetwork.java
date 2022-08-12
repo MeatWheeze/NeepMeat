@@ -41,7 +41,6 @@ public class PipeNetwork
 
     protected boolean isBuilt;
 
-
     // My pet memory leak.
     // TODO: Find a way to remove unloaded networks from this
     public static List<PipeNetwork> LOADED_NETWORKS = new ArrayList<>();
@@ -164,7 +163,7 @@ public class PipeNetwork
                 {
                     e.printStackTrace();
                 }
-                PipeBranches.displayMatrix(nodeMatrix);
+//                PipeBranches.displayMatrix(nodeMatrix);
                 this.isBuilt = true;
                 long t2 = System.nanoTime();
 //                System.out.println("Rebuilt network in " + (t2 - t1) / 1000000 + "ms");
@@ -228,8 +227,8 @@ public class PipeNetwork
         {
             Supplier<FluidNode> fromSupplier = connectedNodes.get(i);
             Transaction transaction = Transaction.openOuter();
-            FluidNode node;
-            if ((node = fromSupplier.get()) == null || fromSupplier.get().getStorage(world) == null
+            FluidNode node = fromSupplier.get();
+            if (node == null || node.getStorage(world) == null
                     || !fromSupplier.get().isStorage
 //                    || !fromSupplier.get().getMode(world).isDriving()
             )
