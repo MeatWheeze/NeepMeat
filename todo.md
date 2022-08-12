@@ -51,6 +51,8 @@
 - [done] Create REI plugin
 - Add Caution Tape (looks similar to redstone)
 
+- Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
+
 ## Ore Processing
 
 - [done] Add crucible and recipes

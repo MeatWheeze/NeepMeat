@@ -50,6 +50,10 @@ public class StagedTransactions
         }
     }
 
+    public static void queue(StagedTransaction transaction)
+    {
+        TRANSACTIONS.add(transaction);
+    }
 
     public interface StagedTransaction
     {
