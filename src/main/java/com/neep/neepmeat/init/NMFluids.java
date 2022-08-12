@@ -2,7 +2,6 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.fluid.*;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.item.BaseBucketItem;
@@ -10,7 +9,6 @@ import com.neep.neepmeat.machine.FluidFuelRegistry;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
@@ -61,11 +59,15 @@ public class NMFluids
     public static Block ELDRITCH_ENZYMES;
     public static FluidFactory ENZYMES_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "eldritch_enzymes", false, 10, 5, 2);
 
-    public static FlowableFluid FLOWING_ORE_FAT;
-    public static FlowableFluid STILL_ORE_FAT;
-    public static Item ORE_FAT_BUCKET;
-    public static Block ORE_FAT;
-    public static OreFatFluidFactory ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
+    public static FlowableFluid FLOWING_DIRTY_ORE_FAT;
+    public static FlowableFluid STILL_DIRTY_ORE_FAT;
+    public static Block DIRTY_ORE_FAT;
+    public static OreFatFluidFactory DIRTY_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
+
+    public static FlowableFluid FLOWING_CLEAN_ORE_FAT;
+    public static FlowableFluid STILL_CLEAN_ORE_FAT;
+    public static Block CLEAN_ORE_FAT;
+    public static OreFatFluidFactory CLEAN_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "clean_ore_fat", false, 10, 5, 2);
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
@@ -112,9 +114,13 @@ public class NMFluids
         ELDRITCH_ENZYMES_BUCKET = ENZYMES_FACTORY.registerItem();
         ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerBlock();
 
-        STILL_ORE_FAT = ORE_FAT_FACTORY.registerStill();
-        FLOWING_ORE_FAT = ORE_FAT_FACTORY.registerFlowing();
-        ORE_FAT = ORE_FAT_FACTORY.registerBlock();
+        STILL_DIRTY_ORE_FAT = DIRTY_ORE_FAT_FACTORY.registerStill();
+        FLOWING_DIRTY_ORE_FAT = DIRTY_ORE_FAT_FACTORY.registerFlowing();
+        DIRTY_ORE_FAT = DIRTY_ORE_FAT_FACTORY.registerBlock();
+
+        STILL_CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerStill();
+        FLOWING_CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerFlowing();
+        CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);

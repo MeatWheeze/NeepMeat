@@ -17,12 +17,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.Random;
+
 @SuppressWarnings("UnstableApiUsage")
 public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     public static final float INCREMENT_MIN = 0.1f;
     public static final float INCREMENT_MAX = 1;
     public static long CONVERT_MIN = 100;
+    public static long BASE_AMOUNT = 3000;
+    public static long BONUS_CHANCE = 40;
+
     public TrommelStorage storage;
     public FluidVariant currentFluid;
 
@@ -31,11 +36,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public float renderProgress;
     private float progressIncrement;
     private float workMultiplier;
+    protected Random random;
 
     public SmallTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
         storage = new TrommelStorage(this);
+        this.random = new Random(pos.asLong());
     }
 
     public SmallTrommelBlockEntity(BlockPos pos, BlockState state)
@@ -78,19 +85,22 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     {
         FluidVariant inputVariant = storage.getInputStorage().getResource();
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
-        if (inputVariant.isOf(NMFluids.STILL_ORE_FAT) && entry != null)
+        if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
-            long baseAmount = 3000;
-            long convertAmount = (long) Math.floor(workMultiplier * baseAmount);
+            long inputAmount = (long) Math.floor(workMultiplier * BASE_AMOUNT);
+            long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
+            long outputAmount = random.nextInt(101) < BONUS_CHANCE ? extractable : extractable + extractable / 2;
 
-            if (convertAmount < CONVERT_MIN)
+            if (outputAmount < CONVERT_MIN)
                 return;
 
             try (Transaction transaction = Transaction.openOuter())
             {
-                long extracted = storage.fluidInput.extract(inputVariant, convertAmount, transaction);
-                long inserted = storage.fluidOutput.insert(inputVariant, extracted, transaction);
-                if (extracted == inserted)
+
+                NbtCompound nbt = inputVariant.copyNbt();
+                long extracted = storage.fluidInput.extract(inputVariant, inputAmount, transaction);
+                long inserted = storage.fluidOutput.insert(FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt), outputAmount, transaction);
+                if (extracted > 0)
                 {
                     transaction.commit();
                     currentFluid = storage.fluidInput.getResource();

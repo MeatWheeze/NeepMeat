@@ -33,7 +33,7 @@ public class OreFatFluidVariantRenderHandler implements FluidVariantRenderHandle
         NbtCompound nbt = fluidVariant.copyNbt();
         if (nbt != null)
         {
-            tooltip.add(new TranslatableText("UwU").formatted(Formatting.AQUA));
+//            tooltip.add(new TranslatableText("UwU").formatted(Formatting.AQUA));
         }
     }
 

@@ -5,7 +5,6 @@ import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
-import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
@@ -16,8 +15,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -160,7 +157,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJson(Registry.FLUID, outputElement);
             if (outputElement.has("fat_item"))
             {
-                if (!(fluidOutput.resource().equals(NMFluids.STILL_ORE_FAT)))
+                if (!(fluidOutput.resource().equals(NMFluids.STILL_DIRTY_ORE_FAT)))
                     throw new IllegalStateException("Fluid '" + fluidOutput.resource() + "' is not an Ore Fat fluid");
 
                 NbtCompound nbt = new NbtCompound();
