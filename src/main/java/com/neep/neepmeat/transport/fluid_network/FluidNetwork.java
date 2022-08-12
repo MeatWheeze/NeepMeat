@@ -72,7 +72,7 @@ public class FluidNetwork
 
     public static boolean shouldTick(long worldTime)
     {
-        return (worldTime & PipeNetwork.TICK_RATE) == 0;
+        return (worldTime % PipeNetwork.TICK_RATE) == 0;
     }
 
     public static void tickNetwork(ServerWorld world)

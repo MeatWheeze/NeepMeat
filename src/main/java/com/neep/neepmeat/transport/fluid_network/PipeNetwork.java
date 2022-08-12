@@ -31,7 +31,7 @@ public class PipeNetwork
     private final Direction originFace;
     public static int UPDATE_DISTANCE = 50;
 
-    public static short TICK_RATE = 2;
+    public static short TICK_RATE = 1;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
 
     public List<Supplier<FluidNode>> connectedNodes = new ArrayList<>();
