@@ -36,7 +36,7 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
 
     public static void createStructure(World world, BlockPos pos, Direction facing)
     {
-        world.setBlockState(pos, NMBlocks.SMALL_TROMMEL_STRUCTURE.getDefaultState().with(FACING, facing), Block.NOTIFY_LISTENERS);
+        world.setBlockState(pos, NMBlocks.SMALL_TROMMEL_STRUCTURE.getDefaultState().with(FACING, facing), Block.NOTIFY_ALL);
     }
 
     @Override
