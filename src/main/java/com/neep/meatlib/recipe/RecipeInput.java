@@ -2,10 +2,12 @@ package com.neep.meatlib.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -17,6 +19,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 /**
@@ -133,6 +136,25 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
             Optional<T> optional = Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
             if (optional.isPresent())
                 return optional;
+        }
+        return Optional.empty();
+    }
+
+    public <V extends TransferVariant<T>> Optional<V> getFirstMatching(Storage<V> storage, NbtCompound nbt, BiFunction<T, NbtCompound, V> func, TransactionContext transaction)
+    {
+        cacheMatching();
+        for (StorageView<V> view : storage.iterable(transaction))
+        {
+            Optional<T> optional = Arrays.stream(matchingStacks).filter(t ->
+            {
+                V variant = view.getResource();
+                return variant.getObject().equals(t) && variant.nbtMatches(nbt);
+            }).findFirst();
+
+            if (optional.isPresent())
+            {
+                return Optional.of(func.apply(optional.get(), nbt));
+            }
         }
         return Optional.empty();
     }

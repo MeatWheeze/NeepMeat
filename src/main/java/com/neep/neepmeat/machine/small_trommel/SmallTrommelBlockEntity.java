@@ -26,7 +26,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public static final float INCREMENT_MAX = 1;
     public static long CONVERT_MIN = 100;
     public static long BASE_AMOUNT = 3000;
-    public static long BONUS_CHANCE = 40;
+    public static long BONUS_CHANCE = 20;
 
     public TrommelStorage storage;
     public FluidVariant currentFluid;
@@ -89,7 +89,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         {
             long inputAmount = (long) Math.floor(workMultiplier * BASE_AMOUNT);
             long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
-            long outputAmount = random.nextInt(101) < BONUS_CHANCE ? extractable : extractable + extractable / 2;
+            long outputAmount = random.nextInt(101) < BONUS_CHANCE ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)
                 return;

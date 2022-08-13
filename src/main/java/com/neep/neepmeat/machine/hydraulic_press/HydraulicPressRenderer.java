@@ -25,7 +25,7 @@ public class HydraulicPressRenderer implements BlockEntityRenderer<HydraulicPres
         float extension = storage.getAmount() / (float) HydraulicPressBlockEntity.EXTEND_AMOUNT;
         be.renderExtension = MathHelper.lerp(0.1f, be.renderExtension, extension);
         BERenderUtils.rotateFacing(facing, matrices);
-        matrices.translate(0, (-8 / 16f) * be.renderExtension, 0);
+        matrices.translate(0, (-8 / 16f - 0.04) * be.renderExtension, 0);
         BERenderUtils.renderModel(NMExtraModels.HYDRAULIC_PRESS_ARM, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
 }
