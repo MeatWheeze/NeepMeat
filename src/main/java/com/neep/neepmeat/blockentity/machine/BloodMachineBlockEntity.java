@@ -156,7 +156,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     protected ExhaustStorage exhaustStorage = new ExhaustStorage(exhaustBufferSize, this::sync);
 
-    public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long inCapacity, long outCapacity)
+    public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -178,8 +178,6 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
             {
                 this.fluidMultiplier = FluidFuelRegistry.getInstance().get(inputStorage.lastFluid.getFluid()).multiplier();
             }
-
-            //
 
             // Reset input counter and fluid
             this.inputStorage.lastInput = 0;

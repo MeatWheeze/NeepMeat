@@ -51,7 +51,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
     public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state, USE_AMOUNT * 2, USE_AMOUNT * 2);
+        super(type, pos, state);
         this.needsRefresh = true;
     }
 

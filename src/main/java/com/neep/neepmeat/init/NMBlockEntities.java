@@ -19,6 +19,7 @@ import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
+import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
@@ -95,6 +96,7 @@ public class NMBlockEntities
     public static BlockEntityType<SmallTrommelBlockEntity> SMALL_TROMMEL;
     public static BlockEntityType<SmallTrommelBlockEntity.Structure> SMALL_TROMMEL_STRUCTURE;
     public static BlockEntityType<CastingBasinBlockEntity> CASTING_BASIN;
+    public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -163,6 +165,9 @@ public class NMBlockEntities
         CASTING_BASIN = registerBlockEntity("casting_basin", CastingBasinBlockEntity::new, NMBlocks.CASTING_BASIN);
         FluidStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().fluid(dir), CASTING_BASIN);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().item(dir), CASTING_BASIN);
+
+        HYDRAULIC_PRESS = registerBlockEntity("hydraulic_press", HydraulicPressBlockEntity::new, NMBlocks.HYDRAULIC_PRESS);
+        FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getStorage, HYDRAULIC_PRESS);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
