@@ -78,7 +78,7 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
     {
         if (!variant.isBlank())
         {
-            return variant.getItem().getMaxCount();
+            return Math.min(variant.getItem().getMaxCount(), capacity);
         }
         return capacity;
     }

@@ -17,6 +17,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class HydraulicPressBlockEntity extends SyncableBlockEntity
@@ -44,7 +45,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         @Override
         protected boolean canExtract(FluidVariant variant)
         {
-            return super.canExtract(variant) && variant.isOf(Fluids.WATER) && (!recipeControlled || recipeState == 2 && currentRecipe != null);
+            return super.canExtract(variant) && variant.isOf(Fluids.WATER) && (!recipeControlled || recipeState == 2);
         }
     };
 
@@ -56,6 +57,11 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     public HydraulicPressBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.HYDRAULIC_PRESS, pos, state);
+    }
+
+    public void setState(int state)
+    {
+        this.recipeState = (short) state;
     }
 
     protected void startRecipe(CastingBasinStorage storage, PressingRecipe recipe)
@@ -84,11 +90,11 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         }
     }
 
-    // TODO: Handle basin broken case
-    protected void stopRecipe(CastingBasinStorage storage)
+    protected void stopRecipe(@Nullable CastingBasinStorage storage)
     {
-        storage.unlock();
+        if (storage != null) storage.unlock();
 
+        this.recipeState = 0;
         this.recipeId = null;
         this.currentRecipe = null;
     }
@@ -122,10 +128,14 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
                 }
                 if (recipeState == 2 && fluidStorage.getAmount() == 0)
                 {
-                    this.recipeState = 0;
                     stopRecipe(basin.getStorage());
                 }
             }
+        }
+        else
+        {
+            stopRecipe(null);
+            setState(2);
         }
 
     }
