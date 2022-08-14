@@ -1,9 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.IDirectionalFluidAcceptor;
-import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.util.NMMaths;
@@ -13,8 +10,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -231,10 +226,10 @@ public class FluidNode
         return this.nodePos;
     }
 
-    public float getFlow(ServerWorld world)
+    public float getFlow()
     {
         if (hasPump) return pump.getFlow();
-        return getMode(world).getFlow();
+        return getMode().getFlow();
     }
 
     public static double exactDistance(FluidNode node1, FluidNode node2)
@@ -284,7 +279,7 @@ public class FluidNode
         return max;
     }
 
-    public AcceptorModes getMode(ServerWorld world)
+    public AcceptorModes getMode()
     {
         if (hasPump) pump.getMode();
         return AcceptorModes.INSERT_EXTRACT;
