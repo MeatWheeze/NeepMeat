@@ -5,6 +5,7 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
@@ -27,7 +28,7 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
 
     public MixerTopBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(settings.nonOpaque().solidBlock(ContentDetectorBlock::never).dropsLike(NMBlocks.MIXER));
+        super(settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
         this.registryName = registryName;
     }
 
@@ -65,9 +66,15 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
     }
 
     @Override
-    public boolean dropsSelf()
+    public ItemConvertible dropsLike()
     {
-        return false;
+        return NMBlocks.MIXER;
+    }
+
+    @Override
+    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos)
+    {
+        return 1;
     }
 
     @Deprecated

@@ -5,6 +5,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
@@ -21,9 +22,11 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider
     {
         for (Map.Entry<Identifier, Block> entry : BlockRegistry.BLOCKS.entrySet())
         {
-            if (entry.getValue() instanceof IMeatBlock meatBlock && meatBlock.dropsSelf())
+            if (entry.getValue() instanceof IMeatBlock meatBlock)
             {
-                this.addDrop(entry.getValue());
+                ItemConvertible like = meatBlock.dropsLike();
+//                System.out.println(entry.getValue());
+                if (like != null) this.addDrop(entry.getValue(), like);
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseSeedsItem;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.CropBlock;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.*;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.math.BlockPos;
@@ -45,9 +42,9 @@ public class BaseCropBlock extends CropBlock implements IMeatBlock
     }
 
     @Override
-    public boolean dropsSelf()
+    public ItemConvertible dropsLike()
     {
-        return false;
+        return null;
     }
 
     @Override

@@ -1,13 +1,11 @@
 package com.neep.meatlib.block;
 
 import com.neep.neepmeat.datagen.tag.BlockTagProvider;
-import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.Tag;
 import net.minecraft.tag.TagKey;
 
 import java.util.List;
@@ -19,6 +17,11 @@ public interface IMeatBlock extends ItemConvertible
     default List<TagKey<Block>> getBlockTags()
     {
         return List.of(BlockTags.PICKAXE_MINEABLE);
+    }
+
+    static void validate(IMeatBlock meatBlock)
+    {
+        if (!(meatBlock instanceof Block)) throw new IllegalStateException("IMeatBlock must only be implemented by blocks");
     }
 
     default void addTags()
@@ -34,9 +37,10 @@ public interface IMeatBlock extends ItemConvertible
         return BlockTags.PICKAXE_MINEABLE;
     }
 
-    default boolean dropsSelf()
+    default ItemConvertible dropsLike()
     {
-        return true;
+        validate(this);
+        return (Block) this;
     }
 
     @FunctionalInterface
