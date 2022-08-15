@@ -33,7 +33,6 @@ public class FluidNode
     private final NodePos nodePos;
     private PipeNetwork network = null;
     public long networkId;
-    public Map<FluidNode, Integer> distances = new HashMap<>();
 
     private FluidPump pump;
     private boolean hasPump;
@@ -165,29 +164,9 @@ public class FluidNode
         this.storage = storage;
     }
 
-    public void setNetwork(ServerWorld world, PipeNetwork network)
+    public boolean isDriven()
     {
-//        load(world);
-        setNetwork(network);
-    }
-
-    public void setNetwork(PipeNetwork network)
-    {
-        if (!(this.network == null) && !this.network.equals(network))
-        {
-            this.network.removeNode(new NodePos(pos, face));
-        }
-        if (this.network != null)
-        {
-            System.out.println(network.uid + " replaces " + this.network.uid);
-        }
-        this.network = network;
-        distances.clear();
-    }
-
-    public PipeNetwork getNetwork()
-    {
-        return network;
+        return getFlow() != 0;
     }
 
     // Removes node from and revalidates the network
@@ -198,7 +177,6 @@ public class FluidNode
             network.removeNode(new NodePos(pos, face));
             network = null;
         }
-        distances.clear();
     }
 
     public Direction getFace()

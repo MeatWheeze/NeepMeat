@@ -72,13 +72,13 @@ public class PipeBranches extends HashMap<Long, PipeState>
             for (int i = 0; i < size; ++i)
             {
                 Supplier<FluidNode> fromNode = nodes.get(i);
-                if (fromNode.get() == null)
+                if (fromNode.get() == null || !fromNode.get().isDriven())
                     continue;
 
                 for (int j = 0; j < size; ++j)
                 {
                     Supplier<FluidNode> toNode = nodes.get(j);
-                    if (toNode.get() == null || toNode.equals(fromNode))
+                    if (toNode.get() == null || toNode.equals(fromNode) || !toNode.get().isDriven())
                         continue;
 
                     NodePos start = fromNode.get().getNodePos();

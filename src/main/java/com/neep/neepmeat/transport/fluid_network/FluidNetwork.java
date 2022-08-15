@@ -144,18 +144,18 @@ public class FluidNetwork
     }
 
     // Replace the node at a position with a new one, preserving the network reference
-    private void replaceNode(NodePos pos, FluidNode node)
-    {
-        Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
-        FluidNode presentNode;
-        if ((presentNode = nodes.get(pos)) != null)
-        {
-            node.setNetwork(presentNode.getNetwork());
-        }
-        nodes.put(pos, node);
-
-        System.out.println("Node replaced: " + nodes.get(pos));
-    }
+//    private void replaceNode(NodePos pos, FluidNode node)
+//    {
+//        Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
+//        FluidNode presentNode;
+//        if ((presentNode = nodes.get(pos)) != null)
+//        {
+//            node.setNetwork(presentNode.getNetwork());
+//        }
+//        nodes.put(pos, node);
+//
+//        System.out.println("Node replaced: " + nodes.get(pos));
+//    }
 
     private void removeNode(NodePos pos)
     {
