@@ -1,8 +1,7 @@
 package com.neep.neepmeat.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 
 public class IndexedHashMap<K, V> implements Cloneable
 {
@@ -108,6 +107,17 @@ public class IndexedHashMap<K, V> implements Cloneable
     {
 //        return map.get(k);
         return keys.indexOf(k);
+    }
+
+    public void forEach(Consumer<? super V> action)
+    {
+        Objects.requireNonNull(action);
+        int size = this.size();
+
+        for(int i = 0; i < size; ++i)
+        {
+            action.accept(get(i));
+        }
     }
 
     @Override

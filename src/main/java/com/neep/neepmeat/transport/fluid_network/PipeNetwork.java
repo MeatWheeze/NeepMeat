@@ -161,7 +161,7 @@ public class PipeNetwork
             {
                 this.isBuilt = false;
 
-//                connectedNodes.forEach((node) -> node.get().setNetwork(this));
+                connectedNodes.forEach((node) -> node.get().setNetwork(this));
                 if (!validate())
                 {
                     return;
@@ -197,7 +197,7 @@ public class PipeNetwork
         this.world = world;
     }
 
-    public World getWorld()
+    public ServerWorld getWorld()
     {
         return world;
     }
@@ -352,48 +352,50 @@ public class PipeNetwork
 
         int depth = 0;
 
-        // Pipe search depth
-//        for (int i = 0; i < UPDATE_DISTANCE; ++i)
-//        {
-//            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
-            while (!pipeQueue.isEmpty() && depth < UPDATE_DISTANCE)
+        while (!pipeQueue.isEmpty() && depth < UPDATE_DISTANCE)
+        {
+            ++depth;
+            BlockPos current = pipeQueue.poll();
+            BlockState state1 = world.getBlockState(current);
+//                PipeState pipeState
+
+            if (!(state1.getBlock() instanceof IFluidPipe))
+                continue;
+
+            for (Direction direction : ((IFluidPipe) state1.getBlock()).getConnections(state1, dir -> true))
             {
-                ++depth;
-                BlockPos current = pipeQueue.poll();
-                BlockState state1 = world.getBlockState(current);
+                BlockPos next = current.offset(direction);
+                BlockState state2 = world.getBlockState(next);
 
-                if (!(state1.getBlock() instanceof IFluidPipe))
-                    continue;
-
-                for (Direction direction : ((IFluidPipe) state1.getBlock()).getConnections(state1, dir -> true))
+                if (!visited.contains(next))
                 {
-                    BlockPos next = current.offset(direction);
-                    BlockState state2 = world.getBlockState(next);
-
-                    if (!visited.contains(next))
+                    if (state2.getBlock() instanceof IFluidPipe)
                     {
-                        if (state2.getBlock() instanceof IFluidPipe)
+                        visited.add(next);
+                        // Next block is connected in opposite direction
+                        if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                         {
-                            visited.add(next);
-                            // Next block is connected in opposite direction
-                            if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
-                            {
-                                pipeQueue.add(next);
-                                networkPipes.put(next, new PipeState(state2));
-                            }
+                            pipeQueue.add(next);
+                            PipeState nextPipe = new PipeState(state2);
+                            PipeState currentPipe = networkPipes.get(current);
+                            currentPipe.putAdjacent(direction, nextPipe);
+                            nextPipe.putAdjacent(direction.getOpposite(), currentPipe);
+                            networkPipes.put(next, nextPipe);
                         }
-                        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
-                        if (storage != null)
+                    }
+                    // TODO: remove
+                    Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
+                    if (storage != null)
+                    {
+                        Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
+                        if (node.get() != null)
                         {
-                            Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
-                            if (node.get() != null)
-                            {
-                                connectedNodes.add(node);
-                            }
+                            connectedNodes.add(node);
                         }
                     }
                 }
             }
+        }
     }
 
     public void removeNode(NodePos pos)

@@ -18,10 +18,12 @@ import java.util.Objects;
 public class PipeState
 {
     List<Direction> connections = new ArrayList<>();
+    PipeState[] connected = new PipeState[6];
     protected float pressure;
     protected int distance;
     protected boolean capillary;
     protected final ISpecialPipe special;
+    public boolean flag;
 
     public PipeState(BlockState state)
     {
@@ -72,6 +74,16 @@ public class PipeState
             return true;
         }
         return special.canTransferFluid(bias, state);
+    }
+
+    public void putAdjacent(Direction direction, PipeState state)
+    {
+        connected[direction.ordinal()] = state;
+    }
+
+    public PipeState getAdjacent(Direction direction)
+    {
+        return connected[direction.ordinal()];
     }
 
     public boolean isCapillary()

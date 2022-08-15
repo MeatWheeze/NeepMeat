@@ -4,11 +4,13 @@ import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.lwjgl.system.CallbackI;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -52,6 +54,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
     public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
+        long tt1 = System.nanoTime();
         int size = nodes.size();
 
         // Initialise matrix
@@ -72,19 +75,20 @@ public class PipeBranches extends HashMap<Long, PipeState>
             for (int i = 0; i < size; ++i)
             {
                 Supplier<FluidNode> fromNode = nodes.get(i);
-                if (fromNode.get() == null || !fromNode.get().isDriven())
+                if (fromNode.get() == null)
                     continue;
 
                 for (int j = 0; j < size; ++j)
                 {
                     Supplier<FluidNode> toNode = nodes.get(j);
-                    if (toNode.get() == null || toNode.equals(fromNode) || !toNode.get().isDriven())
+                    if (toNode.get() == null || toNode.equals(fromNode))
                         continue;
 
                     NodePos start = fromNode.get().getNodePos();
                     NodePos end = toNode.get().getNodePos();
                     PipeState.FilterFunction filterFunction;
-                    if ((filterFunction = shortestPath(world, start, end, pipes)) != null)
+
+                    if (/*(fromNode.get().isDriven() || toNode.get().isDriven()) &&*/ (filterFunction = shortestPath(world, start, end, pipes)) != null)
                     {
                         matrix[i][j] = filterFunction;
                     }
@@ -99,6 +103,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
         {
             e.printStackTrace();
         }
+        long tt2 = System.nanoTime();
+//        System.out.println((tt2-tt1) / 1000000);
         return matrix;
     }
 
@@ -198,15 +204,17 @@ public class PipeBranches extends HashMap<Long, PipeState>
      */
     public static PipeState.FilterFunction shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
     {
+        long t1 = System.nanoTime();
+        pipes.forEach(p -> p.flag = false);
         Map<BlockPos, Integer> distances = new LinkedHashMap<>();
-        List<Pair<PipeState.ISpecialPipe, Direction>> specials = new ArrayList<>();
         PipeState.FilterFunction flowFunc = PipeState::identity;
-        Queue<BlockPos> queue = new LinkedList<>();
-        List<BlockPos> visited = new ArrayList<>();
+        Queue<BlockPos> posQueue = new LinkedList<>();
+        Queue<PipeState> pipeQueue = new LinkedList<>();
         Direction reverse = end.face.getOpposite();
 
         distances.put(end.pos, 0);
-        queue.add(end.pos);
+        posQueue.add(end.pos);
+        pipeQueue.add(pipes.get(end.pos));
 
         // Early return if the end is blocked
         if (!pipes.get(end.pos).canFluidFlow(start.face.getOpposite(), world.getBlockState(end.pos)))
@@ -214,9 +222,10 @@ public class PipeBranches extends HashMap<Long, PipeState>
             return null;
         }
 
-        while (!queue.isEmpty())
+        while (!posQueue.isEmpty())
         {
-            BlockPos pos = queue.poll();
+            BlockPos pos = posQueue.poll();
+            PipeState currentPipe = pipeQueue.poll();
             int dist = distances.get(pos);
 
             if (pos.equals(start.pos))
@@ -224,19 +233,21 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 return flowFunc;
             }
 
-            visited.add(pos);
-//            queue.remove();
+            currentPipe.flag = true;
 
-            PipeState pipe = pipes.get(pos);
-
-            for (Direction connection : pipe.connections)
+            PipeState offsetPipe;
+            for (Direction connection : currentPipe.connections)
             {
                 BlockPos offset = pos.offset(connection);
-                if (!visited.contains(offset) && pipes.get(offset) != null)
+                offsetPipe = currentPipe.getAdjacent(connection);
+//                PipeState offsetPipe = pipes.get(offset);
+
+                long tt2 = System.nanoTime();
+                if (offsetPipe != null && !offsetPipe.flag)
                 {
                     // Check if pipe can transfer fluid in the opposite direction
-                    PipeState offsetPipe = pipes.get(offset);
-                    if (!offsetPipe.canFluidFlow(connection.getOpposite(), world.getBlockState(offset)))
+                    BlockState offsetState = world.getBlockState(offset);
+                    if (!offsetPipe.canFluidFlow(connection.getOpposite(), offsetState))
                     {
                         continue;
                     }
@@ -244,15 +255,17 @@ public class PipeBranches extends HashMap<Long, PipeState>
                     if (offsetPipe.isSpecial())
                     {
 //                        specials.add(new Pair<>(offsetPipe.getSpecial(), connection.getOpposite()));
-                        flowFunc = flowFunc.andThen(offsetPipe.getSpecial().getFlowFunction(world, connection.getOpposite(), offset, world.getBlockState(offset)));
+                        flowFunc = flowFunc.andThen(offsetPipe.getSpecial().getFlowFunction(world, connection.getOpposite(), offset, offsetState));
                     }
 
                     distances.put(offset, dist + 1);
-                    queue.add(offset);
-                    reverse = connection;
+                    posQueue.add(offset);
+                    pipeQueue.add(offsetPipe);
                 }
             }
         }
+        long t2 = System.nanoTime();
+//        System.out.println(t2-t1);
         return null;
     }
 
