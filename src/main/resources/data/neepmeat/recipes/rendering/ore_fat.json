@@ -1,0 +1,11 @@
+{
+  "type": "neepmeat:ore_fat_rendering",
+  "fluid_input": {
+    "resource": "neepmeat:eldritch_enzymes",
+    "amount": 27000
+  },
+  "output": {
+    "resource": "neepmeat:ore_fat",
+    "amount": 9000
+  }
+}
