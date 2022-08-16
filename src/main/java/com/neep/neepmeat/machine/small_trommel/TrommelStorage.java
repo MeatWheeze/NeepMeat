@@ -62,8 +62,13 @@ public class TrommelStorage implements NbtSerialisable, ImplementedRecipe.DummyI
         this.itemOutput.readNbt((NbtCompound) Objects.requireNonNull(nbt.get("itemOutput")));
     }
 
-    public StorageView<FluidVariant> getInputStorage()
+    public WritableSingleFluidStorage input()
     {
         return fluidInput;
+    }
+
+    public WritableSingleFluidStorage output()
+    {
+        return fluidOutput;
     }
 }

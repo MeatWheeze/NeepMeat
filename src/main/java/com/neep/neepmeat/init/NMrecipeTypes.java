@@ -3,10 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.meatlib.recipe.RecipeRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
-import com.neep.neepmeat.recipe.AlloyKilnRecipe;
-import com.neep.neepmeat.recipe.GrindingRecipe;
-import com.neep.neepmeat.recipe.PressingRecipe;
-import com.neep.neepmeat.recipe.RenderingRecipe;
+import com.neep.neepmeat.recipe.*;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 
@@ -31,5 +28,8 @@ public class NMrecipeTypes
 
     public static final RecipeSerializer<PressingRecipe> PRESSING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "pressing", new PressingRecipe.Serializer(PressingRecipe::new));
     public static final RecipeType<PressingRecipe> PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "pressing");
+
+    public static final RecipeSerializer<TrommelRecipe> TROMMEL_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "trommel", new TrommelRecipe.Serializer(TrommelRecipe::new));
+    public static final RecipeType<TrommelRecipe> TROMMEL = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "trommel");
 
 }
