@@ -24,22 +24,25 @@ public class NMFluids
     public static FlowableFluid STILL_BLOOD;
     public static Item BLOOD_BUCKET;
     public static Block BLOOD;
+    public static FluidFactory BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "blood", false, 10, 5, 2);
 
     public static FlowableFluid FLOWING_ENRICHED_BLOOD;
     public static FlowableFluid STILL_ENRICHED_BLOOD;
     public static Item ENRICHED_BLOOD_BUCKET;
     public static Block ENRICHED_BLOOD;
+    public static FluidFactory ENRICHED_BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "enriched_blood", false, 10, 6, 1);
 
     public static FlowableFluid FLOWING_WORK_FLUID;
     public static FlowableFluid STILL_WORK_FLUID;
     public static Item WORK_FLUID_BUCKET;
     public static Block WORK_FLUID;
+    public static FluidFactory WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "work_fluid", false, 10, 6, 1);
 
     public static FlowableFluid FLOWING_CHARGED_WORK_FLUID;
     public static FlowableFluid STILL_CHARGED_WORK_FLUID;
     public static Item CHARGED_WORK_FLUID_BUCKET;
     public static Block CHARGED_WORK_FLUID;
-
+    public static FluidFactory CHARGED_WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "charged_work_fluid", false, 10, 6, 1);
 
     public static FlowableFluid FLOWING_PATINA_TREATMENT;
     public static FlowableFluid STILL_PATINA_TREATMENT;
@@ -74,30 +77,25 @@ public class NMFluids
 
     public static void initialise()
     {
-        STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
-        FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());
-        BLOOD_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "blood_bucket", STILL_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
-        BLOOD = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "blood"), new FluidBlock(NMFluids.STILL_BLOOD, FabricBlockSettings.copy(Blocks.WATER)){});
+        STILL_BLOOD = BLOOD_FACTORY.registerStill();
+        FLOWING_BLOOD = BLOOD_FACTORY.registerFlowing();
+        BLOOD_BUCKET = BLOOD_FACTORY.registerItem();
+        BLOOD = BLOOD_FACTORY.registerBlock();
 
-        STILL_ENRICHED_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "enriched_blood"), new EnrichedBloodFluid.Still());
-        FLOWING_ENRICHED_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "enriched_flowing_blood"), new EnrichedBloodFluid.Flowing());
-        ENRICHED_BLOOD_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "enriched_blood_bucket", STILL_ENRICHED_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
-        ENRICHED_BLOOD = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "enriched_blood"), new FluidBlock(NMFluids.STILL_ENRICHED_BLOOD, FabricBlockSettings.copy(Blocks.WATER)){});
+        STILL_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerStill();
+        FLOWING_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerFlowing();
+        ENRICHED_BLOOD_BUCKET = ENRICHED_BLOOD_FACTORY.registerItem();
+        ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerBlock();
 
-        STILL_WORK_FLUID = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "work_fluid"), new WorkFluid.Still());
-        FLOWING_WORK_FLUID = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_work_fluid"), new WorkFluid.Flowing());
-        WORK_FLUID_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "work_fluid_bucket", STILL_WORK_FLUID, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
-        WORK_FLUID = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "work_fluid"), new FluidBlock(NMFluids.STILL_WORK_FLUID, FabricBlockSettings.copy(Blocks.WATER)){});
+        STILL_WORK_FLUID = WORK_FLUID_FACTORY.registerStill();
+        FLOWING_WORK_FLUID = WORK_FLUID_FACTORY.registerFlowing();
+        WORK_FLUID_BUCKET = WORK_FLUID_FACTORY.registerItem();
+        WORK_FLUID = WORK_FLUID_FACTORY.registerBlock();
 
-        STILL_CHARGED_WORK_FLUID = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "charged_work_fluid"), new ChargedWorkFluid.Still());
-        FLOWING_CHARGED_WORK_FLUID = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_charged_work_fluid"), new ChargedWorkFluid.Flowing());
-        CHARGED_WORK_FLUID_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "charged_work_fluid_bucket", STILL_CHARGED_WORK_FLUID, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
-        CHARGED_WORK_FLUID = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "charged_work_fluid"), new FluidBlock(NMFluids.STILL_CHARGED_WORK_FLUID, FabricBlockSettings.copy(Blocks.WATER)){});
-
-//        STILL_PATINA_TREATMENT = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "patina_treatment"), new ChargedWorkFluid.Still());
-//        FLOWING_PATINA_TREATMENT = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_patina_treatment"), new ChargedWorkFluid.Flowing());
-//        PATINA_TREATMENT_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "patina_treatment_bucket", STILL_CHARGED_WORK_FLUID, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
-//        PATINA_TREATMENT = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "patina_treatment"), new FluidBlock(NMFluids.STILL_CHARGED_WORK_FLUID, FabricBlockSettings.copy(Blocks.WATER)){});
+        STILL_CHARGED_WORK_FLUID = CHARGED_WORK_FLUID_FACTORY.registerStill();
+        FLOWING_CHARGED_WORK_FLUID = CHARGED_WORK_FLUID_FACTORY.registerFlowing();
+        CHARGED_WORK_FLUID_BUCKET = CHARGED_WORK_FLUID_FACTORY.registerItem();
+        CHARGED_WORK_FLUID = CHARGED_WORK_FLUID_FACTORY.registerBlock();
 
         STILL_PATINA_TREATMENT = PATINA.registerStill();
         FLOWING_PATINA_TREATMENT = PATINA.registerFlowing();
