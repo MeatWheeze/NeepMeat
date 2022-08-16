@@ -216,5 +216,7 @@
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.compacting": "Charnel Compacting",
   "category.neepmeat.mixing": "Mixing",
-  "category.neepmeat.mixing.time": "Time: %ds"
+  "category.neepmeat.mixing.time": "Time: %ds",
+  "category.neepmeat.alloy_smelting": "Alloy Smelting",
+  "category.neepmeat.alloy_smelting.time": "Time: %ds"
 }
