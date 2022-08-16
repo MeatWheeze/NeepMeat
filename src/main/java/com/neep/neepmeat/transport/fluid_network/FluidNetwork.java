@@ -292,6 +292,11 @@ public class FluidNetwork
         }
     }
 
+    public void markEntityRemoved(BlockPos pos)
+    {
+        getNodes(pos).forEach(FluidNode::onRemove);
+    }
+
     public NbtCompound writeNodes(BlockPos pos, NbtCompound nbt)
     {
         for (FluidNode node : getNodes(pos))

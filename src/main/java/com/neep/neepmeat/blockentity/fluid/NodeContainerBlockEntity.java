@@ -41,4 +41,11 @@ public class NodeContainerBlockEntity extends BlockEntity
         super.writeNbt(nbt);
         nbt = FluidNetwork.getInstance(getWorld()).writeNodes(getPos(), nbt);
     }
+
+    @Override
+    public void markRemoved()
+    {
+        super.markRemoved();
+        FluidNetwork.getInstance(world).markEntityRemoved(pos);
+    }
 }
