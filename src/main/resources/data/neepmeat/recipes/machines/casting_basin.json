@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b b",
+    "bbb",
+    "iii"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:brick"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:casting_basin",
+    "count": 1
+  }
+}

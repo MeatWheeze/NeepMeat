@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bii",
+    "iBi",
+    "ppp"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "neepmeat:pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:small_trommel",
+    "count": 1
+  }
+}
