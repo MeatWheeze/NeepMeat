@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/crop",
+  "textures": {
+    "crop": "neepmeat:block/flesh_potato/stage1"
+  }
+}

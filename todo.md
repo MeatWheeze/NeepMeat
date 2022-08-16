@@ -24,7 +24,7 @@
 - [done] Add Mixer recipes for Work Fluid and Patina Treatment
 - [done] Change colour of Patina Treatment to cyan
 - [done] Fix Polished Metal recipe
-- Change Work Fluid texture
+- [done] Change Work Fluid texture
 - [done] Replace Whisper Wheat textures
 - [done] Add a source of Whisper Wheat seeds
 - [done] Stirling engine (model can have a little flywheel)
@@ -35,7 +35,7 @@
 - [done] Make grinder produce particles
 - [done] Make Stirling Engine properly interface with motorised blocks
 - [done] Make Mixer require a motor
-- Make Deployer run with a motor
+- [done] Make Deployer run with a motor
 - [done] Fix pumps extracting from multiple tanks
 - [done] Add Rendering Basin
 - [done] Add Ethereal Alembic
@@ -48,6 +48,7 @@
 - Improve world loading speed by serialising fluid networks
 - Add coloured fluid pipes
 - [done] Create REI plugin
+
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
 - Think of an auto-crafting solution
@@ -63,10 +64,10 @@
 - [done] Add crucible and recipes
 - [done] Add dynamic creation of Raw Ore Fat
 - [done] Add Trommel
-- Add casting basin and hydraulic press
+- [done] Add casting basin and hydraulic press
 
 ## Alloys
-- Add Meat Potato farming
+- [done] Add Meat Potato farming
 - [done] Add Whisper Wheat processing
 - [done] Create Whisper Brass ingot
 - Update item pipe recipes

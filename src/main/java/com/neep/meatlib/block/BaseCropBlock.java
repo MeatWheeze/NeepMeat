@@ -23,21 +23,21 @@ public class BaseCropBlock extends CropBlock implements IMeatBlock
             Block.createCuboidShape(0.0D, 0.0D, 0.0D, 16.0D, 9.0D, 16.0D)
     };
 
-    public BaseCropBlock(String registryName, String seedsName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseCropBlock(String registryName, String seedsName, int itemMaxStack, int lore, Settings settings)
     {
         super(settings);
-        this.seedsItem = new BaseSeedsItem(this, seedsName, itemMaxStack, hasLore);
+        this.seedsItem = new BaseSeedsItem(this, seedsName, itemMaxStack, lore);
         this.registryName = registryName;
     }
-    public BaseCropBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseCropBlock(String registryName, int itemMaxStack, int lore, Settings settings)
     {
-        this(registryName, registryName + "_seeds", itemMaxStack, hasLore, settings);
+        this(registryName, registryName + "_seeds", itemMaxStack, lore, settings);
     }
 
-    public BaseCropBlock(String registryName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    public BaseCropBlock(String registryName, int itemMaxStack, int lore, ItemFactory factory, Settings settings)
     {
         super(settings);
-        this.seedsItem = new BaseSeedsItem(this, registryName, itemMaxStack, hasLore);
+        this.seedsItem = new BaseSeedsItem(this, registryName, itemMaxStack, lore);
         this.registryName = registryName;
     }
 
