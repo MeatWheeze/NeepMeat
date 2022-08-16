@@ -42,8 +42,8 @@
 - [done] Fix Fluid Buffer connections
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Balance Transducer and Stirling Engine
-- Add minimum fuel influx for heater activation
-- Remove 'realistic fluids'
+- [done] Add minimum fuel influx for heater activation
+- [done] Remove 'realistic fluids'
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
 - Add coloured fluid pipes

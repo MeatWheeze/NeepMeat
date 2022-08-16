@@ -7,7 +7,6 @@ import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -32,20 +31,9 @@ import net.minecraft.util.math.Vec3d;
 public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, IMotorisedBlock
 {
     protected final WritableStackStorage storage;
-
-    protected IMotorBlockEntity motor;
-
     public float shuttleOffset;
-    public int shuttleTicks;
-
-    protected int cooldown;
-    public boolean shuttle;
-    public long shuttleTime;
-
-    protected boolean powered;
-
-    public static long BASE_WORK_AMOUNT = FluidConstants.BUCKET / 64;
-    public static final int COOLDOWN = 10;
+    protected IMotorBlockEntity motor;
+    public boolean powered;
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -76,37 +64,8 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
         nbt.putBoolean("powered", powered);
     }
 
-    // Oh, Gawd this looks awful. There must be a way of cleaning this up!
-    public void update(BlockPos fromPos)
-    {
-        if (getWorld().getReceivedRedstonePower(getPos()) > 0)
-        {
-            if (!powered) // Trigger on rising edge
-            {
-                try (Transaction transaction = Transaction.openOuter())
-                {
-//                    if (doWork(BASE_WORK_AMOUNT, transaction) == BASE_WORK_AMOUNT)
-//                    {
-//                        transaction.commit();
-                        deploy((ServerWorld) world);
-//                    }
-//                    else
-//                    {
-//                        transaction.abort();
-//                    }
-                }
-            }
-            powered = true;
-        }
-        else
-        {
-            powered = false;
-        }
-    }
-
     public void deploy(ServerWorld world)
     {
-        syncShuttle();
 
         ServerPlayerEntity fakePlayer = new FakePlayerEntity(world.getServer(), world, pos);
         fakePlayer.setWorld(world);
@@ -130,13 +89,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
 
 //        Box box = new Box(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
 //        System.out.println(world.getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, entity -> true));
-    }
-
-    public void syncShuttle()
-    {
-        this.shuttleTime = world.getTime();
-        this.shuttle = true;
-        sync();
     }
 
     @Override
@@ -206,26 +158,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        storage.readNbt(tag);
-
-        if (tag.getBoolean("shuttle"))
-        {
-            this.shuttleTime = world.getTime();
-        }
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        storage.writeNbt(tag);
-        tag.putBoolean("shuttle", shuttle);
-        this.shuttle = false;
-        return tag;
-    }
-
-    @Override
     public boolean tick(IMotorBlockEntity motor)
     {
         return false;
@@ -234,6 +166,16 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     @Override
     public void setWorkMultiplier(float multiplier)
     {
-
+        if (!powered && multiplier > 0) // Rising edge
+        {
+            deploy((ServerWorld) world);
+            powered = true;
+            sync();
+        }
+        else if (powered && multiplier == 0)
+        {
+            powered = false;
+            sync(); // Falling edge
+        }
     }
 }

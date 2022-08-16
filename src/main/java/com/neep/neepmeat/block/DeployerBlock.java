@@ -42,7 +42,7 @@ public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvide
         if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
         {
 //            be.update((ServerWorld) world, pos, fromPos, state);
-            be.update(fromPos);
+//            be.update(fromPos);
         }
     }
 
