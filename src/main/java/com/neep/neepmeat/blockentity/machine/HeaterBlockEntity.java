@@ -30,6 +30,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
     public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
     public static long CAPACITY = 4 * USE_AMOUNT;
+    public static float MIN_MULTIPLIER;
 
     protected IHeatable heatable;
     protected int copperTime;
@@ -74,19 +75,24 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
         if (heatable != null)
         {
-            if (this.getRunningRate() > 0)
+            float runningRate = getRunningRate();
+            if (this.getRunningRate() > 0.05)
             {
                 heatable.setBurning();
+                heatable.setHeatMultiplier(runningRate);
+                heatBlock();
             }
-            heatable.setHeatMultiplier(getRunningRate());
 
             Direction facing = getCachedState().get(HeaterBlock.FACING);
             BlockPos furnacePos = pos.offset(facing);
             BlockState state = getWorld().getBlockState(furnacePos);
             heatable.updateState(getWorld(), furnacePos, state);
         }
+        else if (this.getRunningRate() > 0.05)
+        {
+            heatBlock();
+        }
 
-        heatBlock();
     }
 
     @Override

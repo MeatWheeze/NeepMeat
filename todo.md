@@ -46,12 +46,14 @@
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
-- Add torque shaft
 - Add coloured fluid pipes
 - [done] Create REI plugin
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
+- Think of an auto-crafting solution
+- 
 
+## Fixes
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
 - Fix ConcurrentModificationException when ticking world networks
 - Secure blood machine fluid input detection by transferring irreversible things to a transaction callback
