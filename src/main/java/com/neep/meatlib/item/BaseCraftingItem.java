@@ -6,9 +6,9 @@ public class BaseCraftingItem extends BaseItem implements IMeatItem
 {
     private final String registryName;
 
-    public BaseCraftingItem(String registryName, boolean hasLore, Settings settings)
+    public BaseCraftingItem(String registryName, int loreLines, Settings settings)
     {
-        super(registryName, hasLore, settings);
+        super(registryName, loreLines, settings);
         this.registryName = registryName;
         ItemRegistry.queueItem(this);
     }

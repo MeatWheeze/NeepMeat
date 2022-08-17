@@ -1,6 +1,5 @@
 package com.neep.meatlib.item;
 
-import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,13 +13,13 @@ import java.util.List;
 public class BaseItem extends Item implements IMeatItem
 {
     private final String registryName;
-    private final boolean hasLore;
+    private final int lore;
 
-    public BaseItem(String registryName, boolean hasLore, Settings settings)
+    public BaseItem(String registryName, int loreLines, Settings settings)
     {
         super(settings);
         this.registryName = registryName;
-        this.hasLore = hasLore;
+        this.lore = loreLines;
     }
 
     @Override
@@ -32,9 +31,9 @@ public class BaseItem extends Item implements IMeatItem
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        if (hasLore)
+        for (int i = 0; i < lore; ++i)
         {
-            tooltip.add(new TranslatableText("item." + NeepMeat.NAMESPACE + "." + getRegistryName() + ".lore").formatted(Formatting.GRAY));
+            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
         }
     }
 

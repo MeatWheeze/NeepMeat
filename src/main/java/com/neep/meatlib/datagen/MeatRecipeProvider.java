@@ -10,9 +10,11 @@ import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.tag.TagKey;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +36,14 @@ public class MeatRecipeProvider extends FabricRecipeProvider
     {
         createEightDyeingRecipe(output, Ingredient.ofItems(dye), Ingredient.ofItems(input))
                 .criterion(RecipeProvider.hasItem(input), RecipeProvider.conditionsFromItem(input))
+                .criterion(RecipeProvider.hasItem(dye), RecipeProvider.conditionsFromItem(dye))
+                .offerTo(exporter);
+    }
+
+    public static void offerEightDyeingRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible output, ItemConvertible dye, TagKey<Item> input)
+    {
+        createEightDyeingRecipe(output, Ingredient.ofItems(dye), Ingredient.fromTag(input))
+                .criterion("has_dye", RecipeProvider.conditionsFromTag(input))
                 .criterion(RecipeProvider.hasItem(dye), RecipeProvider.conditionsFromItem(dye))
                 .offerTo(exporter);
     }

@@ -31,7 +31,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
 
-    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", true, new FabricItemSettings().group(NMItemGroups.WEAPONS));
+    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", 1, new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item FUSION_CANNON = new FusionCannonItem();
     public static Item HAND_CANNON = new HandCannonItem();
     public static Item MACHINE_PISTOL = new MachinePistolItem();

@@ -41,6 +41,7 @@ public class NMBlocks
     public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock("polished_metal", 64, true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock("blue_polished_metal", 64, true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block WHITE_ROUGH_CONCRETE = new BaseBuildingBlock("white_rough_concrete", 64, false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block GREY_ROUGH_CONCRETE = new BaseBuildingBlock("grey_rough_concrete", 64, false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block YELLOW_ROUGH_CONCRETE = new BaseBuildingBlock("yellow_rough_concrete", 64, false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block YELLOW_TILES = new BaseBuildingBlock("yellow_tiles", 64, false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
@@ -62,7 +63,7 @@ public class NMBlocks
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", 64, false, FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
 
-    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
+//    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
     public static Block SCAFFOLD_TRAPDOOR = BlockRegistry.queue(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", 64, false, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
 

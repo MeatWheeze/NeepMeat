@@ -136,42 +136,42 @@
 
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
-  "item.neepmeat.animal_heart.lore": "Crude; it lacks any logical design sensibilities.",
+  "item.neepmeat.animal_heart.lore_0": "Crude; it lacks any logical design sensibilities.",
 
   "item.neepmeat.reanimated_heart": "Reanimated Heart",
-  "item.neepmeat.reanimated_heart.lore": "It is said by some that the reanimated exude health.",
+  "item.neepmeat.reanimated_heart.lore_0": "It is said by some that the reanimated exude health.",
 
   "item.neepmeat.machine_fluid": "Machine Fluid",
-  "item.neepmeat.machine_fluid.lore": "What secrets could it have gleaned from those inhuman minds?",
+  "item.neepmeat.machine_fluid.lore_0": "What secrets could it have gleaned from those inhuman minds?",
 
   "item.neepmeat.digestive_system": "Digestive System",
-  "item.neepmeat.digestive_system.lore": "A tube lined with specialised tissues.",
+  "item.neepmeat.digestive_system.lore_0": "A tube lined with specialised tissues.",
 
   "item.neepmeat.interface_array": "Interface Array",
-  "item.neepmeat.interface_array.lore": "So that meat and machine may think as one.",
+  "item.neepmeat.interface_array.lore_0": "So that meat and machine may think as one.",
 
   "item.neepmeat.internal_components": "Biomechanical Components",
-  "item.neepmeat.internal_components.lore": "Arcane mechanisms, sealed in skin never to see the light of day.",
+  "item.neepmeat.internal_components.lore_0": "Arcane mechanisms, sealed in skin never to see the light of day.",
 
   "item.neepmeat.bioelectric_organ": "Bioelectric Organ",
-  "item.neepmeat.bioelectric_organ.lore": "Zap!",
+  "item.neepmeat.bioelectric_organ.lore_0": "Zap!",
 
   "item.neepmeat.copper_coil": "Copper Coil",
 
   "item.neepmeat.brain_rough": "Rough Brain",
-  "item.neepmeat.brain_rough.lore": "It will never see thoughts again, but it may still be of use.",
+  "item.neepmeat.brain_rough.lore_0": "It will never see thoughts again, but it may still be of use.",
   "item.neepmeat.brain_pristine": "Pristine Brain",
-  "item.neepmeat.brain_pristine.lore": "",
+  "item.neepmeat.brain_pristine.lore_0": "",
 
   "item.neepmeat.integration_charge_crude": "Crude Integration Charge",
-  "item.neepmeat.integration_charge_crude.lore": "Brings life, but in what state?",
+  "item.neepmeat.integration_charge_crude.lore_0": "Brings life, but in what state?",
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
-  "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
+  "item.neepmeat.integration_charge_adv.lore_0": "The fluid writhes inside its shell, as if alive.",
 
   "item.neepmeat.whisper_wheat_seeds": "Whisper Wheat Seeds",
   "item.neepmeat.whisper_wheat": "Whisper Wheat",
   "item.neepmeat.whisper_flour": "Whisper Flour",
-  "item.neepmeat.whisper_flour.lore": "Its grains hold terrible secrets of the cosmos.",
+  "item.neepmeat.whisper_flour.lore_0": "Its grains hold terrible secrets of the cosmos.",
 
   "item.neepmeat.flesh_potato": "Gland Potato",
   "item.neepmeat.flesh_potato.lore_0": "Something has mutated it to an Enlightened",
@@ -184,7 +184,7 @@
   "item.neepmeat.whisper_brass": "Whispering Brass",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
-  "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when blessed by an Integrator.",
+  "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when blessed by an Integrator.",
 
   "block.neepmeat.work_fluid": "Work Fluid",
   "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
