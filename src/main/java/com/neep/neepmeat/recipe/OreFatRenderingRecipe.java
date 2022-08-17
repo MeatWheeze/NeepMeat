@@ -1,12 +1,10 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
-import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -46,7 +44,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
     public boolean matches(CrucibleStorage inventory, World world)
     {
         return fluidInput.test(inventory.getStorage(null))
-                && OreFatRegistry.get(inventory.getItemStorage(null).getResource().getItem()) != null;
+                && OreFatRegistry.getFromInput(inventory.getItemStorage(null).getResource().getItem()) != null;
     }
 
     @Override
@@ -85,56 +83,48 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 
     public Item takeInputs(CrucibleStorage storage, int amount, TransactionContext transaction)
     {
-        try (Transaction inner = transaction.openNested())
+        SingleSlotStorage<ItemVariant> itemStorage = storage.getItemStorage(null);
+        Storage<FluidVariant> fluidStorage = storage.getStorage(null);
+        OreFatRegistry.Entry entry = OreFatRegistry.getFromInput(itemStorage.getResource().getItem());
+        Item item = itemStorage.getResource().getItem();
+
+        try (Transaction take = transaction.openNested())
         {
-            SingleSlotStorage<ItemVariant> itemStorage = storage.getItemStorage(null);
-            Storage<FluidVariant> fluidStorage = storage.getStorage(null);
-            Item item = itemStorage.getResource().getItem();
-            boolean present = OreFatRegistry.get(itemStorage.getResource().getItem()) != null;
-            Optional<Fluid> fluid = fluidInput.getFirstMatching(fluidStorage, inner);
-            if (!present || fluid.isEmpty())
+            Optional<Fluid> fluid = fluidInput.getFirstMatching(fluidStorage, take);
+            if (entry == null || fluid.isEmpty())
             {
                 throw new IllegalStateException("Storage contents do not conform to recipe");
             }
 
-            long ex1 = itemStorage.extract(ItemVariant.of(item), amount, inner);
-            long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * amount, inner);
+            long ex1 = itemStorage.extract(ItemVariant.of(item), amount, take);
+            long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * amount, take);
             if (ex1 == amount && ex2 == fluidInput.amount() * amount)
             {
-                inner.commit();
-//                NbtCompound nbt = new NbtCompound();
-//                nbt.putString("item", Registry.ITEM.getId(item);
-                return item;
+                take.commit();
             }
-            inner.abort();
+            else take.abort();
         }
-        return null;
-    }
 
-    public boolean ejectOutput(CrucibleStorage storage, int amount, Item item, TransactionContext transaction)
-    {
-        try (Transaction inner = transaction.openNested())
+        try (Transaction eject = transaction.openNested())
         {
             fluidOutput.update();
 
             boolean bl1 = true;
-            NbtCompound nbt = new NbtCompound();
-            nbt.putString("item", Registry.ITEM.getId(item).toString());
+            fluidOutput.setNbt(entry.toNbt());
             for (int i = 0; i < amount; ++i)
             {
-                fluidOutput.setNbt(nbt);
-                bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, inner);
+                bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, eject);
             }
             fluidOutput.setNbt(null);
 
             if (bl1)
             {
-                inner.commit();
-                return true;
+                eject.commit();
+                return item;
             }
-            inner.abort();
+            else eject.abort();
         }
-        return false;
+        return null;
     }
 
     public static class Serializer implements RecipeSerializer<OreFatRenderingRecipe>

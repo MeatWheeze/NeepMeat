@@ -79,7 +79,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         try (Transaction transaction = Transaction.openOuter())
         {
             FluidVariant variant = currentRecipe.takeInputs(storage, transaction);
-            if (variant != null && currentRecipe.ejectOutput(storage, transaction))
+            if (variant != null)
             {
                 transaction.commit();
             }
