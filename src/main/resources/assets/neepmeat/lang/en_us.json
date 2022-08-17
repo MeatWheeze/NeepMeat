@@ -218,5 +218,6 @@
   "category.neepmeat.mixing": "Mixing",
   "category.neepmeat.mixing.time": "Time: %ds",
   "category.neepmeat.alloy_smelting": "Alloy Smelting",
-  "category.neepmeat.alloy_smelting.time": "Time: %ds"
+  "category.neepmeat.alloy_smelting.time": "Time: %ds",
+  "category.neepmeat.heart_extraction": "Heart Extraction"
 }

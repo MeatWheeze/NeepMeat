@@ -2,14 +2,8 @@ package com.neep.neepmeat.compat.rei;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
-import com.neep.neepmeat.compat.rei.category.AlloyKilnCategory;
-import com.neep.neepmeat.compat.rei.category.CompactingCategory;
-import com.neep.neepmeat.compat.rei.category.GrindingCategory;
-import com.neep.neepmeat.compat.rei.category.MixingCategory;
-import com.neep.neepmeat.compat.rei.display.AlloySmeltingDisplay;
-import com.neep.neepmeat.compat.rei.display.CompactingDisplay;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
-import com.neep.neepmeat.compat.rei.display.MixingDisplay;
+import com.neep.neepmeat.compat.rei.category.*;
+import com.neep.neepmeat.compat.rei.display.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
@@ -22,6 +16,7 @@ import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import me.shedaniel.rei.api.common.util.EntryStacks;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
@@ -45,6 +40,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
             List<Item> entries = iterator.next();
             registry.add(CompactingDisplay.of(entries, Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CRUDE_INTEGRATION_CHARGE))), page++));
         }
+
+        registry.add(HeartExtractionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.ANIMAL_HEART)))));
     }
 
     @Override
@@ -54,12 +51,14 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new GrindingCategory(),
                 new CompactingCategory(),
                 new MixingCategory(),
-                new AlloyKilnCategory()
+                new AlloyKilnCategory(),
+                new HeartExtractionCategory()
         );
 
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
+        registry.addWorkstations(HEART_EXTRACTION, EntryStacks.of(NMItems.SACRIFICIAL_DAGGER.asItem()));
     }
 }
