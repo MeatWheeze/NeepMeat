@@ -2,6 +2,7 @@ package com.neep.neepmeat.blockentity.integrator;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -26,6 +27,11 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnimatable
 {
@@ -48,6 +54,34 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
 //        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
 //        buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
         this.storage = new IntegratorStorage(this);
+    }
+
+    public static IntegratorBlockEntity findIntegrator(World world, BlockPos pos, int maxDist)
+    {
+        Queue<BlockPos> queue = new LinkedList<>();
+        List<BlockPos> visited = new ArrayList<>();
+        queue.add(pos);
+        while (!queue.isEmpty())
+        {
+            BlockPos current = queue.poll();
+            for (Direction direction : Direction.values())
+            {
+                BlockPos offset = current.offset(direction);
+
+                if (pos.getManhattanDistance(offset) > maxDist || visited.contains(offset)) continue;
+
+                if (world.getBlockState(offset).isOf(NMBlocks.DATA_CABLE))
+                {
+                    queue.add(offset);
+                    visited.add(offset);
+                }
+                else if (world.getBlockEntity(offset) instanceof IntegratorBlockEntity integrator)
+                {
+                    return integrator;
+                }
+            }
+        }
+        return null;
     }
 
     @Override

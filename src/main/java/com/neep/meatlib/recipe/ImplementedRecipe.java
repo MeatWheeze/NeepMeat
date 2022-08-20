@@ -6,7 +6,7 @@ import net.minecraft.recipe.Recipe;
 import net.minecraft.util.collection.DefaultedList;
 
 /**
- * This class overrides some Vanilla recipe methods so that they do not have to be overridden in every sub-class.
+ * This class overrides some Vanilla recipe methods so that they do not have to be overridden in every subclass.
  */
 public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInventory> implements Recipe<T>
 {

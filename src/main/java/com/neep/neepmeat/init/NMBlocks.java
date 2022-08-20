@@ -9,6 +9,7 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.cosmic_pylon.PylonBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
@@ -100,6 +101,8 @@ public class NMBlocks
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", 64, false, FLUID_PIPE_SETTINGS));
 
+    public static Block COSMIC_PYLON = BlockRegistry.queue(new PylonBlock("cosmic_pylon", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
 
     public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
@@ -123,7 +126,7 @@ public class NMBlocks
     public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block ITEM_BUFFER = BlockRegistry.queue(new ItemBufferBlock("item_buffer", 64, true, FLUID_MACHINE_SETTINGS));
+    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_port", 64, true, FLUID_MACHINE_SETTINGS));

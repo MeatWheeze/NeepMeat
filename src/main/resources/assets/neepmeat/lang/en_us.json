@@ -187,7 +187,7 @@
   "item.neepmeat.meat_steel": "Meat Steel",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
-  "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when blessed by an Integrator.",
+  "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when connected to an Integrator.",
 
   "message.neepmeat.compactor.not_found": "No Integrator organism is connected.",
   "message.neepmeat.compactor.immature": "The connected Integrator organism is not fully grown.",

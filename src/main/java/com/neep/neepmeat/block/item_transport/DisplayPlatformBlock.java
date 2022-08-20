@@ -1,7 +1,8 @@
 package com.neep.neepmeat.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
+import com.neep.neepmeat.api.block.pipe.IDataCable;
+import com.neep.neepmeat.blockentity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -25,11 +26,11 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
+public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvider
 {
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
-    public ItemBufferBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public DisplayPlatformBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings);
     }
@@ -44,13 +45,13 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new ItemBufferBlockEntity(pos, state);
+        return new DisplayPlatformBlockEntity(pos, state);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof ItemBufferBlockEntity be && !world.isClient)
+        if (world.getBlockEntity(pos) instanceof DisplayPlatformBlockEntity be && !world.isClient)
         {
             ItemStack stack = player.getStackInHand(hand);
             WritableStackStorage storage = be.getStorage(null);
@@ -81,7 +82,7 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         BlockEntity blockEntity = world.getBlockEntity(pos);
-        if (blockEntity instanceof ItemBufferBlockEntity be && !world.isClient())
+        if (blockEntity instanceof DisplayPlatformBlockEntity be && !world.isClient())
         {
             onEntityCollided(world, pos, state, entity, be);
         }
@@ -94,7 +95,7 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
 
-            if (blockEntity instanceof ItemBufferBlockEntity be)
+            if (blockEntity instanceof DisplayPlatformBlockEntity be)
             {
                 ItemUtils.scatterItems(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
@@ -112,13 +113,13 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos)
     {
-        ItemBufferBlockEntity be = (ItemBufferBlockEntity) world.getBlockEntity(pos);
+        DisplayPlatformBlockEntity be = (DisplayPlatformBlockEntity) world.getBlockEntity(pos);
         int maxCount = be.getStorage(null).getResource().toStack().getMaxCount();
         return maxCount > 0 ? (int) Math.ceil((float) be.getStorage(null).getAmount() / (float) maxCount * 16) : 0;
     }
 
     // Add dropped items to inventory
-    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, ItemBufferBlockEntity be)
+    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, DisplayPlatformBlockEntity be)
     {
         if (!world.isClient && entity instanceof ItemEntity item)
         {
