@@ -111,7 +111,7 @@
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
 
-  "block.neepmeat.item_buffer": "Item Platform",
+  "block.neepmeat.item_buffer": "Display Platform",
 
   "block.neepmeat.item_duct": "Hopper Extension",
 
@@ -124,7 +124,8 @@
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
   "block.neepmeat.alembic": "Fat Collector",
   "block.neepmeat.crucible": "Rendering Basin",
-  "block.neepmeat.mixer": "Mixer",
+  "block.neepmeat.casting_basin": "Casting Basin",
+  "block.neepmeat.hydraulic_press": "Hydraulic Press",
   "block.neepmeat.heater": "Heater",
   "block.neepmeat.trommel": "Blasphemous Trommel",
   "block.neepmeat.integrator_egg": "Integrator Egg",
@@ -182,6 +183,8 @@
   "item.neepmeat.flywheel": "Flywheel",
 
   "item.neepmeat.whisper_brass": "Whispering Brass",
+
+  "item.neepmeat.meat_steel": "Meat Steel",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when blessed by an Integrator.",
