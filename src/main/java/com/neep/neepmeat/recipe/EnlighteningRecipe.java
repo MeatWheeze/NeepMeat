@@ -74,7 +74,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PylonBlockEntity.Recip
             Item input = itemInput.getFirstMatching(stackStorage).orElse(null);
             if (input == null)
             {
-                throw new IllegalStateException("Storage contents do not conform to recipe");
+                return null;
             }
 //
             long ext = stackStorage.extract(stackStorage.getResource(), amount * itemInput.amount(), inner);

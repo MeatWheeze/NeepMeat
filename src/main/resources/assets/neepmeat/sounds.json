@@ -22,5 +22,11 @@
     "sounds": [
       "neepmeat:fusion_fire"
     ]
+  },
+  "cosmic_beam": {
+    "subtitle": "subtitles.neepmeat.cosmic_beam",
+    "sounds": [
+      "neepmeat:cosmic_beam"
+    ]
   }
 }

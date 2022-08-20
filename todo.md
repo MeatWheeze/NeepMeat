@@ -46,6 +46,7 @@
 - [done] Remove 'realistic fluids'
 - [done] Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
+- Shave down the number of failed networks by storing whether a node has a network
 - Add coloured fluid pipes
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
@@ -76,9 +77,19 @@ We need to differentiate ourselves from MineFactory.
 - Add Biomass Reprocessor
 - Add Meat fluid
 - Add Enlightened Meat fluid
-- 
+- Add Meat Brick
+- Add Enlightened Meat Brick
 
 - Add casts for Casting Basin?
+
+## Integrator
+
+- Add data requirement for Charnel Compactor
+- Add Enlightening recipes for the Gland Potato and [nyi] Enlightened Meat
+
+## Potion Effects
+
+- Enlightenment
 
 ## Alloys
 - [done] Add Meat Potato farming
