@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.blockentity.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -91,7 +91,7 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.CONVERTER, ConverterBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.CONVERTER, ConverterBlockEntity::serverTick, world);
     }
 
     @Nullable

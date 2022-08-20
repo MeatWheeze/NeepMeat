@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.EjectorBlock;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
@@ -16,7 +16,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.vehicle.StorageMinecartEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
@@ -105,7 +104,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
         Box toBox = Box.of(Vec3d.ofCenter(pos1), 1, 1, 1);
         Vec3d centre = Vec3d.ofCenter(pos1);
         List<StorageMinecartEntity> toMinecarts = world.getEntitiesByType(TypeFilter.instanceOf(StorageMinecartEntity.class), toBox, (entity -> true));
-        StorageMinecartEntity minecart = MiscUitls.closestEntity(toMinecarts, centre);
+        StorageMinecartEntity minecart = MiscUtils.closestEntity(toMinecarts, centre);
         if (minecart != null)
         {
             Storage<ItemVariant> storage = InventoryStorage.of(minecart, null);
@@ -126,7 +125,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
 
     public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, EjectorBlockEntity be)
     {
-        be.retrievalCache = MiscUitls.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
+        be.retrievalCache = MiscUtils.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
         be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
         be.extractionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face));
         be.needsRefresh = false;

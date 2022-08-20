@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 
-public class MiscUitls
+public class MiscUtils
 {
     @Nullable
     public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
