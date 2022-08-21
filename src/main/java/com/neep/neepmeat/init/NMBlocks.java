@@ -9,7 +9,7 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
-import com.neep.neepmeat.machine.cosmic_pylon.PylonBlock;
+import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
@@ -101,7 +101,7 @@ public class NMBlocks
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", 64, false, FLUID_PIPE_SETTINGS));
 
-    public static Block COSMIC_PYLON = BlockRegistry.queue(new PylonBlock("cosmic_pylon", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
 

@@ -2,7 +2,6 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.cosmic_pylon.PylonBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

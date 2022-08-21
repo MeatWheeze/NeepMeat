@@ -15,7 +15,7 @@ import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
-import com.neep.neepmeat.machine.cosmic_pylon.PylonBlockEntity;
+import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
@@ -98,7 +98,7 @@ public class NMBlockEntities
     public static BlockEntityType<SmallTrommelBlockEntity.Structure> SMALL_TROMMEL_STRUCTURE;
     public static BlockEntityType<CastingBasinBlockEntity> CASTING_BASIN;
     public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
-    public static BlockEntityType<PylonBlockEntity> COSMIC_PYLON;
+    public static BlockEntityType<PedestalBlockEntity> PEDESTAL;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -187,7 +187,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
-        COSMIC_PYLON = registerBlockEntity("cosmic_pylon", PylonBlockEntity::new, NMBlocks.COSMIC_PYLON);
+        PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

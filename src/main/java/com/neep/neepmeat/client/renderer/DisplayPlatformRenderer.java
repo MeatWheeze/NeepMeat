@@ -16,11 +16,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemBufferRenderer implements BlockEntityRenderer<DisplayPlatformBlockEntity>
+public class DisplayPlatformRenderer implements BlockEntityRenderer<DisplayPlatformBlockEntity>
 {
     Model model;
 
-    public ItemBufferRenderer(BlockEntityRendererFactory.Context context)
+    public DisplayPlatformRenderer(BlockEntityRendererFactory.Context context)
     {
         model = new GlassTankModel(context.getLayerModelPart(NeepMeatClient.MODEL_GLASS_TANK_LAYER));
     }

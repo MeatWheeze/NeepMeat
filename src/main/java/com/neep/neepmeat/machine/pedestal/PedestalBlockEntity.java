@@ -1,26 +1,22 @@
-package com.neep.neepmeat.machine.cosmic_pylon;
+package com.neep.neepmeat.machine.pedestal;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.FluidIngredient;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.MWParticles;
-import com.neep.neepmeat.blockentity.DisplayPlatformBlockEntity;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.init.SoundInitialiser;
-import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
@@ -31,23 +27,24 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
 
-public class PylonBlockEntity extends SyncableBlockEntity
+public class PedestalBlockEntity extends SyncableBlockEntity
 {
+    protected WritableStackStorage storage;
     protected final RecipeBehaviour recipeBehaviour;
     protected boolean powered;
     protected boolean hasRecipe;
 
-    public PylonBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public PedestalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.recipeBehaviour = new PylonBlockEntity.RecipeBehaviour();
+        this.recipeBehaviour = new PedestalBlockEntity.RecipeBehaviour();
+        this.storage = new WritableStackStorage(this::sync, 1);
     }
 
-    public PylonBlockEntity(BlockPos pos, BlockState state)
+    public PedestalBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.COSMIC_PYLON, pos, state);
+        this(NMBlockEntities.PEDESTAL, pos, state);
     }
 
     public void update(boolean redstone)
@@ -64,6 +61,7 @@ public class PylonBlockEntity extends SyncableBlockEntity
     {
         super.writeNbt(nbt);
         recipeBehaviour.writeNbt(nbt);
+        storage.writeNbt(nbt);
         nbt.putBoolean("hasRecipe", hasRecipe);
     }
 
@@ -72,6 +70,7 @@ public class PylonBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(nbt);
         recipeBehaviour.readNbt(nbt);
+        storage.readNbt(nbt);
         this.hasRecipe = nbt.getBoolean("hasRecipe");
     }
 
@@ -83,31 +82,38 @@ public class PylonBlockEntity extends SyncableBlockEntity
         }
     }
 
+    public static void spawmBeam(ServerWorld world, BlockPos startPos, BlockPos endPos)
+    {
+        Vec3d start = Vec3d.ofCenter(startPos, 0.9);
+        Vec3d end = Vec3d.ofCenter(endPos, 0.8f);
+        for (ServerPlayerEntity player : PlayerLookup.around(world, start, 32d))
+        {
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, start, end, new Vec3d(0, 0, 0), 0.5f, 50, MWNetwork.EFFECT_ID);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+        }
+    }
+
     public class RecipeBehaviour extends com.neep.meatlib.recipe.RecipeBehaviour<EnlighteningRecipe> implements ImplementedRecipe.DummyInventory, NbtSerialisable
     {
         public WritableStackStorage getStorage()
         {
-            if (world.getBlockEntity(pos.down(2)) instanceof DisplayPlatformBlockEntity platform)
-                return platform.getStorage(null);
-
-            return null;
+            return storage;
         }
 
         @Override
         public void startRecipe(EnlighteningRecipe recipe)
         {
+            IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
+
+            if (integrator == null || !integrator.isMature()) return;
+
             setRecipe(recipe);
             hasRecipe = true;
+
+            integrator.setLookPos(pos);
             world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
-//            spawnParticles(10, 0.4, 0.1);
             world.playSound(null, pos, SoundInitialiser.AIRTRUCK_STARTING, SoundCategory.BLOCKS, 2, 3);
-            Vec3d start = Vec3d.ofCenter(pos);
-            Vec3d end = Vec3d.ofCenter(pos.down(2));
-            for (ServerPlayerEntity player : PlayerLookup.around((ServerWorld) world, start, 32d))
-            {
-                Packet<?> packet = BeamPacket.create((ServerWorld) world, GraphicsEffects.BEAM, start, end, new Vec3d(0, 0, 0), 0.5f, 50, MWNetwork.EFFECT_ID);
-                ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
-            }
+            spawmBeam((ServerWorld) world, integrator.getPos().up(), pos);
             sync();
         }
 
