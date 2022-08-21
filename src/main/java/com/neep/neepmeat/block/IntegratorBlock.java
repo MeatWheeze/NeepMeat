@@ -74,18 +74,18 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, I
         return ActionResult.SUCCESS;
     }
 
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-        super.randomDisplayTick(state, world, pos, random);
-        if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
-        {
-            Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
-            List<Entity> players = be.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
-            if (players.size() > 0)
-            {
-                be.setLookPos(players.get(0).getBlockPos());
-            }
-        }
-    }
+//    @Override
+//    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
+//    {
+//        super.randomDisplayTick(state, world, pos, random);
+//        if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
+//        {
+//            Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+//            List<Entity> players = be.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
+//            if (players.size() > 0)
+//            {
+//                be.setLookPos(players.get(0).getBlockPos());
+//            }
+//        }
+//    }
 }

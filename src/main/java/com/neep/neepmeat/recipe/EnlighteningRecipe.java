@@ -4,10 +4,10 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -26,18 +26,22 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
     protected RecipeOutput<Item> itemOutput;
+    protected int data;
 
-    public EnlighteningRecipe(Identifier id, RecipeInput<Item> fluidInput, RecipeOutput<Item> itemOutput)
+    public EnlighteningRecipe(Identifier id, RecipeInput<Item> fluidInput, RecipeOutput<Item> itemOutput, int data)
     {
         this.itemInput = fluidInput;
         this.itemOutput = itemOutput;
+        this.data = data;
         this.id = id;
     }
 
     @Override
     public boolean matches(PedestalBlockEntity.RecipeBehaviour inventory, World world)
     {
-        return itemInput.test(inventory.getStorage());
+        return itemInput.test(inventory.getStorage())
+                && inventory.getIntegrator() != null
+                && inventory.getIntegrator().getData() >= data;
     }
 
     public RecipeInput<Item> getItemInput()
@@ -63,7 +67,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         return NMrecipeTypes.ENLIGHTENING;
     }
 
-    public FluidVariant craft(PedestalBlockEntity.RecipeBehaviour storage, TransactionContext transaction)
+    public ItemVariant craft(PedestalBlockEntity.RecipeBehaviour storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {
@@ -72,22 +76,25 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
 //            // Ensure that storage contents still match the recipe
             long amount = stackStorage.getAmount();
             Item input = itemInput.getFirstMatching(stackStorage).orElse(null);
-            if (input == null)
+            IntegratorBlockEntity integrator = storage.getIntegrator();
+            float storedData = integrator.getData();
+            if (input == null || storedData < data)
             {
                 return null;
             }
-//
+
             long ext = stackStorage.extract(stackStorage.getResource(), amount * itemInput.amount(), inner);
-//
-            if (ext != amount * itemInput.amount())
+            float dataExt = integrator.extractEnlightenment(amount * data, transaction);
+
+
+            if (ext != amount * itemInput.amount() || dataExt != amount * data)
             {
                 inner.abort();
                 return null;
             }
-//
+
             itemOutput.update();
             long ins = stackStorage.insert(ItemVariant.of(itemOutput.resource()), amount * itemOutput.amount(), inner);
-//            boolean ins = itemOutput.insertInto(stackStorage, ItemVariant::of, transaction);
 
             if (ins == amount * itemOutput.amount())
             {
@@ -117,7 +124,9 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
             RecipeOutput<Item> itemOutput = RecipeOutput.fromJson(Registry.ITEM, itemOutputElement);
 
-            return this.factory.create(id, itemInput, itemOutput);
+            int data = JsonHelper.getInt(json, "data");
+
+            return this.factory.create(id, itemInput, itemOutput, data);
         }
 
         @Override
@@ -125,8 +134,9 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(Registry.ITEM, buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            int data = buf.readVarInt();
 
-            return this.factory.create(id, itemInput, itemOutput);
+            return this.factory.create(id, itemInput, itemOutput, data);
         }
 
         @Override
@@ -134,12 +144,13 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         {
             recipe.itemInput.write(Registry.ITEM, buf);
             recipe.itemOutput.write(Registry.ITEM, buf);
+            buf.writeVarInt(recipe.data);
         }
 
         @FunctionalInterface
         public interface RecipeFactory<T extends EnlighteningRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out);
+            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out, int data);
         }
     }
 }

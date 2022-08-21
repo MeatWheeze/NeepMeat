@@ -4,6 +4,7 @@
     "resource": "minecraft:wheat_seeds",
     "amount": 1
   },
+  "data": 1000,
   "output": {
     "resource": "neepmeat:whisper_wheat_seeds",
     "amount": 1

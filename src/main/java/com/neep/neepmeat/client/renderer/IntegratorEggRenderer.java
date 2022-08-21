@@ -1,38 +1,29 @@
 package com.neep.neepmeat.client.renderer;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.util.NMMaths;
-import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
-import net.fabricmc.fabric.api.renderer.v1.Renderer;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.BakedModelManager;
-import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.TypeFilter;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
+import software.bernie.geckolib3.core.util.Color;
+import software.bernie.geckolib3.geo.render.built.GeoModel;
+import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
-import java.util.List;
 import java.util.Random;
 
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
+    private static final Identifier LAYER = new Identifier(NeepMeat.NAMESPACE, "textures/entity/integrator_basic_overlay.png");
+
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
         super(new IntegratorEggModel<IntegratorBlockEntity>());
@@ -52,34 +43,42 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 
             be.facing = NMMaths.angleLerp(0.03f, be.facing, be.targetFacing);
 
+            // Rotate towards target
             renderBase(matrices, be, vertexConsumers);
             matrices.push();
             matrices.translate(0.5d, 0d, 0.5d);
             matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
             matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + partialTicks) / 20) / 15, 0);
-            super.render(be, partialTicks, matrices, vertexConsumers, packedLightIn);
+
+            AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
+            GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(be));
+            modelProvider.setLivingAnimations(be, this.getUniqueID(be));
+            matrices.push();
+            matrices.translate(0, 0.01f, 0);
+            matrices.translate(0.5, 0, 0.5);
+
+            // Render main model
+            MinecraftClient.getInstance().getTextureManager().bindTexture(getTextureLocation(be));
+            Color renderColor = getRenderColor(be, partialTicks, matrices, vertexConsumers, null, packedLightIn);
+            RenderLayer renderType = getRenderType(be, partialTicks, matrices, vertexConsumers, null, packedLightIn, getTextureLocation(be));
+            render(model, be, partialTicks, renderType, matrices, vertexConsumers, null, packedLightIn, OverlayTexture.DEFAULT_UV,
+                    (float) renderColor.getRed() / 255f, (float) renderColor.getGreen() / 255f,
+                    (float) renderColor.getBlue() / 255f, (float) renderColor.getAlpha() / 255);
+
+            // Render enlightenment overlay
+            RenderLayer cameo =  RenderLayer.getEntityTranslucent(LAYER);
+            render(model, be, partialTicks, cameo, matrices, vertexConsumers,
+                    vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, be.getData() / IntegratorBlockEntity.MAX_DATA);
+
+            matrices.pop();
             matrices.pop();
         }
     }
 
     public static void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
     {
-        BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
-        BakedModel handle = BakedModelManagerHelper.getModel(manager, NMExtraModels.INTEGRATOR_BASE);
-        BlockModelRenderer renderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
-        renderer.render(
-                be.getWorld(),
-                handle,
-                be.getCachedState(),
-                be.getPos(),
-                matrices,
-                vertexConsumers.getBuffer(RenderLayer.getCutout()),
-                true,
-                new Random(0),
-                0,
-                0
-        );
+        BERenderUtils.renderModel(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
 
     public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
@@ -110,67 +109,8 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         );
         matrices.pop();
 
-//        WritableFluidBuffer buffer = blockEntity.getInputBuffer();
-//        float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
-//        FluidVariant fluid = buffer.getResource();
-
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
-//        IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
-
         matrices.pop();
-    }
-
-    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float startXZ, float endXZ, float endY, float scaleY)
-    {
-        Sprite sprite = FluidVariantRendering.getSprite(fluid);
-        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
-        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
-
-        int col = FluidVariantRendering.getColor(fluid);
-
-        // Magic colourspace transformation copied from Modern Industrialisation
-        float r = ((col >> 16) & 255) / 256f;
-        float g = ((col >> 8) & 255) / 256f;
-        float b = (col & 255) / 256f;
-
-        if (fluid.isBlank() || scaleY == 0)
-        {
-            return;
-        }
-
-        float startY = startXYZ;
-//        float dist = startY + (endY - startY) * scaleY;
-        float dist = startY + (endY - startY) * scaleY;
-        if (FluidVariantAttributes.isLighterThanAir(fluid))
-        {
-            matrices.translate(1, 1, 0);
-            matrices.scale(-1, -1, 1);
-        }
-
-
-
-//        fill = yEnd * fill < xyzStart ?
-        for (Direction direction : Direction.values())
-        {
-            QuadEmitter emitter = renderer.meshBuilder().getEmitter();
-
-            if (direction.getAxis().isVertical())
-            {
-                emitter.square(direction, endXZ, endXZ, startXZ, startXZ, direction == Direction.UP ? 1 - dist : startY);
-            }
-            else
-            {
-                // Nasty bodge because I can't be bothered to fix this
-                emitter.square(direction, endXZ, startXYZ, startXZ, dist, endXZ);
-            }
-//            emitter.square(direction, 0.1f, 0.1f, 0.9f, 0.9f - fill, 0.9f);
-
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_ROTATE_90);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-        }
     }
 }

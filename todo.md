@@ -52,6 +52,9 @@
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
 - [done] Add recipe for biomechanical components
 - Add Meat Grinder
+- [done] Add Enlightening recipe type
+- Add REI support for Enlightening
+- Give Integrator a Data resource bufer
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank

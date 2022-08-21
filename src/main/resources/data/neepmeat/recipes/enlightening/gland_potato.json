@@ -4,6 +4,7 @@
     "resource": "minecraft:potato",
     "amount": 1
   },
+  "data": 1000,
   "output": {
     "resource": "neepmeat:flesh_potato",
     "amount": 1
