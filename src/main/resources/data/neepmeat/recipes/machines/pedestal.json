@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "idi",
+    "ici"
+  ],
+  "key": {
+    "d": {
+      "item": "neepmeat:item_buffer"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "neepmeat:data_cable"
+    }
+  },
+  "result": {
+    "item": "neepmeat:pedestal",
+    "count": 1
+  }
+}

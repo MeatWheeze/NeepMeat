@@ -14,6 +14,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.mixin.registry.sync.AccessorRegistry;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -83,6 +85,16 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
     }
 
     @Override
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+    {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof PedestalBlockEntity be && !world.isClient())
+        {
+            onEntityCollided(world, pos, state, entity, be);
+        }
+    }
+
+    @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
     {
         super.randomDisplayTick(state, world, pos, random);
@@ -109,5 +121,29 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NMBlockEntities.PEDESTAL.instantiate(pos, state);
+    }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof PedestalBlockEntity be)
+        {
+            return be.storage.amount == 1 ? 15 : 0;
+        }
+        return 0;
+    }
+
+    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, PedestalBlockEntity be)
+    {
+        if (!world.isClient && entity instanceof ItemEntity item)
+        {
+            be.extractFromItem(item);
+        }
     }
 }
