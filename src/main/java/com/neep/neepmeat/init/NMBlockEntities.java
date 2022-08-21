@@ -188,6 +188,7 @@ public class NMBlockEntities
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
         PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
+        ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage(dir), PEDESTAL);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

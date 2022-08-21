@@ -15,6 +15,8 @@ import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,6 +27,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -91,6 +94,11 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, start, end, new Vec3d(0, 0, 0), 0.5f, 50, MWNetwork.EFFECT_ID);
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
+    }
+
+    public Storage<ItemVariant> getStorage(Direction dir)
+    {
+        return storage;
     }
 
     public class RecipeBehaviour extends com.neep.meatlib.recipe.RecipeBehaviour<EnlighteningRecipe> implements ImplementedRecipe.DummyInventory, NbtSerialisable

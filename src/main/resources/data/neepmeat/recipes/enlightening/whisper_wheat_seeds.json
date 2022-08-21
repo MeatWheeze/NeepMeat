@@ -1,11 +1,11 @@
 {
   "type": "neepmeat:enlightening",
   "item_input": {
-    "resource": "minecraft:stone",
+    "resource": "minecraft:wheat_seeds",
     "amount": 1
   },
   "output": {
-    "resource": "minecraft:copper_ingot",
+    "resource": "neepmeat:whisper_wheat_seeds",
     "amount": 1
   }
 }
