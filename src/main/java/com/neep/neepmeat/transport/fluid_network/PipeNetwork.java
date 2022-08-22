@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
@@ -35,12 +36,13 @@ public class PipeNetwork
     public static short TICK_RATE = 1;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
 
-    public List<Supplier<FluidNode>> connectedNodes = new ArrayList<>();
+    public List<NodeSupplier> connectedNodes = new ArrayList<>();
 
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     protected PipeState.FilterFunction[][] nodeMatrix = null;
 
     protected boolean isBuilt;
+    public boolean isSaved;
 
     // My pet memory leak.
     // TODO: Find a way to remove unloaded networks from this
@@ -66,6 +68,41 @@ public class PipeNetwork
             return Optional.of(network);
         }
         System.out.println("fluid network failed");
+        return Optional.empty();
+    }
+
+    public static Optional<PipeNetwork> createFromNbt(ServerWorld world, NbtCompound nbt)
+    {
+        UUID uuid = nbt.getUuid("uuid");
+        BlockPos origin = NbtHelper.toBlockPos(nbt.getCompound("origin"));
+
+        NbtList nbtNodes = nbt.getList("nodes", 10);
+        ArrayList<NodeSupplier> nodes = new ArrayList<>();
+        FluidNodeManager manager = FluidNodeManager.getInstance(world);
+        PipeNetwork network = new PipeNetwork(world, uuid, origin);
+        for (NbtElement element : nbtNodes)
+        {
+            // Type 10 list should contain NbtCompound
+            NbtCompound compound = (NbtCompound) element;
+            NodePos pos = NodePos.fromNbt(compound);
+
+            // Set the node's network and trigger it to cache connected storages and pumps
+            FluidNode node = manager.getNodeSupplier(pos).get();
+            node.setNetwork(network);
+            node.loadDeferred(world);
+
+            nodes.add(manager.getNodeSupplier(pos));
+        }
+        network.connectedNodes = nodes;
+
+        network.rebuild(origin);
+        if (network.isValid())
+        {
+            LOADED_NETWORKS.add(network);
+            return Optional.of(network);
+        }
+        System.out.println("fluid network failed");
+
         return Optional.empty();
     }
 
@@ -100,21 +137,18 @@ public class PipeNetwork
     {
         NbtCompound nbt = new NbtCompound();
         nbt.putUuid("uuid", uuid);
+        nbt.put("origin", NbtHelper.fromBlockPos(origin));
 
         NbtList list = new NbtList();
-        for (int i = 0; i < networkPipes.size(); ++i)
+        for (NodeSupplier node : connectedNodes)
         {
-            NbtCompound pipeNbt = new NbtCompound();
-            pipeNbt.put("pos", NbtHelper.fromBlockPos(networkPipes.getKey(i)));
-            list.add(pipeNbt);
+            NbtCompound nodeNbt = new NbtCompound();
+            node.pos.toNbt(nodeNbt);
+            list.add(nodeNbt);
         }
+        nbt.put("nodes", list);
 
         return nbt;
-    }
-
-    public static void validateAll()
-    {
-        LOADED_NETWORKS.removeIf(current -> !current.isValid());
     }
 
     public boolean isValid()
@@ -122,16 +156,6 @@ public class PipeNetwork
         if (connectedNodes.size() < 2)
             return false;
 
-//        int count = 0;
-//        for (Iterator<Supplier<FluidNode>> iterator = connectedNodes.iterator(); iterator.hasNext();)
-//        {
-//            Supplier<FluidNode> supplier = iterator.next();
-//            if (supplier.get() == null)
-//            {
-//                iterator.remove();
-//                ++count;
-//            }
-//        }
         return true;
     }
 
@@ -196,15 +220,6 @@ public class PipeNetwork
     {
         return world;
     }
-
-//    int compareNodes(FluidNode node1, FluidNode node2, FluidNode ref)
-//    {
-//        if (node1.getDistance(ref) == node2.getDistance(ref))
-//        {
-//            return 0;
-//        }
-//        return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
-//    }
 
     public static boolean validPair(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
@@ -383,7 +398,7 @@ public class PipeNetwork
                     Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
                     if (storage != null)
                     {
-                        Supplier<FluidNode> node = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(current, direction));
+                        NodeSupplier node = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(current, direction));
                         if (node.get() != null)
                         {
                             connectedNodes.add(node);

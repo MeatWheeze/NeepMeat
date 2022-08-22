@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.CharnelCompactorStorage;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.datagen.NMRecipes;
+import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -51,6 +52,7 @@ public class NeepMeat implements ModInitializer
 
 		FluidNodeManager.registerEvents();
 //		NetworkRebuilding.init();
+		FluidNetworkManager.init();
 		StagedTransactions.init();
 
 

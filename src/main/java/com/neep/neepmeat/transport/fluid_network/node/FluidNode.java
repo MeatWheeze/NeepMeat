@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.fluid_network.node;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.intrfaces.IServerWorld;
 import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -130,10 +131,18 @@ public class FluidNode
         }
         boolean bl1 = findStorage(world);
         boolean bl2 = findPump(world);
-        if (networkUUID != null)
+
+        // UUID will not be null if the node should be connected to a network. If network is null, the network must be
+        // generated from NBT.
+        if (networkUUID != null && network == null)
         {
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos);
+            NbtCompound netNbt = ((IServerWorld) world).getFluidNetworkManager().getNetwork(networkUUID);
+            if (netNbt != null)
+            {
+                Optional<PipeNetwork> net = PipeNetwork.createFromNbt(world, netNbt);
+            }
         }
+        needsDeferredLoading = false;
     }
 
     private void load(ServerWorld world)
@@ -186,8 +195,8 @@ public class FluidNode
     {
         if (!(this.network == null))
         {
-            network.removeNode(new NodePos(pos, face));
-            network = null;
+//            network.removeNode(new NodePos(pos, face));
+            setNetwork(null);
         }
     }
 

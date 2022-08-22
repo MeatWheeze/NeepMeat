@@ -56,7 +56,9 @@
   "custom": {
     "loom:injected_interfaces": {
       "net/minecraft/client/world/ClientWorld": ["com/neep/meatweapons/client/IEffectProvider"],
-      "net/minecraft/block/entity/AbstractFurnaceBlockEntity": ["com/neep/neepmeat/machine/HeatableFurnace"]}
+      "net/minecraft/block/entity/AbstractFurnaceBlockEntity": ["com/neep/neepmeat/machine/HeatableFurnace"],
+      "net/minecraft/block/entity/ServerWorld": ["com/neep/neepmeat/transport/interfaces/IServerWorld"]
+    }
   },
   "accessWidener" : "neepmeat.accesswidener"
 }

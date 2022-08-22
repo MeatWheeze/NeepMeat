@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_16",
   "mixins": [
     "FurnaceAccessor",
-    "MixinAbstractFurnaceBlockEntity"
+    "MixinAbstractFurnaceBlockEntity",
+    "MixinServerWorld"
   ],
   "client": [
     "BlockModelRendererAccessor",

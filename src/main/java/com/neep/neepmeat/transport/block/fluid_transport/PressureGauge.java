@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.fluid_network.NodeSupplier;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.Block;
@@ -76,7 +77,7 @@ public class PressureGauge extends BaseFacingBlock implements IFluidNodeProvider
     {
         Direction facing = state.get(FACING);
         BlockPos pipe = pos.offset(facing);
-        FluidNodeManager.NodeSupplier supplier = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pipe, facing.getOpposite()));
+        NodeSupplier supplier = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pipe, facing.getOpposite()));
         FluidNode node;
         if ((node = supplier.get()) != null)
         {
