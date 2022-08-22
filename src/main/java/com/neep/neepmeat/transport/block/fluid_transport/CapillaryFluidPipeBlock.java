@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.api.block.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -37,7 +37,7 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
+            FluidNodeManager.getInstance((ServerWorld) world).removeNode(world, nodePos);
         }
     }
 

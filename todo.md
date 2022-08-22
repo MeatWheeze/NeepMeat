@@ -46,7 +46,6 @@
 - [done] Remove 'realistic fluids'
 - [done] Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
-- Shave down the number of failed networks by storing whether a node has a network
 - Add coloured fluid pipes
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
@@ -56,6 +55,10 @@
 - Add REI support for Enlightening
 - [done] Give Integrator a Data resource bufer
 - Add flywheel linkage
+- Add BIG FAN
+
+- Shave down the number of failed networks by storing whether a node has a network
+- Improve speed of FluidNetwork node lookup
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
@@ -248,5 +251,9 @@ Heart Machine
 Welcome to the world of NeepMeat, a 
 
 tldr: cosmic-horror-cyber-gore-punk cheerful spooky meat RedPower ripoff
+
+Fluids obey gravity, negating the need for pumps in well-designed systems.
+
+Flow calculations are performed in a separate thread
 
 Since this is version 0.1, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
