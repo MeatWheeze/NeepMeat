@@ -211,7 +211,7 @@
   "block.neepmeat.eldritch_enzymes": "Eldritch Enzymes",
 
   "block.neepmeat.clean_ore_fat": "Clean Fat",
-  "block.neepmeat.ore_fat": "Dirty Fat",
+  "block.neepmeat.ore_fat": "Dirty %s Fat",
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
 

@@ -5,14 +5,18 @@ import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -75,7 +79,9 @@ public class PumpBlockEntity extends SyncableBlockEntity
         super.writeNbt(tag);
         buffer.writeNbt(tag);
         tag.putInt(FRONT_MODE, frontMode.getId());
-       tag.putInt(BACK_MODE, backMode.getId());
+        tag.putInt(BACK_MODE, backMode.getId());
+        tag.putBoolean("hasFrontStorage", hasFrontStorage);
+        tag.putBoolean("hasRearStorage", hasRearStorage);
     }
 
     @Override
@@ -85,6 +91,8 @@ public class PumpBlockEntity extends SyncableBlockEntity
         buffer.readNbt(tag);
         this.frontMode = AcceptorModes.byId(tag.getInt(FRONT_MODE));
         this.backMode = AcceptorModes.byId(tag.getInt(BACK_MODE));
+        this.hasFrontStorage = tag.getBoolean("hasFrontStorage");
+        this.hasRearStorage = tag.getBoolean("hasRearStorage");
     }
 
     @Nullable
@@ -111,10 +119,43 @@ public class PumpBlockEntity extends SyncableBlockEntity
 
     BlockApiCache<Storage<FluidVariant>, Direction> frontCache;
     BlockApiCache<Storage<FluidVariant>, Direction> rearCache;
+    protected boolean hasFrontStorage;
+    protected boolean hasRearStorage;
+
+    public void updateCache()
+    {
+        Direction facing = getCachedState().get(PumpBlock.FACING);
+        frontCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, pos.offset(facing));
+        rearCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, pos.offset(facing.getOpposite()));
+
+        Storage<FluidVariant> frontStorage = frontCache.find(world.getBlockState(pos.offset(facing)), facing);
+        Storage<FluidVariant> rearStorage = rearCache.find(world.getBlockState(pos.offset(facing.getOpposite())), facing.getOpposite());
+        hasFrontStorage = frontStorage != null;
+        hasRearStorage = rearStorage != null;
+    }
 
     // I resent making pumps ticked, it undermines the whole point of ticking fluid networks.
     public void tick()
     {
-//        if (frontCache.
+        Direction facing = getCachedState().get(PumpBlock.FACING);
+        long transfer = PipeNetwork.BASE_TRANSFER / PipeNetwork.TICK_RATE;
+
+        // Create caches if they should be present
+        if (hasFrontStorage && frontCache == null || hasRearStorage && rearCache == null)
+            updateCache();
+
+        if (rearCache != null && frontCache != null)
+        {
+            Storage<FluidVariant> frontStorage = frontCache.find(world.getBlockState(pos.offset(facing)), facing);
+            Storage<FluidVariant> rearStorage = rearCache.find(world.getBlockState(pos.offset(facing.getOpposite())), facing.getOpposite());
+            if (rearStorage != null && backMode.isDriving())
+            {
+                long tr1 = StorageUtil.move(rearStorage, buffer, v -> true, transfer, null);
+            }
+            if (frontStorage != null && frontMode.isDriving())
+            {
+                long tr2 = StorageUtil.move(buffer, frontStorage, v -> true, transfer, null);
+            }
+        }
     }
 }
