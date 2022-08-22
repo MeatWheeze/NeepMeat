@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
+import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -32,7 +33,9 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.registerRecipeFiller(GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
         registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
+        registry.registerRecipeFiller(EnlighteningRecipe.class, NMrecipeTypes.ENLIGHTENING, EnlighteningDisplay::new);
 
+        // Charnel Compactor recipes
         int page = 0;
         UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.CHARNEL_COMPACTOR).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
         while (iterator.hasNext())
@@ -41,6 +44,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
             registry.add(CompactingDisplay.of(entries, Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CRUDE_INTEGRATION_CHARGE))), page++));
         }
 
+        // Heart extraction
         registry.add(HeartExtractionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.ANIMAL_HEART)))));
     }
 
@@ -52,7 +56,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new CompactingCategory(),
                 new MixingCategory(),
                 new AlloyKilnCategory(),
-                new HeartExtractionCategory()
+                new HeartExtractionCategory(),
+                new EnlighteningCategory()
         );
 
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
@@ -60,5 +65,6 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
         registry.addWorkstations(HEART_EXTRACTION, EntryStacks.of(NMItems.SACRIFICIAL_DAGGER.asItem()));
+        registry.addWorkstations(ENLIGHTENING, EntryStacks.of(NMBlocks.PEDESTAL.asItem()));
     }
 }

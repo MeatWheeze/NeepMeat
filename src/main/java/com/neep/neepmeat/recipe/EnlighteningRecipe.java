@@ -106,6 +106,16 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         return null;
     }
 
+    public RecipeOutput<Item> getItemOutput()
+    {
+        return itemOutput;
+    }
+
+    public float getData()
+    {
+        return data;
+    }
+
     public static class Serializer implements RecipeSerializer<EnlighteningRecipe>
     {
         RecipeFactory<EnlighteningRecipe> factory;

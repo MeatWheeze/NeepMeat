@@ -54,12 +54,14 @@
 - Add Meat Grinder
 - [done] Add Enlightening recipe type
 - Add REI support for Enlightening
-- Give Integrator a Data resource bufer
+- [done] Give Integrator a Data resource bufer
+- Add flywheel linkage
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
 - Think of an auto-crafting solution
-- 
+- Item pipe routing
+- PLC and bundled cables!
 
 ## Fixes
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
@@ -123,9 +125,9 @@ Blood bubble trees!
 
 All are made one in the maw of the Biomass Reprocesor.
 
-An Integrator is a biomechanical intelligence construct whose function is to ease the production of machines.
+An Integrator is a biomechanical intelligence construct with two functions: to to ease the production of machines and to process eldritch knowledge. Integrators are designed to withstand high quantities of inhuman knowledge.
 
-The Integrator exudes alien microfauna that convert all biotic material into Body Compound, the basis of all machines.
+The Integrator exudes alien microfauna that convert all biotic material into Body Compound, the basis of all machines. 
 
 Ordinary wheat, spliced with members of the unseen biosphere. The rustling of its leaves whispers of the Divine.
 
