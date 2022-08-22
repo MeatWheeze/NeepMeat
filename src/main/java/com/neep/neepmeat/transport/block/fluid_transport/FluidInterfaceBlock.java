@@ -28,9 +28,9 @@ public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityP
 //            Direction.WEST, Block.createCuboidShape(0, 0, 3, 1, 15.75, 13),
 //            Direction.EAST, Block.createCuboidShape(15, 0, 3, 16, 15.75, 13)));
 
-    public FluidInterfaceBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidInterfaceBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemMaxStack, hasLore, factory, settings.nonOpaque());
     }
 
     @Override

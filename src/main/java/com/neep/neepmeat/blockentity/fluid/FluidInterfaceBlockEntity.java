@@ -1,7 +1,8 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
+import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -31,7 +32,7 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
 
     public FluidInterfaceBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.FLUID_INTERFACE, pos, state);
+        this(NMBlockEntities.FLUID_INTERFACE, pos, state);
     }
 
     @Override
@@ -53,10 +54,15 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
         {
             updateApiCache(getPos(), getCachedState());
         }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
+        Direction facing = getCachedState().get(FluidInterfaceBlock.FACING);
+        Storage<FluidVariant> storage = cache.find(world.getBlockState(pos.offset(facing)), facing);
         if (storage != null)
         {
             return storage.insert(resource, maxAmount, transaction);
+        }
+        else
+        {
+            cache = null;
         }
         return 0;
     }
