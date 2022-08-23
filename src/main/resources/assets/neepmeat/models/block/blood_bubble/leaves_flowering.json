@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "neepmeat:block/blood_bubble/leaves_flowering"
+  }
+}

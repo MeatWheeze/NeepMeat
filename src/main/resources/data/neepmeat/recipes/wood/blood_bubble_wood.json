@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "bark",
+  "pattern": [
+    "ll ",
+    "ll "
+  ],
+  "key": {
+    "l": {
+      "item": "neepmeat:blood_bubble_log"
+    }
+  },
+  "result": {
+    "item": "neepmeat:blood_bubble_wood",
+    "count": 3
+  }
+}

@@ -181,6 +181,15 @@
   "block.neepmeat.blood_bubble_sapling": "Blood Bubble Sapling",
   "item.neepmeat.blood_bubble": "Blood Bubble",
 
+  "block.neepmeat.blood_bubble_log": "Blood Bubble Log",
+  "block.neepmeat.blood_bubble_wood": "Blood Bubble Wood",
+  "block.neepmeat.blood_bubble_leaves": "Blood Bubble Leaves",
+  "block.neepmeat.blood_bubble_leaves_flowering": "Fruiting Blood Bubble Leaves",
+  "block.neepmeat.blood_bubble_planks": "Blood Bubble Planks",
+  "block.neepmeat.blood_bubble_planks_slab": "Blood Bubble Planks Slab",
+  "block.neepmeat.blood_bubble_planks_stairs": "Blood Bubble Planks Stairs",
+  "block.neepmeat.blood_bubble_planks_wall": "Blood Bubble Planks Wall",
+
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
   "item.neepmeat.flywheel": "Flywheel",

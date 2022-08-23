@@ -129,6 +129,11 @@
     "neepmeat:data_cable",
     "neepmeat:whisper_wheat",
     "neepmeat:flesh_potato",
+    "neepmeat:blood_bubble_sapling",
+    "neepmeat:blood_bubble_planks_stairs",
+    "neepmeat:blood_bubble_planks_slab",
+    "neepmeat:blood_bubble_planks_wall",
+    "neepmeat:blood_bubble_planks",
     "neepmeat:linear_rail",
     "neepmeat:big_lever",
     "neepmeat:integrator_egg"

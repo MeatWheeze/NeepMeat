@@ -10,6 +10,14 @@ public class BaseBlock extends Block implements IMeatBlock
     public BlockItem blockItem;
     private String registryName;
 
+    public BaseBlock(String registryName, Settings settings)
+    {
+        super(settings);
+        this.blockItem = new BaseBlockItem(this, registryName, 64, false);
+        this.registryName = registryName;
+        addTags();
+    }
+
     public BaseBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
