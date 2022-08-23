@@ -17,7 +17,7 @@ public class FluidFuelRegistry extends HashMap<Fluid, FluidFuelRegistry.Entry>
 
     public void register(Fluid fluid, float multiplier, boolean isEnergised, @Nullable Fluid exhaustType)
     {
-        put(fluid, new Entry(multiplier, isEnergised, exhaustType));
+        put(fluid, new com.neep.neepmeat.machine.FluidFuelRegistry.Entry(multiplier, isEnergised, exhaustType));
     }
 
     @SuppressWarnings("UnstableApiUsage")
