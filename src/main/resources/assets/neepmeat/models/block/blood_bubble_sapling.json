@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "neepmeat:block/blood_bubble_sapling"
+  }
+}

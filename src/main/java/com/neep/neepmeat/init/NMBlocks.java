@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.block.*;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
@@ -28,6 +29,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
+import net.minecraft.block.sapling.OakSaplingGenerator;
 import net.minecraft.sound.BlockSoundGroup;
 
 @SuppressWarnings("unused")
@@ -152,6 +154,7 @@ public class NMBlocks
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
     public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new OakSaplingGenerator(), 0, FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
 
     // --- Assembly ---
     public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

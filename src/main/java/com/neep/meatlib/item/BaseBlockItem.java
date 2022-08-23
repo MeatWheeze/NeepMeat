@@ -18,21 +18,30 @@ import java.util.List;
 public class BaseBlockItem extends BlockItem implements IMeatItem
 {
     private final String name;
-    private final boolean hasLore;
+    private final int loreLines;
 
     public BaseBlockItem(Block block, String registryName, int itemMaxStack, boolean hasLore)
     {
         super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
         this.name = registryName;
-        this.hasLore = hasLore;
+        this.loreLines = hasLore ? 1 : 0;
+        ItemRegistry.queueItem(this);
+    }
+
+    public BaseBlockItem(Block block, String registryName, int itemMaxStack, int loreLines)
+    {
+        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
+        this.name = registryName;
+        this.loreLines = loreLines;
         ItemRegistry.queueItem(this);
     }
 
     @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
-        if (hasLore)
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
+    {
+        for (int i = 0; i < loreLines; ++i)
         {
-            tooltip.add(new TranslatableText("item." + NeepMeat.NAMESPACE + "." + name + ".lore").formatted(Formatting.GRAY));
+            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
         }
     }
 
