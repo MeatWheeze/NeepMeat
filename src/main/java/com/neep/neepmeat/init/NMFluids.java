@@ -26,11 +26,11 @@ public class NMFluids
     public static Block BLOOD;
     public static FluidFactory BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "blood", false, 10, 5, 2);
 
-    public static FlowableFluid FLOWING_ENRICHED_BLOOD;
-    public static FlowableFluid STILL_ENRICHED_BLOOD;
-    public static Item ENRICHED_BLOOD_BUCKET;
-    public static Block ENRICHED_BLOOD;
-    public static FluidFactory ENRICHED_BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "enriched_blood", false, 10, 6, 1);
+//    public static FlowableFluid FLOWING_ENRICHED_BLOOD;
+//    public static FlowableFluid STILL_ENRICHED_BLOOD;
+//    public static Item ENRICHED_BLOOD_BUCKET;
+//    public static Block ENRICHED_BLOOD;
+//    public static FluidFactory ENRICHED_BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "enriched_blood", false, 10, 6, 1);
 
     public static FlowableFluid FLOWING_WORK_FLUID;
     public static FlowableFluid STILL_WORK_FLUID;
@@ -82,10 +82,10 @@ public class NMFluids
         BLOOD_BUCKET = BLOOD_FACTORY.registerItem();
         BLOOD = BLOOD_FACTORY.registerBlock();
 
-        STILL_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerStill();
-        FLOWING_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerFlowing();
-        ENRICHED_BLOOD_BUCKET = ENRICHED_BLOOD_FACTORY.registerItem();
-        ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerBlock();
+//        STILL_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerStill();
+//        FLOWING_ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerFlowing();
+//        ENRICHED_BLOOD_BUCKET = ENRICHED_BLOOD_FACTORY.registerItem();
+//        ENRICHED_BLOOD = ENRICHED_BLOOD_FACTORY.registerBlock();
 
         STILL_WORK_FLUID = WORK_FLUID_FACTORY.registerStill();
         FLOWING_WORK_FLUID = WORK_FLUID_FACTORY.registerFlowing();

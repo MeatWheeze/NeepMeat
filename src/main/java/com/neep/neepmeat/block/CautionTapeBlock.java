@@ -109,7 +109,8 @@ public class CautionTapeBlock extends BaseBlock
 
     protected static boolean connectsTo(BlockState state, @Nullable Direction dir)
     {
-        return state.isOf(NMBlocks.CAUTION_TAPE);
+//        return state.isOf(NMBlocks.CAUTION_TAPE);
+        return false;
     }
 
     private WireConnection getRenderConnectionType(BlockView world, BlockPos pos, Direction direction, boolean bl)

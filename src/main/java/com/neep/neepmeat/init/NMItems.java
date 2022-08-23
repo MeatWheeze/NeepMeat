@@ -38,7 +38,7 @@ public class NMItems
     public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item PRISTINE_BRAIN = new BaseCraftingItem("brain_pristine", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
@@ -48,14 +48,4 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-
-//    public static Item GLAND_POTATO = new BaseCraftingItem("flesh_potato", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-
-    static
-    {
-//        ROUGH.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//        ROUGH.get("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//        ROUGH.create("brain", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//        CRUDE.create("integration_charge", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    }
 }
