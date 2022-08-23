@@ -1,6 +1,7 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.CharnelCompactorStorage;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
@@ -41,7 +42,7 @@ public class NeepMeat implements ModInitializer
 		NMParticles.init();
 
 		NMFluids.initialise();
-		SoundInitialiser.initialise();
+		SoundRegistry.init();
 		NMBlockEntities.initialise();
 		NMEntities.initialise();
 		OreFatRegistry.init();

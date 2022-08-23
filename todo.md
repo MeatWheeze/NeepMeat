@@ -53,6 +53,7 @@
 - Move machine blocks and entities together
 - Make SoundRegistry general
 - Separate modules
+- Add recipes for MeatWeapons
 
 ## Later
 
@@ -75,6 +76,11 @@
 - Think of an auto-crafting solution
 - Item pipe routing
 - PLC and bundled cables!
+
+## Crafting Ingredients
+
+- Add Meat Steel recipe (Compress iron and MEAT in a Casting Basin with a Hydraulic Press)
+- Add Meat Steel casing
 
 ## Fixes
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times

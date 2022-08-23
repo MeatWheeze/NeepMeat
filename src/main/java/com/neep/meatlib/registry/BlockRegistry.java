@@ -42,7 +42,7 @@ public class BlockRegistry
         return block;
     }
 
-    public static void registerBlocks()
+    public static void init()
     {
         for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
         {
