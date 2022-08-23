@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " p ",
+    " e ",
+    " b "
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:ender_pearl"
+    },
+    "e": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "b": {
+      "item": "neepmeat:internal_components"
+    }
+  },
+  "result": {
+    "item": "neepmeat:control_unit",
+    "count": 1
+  }
+}

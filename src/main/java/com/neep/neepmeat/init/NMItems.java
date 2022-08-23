@@ -30,18 +30,20 @@ public class NMItems
     public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MEAT_STEEL_COMPONENT = new BaseCraftingItem("meat_steel_component", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Organism Parts
     public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 //    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item PRISTINE_BRAIN = new BaseCraftingItem("brain_pristine", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ENLIGHTENED_BRAIN = new BaseCraftingItem("enlightened_brain", 2, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

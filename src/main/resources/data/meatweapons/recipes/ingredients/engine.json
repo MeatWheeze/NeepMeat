@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cbc",
+    "cos",
+    "coc"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "o": {
+      "item": "neepmeat:copper_coil"
+    },
+    "s": {
+      "item": "neepmeat:stator"
+    }
+  },
+  "result": {
+    "item": "meatweapons:engine",
+    "count": 1
+  }
+}

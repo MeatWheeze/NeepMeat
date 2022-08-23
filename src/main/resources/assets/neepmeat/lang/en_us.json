@@ -148,8 +148,8 @@
   "item.neepmeat.digestive_system": "Digestive System",
   "item.neepmeat.digestive_system.lore_0": "A tube lined with specialised tissues.",
 
-  "item.neepmeat.interface_array": "Interface Array",
-  "item.neepmeat.interface_array.lore_0": "So that meat and machine may think as one.",
+  "item.neepmeat.control_unit": "Control Unit",
+  "item.neepmeat.control_unit.lore_0": "So that meat and machine may think as one.",
 
   "item.neepmeat.internal_components": "Biomechanical Components",
   "item.neepmeat.internal_components.lore_0": "Arcane mechanisms, sealed in skin never to see the light of day.",
@@ -161,8 +161,9 @@
 
   "item.neepmeat.brain_rough": "Rough Brain",
   "item.neepmeat.brain_rough.lore_0": "It will never see thoughts again, but it may still be of use.",
-  "item.neepmeat.brain_pristine": "Pristine Brain",
-  "item.neepmeat.brain_pristine.lore_0": "",
+  "item.neepmeat.enlightened_brain": "Enlightened Brain",
+  "item.neepmeat.enlightened_brain.lore_0": "Although still dead, it has undergone",
+  "item.neepmeat.enlightened_brain.lore_1": "some profound structural changes.",
 
   "item.neepmeat.integration_charge_crude": "Crude Integration Charge",
   "item.neepmeat.integration_charge_crude.lore_0": "Brings life, but in what state?",
@@ -197,6 +198,7 @@
   "item.neepmeat.whisper_brass": "Whispering Brass",
 
   "item.neepmeat.meat_steel": "Meat Steel",
+  "item.neepmeat.meat_steel_component": "Meat Steel Component",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when connected to an Integrator.",
