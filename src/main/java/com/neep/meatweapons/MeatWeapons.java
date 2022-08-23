@@ -37,15 +37,6 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
 
-    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", 1, new FabricItemSettings().group(WEAPONS));
-    public static Item ENGINE = new BaseCraftingItem("engine", 0, new FabricItemSettings().group(WEAPONS));
-    public static Item FUSION_CANNON = new FusionCannonItem();
-    public static Item HAND_CANNON = new HandCannonItem();
-    public static Item MACHINE_PISTOL = new MachinePistolItem();
-    public static Item LMG = new LMGItem();
-    public static Item HEAVY_CANNON = new HeavyCannonItem();
-    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(WEAPONS));
-
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
         return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
@@ -75,6 +66,7 @@ public class MeatWeapons implements ModInitializer
                 .build());
 
         MeatLib.setNamespace(NAMESPACE);
+        new MWItems();
         ItemRegistry.init();
         MWParticles.init();
 
