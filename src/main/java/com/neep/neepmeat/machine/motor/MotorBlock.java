@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.block.BaseVertFacingBlock;
-import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;

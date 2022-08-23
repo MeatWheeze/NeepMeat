@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.DeployerBlockEntity;
+import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;

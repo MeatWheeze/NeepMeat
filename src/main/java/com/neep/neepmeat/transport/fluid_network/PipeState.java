@@ -1,12 +1,10 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.AbstractPipeBlock;
+import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.ICapillaryPipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;

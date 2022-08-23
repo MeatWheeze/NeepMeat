@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.blockentity.ConverterBlockEntity;
+import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.blockentity.fluid.SpigotBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.SpigotBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

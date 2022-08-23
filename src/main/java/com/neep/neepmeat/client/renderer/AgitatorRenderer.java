@@ -1,20 +1,13 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.AgitatorBlock;
-import com.neep.neepmeat.blockentity.DeployerBlockEntity;
-import com.neep.neepmeat.blockentity.machine.AgitatorBlockEntity;
+import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 public class AgitatorRenderer implements BlockEntityRenderer<AgitatorBlockEntity>

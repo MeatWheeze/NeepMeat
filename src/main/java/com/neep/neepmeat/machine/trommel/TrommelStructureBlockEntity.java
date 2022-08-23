@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.trommel;
 
-import com.neep.neepmeat.block.machine.TrommelBlock;
-import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -14,7 +13,6 @@ import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TrommelStructureBlockEntity extends BlockEntity

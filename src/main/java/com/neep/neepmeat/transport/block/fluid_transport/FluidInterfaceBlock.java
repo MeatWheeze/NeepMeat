@@ -2,8 +2,8 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.fluid.FluidInterfaceBlockEntity;
-import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.FluidInterfaceBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

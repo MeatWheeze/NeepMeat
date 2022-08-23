@@ -3,11 +3,9 @@ package com.neep.neepmeat.machine.casting_basin;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.storage.WritableStackStorage;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 

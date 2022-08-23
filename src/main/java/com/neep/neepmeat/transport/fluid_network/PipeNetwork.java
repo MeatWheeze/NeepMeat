@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.api.block.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;

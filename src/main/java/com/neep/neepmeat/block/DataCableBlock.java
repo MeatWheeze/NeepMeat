@@ -1,7 +1,8 @@
 package com.neep.neepmeat.block;
 
+import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.meatlib.item.BaseBlockItem;
-import com.neep.neepmeat.api.block.pipe.IDataCable;
+import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;

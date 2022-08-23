@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseVertFacingBlock;
-import com.neep.neepmeat.blockentity.machine.AgitatorBlockEntity;
+import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

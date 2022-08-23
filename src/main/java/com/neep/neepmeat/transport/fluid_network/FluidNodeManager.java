@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
-import com.neep.neepmeat.transport.intrfaces.IServerWorld;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;

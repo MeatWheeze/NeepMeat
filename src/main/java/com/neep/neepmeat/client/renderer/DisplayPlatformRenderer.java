@@ -1,9 +1,9 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.blockentity.DisplayPlatformBlockEntity;
+import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.storage.WritableStackStorage;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.VertexConsumerProvider;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;

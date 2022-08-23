@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.util.NMMaths;
 import net.minecraft.client.MinecraftClient;

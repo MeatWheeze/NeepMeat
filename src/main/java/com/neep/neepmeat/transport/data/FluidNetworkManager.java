@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.data;
 
-import com.neep.neepmeat.transport.intrfaces.IServerWorld;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;

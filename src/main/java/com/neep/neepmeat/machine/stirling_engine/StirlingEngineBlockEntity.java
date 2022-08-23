@@ -2,14 +2,10 @@ package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.block.IntegratorBlock;
-import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

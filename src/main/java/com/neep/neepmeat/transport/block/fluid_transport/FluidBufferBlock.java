@@ -2,8 +2,8 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.api.block.pipe.IFluidPipe;
-import com.neep.neepmeat.blockentity.fluid.FluidBufferBlockEntity;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.machine.fluid.FluidBufferBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;

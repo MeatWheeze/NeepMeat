@@ -1,10 +1,9 @@
 package com.neep.neepmeat.block.vat;
 
-import com.neep.neepmeat.block.multiblock.IPortBlock;
-import com.neep.neepmeat.block.multiblock.PortBlockEntity;
+import com.neep.neepmeat.api.multiblock.IPortBlock;
+import com.neep.neepmeat.api.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;

@@ -2,9 +2,8 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.client.NeepMeatClient;
-import com.neep.neepmeat.blockentity.fluid.GlassTankBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -12,7 +11,6 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
