@@ -2,8 +2,9 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.block.item_transport.PneumaticTubeBlock;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -46,15 +47,15 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (world.isClient())
-            return;
+        Direction direction = Direction.fromVector(fromPos.subtract(pos));
+        BlockState nextState = getStateForNeighborUpdate(state, direction, world.getBlockState(fromPos), world, pos, fromPos);
 
-        BlockState state2 = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
-
+        // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
+        world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
+//
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
-            if (createStorageNodes(world, pos, state2))
+            if (createStorageNodes(world, pos, nextState))
                 updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
@@ -75,26 +76,35 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
-        boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient())
+        PipeConnectionType type = state.get(DIR_TO_CONNECTION.get(direction));
+        boolean forced = type == PipeConnectionType.FORCED;
+        boolean otherConnected = false;
+
+        boolean canConnect = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
+        if (world instanceof ServerWorld serverWorld && !(neighborState.getBlock() instanceof FluidPipeBlock))
         {
-            connection = connection || canConnectApi((World) world, pos, state, direction);
+
+            canConnect = canConnect || (canConnectApi((World) world, pos, state, direction));
         }
 
         // Check if neighbour is forced
-        boolean neighbourForced = false;
         if (neighborState.getBlock() instanceof FluidPipeBlock)
         {
-            neighbourForced = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
+            forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
+            otherConnected = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.SIDE;
+
         }
 
-        PipeConnectionType connection1 = neighbourForced
-                ? PipeConnectionType.FORCED
-                : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
+        // AAAAAAAAAAAAAAAAAAAA
+        PipeConnectionType finalConnection =
+                otherConnected ? PipeConnectionType.SIDE :
+                        forced ? PipeConnectionType.FORCED
+                                : canConnect ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
-        // I don't know what this bit was for.
+        BlockState finalState = state.with(DIR_TO_CONNECTION.get(direction), finalConnection);
 
-        return state.with(DIR_TO_CONNECTION.get(direction), connection1);
+
+        return finalState;
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
