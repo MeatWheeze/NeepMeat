@@ -2,12 +2,15 @@
   "type": "minecraft:crafting_shaped",
   "pattern": [
     " I ",
-    "iBi",
+    "mBm",
     "ipi"
   ],
   "key": {
     "p": {
       "item": "minecraft:piston"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel"
     },
     "i": {
       "item": "minecraft:iron_ingot"
