@@ -6,11 +6,16 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.item.ArmorMaterial;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 
 @SuppressWarnings("unused")
 public class NMItems
 {
+
+
 
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
@@ -54,4 +59,8 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
+//    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new FabricItemSettings().group(NMItemGroups.GENERAL));
+//    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, new FabricItemSettings().group(NMItemGroups.GENERAL));
+//    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new FabricItemSettings().group(NMItemGroups.GENERAL));
 }

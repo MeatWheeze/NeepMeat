@@ -4,8 +4,8 @@ import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
+import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.init.*;
@@ -41,6 +41,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class NeepMeatClient implements ClientModInitializer
@@ -115,19 +116,27 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 
-        GeoItemRenderer.registerItemRenderer(NMItems.SLASHER, new SwordRenderer<>(new SwordModel<>(
+        GeoItemRenderer.registerItemRenderer(NMItems.SLASHER, new SwordRenderer<>(new GenericModel<>(
                 NeepMeat.NAMESPACE,
                 "geo/slasher.geo.json",
                 "textures/item/slasher.png",
                 "animations/slasher.animation.json"
         )));
 
-        GeoItemRenderer.registerItemRenderer(NMItems.CHEESE_CLEAVER, new SwordRenderer<>(new SwordModel<>(
+        GeoItemRenderer.registerItemRenderer(NMItems.CHEESE_CLEAVER, new SwordRenderer<>(new GenericModel<>(
                 NeepMeat.NAMESPACE,
                 "geo/cheese_cleaver.geo.json",
                 "textures/item/cheese_cleaver.png",
                 "animations/cheese_cleaver.animation.json"
         )));
+
+//        GeoArmorRenderer.registerArmorRenderer(new MeatSteelArmourRenderer(new GenericModel<>(
+//                NeepMeat.NAMESPACE,
+//                "geo/meat_steel_armour.geo.json",
+//                "textures/entity/armour/meat_steel_armour.png",
+//                "animations/meat_steel_armour.animation.json"
+//        )),
+//                NMItems.MEAT_STEEL_BOOTS, NMItems.MEAT_STEEL_LEGS, NMItems.MEAT_STEEL_CHESTPLATE);
 
         // Fluid textures
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD, new SimpleFluidRenderHandler(
