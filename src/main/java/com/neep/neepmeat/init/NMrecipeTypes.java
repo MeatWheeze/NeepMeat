@@ -29,8 +29,12 @@ public class NMrecipeTypes
     public static final RecipeSerializer<OreFatRenderingRecipe> ORE_FAT_RENDERING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "ore_fat_rendering", new OreFatRenderingRecipe.Serializer(OreFatRenderingRecipe::new));
     public static final RecipeType<OreFatRenderingRecipe> ORE_FAT_RENDERING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "ore_fat_rendering");
 
+    public static final RecipeSerializer<FatPressingRecipe> FAT_PRESSING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "fat_pressing", new FatPressingRecipe.Serializer(FatPressingRecipe::new));
+    public static final RecipeType<FatPressingRecipe> FAT_PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "fat_pressing");
+
     public static final RecipeSerializer<PressingRecipe> PRESSING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "pressing", new PressingRecipe.Serializer(PressingRecipe::new));
     public static final RecipeType<PressingRecipe> PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "pressing");
+
 
     public static final RecipeSerializer<EnlighteningRecipe> ENLIGHTENING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "enlightening", new EnlighteningRecipe.Serializer(EnlighteningRecipe::new));
     public static final RecipeType<EnlighteningRecipe> ENLIGHTENING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "enlightening");

@@ -54,7 +54,7 @@
 - [done] Make SoundRegistry general
 - Add support for item input in Pressing
 - Add Maceration Blades (whirly blades of death)
-- Add MEAT fluid
+- [done] Add MEAT fluid
 - [done] Add Meat Steel recipe
 - [done] Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections

@@ -61,8 +61,14 @@ public class NMFluids
 
     public static FlowableFluid FLOWING_CLEAN_ORE_FAT;
     public static FlowableFluid STILL_CLEAN_ORE_FAT;
+    public static Item MEAT_BUCKET;
     public static Block CLEAN_ORE_FAT;
     public static OreFatFluidFactory CLEAN_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "clean_ore_fat", false, 5, 2);
+
+    public static FlowableFluid FLOWING_MEAT;
+    public static FlowableFluid STILL_MEAT;
+    public static Block MEAT;
+    public static OreFatFluidFactory MEAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "meat", false, 5, 2);
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
@@ -111,6 +117,11 @@ public class NMFluids
         STILL_CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerStill();
         FLOWING_CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerFlowing();
         CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerBlock();
+
+        STILL_MEAT = MEAT_FACTORY.registerStill();
+        FLOWING_MEAT = MEAT_FACTORY.registerFlowing();
+        MEAT_BUCKET = MEAT_FACTORY.registerItem();
+        MEAT = MEAT_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 2, false, null);

@@ -10,6 +10,8 @@
     "neepmeat:eldritch_enzymes",
     "neepmeat:flowing_eldritch_enzymes",
     "neepmeat:ethereal_fuel",
-    "neepmeat:flowing_ethereal_fuel"
+    "neepmeat:flowing_ethereal_fuel",
+    "neepmeat:meat",
+    "neepmeat:flowing_meat"
   ]
 }
