@@ -9,7 +9,7 @@
 - [2022-07-11 done] Fix block tool settings
 - [2022-07-11 done] Add recipes for item pipes
 - [2022-07-11 done] Add walls to wall tag
-- Add recipes for building blocks
+- [done] Add recipes for building blocks
 - [done] Fix hopper extension recipe
 - [done] Add break particles for item pipes
 - [done] Add break particles for Charnel CompactorG
@@ -39,23 +39,27 @@
 - [done] Add minimum fuel influx for heater activation
 - [done] Remove 'realistic fluids'
 - [done] Add cutting recipes for building blocks
-- Improve world loading speed by serialising fluid networks
+- [done] Improve world loading speed by serialising fluid networks
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
 - [done] Add recipe for biomechanical components
 - Add Meat Grinder
 - [done] Add Enlightening recipe type
-- Add REI support for Enlightening
+- [done] Add REI support for Enlightening
 - [done] Give Integrator a Data resource bufer
 - [done] Add Blood Bubble Tree
-- Remove stupid items (spigot, etc.)
+- [done] Remove stupid items (spigot, etc.)
 - [done] Shave down the number of failed networks by storing whether a node has a network
-- Move machine blocks and entities together
+- [done] Move machine blocks and entities together
 - [done] Make SoundRegistry general
-- Add recipes for MeatWeapons
+- Add support for item input in Pressing
+- Add MEAT fluid
+- Add Meat Steel recipe
+- Add Raw Meat Brick recipe
 
 ## Later
 
+- Add recipes for MeatWeapons
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add coloured fluid pipes
 - Add flywheel linkage
@@ -102,6 +106,8 @@ We need to differentiate ourselves from MineFactory and the other one.
 - Add Enlightened Meat fluid
 - Add Meat Brick
 - Add Enlightened Meat Brick
+
+Raw Meat Brick can be crafted from 9 Meat Scraps, obtained from crushing charnel substrate.
 
 - Add casts for Casting Basin?
 

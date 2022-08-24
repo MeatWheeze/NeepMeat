@@ -93,7 +93,6 @@
     "neepmeat:crucible",
     "neepmeat:alembic",
     "neepmeat:converter",
-    "neepmeat:converter_base",
     "neepmeat:transducer",
     "neepmeat:pedestal",
     "neepmeat:charnel_compactor",
@@ -131,7 +130,6 @@
     "neepmeat:blood_bubble_planks_slab",
     "neepmeat:blood_bubble_planks_wall",
     "neepmeat:blood_bubble_planks",
-    "neepmeat:linear_rail",
     "neepmeat:big_lever",
     "neepmeat:integrator_egg"
   ]

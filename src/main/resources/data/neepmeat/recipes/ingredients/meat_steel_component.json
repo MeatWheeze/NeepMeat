@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " m ",
+    "mim",
+    " m "
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "neepmeat:meat_steel_component",
+    "count": 1
+  }
+}
