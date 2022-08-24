@@ -43,7 +43,6 @@
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
 - [done] Add recipe for biomechanical components
-- Add Meat Grinder
 - [done] Add Enlightening recipe type
 - [done] Add REI support for Enlightening
 - [done] Give Integrator a Data resource bufer
@@ -52,7 +51,6 @@
 - [done] Shave down the number of failed networks by storing whether a node has a network
 - [done] Move machine blocks and entities together
 - [done] Make SoundRegistry general
-- Add support for item input in Pressing
 - Add Maceration Blades (whirly blades of death)
 - [done] Add MEAT fluid
 - [done] Add Meat Steel recipe
@@ -73,18 +71,19 @@
 - Add Compound Injector
 - Add temperature requirements for alloy smelting
 - Canned meat! (works like IC2 cans)
+- Add recipes for Scaffolding
 
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
 
 ## Much Later
 
-- Add Feeding Trough
+- Add Feeding Trough (accepts meat or vegetable feed)
+- Think of an auto-crafting solution
 - Dyeable Meat Steel armour
 - [part] Add Caution Tape (looks similar to redstone)
 - Pipe Tree? 
 - Add MultiTank
-- Think of an auto-crafting solution
 - Item pipe routing
 - PLC and bundled cables!
 
