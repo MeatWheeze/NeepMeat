@@ -1,14 +1,11 @@
 package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
-import com.neep.neepmeat.fluid.RealisticFluid;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidDrainable;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
@@ -54,12 +51,12 @@ public class FluidDrainBlockEntity extends TankBlockEntity
             if (transferred >= targetAmount)
             {
 
-                if (world.getFluidState(sourcePos).getFluid() instanceof RealisticFluid realisticFluid)
-                {
-                    world.setBlockState(sourcePos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-                    transaction.commit();
-                }
-                else if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
+//                if (world.getFluidState(sourcePos).getFluid() instanceof RealisticFluid realisticFluid)
+//                {
+//                    world.setBlockState(sourcePos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
+//                    transaction.commit();
+//                }
+                if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
                 {
                     drainable.tryDrainFluid(world, sourcePos, fluidBlockState);
                     transaction.commit();
@@ -79,7 +76,7 @@ public class FluidDrainBlockEntity extends TankBlockEntity
         {
             return null;
         }
-        else if (world.getFluidState(origin).isStill() || world.getFluidState(origin).getFluid() instanceof RealisticFluid)
+        else if (world.getFluidState(origin).isStill() /*|| world.getFluidState(origin).getFluid() instanceof RealisticFluid*/)
         {
             return origin;
         }
@@ -103,7 +100,7 @@ public class FluidDrainBlockEntity extends TankBlockEntity
                     if (visited.contains(newPos) || fluidState.isEmpty())
                         continue;
 
-                    if (fluidState.isStill() || fluidState.getFluid() instanceof RealisticFluid)
+                    if (fluidState.isStill() /*|| fluidState.getFluid() instanceof RealisticFluid*/)
                     {
                         return newPos;
                     }

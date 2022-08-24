@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "neepmeat:blood",
+    "neepmeat:flowing_blood",
+    "neepmeat:work_fluid",
+    "neepmeat:flowing_work_fluid",
+    "neepmeat:charged_work_fluid",
+    "neepmeat:flowing_charged_work_fluid",
+    "neepmeat:eldritch_enzymes",
+    "neepmeat:flowing_eldritch_enzymes",
+    "neepmeat:ethereal_fuel",
+    "neepmeat:flowing_ethereal_fuel"
+  ]
+}

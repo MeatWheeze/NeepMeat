@@ -32,11 +32,10 @@ public class FluidFactory
     protected Item bucketItem;
 
     protected final boolean isInfinite;
-    protected final int flowSpeed;
     protected final int tickRate;
     protected final int levelDecrease;
 
-    public FluidFactory(String namespace, String baseName, boolean isInfinite, int flowSpeed, int tickRate, int levelDecrease)
+    public FluidFactory(final String namespace, final String baseName, boolean isInfinite, int tickRate, int levelDecrease)
     {
         this.namespace = namespace;
         this.baseName = baseName;
@@ -45,7 +44,6 @@ public class FluidFactory
         this.bucketName = baseName + "_bucket";
 
         this.isInfinite = isInfinite;
-        this.flowSpeed = flowSpeed;
         this.tickRate = tickRate;
         this.levelDecrease = levelDecrease;
     }
@@ -77,9 +75,15 @@ public class FluidFactory
     public abstract class Main extends BaseFluid
     {
         @Override
-        public Fluid getFlowing()
+        protected int getLevelDecreasePerBlock(WorldView worldView)
         {
-            return flowing;
+            return levelDecrease;
+        }
+
+        @Override
+        public int getTickRate(WorldView worldView)
+        {
+            return tickRate;
         }
 
         @Override
@@ -89,9 +93,9 @@ public class FluidFactory
         }
 
         @Override
-        protected boolean isInfinite()
+        public Fluid getFlowing()
         {
-            return isInfinite;
+            return flowing;
         }
 
         @Override
@@ -101,42 +105,9 @@ public class FluidFactory
         }
 
         @Override
-        protected BlockState toBlockState(FluidState state)
+        protected BlockState toBlockState(FluidState fluidState)
         {
-            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-        }
-
-        @Override
-        protected int getFlowSpeed(WorldView world)
-        {
-            return flowSpeed;
-        }
-
-        @Override
-        protected int getLevelDecreasePerBlock(WorldView world)
-        {
-            return levelDecrease;
-        }
-
-        @Override
-        public int getTickRate(WorldView world)
-        {
-            return tickRate;
-        }
-    }
-
-    public class Still extends Main
-    {
-        @Override
-        public int getLevel(FluidState fluidState)
-        {
-            return 8;
-        }
-
-        @Override
-        public boolean isStill(FluidState fluidState)
-        {
-            return true;
+            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
         }
     }
 
@@ -162,117 +133,18 @@ public class FluidFactory
         }
     }
 
-//    public final FlowableFluid mainFluid = new BaseFluid()
-//    {
-//        @Override
-//        public Fluid getFlowing()
-//        {
-//            return flowing;
-//        }
-//
-//        @Override
-//        public Fluid getStill()
-//        {
-//            return still;
-//        }
-//
-//        @Override
-//        protected boolean isInfinite()
-//        {
-//            return isInfinite;
-//        }
-//
-//        @Override
-//        public Item getBucketItem()
-//        {
-//            return item;
-//        }
-//
-//        @Override
-//        protected int getFlowSpeed(WorldView world)
-//        {
-//            return flowSpeed;
-//        }
-//
-//        @Override
-//        protected int getLevelDecreasePerBlock(WorldView world)
-//        {
-//            return levelDecrease;
-//        }
-//
-//        @Override
-//        public int getTickRate(WorldView world)
-//        {
-//            return tickRate;
-//        }
-//
-//        @Override
-//        protected BlockState toBlockState(FluidState state)
-//        {
-//            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-//        }
-//
-//        @Override
-//        public boolean isStill(FluidState state)
-//        {
-//            return true;
-//        }
-//    };
-//
-//    public final FlowableFluid flowingFluid = new BaseFluid()
-//    {
-//        @Override
-//        public Fluid getFlowing()
-//        {
-//            return flowing;
-//        }
-//
-//        @Override
-//        public Fluid getStill()
-//        {
-//            return still;
-//        }
-//
-//        @Override
-//        protected boolean isInfinite()
-//        {
-//            return isInfinite;
-//        }
-//
-//        @Override
-//        public Item getBucketItem()
-//        {
-//            return item;
-//        }
-//
-//        @Override
-//        protected int getFlowSpeed(WorldView world)
-//        {
-//            return flowSpeed;
-//        }
-//
-//        @Override
-//        protected int getLevelDecreasePerBlock(WorldView world)
-//        {
-//            return levelDecrease;
-//        }
-//
-//        @Override
-//        public int getTickRate(WorldView world)
-//        {
-//            return tickRate;
-//        }
-//
-//        @Override
-//        protected BlockState toBlockState(FluidState state)
-//        {
-//            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-//        }
-//
-//        @Override
-//        public boolean isStill(FluidState state)
-//        {
-//            return true;
-//        }
-//    };
+    public class Still extends Main
+    {
+        @Override
+        public int getLevel(FluidState fluidState)
+        {
+            return 8;
+        }
+
+        @Override
+        public boolean isStill(FluidState fluidState)
+        {
+            return true;
+        }
+    }
 }
