@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:rotten_flesh",
+    "minecraft:cod",
+    "minecraft:salmon",
+    "minecraft:beef",
+    "minecraft:porkchop",
+    "minecraft:chicken",
+    "minecraft:rabbit",
+    "minecraft:mutton",
+    "neepmeat:brain_rough",
+    "neepmeat:enlightened_brain",
+    "neepmeat:animal_heart",
+    "neepmeat:reanimated_heart"
+  ]
+}

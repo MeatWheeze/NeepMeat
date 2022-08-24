@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    "ccc",
+    "ccc"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:meat_scrap"
+    }
+  },
+  "result": {
+    "item": "neepmeat:raw_meat_brick",
+    "count": 1
+  }
+}

@@ -53,10 +53,13 @@
 - [done] Move machine blocks and entities together
 - [done] Make SoundRegistry general
 - Add support for item input in Pressing
+- Add Maceration Blades (whirly blades of death)
 - Add MEAT fluid
 - [done] Add Meat Steel recipe
 - Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
+- Make Charnel Compactor accept c:raw_meat
+- Add temperature requirements for alloy smelting
 
 ## Later
 
