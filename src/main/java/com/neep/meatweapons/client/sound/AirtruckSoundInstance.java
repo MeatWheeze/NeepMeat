@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.sound;
 
 import com.neep.meatweapons.entity.AirtruckEntity;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.sound.MovingSoundInstance;
@@ -17,7 +17,7 @@ public class AirtruckSoundInstance extends MovingSoundInstance
 
     public AirtruckSoundInstance(AirtruckEntity entity)
     {
-        super(SoundInitialiser.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL);
+        super(NMSounds.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL);
 //        super(SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.NEUTRAL);
         this.entity = entity;
         this.repeat = true;

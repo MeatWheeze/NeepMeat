@@ -3,7 +3,7 @@ package com.neep.neepmeat.block.redstone;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -124,7 +124,7 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
             else
                 be.activeTicks = 40;
 
-            world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.7f, 2);
+            world.playSound(null, pos, NMSounds.CLICK, SoundCategory.BLOCKS, 0.7f, 2);
 
 //            Direction facing = state.get(FACING);
 //            Direction hitSide = hit.getSide();
@@ -173,9 +173,9 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
         world.updateNeighborsAlways(pos.offset(LeverBlock.getDirection(state).getOpposite()), this);
 
         if (powered)
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundInitialiser.BIG_LEVER_ON, SoundCategory.HOSTILE, 1f, 0.8f);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), NMSounds.BIG_LEVER_ON, SoundCategory.HOSTILE, 1f, 0.8f);
         else
-            world.playSound(null, pos, SoundInitialiser.BIG_LEVER_OFF, SoundCategory.HOSTILE, 1f, 0.9f);
+            world.playSound(null, pos, NMSounds.BIG_LEVER_OFF, SoundCategory.HOSTILE, 1f, 0.9f);
 
     }
 }
