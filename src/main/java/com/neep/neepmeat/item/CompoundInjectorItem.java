@@ -5,6 +5,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -16,12 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class CompoundInjectorItem extends Item implements IMeatItem
 {
@@ -104,9 +107,18 @@ public class CompoundInjectorItem extends Item implements IMeatItem
         }
         return false;
     }
+
     public boolean hasUses(ItemStack stack)
     {
         return stack.getDamage() < this.getMaxDamage();
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
+    {
+        super.appendTooltip(stack, world, tooltip, context);
+        tooltip.add(new TranslatableText(getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
+        tooltip.add(new TranslatableText(getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
     }
 
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
