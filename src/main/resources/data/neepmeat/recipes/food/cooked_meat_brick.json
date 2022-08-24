@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:smelting",
+  "ingredient": {
+    "item": "neepmeat:raw_meat_brick"
+  },
+  "result": "neepmeat:cooked_meat_brick",
+  "experience": 0.1,
+  "cookingtime": 200
+}

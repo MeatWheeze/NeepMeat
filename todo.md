@@ -12,7 +12,7 @@
 - [done] Add recipes for building blocks
 - [done] Fix hopper extension recipe
 - [done] Add break particles for item pipes
-- [done] Add break particles for Charnel CompactorG
+- [done] Add break particles for Charnel Compactor
 - [done] Add a method for obtaining brains
 - [done] Add recipe for Sacrificial Dagger
 - [done] Add Mixer
@@ -68,6 +68,7 @@
 - Make small multi tank usable
 - Sort out the Process Tank
 - Improve Big Lever texture
+- Add Compound Injector
 
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
@@ -88,6 +89,12 @@
 - Add Meat Steel recipe (Compress iron and MEAT in a Casting Basin with a Hydraulic Press)
 - 
 - [done] Add Meat Steel casing
+
+## Meat Steel Recipe Ideas
+
+- Compress Iron Ingot and MEAT with Hydraulic Press
+- Combine 
+- Use Forge Hammer [nyi] to pound Impure Meat Steel
 
 ## Fixes
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
@@ -123,6 +130,7 @@ Raw Meat Brick can be crafted from 9 Meat Scraps, obtained from crushing charnel
 ## Potion Effects
 
 - Enlightenment
+- Bloodlust
 
 ## Alloys
 - [done] Add Meat Potato farming
@@ -132,20 +140,10 @@ Raw Meat Brick can be crafted from 9 Meat Scraps, obtained from crushing charnel
 - Add Meat Steel
 
 ## Other
-- [part] Add Data cables
-- Change recipe outputs depending on Integrator connection
-  - Without: WW -> grind -> seeds, meat -> 
-- Add grinder
-- Add trommel
-
-## REI Plugin
-- Mixer recipes
-- Heating recipes
-- Charnel Compactor recipe
-
-## Fixes
-
-- Fix item pipe interaction with Charnel Compactor
+- [done] Add Data cables
+- [done] Change recipe outputs depending on Integrator connection
+- [done] Add grinder
+- [done] Add trommel
 
 # Insane Ramblings
 
@@ -216,6 +214,17 @@ Biomass reprocessor
 - Better version of the grinder
 
 # Early-Game Progress Path
+
+Tier 1:
+- Whisper Brass
+
+Tier 2:
+- Liquid Meat
+- Meat Steel
+
+Tier 3:
+- Divine Alloy
+
 
 - Pipes and redstone pumps are obtainable from Vanilla resources
 
