@@ -57,7 +57,7 @@
 - [done] Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
 - [done] Make Charnel Compactor accept c:raw_meat
-- Remove redstone control in Deployer
+- [done] Remove redstone control in Breaker
 
 ## Later
 
@@ -94,6 +94,14 @@
 - 
 - [done] Add Meat Steel casing
 
+## Auto-Crafting Ideas
+
+- Project Table is a crafting table with a persistent inventory.
+- The Assembler sits on top of a project table or any other inventory and attempts to fill out a user-defined recipe
+- Assembler detects an inventory implementation below it and displays the available slots. The user sets a filter for the input slots and selects the output slots.
+- When running, the assembler takes items from its internal buffer and places them into the filtered slots, one at a time. When the item output appears, it will eject it.
+- RECIPE REMAINDER HANDLING?
+
 ## Meat Steel Recipe Ideas
 
 - Compress Iron Ingot and MEAT with Hydraulic Press
@@ -128,8 +136,14 @@ Raw Meat Brick can be crafted from 9 Meat Scraps, obtained from crushing charnel
 
 ## Integrator
 
-- Add data requirement for Charnel Compactor
-- Add Enlightening recipes for the Gland Potato and [nyi] Enlightened Meat
+- [done] Add data requirement for Charnel Compactor
+- [done] Add Enlightening recipes for the Gland Potato and [nyi] Enlightened Meat
+
+## Item Routing
+
+- Will only be possible with an attached tube driver (?)
+- Each ItemInPipe will carry an array of 6-bit integers that encodes its desired route.
+- When there is a mismatch between the item's route and the current pipe's connections, the route will be voided.
 
 ## Potion Effects
 

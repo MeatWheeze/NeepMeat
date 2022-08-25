@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemPlacementContext;
@@ -89,6 +90,12 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
         public ItemConvertible dropsLike()
         {
             return NMBlocks.SMALL_TROMMEL;
+        }
+
+        @Override
+        public PistonBehavior getPistonBehavior(BlockState state)
+        {
+            return PistonBehavior.IGNORE;
         }
 
         @Override
