@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
+import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -34,7 +35,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
 {
-    public static final int MAX_PROGRESS = 10;
+    public static final int PATTERN_SLOTS = 12;
+    public static final int MAX_PROGRESS = 20;
     public static final float MAX_INCREMENT = 1f;
     public static final float MIN_INCREMENT = 0.3f;
     protected float progress;
@@ -64,10 +66,10 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
         {
             switch (index)
             {
-                case 0: storage.outputSlots = value; return;
-                case 1: targetSize = value; return;
-
+                case 0: storage.outputSlots = value; break;
+                case 1: targetSize = value; break;
             }
+            markDirty();
         }
 
         @Override
@@ -133,6 +135,21 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
             cache = BlockApiCache.create(ItemStorage.SIDED, serverWorld, pos.down());
     }
 
+    // Move items from target output slots to internal output buffer
+    public boolean removeOutputs(Inventory target)
+    {
+        for (int i = 0; i < target.size() && i < PATTERN_SLOTS; ++i)
+        {
+//            if (((delegate.get(0) >> i) & 1) == 1)
+            if (storage.isOutput(delegate, i))
+            {
+                if (ItemUtils.insertItem(target.getStack(i), storage.getInventory(), 24, 28, false))
+                    return true;
+            }
+        }
+        return false;
+    }
+
     public void tick(ServerWorld world)
     {
         progress = Math.min(MAX_PROGRESS, progress + increment);
@@ -143,19 +160,31 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
             cache = BlockApiCache.create(ItemStorage.SIDED, world, down);
         }
 
-        if (progress >= MAX_PROGRESS && cache.getBlockEntity() instanceof SidedInventory target)
+        if (progress >= MAX_PROGRESS && cache.getBlockEntity() instanceof Inventory target)
         {
+            progress = 0;
+
+            if (removeOutputs(target))
+            {
+                return;
+            }
+
             Inventory inventory = storage.getInventory();
-            for (int i = 0; i < target.size() && i < 12; ++i)
+            for (int i = 0; i < target.size() && i < PATTERN_SLOTS; ++i)
             {
                 ItemStack patternStack = inventory.getStack(i);
-                if (target.getStack(i).isEmpty() && !patternStack.isEmpty() && target.canInsert(i, patternStack, null))
+                if (!storage.isOutput(delegate, i) && target.getStack(i).isEmpty() && !patternStack.isEmpty())
                 {
+                    // Honour valid insertion slots
+                    if (target instanceof SidedInventory sided && !sided.canInsert(i, patternStack, null))
+                    {
+                        break;
+                    }
+
                     ItemStack transferStack = storage.findIngredient(patternStack);
                     if (!transferStack.isEmpty())
                     {
                         target.setStack(i, patternStack.copy());
-                        progress = 0;
                         break;
                     }
                 }

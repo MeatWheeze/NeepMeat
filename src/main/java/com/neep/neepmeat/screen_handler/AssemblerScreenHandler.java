@@ -1,6 +1,7 @@
 package com.neep.neepmeat.screen_handler;
 
 import com.neep.neepmeat.init.ScreenHandlerInit;
+import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -104,7 +105,19 @@ public class AssemblerScreenHandler extends BasicScreenHandler
     @Override
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player)
     {
-        super.onSlotClick(slotIndex, button, actionType, player);
+        if (!markOutput(slotIndex, button))
+            super.onSlotClick(slotIndex, button, actionType, player);
+    }
+
+    protected boolean markOutput(int slot, int button)
+    {
+        if (slot >= 24) return false; // Return if the clicked slot is outside the filter range
+        int invIndex = slot % AssemblerBlockEntity.PATTERN_SLOTS;
+
+        int prevSlots = propertyDelegate.get(0);
+        // Shift 1 left to position corresponding to index, bitwise XOR to toggle bit.
+        propertyDelegate.set(0, (1 << invIndex) ^ prevSlots);
+        return true;
     }
 
     public static class DisplaySlot extends Slot
