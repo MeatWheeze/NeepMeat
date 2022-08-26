@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.block.entity.*;
+import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
@@ -199,9 +200,11 @@ public class NMBlockEntities
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
         PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
-        ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage(dir), PEDESTAL);
+        ItemStorage.SIDED.registerForBlockEntity(PedestalBlockEntity::getStorage, PEDESTAL);
 
         ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
+        ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
+        FluidStorage.SIDED.registerForBlocks(AssemblerBlock.Top::getStorage, NMBlocks.ASSEMBLER_TOP);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

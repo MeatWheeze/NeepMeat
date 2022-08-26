@@ -4,8 +4,13 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.util.MiscUtils;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -13,6 +18,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
@@ -21,9 +27,11 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityProvider
@@ -42,6 +50,11 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (player.getStackInHand(hand).getItem() instanceof BlockItem bi)
+        {
+            if (bi.getBlock() instanceof IItemPipe || bi.getBlock() instanceof IFluidPipe) return ActionResult.PASS;
+        }
+
         if (world.getBlockEntity(pos) instanceof AssemblerBlockEntity be)
         {
             player.openHandledScreen(be);
@@ -63,6 +76,12 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUtils.checkType(type, NMBlockEntities.ASSEMBLER, AssemblerBlockEntity::serverTick, world);
+    }
+
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+    {
+        return super.canPlaceAt(state, world, pos) && world.getBlockState(pos.up()).isAir();
     }
 
     @Override
@@ -126,6 +145,15 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
         {
             super(settings);
             this.registryName = registryName;
+        }
+
+        public static Storage<FluidVariant> getStorage(World world, BlockPos pos, BlockState state, @Nullable BlockEntity entity, Direction dir)
+        {
+            if (world.getBlockEntity(pos.down()) instanceof AssemblerBlockEntity be)
+            {
+                return be.getFluidStorage(dir);
+            }
+            return null;
         }
 
         @Override
