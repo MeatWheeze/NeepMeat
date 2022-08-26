@@ -10,6 +10,8 @@ import com.neep.neepmeat.block.entity.*;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
+import com.neep.neepmeat.machine.crafting_station.WorkstationBlock;
+import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.StopValveBlockEntity;
@@ -50,6 +52,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+
+import java.beans.Beans;
 
 public class NMBlockEntities
 {
@@ -111,6 +115,7 @@ public class NMBlockEntities
     public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
     public static BlockEntityType<PedestalBlockEntity> PEDESTAL;
     public static BlockEntityType<AssemblerBlockEntity> ASSEMBLER;
+    public static BlockEntityType<WorkstationBlockEntity> WORKSTATION;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -205,6 +210,8 @@ public class NMBlockEntities
         ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
         FluidStorage.SIDED.registerForBlocks(AssemblerBlock.Top::getStorage, NMBlocks.ASSEMBLER_TOP);
+
+        WORKSTATION = registerBlockEntity("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

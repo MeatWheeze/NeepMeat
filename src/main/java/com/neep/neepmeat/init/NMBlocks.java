@@ -10,6 +10,7 @@ import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorBlock;
 import com.neep.neepmeat.machine.converter.ConverterBlock;
+import com.neep.neepmeat.machine.crafting_station.WorkstationBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
@@ -125,6 +126,8 @@ public class NMBlocks
 
     public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", 64, false, FabricBlockSettings.copyOf(MIXER)));
     public static Block HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", 64, false, FabricBlockSettings.copyOf(MIXER)));
+
+    public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));
