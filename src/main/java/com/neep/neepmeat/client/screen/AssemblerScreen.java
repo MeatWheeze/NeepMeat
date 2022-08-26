@@ -2,15 +2,20 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.button.TextToggleWidget;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.TexturedButtonWidget;
+import net.minecraft.client.gui.widget.ToggleButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
@@ -24,7 +29,7 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
         super(handler, inventory, title);
         this.handler = handler;
         backgroundWidth = 216;
-        backgroundHeight = 203;
+        backgroundHeight = 211;
     }
 
     @Override
@@ -90,7 +95,7 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
     {
-//        this.textRenderer.draw(matrices, this.title, (float)this.titleX, (float)this.titleY, 0x404040);
+        this.textRenderer.draw(matrices, new TranslatableText("container.neepmeat.assembler.display"), this.titleX, this.titleY, 0x404040);
 //        this.textRenderer.draw(matrices, this.playerInventoryTitle, (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 0x404040);
     }
 
@@ -99,5 +104,16 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     {
         super.init();
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
+        this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, new TranslatableText("button." + NeepMeat.NAMESPACE + ".assembler.select"),
+                handler.getProperty(2) > 0, (b, t) ->
+        {
+
+            buttonPress(AssemblerScreenHandler.ID_TOGGLE_SELECT);
+        }));
+    }
+
+    public void buttonPress(int id)
+    {
+        this.client.interactionManager.clickButton(this.handler.syncId, id);
     }
 }

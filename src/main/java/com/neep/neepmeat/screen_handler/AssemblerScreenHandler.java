@@ -12,8 +12,12 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
 
+import java.util.Optional;
+
 public class AssemblerScreenHandler extends BasicScreenHandler
 {
+    public static final int ID_TOGGLE_SELECT = 0;
+
     protected Inventory dummyInventory = new SimpleInventory(12);
     protected Inventory targetInventory;
     protected int targetSize;
@@ -34,7 +38,14 @@ public class AssemblerScreenHandler extends BasicScreenHandler
         this.targetSize = targetInventory.size();
 
         createSlots();
-        createPlayerSlots(28, 121, playerInventory);
+        createPlayerSlots(28, 129, playerInventory);
+    }
+
+    @Override
+    public void close(PlayerEntity player)
+    {
+        super.close(player);
+        propertyDelegate.set(2, 0); // Ensure that selection mode is disabled when closed
     }
 
     @Override
@@ -105,13 +116,41 @@ public class AssemblerScreenHandler extends BasicScreenHandler
     @Override
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player)
     {
-        if (!markOutput(slotIndex, button))
-            super.onSlotClick(slotIndex, button, actionType, player);
+        if (slotIndex > 12 && slotIndex < 24 && (
+                actionType == SlotActionType.CLONE
+//                || actionType == SlotActionType.PICKUP
+                || actionType == SlotActionType.PICKUP_ALL
+                || actionType == SlotActionType.QUICK_MOVE
+                || actionType == SlotActionType.QUICK_CRAFT
+                || actionType == SlotActionType.SWAP
+                || actionType == SlotActionType.THROW))
+            return;
+
+        if (markOutput(slotIndex, button)) return;
+
+        super.onSlotClick(slotIndex, button, actionType, player);
+    }
+
+    @Override
+    public boolean onButtonClick(PlayerEntity player, int id)
+    {
+        if (id > 100)
+        {
+            return false;
+        }
+        if (id == ID_TOGGLE_SELECT)
+        {
+            // Cycle output slot selection mode
+            int mode = propertyDelegate.get(2);
+            propertyDelegate.set(2, mode > 0 ? 0 : 1);
+        }
+
+        return true;
     }
 
     protected boolean markOutput(int slot, int button)
     {
-        if (slot >= 24) return false; // Return if the clicked slot is outside the filter range
+        if (slot >= 24 || propertyDelegate.get(2) == 0) return false; // Return if the clicked slot is outside the filter range
         int invIndex = slot % AssemblerBlockEntity.PATTERN_SLOTS;
 
         int prevSlots = propertyDelegate.get(0);
@@ -161,6 +200,21 @@ public class AssemblerScreenHandler extends BasicScreenHandler
             super(inventory, index, x, y);
         }
 
+        public void onQuickTransfer(ItemStack newItem, ItemStack original)
+        {
+
+        }
+
+        public ItemStack takeStackRange(int min, int max, PlayerEntity player)
+        {
+            return ItemStack.EMPTY;
+        }
+
+        public Optional<ItemStack> tryTakeStackRange(int min, int max, PlayerEntity player)
+        {
+            return super.tryTakeStackRange(min, max, player);
+        }
+
         @Override
         public ItemStack insertStack(ItemStack stack, int amount)
         {
@@ -173,6 +227,19 @@ public class AssemblerScreenHandler extends BasicScreenHandler
         {
             this.inventory.removeStack(this.getIndex());
             return ItemStack.EMPTY;
+        }
+
+        @Override
+        public boolean canInsert(ItemStack stack)
+        {
+            return true;
+        }
+
+        @Override
+        public boolean canTakeItems(PlayerEntity playerEntity)
+        {
+            this.inventory.removeStack(this.getIndex());
+            return false;
         }
     }
 }
