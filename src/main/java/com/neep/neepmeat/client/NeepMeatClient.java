@@ -43,7 +43,6 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class NeepMeatClient implements ClientModInitializer
@@ -244,6 +243,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.STIRLING_ENGINE, StirlingEngineScreen::new);
         HandledScreens.register(ScreenHandlerInit.ALLOY_KILN, AlloyKilnScreen::new);
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);
+        HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
     }
 
     public static void registerLayers()

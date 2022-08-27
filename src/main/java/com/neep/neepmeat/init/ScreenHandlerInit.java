@@ -14,6 +14,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<StirlingEngineScreenHandler> STIRLING_ENGINE;
     public static ScreenHandlerType<AlloyKilnScreenHandler> ALLOY_KILN;
     public static ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER;
+    public static ScreenHandlerType<WorkstationScreenHandler> WORKSTATION;
 
     public static void registerScreenHandlers()
     {
@@ -23,5 +24,6 @@ public class ScreenHandlerInit
         STIRLING_ENGINE = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "stirling_engine"), StirlingEngineScreenHandler::new);
         ALLOY_KILN = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "alloy_kiln"), AlloyKilnScreenHandler::new);
         ASSEMBLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "assembler"), AssemblerScreenHandler::new);
+        WORKSTATION = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "workstation"), WorkstationScreenHandler::new);
     }
 }
