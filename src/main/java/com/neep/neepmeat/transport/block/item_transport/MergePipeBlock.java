@@ -5,7 +5,10 @@ import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEnt
 import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -140,10 +143,34 @@ public class MergePipeBlock extends PneumaticTubeBlock
     }
 
     @Override
+    public Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
+    {
+        return state.get(MergePipeBlock.FACING);
+    }
+
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         super.appendProperties(builder);
         builder.add(FACING);
+    }
+
+    @Override
+    public boolean singleOutput()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean canItemEnter(ResourceAmount<ItemVariant> item, World world, BlockPos pos, BlockState state, Direction inFace)
+    {
+        return super.canItemEnter(item, world, pos, state, inFace) && inFace != state.get(FACING);
+    }
+
+    @Override
+    public boolean canItemLeave(ResourceAmount<ItemVariant> item, World world, BlockPos pos, BlockState state, Direction outFace)
+    {
+        return super.canItemLeave(item, world, pos, state, outFace) && outFace == state.get(FACING);
     }
 
     @Nullable
