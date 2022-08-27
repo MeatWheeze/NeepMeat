@@ -5,8 +5,12 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +28,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
@@ -121,4 +126,18 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
         return state.get(LEVEL);
     }
 
+    @Override
+    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance)
+    {
+        if (entity instanceof ItemEntity item)
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                ItemStack stack = item.getStack();
+                long inserted = CharnelCompactorStorage.getStorage(world, pos, Direction.UP).insert(ItemVariant.of(stack), stack.getCount(), transaction);
+                stack.decrement((int) inserted);
+                transaction.commit();
+            }
+        }
+    }
 }
