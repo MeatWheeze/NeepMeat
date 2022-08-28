@@ -2,6 +2,7 @@ package com.neep.neepmeat.screen_handler;
 
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
+import com.neep.neepmeat.screen_handler.slot.PatternSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -11,8 +12,6 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
-
-import java.util.Optional;
 
 public class AssemblerScreenHandler extends BasicScreenHandler
 {
@@ -189,60 +188,6 @@ public class AssemblerScreenHandler extends BasicScreenHandler
         @Override
         public boolean canInsert(ItemStack stack)
         {
-            return false;
-        }
-    }
-
-    public static class PatternSlot extends Slot
-    {
-        protected final int maxAmount = 1;
-
-        public PatternSlot(Inventory inventory, int index, int x, int y)
-        {
-            super(inventory, index, x, y);
-        }
-
-        public void onQuickTransfer(ItemStack newItem, ItemStack original)
-        {
-
-        }
-
-        public ItemStack takeStackRange(int min, int max, PlayerEntity player)
-        {
-            return ItemStack.EMPTY;
-        }
-
-        public Optional<ItemStack> tryTakeStackRange(int min, int max, PlayerEntity player)
-        {
-            return super.tryTakeStackRange(min, max, player);
-        }
-
-        @Override
-        public ItemStack insertStack(ItemStack stack, int amount)
-        {
-            ItemStack thisStack = stack.copy();
-            thisStack.setCount(1);
-            this.setStack(thisStack);
-            return stack;
-        }
-
-        @Override
-        public ItemStack takeStack(int amount)
-        {
-            this.inventory.removeStack(this.getIndex());
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public boolean canInsert(ItemStack stack)
-        {
-            return true;
-        }
-
-        @Override
-        public boolean canTakeItems(PlayerEntity playerEntity)
-        {
-            this.inventory.removeStack(this.getIndex());
             return false;
         }
     }
