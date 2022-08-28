@@ -186,5 +186,7 @@ public class NMBlocks
     // --- Integrator ---
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
 
+    public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", 64, false, FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
+
 }
 
