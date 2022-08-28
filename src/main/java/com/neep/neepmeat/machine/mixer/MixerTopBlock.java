@@ -15,6 +15,7 @@ import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -24,6 +25,7 @@ import java.util.List;
 
 public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvider
 {
+    public static final VoxelShape OUTLINE = Block.createCuboidShape(0, -16, 0, 16, 16, 16);
     private final String registryName;
 
     public MixerTopBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -36,6 +38,12 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
     public String getRegistryName()
     {
         return registryName;
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return OUTLINE;
     }
 
     @Nullable
