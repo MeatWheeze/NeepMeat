@@ -8,6 +8,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ItemInPipe
 {
     public double x;
@@ -22,14 +23,17 @@ public class ItemInPipe
     public long tickEnd;
     public float speed;
 
-    protected ItemStack itemStack;
+    protected ItemVariant variant;
+    protected int amount;
 
     public ItemInPipe(ResourceAmount<ItemVariant> amount, long tickStart)
     {
         this.in = null;
         this.out = null;
         this.progress = 0;
-        this.itemStack = amount.resource().toStack((int) amount.amount());
+        this.variant = amount.resource();
+        this.amount = (int) amount.amount();
+//        this.itemStack = amount.resource().toStack((int) amount.amount());
         this.speed = 0.1f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
@@ -42,10 +46,16 @@ public class ItemInPipe
 
     public ItemInPipe(Direction in, Direction out, ItemStack itemStack, long tickStart)
     {
+        this(in, out, ItemVariant.of(itemStack), itemStack.getCount(), tickStart);
+    }
+
+    public ItemInPipe(Direction in, Direction out, ItemVariant variant, int amount, long tickStart)
+    {
         this.in = in;
         this.out = out;
         this.progress = 0;
-        this.itemStack = itemStack;
+        this.variant = variant;
+        this.amount = amount;
         this.speed = 0.1f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
@@ -58,12 +68,12 @@ public class ItemInPipe
 
     public ItemStack getItemStack()
     {
-        return itemStack;
+        return variant.toStack(amount);
     }
 
-    public int getCount()
+    public int getAmount()
     {
-        return itemStack.getCount();
+        return amount;
     }
 
     public void set(Vec3d vec)
@@ -82,7 +92,6 @@ public class ItemInPipe
     public Vec3d getPosition(float prog)
     {
         float inFactor = 1 - prog;
-        float outFactor = prog;
         Vec3d vec;
         if (prog <= 0.5)
         {
@@ -90,7 +99,7 @@ public class ItemInPipe
         }
         else
         {
-            vec = directionUnit(out).multiply(outFactor - 0.5);
+            vec = directionUnit(out).multiply(prog - 0.5);
         }
         return vec;
     }
@@ -106,20 +115,20 @@ public class ItemInPipe
         this.set(new Vec3d(0, 0, 0));
     }
 
-    public ResourceAmount<ItemVariant> getResourceAmount()
+    public ResourceAmount<ItemVariant> toResourceAmount()
     {
-        ResourceAmount<ItemVariant> amount = new ResourceAmount<>(ItemVariant.of(itemStack), itemStack.getCount());
-        if (amount.resource().isBlank())
+        ResourceAmount<ItemVariant> itemVariantResourceAmount = new ResourceAmount<>(variant, amount);
+        if (itemVariantResourceAmount.resource().isBlank())
         {
-            amount = new ResourceAmount<>(ItemVariant.of(Items.STONE.getDefaultStack()), 1);
+            itemVariantResourceAmount = new ResourceAmount<>(ItemVariant.of(Items.STONE.getDefaultStack()), 1);
         }
-        return amount;
+        return itemVariantResourceAmount;
 //        return new ResourceAmount<ItemVariant>(ItemVariant.of(itemStack), itemStack.getCount());
     }
 
     public void decrement(int i)
     {
-        this.itemStack.decrement(i);
+        this.amount -= i;
     }
 
     public NbtCompound toNbt(NbtCompound nbt)
@@ -130,7 +139,9 @@ public class ItemInPipe
         nbt.putLong("tick_end", tickEnd);
 
         NbtCompound item = new NbtCompound();
-        itemStack.writeNbt(item);
+//        itemStack.writeNbt(item);
+        nbt.put("variant", variant.toNbt());
+        nbt.putInt("amount", amount);
         nbt.put("item", item);
 
         return nbt;
@@ -140,10 +151,11 @@ public class ItemInPipe
     {
         Direction in = Direction.byId(nbt.getInt("in"));
         Direction out = Direction.byId(nbt.getInt("out"));
-        ItemStack stack = ItemStack.fromNbt(nbt.getCompound("item"));
+        ItemVariant variant = ItemVariant.fromNbt(nbt.getCompound("variant"));
+        int amount = nbt.getInt("amount");
         long tickStart = nbt.getLong("tick_start");
 
-        ItemInPipe item = new ItemInPipe(in, out, stack, tickStart);
+        ItemInPipe item = new ItemInPipe(in, out, variant, amount, tickStart);
 
         return item;
     }

@@ -83,7 +83,7 @@ public class PneumaticPipeBlockEntity extends SyncableBlockEntity
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     long transferred = TubeUtils.pipeToAny(item, blockPos, blockState, item.out, world, transaction, false);
-                    if (transferred == item.getCount() || item.getItemStack().isEmpty())
+                    if (transferred == item.getAmount() || item.getItemStack().isEmpty())
                     {
                         it.remove();
                     } else

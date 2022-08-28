@@ -7,7 +7,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -81,7 +80,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
         {
             if (be.getCachedState().get(ItemPumpBlock.FACING) == direction.getOpposite())
             {
-                return be.forwardItem(item.getResourceAmount(), transaction);
+                return be.forwardItem(item.toResourceAmount(), transaction);
             }
         }
         return 0;
