@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.api.pipe;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +42,7 @@ public interface IItemPipe
                 .collect(Collectors.toList());
     }
 
-    long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item);
+    long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction);
 
     default boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {

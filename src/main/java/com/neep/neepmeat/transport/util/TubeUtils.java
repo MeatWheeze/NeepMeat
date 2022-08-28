@@ -44,7 +44,7 @@ public class TubeUtils
         }
         else if ((storage = ItemStorage.SIDED.find(world, toPos, out.getOpposite())) != null)
         {
-            amountInserted = itemToStorage(item, storage);
+            amountInserted = itemToStorage(item, storage, transaction);
         }
 
         // TODO: is this condition necessary?
@@ -61,22 +61,19 @@ public class TubeUtils
      * @param storage The ItemVariant storage to be inserted into
      * @return The number of items that were inserted
      */
-    public static long itemToStorage(ItemInPipe item, Storage<ItemVariant> storage)
+    public static long itemToStorage(ItemInPipe item, Storage<ItemVariant> storage, TransactionContext transaction)
     {
-        Transaction t = Transaction.openOuter();
-        long transferred = storage.insert(item.getResourceAmount().resource(), item.getCount(), t);
-        if (transferred > 0)
+        try (Transaction nested = transaction.openNested())
         {
-            t.commit();
-            if (transferred == item.getCount())
+            long transferred = storage.insert(item.getResourceAmount().resource(), item.getCount(), nested);
+            if (transferred > 0)
             {
-//                item.decrement((int) transferred);
-                return item.getCount();
+                nested.commit();
+                item.decrement((int) transferred);
+                return transferred;
             }
-            item.decrement((int) transferred);
-            return transferred;
+            nested.abort();
         }
-        t.abort();
         return 0;
     }
 
@@ -105,9 +102,9 @@ public class TubeUtils
             {
                 long simpleAmount = canEjectSimple(item.getResourceAmount(), world, toPos, out, transaction);
                 ItemInPipe newItem = item.copyWith((int) simpleAmount);
-                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), newItem);
+                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), newItem, transaction);
             }
-            else amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item);
+            else amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item, transaction);
         }
         return amountInserted;
     }

@@ -7,6 +7,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -65,7 +66,7 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
 
     // TODO: make this do things
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction)
     {
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {

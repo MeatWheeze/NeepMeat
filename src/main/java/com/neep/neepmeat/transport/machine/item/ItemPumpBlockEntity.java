@@ -126,17 +126,15 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         return true;
     }
 
+    // Takes items from connected storages
     public boolean retrieve(Transaction transaction)
     {
-
-//        if (doWork(USE_AMOUNT, transaction) == 0)
-//        {
-//            return false;
-//        }
-
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
 
         boolean success = false;
+
+        Storage<ItemVariant> facingStorage = insertionCache.find(facing);
+
         for (RetrievalTarget<ItemVariant> target : retrievalCache)
         {
             Storage<ItemVariant> targetStorage = target.find();
@@ -144,12 +142,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             Transaction nested1 = transaction.openNested();
 
             ResourceAmount<ItemVariant> extractable;
-            Storage<ItemVariant> facingStorage = insertionCache.find(facing);
             if (facingStorage != null)
             {
                 Transaction nested2 = nested1.openNested();
                 extractable = StorageUtil.findExtractableContent(targetStorage,
-                        itemVariant -> facingStorage.insert(itemVariant, Long.MAX_VALUE, nested2) > 0, nested2);
+                        itemVariant -> facingStorage.simulateInsert(itemVariant, Long.MAX_VALUE, nested2) > 0, nested2);
                 nested2.abort();
             }
             else
@@ -173,7 +170,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             // TODO: change max amount
             long extracted = targetStorage.extract(extractable.resource(), Math.min(transferable, 16), nested1);
             extractable = new ResourceAmount<>(extractable.resource(), extracted);
-            long forwarded = forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target);
+            long forwarded = forwardRetrieval(new ResourceAmount<>(extractable.resource(), extracted), target, transaction);
 
             if (forwarded < 1)
             {
@@ -222,13 +219,13 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 //        }
     }
 
-    public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target)
+    public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target, TransactionContext transaction)
     {
         BlockPos newPos = target.getPos().offset(target.getFace());
         BlockState state = world.getBlockState(newPos);
         if (state.getBlock() instanceof IItemPipe pipe)
         {
-            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()));
+            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()), transaction);
         }
         return 0;
     }
