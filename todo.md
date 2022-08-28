@@ -58,6 +58,7 @@
 - [done] Make fluid pipes retain connections
 - [done] Make Charnel Compactor accept c:raw_meat
 - [done] Remove redstone control in Breaker
+- Make Router use filter slots or something
 
 ## Later
 
