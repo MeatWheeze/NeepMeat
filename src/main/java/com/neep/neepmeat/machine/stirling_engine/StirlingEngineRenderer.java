@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 import com.eliotlash.mclib.utils.MathHelper;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
-import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -32,7 +32,6 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
 
         CURRENT_FRAME = be.getWorld().getTime() + tickDelta;
         float delta = (float) (CURRENT_FRAME - LAST_FRAME);
-//        this.lastFrame = currentFrame;
 
         // Temporal discretisation!
         be.angle = MathHelper.wrapDegrees(be.angle + StirlingEngineBlockEntity.energyToSpeed(be.energyStored) * delta);

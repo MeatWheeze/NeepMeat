@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
+import com.google.common.collect.MultimapBuilder;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
@@ -27,12 +28,13 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 {
     protected StirlingEngineStorage storage;
 
-    public static final int MAX_ENERGY = 8192;
+    public static final int MAX_ENERGY = 100;
+    public static final float MULTIPLIER = 0.08f;
 
     public float angle;
 
-    protected int energyStored;
-    private int prevEnergy;
+    protected float energyStored;
+    protected float prevEnergy;
 
     protected int burnTime;
     protected int fuelTime;
@@ -63,7 +65,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
                 {
                     case 0 -> burnTime;
                     case 1 -> fuelTime;
-                    case 2 -> energyStored;
+                    case 2 -> (int) energyStored;
                     default -> 0;
                 };
         }
@@ -104,7 +106,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         storage.writeNbt(nbt);
         nbt.putInt("burn_time", burnTime);
         nbt.putInt("fuel_time", fuelTime);
-        nbt.putInt("energy", energyStored);
+        nbt.putFloat("energy", energyStored);
 //        nbt.putInt("fuel_time", fuelTime);
     }
 
@@ -114,7 +116,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         storage.readNbt(nbt);
         this.burnTime = nbt.getInt("burn_time");
         this.fuelTime = nbt.getInt("fuel_time");
-        this.energyStored = nbt.getInt("energy");
+        this.energyStored = nbt.getFloat("energy");
 //        this.fuelTime = nbt.getInt("fuel_time");
     }
 
@@ -127,14 +129,14 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
         if (isBurning())
         {
-            this.energyStored = Math.min(MAX_ENERGY, energyStored + 2);
+            this.energyStored = Math.min(MAX_ENERGY, energyStored + 1);
             sync();
         }
 
         if (burnTime == 0)
         {
             int time;
-            if (getWorkMultiplier() < 0.8 && (time = storage.decrementFuel()) > 0)
+            if (getRunningRate() < 0.8 && (time = storage.decrementFuel()) > 0)
             {
                 this.burnTime = time;
                 this.fuelTime = time;
@@ -144,17 +146,17 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
         if (cache != null)
         {
-            cache.setWorkMultiplier(getWorkMultiplier());
+            cache.setWorkMultiplier(getRunningRate());
             doWork();
-
-            if (!cache.tick(this))
-                energyStored = prevEnergy;
         }
+
+        cache.tick(this);
     }
 
-    public float getWorkMultiplier()
+    public float getRunningRate()
     {
-        return energyStored / (float) MAX_ENERGY;
+//        return this.isBurning() ? MULTIPLIER : 0;
+        return energyStored / (float) MAX_ENERGY * MULTIPLIER;
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, StirlingEngineBlockEntity be)
@@ -192,20 +194,20 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         return new StirlingEngineScreenHandler(syncId, inv, storage.inventory, propertyDelegate);
     }
 
-    public static float energyToSpeed(int energy)
+    public static float energyToSpeed(float energy)
     {
-        // E=Iw^2. Assume the flywheel has a moment of inertia of 100kgm^2, divide by 20 to get velocity in rad / tick.
-        float w1 = (float) Math.sqrt(2f * energy / 100) / 20;
+        // E=Iw^2. Assume the flywheel has a moment of inertia of 40kgm^2, divide by 20 to get velocity in rad / tick.
+        float w1 = (float) Math.sqrt(2f * energy / 40) / 20;
         return (float) (w1 * 180 / Math.PI); // Convert to degrees / tick
     }
 
-    public int doWork()
+    public float doWork()
     {
-        int convertAmount = 1;
-        if (energyStored > convertAmount)
+        float convertAmount = 0.5f;
+        if (energyStored >= convertAmount)
         {
             this.prevEnergy = energyStored;
-            energyStored -= convertAmount;
+            energyStored = Math.max(0, energyStored - convertAmount);
             sync();
             return convertAmount;
         }

@@ -72,4 +72,9 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     {
         return cache;
     }
+
+    public static float rateToSpeed(float rate)
+    {
+        return rate * 20;
+    }
 }
