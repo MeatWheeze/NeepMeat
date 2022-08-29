@@ -96,26 +96,26 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
     {
-        GrindingRecipe recipe;
-        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && (recipe = be.getCurrentRecipe()) != null)
-        {
-//            Item output = recipe.getItemOutput().resource();
-            ItemStack stack1 = be.getStorage().getInputStorage().getResource().toStack(1);
-            ItemStack stack2 = recipe.getItemOutput().resource().getDefaultStack();
-
-            for (int it = 0; it < 5; ++it)
-            {
-                double d = (double) pos.getX() + 0.5;
-                double e = pos.getY() + 0.7;
-                double f = (double) pos.getZ() + 0.5;
-
-                double h = (random.nextDouble() - 0.5) * 0.1;
-                double i = (random.nextDouble() - 0.5) * 0.1 + 0.2;
-                double j = (random.nextDouble() - 0.5) * 0.1;
-
-                world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, stack1.isEmpty() ? stack2 : stack1), d, e, f, h, i, j);
-            }
-        }
+//        GrindingRecipe recipe;
+//        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && (recipe = be.getCurrentRecipe()) != null)
+//        {
+////            Item output = recipe.getItemOutput().resource();
+//            ItemStack stack1 = be.getStorage().getInputStorage().getResource().toStack(1);
+//            ItemStack stack2 = recipe.getItemOutput().resource().getDefaultStack();
+//
+//            for (int it = 0; it < 5; ++it)
+//            {
+//                double d = (double) pos.getX() + 0.5;
+//                double e = pos.getY() + 0.7;
+//                double f = (double) pos.getZ() + 0.5;
+//
+//                double h = (random.nextDouble() - 0.5) * 0.1;
+//                double i = (random.nextDouble() - 0.5) * 0.1 + 0.2;
+//                double j = (random.nextDouble() - 0.5) * 0.1;
+//
+//                world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, stack1.isEmpty() ? stack2 : stack1), d, e, f, h, i, j);
+//            }
+//        }
     }
 
     @Override
