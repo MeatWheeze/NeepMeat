@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
+public class TankBlockEntity extends SyncableBlockEntity
 {
     protected final WritableSingleFluidStorage buffer;
 
@@ -52,13 +52,6 @@ public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.
         buffer.readNbt(tag);
     }
 
-    @Override
-    @Nullable
-    public WritableSingleFluidStorage getBuffer(Direction direction)
-    {
-        return buffer;
-    }
-
     public boolean onUse(PlayerEntity player, Hand hand)
     {
         if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
@@ -67,7 +60,7 @@ public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.
         }
         else if (!world.isClient())
         {
-            showContents((ServerPlayerEntity) player, world, getPos(), getBuffer(null));
+            showContents((ServerPlayerEntity) player, world, getPos(), buffer);
             return true;
         }
         return true;

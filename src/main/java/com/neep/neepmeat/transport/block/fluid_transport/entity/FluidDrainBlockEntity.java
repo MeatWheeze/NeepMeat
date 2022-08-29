@@ -1,5 +1,9 @@
 package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -7,24 +11,33 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FluidDrainable;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import static com.neep.neepmeat.transport.machine.fluid.TankBlockEntity.showContents;
+
 @SuppressWarnings("UnstableApiUsage")
-public class FluidDrainBlockEntity extends TankBlockEntity
+public class FluidDrainBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
     private int transferCooldown = 0;
+    protected final WritableSingleFluidStorage buffer;
 
     public FluidDrainBlockEntity(BlockPos pos, BlockState state)
     {
         super(NMBlockEntities.FLUID_DRAIN, pos, state);
+        this.buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync);
     }
 
     public boolean needsCooldown()
@@ -35,6 +48,13 @@ public class FluidDrainBlockEntity extends TankBlockEntity
     private void setCooldown(int cooldown)
     {
         this.transferCooldown = cooldown;
+    }
+
+    @Override
+    @Nullable
+    public WritableSingleFluidStorage getBuffer(Direction direction)
+    {
+        return buffer;
     }
 
     public boolean grabFluid(World world, BlockPos pos, BlockState state)
@@ -122,5 +142,33 @@ public class FluidDrainBlockEntity extends TankBlockEntity
             blockEntity.setCooldown(16);
             blockEntity.grabFluid(world, pos, state);
         }
+    }
+
+    @Override
+    public void writeNbt(NbtCompound tag)
+    {
+        super.writeNbt(tag);
+        buffer.writeNbt(tag);
+    }
+
+    @Override
+    public void readNbt(NbtCompound tag)
+    {
+        super.readNbt(tag);
+        buffer.readNbt(tag);
+    }
+
+    public boolean onUse(PlayerEntity player, Hand hand)
+    {
+        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
+        {
+            return true;
+        }
+        else if (!world.isClient())
+        {
+            showContents((ServerPlayerEntity) player, world, getPos(), getBuffer(null));
+            return true;
+        }
+        return true;
     }
 }
