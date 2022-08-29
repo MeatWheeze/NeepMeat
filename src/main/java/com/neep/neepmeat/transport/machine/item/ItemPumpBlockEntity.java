@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -145,8 +146,8 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             if (facingStorage != null)
             {
                 Transaction nested2 = nested1.openNested();
-                extractable = StorageUtil.findExtractableContent(targetStorage,
-                        itemVariant -> facingStorage.simulateInsert(itemVariant, Long.MAX_VALUE, nested2) > 0, nested2);
+                extractable = MeatStorageUtil.findExtractableContent(targetStorage,
+                        (t, itemVariant) -> facingStorage.simulateInsert(itemVariant, Long.MAX_VALUE, t) > 0, nested2);
                 nested2.abort();
             }
             else
