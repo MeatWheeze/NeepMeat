@@ -1,17 +1,16 @@
 package com.neep.meatweapons.particle;
 
+import com.neep.meatlib.registry.ParticleRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
-import net.minecraft.client.particle.CloudParticle;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class MWParticles
 {
@@ -19,7 +18,7 @@ public class MWParticles
 
     public static void init()
     {
-        PLASMA_PARTICLE = register(MeatWeapons.NAMESPACE, "plasma", PLASMA_PARTICLE);
+        PLASMA_PARTICLE = ParticleRegistry.register(MeatWeapons.NAMESPACE, "plasma", PLASMA_PARTICLE);
     }
 
     @Environment(EnvType.CLIENT)
@@ -33,8 +32,4 @@ public class MWParticles
         ParticleFactoryRegistry.getInstance().register(PLASMA_PARTICLE, FlameParticle.Factory::new);
     }
 
-    public static DefaultParticleType register(String namespace, String id, DefaultParticleType particleType)
-    {
-        return Registry.register(Registry.PARTICLE_TYPE, new Identifier(namespace, id), particleType);
-    }
 }
