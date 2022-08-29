@@ -33,6 +33,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -178,6 +179,12 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
     public void tick(ServerWorld world)
     {
+        super.tick();
+
+        if (getRunningRate() < 0.05) return;
+
+        increment = MathHelper.lerp(getRunningRate(), MIN_INCREMENT, MAX_INCREMENT);
+
         progress = Math.min(MAX_PROGRESS, progress + increment);
 
         // Sync when spinTicks reaches zero

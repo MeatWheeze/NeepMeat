@@ -51,17 +51,20 @@
 - [done] Shave down the number of failed networks by storing whether a node has a network
 - [done] Move machine blocks and entities together
 - [done] Make SoundRegistry general
-- Add Maceration Blades (whirly blades of death)
+- [done] Add Maceration Blades (whirly blades of death)
 - [done] Add MEAT fluid
 - [done] Add Meat Steel recipe
 - [done] Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
 - [done] Make Charnel Compactor accept c:raw_meat
 - [done] Remove redstone control in Breaker
-- Make Router use filter slots or something
+- [done] Make Router use filter slots or something
+- Make Assembler require power
 
 ## Later
 
+- Do not eject grinder xp
+- Try to make Assembler use screen handlers
 - Add recipes for MeatWeapons
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add coloured fluid pipes
