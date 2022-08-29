@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -164,13 +165,17 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                 ItemStack filterStack = storage.getInventory().getStack(i);
                 if (!(filterStack.isEmpty() || filterStack.isItemEqual(stack))) return false;
 
-                int ejected = TubeUtils.stackToAny((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), target.getStack(i).copy());
-                if (ejected > 0)
+                try (Transaction transaction = Transaction.openOuter())
                 {
-                    target.removeStack(i, ejected);
-                    target.markDirty();
-                    spawnSmoke((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), stack);
-                    return true;
+                    int ejected = TubeUtils.stackToAny((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING),
+                            ItemVariant.of(target.getStack(i)), target.getStack(i).getCount(), transaction);
+                    if (ejected > 0)
+                    {
+                        target.removeStack(i, ejected);
+                        target.markDirty();
+                        spawnSmoke((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), stack);
+                        return true;
+                    }
                 }
             }
         }

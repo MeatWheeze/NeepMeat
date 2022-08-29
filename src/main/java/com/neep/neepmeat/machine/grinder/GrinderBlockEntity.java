@@ -8,6 +8,7 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.util.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -205,78 +206,11 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     {
         Direction facing = getCachedState().get(GrinderBlock.FACING);
         CombinedStorage<ItemVariant, WritableStackStorage> combined = new CombinedStorage<>(List.of(storage.outputStorage, storage.extraStorage));
-        storageToWorld(getWorld(), combined, pos.offset(facing), facing.getOpposite(), transaction);
+        TubeUtils.storageToAny((ServerWorld) getWorld(), combined, pos, facing, transaction);
 
         Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
         ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
         storage.xpStorage.extract(Float.MAX_VALUE, transaction);
-    }
-
-//    @Override
-//    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
-//    {
-//        Direction facing = state.get(GrinderBlock.FACING);
-//        for (Direction direction : Direction.values())
-//        {
-//            if (direction == facing || direction == Direction.UP || direction == Direction.DOWN)
-//                continue;
-//
-//            BlockPos offset = pos.offset(direction);
-//            if (world.getBlockEntity(offset) instanceof IMotorBlockEntity be
-//                    && world.getBlockState(offset).get(BaseFacingBlock.FACING) == direction.getOpposite())
-//            {
-//                setConnectedMotor(be);
-//                return;
-//            }
-//        }
-//        setConnectedMotor(null);
-//    }
-
-    public static void storageToWorld(World world, Storage<ItemVariant> storage, BlockPos toPos, Direction direction, TransactionContext transaction)
-    {
-        BlockState state = world.getBlockState(toPos);
-        Storage<ItemVariant> ejectStorage = ItemStorage.SIDED.find(world, toPos, direction);
-        for (StorageView<ItemVariant> view : storage.iterable(transaction))
-        {
-            try (Transaction inner = transaction.openNested())
-            {
-                if (view.isResourceBlank())
-                {
-                    inner.abort();
-                    continue;
-                }
-
-                long maxAmount = view.getAmount();
-                long transferred = 0;
-                ItemStack stack = view.getResource().toStack((int) maxAmount);
-                if (ejectStorage != null)
-                {
-                    transferred = ejectStorage.insert(view.getResource(), maxAmount, inner);
-                }
-                else if (state.getBlock() instanceof IItemPipe pipe && pipe.getConnections(state, d -> true).contains(direction))
-                {
-//                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime())) == -1 ? maxAmount : 0;
-                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime()), transaction);
-                }
-                else
-                {
-                    Direction facing = direction.getOpposite();
-                    Vec3d itemPos = Vec3d.ofCenter(toPos, 0.5);
-                    ItemEntity entity = new ItemEntity(world, itemPos.x, itemPos.y, itemPos.z, stack);
-                    float mult = 0.1f;
-                    entity.setVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
-                    world.spawnEntity(entity);
-                    transferred = maxAmount;
-                }
-                long extracted = view.extract(view.getResource(), maxAmount, inner);
-                if (transferred == maxAmount && extracted == maxAmount)
-                {
-                    inner.commit();
-                    continue;
-                }
-                inner.abort();
-            }
-        }
     }
 
     @Override
