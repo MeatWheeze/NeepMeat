@@ -77,6 +77,7 @@
 
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
+- Fix motor retaining reference to BE
 
 ## Much Later
 
