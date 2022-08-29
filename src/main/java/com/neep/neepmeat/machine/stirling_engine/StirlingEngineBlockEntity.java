@@ -1,12 +1,12 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
-import com.google.common.collect.MultimapBuilder;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -17,6 +17,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
@@ -39,7 +40,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     protected int burnTime;
     protected int fuelTime;
 
-    protected IMotorisedBlock cache = null;
+    protected BlockApiCache<Void, Void> cache = null;
 
 //    protected SnapshotParticipant<Integer> snapshotParticipant = new SnapshotParticipant<>()
 //    {
@@ -123,7 +124,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     public void tick()
     {
         if (cache == null)
-            update(world, pos, pos, getCachedState());
+            update((ServerWorld) world, pos, pos, getCachedState());
 
         this.burnTime = Math.max(0, burnTime - 1);
 
@@ -144,13 +145,15 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             updateBurning();
         }
 
-        if (cache != null)
+        if (cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            cache.setWorkMultiplier(getRunningRate());
-            doWork();
+            if (cache != null)
+            {
+                motorised.setWorkMultiplier(getRunningRate());
+                doWork();
+            }
+            motorised.tick(this);
         }
-
-        cache.tick(this);
     }
 
     public float getRunningRate()
@@ -215,7 +218,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
-    public void setConnectedBlock(IMotorisedBlock motorised)
+    public void setConnectedBlock(BlockApiCache<Void, Void> motorised)
     {
         cache = motorised;
     }
@@ -227,7 +230,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
-    public IMotorisedBlock getConnectedBlock()
+    public BlockApiCache<Void, Void> getConnectedBlock()
     {
         return cache;
     }
