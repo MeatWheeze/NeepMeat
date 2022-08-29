@@ -73,7 +73,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
                 default -> throw new IllegalStateException("Unexpected value: " + getCachedState().get(DeathBladesBlock.FACING));
             }
 
-            int damageAmount = 1;
+            int damageAmount = (int) (4 * multiplier);
             world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true).stream()
 //                .filter(entity ->
 //                {
@@ -83,7 +83,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
                     .filter(e -> e.hurtTime == 0).forEach(e ->
                     {
                         if (e.getHealth() > damageAmount)
-                            e.damage(DamageSource.GENERIC, 1);
+                            e.damage(DamageSource.GENERIC, damageAmount);
                         else killEntity((ServerWorld) world, e);
                     });
         }
@@ -97,12 +97,12 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
             try (Transaction transaction = Transaction.openOuter())
             {
                 be.getBuffer(null).insert(FluidVariant.of(NMFluids.STILL_MEAT), getEntityAmount(entity), transaction);
-                entity.remove(Entity.RemovalReason.KILLED);
                 world.spawnParticles(NMParticles.MEAT_SPLASH, entity.getX(), entity.getY(), entity.getZ(), 20, 0.4, 0.4, 0.4, 0.01);
+                entity.setDropsLoot(false);
                 transaction.commit();
             }
         }
-        else entity.kill();
+        entity.kill();
     }
 
     public static long getEntityAmount(LivingEntity entity)

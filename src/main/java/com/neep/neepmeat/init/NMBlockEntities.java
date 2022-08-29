@@ -133,9 +133,12 @@ public class NMBlockEntities
         FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
 
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
+        FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, NMBlockEntities.TANK_BLOCK_ENTITY);
+
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, NMBlockEntities.GLASS_TANK_BLOCK_ENTITY);
         NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
         STOP_VALVE = registerBlockEntity("stop_valve", StopValveBlockEntity::new, NMBlocks.STOP_VALVE);
 

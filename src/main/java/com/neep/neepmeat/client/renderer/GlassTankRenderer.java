@@ -42,10 +42,10 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
     {
         matrices.push();
 
-        WritableSingleFluidStorage buffer = blockEntity.getBuffer(null);
+        WritableSingleFluidStorage buffer = blockEntity.getStorage(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         buffer.renderLevel = MathHelper.lerp(0.1f, buffer.renderLevel,(buffer.getAmount()) / (float) buffer.getCapacity());
-        FluidVariant fluid = blockEntity.getBuffer(null).getResource();
+        FluidVariant fluid = blockEntity.getStorage(null).getResource();
         renderFluidCuboid(vertexConsumers, matrices, fluid, 0.07f, 0.93f, 0.93f, buffer.renderLevel);
 
         matrices.pop();

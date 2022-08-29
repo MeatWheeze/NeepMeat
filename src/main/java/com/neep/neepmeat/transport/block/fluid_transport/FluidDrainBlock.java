@@ -37,7 +37,7 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
     {
         if (!world.isClient)
         {
-            if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
+            if (world.getBlockEntity(pos) instanceof FluidDrainBlockEntity be)
             {
                 TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
             }
