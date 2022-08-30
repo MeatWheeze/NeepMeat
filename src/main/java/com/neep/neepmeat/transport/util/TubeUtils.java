@@ -27,7 +27,7 @@ public class TubeUtils
     /** Handles the movement of an item from a pipe to an adjacent block.
      */
     // TODO: Cutoff depth
-    public static long pipeToAny(ItemInPipe item, BlockPos pos, BlockState state, Direction out, World world, TransactionContext transaction, boolean simpleCheck)
+    public static long pipeToAny(ItemInPipe item, BlockPos pos, Direction out, World world, TransactionContext transaction, boolean simpleCheck)
     {
         BlockPos toPos = pos.offset(out);
         BlockState toState = world.getBlockState(toPos);

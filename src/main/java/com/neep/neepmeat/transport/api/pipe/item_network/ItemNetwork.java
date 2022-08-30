@@ -1,15 +1,21 @@
 package com.neep.neepmeat.transport.api.pipe.item_network;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.util.TubeUtils;
+import com.neep.neepmeat.util.ItemInPipe;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Stack;
 
 public class ItemNetwork implements IItemNetwork
 {
@@ -23,15 +29,24 @@ public class ItemNetwork implements IItemNetwork
     }
 
     @Override
-    public boolean retrieve(BlockPos to, Direction in, ItemVariant variant, long amount)
+    public boolean retrieve(BlockPos to, Direction in, ItemVariant variant, long amount, TransactionContext transaction)
     {
         return false;
     }
 
     @Override
-    public long eject(BlockPos from, Direction out, ItemVariant variant, long amount)
+    public long eject(BlockPos from, Direction out, ItemVariant variant, long amount, TransactionContext transaction)
     {
         return 0;
+    }
+
+    @Override
+    public long route(BlockPos from, Direction in, BlockPos to, Direction out, ItemVariant variant, int amount, TransactionContext transaction)
+    {
+        ItemInPipe item = new ItemInPipe(null, null, variant, amount, world.getTime());
+        Stack<Direction> route = findPath(from, in, to, out, variant, amount);
+        item.setRoute(route);
+        return TubeUtils.pipeToAny(item, from, Direction.NORTH, world, transaction, false);
     }
 
     public ItemPipeState getPipe(BlockPos pos)
@@ -45,7 +60,6 @@ public class ItemNetwork implements IItemNetwork
         if (state.getBlock() instanceof IItemPipe pipe)
         {
             ItemPipeState pipeState = new ItemPipeState(pipe);
-//            putPipe(pos, pipeState);
             return pipeState;
         }
         return null;
@@ -61,9 +75,12 @@ public class ItemNetwork implements IItemNetwork
         pipes.remove(pos.asLong());
     }
 
+    /** To be optionally called when an {@link IItemPipe} is added or changed.
+     */
     public void onPipeAdded(IItemPipe pipe, BlockPos pos, BlockState state)
     {
-//        ItemPipeState pipeState = new ItemPipeState(pipe);
+        ItemPipeState pipeState = new ItemPipeState(pipe);
+        putPipe(pos, pipeState);
 //
 //        List<Direction> connections = pipe.getConnections(state, d -> true);
 //        for (Direction direction : connections)
@@ -78,12 +95,10 @@ public class ItemNetwork implements IItemNetwork
 //        }
     }
 
+    /** Removes the cached pipe at the given position. Must be called whenever an {@link IItemPipe} is removed.
+     */
     public void onPipeRemove(BlockPos pos)
     {
-        for (Direction direction : Direction.values())
-        {
-//            getPipe(pos.offset(direction)).connected[direction.getOpposite().getId()] = null;
-        }
         removePipe(pos);
     }
 
