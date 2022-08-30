@@ -1,11 +1,13 @@
 package com.neep.neepmeat.transport.api.pipe;
 
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -66,7 +68,9 @@ public interface IItemPipe
 
     default Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
     {
-        Direction out;
+        Direction out = item.getPreferredOutputDirection(state, in, this);
+        if (out != null) return out;
+
         List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
         Random rand = world.getRandom();
         if (!connections.isEmpty())
@@ -83,5 +87,20 @@ public interface IItemPipe
     default boolean singleOutput()
     {
         return true;
+    }
+
+    default boolean routeAware()
+    {
+        return false;
+    }
+
+    default void onAdded(BlockPos pos, BlockState state, ServerWorld world)
+    {
+        ((IServerWorld) world).getItemNetwork().onPipeAdded(this, pos, state);
+    }
+
+    default void onBroken(BlockPos pos, ServerWorld world)
+    {
+        ((IServerWorld) world).getItemNetwork().onPipeRemove(pos);
     }
 }

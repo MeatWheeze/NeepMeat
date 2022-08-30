@@ -21,6 +21,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
 public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
@@ -50,18 +52,21 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
             }
             world.removeBlockEntity(pos);
         }
+        if (world instanceof ServerWorld serverWorld)
+            onBroken(pos, serverWorld);
     }
 
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-//        BlockState state2 = enforceApiConnections(world, pos, state);
-//        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
         if (!(world.getBlockState(fromPos).getBlock() instanceof PneumaticTubeBlock))
         {
 //            createStorageNodes(world, pos, state2);
         }
+
+        if (world instanceof ServerWorld serverWorld)
+            onAdded(pos, state, serverWorld);
 
     }
 
@@ -71,6 +76,9 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
 //        createStorageNodes(world, pos, updatedState);
+
+        if (world instanceof ServerWorld serverWorld)
+            onAdded(pos, state, serverWorld);
     }
 
     @Override
@@ -112,6 +120,8 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
+        if (world instanceof ServerWorld serverWorld)
+            onAdded(pos, state, serverWorld);
     }
 
     @Nullable

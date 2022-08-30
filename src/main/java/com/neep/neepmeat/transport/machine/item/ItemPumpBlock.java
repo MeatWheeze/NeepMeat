@@ -15,6 +15,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -59,6 +60,14 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (world instanceof ServerWorld serverWorld)
+            onBroken(pos, serverWorld);
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
 //        if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
@@ -80,7 +89,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
         {
             if (be.getCachedState().get(ItemPumpBlock.FACING) == direction.getOpposite())
             {
-                return be.forwardItem(item.toResourceAmount(), transaction);
+                return be.forwardItem(item, transaction);
             }
         }
         return 0;

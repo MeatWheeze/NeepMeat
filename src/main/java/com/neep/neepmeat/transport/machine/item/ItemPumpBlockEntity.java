@@ -202,6 +202,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
     public long forwardItem(ResourceAmount<ItemVariant> amount, TransactionContext transaction)
     {
+        return forwardItem(new ItemInPipe(amount, world.getTime()), transaction);
+    }
+
+    public long forwardItem(ItemInPipe item, TransactionContext transaction)
+    {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         BlockPos newPos = pos.offset(facing);
 
@@ -209,11 +214,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
             Transaction nested = transaction.openNested();
-            long transferred = storage.insert(amount.resource(), amount.amount(), nested);
+            long transferred = storage.insert(item.resource(), item.amount(), nested);
             nested.commit();
             return transferred;
         }
-        return TubeUtils.pipeToAny(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld(), transaction, true);
+        return TubeUtils.pipeToAny(item, getPos(), getCachedState(), facing, getWorld(), transaction, true);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
