@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 
-public class MergePipeBlockEntity extends PneumaticPipeBlockEntity
+public class MergePipeBlockEntity extends ItemPipeBlockEntity
 {
     public MergePipeBlockEntity(BlockPos pos, BlockState state)
     {

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -12,10 +12,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3f;
 
-public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implements BlockEntityRenderer<T>
+public class ItemPipeRenderer<T extends ItemPipeBlockEntity> implements BlockEntityRenderer<T>
 {
 
-    public PneumaticPipeRenderer(BlockEntityRendererFactory.Context context)
+    public ItemPipeRenderer(BlockEntityRendererFactory.Context context)
     {
     }
 

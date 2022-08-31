@@ -96,7 +96,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.PNEUMATIC_PIPE, ItemPipeRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);

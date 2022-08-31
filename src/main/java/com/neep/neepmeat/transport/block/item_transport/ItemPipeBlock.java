@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -32,10 +32,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
+public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
 
-    public PneumaticTubeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public ItemPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
     }
@@ -45,7 +45,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         if (!state.isOf(newState.getBlock()))
         {
-            if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+            if (world.getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
             {
                 be.dropItems();
             }
@@ -59,7 +59,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
 
-        if (!(world.getBlockState(fromPos).getBlock() instanceof PneumaticTubeBlock))
+        if (!(world.getBlockState(fromPos).getBlock() instanceof ItemPipeBlock))
         {
 //            createStorageNodes(world, pos, state2);
         }
@@ -94,7 +94,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         }
 
         // Check if neighbour is forced
-        if (neighborState.getBlock() instanceof PneumaticTubeBlock)
+        if (neighborState.getBlock() instanceof ItemPipeBlock)
         {
             forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
             otherConnected = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.SIDE;
@@ -127,7 +127,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new PneumaticPipeBlockEntity(pos, state);
+        return new ItemPipeBlockEntity(pos, state);
     }
 
     @Override
@@ -149,7 +149,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, ItemPipeBlockEntity::serverTick, world);
     }
 
     // Creates blockstate connections to fluid containers after placing
@@ -179,7 +179,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction)
     {
-        if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
         {
             long transferred = be.insert(item, world, state, pos, direction);
             return transferred;

@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.block.item_transport.PneumaticTubeBlock;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
