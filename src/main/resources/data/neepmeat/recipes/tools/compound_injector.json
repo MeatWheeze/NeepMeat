@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "m m",
+    "mbm",
+    " n "
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "n": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "result": {
+    "item": "neepmeat:compound_injector",
+    "count": 1
+  }
+}
