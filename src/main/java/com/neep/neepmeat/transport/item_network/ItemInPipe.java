@@ -6,12 +6,15 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtByteArray;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ItemInPipe
@@ -31,18 +34,11 @@ public class ItemInPipe
     protected ItemVariant variant;
     protected int amount;
 
-    protected Stack<Direction> route;
+    protected List<Direction> route;
 
     public ItemInPipe(ResourceAmount<ItemVariant> amount, long tickStart)
     {
-        this.in = null;
-        this.out = null;
-        this.progress = 0;
-        this.variant = amount.resource();
-        this.amount = (int) amount.amount();
-        this.speed = 0.1f;
-        this.tickStart = tickStart;
-        this.tickEnd = (long) (tickStart + 1 / speed);
+        this(null, null, amount.resource(), (int) amount.amount(), tickStart);
     }
 
     public ItemInPipe(Direction in, Direction out, ItemVariant variant, int amount, long tickStart)
@@ -67,7 +63,7 @@ public class ItemInPipe
         return amount;
     }
 
-    public void setRoute(Stack<Direction> route)
+    public void setRoute(List<Direction> route)
     {
         this.route = route;
     }
@@ -75,7 +71,7 @@ public class ItemInPipe
     public Direction getPreferredOutputDirection(BlockState state, Direction in, IItemPipe pipe)
     {
         List<Direction> options = pipe.getConnections(state, d -> d != in);
-        if (options.size() > 1 && route != null && !route.empty())
+        if (options.size() > 1 && route != null && !route.isEmpty())
         {
             return route.remove(0);
         }
@@ -152,6 +148,22 @@ public class ItemInPipe
         this.amount -= i;
     }
 
+    public static byte[] writeRoute(List<Direction> route)
+    {
+        byte[] bytes = new byte[route.size()];
+        for (int i = 0; i < route.size(); ++i)
+        {
+            bytes[i] = (byte) route.get(i).getId();
+        }
+        return bytes;
+    }
+
+    public static List<Direction> readRoute(NbtByteArray byteArray)
+    {
+        if (byteArray == null) return null;
+        return byteArray.stream().map(b -> Direction.byId(b.byteValue())).collect(Collectors.toList());
+    }
+
     public NbtCompound toNbt(NbtCompound nbt)
     {
         nbt.putInt("in", in.getId());
@@ -160,10 +172,11 @@ public class ItemInPipe
         nbt.putLong("tick_end", tickEnd);
 
         NbtCompound item = new NbtCompound();
-//        itemStack.writeNbt(item);
         nbt.put("variant", variant.toNbt());
         nbt.putInt("amount", amount);
         nbt.put("item", item);
+        if (route != null)
+            nbt.putByteArray("route", writeRoute(route));
 
         return nbt;
     }
@@ -175,17 +188,24 @@ public class ItemInPipe
         ItemVariant variant = ItemVariant.fromNbt(nbt.getCompound("variant"));
         int amount = nbt.getInt("amount");
         long tickStart = nbt.getLong("tick_start");
+        List<Direction> route = readRoute((NbtByteArray) nbt.get("route"));
 
         ItemInPipe item = new ItemInPipe(in, out, variant, amount, tickStart);
+        item.setRoute(route);
 
         return item;
     }
 
-    public ItemInPipe copyWith(int amount)
+    public void setAmount(int amount)
     {
-        ItemInPipe newItem = new ItemInPipe(in, out, variant, amount, tickStart);
-        if (route != null)
-            newItem.setRoute((Stack<Direction>) route.clone());
-        return newItem;
+        this.amount = amount;
     }
+
+//    public ItemInPipe copyWith(int amount)
+//    {
+//        ItemInPipe newItem = new ItemInPipe(in, out, variant, amount, tickStart);
+//        if (route != null)
+//            newItem.setRoute((List<Direction>) route.clone());
+//        return newItem;
+//    }
 }
