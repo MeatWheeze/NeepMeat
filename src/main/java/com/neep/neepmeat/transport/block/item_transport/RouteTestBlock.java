@@ -2,8 +2,8 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.util.TubeUtils;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -38,7 +38,7 @@ public class RouteTestBlock extends BaseBlock
             item.setRoute(route);
             try (Transaction transaction = Transaction.openOuter())
             {
-                TubeUtils.pipeToAny(item, pos, Direction.NORTH, world, transaction, false);
+                ItemPipeUtil.pipeToAny(item, pos, Direction.NORTH, world, transaction, false);
             }
             
         }

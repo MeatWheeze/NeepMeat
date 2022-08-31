@@ -5,7 +5,7 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
-import com.neep.neepmeat.transport.util.TubeUtils;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -167,7 +167,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    int ejected = TubeUtils.stackToAny((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING),
+                    int ejected = ItemPipeUtil.stackToAny((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING),
                             ItemVariant.of(target.getStack(i)), target.getStack(i).getCount(), transaction);
                     if (ejected > 0)
                     {

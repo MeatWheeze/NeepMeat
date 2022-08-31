@@ -2,9 +2,9 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.util.TubeUtils;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.util.MiscUtils;
-import com.neep.neepmeat.util.RetrievalTarget;
+import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -125,7 +125,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
 
     public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, EjectorBlockEntity be)
     {
-        be.retrievalCache = MiscUtils.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
+        be.retrievalCache = ItemPipeUtil.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
         be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
         be.extractionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face));
         be.needsRefresh = false;

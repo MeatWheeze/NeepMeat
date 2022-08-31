@@ -1,4 +1,4 @@
-package com.neep.neepmeat.util;
+package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -7,7 +7,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 

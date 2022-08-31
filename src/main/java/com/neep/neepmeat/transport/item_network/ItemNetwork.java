@@ -1,8 +1,8 @@
-package com.neep.neepmeat.transport.api.pipe.item_network;
+package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.transport.util.TubeUtils;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.api.IItemNetwork;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -46,7 +46,7 @@ public class ItemNetwork implements IItemNetwork
         ItemInPipe item = new ItemInPipe(null, null, variant, amount, world.getTime());
         Stack<Direction> route = findPath(from, in, to, out, variant, amount);
         item.setRoute(route);
-        return TubeUtils.pipeToAny(item, from, Direction.NORTH, world, transaction, false);
+        return ItemPipeUtil.pipeToAny(item, from, Direction.NORTH, world, transaction, false);
     }
 
     public ItemPipeState getPipe(BlockPos pos)

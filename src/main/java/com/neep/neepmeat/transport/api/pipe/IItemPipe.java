@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;

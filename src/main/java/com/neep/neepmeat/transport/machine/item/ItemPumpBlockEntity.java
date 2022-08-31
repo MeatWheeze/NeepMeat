@@ -6,10 +6,9 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.util.TubeUtils;
-import com.neep.neepmeat.util.ItemInPipe;
-import com.neep.neepmeat.util.MiscUtils;
-import com.neep.neepmeat.util.RetrievalTarget;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -219,7 +218,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             nested.commit();
             return transferred;
         }
-        return TubeUtils.pipeToAny(item, getPos(), facing, getWorld(), transaction, true);
+        return ItemPipeUtil.pipeToAny(item, getPos(), facing, getWorld(), transaction, true);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
@@ -240,7 +239,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
     public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
     {
-        be.retrievalCache = MiscUtils.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
+        be.retrievalCache = ItemPipeUtil.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
         be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
         be.needsRefresh = false;
     }
