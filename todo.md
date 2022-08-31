@@ -35,7 +35,7 @@
 - [done] Add Rendering Basin
 - [done] Add Ethereal Alembic
 - [done] Fix Fluid Buffer connections
-- Balance Transducer and Stirling Engine
+- [done] Balance Transducer and Stirling Engine
 - [done] Add minimum fuel influx for heater activation
 - [done] Remove 'realistic fluids'
 - [done] Add cutting recipes for building blocks

@@ -145,13 +145,10 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             updateBurning();
         }
 
-        if (cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            if (cache != null)
-            {
-                motorised.setWorkMultiplier(getRunningRate());
-                doWork();
-            }
+            motorised.setWorkMultiplier(getRunningRate());
+            doWork();
             motorised.tick(this);
         }
     }
