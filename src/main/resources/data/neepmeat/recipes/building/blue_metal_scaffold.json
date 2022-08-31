@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "tag": "c:metal_scaffolding"
+    },
+    "d": {
+      "item": "minecraft:blue_dye"
+    }
+  },
+  "result": {
+    "item": "neepmeat:blue_metal_scaffold",
+    "count": 8
+  }
+}

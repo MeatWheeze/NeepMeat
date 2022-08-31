@@ -3,6 +3,7 @@ package com.neep.meatlib.datagen;
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.block.MetalScaffoldingBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
@@ -63,6 +64,10 @@ public class MeatRecipeProvider extends FabricRecipeProvider
         BlockRegistry.BLOCKS.values().stream()
                     .filter(block -> block instanceof BasePaintedBlock.PaintedBlock)
                     .forEach(block -> ((BasePaintedBlock.PaintedBlock) block).generateRecipe(exporter));
+
+        BlockRegistry.BLOCKS.values().stream()
+                .filter(block -> block instanceof MetalScaffoldingBlock)
+                .forEach(block -> ((MetalScaffoldingBlock) block).generateRecipe(exporter));
 
         EXPORTER_CONSUMERS.forEach(consumer -> consumer.accept(exporter));
 
