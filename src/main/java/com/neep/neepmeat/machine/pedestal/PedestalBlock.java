@@ -7,8 +7,11 @@ import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -107,6 +110,12 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
             world.addParticle(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,
                     Blocks.AMETHYST_BLOCK.getDefaultState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.1 + random.nextFloat(), pos.getZ() + 0.5, 0, dy, 0.1);
         }
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.PEDESTAL, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
     }
 
     @Nullable

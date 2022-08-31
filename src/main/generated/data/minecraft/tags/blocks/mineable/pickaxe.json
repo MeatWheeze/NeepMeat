@@ -115,8 +115,6 @@
     "neepmeat:basic_glass_tank",
     "neepmeat:fluid_buffer",
     "neepmeat:item_buffer",
-    "neepmeat:fluid_meter",
-    "neepmeat:pressure_gauge",
     "neepmeat:fluid_interface",
     "neepmeat:fluid_drain",
     "neepmeat:item_duct",

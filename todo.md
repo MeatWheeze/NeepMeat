@@ -323,19 +323,17 @@ Grant us eyes!
 Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logistics and cosmic horror (WIP). 
 
 
-## Features
+## Feature Overview
 
-- Fluid pipes
-- Prety item pipes
-- Block breakers and placers
-- Advanced ore processing
-- Building blocks
+- Fluid pipes: An extensive fluid transfer system is provided, complete with tanks and valves. Fluids obey gravity, so fewer pumps are required.
+- Item pipes: I miss RedPower 2.
+- Block breakers and placers: 
+- Advanced ore processing: Dissolve raw ores in Eldritch Enzymes, filter out impurities in a Trommel and produce ingots with the Casting Basin and Hydraulic Press.
+- Building blocks: Plenty of rusty, dungy and... bloody? textures are provided. Perfect for decorating hospitals, abattoirs, cathedrals and more!
 - Meat [zalgo pls]
 
-## Future Features
 
-- Automatic farming
-- 
+## Feature Explanation
 
 ## Dependencies
 
@@ -344,18 +342,32 @@ Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logisti
 
 tldr: cosmic-horror-cyber-gore-punk cheerful spooky meat RedPower ripoff
 
-## Fluid Pipes
+## Getting Started
 
-Fluids obey gravity, negating the need for pumps in well-designed systems.
+- Obtaining an Integrator:
+Integrator Eggs can be found in dungeon loot. To hatch one, you must obtain blood by slaughtering a mob over a Drain with the Sacrificial Dagger. This blood can then be pumped into the egg using fluid pipes. A fully-grown Integrator has an internal buffer of 'Enlightenment' that is used by workstations that are connected by Data Cables.
 
-Flow calculations are performed in a separate thread
+- Obtaining Body Compound
+Body compound is a common crafting item in NeepMeat. To produce it, connect a Charnel Compactor to a fully-grown Integrator with Data Cables. The Charnel Compactor fuunctions much like a Composter, except it requires flesh. We hope that you have a burgeoning meat industrial complex.
 
-## Building Blocks
+- Crops
+NeepMeat provides two major crops. Gland Potatoes can be processed into Eldritch Enzymes in a mixer. Whisper Wheat can be ground into Whisper Flour which can be fed to an Integrator to increase its Enlightenment.
 
-We have provided an exciting array of rusty and bloody textures that are just perfect for hospitals, mental hospitals, abattoirs, cathedrals and more!
+- Obtaining Meat Steel
+Meat steel is required for mid-tier machinery. It is made by combining an Iron Ingot and a Raw Meat Brick in an alloy furnace.
+
+## Potential Future Features
+
+- Automatic farming
+- Multiblock tank
+- In-game guide tablet
+- Advanced item and fluid logistics
+- Programmable automation controller
+- More eldritchness
+
 
 Since this is version 0.1, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
 
-# Forge Port
+## Forge Port
 
 Nope. This is a hobby project and a port would be a massive amount of non-fun work. However, this is Free software so you are more than welcome to port it yourself.
