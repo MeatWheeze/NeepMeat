@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "neepmeat:item/meat_steel"
+    "layer0": "neepmeat:item/whisper_brass_ingot"
   }
 }

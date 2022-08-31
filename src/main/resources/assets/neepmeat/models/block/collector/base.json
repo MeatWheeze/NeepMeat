@@ -2,11 +2,11 @@
 	"credit": "Made with Blockbench",
 	"ambientocclusion": false,
 	"textures": {
-		"0": "neepmeat:block/alembic/glass_tank",
-		"1": "neepmeat:block/alembic/tank",
-		"2": "neepmeat:block/alembic/base",
-		"3": "neepmeat:block/alembic/pipe",
-		"particle": "neepmeat:block/alembic/glass_tank"
+		"0": "neepmeat:block/collector/glass_tank",
+		"1": "neepmeat:block/collector/tank",
+		"2": "neepmeat:block/collector/base",
+		"3": "neepmeat:block/collector/pipe",
+		"particle": "neepmeat:block/collector/glass_tank"
 	},
 	"elements": [
 		{

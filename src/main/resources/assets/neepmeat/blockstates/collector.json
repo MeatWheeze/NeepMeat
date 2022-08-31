@@ -1,22 +1,22 @@
 {
   "variants": {
     "facing=east": {
-      "model": "neepmeat:block/alembic/base",
+      "model": "neepmeat:block/collector/base",
       "y": 90,
       "x": 0
     },
     "facing=north": {
-      "model": "neepmeat:block/alembic/base",
+      "model": "neepmeat:block/collector/base",
       "y": 0,
       "x": 0
     },
     "facing=south": {
-      "model": "neepmeat:block/alembic/base",
+      "model": "neepmeat:block/collector/base",
       "y": 180,
       "x": 0
     },
     "facing=west": {
-      "model": "neepmeat:block/alembic/base",
+      "model": "neepmeat:block/collector/base",
       "y": -90,
       "x": 0
     }

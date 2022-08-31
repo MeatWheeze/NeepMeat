@@ -184,7 +184,7 @@ public class NMBlockEntities
         CRUCIBLE = registerBlockEntity("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUCIBLE);
-        ALEMBIC = registerBlockEntity("alembic", AlembicBlockEntity::new, NMBlocks.ALEMBIC);
+        ALEMBIC = registerBlockEntity("collector", AlembicBlockEntity::new, NMBlocks.ALEMBIC);
         FluidStorage.SIDED.registerForBlockEntity(AlembicBlockEntity::getStorage, ALEMBIC);
 
         CASTING_BASIN = registerBlockEntity("casting_basin", CastingBasinBlockEntity::new, NMBlocks.CASTING_BASIN);

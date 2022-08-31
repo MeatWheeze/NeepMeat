@@ -7,7 +7,7 @@
   ],
   "key": {
     "b": {
-      "item": "neepmeat:whisper_brass"
+      "item": "neepmeat:whisper_brass_ingot"
     },
     "i": {
       "item": "minecraft:iron_ingot"
@@ -16,11 +16,11 @@
       "item": "neepmeat:fluid_buffer"
     },
     "p": {
-      "item": "neepmeat:pipe"
+      "item": "neepmeat:fluid_pipe"
     }
   },
   "result": {
-    "item": "neepmeat:alembic",
+    "item": "neepmeat:collector",
     "count": 1
   }
 }
