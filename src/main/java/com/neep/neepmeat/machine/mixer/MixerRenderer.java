@@ -1,9 +1,11 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -21,8 +23,16 @@ import net.minecraft.util.math.Vec3f;
 @SuppressWarnings("UnstableApiUsage")
 public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 {
-    public MixerRenderer(BlockEntityRendererFactory.Context context)
+    protected float lastFrame;
+    protected float currentFrame;
+
+    public MixerRenderer(BlockEntityRendererFactory.Context ctx)
     {
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
+        {
+            this.lastFrame = this.currentFrame;
+            return true;
+        }));
     }
 
     @Override
@@ -38,6 +48,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
             progress = (be.progress) / be.processLength;
             nextOutput = progress * be.getCurrentRecipe().fluidOutput.amount();
         }
+
 
         WritableSingleFluidStorage storage = (WritableSingleFluidStorage) be.storage.getFluidOutput();
         storage.renderLevel = MathHelper.lerp(0.1f, storage.renderLevel,(storage.getAmount() + nextOutput) / (float) storage.getCapacity());
@@ -65,32 +76,44 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 
         matrices.push();
         matrices.translate(0.5, 1.5, 0.5);
-        float rotatingAngle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * 50f);
-        be.bladeAngle = MathHelper.lerpAngleDegrees(0.1f, be.bladeAngle,
-                be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : rotatingAngle
+
+        this.currentFrame = be.getWorld().getTime() + tickDelta;
+        float delta = (currentFrame - lastFrame);
+
+        be.bladeSpeed = MathHelper.lerp(0.5f, be.bladeSpeed,
+                be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : 20f * be.progressIncrement
         );
+        be.bladeAngle = MathHelper.wrapDegrees(be.bladeAngle + be.bladeSpeed * delta);
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 
-        renderItems(be, matrices, rotatingAngle, 0, outputEnd - 0.4f, 0.2f, vertexConsumers, overlay);
+        renderItems(be, matrices, 0, 0, outputEnd - 0.4f, 0.4f, tickDelta, vertexConsumers, overlay);
         matrices.pop();
     }
 
-    public static void renderItems(MixerBlockEntity be, MatrixStack matrices, float angle, float angleOffset, float fluidHeight, float offset, VertexConsumerProvider vertexConsumers, int overlay)
+    public static void renderItems(MixerBlockEntity be, MatrixStack matrices, float angle, float angleOffset, float fluidHeight, float offset, float tickDelta, VertexConsumerProvider vertexConsumers, int overlay)
     {
-        Transaction transaction = Transaction.openOuter();
-        for (StorageView<ItemVariant> view : be.getItemStorage(null).iterable(transaction))
-        {
-            matrices.push();
-            matrices.multiply(Quaternion.fromEulerXyz(0, (angle * angleOffset * 2) / 20, 0));
-            matrices.translate(0.5, fluidHeight, offset);
 
+        WritableStackStorage view = be.getItemStorage(null);
+        matrices.push();
+        matrices.translate(0.5, 0, 0.5);
+
+        int n = (int) MathHelper.clamp(view.amount / 14f, 1, 3);
+
+        for (int i = 0; i < n; ++i)
+        {
+            float bobOffset = (float) ((float) i * (2 / (float) n * Math.PI));
+            float yOffset = (float) MathHelper.clamp(fluidHeight + 0.03f * Math.sin((be.getWorld().getTime() + tickDelta) / 6 + bobOffset), -0.27f, 1 - 0.4f);
+
+            matrices.push();
+            matrices.multiply(Quaternion.fromEulerXyz(0, (float) (angle + angleOffset), 0));
+            matrices.translate(0, yOffset, offset);
             MinecraftClient.getInstance().getItemRenderer()
                     .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
-            angleOffset += Math.PI / 3;
+            angleOffset += 2 * Math.PI / n;
             matrices.pop();
         }
-        transaction.abort();
+        matrices.pop();
     }
 }

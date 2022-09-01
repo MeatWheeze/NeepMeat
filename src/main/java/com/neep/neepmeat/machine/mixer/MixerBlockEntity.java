@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.mixer;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.FluidIngredient;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -45,6 +46,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
     protected long processStart;
 
     public float bladeAngle;
+    public float bladeSpeed;
 
     public MixerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -61,7 +63,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
         return getOutputStorage();
     }
 
-    public Storage<ItemVariant> getItemStorage(@Nullable Direction direction)
+    public WritableStackStorage getItemStorage(@Nullable Direction direction)
     {
         return storage.getItemInput();
     }

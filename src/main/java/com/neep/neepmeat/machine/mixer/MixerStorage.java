@@ -79,7 +79,7 @@ public class MixerStorage extends SimpleInventory
         fluidOutput.readNbt(output);
     }
 
-    public Storage<ItemVariant> getItemInput()
+    public WritableStackStorage getItemInput()
     {
         return itemInput;
     }

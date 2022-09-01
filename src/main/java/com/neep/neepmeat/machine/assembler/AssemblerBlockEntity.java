@@ -132,6 +132,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     public ScreenHandler createMenu(int syncId, PlayerInventory playerInv, PlayerEntity player)
     {
         Inventory targetInv = new SimpleInventory(12);
+        if (cache == null) update();
         BlockEntity be = cache.getBlockEntity();
         if (be instanceof Inventory inv)
         {
