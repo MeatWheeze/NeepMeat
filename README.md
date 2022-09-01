@@ -1,4 +1,4 @@
-<img align="middle" src="https://raw.githubusercontent.com/MeatWheeze/NeepMeat/1.18-dev/logo_low.png?token=GHSAT0AAAAAABYJMQXRKVYKSPZI6XNWLC72YYRD6DQ" alt="NeepMeat logo" />
+<img align="middle" src="https://raw.githubusercontent.com/MeatWheeze/NeepMeat/1.18-dev/logo_low.png?token=GHSAT0AAAAAABYJMQXRKVYKSPZI6XNWLC72YYRD6DQ" alt="NeepMeat logo" width="500"/>
 
 *'All meat is an unknowing ritual sacrifice to the gods of nature. Through the sifting of flesh, we will find remnants of the Divine, and through them will be delivered enlightenment. At NEEP, we are pleased to announce a new range of superior, flesh-based industrial machines that will allow your company to augur the Divine with efficiency and excellence.'*
 
