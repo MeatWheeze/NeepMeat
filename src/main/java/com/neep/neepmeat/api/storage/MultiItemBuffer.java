@@ -1,4 +1,4 @@
-package com.neep.meatlib.transfer;
+package com.neep.neepmeat.api.storage;
 
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

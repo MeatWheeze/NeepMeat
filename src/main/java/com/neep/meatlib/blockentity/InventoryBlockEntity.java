@@ -1,6 +1,6 @@
 package com.neep.meatlib.blockentity;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventories;
@@ -10,7 +10,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 
-public abstract class InventoryBlockEntity extends SyncableBlockEntity implements ImplementedInventory, SidedInventory
+public abstract class InventoryBlockEntity extends SyncableBlockEntity implements InventoryImpl, SidedInventory
 {
     protected DefaultedList<ItemStack> inventory;
 

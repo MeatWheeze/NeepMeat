@@ -4,7 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.CombinedInventory;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
 import com.neep.neepmeat.util.ItemUtils;
@@ -37,7 +37,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
     protected DummyScreenHandler dummyScreenHandler = new DummyScreenHandler(this::onStackChanged);
     protected CraftingInventory input = new CraftingInventory(dummyScreenHandler, 3, 3);
 
-    protected class Output implements ImplementedInventory
+    protected class Output implements InventoryImpl
     {
         private DefaultedList<ItemStack> items = DefaultedList.ofSize(1, ItemStack.EMPTY);
         private boolean inputsTaken;
@@ -51,7 +51,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
         @Override
         public ItemStack removeStack(int slot, int count)
         {
-            ItemStack retStack = ImplementedInventory.super.removeStack(slot, count);
+            ItemStack retStack = InventoryImpl.super.removeStack(slot, count);
             if (!inputsTaken)
             {
                 inputsTaken = true;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import com.neep.neepmeat.transport.machine.item.RouterInventory;
 import com.neep.neepmeat.screen_handler.RouterScreenHandler;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class RouterBlockEntity extends BlockEntity implements NamedScreenHandlerFactory
 {
-    public ImplementedInventory inventory = new RouterInventory();
+    public InventoryImpl inventory = new RouterInventory();
     public static Direction[] DIRECTIONS = {Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP, Direction.DOWN};
 
     public RouterBlockEntity(BlockPos pos, BlockState state)

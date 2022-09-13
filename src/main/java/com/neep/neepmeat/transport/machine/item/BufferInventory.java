@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
-public class BufferInventory implements ImplementedInventory
+public class BufferInventory implements InventoryImpl
 {
     protected DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
 
@@ -17,6 +17,6 @@ public class BufferInventory implements ImplementedInventory
     @Override
     public ItemStack removeStack(int slot, int count)
     {
-        return ImplementedInventory.super.removeStack(slot, count);
+        return InventoryImpl.super.removeStack(slot, count);
     }
 }

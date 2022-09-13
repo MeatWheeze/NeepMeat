@@ -6,16 +6,17 @@ NeepMeat is a Minecraft mod that adds various forms of darkly aesthetic automati
 
 - **Fluid pipes**: Complete with tanks, valves and pumps.
 - **Item pipes**: Simple and pretty item transfer. Advanced routing coming in the future.
-- **Numerous machines**: Block breaking and placing, auto-crafting, 
+- **Numerous machines**: Block breaking and placing, auto-crafting, smelting, etc.
 - **Advanced ore processing**: Convert raw ores into cosmic fat using eldritch enzymes!
 - **Building blocks**: Plenty of rusty, dungy and... bloody? textures are provided. Perfect for decorating hospitals, abattoirs, cathedrals and more!
 - M̵̛̦̽̊̀͆̿̕̕͝Ë̷͇́͐̓̉̿͌̃̈͋̀͝Ą̶̪̗̻͕͈̱͎̦̟͚̄̄͛̌̚̕͜T̴̜̖̝̖͈͙̺̦́̍̎̕͜͝
 
 ### Dependencies
 
-- Fabric API ??? (Required)
-- Geckolib ??? (Required)
-- REI ??? (Highly recommended for recipe viewing)
+- Fabric Loader (Required)
+- Fabric API (Required)
+- Geckolib  (Required)
+- REI (Highly recommended for recipe viewing)
 
 ## Potential Future Features
 

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -29,13 +29,13 @@ public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
     public static int INPUT_2 = 2;
     public static int OUTPUT = 3;
 
-    protected ImplementedInventory inventory;
+    protected InventoryImpl inventory;
     protected InventoryStorage inventoryStorage;
     protected AlloyKilnBlockEntity parent;
 
     public AlloyKilnStorage(AlloyKilnBlockEntity parent)
     {
-        this.inventory = new ImplementedInventory()
+        this.inventory = new InventoryImpl()
         {
             final DefaultedList<ItemStack> items = DefaultedList.ofSize(4, ItemStack.EMPTY);
 
@@ -48,7 +48,7 @@ public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
             @Override
             public void markDirty()
             {
-                ImplementedInventory.super.markDirty();
+                InventoryImpl.super.markDirty();
                 AlloyKilnStorage.this.parent.markDirty();
             }
         };

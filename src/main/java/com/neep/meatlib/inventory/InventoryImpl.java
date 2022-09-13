@@ -1,4 +1,4 @@
-package com.neep.neepmeat.inventory;
+package com.neep.meatlib.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
@@ -7,16 +7,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 
-public interface ImplementedInventory extends Inventory
+public interface InventoryImpl extends Inventory
 {
     DefaultedList<ItemStack> getItems();
 
-    static ImplementedInventory of(DefaultedList<ItemStack> items)
+    static InventoryImpl of(DefaultedList<ItemStack> items)
     {
         return () -> items;
     }
 
-    static ImplementedInventory ofSize(int size)
+    static InventoryImpl ofSize(int size)
     {
         return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
     }

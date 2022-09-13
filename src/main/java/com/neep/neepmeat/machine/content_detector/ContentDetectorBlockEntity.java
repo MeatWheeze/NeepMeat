@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.content_detector;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.item.ContentDetectorInventory;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import com.neep.neepmeat.util.FilterUtils;
 import com.neep.neepmeat.util.ItemUtils;
@@ -48,7 +48,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     public static final String NBT_COUNT_MODE = "count_mode";
     public static final String NBT_BEHAVIOUR_MODE = "behaviour_mode";
 
-    public ImplementedInventory filterInventory = new ContentDetectorInventory();
+    public InventoryImpl filterInventory = new ContentDetectorInventory();
 
     protected BlockApiCache<Storage<ItemVariant>, Direction> cache;
     protected boolean powered;

@@ -4,23 +4,22 @@
   "version": "${version}",
 
   "name": "NeepMeat",
-  "description": "Conquer the world with the power of BLOOD!",
+  "description": "",
   "authors": [
-    "NeepMeat"
+    "MeatWheeze"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
 
-  "license": "GPLv3",
+  "license": "MIT",
   "icon": "assets/neepmeat/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
       "com.neep.neepmeat.NeepMeat",
-      "com.neep.assembly.Assembly",
       "com.neep.meatlib.MeatLib",
       "com.neep.meatweapons.MeatWeapons"
     ],
@@ -29,7 +28,6 @@
     ],
     "client": [
       "com.neep.neepmeat.client.NeepMeatClient",
-      "com.neep.assembly.Assembly",
       "com.neep.meatweapons.client.MWClient"
     ],
     "rei_server": [
