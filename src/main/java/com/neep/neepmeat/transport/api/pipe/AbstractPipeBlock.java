@@ -169,7 +169,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
                 continue;
             BlockPos adjPos = pos.offset(direction);
             BlockState adjState = world.getBlockState(adjPos);
-            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos) ? PipeConnectionType.SIDE : PipeConnectionType.NONE);
+            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, adjPos) ? PipeConnectionType.SIDE : PipeConnectionType.NONE);
         }
         return state;
     }

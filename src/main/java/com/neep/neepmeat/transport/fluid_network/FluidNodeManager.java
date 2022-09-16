@@ -289,6 +289,7 @@ public class FluidNodeManager
     }
 
     /** Called whenever a node block entity is removed.
+     * @param pos Position of node block entity
      */
     public void entityRemoved(BlockPos pos)
     {

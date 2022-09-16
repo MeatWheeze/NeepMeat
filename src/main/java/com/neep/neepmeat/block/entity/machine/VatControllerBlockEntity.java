@@ -3,7 +3,7 @@ package com.neep.neepmeat.block.entity.machine;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
-import com.neep.neepmeat.api.storage.MultiItemBuffer;
+import com.neep.meatlib.transfer.MultiItemBuffer;
 import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.api.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.IVatComponent;

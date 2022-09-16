@@ -1,12 +1,11 @@
 package com.neep.neepmeat.inventory;
 
-import com.neep.meatlib.inventory.InventoryImpl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.collection.DefaultedList;
 
-public class GeneralInventory implements InventoryImpl
+public class GeneralInventory implements ImplementedInventory
 {
     protected DefaultedList<ItemStack> items;
 
@@ -24,7 +23,7 @@ public class GeneralInventory implements InventoryImpl
     @Override
     public ItemStack removeStack(int slot, int count)
     {
-        return InventoryImpl.super.removeStack(slot, count);
+        return ImplementedInventory.super.removeStack(slot, count);
     }
 
     public void readNbtList(NbtList nbtList)
