@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.content_detector;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.item.ContentDetectorInventory;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import com.neep.neepmeat.util.FilterUtils;
 import com.neep.neepmeat.util.ItemUtils;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

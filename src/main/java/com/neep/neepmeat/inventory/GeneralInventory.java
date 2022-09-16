@@ -1,5 +1,6 @@
 package com.neep.neepmeat.inventory;
 
+import com.neep.meatlib.inventory.ImplementedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;

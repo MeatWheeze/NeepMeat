@@ -1,6 +1,6 @@
 package com.neep.meatlib.blockentity;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.inventory.Inventories;
