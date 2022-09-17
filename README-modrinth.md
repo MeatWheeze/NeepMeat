@@ -4,15 +4,15 @@
 
 - Katherine Ursula Hydroxonium McSpree, Director of NEEP, 1922
 
-NEEPMeat is a mod about automation, logistics and cosmic horror.
+NEEPMeat is a mod about automation, logistics and cosmic horror (WIP).
 
 ## Features
 
 - **Fluid pipes**: Complete with tanks, valves and pumps.
-- **Item pipes**: Simple and pretty item transfer. Advanced routing coming in the future.
+- **Item pipes**: Simple and pretty item transfer. Advanced routing is planned.
 - **Numerous machines**: Block breaking and placing, auto-crafting, smelting, etc.
-- **Advanced ore processing**: Convert raw ores into cosmic fat using eldritch enzymes!
-- **Building blocks**: Plenty of rusty, dungy and... bloody? textures are provided. Perfect for decorating hospitals, abattoirs, cathedrals and more!
+- **Advanced ore processing**: A rather involved process that involves eldritch enzymes and cosmic fat.
+- **Building blocks**: Plenty of rusty, dingy and... bloody? textures are provided. Perfect for decorating hospitals, abattoirs, cathedrals and more!
 - M̵̛̦̽̊̀͆̿̕̕͝Ë̷͇́͐̓̉̿͌̃̈͋̀͝Ą̶̪̗̻͕͈̱͎̦̟͚̄̄͛̌̚̕͜T̴̜̖̝̖͈͙̺̦́̍̎̕͜͝
 
 ### Dependencies
