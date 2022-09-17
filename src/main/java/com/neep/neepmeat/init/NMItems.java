@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TieredCraftingItemFactory;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
@@ -57,6 +58,8 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
+    public static Item TABLET = ItemRegistry.queueItem(new TabletItem("tablet", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
 //    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new FabricItemSettings().group(NMItemGroups.GENERAL));
 //    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, new FabricItemSettings().group(NMItemGroups.GENERAL));

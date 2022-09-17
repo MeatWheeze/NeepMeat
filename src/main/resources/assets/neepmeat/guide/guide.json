@@ -1,0 +1,12 @@
+{
+  "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
+      {"type": "menu", "id": "test_entry", "icon": "minecraft:dirt", "text": "Level 1 menu entry", "entries": [
+          {"type": "page", "id": "l2test", "icon": "minecraft:gravel", "text": "Level 2 page entry"}
+          ]},
+      {"type": "page", "id": "l1test", "icon": "minecraft:stone", "text": "This is a test. This is only a test."}
+  ]},
+
+  "articles": [
+    {"id": "test_article", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"}
+    ]
+}
