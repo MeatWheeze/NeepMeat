@@ -58,7 +58,7 @@ public class PipeNetwork
 
     public static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos)
     {
-        System.out.println("trying fluid network at " + pos);
+//        System.out.println("trying fluid network at " + pos);
         UUID uuid = UUID.randomUUID();
         PipeNetwork network = new PipeNetwork(world, uuid, pos);
         network.rebuild(pos);
@@ -67,7 +67,7 @@ public class PipeNetwork
             LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
-        System.out.println("fluid network failed");
+//        System.out.println("fluid network failed");
         return Optional.empty();
     }
 
