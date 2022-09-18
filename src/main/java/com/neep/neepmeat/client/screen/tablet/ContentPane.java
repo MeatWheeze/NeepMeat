@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.screen.tablet;
 
-import me.shedaniel.math.Rectangle;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -11,8 +10,8 @@ import net.minecraft.text.Text;
 
 public abstract class ContentPane extends Screen implements Drawable, Selectable, Element, ParentElement
 {
-    protected int screenOffsetX = 17;
-    protected int screenOffsetY = 17;
+    protected int screenOffsetX = 5;
+    protected int screenOffsetY = 5;
     protected int backgroundWidth = 255;
     protected int backgroundHeight = 194;
     protected int screenWidth = 156;
