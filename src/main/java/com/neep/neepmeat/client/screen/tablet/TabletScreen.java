@@ -3,9 +3,9 @@ package com.neep.neepmeat.client.screen.tablet;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -55,16 +55,14 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         super(handler, player.getInventory(), new TranslatableText(""));
         this.player = player;
         this.leftPane = new TabletListPane(player, this);
-        this.rightPane = new TabletArticlePane(this, Text.of("ooer"));
+        this.rightPane = new TabletArticlePane(this, Article.EMPTY);
     }
 
     @Override
     public void setLeftPane(ContentPane element)
     {
         remove(leftPane);
-//        addDrawableChild(element);
         this.leftPane = element;
-//        if (client != null) leftPane.init(client, width, height);
         init();
     }
 
@@ -72,9 +70,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     public void setRightPane(ContentPane element)
     {
         remove(rightPane);
-//        addDrawableChild(element);
         this.rightPane = element;
-//        if (client != null) rightPane.init(client, width, height);
         init();
     }
 
@@ -136,7 +132,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         }
         if (rightPane != null)
         {
-            rightPane.setDimensions(rightStart, y, rightWidth, 120);
+            rightPane.setDimensions(rightStart, y, rightWidth, contentHeight);
             rightPane.init(client);
         }
     }

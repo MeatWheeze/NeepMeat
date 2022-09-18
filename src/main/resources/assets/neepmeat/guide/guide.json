@@ -8,8 +8,9 @@
 
   "articles": [
     {"id": "charnel_compactor", "contents": [
-      {"text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"},
-      {"text": "More text!"}
+      {"type": "text", "text": "Charnel Compactor\n", "bold": true},
+      {"type": "text", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"},
+      {"type": "text", "text": "More text!"}
       ]
     }
   ]
