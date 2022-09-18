@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
-import com.neep.neepmeat.guide.GuideReloadListener;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -24,12 +23,12 @@ import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
@@ -45,7 +44,9 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     // Currently available entries
     protected final List<EntryWidget> entries = new ArrayList<>();
 
-    private int menuPage;
+    private GuideNode lastNode;
+    private int highlighted;
+    private int selected;
     protected int entryHeight = 11;
 
     public TabletListPane(ITabletScreen parent)
@@ -59,6 +60,11 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     {
         super.render(matrices, mouseX, mouseY, delta);
         GUIUtil.renderBorder(matrices, x, y, width, height, 0xFF888800, 0);
+
+        if (selected != -1)
+        {
+            GUIUtil.renderBorder(matrices, x + screenOffsetX, y + screenOffsetY + selected * entryHeight, width - 2 * screenOffsetX, entryHeight, 0xFFAAAA00, 0);
+        }
     }
 
     @Override
@@ -77,6 +83,14 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     {
         if (!(chr == GLFW.GLFW_KEY_ESCAPE))
         {
+            if (chr == GLFW.GLFW_KEY_J)
+            {
+                setSelected(getSelected() + 1);
+            }
+            if (chr == GLFW.GLFW_KEY_K)
+            {
+                setSelected(getSelected() - 1);
+            }
         }
         super.charTyped(chr, modifiers);
         return true;
@@ -86,13 +100,23 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     public void init()
     {
         super.init();
+
         clearChildren();
         generateMenu();
+
+        if (lastNode != parent.getPath().peek())
+        {
+            selected = -1;
+            lastNode = parent.getPath().peek();
+        }
     }
 
     protected void generateMenu()
     {
         entries.clear();
+
+        // Back button
+        entries.add(new EntryWidget(0, screenOffsetX + this.x, screenOffsetY + this.y, width - 2 * screenOffsetX, entryHeight, ItemStack.EMPTY, Text.of("\u2190"), GuideNode.BACK));
 
         List<GuideNode> nodes = parent.getPath().peek().getChildren();
         // TODO: pages
@@ -100,14 +124,31 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         {
             GuideNode node = nodes.get(i);
             ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
-            entries.add(new EntryWidget(screenOffsetX + this.x, screenOffsetY + this.y + i * entryHeight, width - 2 * screenOffsetX, entryHeight, icon, node.getText(), node));
+            entries.add(new EntryWidget(i + 1,
+                    screenOffsetX + this.x,
+                    screenOffsetY + this.y + (i + 1) * entryHeight,
+                    width - 2 * screenOffsetX,
+                    entryHeight,
+                    icon,
+                    node.getText(),
+                    node));
         }
         entries.forEach(this::addDrawableChild);
     }
 
     protected int getPageEntries()
     {
-        return 10;
+        return (int) Math.floor(height / (float) entryHeight);
+    }
+
+    public void setSelected(int sel)
+    {
+        this.selected = MathHelper.clamp(sel, 0, entries.size());
+    }
+
+    public int getSelected()
+    {
+        return selected;
     }
 
     @Override
@@ -132,10 +173,12 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     {
         private final GuideNode node;
         private final ItemStack icon;
+        private final int index;
 
-        public EntryWidget(int x, int y, int w, int h, ItemStack icon, Text text, GuideNode node)
+        public EntryWidget(int index, int x, int y, int w, int h, ItemStack icon, Text text, GuideNode node)
         {
             super(x, y, w, h, text);
+            this.index = index;
             this.node = node;
             this.icon = icon;
         }
@@ -154,6 +197,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
 
         protected void onPress()
         {
+            setSelected(index);
             node.visitScreen(parent);
         }
 
@@ -168,6 +212,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         {
             VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
+//            int borderCol = getSelected() == index ? 0xFF00CC00 : 0xFF008800;
             int borderCol = 0xFF008800;
             this.drawHorizontalLine(matrices, this.x, this.x + width, this.y + height, borderCol);
             this.drawHorizontalLine(matrices, this.x, this.x + width, this.y, borderCol);
@@ -175,7 +220,14 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
             this.drawVerticalLine(matrices, this.x + width, this.y, this.y + height, borderCol);
 //            int j = this.active ? 0xFFFFFF : 0xA0A0A0;
             textRenderer.draw(matrices, this.getMessage(), this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
-            renderItemIcon(this.x + width - 16, this.y - 1, itemRenderer, getZOffset(), icon, matrices, vertexConsumers, 15, 0);
+            if (node.getChildren().size() > 0)
+            {
+                textRenderer.draw(matrices, "\u2192", this.x + this.width - 9, this.y + (this.height - 7) / 2f, 0x008800);
+            }
+            else
+            {
+                renderItemIcon(this.x + width - 16, this.y - 1, itemRenderer, getZOffset(), icon, matrices, vertexConsumers, 15, 0);
+            }
         }
     }
 

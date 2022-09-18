@@ -9,5 +9,6 @@ public interface ITabletScreen
     void setLeftPane(ContentPane element);
     void setRightPane(ContentPane element);
     void push(GuideNode node);
+    GuideNode pop();
     Deque<GuideNode> getPath();
 }

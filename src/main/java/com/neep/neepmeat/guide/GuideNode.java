@@ -19,6 +19,42 @@ public interface GuideNode
     Text getText();
     void visitScreen(ITabletScreen screen);
 
+    GuideNode BACK = new GuideNode()
+    {
+        @Override
+        public List<GuideNode> getChildren()
+        {
+            return Collections.emptyList();
+        }
+
+        @Override
+        public void addChild(GuideNode node) {}
+
+        @Override
+        public String getId()
+        {
+            return "";
+        }
+
+        @Override
+        public Identifier getIcon()
+        {
+            return new Identifier("minecraft:empty");
+        }
+
+        @Override
+        public Text getText()
+        {
+            return Text.of(" \u2190");
+        }
+
+        @Override
+        public void visitScreen(ITabletScreen screen)
+        {
+            screen.pop();
+        }
+    };
+
     abstract class GuideNodeImpl implements GuideNode
     {
         private final String id;
