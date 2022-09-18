@@ -20,6 +20,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 
 import java.util.*;
@@ -44,6 +45,9 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     protected PlayerEntity player;
     protected int tabWidth = 21;
 
+    protected int animationTicks;
+    protected boolean start;
+
     protected ContentPane leftPane;
     protected ContentPane rightPane;
 
@@ -56,12 +60,14 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         this.player = player;
         this.leftPane = new TabletListPane(this);
         this.rightPane = new TabletArticlePane(this, Article.EMPTY);
+        this.start = true;
 
         GuideNode root = GuideReloadListener.getInstance().getRootNode();
         if (root != null)
         {
             push(root);
         }
+        else throw new IllegalStateException("Error loading the guide contents.");
     }
 
     @Override
@@ -103,17 +109,34 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     }
 
     @Override
+    public int getAnimationTicks()
+    {
+        return animationTicks;
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
-        super.render(matrices, mouseX, mouseY, delta);
-        this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+
+        matrices.push();
+        float scale = MathHelper.clampedLerp(0.01f, 1f, (animationTicks + delta) / 10f);
+        matrices.translate(0, height / 2f * (1 - scale), 0);
+        matrices.scale(1, scale, 1);
+        if (animationTicks > 10)
+        {
+            super.render(matrices, mouseX, mouseY, delta);
+            this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+        }
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
         int borderCol = 0xFF008800;
         int offset = 3;
-        GUIUtil.renderBorder(matrices, x, y, contentWidth, contentHeight, borderCol, offset);
+
+        if (animationTicks != 0 && animationTicks != 2)
+            GUIUtil.renderBorder(matrices, x, y, contentWidth, contentHeight, borderCol, offset);
+        matrices.pop();
     }
 
     @Override
@@ -127,7 +150,6 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     @Override
     protected void init()
     {
-
         super.init();
         addDrawableChild(leftPane);
         addDrawableChild(rightPane);
@@ -159,7 +181,13 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TABLET_TEXTURE);
-        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+//        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+    }
+
+    @Override
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    {
+//        super.drawForeground(matrices, mouseX, mouseY);
     }
 
     @Override
@@ -174,6 +202,15 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         List<TooltipComponent> list = lines.stream().map(Text::asOrderedText).map(TooltipComponent::of).collect(Collectors.toList());
         data2.ifPresent(data -> list.add(1, TooltipComponent.of(data)));
         this.renderTooltipFromComponents(matrices, list, x, y);
+    }
+
+    @Override
+    protected void handledScreenTick()
+    {
+        ++animationTicks;
+        super.handledScreenTick();
+        leftPane.tick();
+        rightPane.tick();
     }
 
     private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y)

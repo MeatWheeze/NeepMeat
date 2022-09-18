@@ -28,6 +28,7 @@ public class TabletArticlePane extends ContentPane implements Drawable, Element,
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
+        if (parent.getAnimationTicks() < 14) return;
         super.render(matrices, mouseX, mouseY, delta);
         GUIUtil.renderBorder(matrices, x, y, width, height, 0xFF888800, 0);
     }

@@ -11,4 +11,6 @@ public interface ITabletScreen
     void push(GuideNode node);
     GuideNode pop();
     Deque<GuideNode> getPath();
+
+    int getAnimationTicks();
 }
