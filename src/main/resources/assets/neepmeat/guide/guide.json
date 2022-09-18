@@ -10,8 +10,15 @@
     {"id": "charnel_compactor", "contents": [
       {"type": "text", "text": "Charnel Compactor\n", "bold": true},
       {"type": "text", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"},
-      {"type": "text", "text": "More text!"}
+      {"type": "text", "text": "More text!\n\n\n\n\n\n\n\n\n _____________________________________________________________________________________________________________________________________________________________________________________________--________________________________________________________________________________________________________________"}
       ]
+    },
+    {"id": "mixer", "contents": [
+      {"type": "text", "text": "Mixer\n", "bold": true},
+      {"type": "text", "text": "The Mixer is a two block tall machine that combines fluids and items. It requires a source of rotation to function.\n"},
+      {"type": "text", "text": "Usage\n", "bold": true},
+      {"type": "text", "text": "Fluid inputs are taken from any tank that is adjacent to the mixer's lower block. Item inputs must be inserted directly into the machine through hoppers or pipes. Once a valid combination of items and fluids is present, the mixing will begin. The rate of this process is determined by the speed of the connected motor."}
+    ]
     }
   ]
 }

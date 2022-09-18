@@ -48,16 +48,10 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     private int menuPage;
     protected int entryHeight = 11;
 
-    public TabletListPane(PlayerEntity player, ITabletScreen parent)
+    public TabletListPane(ITabletScreen parent)
     {
         super(Text.of("eeeee"), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
-        GuideNode root = GuideReloadListener.getInstance().getRootNode();
-        if (root == null)
-        {
-            throw new IllegalStateException("Guide tablet tree failed to load.");
-        }
-        parent.push(root);
     }
 
     @Override
@@ -125,7 +119,13 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     @Override
     public SelectionType getType()
     {
-        return SelectionType.FOCUSED;
+        return SelectionType.NONE;
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY)
+    {
+        return false;
     }
 
     public class EntryWidget extends ClickableWidget

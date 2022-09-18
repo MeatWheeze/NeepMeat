@@ -3,7 +3,6 @@ package com.neep.neepmeat.guide.article;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
-import com.sun.jna.platform.win32.COM.COMBindingBaseObject;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -58,6 +57,6 @@ public class Article
     // Content takes a fixed width and returns a height
     public interface Content
     {
-        int render(MatrixStack matrices, float x, float y, float width, ArticleTextWidget parent);
+        int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent);
     }
 }
