@@ -2,13 +2,13 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.guide.GuideNode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -20,14 +20,12 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Matrix4f;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public abstract class TabletScreen extends HandledScreen<ScreenHandler>
+public class TabletScreen extends HandledScreen<ScreenHandler> implements ITabletScreen
 {
     public static final Identifier TABLET_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/tablet_background.png");
 
@@ -39,21 +37,52 @@ public abstract class TabletScreen extends HandledScreen<ScreenHandler>
     protected int screenOffsetY = 17;
     protected int backgroundWidth = 255;
     protected int backgroundHeight = 194;
+    protected int screenWidth = 156;
+    protected int screenHeight = 145;
     protected PlayerEntity player;
     protected int tabWidth = 21;
+
+    protected ContentPane leftPane;
+    protected ContentPane rightPane;
+
+    // Current location within the entry tree
+    protected final Deque<GuideNode> path = new LinkedList<>();
 
     public TabletScreen(PlayerEntity player, ScreenHandler handler)
     {
         super(handler, player.getInventory(), new TranslatableText(""));
         this.player = player;
-//        SCREENS.add(TabletTextScreen.getFactory(player));
-//        SCREENS.add(TabletInventoryScreen.getFactory(player));
-        SCREENS.add(TabletMenuScreen.getFactory(player));
+        this.setLeftPane(new TabletListPane(player, this));
     }
 
-    public static TabletScreenFactory getFactory(PlayerEntity player)
+    @Override
+    public void setLeftPane(ContentPane element)
     {
-        return null;
+        remove(leftPane);
+        addDrawableChild(element);
+        this.leftPane = element;
+        if (client != null) leftPane.init(client, width, height);
+    }
+
+    @Override
+    public void setRightPane(ContentPane element)
+    {
+        remove(rightPane);
+        addDrawableChild(element);
+        this.rightPane = element;
+        if (client != null) rightPane.init(client, width, height);
+    }
+
+    @Override
+    public void push(GuideNode node)
+    {
+        path.push(node);
+    }
+
+    @Override
+    public Deque<GuideNode> getPath()
+    {
+        return path;
     }
 
     @Override
@@ -72,21 +101,22 @@ public abstract class TabletScreen extends HandledScreen<ScreenHandler>
         MinecraftClient.getInstance().setScreen(factory.getScreen(player));
     }
 
+    protected void enterNode(GuideNode node)
+    {
+        path.push(node);
+        node.visitScreen(this);
+        init();
+    }
+
     @Override
     protected void init()
     {
         super.init();
+        addDrawableChild(leftPane);
         this.x = (this.width - backgroundWidth) / 2;
         this.y = (this.height - backgroundHeight) / 2;
-        for (int i = 0; i < SCREENS.size(); ++i)
-        {
-            Identifier widget = SCREENS.get(i).getIcon();
-            int finalI = i;
-            this.addDrawableChild(new TexturedButtonWidget(this.x + 58 + i * 17, this.y + 182, 12, 12, 0, 0, 0, widget, 12, 12, button ->
-            {
-                this.switchScreen(SCREENS.get(finalI));
-            }));
-        }
+        leftPane.setDimensions(x, y, 120, 120);
+        leftPane.init(client);
     }
 
     @Override
@@ -95,7 +125,6 @@ public abstract class TabletScreen extends HandledScreen<ScreenHandler>
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TABLET_TEXTURE);
-//        DrawableHelper.drawTexture(matrices, i, j, 0, 0, 0, backgroundWidth, backgroundHeight, s56, 384);
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
     }
 

@@ -1,12 +1,16 @@
 {
   "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
-      {"type": "menu", "id": "test_entry", "icon": "minecraft:dirt", "text": "Machines", "entries": [
-          {"type": "page", "id": "l2test", "icon": "minecraft:gravel", "text": "Mixer"}
+      {"type": "menu", "id": "machines", "icon": "neepmeat:meat_steel_ingot", "text": "Machines", "entries": [
+          {"type": "page", "id": "mixer", "icon": "neepmeat:mixer", "text": "Mixer"}
           ]},
-      {"type": "page", "id": "l1test", "icon": "minecraft:stone", "text": "Charnel Compactor"}
+      {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
   ]},
 
   "articles": [
-    {"id": "test_article", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"}
-    ]
+    {"id": "charnel_compactor", "contents": [
+      {"text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"},
+      {"text": "More text!"}
+      ]
+    }
+  ]
 }
