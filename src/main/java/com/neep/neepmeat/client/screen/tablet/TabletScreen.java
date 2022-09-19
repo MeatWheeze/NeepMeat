@@ -21,6 +21,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -143,6 +144,24 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     {
         return this.hoveredElement(mouseX, mouseY).filter(element ->
                 element.mouseScrolled(mouseX, mouseY, amount)).isPresent();
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (leftPane.keyPressed(keyCode, scanCode, modifiers)) return true;
+        if (keyCode == GLFW.GLFW_KEY_ESCAPE && this.shouldCloseOnEsc())
+        {
+            this.close();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers)
+    {
+        return leftPane != null && leftPane.charTyped(chr, modifiers);
     }
 
     @Override

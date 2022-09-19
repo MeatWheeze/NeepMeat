@@ -26,18 +26,20 @@ public class Article
         return new TextContent(text);
     });
 
-    public static Article EMPTY = new Article();
+    public static Article EMPTY = new Article("");
 
     private final List<Content> contents = new ArrayList<>();
+    private final String id;
 
-    private Article()
+    private Article(String id)
     {
-
+        this.id = id;
     }
 
     public static Article fromJson(JsonObject object)
     {
-        Article article = new Article();
+        String id = JsonHelper.getString(object, "id");
+        Article article = new Article(id);
         JsonHelper.getArray(object, "contents", new JsonArray()).forEach(
                 element ->
                 {
@@ -55,6 +57,11 @@ public class Article
     public List<Content> getContents()
     {
         return contents;
+    }
+
+    public String getId()
+    {
+        return id;
     }
 
     // Content takes a fixed width and returns a height

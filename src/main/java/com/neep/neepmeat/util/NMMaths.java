@@ -86,4 +86,18 @@ public class NMMaths
         return current + delta;
     }
 
+    public static int wrap(int value, int min, int max)
+    {
+        if (value >= min && value < max)
+            return value;
+
+        int t = value - min;
+        int s = max - min + 1;
+
+        if (s <= 0) return min;
+
+        t %= s;
+        if (t < 0) t += s;
+        return min + t;
+    }
 }
