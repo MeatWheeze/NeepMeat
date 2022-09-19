@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.tablet.TabletScreen;
 import com.neep.neepmeat.screen_handler.TerminalScreenHandler;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -12,16 +13,19 @@ import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
 {
     public TabletItem(String name, Settings settings)
     {
-        super(name, 1, settings);
+        super(name, 0, settings);
     }
 
     @Override
@@ -47,6 +51,13 @@ public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
     public Text getDisplayName()
     {
         return new TranslatableText(NeepMeat.NAMESPACE + "screen.tablet");
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
+    {
+        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
+        tooltip.add(new TranslatableText(getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
     }
 
     @Nullable

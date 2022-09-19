@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " r ",
+    " b "
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:book"
+    },
+    "r": {
+      "item": "minecraft:rotten_flesh"
+    }
+  },
+  "result": {
+    "item": "neepmeat:projector",
+    "count": 1
+  }
+}
