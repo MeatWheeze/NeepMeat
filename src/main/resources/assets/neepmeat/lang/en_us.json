@@ -148,8 +148,9 @@
   "block.neepmeat.small_trommel": "Small Trommel",
 
   "block.neepmeat.assembler": "Assembler",
-  "block.neepmeat.assembler.lore_0": "Enforces a pattern of items in the block below.",
-  "block.neepmeat.assembler.lore_1": "Place above Persistent Crafting Table for aut-crafing.",
+  "block.neepmeat.assembler.lore_0": "Enforces a pattern of items in the inventory below.",
+  "block.neepmeat.assembler.lore_1": "Place above Persistent Crafting Table for auto-craffing.",
+
   "block.neepmeat.workstation": "Persistent Crafting Table",
 
   "block.neepmeat.pedestal": "Pedestal",
@@ -212,6 +213,9 @@
   "block.neepmeat.blood_bubble_planks_wall": "Blood Bubble Planks Wall",
 
   "block.neepmeat.statue": "Mysterious Statue",
+
+  "item.neepmeat.projector": "Guide Projector",
+  "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",
 
   "item.neepmeat.refractory_brick": "Refractory Brick",
 

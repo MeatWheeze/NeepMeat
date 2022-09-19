@@ -5,5 +5,7 @@
   "item.meatweapons.hand_cannon": "Hand Cannon",
   "item.meatweapons.machine_pistol": "Machine Pistol",
   "item.meatweapons.light_machine_gun": "Light Machine Gun",
-  "item.meatweapons.heavy_cannon": "Pocket Howitzer"
+  "item.meatweapons.heavy_cannon": "Pocket Howitzer",
+
+  "item.meatweapons.airtruck": "Airtruck"
 }
