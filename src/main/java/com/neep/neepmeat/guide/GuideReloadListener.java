@@ -40,6 +40,8 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
     public void reload(ResourceManager manager)
     {
         root = null;
+        articleNodes.clear();
+        articles.clear();
 
         for(Identifier id : manager.findResources("guide", path -> path.endsWith(".json")))
         {

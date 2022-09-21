@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 
 import java.util.ArrayList;
@@ -25,6 +26,20 @@ public class Article
         MutableText text = Text.Serializer.fromJson(object);
         return new TextContent(text);
     });
+    public static final Function<JsonObject, Content> CTEXT = DESERIALISERS.put("ctext",
+            object ->
+            {
+                MutableText text = Text.Serializer.fromJson(object);
+                return new CenteredTextContent(text);
+            });
+    public static final Function<JsonObject, Content> IMAGE = DESERIALISERS.put("image",
+            object ->
+            {
+                int width = JsonHelper.getInt(object, "width");
+                int height = JsonHelper.getInt(object, "height");
+                Identifier image = new Identifier(JsonHelper.getString(object, "path"));
+                return new ImageContent(width, height, image);
+            });
 
     public static Article EMPTY = new Article("");
 
