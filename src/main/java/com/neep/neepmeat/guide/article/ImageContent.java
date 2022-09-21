@@ -51,7 +51,7 @@ public class ImageContent implements Article.Content
                 (int) scaledWidth, (int) scaledHeight);
         matrices.pop();
 
-        return height;
+        return (int) scaledHeight;
     }
 
 //    public static void drawTexture(MatrixStack matrices, int x, int y, int width, int height, float u, float v, int regionWidth, int regionHeight, int textureWidth, int textureHeight)
