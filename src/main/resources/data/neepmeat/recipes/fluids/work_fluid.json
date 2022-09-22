@@ -9,8 +9,8 @@
     "amount": 9000
   },
   "fluid2":{
-    "resource": "minecraft:empty",
-    "amount": 0
+    "resource": "neepmeat:meat",
+    "amount": 9000
   },
   "output":{
     "resource": "neepmeat:work_fluid",
