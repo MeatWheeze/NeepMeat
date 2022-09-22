@@ -13,12 +13,11 @@ import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(value= EnvType.CLIENT)
-public class TabletArticlePane extends ContentPane implements Drawable, Element, Selectable
+public class GuideArticlePane extends ContentPane implements Drawable, Element, Selectable
 {
-    private int page;
-    private ArticleTextWidget articleWidget;
+    private final ArticleTextWidget articleWidget;
 
-    public TabletArticlePane(ITabletScreen parent, Article article)
+    public GuideArticlePane(IGuideScreen parent, Article article)
     {
         super(Text.of(""), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;

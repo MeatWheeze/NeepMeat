@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.screen.tablet.TabletScreen;
+import com.neep.neepmeat.client.screen.tablet.GuideScreen;
 import com.neep.neepmeat.screen_handler.TerminalScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
@@ -21,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
+public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
 {
-    public TabletItem(String name, Settings settings)
+    public ProjectorItem(String name, Settings settings)
     {
         super(name, 0, settings);
     }
@@ -37,7 +37,7 @@ public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
             user.currentScreenHandler = handler;
             try
             {
-                MinecraftClient.getInstance().setScreen(new TabletScreen(user, handler));
+                MinecraftClient.getInstance().setScreen(new GuideScreen(user, handler));
             }
             catch (Exception e)
             {
@@ -50,7 +50,7 @@ public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
     @Override
     public Text getDisplayName()
     {
-        return new TranslatableText(NeepMeat.NAMESPACE + "screen.tablet");
+        return new TranslatableText(NeepMeat.NAMESPACE + "screen.guide");
     }
 
     @Override
