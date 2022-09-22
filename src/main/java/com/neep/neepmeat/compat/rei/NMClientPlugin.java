@@ -12,6 +12,7 @@ import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.recipe.PressingRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -34,6 +35,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
         registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
         registry.registerRecipeFiller(EnlighteningRecipe.class, NMrecipeTypes.ENLIGHTENING, EnlighteningDisplay::new);
+        registry.registerRecipeFiller(PressingRecipe.class, NMrecipeTypes.PRESSING, PressingDisplay::new);
 
         // Charnel Compactor recipes
         int page = 0;
@@ -57,7 +59,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new MixingCategory(),
                 new AlloyKilnCategory(),
                 new HeartExtractionCategory(),
-                new EnlighteningCategory()
+                new EnlighteningCategory(),
+                new PressingCategory()
         );
 
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
@@ -66,5 +69,6 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
         registry.addWorkstations(HEART_EXTRACTION, EntryStacks.of(NMItems.SACRIFICIAL_DAGGER.asItem()));
         registry.addWorkstations(ENLIGHTENING, EntryStacks.of(NMBlocks.PEDESTAL.asItem()));
+        registry.addWorkstations(PRESSING, EntryStacks.of(NMBlocks.HYDRAULIC_PRESS.asItem()));
     }
 }

@@ -49,15 +49,19 @@
 
   "articles": [
     {"id": "test", "contents": [
-      {"type": "text", "text": "Charnel Compactor\n", "bold": true},
+      {"type": "text", "text": "Test Article\n", "bold": true},
       {"type": "text", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah\n\n\n\n\n\n\n"},
       {"type": "image", "width": 128, "height": 128, "path": "neepmeat:guide/images/test.png"},
       {"type": "text", "text": "More text!\n\n\n\n\n\n\n\n\n _____________________________________________________________________________________________________________________________________________________________________________________________--________________________________________________________________________________________________________________"}
       ]},
     {"id": "intro", "contents": [
-      {"type": "text", "text": "Introduction\n", "bold": true},
-      {"type": "text", "text": "We thank you for choosing solutions from NEEP."},
-      {"type": "text", "text": "\n Crafting and processing recipes are not yet supported in this guide. To view them, you must install REI."}
+      {"type": "ctext", "text": "\n"},
+      {"type": "image", "width": 60, "height": 25, "scale": 0.6, "path": "neepmeat:textures/gui/tablet/neep.png"},
+      {"type": "ctext", "text": "North-East Electric and Petrochemical\n\n"},
+      {"type": "ctext", "text": "NEEP INDUSTRIAL SUITE", "bold": true},
+      {"type": "ctext", "text": "Owner's Manual\n\n"},
+      {"type": "text", "text": "Thank you for choosing industrial solutions from NEEP. This guide will take you through our debut range of biomechanical abominations."},
+      {"type": "text", "text": "\nNote: Crafting and processing recipes are not yet supported in this guide. To view them, you must install Roughly Enough Items."}
     ]},
     {"id": "fluids", "contents": [
       {"type": "text", "text": "Energetic Fluids\n", "bold": true},
@@ -67,7 +71,7 @@
       {"type": "text", "text": "\nEthereal Fuel (3x work multiplier)\n", "bold": true},
       {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. Unlike Work Fluid, Ethereal Fuel is consumed totally by the machine it powers. To produce it, a Fuel Transducer must be placed over a hot block, such as lava or a lit furnace."},
       {"type": "text", "text": "\nWork Fluid (5x work multiplier)\n", "bold": true},
-      {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened nanofauna that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Charger when depleted."}
+      {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened animalcules that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Charger when depleted."}
     ]},
     {"id": "mixer", "contents": [
       {"type": "text", "text": "Mixer\n", "bold": true},

@@ -12,4 +12,5 @@ public interface NMREIPlugin
     CategoryIdentifier<AlloySmeltingDisplay> ALLOY_SMELTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/alloy_smelting");
     CategoryIdentifier<HeartExtractionDisplay> HEART_EXTRACTION = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/heart_extraction");
     CategoryIdentifier<EnlighteningDisplay> ENLIGHTENING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/enlightening");
+    CategoryIdentifier<PressingDisplay> PRESSING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/pressing");
 }
