@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.assembler;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -13,16 +14,9 @@ import net.minecraft.util.math.Vec3f;
 
 public class AssemblerRenderer implements BlockEntityRenderer<AssemblerBlockEntity>
 {
-    protected float lastFrame;
-    protected float currentFrame;
 
     public AssemblerRenderer(BlockEntityRendererFactory.Context ctx)
     {
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
-        {
-            this.lastFrame = this.currentFrame;
-            return true;
-        }));
     }
 
     @Override
@@ -30,9 +24,7 @@ public class AssemblerRenderer implements BlockEntityRenderer<AssemblerBlockEnti
     {
         Direction facing = be.getCachedState().get(AssemblerBlock.FACING);
 
-        this.currentFrame = be.getWorld().getTime() + tickDelta;
-        float delta = (currentFrame - lastFrame);
-
+        float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
         be.currentSpeed = (float) (MathHelper.lerp(0.5, be.currentSpeed, be.spinTicks > 0 ? 15 : 0));
         if (be.spinTicks > 0)
         {
