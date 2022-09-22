@@ -14,12 +14,14 @@ public class ImageContent implements Article.Content
 //    private final Text caption;
     private final int width;
     private final int height;
+    private final float scale;
     private final Identifier image;
 
-    public ImageContent(int width, int height, Identifier image)
+    public ImageContent(int width, int height, float scale, Identifier image)
     {
         this.width = width;
         this.height = height;
+        this.scale = scale;
         this.image = image;
     }
 
@@ -30,12 +32,9 @@ public class ImageContent implements Article.Content
 //        List<OrderedText> lines = renderer.wrapLines(caption, (int) width);
 
         matrices.push();
-//        matrices.translate(x, y, 0);
-//        matrices.scale(scale, scale, 1);
-//        matrices.translate(-x, -y, 0);
         RenderSystem.setShaderTexture(0, image);
 
-        float scaledWidth = width / 2;
+        float scaledWidth = width * scale;
         float scaledHeight = this.height * scaledWidth / this.width;
 
         float cx = x + (width / 2 - scaledWidth / 2f);

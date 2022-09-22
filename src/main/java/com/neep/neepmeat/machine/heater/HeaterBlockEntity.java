@@ -122,7 +122,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
     {
         BlockPos facingPos = getPos().offset(getCachedState().get(BaseFacingBlock.FACING));
         BlockState facingState = world.getBlockState(facingPos);
-        if (facingState.getBlock() instanceof OxidizableBlock)
+        if (facingState.getBlock() instanceof Oxidizable oxidizable)
         {
             ++copperTime;
 //            getWorld().addParticle(ParticleTypes.LAVA, facingPos.getX() + 0.5, facingPos.getY() + 1.5, facingPos.getZ() + 0.5, 0, 0, 0);
@@ -132,10 +132,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             if (copperTime == 100)
             {
                 copperTime = 0;
-                Optional<Block> nextBlock = Oxidizable.getIncreasedOxidationBlock(facingState.getBlock());
+                Optional<BlockState> nextBlock = oxidizable.getDegradationResult(facingState);
                 if (canOxidise(world, facingPos) && nextBlock.isPresent())
                 {
-                    world.setBlockState(facingPos, nextBlock.get().getDefaultState());
+                    world.setBlockState(facingPos, nextBlock.get());
                 }
             }
         }

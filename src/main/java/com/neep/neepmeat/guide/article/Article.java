@@ -37,8 +37,11 @@ public class Article
             {
                 int width = JsonHelper.getInt(object, "width");
                 int height = JsonHelper.getInt(object, "height");
+                float scale = 0.5f;
+                if (JsonHelper.hasNumber(object, "scale"))
+                    scale = JsonHelper.getFloat(object, "scale");
                 Identifier image = new Identifier(JsonHelper.getString(object, "path"));
-                return new ImageContent(width, height, image);
+                return new ImageContent(width, height, scale, image);
             });
 
     public static Article EMPTY = new Article("");
