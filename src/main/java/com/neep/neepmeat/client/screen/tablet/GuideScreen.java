@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;
+import com.neep.neepmeat.screen_handler.GuideScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
@@ -13,9 +14,8 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
@@ -30,13 +30,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public class GuideScreen extends HandledScreen<ScreenHandler> implements IGuideScreen
+public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IGuideScreen
 {
     public static final Identifier LOGO_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/neep.png");
 
     protected int contentWidth = 340;
     protected int contentHeight = 280;
-    protected PlayerEntity player;
 
     protected int animationTicks;
     protected boolean start;
@@ -47,10 +46,9 @@ public class GuideScreen extends HandledScreen<ScreenHandler> implements IGuideS
     // Current location within the entry tree
     protected final Deque<GuideNode> path = new LinkedList<>();
 
-    public GuideScreen(PlayerEntity player, ScreenHandler handler)
+    public GuideScreen(GuideScreenHandler handler, PlayerInventory inventory, Text title)
     {
-        super(handler, player.getInventory(), new TranslatableText(""));
-        this.player = player;
+        super(handler, inventory.player.getInventory(), new TranslatableText(""));
         this.leftPane = new GuideListPane(this);
         this.rightPane = new GuideArticlePane(this, Article.EMPTY);
         this.start = true;
