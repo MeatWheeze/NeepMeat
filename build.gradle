@@ -1,6 +1,8 @@
 plugins {
 	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'maven-publish'
+
+	id "com.modrinth.minotaur" version "2.+"
 }
 
 sourceCompatibility = JavaVersion.VERSION_17
@@ -104,3 +106,21 @@ loom {
 	accessWidenerPath = file("src/main/resources/neepmeat.accesswidener")
 }
 assemble.dependsOn runDatagen
+
+import com.modrinth.minotaur.dependencies.ModDependency
+
+modrinth {
+	token = token = System.getenv("MODRINTH_TOKEN")
+	projectId = 'Hagcl1FT'
+//	versionNumber = '0.1.2'
+//	versionName = 'v'
+	versionType = "alpha"
+	uploadFile = remapJar // Tells Minotaur to use the remapped jar
+	gameVersions = ['1.18', '1.18.1', '1.18.2'] // An array of game versions the version supports
+	loaders = ['fabric']
+	dependencies = [
+			new ModDependency('P7dR8mSH', 'required'), // Fabric API
+			new ModDependency('8BmcQJ2H', 'required'), // Geckolib
+			new ModDependency('nfn13YXA', 'optional') // REI
+	]
+}
