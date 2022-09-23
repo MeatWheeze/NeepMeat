@@ -75,11 +75,11 @@ public class NMBlocks
     public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(BlockSoundGroup.NETHERITE));
 
     // --- Building Blocks ---
-    public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
-    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
+    public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_column", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
+//    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
-    public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
+    public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", 64, false, FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", 64, false, FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
 
 //    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
@@ -89,7 +89,7 @@ public class NMBlocks
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
     // --- Fluid Pipes ---
-    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
+    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", 64, false, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
 //    public static Block IRON_PIPE = BlockRegistry.queue(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", 64, true, FLUID_PIPE_SETTINGS));
@@ -130,7 +130,7 @@ public class NMBlocks
 
     public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));
@@ -140,11 +140,11 @@ public class NMBlocks
 
     // --- Fluid Transfer ---
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", 64, true, FLUID_MACHINE_SETTINGS));
+    public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, false, FLUID_MACHINE_SETTINGS));
+    public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", 64, false, FLUID_MACHINE_SETTINGS));
+    public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", 64, false, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", 64, true, FLUID_MACHINE_SETTINGS));
+    public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", 64, false, FLUID_MACHINE_SETTINGS));
 //    public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FLUID_MACHINE_SETTINGS));
 //    public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", 64, true, FluidComponentItem::new, FLUID_MACHINE_SETTINGS));
@@ -152,9 +152,9 @@ public class NMBlocks
 //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
     // --- Item Transfer ---
-    public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.copyOf(Blocks.HOPPER)));
+    public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, false, FabricBlockSettings.copyOf(Blocks.HOPPER)));
     public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
-    public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
+    public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, false, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -163,7 +163,7 @@ public class NMBlocks
     public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", 64, true, FabricBlockSettings.copy(Blocks.OAK_WOOD)));
 
     // --- Data ---
-    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", 64, true, FLUID_PIPE_SETTINGS));
+    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", 64, false, FLUID_PIPE_SETTINGS));
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));

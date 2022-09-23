@@ -1,7 +1,6 @@
 {
-    "parent": "block/cube_column",
-    "textures": {
-        "end": "neepmeat:block/rusty_vent_top",
-        "side": "neepmeat:block/rusty_vent_side"
-    }
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "neepmeat:block/rusty_vent"
+  }
 }

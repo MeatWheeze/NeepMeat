@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=y": { "model": "neepmeat:block/rusty_column" },
+    "axis=z": { "model": "neepmeat:block/rusty_column", "x": 90 },
+    "axis=x": { "model": "neepmeat:block/rusty_column", "x": 90, "y": 90 }
+  }
+}

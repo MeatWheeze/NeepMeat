@@ -1,7 +1,7 @@
 {
   "variants": {
-    "axis=y": { "model": "neepmeat:block/rusty_vent" },
-    "axis=z": { "model": "neepmeat:block/rusty_vent", "x": 90 },
-    "axis=x": { "model": "neepmeat:block/rusty_vent", "x": 90, "y": 90 }
+    "": {
+      "model": "neepmeat:block/rusty_vent"
+    }
   }
 }

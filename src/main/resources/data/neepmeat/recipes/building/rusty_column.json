@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    " i ",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:rusty_metal"
+    },
+  },
+  "result": {
+    "item": "neepmeat:rusty_column",
+    "count": 3
+  }
+}
