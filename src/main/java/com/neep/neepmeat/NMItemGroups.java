@@ -17,4 +17,8 @@ public class NMItemGroups
             new Identifier(NeepMeat.NAMESPACE, "ingredients"),
             () -> new ItemStack(NMItems.INTERNAL_COMPONENTS));
 
+    public static final ItemGroup FOOD = FabricItemGroupBuilder.build(
+            new Identifier(NeepMeat.NAMESPACE, "food"),
+            () -> new ItemStack(NMItems.COOKED_MEAT_BRICK));
+
 }
