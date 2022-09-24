@@ -2,23 +2,28 @@ package com.neep.neepmeat.machine.hydraulic_press;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
     public HydraulicPressBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
     }
 
     @Nullable
@@ -43,6 +48,12 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
 //            be.stopRecipe(null);
 //            be.setState(2);
 //        }
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return Block.createCuboidShape(0, 7, 0, 16, 16, 16);
     }
 
     @Override
