@@ -4,6 +4,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.block.*;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
+import com.neep.neepmeat.machine.bottler.BottlerBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
@@ -150,6 +151,8 @@ public class NMBlocks
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", 64, true, FluidComponentItem::new, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", 64, true, FLUID_MACHINE_SETTINGS));
 //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
+
+    public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", 64, true, FLUID_MACHINE_SETTINGS));
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, false, FabricBlockSettings.copyOf(Blocks.HOPPER)));
