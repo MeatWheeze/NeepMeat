@@ -35,8 +35,9 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBl
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return context.getSide().getAxis().isVertical() ? getDefaultState() :
-                this.getDefaultState().with(FACING, context.getSide().getOpposite());
+//        return context.getSide().getAxis().isVertical() ? getDefaultState() :
+//                this.getDefaultState().with(FACING, context.getSide().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
     }
 
     @Override
