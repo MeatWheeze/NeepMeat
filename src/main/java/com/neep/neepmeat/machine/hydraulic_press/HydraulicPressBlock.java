@@ -51,6 +51,16 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (world.getBlockEntity(pos) instanceof HydraulicPressBlockEntity be)
+        {
+            be.stopRecipe();
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return Block.createCuboidShape(0, 7, 0, 16, 16, 16);
