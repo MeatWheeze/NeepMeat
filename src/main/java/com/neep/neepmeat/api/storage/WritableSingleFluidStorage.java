@@ -7,6 +7,9 @@ import net.minecraft.nbt.NbtCompound;
 @SuppressWarnings("UnstableApiUsage")
 public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVariant>
 {
+    public static final String KEY_RESOURCE = "resource";
+    public static final String KEY_AMOUNT = "amount";
+
     protected long capacity;
     public float renderLevel;
     public Runnable finalCallback;
@@ -43,13 +46,13 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
 
     public void writeNbt(NbtCompound nbt)
     {
-        nbt.put("resource", getResource().toNbt());
-        nbt.putLong("amount", amount);
+        nbt.put(KEY_RESOURCE, getResource().toNbt());
+        nbt.putLong(KEY_AMOUNT, amount);
     }
 
     public void readNbt(NbtCompound nbt)
     {
-        this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));
-        this.amount = nbt.getLong("amount");
+        this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get(KEY_RESOURCE));
+        this.amount = nbt.getLong(KEY_AMOUNT);
     }
 }

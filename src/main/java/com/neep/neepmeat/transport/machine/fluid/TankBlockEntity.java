@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -56,6 +57,12 @@ public class TankBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(tag);
         buffer.readNbt(tag);
+    }
+
+    @Override
+    public void setStackNbt(ItemStack stack)
+    {
+        super.setStackNbt(stack);
     }
 
     public boolean onUse(PlayerEntity player, Hand hand)

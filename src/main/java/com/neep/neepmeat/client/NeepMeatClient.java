@@ -82,7 +82,7 @@ public class NeepMeatClient implements ClientModInitializer
         registerScreens();
         HUDOverlays.init();
 
-        TankMessagePacket.Client.registerReciever();
+        TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
     }
 

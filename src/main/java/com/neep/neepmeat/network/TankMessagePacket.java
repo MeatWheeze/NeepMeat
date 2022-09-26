@@ -37,7 +37,7 @@ public class TankMessagePacket
     @Environment(value=EnvType.CLIENT)
     public static class Client
     {
-        public static void registerReciever()
+        public static void registerReceiver()
         {
             ClientPlayNetworking.registerGlobalReceiver(TANK_MESSAGE, (client, handler, buf, responseSender) ->
             {
