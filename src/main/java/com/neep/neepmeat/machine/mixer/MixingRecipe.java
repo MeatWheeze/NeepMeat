@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.FluidIngredient;
 import com.neep.meatlib.recipe.GenericIngredient;
 import com.neep.meatlib.recipe.ItemIngredient;
+import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
@@ -19,6 +21,7 @@ import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.*;
@@ -27,13 +30,13 @@ import java.util.*;
 public class MixingRecipe implements Recipe<MixerStorage>
 {
     protected Identifier id;
-    protected ItemIngredient itemInput;
+    protected RecipeInput<Item> itemInput;
     protected FluidIngredient fluidInput1;
     protected FluidIngredient fluidInput2;
     protected FluidIngredient fluidOutput;
     protected int processTime;
 
-    public MixingRecipe(Identifier id, ItemIngredient itemInput, FluidIngredient fluidInput1, FluidIngredient fluidInput2, FluidIngredient fluidOutput, int processTime)
+    public MixingRecipe(Identifier id, RecipeInput<Item> itemInput, FluidIngredient fluidInput1, FluidIngredient fluidInput2, FluidIngredient fluidOutput, int processTime)
     {
         this.itemInput = itemInput;
         this.fluidInput1 = fluidInput1;
@@ -43,9 +46,9 @@ public class MixingRecipe implements Recipe<MixerStorage>
         this.id = id;
     }
 
-    public List<ItemIngredient> getItemIngredient()
+    public RecipeInput<Item> getItemIngredient()
     {
-        return List.of(itemInput);
+        return itemInput;
     }
 
     public List<FluidIngredient> getFluidInputs()
@@ -67,9 +70,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
     public boolean matches(MixerStorage inventory, World world)
     {
         Transaction transaction = Transaction.openOuter();
-        List<GenericIngredient<?, ?>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2, itemInput));
-
-        boolean success = true;
+        List<GenericIngredient<?, ?>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
 
         ListIterator<GenericIngredient<?, ?>> it = queue.listIterator();
         while (it.hasNext())
@@ -85,7 +86,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
             }
         }
         transaction.abort();
-        return queue.size() == 0;
+        return queue.size() == 0 && itemInput.test(inventory.getItemInput());
     }
 
     public boolean takeInputs(MixerStorage inventory, TransactionContext transactionContext)
@@ -98,12 +99,10 @@ public class MixingRecipe implements Recipe<MixerStorage>
 
             if (!inputList.isEmpty())
             {
-//                long ext1 = fluidStorage.extract((FluidVariant) fluidInput1.resource(), fluidInput1.amount(), transactionContext);
                 long ext1 = fluidInput1.take(fluidStorage, transactionContext);
                 long ext2 = fluidInput2.take(fluidStorage, transactionContext);
-                long ext3 = itemInput.take(itemStorage, transactionContext);
-//                long ext2 = fluidStorage.extract((FluidVariant) fluidInput2.resource(), fluidInput2.amount(), transactionContext);
-//                long ext3 = itemStorage.extract((ItemVariant) itemInput.resource(), itemInput.amount(), transactionContext);
+                Item item = itemInput.getFirstMatching(inventory.getItemInput()).orElseThrow(() -> new IllegalStateException("Storage contents must conform to recipe"));
+                long ext3 = inventory.getItemInput().extract(ItemVariant.of(item), itemInput.amount(), inner);
 
                 if (ext1 == fluidInput1.amount() && ext2 == fluidInput2.amount() && ext3 == itemInput.amount())
                 {
@@ -208,7 +207,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         public MixingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject itemElement = JsonHelper.getObject(json, "item");
-            ItemIngredient itemInput = ItemIngredient.fromJson(itemElement);
+            RecipeInput<Item> itemInput = RecipeInput.fromJson(Registry.ITEM, itemElement);
 
             JsonObject fluidElement1 = JsonHelper.getObject(json, "fluid1");
             FluidIngredient fluidInput1 = FluidIngredient.fromJson(fluidElement1);
@@ -226,7 +225,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @Override
         public MixingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            ItemIngredient ingredient = ItemIngredient.fromBuffer(buf);
+            RecipeInput<Item> ingredient = RecipeInput.fromBuffer(Registry.ITEM, buf);
             FluidIngredient fluidInput1 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidInput2 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidOutput = FluidIngredient.fromPacket(buf);
@@ -238,7 +237,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @Override
         public void write(PacketByteBuf buf, MixingRecipe recipe)
         {
-            recipe.itemInput.write(buf);
+            recipe.itemInput.write(Registry.ITEM, buf);
             recipe.fluidInput1.write(buf);
             recipe.fluidInput2.write(buf);
             recipe.fluidOutput.write(buf);
@@ -248,7 +247,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends MixingRecipe>
         {
-            T create(Identifier var1, ItemIngredient var3, FluidIngredient f1, FluidIngredient f2, FluidIngredient out, int time);
+            T create(Identifier var1, RecipeInput<Item> var3, FluidIngredient f1, FluidIngredient f2, FluidIngredient out, int time);
         }
     }
 

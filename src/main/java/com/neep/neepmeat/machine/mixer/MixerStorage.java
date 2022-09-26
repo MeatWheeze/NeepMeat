@@ -39,9 +39,9 @@ public class MixerStorage extends SimpleInventory
     public List<StorageView<?>> getInputStorages(TransactionContext transaction)
     {
         List<Storage<FluidVariant>> storages = parent.getAdjacentStorages();
-        Storage<ItemVariant> itemStorage = parent.getItemStorage(null);
-        return Stream.concat(storages.stream(), Stream.of(itemStorage))
-                .flatMap(storage -> StreamSupport.stream(storage.iterable(transaction).spliterator(), false)).collect(Collectors.toList());
+//        Storage<ItemVariant> itemStorage = parent.getItemStorage(null);
+//        return Stream.concat(storages.stream(), Stream.of(itemStorage))
+        return storages.stream().flatMap(storage -> StreamSupport.stream(storage.iterable(transaction).spliterator(), false)).collect(Collectors.toList());
     }
 
     public void writeNbt(NbtCompound nbt)

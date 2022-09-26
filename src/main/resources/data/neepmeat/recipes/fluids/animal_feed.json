@@ -1,20 +1,20 @@
 {
   "type": "neepmeat:mixing",
   "item": {
-    "resource": "neepmeat:whisper_flour",
+    "tag": "c:grains",
     "amount": 1
   },
   "fluid1": {
-    "resource": "neepmeat:blood",
-    "amount": 9000
+    "resource": "minecraft:water",
+    "amount": 20250
   },
   "fluid2":{
     "resource": "neepmeat:meat",
-    "amount": 9000
+    "amount": 6750
   },
   "output":{
-    "resource": "neepmeat:work_fluid",
-    "amount": 9000
+    "resource": "neepmeat:animal_feed",
+    "amount": 27000
   },
   "processtime": 30
 }

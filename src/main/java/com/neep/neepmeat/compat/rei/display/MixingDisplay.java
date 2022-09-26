@@ -9,10 +9,12 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,7 @@ public class MixingDisplay extends BasicDisplay
                 List.of(
                         EntryIngredients.of(ingredientToStack(recipe.getFluidInputs().get(0))),
                         EntryIngredients.of(ingredientToStack(recipe.getFluidInputs().get(1))),
-                        EntryIngredients.of(ingredientToStack(recipe.getItemIngredient().get(0)))
+                        EntryIngredients.ofItems((Collection<ItemConvertible>) (Object) recipe.getItemIngredient().getAll(), (int) recipe.getItemIngredient().amount())
                         ),
                 List.of(
                         EntryIngredients.of(ingredientToStack(recipe.getFluidOutput()))
