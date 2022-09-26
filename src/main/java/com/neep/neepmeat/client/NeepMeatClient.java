@@ -24,6 +24,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pedestal.PedestalRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
+import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -123,6 +124,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.ASSEMBLER, AssemblerRenderer::new);
 
         BlockEntityRendererRegistry.register(NMBlockEntities.DEATH_BLADES, DeathBladesRenderer::new);
+
+        BlockEntityRendererRegistry.register(NMBlockEntities.FEEDING_TROUGH, TroughRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

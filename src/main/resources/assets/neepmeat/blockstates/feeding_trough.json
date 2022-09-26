@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/trough/base",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/trough/base",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/trough/base",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/trough/base",
+      "y": -90,
+      "x": 0
+    }
+  }
+}

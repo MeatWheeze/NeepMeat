@@ -23,6 +23,7 @@ import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
+import com.neep.neepmeat.machine.trough.TroughBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
@@ -132,6 +133,8 @@ public class NMBlocks
     public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
+    public static Block FEEDING_TROUGH = BlockRegistry.queue(new TroughBlock("feeding_trough", 64, true, FabricBlockSettings.copyOf(FLUID_MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));

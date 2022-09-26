@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bpb",
+    "bbb"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "neepmeat:flesh_potato"
+    }
+  },
+  "result": {
+    "item": "neepmeat:feeding_trough",
+    "count": 1
+  }
+}
