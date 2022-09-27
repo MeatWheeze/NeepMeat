@@ -130,7 +130,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
                         if (target.isPresent())
                         {
                             LivingEntity entity = target.get();
-                            target.get().damage(BulletDamageSource.create(player, 0.1f), 1);
+                            target.get().damage(BulletDamageSource.create(player, 0.1f), 2);
                             entity.timeUntilRegen = 0;
                         }
 
