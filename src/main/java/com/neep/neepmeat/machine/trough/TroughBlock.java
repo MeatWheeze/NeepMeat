@@ -95,11 +95,12 @@ public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvid
 
                 Collections.shuffle(entities);
 
-                if (!entities.isEmpty() && extractFeed(TroughBlockEntity.USE_AMOUNT, world, pos, transaction))
+                if (entities.size() > 1 && extractFeed(TroughBlockEntity.USE_AMOUNT, world, pos, transaction))
                 {
                     for (int i = 0; i < Math.min(2, entities.size()); ++i)
                     {
                         AnimalEntity mob = entities.get(i);
+                        mob.setBreedingAge(0);
                         mob.lovePlayer(null);
                     }
                     transaction.commit();
