@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " pp",
+    "ibp",
+    "iii"
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    }
+  },
+  "result": {
+    "item": "neepmeat:bottler",
+    "count": 1
+  }
+}

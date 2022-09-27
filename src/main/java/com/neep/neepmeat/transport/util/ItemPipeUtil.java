@@ -200,15 +200,19 @@ public class ItemPipeUtil
     {
         Queue<BlockPos> queue = new LinkedList<>();
         Queue<IItemPipe> pipeQueue = new LinkedList<>();
-        List<Long> visited = new ArrayList<>(); // Hopefully using longs will speed up comparison
+        Queue<Direction> dirQueue = new LinkedList<>();
+        // TODO: Use a HashSet
+        Set<Long> visited = new HashSet<>(); // Hopefully using longs will speed up comparison
         queue.add(startPipe);
         pipeQueue.add((IItemPipe) world.getBlockState(startPipe).getBlock());
+        dirQueue.add(exit.getOpposite());
         visited.add(startPipe.offset(exit.getOpposite()).asLong());
 
         while (!queue.isEmpty())
         {
             BlockPos current = queue.poll();
             IItemPipe currentPipe = pipeQueue.poll();
+            Direction currentDir = dirQueue.poll();
             BlockState currentState = world.getBlockState(current);
 
             visited.add(current.asLong());
@@ -220,6 +224,8 @@ public class ItemPipeUtil
 
             for (Direction direction : Direction.values())
             {
+                if (direction == currentDir) continue;
+
                 BlockPos offset = current.offset(direction);
                 BlockState offsetState = world.getBlockState(offset);
                 if (currentPipe.canItemLeave(item, world, current, currentState, direction))
@@ -233,6 +239,7 @@ public class ItemPipeUtil
                     {
                         queue.add(offset);
                         pipeQueue.add(pipe);
+                        dirQueue.add(direction.getOpposite());
                     }
                     else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                     {

@@ -222,6 +222,8 @@ public class NMBlockEntities
         DEATH_BLADES = registerBlockEntity("death_blades", DeathBladesBlockEntity::new, NMBlocks.DEATH_BLADES);
 
         BOTTLER = registerBlockEntity("bottler", BottlerBlockEntity::new, NMBlocks.BOTTLER);
+        ItemStorage.SIDED.registerForBlockEntity(BottlerBlockEntity::getItemStorage, BOTTLER);
+//        FluidStorage.SIDED.registerForBlockEntity(BottlerBlockEntity::getStorage, BOTTLER);
 
         FEEDING_TROUGH = registerBlockEntity("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
         FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
