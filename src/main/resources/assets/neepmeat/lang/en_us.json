@@ -78,6 +78,10 @@
   "block.neepmeat.caution_block_slab": "Caution Stripes Slab",
   "block.neepmeat.caution_block_stairs": "Caution Stripes Stairs",
 
+  "block.neepmeat.meat_steel_block": "Meat Steel Block",
+  "block.neepmeat.meat_steel_block_slab": "Meat Steel Slab",
+  "block.neepmeat.meat_steel_block_stairs": "Meat Steel Stairs",
+
   "block.neepmeat.smooth_tile_black": "Black Smooth Tile",
   "block.neepmeat.smooth_tile_red": "Red Smooth Tile",
   "block.neepmeat.smooth_tile_green": "Green Smooth Tile",
