@@ -40,5 +40,11 @@
     "sounds": [
       "neepmeat:beep"
     ]
+  },
+  "pylon_start": {
+    "subtitle": "subtitles.neepmeat.pylon_start",
+    "sounds": [
+      "neepmeat:pylon_start"
+    ]
   }
 }

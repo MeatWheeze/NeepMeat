@@ -78,4 +78,10 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     {
         return rate * 20;
     }
+
+    @Override
+    public float getSpeed()
+    {
+        return MotorBlockEntity.rateToSpeed(getRunningRate());
+    }
 }

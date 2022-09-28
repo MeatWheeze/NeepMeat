@@ -43,7 +43,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 //        this.lastFrame = currentFrame;
 
         float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
-        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, MotorBlockEntity.rateToSpeed(be.getRunningRate())));
+        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.getSpeed()));
         be.angle = MathHelper.wrapDegrees(be.angle + be.currentSpeed * delta);
 
         BERenderUtils.rotateFacingSouth(facing, matrices);

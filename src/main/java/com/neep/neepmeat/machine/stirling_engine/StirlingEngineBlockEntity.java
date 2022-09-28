@@ -227,6 +227,12 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
+    public float getSpeed()
+    {
+        return energyToSpeed(energyStored);
+    }
+
+    @Override
     public BlockApiCache<Void, Void> getConnectedBlock()
     {
         return cache;
