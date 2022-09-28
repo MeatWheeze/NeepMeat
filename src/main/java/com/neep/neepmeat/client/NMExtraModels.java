@@ -28,6 +28,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier HYDRAULIC_PRESS_ARM = new Identifier(NeepMeat.NAMESPACE, "block/hydraulic_press/arm");
     public static Identifier LARGE_BLADE = new Identifier(NeepMeat.NAMESPACE, "block/blades/blade");
     public static Identifier PUMP = new Identifier(NeepMeat.NAMESPACE, "block/bottler/pump");
+    public static Identifier PYLON_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -48,5 +49,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(HYDRAULIC_PRESS_ARM);
         out.accept(LARGE_BLADE);
         out.accept(PUMP);
+        out.accept(PYLON_ROTOR);
     }
 }

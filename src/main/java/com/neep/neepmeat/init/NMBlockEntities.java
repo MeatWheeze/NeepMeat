@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -119,6 +120,7 @@ public class NMBlockEntities
     public static BlockEntityType<DeathBladesBlockEntity> DEATH_BLADES;
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
     public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
+    public static BlockEntityType<PylonBlockEntity> PYLON;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -194,6 +196,8 @@ public class NMBlockEntities
 
         HYDRAULIC_PRESS = registerBlockEntity("hydraulic_press", HydraulicPressBlockEntity::new, NMBlocks.HYDRAULIC_PRESS);
         FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getStorage, HYDRAULIC_PRESS);
+
+        PYLON = registerBlockEntity("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
