@@ -111,7 +111,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
                 {
 //                    System.out.println(network.connectedNodes);
                     System.out.print("\n" + network.uuid + " nodes: ");
-                    for (Supplier<FluidNode> supplier : network.connectedNodes)
+                    for (Supplier<FluidNode> supplier : network.getNodes())
                     {
                         System.out.print(supplier.get());
                     }
