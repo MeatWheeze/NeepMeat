@@ -10,8 +10,6 @@ import net.minecraft.util.math.MathHelper;
 
 public class PylonSoundInstance extends AbstractSoundInstance implements TickableSoundInstance
 {
-    public static final float MAX_SPEED = 16;
-
     protected final Identifier startId;
     protected final Identifier runningId;
     protected Sound startSound;
@@ -36,7 +34,7 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
 
     public boolean isRunning()
     {
-        return blockEntity.getSpeed() >= MAX_SPEED;
+        return blockEntity.getSpeed() >= PylonBlockEntity.RUNNING_SPEED;
     }
 
     @Override
@@ -95,7 +93,7 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
     @Override
     public void tick()
     {
-        this.pitch = MathHelper.lerp(MathHelper.clamp(blockEntity.getSpeed(), 0, MAX_SPEED) / MAX_SPEED, 0, 1);
+        this.pitch = MathHelper.lerp(0.2f, this.pitch, MathHelper.lerp(MathHelper.clamp(blockEntity.getSpeed(), 0, PylonBlockEntity.RUNNING_SPEED) / PylonBlockEntity.RUNNING_SPEED, 0, 1));
         this.volume = pitch;
         if (this.blockEntity.isRemoved())
         {
