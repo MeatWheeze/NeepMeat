@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.neep.meatlib.mixin",
+  "compatibilityLevel": "JAVA_16",
+  "mixins": [
+    "DataPackContentsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

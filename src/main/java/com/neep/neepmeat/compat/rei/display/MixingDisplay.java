@@ -1,7 +1,7 @@
 package com.neep.neepmeat.compat.rei.display;
 
-import com.neep.meatlib.recipe.FluidIngredient;
-import com.neep.meatlib.recipe.ItemIngredient;
+import com.neep.meatlib.recipe.ingredient.FluidIngredient;
+import com.neep.meatlib.recipe.ingredient.ItemIngredient;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import dev.architectury.fluid.FluidStack;
@@ -11,7 +11,6 @@ import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;

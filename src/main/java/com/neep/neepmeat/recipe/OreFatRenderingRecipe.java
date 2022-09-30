@@ -2,8 +2,8 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
-import com.neep.meatlib.recipe.RecipeInput;
-import com.neep.meatlib.recipe.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
