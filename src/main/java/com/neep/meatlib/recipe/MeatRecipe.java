@@ -6,7 +6,7 @@ import net.minecraft.util.Identifier;
 @SuppressWarnings("UnstableApiUsage")
 public interface MeatRecipe<C>
 {
-    boolean matches(C context, TransactionContext transaction);
+    boolean matches(C context);
 
     boolean takeInputs(C context, TransactionContext transaction);
 
@@ -14,7 +14,7 @@ public interface MeatRecipe<C>
 
     MeatRecipeType<?> getType();
 
-    <T extends MeatRecipe<?>> MeatRecipeSerialiser<T> getSerialiser();
+    MeatRecipeSerialiser<?> getSerialiser();
 
     Identifier getId();
 }

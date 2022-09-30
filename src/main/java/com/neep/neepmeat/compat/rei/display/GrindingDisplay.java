@@ -19,7 +19,7 @@ import java.util.Optional;
 
 public class GrindingDisplay extends BasicDisplay
 {
-    private Recipe<?> recipe;
+    private GrindingRecipe recipe;
 
     public GrindingDisplay(GrindingRecipe recipe)
     {

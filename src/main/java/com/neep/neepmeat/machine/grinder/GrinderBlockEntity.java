@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -72,7 +74,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     {
         if (world != null)
         {
-            Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(currentRecipeId);
+            Optional<? extends MeatRecipe<?>> optional = MeatRecipeManager.getInstance().get(currentRecipeId);
             optional.ifPresentOrElse(recipe -> this.currentRecipe = (GrindingRecipe) recipe,
                     () -> this.currentRecipe = null);
         }
@@ -133,7 +135,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
             ((ServerWorld) world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, getCurrentRecipe().getItemOutput().resource().getDefaultStack()),
                 pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 1, 0.1, 0, 0.1, 0.01);
 
-            if (progress >= this.processLength || !getCurrentRecipe().matches(storage, world))
+            if (progress >= this.processLength || !getCurrentRecipe().matches(storage))
             {
                 endDutyCycle();
                 this.progress = 0;
@@ -155,7 +157,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     {
         if (currentRecipe == null && storage.outputStorage.isEmpty() && !storage.inputStorage.isEmpty())
         {
-            GrindingRecipe recipe = getWorld().getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
+            GrindingRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
             if (recipe != null && storage.outputStorage.simulateInsert(ItemVariant.of(recipe.getItemOutput().resource()),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
@@ -182,7 +184,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (getCurrentRecipe().matches(storage, world) && getCurrentRecipe().takeInputs(storage, transaction) && getCurrentRecipe().ejectOutput(storage, transaction))
+                if (getCurrentRecipe().matches(storage) && getCurrentRecipe().takeInputs(storage, transaction) && getCurrentRecipe().ejectOutputs(storage, transaction))
                 {
                     ejectOutput(transaction);
                     transaction.commit();

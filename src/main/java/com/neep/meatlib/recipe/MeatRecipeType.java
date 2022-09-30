@@ -1,6 +1,5 @@
 package com.neep.meatlib.recipe;
 
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -20,8 +19,8 @@ public interface MeatRecipeType<T extends MeatRecipe<?>>
         });
     }
 
-    default <C> Optional<T> match(MeatRecipe<C> recipe, C context, TransactionContext transaction)
+    default <C> Optional<T> match(MeatRecipe<C> recipe, C context)
     {
-        return recipe.matches(context, transaction) ? Optional.of((T) recipe) : Optional.empty();
+        return recipe.matches(context) ? Optional.of((T) recipe) : Optional.empty();
     }
 }
