@@ -4,22 +4,19 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.google.gson.*;
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.network.SyncMeatRecipesS2CPacket;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.world.World;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class MeatRecipeManager extends JsonDataLoader implements IdentifiableResourceReloadListener
 {
@@ -89,9 +86,41 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
                 .read(id, json);
     }
 
+    public Collection<MeatRecipe<?>> values()
+    {
+        return this.recipes.values().stream().flatMap(map -> map.values().stream()).collect(Collectors.toSet());
+    }
+
+    public void setRecipes(Iterable<MeatRecipe<?>> recipes)
+    {
+        HashMap<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> map = Maps.newHashMap();
+        ImmutableMap.Builder<Identifier, MeatRecipe<?>> builder = ImmutableMap.builder();
+        recipes.forEach(recipe ->
+        {
+            Map<Identifier, MeatRecipe<?>> map2 = map.computeIfAbsent(recipe.getType(), t -> Maps.newHashMap());
+            Identifier identifier = recipe.getId();
+            MeatRecipe<?> recipe2 = map2.put(identifier, recipe);
+            builder.put(identifier, recipe);
+            if (recipe2 != null)
+            {
+                throw new IllegalStateException("Duplicate recipe ignored with ID " + identifier);
+            }
+        });
+        this.recipes = ImmutableMap.copyOf(map);
+        this.recipesById = builder.build();
+    }
+
     @Override
     public Identifier getFabricId()
     {
         return new Identifier(MeatLib.CURRENT_NAMESPACE, "special_recipes");
+    }
+
+    static
+    {
+        ServerLifecycleEvents.SYNC_DATA_PACK_CONTENTS.register((player, joined) ->
+        {
+            SyncMeatRecipesS2CPacket.send(player, getInstance().values());
+        });
     }
 }
