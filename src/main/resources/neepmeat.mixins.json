@@ -4,6 +4,7 @@
   "package": "com.neep.neepmeat.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BrewingRecipeRegistryAccessor",
     "FurnaceAccessor",
     "MixinAbstractFurnaceBlockEntity",
     "MixinLivingEntity",
