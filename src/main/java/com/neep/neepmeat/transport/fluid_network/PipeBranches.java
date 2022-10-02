@@ -52,7 +52,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, Set<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         int size = nodes.size();
 
@@ -71,15 +71,16 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
         try
         {
+            NodeSupplier[] nodeArray = nodes.toArray(new NodeSupplier[0]);
             for (int i = 0; i < size; ++i)
             {
-                Supplier<FluidNode> fromNode = nodes.get(i);
+                Supplier<FluidNode> fromNode = nodeArray[i];
                 if (fromNode.get() == null)
                     continue;
 
                 for (int j = 0; j < size; ++j)
                 {
-                    Supplier<FluidNode> toNode = nodes.get(j);
+                    Supplier<FluidNode> toNode = nodeArray[j];
                     if (toNode.get() == null || toNode.equals(fromNode))
                         continue;
 
