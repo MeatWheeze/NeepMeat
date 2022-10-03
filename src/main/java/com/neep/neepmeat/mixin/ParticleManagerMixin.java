@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(ParticleManager.SimpleSpriteProvider.class)
-public interface MixinParticleManager
+public interface ParticleManagerMixin
 {
     @Invoker("<init>")
     static ParticleManager.SimpleSpriteProvider invokeConstructor()

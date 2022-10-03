@@ -6,15 +6,15 @@
   "mixins": [
     "BrewingRecipeRegistryAccessor",
     "FurnaceAccessor",
-    "MixinAbstractFurnaceBlockEntity",
-    "MixinLivingEntity",
-    "MixinServerWorld"
+    "AbstractFurnaceBlockEntityMixin",
+    "LivingEntityMixin",
+    "ServerWorldMixin"
   ],
   "client": [
     "BlockModelRendererAccessor",
-    "MixinCowEntityRenderer",
-    "MixinHeldItemRenderer",
-    "MixinParticleManager"
+    "CowEntityRendererMixin",
+    "HeldItemRendererMixin",
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1

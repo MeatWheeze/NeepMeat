@@ -16,13 +16,14 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
-public abstract class MixinLivingEntity implements ILivingEntity
+public abstract class LivingEntityMixin implements ILivingEntity
 {
     @Shadow protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
@@ -32,18 +33,18 @@ public abstract class MixinLivingEntity implements ILivingEntity
 
     @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot var1);
 
-    public boolean dropsLoot = true;
+    @Unique public boolean neepmeat$dropsLoot = true;
 
     @Override
     public void setDropsLoot(boolean bl)
     {
-        this.dropsLoot = bl;
+        this.neepmeat$dropsLoot = bl;
     }
 
     @Inject(method = "shouldDropLoot", at = @At(value = "HEAD"), cancellable = true)
     public void dropsLoot(CallbackInfoReturnable<Boolean> cir)
     {
-        if (!dropsLoot) cir.setReturnValue(false);
+        if (!neepmeat$dropsLoot) cir.setReturnValue(false);
     }
 
     @Inject(method = "onDeath", at = @At(value = "HEAD"))

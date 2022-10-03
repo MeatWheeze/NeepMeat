@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 @Mixin(HeldItemRenderer.class)
-public class MixinHeldItemRenderer
+public class HeldItemRendererMixin
 {
     @Inject(method = "renderFirstPersonItem", at = @At(value = "TAIL"))
     public void renderItemHead(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
