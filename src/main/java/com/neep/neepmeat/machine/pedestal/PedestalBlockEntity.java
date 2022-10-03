@@ -112,7 +112,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         }
     }
 
-    public Storage<ItemVariant> getStorage(@Nullable Direction dir)
+    public WritableStackStorage getStorage(@Nullable Direction dir)
     {
         return storage;
     }
