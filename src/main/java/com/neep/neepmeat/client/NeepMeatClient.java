@@ -26,6 +26,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
+import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
@@ -146,6 +147,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.BOTTLER, BottlerRenderer::new);
 
         BlockEntityRendererRegistry.register(NMBlockEntities.PYLON, PylonRenderer::new);
+
+        BlockEntityRendererRegistry.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityRendererRegistry.register(NMEntities.GLOME, (ctx) -> new GlomeEntityRenderer(ctx, GLOME));

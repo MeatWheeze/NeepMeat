@@ -15,6 +15,8 @@ import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
+import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
+import com.neep.neepmeat.machine.synthesiser.SynthesiserStorage;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -124,6 +126,7 @@ public class NMBlockEntities
     public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
     public static BlockEntityType<PylonBlockEntity> PYLON;
     public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
+    public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -201,6 +204,9 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getStorage, HYDRAULIC_PRESS);
 
         PYLON = registerBlockEntity("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
+
+        SYNTHESISER = registerBlockEntity("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
+        FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);
 
         TABLE_CONTROLLER = registerBlockEntity("surgery_controller", TableControllerBlockEntity::new, NMBlocks.SURGERY_CONTROLLER);
         FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, TABLE_CONTROLLER);
