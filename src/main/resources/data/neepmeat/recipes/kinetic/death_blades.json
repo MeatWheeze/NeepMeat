@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " b ",
+    "bmb",
+    " b "
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:iron_bars"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_components"
+    }
+  },
+  "result": {
+    "item": "neepmeat:death_blades",
+    "count": 1
+  }
+}
