@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.particle.ParticleTypes;
@@ -51,7 +50,8 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 mutable.set(corner, xVec);
                 mutable.set(mutable, zVec);
                 caches.add(createCache((ServerWorld) world, mutable));
-                ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, mutable.getX() + 0.5, mutable.getY() + 0.5, mutable.getZ() + 0.5, 5, 0, 0, 0, 0);
+                if (caches.get(caches.size() - 1).find(Direction.UP) != null)
+                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, mutable.getX() + 0.5, mutable.getY() + 0.5, mutable.getZ() + 0.5, 5, 0, 0, 0, 0);
             }
         }
     }
@@ -60,4 +60,5 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         return BlockApiCache.create(FluidStorage.SIDED, world, pos);
     }
+
 }

@@ -1,12 +1,12 @@
 package com.neep.neepmeat.init;
 
-import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.RecipeRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
+import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 
@@ -46,5 +46,8 @@ public class NMrecipeTypes
 
     public static final RecipeSerializer<TrommelRecipe> TROMMEL_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "trommel", new TrommelRecipe.Serializer(TrommelRecipe::new));
     public static final RecipeType<TrommelRecipe> TROMMEL = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "trommel");
+
+    public static final MeatRecipeSerialiser<SurgeryRecipe> SURGERY_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "surgery", new SurgeryRecipe.Serializer(SurgeryRecipe::new));
+    public static final MeatRecipeType<SurgeryRecipe> SURGERY = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "surgery");
 
 }
