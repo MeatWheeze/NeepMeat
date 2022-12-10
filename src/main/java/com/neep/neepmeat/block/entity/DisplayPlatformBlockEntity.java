@@ -1,15 +1,21 @@
 package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.recipe.surgery.TableComponent;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class DisplayPlatformBlockEntity extends SyncableBlockEntity
 {
     protected final WritableStackStorage storage;
+    protected final TableComponent<ItemVariant> tableComponent = new Component();
 
     public float stackRenderDelta; // Used by the renderer
 
@@ -42,6 +49,11 @@ public class DisplayPlatformBlockEntity extends SyncableBlockEntity
     public WritableStackStorage getStorage(@Nullable Direction direction)
     {
         return storage;
+    }
+
+    public TableComponent<ItemVariant> getTableComponent(Void ctx)
+    {
+        return tableComponent;
     }
 
     @Override
@@ -77,4 +89,20 @@ public class DisplayPlatformBlockEntity extends SyncableBlockEntity
             transaction.commit();
         }
     }
+
+
+    protected class Component implements TableComponent<ItemVariant>
+    {
+        @Override
+        public Storage<ItemVariant> getStorage()
+        {
+            return DisplayPlatformBlockEntity.this.getStorage(null);
+        }
+
+        @Override
+        public Identifier getType()
+        {
+            return RecipeInputs.ITEM_ID;
+        }
+    };
 }

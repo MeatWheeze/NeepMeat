@@ -18,6 +18,7 @@ import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserStorage;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
+import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.StopValveBlockEntity;
@@ -159,6 +160,7 @@ public class NMBlockEntities
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);

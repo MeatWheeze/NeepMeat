@@ -21,14 +21,12 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -55,31 +53,46 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     @Override
     public boolean matches(SurgeryTableContext context)
     {
+        // Iterate position of top left corner
+//        for (int i = 0; i <= context.getWidth() - width; ++i)
+//        {
+//            for (int j = 0; j <= context.getHeight() - height; ++j)
+//            {
+
         // 1. Does the block expose a valid Surgery Table Structure API?
         // 2. Does the reported storage lookup match the lookup in the recipe?
         // 3. Does the storage match the ingredient's conditions?
 
-        for (int i = 0; i < 9; ++i)
+        for (int u = 0; u < width; ++u) for (int v = 0; v < height; ++v)
         {
-            RecipeInput<?> input = inputs.get(i);
-            TableComponent<? extends TransferVariant<?>> structure = context.getStructure(i);
-            if (structure == null || Objects.equals(structure.getSidedLookup(), lookups.get(i))) return false;
+            int index = v * height + u;
+            RecipeInput<?> input = inputs.get(index);
+            TableComponent<? extends TransferVariant<?>> structure = context.getStructure(index);
+            if (structure == null || !Objects.equals(structure.getType(), input.getType())) continue;
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (input.test(structure.getStorage(), transaction))
+                if (!input.test(structure.getStorage(), transaction))
                 {
                     transaction.abort();
-                    return true;
+                    return false;
                 }
                 transaction.abort();
             }
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean takeInputs(SurgeryTableContext context, TransactionContext transaction)
     {
+        for (int u = 0; u < width; ++u) for (int v = 0; v < height; ++v)
+        {
+            int index = v * height + u;
+            RecipeInput<?> input = inputs.get(index);
+            Storage<?> storage = context.getStructure(index).getStorage();
+
+        }
+
         return false;
     }
 
@@ -141,23 +154,19 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
 
         private static String[] getPattern(JsonArray json)
         {
-            String[] strings = new String[json.size()];
-            if (strings.length > 3)
+            String[] strings = new String[3];
+            if (json.size() != 3)
             {
-                throw new JsonSyntaxException("Invalid pattern: too many rows, 3 is maximum");
-            }
-            else if (strings.length == 0)
-            {
-                throw new JsonSyntaxException("Invalid pattern: empty pattern not allowed");
+                throw new JsonSyntaxException("Invalid pattern: incorrect number of columns.");
             }
             else
             {
-                for(int i = 0; i < strings.length; ++i)
+                for (int i = 0; i < json.size(); ++i)
                 {
                     String string = JsonHelper.asString(json.get(i), "pattern[" + i + "]");
-                    if (string.length() > 3)
+                    if (string.length() != 3)
                     {
-                        throw new JsonSyntaxException("Invalid pattern: too many columns, 3 is maximum");
+                        throw new JsonSyntaxException("Invalid pattern: incorrect number of rows.");
                     }
 
                     if (i > 0 && strings[0].length() != string.length())
@@ -169,61 +178,6 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
                 }
                 return strings;
             }
-        }
-
-        private static String[] removePadding(String... pattern)
-        {
-            int i = Integer.MAX_VALUE;
-            int j = 0, k = 0, l = 0;
-
-            for(int m = 0; m < pattern.length; ++m)
-            {
-                String string = pattern[m];
-                i = Math.min(i, findFirstSymbol(string));
-                int n = findLastSymbol(string);
-                j = Math.max(j, n);
-                if (n < 0)
-                {
-                    if (k == m)
-                    {
-                        ++k;
-                    }
-
-                    ++l;
-                }
-                else
-                {
-                    l = 0;
-                }
-            }
-            if (pattern.length == l)
-            {
-                return new String[0];
-            }
-            else
-            {
-                String[] strings = new String[pattern.length - l - k];
-
-                for(int o = 0; o < strings.length; ++o)
-                {
-                    strings[o] = pattern[o + k].substring(i, j + 1);
-                }
-                return strings;
-            }
-        }
-
-        private static int findFirstSymbol(String line)
-        {
-            int i;
-            for(i = 0; i < line.length() && line.charAt(i) == ' '; ++i) {}
-            return i;
-        }
-
-        private static int findLastSymbol(String pattern)
-        {
-            int i;
-            for(i = pattern.length() - 1; i >= 0 && pattern.charAt(i) == ' '; --i) {}
-            return i;
         }
 
         // Creates a width×height list of inputs
@@ -252,7 +206,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
         public SurgeryRecipe read(Identifier id, JsonObject json)
         {
             Map<String, RecipeInput<?>> map = Serializer.readSymbols(JsonHelper.getObject(json, "key"));
-            String[] strings = removePadding(getPattern(JsonHelper.getArray(json, "pattern")));
+            String[] strings = getPattern(JsonHelper.getArray(json, "pattern"));
             int w = strings[0].length();
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);

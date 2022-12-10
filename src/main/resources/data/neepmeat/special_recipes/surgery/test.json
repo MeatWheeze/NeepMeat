@@ -1,12 +1,19 @@
 {
   "type": "neepmeat:surgery",
   "pattern": [
-    "iii"
+    "jji",
+    "iii",
+    "iij"
   ],
   "key": {
     "i": {
       "type": "minecraft:item",
       "tag": "c:metal_scaffolding",
+      "amount": 1
+    },
+    "j": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:whisper_flour",
       "amount": 1
     }
   },

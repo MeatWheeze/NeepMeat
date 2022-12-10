@@ -26,6 +26,7 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
         if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
         {
             be.assemble();
+            be.testRecipe();
         }
         return ActionResult.SUCCESS;
     }
