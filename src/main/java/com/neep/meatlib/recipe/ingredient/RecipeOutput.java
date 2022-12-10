@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
 import net.minecraft.util.registry.Registry;
+import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -99,7 +100,12 @@ public class RecipeOutput<T>
         return inserted == amount;
     }
 
-    public static <R> RecipeOutput<R> fromJson(Registry<R> registry, JsonObject json)
+    public static RecipeOutput<?> fromJson(JsonObject json)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static <R> RecipeOutput<R> fromJsonRegistry(Registry<R> registry, JsonObject json)
     {
         R resource;
         if (json.has("resource"))

@@ -2,6 +2,7 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnStorage;
@@ -192,13 +193,13 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         public AlloyKilnRecipe read(Identifier id, JsonObject json)
         {
             JsonObject inputElement1 = JsonHelper.getObject(json, "input1");
-            RecipeInput<Item> itemInput1 = RecipeInput.fromJson(Registry.ITEM, inputElement1);
+            RecipeInput<Item> itemInput1 = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement1);
 
             JsonObject inputElement2 = JsonHelper.getObject(json, "input2");
-            RecipeInput<Item> itemInput2 = RecipeInput.fromJson(Registry.ITEM, inputElement2);
+            RecipeInput<Item> itemInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement2);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJson(Registry.ITEM, outputElement);
+            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput1, itemInput2, itemOutput, time);
@@ -207,8 +208,8 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         @Override
         public AlloyKilnRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(Registry.ITEM, buf);
-            RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(Registry.ITEM, buf);
+            RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
             int time = buf.readVarInt();
@@ -219,8 +220,8 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         @Override
         public void write(PacketByteBuf buf, AlloyKilnRecipe recipe)
         {
-            recipe.itemInput1.write(Registry.ITEM, buf);
-            recipe.itemInput2.write(Registry.ITEM, buf);
+            recipe.itemInput1.write(buf);
+            recipe.itemInput2.write(buf);
             recipe.itemOutput.write(Registry.ITEM, buf);
 
             buf.writeVarInt(recipe.processTime);

@@ -2,6 +2,7 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -113,7 +114,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
         public FatPressingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromJson(Registry.FLUID, fluidInputElement);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             return this.factory.create(id, fluidInput);
         }
@@ -121,7 +122,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
         @Override
         public FatPressingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
 
             return this.factory.create(id, fluidInput);
         }
@@ -129,7 +130,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
         @Override
         public void write(PacketByteBuf buf, FatPressingRecipe recipe)
         {
-            recipe.fluidInput.write(Registry.FLUID, buf);
+            recipe.fluidInput.write(buf);
         }
 
         @FunctionalInterface

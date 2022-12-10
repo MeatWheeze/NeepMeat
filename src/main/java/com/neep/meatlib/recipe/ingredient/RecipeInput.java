@@ -1,11 +1,11 @@
 package com.neep.meatlib.recipe.ingredient;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -30,65 +30,57 @@ import java.util.stream.Stream;
 @SuppressWarnings("UnstableApiUsage")
 public class RecipeInput<T> implements Predicate<StorageView<? extends TransferVariant<T>>>
 {
+    protected final Serialiser<T> serialiser;
+
     // Only one entry at the moment.
     protected Entry<T> entry;
 
     protected long amount;
     @Nullable protected T[] matchingStacks;
 
-    protected RecipeInput(Entry<T> entry, long amount)
+    protected RecipeInput(Entry<T> entry, long amount, Serialiser<T> serialiser)
     {
         this.entry = entry;
         this.amount = amount;
+        this.serialiser = serialiser;
     }
 
-    public static <R> RecipeInput<R> fromJson(Registry<R> registry, JsonObject json)
+    public Serialiser<T> getSerialiser()
     {
-        Entry<R> entry = null;
-        if (json.has("resource"))
-        {
-            Identifier id = new Identifier(JsonHelper.getString(json, "resource"));
-            R resource = registry.getOrEmpty(id).orElseThrow(() -> new JsonSyntaxException("Unknown resource '" + id + "'"));
-            entry = new ResourceEntry<>(resource);
-        }
-        if (json.has("tag"))
-        {
-            Identifier identifier = new Identifier(JsonHelper.getString(json, "tag"));
-            TagKey<R> tagKey = TagKey.of(registry.getKey(), identifier);
-            entry =  new TagEntry<R>(tagKey);
-        }
-
-        if (entry == null)
-        {
-            throw new JsonSyntaxException("No resource or tag specified.");
-        }
-        long amount = JsonHelper.getLong(json, "amount");
-
-        return new RecipeInput<>(entry, amount);
+        return serialiser;
     }
 
-    public static <R> RecipeInput<R> fromBuffer(Registry<R> registry, PacketByteBuf buf)
+    /**
+     * @param json Recipe JSON object
+     * @return A RecipeInput based on the detected resource type
+     */
+    public static RecipeInput<?> fromJson(JsonObject json)
     {
-        Entry<R> entry = null;
-        boolean isTag = buf.readBoolean();
-        if (isTag)
+        Identifier type;
+        Serialiser<?> serialiser;
+        if (json.has("type"))
         {
-            Identifier id = buf.readIdentifier();
-            TagKey<R> tagKey = TagKey.of(registry.getKey(), id);
-            entry = new TagEntry<>(tagKey);
+            type = new Identifier(JsonHelper.getString(json, "type"));
+            serialiser = RecipeInputs.SERIALISERS.get(type);
         }
-        else
-        {
-            Identifier id = buf.readIdentifier();
-            R r = registry.get(id);
-            entry = new ResourceEntry<>(r);
-        }
-        long amount = buf.readVarLong();
+        else throw new JsonParseException("Recipe does not specify resource type.");
 
-        return new RecipeInput<>(entry, amount);
+        if (serialiser == null) throw new JsonParseException("Unknown resource type '" + type +"'");
+
+        return serialiser.fromJson(json);
     }
 
-    public void write(Registry<T> registry, PacketByteBuf buf)
+    public static <R> RecipeInput<R> fromJsonRegistry(Serialiser<R> serialiser, JsonObject json)
+    {
+        return serialiser.fromJson(json);
+    }
+
+    public static <R> RecipeInput<R> fromBuffer(Serialiser<R> serialiser, PacketByteBuf buf)
+    {
+        return serialiser.fromBuffer(buf);
+    }
+
+    public void write(PacketByteBuf buf)
     {
         boolean isTag = entry instanceof TagEntry;
         buf.writeBoolean(isTag);
@@ -98,7 +90,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         }
         else
         {
-            buf.writeIdentifier(registry.getId(((ResourceEntry<T>) entry).getObject()));
+            buf.writeIdentifier(getSerialiser().getId(((ResourceEntry<T>) entry).getObject()));
         }
         buf.writeVarLong(amount);
     }
@@ -178,6 +170,8 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
 
     public interface Entry<T>
     {
+        Entry<Object> EMPTY = () -> Collections.EMPTY_SET;
+
         Collection<T> getMatching();
     }
 
@@ -236,6 +230,84 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         public Collection<T> getMatching()
         {
             return List.of(object);
+        }
+    }
+
+    public interface Serialiser<T>
+    {
+        RecipeInput<T> fromJson(JsonObject json);
+        RecipeInput<T> fromBuffer(PacketByteBuf buf);
+        T getObject(Identifier id);
+        Identifier getId(T t);
+    }
+
+    public static class RegistrySerialiser<R> implements Serialiser<R>
+    {
+        private final Registry<R> registry;
+
+        public RegistrySerialiser(Registry<R> registry)
+        {
+            this.registry = registry;
+        }
+
+        @Override
+        public RecipeInput<R> fromJson(JsonObject json)
+        {
+            Entry<R> entry = null;
+            if (json.has("resource"))
+            {
+                Identifier id = new Identifier(JsonHelper.getString(json, "resource"));
+                R resource = registry.get(id);
+                if (resource == null) throw new JsonSyntaxException("Unknown resource '" + id + "'");
+                entry = new ResourceEntry<>(resource);
+            }
+            if (json.has("tag"))
+            {
+                Identifier identifier = new Identifier(JsonHelper.getString(json, "tag"));
+                TagKey<R> tagKey = TagKey.of(registry.getKey(), identifier);
+                entry =  new TagEntry<>(tagKey);
+            }
+
+            if (entry == null)
+            {
+                throw new JsonSyntaxException("No resource or tag specified.");
+            }
+            long amount = JsonHelper.getLong(json, "amount");
+
+            return new RecipeInput<>(entry, amount, this);
+        }
+
+        public RecipeInput<R> fromBuffer(PacketByteBuf buf)
+        {
+            Entry<R> entry = null;
+            boolean isTag = buf.readBoolean();
+            if (isTag)
+            {
+                Identifier id = buf.readIdentifier();
+                TagKey<R> tagKey = TagKey.of(registry.getKey(), id);
+                entry = new TagEntry<>(tagKey);
+            }
+            else
+            {
+                Identifier id = buf.readIdentifier();
+                R r = registry.get(id);
+                entry = new ResourceEntry<>(r);
+            }
+            long amount = buf.readVarLong();
+
+            return new RecipeInput<>(entry, amount, this);
+        }
+
+        @Override
+        public R getObject(Identifier id)
+        {
+            return registry.get(id);
+        }
+
+        @Override
+        public Identifier getId(R t)
+        {
+            return registry.getId(t);
         }
     }
 }

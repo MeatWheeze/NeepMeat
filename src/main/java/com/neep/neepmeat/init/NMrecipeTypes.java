@@ -47,7 +47,7 @@ public class NMrecipeTypes
     public static final RecipeSerializer<TrommelRecipe> TROMMEL_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "trommel", new TrommelRecipe.Serializer(TrommelRecipe::new));
     public static final RecipeType<TrommelRecipe> TROMMEL = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "trommel");
 
-    public static final MeatRecipeSerialiser<SurgeryRecipe> SURGERY_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "surgery", new SurgeryRecipe.Serializer(SurgeryRecipe::new));
+    public static final MeatRecipeSerialiser<SurgeryRecipe> SURGERY_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "surgery", new SurgeryRecipe.Serializer());
     public static final MeatRecipeType<SurgeryRecipe> SURGERY = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "surgery");
 
 }
