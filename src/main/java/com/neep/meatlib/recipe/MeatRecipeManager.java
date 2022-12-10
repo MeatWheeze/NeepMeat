@@ -7,8 +7,6 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.network.SyncMeatRecipesS2CPacket;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -42,7 +40,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return Optional.ofNullable(this.recipesById.get(id));
     }
 
-    public <C extends Inventory, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
+    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
     {
         return this.getAllOfType(type).values().stream().flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
     }
