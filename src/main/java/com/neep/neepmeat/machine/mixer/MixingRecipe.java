@@ -225,7 +225,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @Override
         public MixingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> ingredient = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Item> ingredient = RecipeInput.fromBuffer(buf);
             FluidIngredient fluidInput1 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidInput2 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidOutput = FluidIngredient.fromPacket(buf);

@@ -143,7 +143,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         @Override
         public EnlighteningRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
             int data = buf.readVarInt();
 

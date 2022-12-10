@@ -161,7 +161,7 @@ public class TrommelRecipe extends ImplementedRecipe<TrommelStorage>
         @Override
         public TrommelRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
             NbtCompound nbt = buf.readNbt();
 

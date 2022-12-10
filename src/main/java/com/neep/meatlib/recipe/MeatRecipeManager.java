@@ -69,12 +69,12 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
             }
             catch (JsonParseException | IllegalArgumentException runtimeException)
             {
-                MeatLib.LOGGER.error("Parsing error loading special recipe {} ({})", identifier, runtimeException);
+                MeatLib.LOGGER.error("Parsing error loading meatlib recipe {} ({})", identifier, runtimeException);
             }
         }
         this.recipes = map2.entrySet().stream().collect(ImmutableMap.toImmutableMap(Map.Entry::getKey, entry -> (entry.getValue()).build()));
         this.recipesById = builder.build();
-        MeatLib.LOGGER.info("Loaded {} special recipes", map2.size());
+        MeatLib.LOGGER.info("Loaded {} meatlib recipes", map2.size());
 
     }
 
@@ -82,7 +82,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     {
         String string = JsonHelper.getString(json, "type");
         return RecipeRegistry.RECIPE_SERIALISER.getOrEmpty(new Identifier(string)).orElseThrow(() ->
-                new JsonSyntaxException("Invalid or unsupported special recipe type '" + string + "'"))
+                new JsonSyntaxException("Invalid or unsupported meatlib recipe type '" + string + "'"))
                 .read(id, json);
     }
 
@@ -97,13 +97,15 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         ImmutableMap.Builder<Identifier, MeatRecipe<?>> builder = ImmutableMap.builder();
         recipes.forEach(recipe ->
         {
+            if (recipe == null) throw new IllegalStateException("Received recipe is null on the client. Is serialisation correctly implemented?");
+
             Map<Identifier, MeatRecipe<?>> map2 = map.computeIfAbsent(recipe.getType(), t -> Maps.newHashMap());
             Identifier identifier = recipe.getId();
             MeatRecipe<?> recipe2 = map2.put(identifier, recipe);
             builder.put(identifier, recipe);
             if (recipe2 != null)
             {
-                throw new IllegalStateException("Duplicate recipe ignored with ID " + identifier);
+                throw new IllegalStateException("Duplicate meatlib recipe ignored with ID " + identifier);
             }
         });
         this.recipes = ImmutableMap.copyOf(map);

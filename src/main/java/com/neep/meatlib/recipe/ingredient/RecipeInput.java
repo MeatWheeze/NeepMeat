@@ -31,6 +31,7 @@ import java.util.stream.Stream;
 public class RecipeInput<T> implements Predicate<StorageView<? extends TransferVariant<T>>>
 {
     protected final Serialiser<T> serialiser;
+    protected final Identifier type;
 
     // Only one entry at the moment.
     protected Entry<T> entry;
@@ -38,16 +39,22 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     protected long amount;
     @Nullable protected T[] matchingStacks;
 
-    protected RecipeInput(Entry<T> entry, long amount, Serialiser<T> serialiser)
+    protected RecipeInput(Entry<T> entry, long amount, Serialiser<T> serialiser, Identifier type)
     {
         this.entry = entry;
         this.amount = amount;
         this.serialiser = serialiser;
+        this.type = type;
     }
 
     public Serialiser<T> getSerialiser()
     {
         return serialiser;
+    }
+
+    private Identifier getType()
+    {
+        return type;
     }
 
     /**
@@ -70,29 +77,23 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return serialiser.fromJson(json);
     }
 
+    public static <R> RecipeInput<R> fromBuffer(PacketByteBuf buf)
+    {
+        Identifier type = new Identifier(buf.readString());
+        Serialiser<?> serialiser = RecipeInputs.SERIALISERS.get(type);
+        if (serialiser == null) throw new IllegalStateException("Error reading meatlib recipe packet: invalid type");
+
+        return (RecipeInput<R>) serialiser.fromBuffer(buf);
+    }
+
     public static <R> RecipeInput<R> fromJsonRegistry(Serialiser<R> serialiser, JsonObject json)
     {
         return serialiser.fromJson(json);
     }
 
-    public static <R> RecipeInput<R> fromBuffer(Serialiser<R> serialiser, PacketByteBuf buf)
-    {
-        return serialiser.fromBuffer(buf);
-    }
-
     public void write(PacketByteBuf buf)
     {
-        boolean isTag = entry instanceof TagEntry;
-        buf.writeBoolean(isTag);
-        if (isTag)
-        {
-            buf.writeIdentifier(((TagEntry<T>) entry).tag.id());
-        }
-        else
-        {
-            buf.writeIdentifier(getSerialiser().getId(((ResourceEntry<T>) entry).getObject()));
-        }
-        buf.writeVarLong(amount);
+        serialiser.write(buf, this);
     }
 
     public long amount()
@@ -237,6 +238,8 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     {
         RecipeInput<T> fromJson(JsonObject json);
         RecipeInput<T> fromBuffer(PacketByteBuf buf);
+
+        void write(PacketByteBuf buf, RecipeInput<T> input);
         T getObject(Identifier id);
         Identifier getId(T t);
     }
@@ -274,7 +277,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
             }
             long amount = JsonHelper.getLong(json, "amount");
 
-            return new RecipeInput<>(entry, amount, this);
+            return new RecipeInput<>(entry, amount, this, registry.getKey().getValue());
         }
 
         public RecipeInput<R> fromBuffer(PacketByteBuf buf)
@@ -295,7 +298,27 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
             }
             long amount = buf.readVarLong();
 
-            return new RecipeInput<>(entry, amount, this);
+            return new RecipeInput<>(entry, amount, this, registry.getKey().getValue());
+        }
+
+        @Override
+        public void write(PacketByteBuf buf, RecipeInput<R> input)
+        {
+            // Write recipe resource type
+            buf.writeString(input.getType().toString());
+
+            // This jank is here to avoid making another registry.
+            boolean isTag = input.entry instanceof TagEntry;
+            buf.writeBoolean(isTag);
+            if (isTag)
+            {
+                buf.writeIdentifier(((TagEntry<R>) input.entry).tag.id());
+            }
+            else
+            {
+                buf.writeIdentifier(getId(((ResourceEntry<R>) input.entry).getObject()));
+            }
+            buf.writeVarLong(input.amount());
         }
 
         @Override
@@ -310,4 +333,5 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
             return registry.getId(t);
         }
     }
+
 }

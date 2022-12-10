@@ -7,6 +7,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.NotImplementedException;
 
@@ -16,8 +17,9 @@ public class RecipeInputs
             (Class<RecipeInput.Serialiser<?>>) (Object) RecipeInput.Serialiser.class,
             new Identifier(NeepMeat.NAMESPACE, "recipe_input"),
             new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
-    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, new Identifier(NeepMeat.NAMESPACE, "fluid"), new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
-    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, new Identifier(NeepMeat.NAMESPACE, "item"), new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
+    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, Registry.FLUID.getKey().getValue(), new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
+    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, Registry.ITEM.getKey().getValue(), new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
+
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, new RecipeInput.Serialiser<>()
     {
         @Override
@@ -33,6 +35,12 @@ public class RecipeInputs
         }
 
         @Override
+        public void write(PacketByteBuf buf, RecipeInput<Object> input)
+        {
+
+        }
+
+        @Override
         public Object getObject(Identifier id)
         {
             throw new NotImplementedException();
@@ -43,5 +51,5 @@ public class RecipeInputs
         {
             throw new NotImplementedException();
         }
-    });
+    }, new Identifier("neepmeat:empty"));
 }

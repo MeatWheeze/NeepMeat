@@ -19,12 +19,16 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.registry.Registry;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -32,13 +36,17 @@ import java.util.Set;
 @SuppressWarnings("UnstableApiUsage")
 public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
 {
+    private final int width;
+    private final int height;
     private final DefaultedList<BlockApiLookup<Storage<?>, Direction>> lookups;
     private final DefaultedList<RecipeInput<?>> inputs;
-    private final RecipeOutput<?> output;
+    private final RecipeOutput<Item> output;
     private final Identifier id;
-    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, DefaultedList<BlockApiLookup<Storage<?>, Direction>> lookups, RecipeOutput<?> output)
+    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, DefaultedList<BlockApiLookup<Storage<?>, Direction>> lookups, RecipeOutput<Item> output)
     {
         this.id = id;
+        this.width = w;
+        this.height = h;
         this.inputs = inputs;
         this.lookups = lookups;
         this.output = output;
@@ -84,7 +92,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     @Override
     public MeatRecipeType<?> getType()
     {
-        return null;
+        return NMrecipeTypes.SURGERY;
     }
 
     @Override
@@ -248,21 +256,36 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             int w = strings[0].length();
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);
-            RecipeOutput<?> output = RecipeOutput.fromJson(JsonHelper.getObject(json, "result"));
+            RecipeOutput<Item> output = RecipeOutput.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
             return new SurgeryRecipe(id, w, h, inputs, null, output);
         }
-
-
 
         @Override
         public SurgeryRecipe read(Identifier id, PacketByteBuf buf)
         {
-            return null;
+            int width = buf.readVarInt();
+            int height = buf.readVarInt();
+
+            DefaultedList<RecipeInput<?>> inputs = DefaultedList.ofSize(width * height, RecipeInputs.EMPTY);
+
+            inputs.replaceAll(ignored -> RecipeInput.fromBuffer(buf));
+
+            RecipeOutput<Item> output = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            return new SurgeryRecipe(id, width, height, inputs, null, output);
         }
 
         @Override
         public void write(PacketByteBuf buf, SurgeryRecipe recipe)
         {
+            buf.writeVarInt(recipe.width);
+            buf.writeVarInt(recipe.height);
+
+            for (RecipeInput<?> input : recipe.inputs)
+            {
+                input.write(buf);
+            }
+
+            recipe.output.write(Registry.ITEM, buf);
         }
     }
 }

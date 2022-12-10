@@ -151,7 +151,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @Override
         public OreFatRenderingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, fluidInput, fluidOutput);

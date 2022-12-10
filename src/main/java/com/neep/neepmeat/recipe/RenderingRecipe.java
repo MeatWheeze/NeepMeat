@@ -174,8 +174,8 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @Override
         public RenderingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, itemInput, fluidInput, fluidOutput);

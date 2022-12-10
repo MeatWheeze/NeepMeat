@@ -122,7 +122,7 @@ public class FatPressingRecipe extends AbstractPressingRecipe<CastingBasinStorag
         @Override
         public FatPressingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
 
             return this.factory.create(id, fluidInput);
         }
