@@ -10,12 +10,6 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class IntegratorEggModel<I extends BlockEntity> extends AnimatedGeoModel<IntegratorBlockEntity>
 {
     @Override
-    public void setLivingAnimations(IntegratorBlockEntity o, Integer integer, AnimationEvent animationEvent)
-    {
-
-    }
-
-    @Override
     public Identifier getModelLocation(IntegratorBlockEntity object)
     {
         return new Identifier(NeepMeat.NAMESPACE, "geo/integrator.geo.json");

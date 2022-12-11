@@ -7,8 +7,8 @@ import net.minecraft.item.Item;
 
 public class BaseColumnBlock extends PillarBlock implements IMeatBlock
 {
-    BlockItem blockItem;
-    private String regsitryName;
+    public final BlockItem blockItem;
+    private final String regsitryName;
 
     public BaseColumnBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {

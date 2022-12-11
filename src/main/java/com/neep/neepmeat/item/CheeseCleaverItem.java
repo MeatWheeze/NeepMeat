@@ -17,13 +17,14 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.core.manager.SingletonAnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnimatable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static String CONTROLLER_NAME = "controller";
 
     public CheeseCleaverItem(String registryName, Settings settings)
@@ -102,15 +103,15 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
         {
             case ANIM_SWING -> {
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.swing", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.swing"));
             }
             case ANIM_STAB -> {
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.stab", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.stab"));
             }
             case ANIM_CHOP -> {
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.chop", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.cheese_cleaver.chop"));
 
             }
         }

@@ -37,7 +37,7 @@ import java.util.Optional;
 
 public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakTwoHanded, IAimable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller1";
 
     public FusionCannonItem()
@@ -173,13 +173,13 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire"));
         }
         else if (state == ANIM_RELOAD)
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r", false));
+            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
         }
     }
 }

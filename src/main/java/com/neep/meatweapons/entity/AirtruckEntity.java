@@ -16,10 +16,12 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.core.manager.InstancedAnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 {
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     public final float maxSpeed = 0.05f;
     protected final float forwardsAccel = 0.004f;
@@ -108,7 +110,7 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.airtruck.fly", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.airtruck.fly"));
         return PlayState.CONTINUE;
     }
 

@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.core.manager.SingletonAnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -44,7 +45,7 @@ import java.util.function.Predicate;
 
 public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable, ISyncable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = new SingletonAnimationFactory(this);
     Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
     public Item ammunition;
     public boolean hasLore;

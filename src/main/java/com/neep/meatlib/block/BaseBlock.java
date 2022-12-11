@@ -7,8 +7,8 @@ import net.minecraft.item.Item;
 
 public class BaseBlock extends Block implements IMeatBlock
 {
-    public BlockItem blockItem;
-    private String registryName;
+    public final BlockItem blockItem;
+    private final String registryName;
 
     public BaseBlock(String registryName, Settings settings)
     {

@@ -22,7 +22,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class SlasherItem extends AnimatedSword implements IAnimatable, ISyncable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public static String CONTROLLER_NAME = "controller";
 
     public SlasherItem(String registryName, Settings settings)
@@ -84,11 +84,11 @@ public class SlasherItem extends AnimatedSword implements IAnimatable, ISyncable
         {
             case ANIM_SWING:
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.slasher.swing", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.slasher.swing"));
                 break;
             case ANIM_STAB:
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.slasher.stab", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.slasher.stab"));
                 break;
             default:
 

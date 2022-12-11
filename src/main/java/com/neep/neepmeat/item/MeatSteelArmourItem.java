@@ -12,10 +12,11 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class MeatSteelArmourItem extends ArmorItem implements IMeatItem, IAnimatable
 {
-    private AnimationFactory factory = new AnimationFactory(this);
+    private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
     protected final String registryName;
 
@@ -40,7 +41,7 @@ public class MeatSteelArmourItem extends ArmorItem implements IMeatItem, IAnimat
 
     private <P extends IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.meat_steel_armour.idle", true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.meat_steel_armour.idle"));
         return PlayState.CONTINUE;
     }
 
