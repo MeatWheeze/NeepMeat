@@ -264,6 +264,10 @@
   "item.neepmeat.pinkdrink": "Pinkdrink",
   "item.neepmeat.pinkdrink.lore_0": "It's pink, and it's a drink.",
 
+  "item.neepmeat.meat_steel_chestplate": "Meat Steel Chestplate",
+  "item.neepmeat.meat_steel_legs": "Meat Steel Legs",
+  "item.neepmeat.meat_steel_boots": "Meat Steel Boots",
+
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when connected to an Integrator.",
 
