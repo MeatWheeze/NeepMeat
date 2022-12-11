@@ -3,15 +3,23 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatweapons.init.GraphicsEffects;
+import com.neep.meatweapons.network.BeamPacket;
+import com.neep.meatweapons.network.MWNetwork;
+import com.neep.meatweapons.particle.GraphicsEffect;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -39,15 +47,18 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         this(NMBlockEntities.TABLE_CONTROLLER, pos, state);
     }
 
+    int counter = 0;
     public void tick()
     {
+        counter = Math.min(counter + 1, 10);
+
         robot.tick();
         Vec3d robotPos = robot.getPos();
-        ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, robotPos.x, robotPos.y, robotPos.z, 5, 0, 0, 0, 0);
 
-        if (robot.isActive() && robot.reachedTarget())
+        if (robot.isActive() && counter == 10)
         {
             MeatRecipeManager.getInstance().get(NMrecipeTypes.SURGERY, currentRecipe).ifPresent(this::nextIngredient);
+            counter = 0;
         }
 
         sync();
@@ -77,14 +88,17 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public void testRecipe()
     {
-        SurgeryRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
-        NeepMeat.LOGGER.info("Recipe: " + recipe);
-        if (recipe != null)
-        {
-            this.recipeProgress = 0;
-            this.currentRecipe = recipe.getId();
-            nextIngredient(recipe);
-        }
+        MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).ifPresent(this::startRecipe);
+//        NeepMeat.LOGGER.info("Recipe: " + recipe);
+    }
+
+    private void startRecipe(SurgeryRecipe recipe)
+    {
+        this.recipeProgress = 0;
+        this.currentRecipe = recipe.getId();
+        Direction facing = getCachedState().get(TableControllerBlock.FACING);
+        robot.setTarget(pos.add(0, 2.2, 0).offset(facing.getOpposite(), 2));
+        nextIngredient(recipe);
     }
 
     private void nextIngredient(SurgeryRecipe recipe)
@@ -100,11 +114,29 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
             RecipeInput<?> input = recipe.getInputs().get(recipeProgress);
             if (!input.isEmpty())
             {
-                robot.setTarget(context.getPos(recipeProgress));
-                ++recipeProgress;
+                BlockPos itemPos = context.getPos(recipeProgress);
+                if (robot.reachedTarget())
+                {
+//                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER,
+//                            itemPos.getX() + 0.5,
+//                            itemPos.getY() + 0.5,
+//                            itemPos.getZ() + 0.5,
+//                            5, 0, 0, 0, 0);
+                    syncBeamEffect((ServerWorld) world, robot.getPos(), Vec3d.ofCenter(itemPos, 0), Vec3d.ZERO, 20);
+                    ++recipeProgress;
+                }
                 return;
             }
             ++recipeProgress;
+        }
+    }
+
+    private void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, double showRadius)
+    {
+        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
+        {
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, velocity, 0.5f, 5, MWNetwork.EFFECT_ID);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
 

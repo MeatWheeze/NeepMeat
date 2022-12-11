@@ -31,6 +31,8 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier PYLON_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor");
     public static Identifier SYNTHESISER_PLUNGER = new Identifier(NeepMeat.NAMESPACE, "block/synthesiser/plunger");
 
+    public static Identifier SURGERY_ROBOT = new Identifier(NeepMeat.NAMESPACE, "block/table_controller/robot");
+
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
     {
@@ -52,5 +54,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(PUMP);
         out.accept(PYLON_ROTOR);
         out.accept(SYNTHESISER_PLUNGER);
+        out.accept(SURGERY_ROBOT);
     }
 }

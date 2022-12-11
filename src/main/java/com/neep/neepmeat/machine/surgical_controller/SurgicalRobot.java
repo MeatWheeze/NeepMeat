@@ -26,6 +26,10 @@ public class SurgicalRobot implements NbtSerialisable
     private double y;
     private double z;
 
+    public double clientX;
+    public double clientY;
+    public double clientZ;
+
     private Vec3d targetPos;
 
     private BlockPos target;
@@ -60,7 +64,7 @@ public class SurgicalRobot implements NbtSerialisable
         }
         else if (movementState == STATE_LAUNCHING)
         {
-            if (moveTo(dockingPos)) movementState = STATE_ACTIVE;
+            if (moveTo(attachPos)) movementState = STATE_ACTIVE;
         }
         else if (movementState == STATE_ACTIVE)
         {
@@ -125,6 +129,21 @@ public class SurgicalRobot implements NbtSerialisable
     public Vec3d getPos()
     {
         return new Vec3d(x, y, z);
+    }
+
+    public double getX()
+    {
+        return x;
+    }
+
+    public double getY()
+    {
+        return y;
+    }
+
+    public double getZ()
+    {
+        return z;
     }
 
     private static final String NBT_MOVEMENT_STATE = "movementState";
