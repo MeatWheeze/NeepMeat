@@ -4,12 +4,11 @@ import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -20,10 +19,8 @@ import java.util.List;
  */
 public class SurgeryTableContext implements NbtSerialisable
 {
-    private List<BlockApiCache<TableComponent<?>, Void>> caches = new ArrayList<>(9);
-
-    private World world;
-    private List<BlockPos> posList;
+    private final List<BlockApiCache<TableComponent<?>, Void>> caches = new ArrayList<>(9);
+    private final List<BlockPos> posList = new ArrayList<>(9);
 
     @Nullable
     public TableComponent<? extends TransferVariant<?>> getStructure(int i)
@@ -43,6 +40,11 @@ public class SurgeryTableContext implements NbtSerialisable
         return 3;
     }
 
+    public int getSize()
+    {
+        return posList.size();
+    }
+
     @Override
     public void writeNbt(NbtCompound nbt)
     {
@@ -57,16 +59,18 @@ public class SurgeryTableContext implements NbtSerialisable
 
     public void add(ServerWorld world, BlockPos pos)
     {
+        posList.add(pos.toImmutable());
         caches.add(BlockApiCache.create(TableComponent.STRUCTURE_LOOKUP, world, pos));
+    }
+
+    public BlockPos getPos(int i)
+    {
+        return posList.get(i);
     }
 
     public void clear()
     {
         caches.clear();
-    }
-
-    public interface Part<T>
-    {
-
+        posList.clear();
     }
 }

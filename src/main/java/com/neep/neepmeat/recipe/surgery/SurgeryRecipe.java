@@ -1,7 +1,6 @@
 package com.neep.neepmeat.recipe.surgery;
 
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -14,8 +13,6 @@ import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -24,29 +21,25 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
 {
     private final int width;
     private final int height;
-    private final DefaultedList<BlockApiLookup<Storage<?>, Direction>> lookups;
     private final DefaultedList<RecipeInput<?>> inputs;
     private final RecipeOutput<Item> output;
     private final Identifier id;
-    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, DefaultedList<BlockApiLookup<Storage<?>, Direction>> lookups, RecipeOutput<Item> output)
+    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, RecipeOutput<Item> output)
     {
         this.id = id;
         this.width = w;
         this.height = h;
         this.inputs = inputs;
-        this.lookups = lookups;
         this.output = output;
     }
 
@@ -85,14 +78,6 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     @Override
     public boolean takeInputs(SurgeryTableContext context, TransactionContext transaction)
     {
-        for (int u = 0; u < width; ++u) for (int v = 0; v < height; ++v)
-        {
-            int index = v * height + u;
-            RecipeInput<?> input = inputs.get(index);
-            Storage<?> storage = context.getStructure(index).getStorage();
-
-        }
-
         return false;
     }
 
@@ -118,6 +103,16 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     public Identifier getId()
     {
         return id;
+    }
+
+    public DefaultedList<RecipeInput<?>> getInputs()
+    {
+        return inputs;
+    }
+
+    public int getGridSize()
+    {
+        return width * height;
     }
 
     public static class Serializer implements MeatRecipeSerialiser<SurgeryRecipe>
@@ -184,8 +179,6 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
         private DefaultedList<RecipeInput<?>> createPatternMatrix(String[] pattern, Map<String, RecipeInput<?>> symbols, int width, int height)
         {
             DefaultedList<RecipeInput<?>> defaultedList = DefaultedList.ofSize(width * height, RecipeInputs.EMPTY);
-            Set<String> set = Sets.newHashSet(symbols.keySet());
-            set.remove(" ");
 
             for(int i = 0; i < pattern.length; ++i)
             {
@@ -211,7 +204,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);
             RecipeOutput<Item> output = RecipeOutput.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
-            return new SurgeryRecipe(id, w, h, inputs, null, output);
+            return new SurgeryRecipe(id, w, h, inputs, output);
         }
 
         @Override
@@ -225,7 +218,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             inputs.replaceAll(ignored -> RecipeInput.fromBuffer(buf));
 
             RecipeOutput<Item> output = RecipeOutput.fromBuffer(Registry.ITEM, buf);
-            return new SurgeryRecipe(id, width, height, inputs, null, output);
+            return new SurgeryRecipe(id, width, height, inputs, output);
         }
 
         @Override

@@ -40,6 +40,13 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return Optional.ofNullable(this.recipesById.get(id));
     }
 
+    public <C, T extends MeatRecipe<C>> Optional<T> get(MeatRecipeType<T> type, Identifier id)
+    {
+        MeatRecipe<?> recipe = this.recipesById.get(id);
+        if (recipe == null || recipe.getType() != type) return Optional.empty();
+        return Optional.ofNullable((T) recipe);
+    }
+
     public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
     {
         return this.getAllOfType(type).values().stream().flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
