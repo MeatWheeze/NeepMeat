@@ -18,12 +18,20 @@ import java.util.List;
 /**
  * A mutable view of the surgery table's constituent storages
  */
+@SuppressWarnings("UnstableApiUsage")
 public class SurgeryTableContext implements NbtSerialisable
 {
     private final List<BlockApiCache<TableComponent<?>, Void>> caches = new ArrayList<>(9);
     private final List<BlockPos> posList = new ArrayList<>(9);
 
-    Storage<ItemVariant> storage = new WritableStackStorage(() -> {}, Integer.MAX_VALUE);
+    WritableStackStorage storage = new WritableStackStorage(() -> {}, Integer.MAX_VALUE)
+    {
+        @Override
+        public boolean supportsInsertion()
+        {
+            return false;
+        }
+    };
 
     @Nullable
     public TableComponent<TransferVariant<?>> getStructure(int i)
@@ -51,13 +59,13 @@ public class SurgeryTableContext implements NbtSerialisable
     @Override
     public void writeNbt(NbtCompound nbt)
     {
-
+        storage.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
-
+        storage.readNbt(nbt);
     }
 
     public void add(ServerWorld world, BlockPos pos)

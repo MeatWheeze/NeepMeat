@@ -13,8 +13,11 @@ import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
@@ -177,6 +180,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         nbt.putInt("recipeProgress", recipeProgress);
         nbt.putString("currentRecipe", currentRecipe != null ? currentRecipe.toString() : "null");
         robot.writeNbt(nbt);
+        context.writeNbt(nbt);
     }
 
     @Override
@@ -186,5 +190,12 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         this.recipeProgress = nbt.getInt("recipeProgress");
         this.currentRecipe = new Identifier(nbt.getString("currentRecipe"));
         robot.readNbt(nbt);
+        context.readNbt(nbt);
+    }
+
+    public Storage<ItemVariant> getStorage(Direction direction)
+    {
+        Direction facing = getCachedState().get(TableControllerBlock.FACING);
+        return direction == facing || direction == Direction.DOWN ? context.storage : null;
     }
 }
