@@ -1,0 +1,24 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    "rbr",
+    "   ",
+    "   "
+  ],
+  "key": {
+    "b": {
+      "type": "minecraft:fluid",
+      "resource": "neepmeat:blood",
+      "amount": 27000
+    },
+    "r": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:enlightened_brain",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "neepmeat:synthesiser",
+    "amount": 1
+  }
+}

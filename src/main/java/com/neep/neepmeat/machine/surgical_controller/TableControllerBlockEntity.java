@@ -10,6 +10,7 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -106,8 +107,19 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         robot.returnToBase();
     }
 
-    private void completeRecipe()
+    private void finishRecipe()
     {
+        MeatRecipeManager.getInstance().get(NMrecipeTypes.SURGERY, currentRecipe).ifPresent(recipe ->
+        {
+            Direction facing = getCachedState().get(TableControllerBlock.FACING);
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                recipe.ejectOutputs(context, transaction);
+                ItemPipeUtil.storageToAny((ServerWorld) getWorld(), context.getStorage(), pos, facing, transaction);
+                transaction.commit();
+            }
+        });
+
         this.currentRecipe = null;
         this.recipeProgress = 0;
         robot.returnToBase();
@@ -119,7 +131,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         {
             if (recipeProgress >= context.getSize())
             {
-                completeRecipe();
+                finishRecipe();
                 return;
             }
             RecipeInput<?> input = recipe.getInputs().get(recipeProgress);
