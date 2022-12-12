@@ -89,15 +89,25 @@ public class SurgicalRobot implements NbtSerialisable
 
     private boolean moveTo(Vec3d toPos)
     {
-        if (toPos.squaredDistanceTo(x, y, z) >= 0.1 * 0.1)
+        if (toPos.squaredDistanceTo(x, y, z) >= 0.01 * 0.01)
         {
             double dx = (toPos.x - x);
             double dy = (toPos.y - y);
             double dz = (toPos.z - z);
             double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-            double vx = dx / dist * getSpeed();
-            double vy = dy / dist * getSpeed();
-            double vz = dz / dist * getSpeed();
+            double vx = dx;
+            double vy = dy;
+            double vz = dz;
+
+            // Normalise motion vector if distance is greater than base movement step
+            if (dist > getSpeed())
+            {
+                vx = vx / dist * getSpeed();
+                vy = vy / dist * getSpeed();
+                vz = vz / dist * getSpeed();
+            }
+
+            // Step position
             x += vx;
             y += vy;
             z += vz;
