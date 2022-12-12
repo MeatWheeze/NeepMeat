@@ -7,8 +7,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import org.apache.commons.compress.utils.Lists;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -23,11 +21,11 @@ public class SurgeryTableContext implements NbtSerialisable
     private final List<BlockPos> posList = new ArrayList<>(9);
 
     @Nullable
-    public TableComponent<? extends TransferVariant<?>> getStructure(int i)
+    public TableComponent<TransferVariant<?>> getStructure(int i)
     {
         // TODO: This is a problem
 //        return (TableComponent<? extends TransferVariant<?>>) TableComponent.STRUCTURE_LOOKUP.find(world, posList.get(i), null);
-        return (TableComponent<? extends TransferVariant<?>>) caches.get(i).find(null);
+        return (TableComponent<TransferVariant<?>>) caches.get(i).find(null);
     }
 
     public int getWidth()

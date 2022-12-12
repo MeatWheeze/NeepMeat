@@ -6,19 +6,17 @@ import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.GraphicsEffect;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -101,14 +99,27 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         nextIngredient(recipe);
     }
 
+    private void interruptRecipe()
+    {
+        this.currentRecipe = null;
+        this.recipeProgress = 0;
+        robot.returnToBase();
+    }
+
+    private void completeRecipe()
+    {
+        this.currentRecipe = null;
+        this.recipeProgress = 0;
+        robot.returnToBase();
+    }
+
     private void nextIngredient(SurgeryRecipe recipe)
     {
         while (true)
         {
             if (recipeProgress >= context.getSize())
             {
-                recipeProgress = 0;
-                robot.returnToBase();
+                completeRecipe();
                 return;
             }
             RecipeInput<?> input = recipe.getInputs().get(recipeProgress);
@@ -117,12 +128,19 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 BlockPos itemPos = context.getPos(recipeProgress);
                 if (robot.reachedTarget())
                 {
-//                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER,
-//                            itemPos.getX() + 0.5,
-//                            itemPos.getY() + 0.5,
-//                            itemPos.getZ() + 0.5,
-//                            5, 0, 0, 0, 0);
-                    syncBeamEffect((ServerWorld) world, robot.getPos(), Vec3d.ofCenter(itemPos, 0), Vec3d.ZERO, 20);
+                    try (Transaction transaction = Transaction.openOuter())
+                    {
+                        if (recipe.takeInput(context, recipeProgress, transaction))
+                        {
+                            transaction.commit();
+                            syncBeamEffect((ServerWorld) world, robot.getPos(), Vec3d.ofCenter(itemPos, 0), Vec3d.ZERO, 20);
+                        }
+                        else
+                        {
+                            transaction.abort();
+                            interruptRecipe();
+                        }
+                    }
                     ++recipeProgress;
                 }
                 return;

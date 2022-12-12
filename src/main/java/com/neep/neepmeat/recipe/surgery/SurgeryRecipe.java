@@ -13,9 +13,13 @@ import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -23,12 +27,20 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.registry.Registry;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
 {
+    private final Map<Identifier, Function<Object, TransferVariant<?>>> TRANSFER_MAP = new HashMap<>();
+
+    private final Function<?, TransferVariant<?>> ITEM = TRANSFER_MAP.put(RecipeInputs.ITEM_ID, v -> ItemVariant.of((Item) v));
+    private final Function<?, TransferVariant<?>> FLUID = TRANSFER_MAP.put(RecipeInputs.FLUID_ID, v -> FluidVariant.of((Fluid) v));
+
     private final int width;
     private final int height;
     private final DefaultedList<RecipeInput<?>> inputs;
@@ -73,6 +85,26 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             }
         }
         return true;
+    }
+
+    public <T> boolean takeInput(SurgeryTableContext context, int i, TransactionContext transaction)
+    {
+        RecipeInput<?> input = inputs.get(i);
+        Storage<TransferVariant<?>> storage = context.getStructure(i).getStorage();
+        Optional<?> matching = input.getFirstMatching(storage, transaction);
+        if (matching.isPresent())
+        {
+            Transaction inner = transaction.openNested();
+            Class<?> cl = matching.get().getClass();
+            TransferVariant<?> variant = TRANSFER_MAP.get(input.getType()).apply(matching.get());
+            if (storage.extract(variant, input.amount(), inner) == input.amount())
+            {
+                inner.commit();
+                return true;
+            }
+            inner.abort();
+        }
+        return false;
     }
 
     @Override
