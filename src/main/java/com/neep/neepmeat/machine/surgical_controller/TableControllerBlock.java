@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,10 +29,20 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     {
         if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
         {
-            be.assemble();
-            be.testRecipe();
+//            be.assemble();
+//            be.tryRecipe();
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
+        {
+            be.update(world.isReceivingRedstonePower(pos));
+        }
     }
 
     @Override

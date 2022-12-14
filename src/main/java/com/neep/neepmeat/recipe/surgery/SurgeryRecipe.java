@@ -91,12 +91,16 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     public <T> boolean takeInput(SurgeryTableContext context, int i, TransactionContext transaction)
     {
         RecipeInput<?> input = inputs.get(i);
-        Storage<TransferVariant<?>> storage = context.getStructure(i).getStorage();
+        TableComponent<TransferVariant<?>> component = context.getStructure(i);
+
+        // Abort if the structure is invalid (block has probably been broken)
+        if (component == null) return false;
+
+        Storage<TransferVariant<?>> storage = component.getStorage();
         Optional<?> matching = input.getFirstMatching(storage, transaction);
         if (matching.isPresent())
         {
             Transaction inner = transaction.openNested();
-            Class<?> cl = matching.get().getClass();
             TransferVariant<?> variant = TRANSFER_MAP.get(input.getType()).apply(matching.get());
             if (storage.extract(variant, input.amount(), inner) == input.amount())
             {
