@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "full=false": {
       "model": "neepmeat:block/synthesiser/synthesiser"
+    },
+    "full=true": {
+      "model": "neepmeat:block/synthesiser/synthesiser_full"
     }
   }
 }

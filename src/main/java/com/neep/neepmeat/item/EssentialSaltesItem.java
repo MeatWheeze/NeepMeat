@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -37,11 +38,21 @@ public class EssentialSaltesItem extends BaseItem
     }
 
     @Override
+    public Text getName(ItemStack stack)
+    {
+        String id = stack.getOrCreateNbt().getString("id");
+        if (id != null)
+        {
+            return new TranslatableText(this.getTranslationKey(), Registry.ENTITY_TYPE.get(new Identifier(id)).getName());
+        }
+        else return super.getName(stack);
+    }
+
+    @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
         String id = itemStack.getOrCreateNbt().getString("id");
-        if (id != null)
         {
             tooltip.add(Registry.ENTITY_TYPE.get(new Identifier(id)).getName());
         }
@@ -102,7 +113,21 @@ public class EssentialSaltesItem extends BaseItem
         return null;
     }
 
-    static
+    public static void putEntityType(ItemStack stack, EntityType<?> type)
     {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        nbt.putString("id", Registry.ENTITY_TYPE.getId(type).toString());
+        stack.setNbt(nbt);
+    }
+
+    public static EntityType<?> getEntityType(ItemStack stack)
+    {
+        NbtCompound nbt = stack.getOrCreateNbt();
+        String id = nbt.getString("id");
+        if (id != null)
+        {
+            return Registry.ENTITY_TYPE.get(new Identifier(id));
+        }
+        return null;
     }
 }

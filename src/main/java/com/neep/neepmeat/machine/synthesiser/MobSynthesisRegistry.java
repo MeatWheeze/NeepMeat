@@ -38,5 +38,6 @@ public class MobSynthesisRegistry
     public static void initDefaults()
     {
         register(EntityType.PIG, FluidConstants.BUCKET, 60);
+        register(EntityType.COW, FluidConstants.BUCKET, 60);
     }
 }
