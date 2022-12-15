@@ -93,7 +93,7 @@ public class MergePipeBlock extends ItemPipeBlock
         boolean adjConnect = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
         boolean connect = connectInDirection(world, pos, state, direction);
         boolean connection = adjConnect && connect;
-        if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe) && direction == facing)
+        if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe) && direction != facing)
         {
             connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
