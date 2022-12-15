@@ -35,7 +35,7 @@ public class EggEntityRenderer extends EntityRenderer<EggEntity>
         }
         if (p > 0.0f)
         {
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin(p) * p * q / 10.0f * 1));
+            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin(p) * p * q / 10.0f * entity.getWobbleDirection()));
         }
 
         matrices.translate(-0.5, 0, -0.5);

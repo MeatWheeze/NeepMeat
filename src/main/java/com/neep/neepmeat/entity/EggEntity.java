@@ -2,15 +2,20 @@ package com.neep.neepmeat.entity;
 
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.init.NMParticles;
+import com.neep.neepmeat.item.EssentialSaltesItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -20,6 +25,7 @@ public class EggEntity extends SimpleEntity
 {
     private static final TrackedData<Integer> WOBBLE_TICKS = DataTracker.registerData(EggEntity.class, TrackedDataHandlerRegistry.INTEGER);
     private static final TrackedData<Float> WOBBLE_STRENGTH = DataTracker.registerData(EggEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    private static final TrackedData<Float> WOBBLE_DIRECTION = DataTracker.registerData(EggEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
     protected EntityType<?> hatchType;
     protected int growthTicks;
@@ -35,6 +41,7 @@ public class EggEntity extends SimpleEntity
         super.initDataTracker();
         this.dataTracker.startTracking(WOBBLE_TICKS, 0);
         this.dataTracker.startTracking(WOBBLE_STRENGTH, 0f);
+        this.dataTracker.startTracking(WOBBLE_DIRECTION, 1f);
     }
 
     public EggEntity(World world, EntityType<?> hatchType)
@@ -54,6 +61,8 @@ public class EggEntity extends SimpleEntity
         if (random.nextFloat() < 0.005)
         {
             setWobbleTicks(10);
+            setWobbleStrength(10);
+            invertWobbleDirection();
         }
 
         if (canGrow())
@@ -74,7 +83,7 @@ public class EggEntity extends SimpleEntity
 
     private void hatch()
     {
-        if (getHatchType() != null)
+        if (!world.isClient() && getHatchType() != null)
         {
             Entity entity = getHatchType().create(world);
             if (entity != null)
@@ -83,6 +92,7 @@ public class EggEntity extends SimpleEntity
                 world.spawnEntity(entity);
             }
             this.remove(RemovalReason.DISCARDED);
+            ((ServerWorld) world).spawnParticles(NMParticles.MEAT_SPLASH, entity.getX(), entity.getY(), entity.getZ(), 30, 1, 2, 1, 0.01);
         }
     }
 
@@ -90,13 +100,27 @@ public class EggEntity extends SimpleEntity
     public boolean damage(DamageSource source, float amount)
     {
         setWobbleTicks(10);
-        this.setWobbleStrength(this.getWobbleStrength() + amount * 10.0f);
+        setWobbleStrength(getWobbleStrength() + amount * 10.0f);
+        invertWobbleDirection();
         this.emitGameEvent(GameEvent.ENTITY_DAMAGED, source.getAttacker());
-        if (getWobbleStrength() > 30.0f)
+        if (!world.isClient() && getWobbleStrength() > 30.0f)
         {
-            this.remove(RemovalReason.KILLED);
+            this.onDeath();
         }
         return super.damage(source, amount);
+    }
+
+    public void onDeath()
+    {
+        if (this.isRemoved())
+        {
+            return;
+        }
+        ItemStack stack = new ItemStack(NMItems.MOB_EGG);
+        EssentialSaltesItem.putEntityType(stack, hatchType);
+        dropStack(stack);
+        this.kill();
+        this.world.sendEntityStatus(this, (byte)3);
     }
 
     public boolean canGrow()
@@ -151,6 +175,11 @@ public class EggEntity extends SimpleEntity
         return this.dataTracker.get(WOBBLE_STRENGTH);
     }
 
+    public void invertWobbleDirection()
+    {
+        this.dataTracker.set(WOBBLE_DIRECTION, -dataTracker.get(WOBBLE_DIRECTION));
+    }
+
     public EntityType<?> getHatchType()
     {
         return hatchType;
@@ -160,5 +189,10 @@ public class EggEntity extends SimpleEntity
     public Packet<?> createSpawnPacket()
     {
         return new EntitySpawnS2CPacket(this);
+    }
+
+    public float getWobbleDirection()
+    {
+        return dataTracker.get(WOBBLE_DIRECTION);
     }
 }

@@ -52,13 +52,7 @@ public abstract class LivingEntityMixin implements ILivingEntity
     {
         if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION))
         {
-            LivingEntity thisLiving = (LivingEntity) (Object) this;
-            World world = thisLiving.getWorld();
-            Vec3d pos = thisLiving.getPos();
-            ItemStack stack = NMItems.ESSENTIAL_SALTES.getDefaultStack();
-            EssentialSaltesItem.storeEntity(stack, thisLiving);
-            ItemEntity entity = new ItemEntity(world, pos.x, pos.y, pos.z, stack);
-            world.spawnEntity(entity);
+            EssentialSaltesItem.onEntityDeath((LivingEntity) (Object) this);
         }
     }
 }

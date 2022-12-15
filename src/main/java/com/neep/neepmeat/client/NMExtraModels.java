@@ -31,7 +31,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier PYLON_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor");
     public static Identifier SYNTHESISER_PLUNGER = new Identifier(NeepMeat.NAMESPACE, "block/synthesiser/plunger");
     public static Identifier SURGERY_ROBOT = new Identifier(NeepMeat.NAMESPACE, "block/table_controller/robot");
-    public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/integrator_egg_growth_1");
+    public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/mob_egg");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
