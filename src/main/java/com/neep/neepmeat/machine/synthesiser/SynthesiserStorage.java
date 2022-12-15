@@ -29,7 +29,7 @@ public class SynthesiserStorage implements NbtSerialisable
     public SynthesiserStorage(SynthesiserBlockEntity parent)
     {
         this.parent = parent;
-        this.meatStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 8, this.parent::sync)
+        this.meatStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 9, this.parent::sync)
         {
             @Override
             protected boolean canInsert(FluidVariant variant)
@@ -38,7 +38,7 @@ public class SynthesiserStorage implements NbtSerialisable
             }
         };
 
-        this.fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 8, this.parent::sync)
+        this.fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 9, this.parent::sync)
         {
             @Override
             protected boolean canInsert(FluidVariant variant)
