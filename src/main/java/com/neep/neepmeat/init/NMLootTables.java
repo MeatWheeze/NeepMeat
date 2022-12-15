@@ -40,9 +40,10 @@ public class NMLootTables
                 LootPool.Builder poolBuilder = LootPool.builder()
                     .rolls(ConstantLootNumberProvider.create(1.0f))
                         .with((LootPoolEntry.Builder<?>)((LeafEntry.Builder)ItemEntry.builder(NMItems.ROUGH_BRAIN)
-                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0f, 1.0f))))
-                                .apply(LootingEnchantLootFunction.builder(UniformLootNumberProvider.create(0.0f, 1.0f))))
-                        .conditionally(KilledByPlayerLootCondition.builder());
+                                .apply(SetCountLootFunction.builder(ConstantLootNumberProvider.create(1.0f))))
+                                .apply(LootingEnchantLootFunction.builder(ConstantLootNumberProvider.create(1.0f)))
+                        ).conditionally(RandomChanceLootCondition.builder(0.25f));
+//                        .conditionally(KilledByPlayerLootCondition.builder());
 
                 tableBuilder.pool(poolBuilder);
             }
