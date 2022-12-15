@@ -32,6 +32,7 @@ import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -147,7 +148,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         }
     }
 
-    public Optional<LivingEntity> hitScan(PlayerEntity caster, Vec3d start, Vec3d end, double distance)
+    public Optional<Entity> hitScan(@NotNull PlayerEntity caster, Vec3d start, Vec3d end, double distance)
     {
         World world = caster.world;
         if (!world.isClient)
@@ -156,7 +157,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
             BlockHitResult blockResult = world.raycast(ctx);
 
-            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
+            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides();
 
             double minDistance = distance;
             Entity entity = null;
@@ -174,7 +175,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
             syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, GraphicsEffects.BEAM, 100);
 
-            return Optional.ofNullable((LivingEntity) entity);
+            return Optional.ofNullable(entity);
         }
         return Optional.empty();
     }

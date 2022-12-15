@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -126,10 +127,10 @@ public class LMGItem extends BaseGunItem implements IAnimatable
                         Vec3d end = pos.add(player.getRotationVec(1)
                                 .add(perturb)
                                 .multiply(40));
-                        Optional<LivingEntity> target = this.hitScan(player, pos, end, 40);
+                        Optional<Entity> target = this.hitScan(player, pos, end, 40);
                         if (target.isPresent())
                         {
-                            LivingEntity entity = target.get();
+                            Entity entity = target.get();
                             target.get().damage(BulletDamageSource.create(player, 0.1f), 2);
                             entity.timeUntilRegen = 0;
                         }

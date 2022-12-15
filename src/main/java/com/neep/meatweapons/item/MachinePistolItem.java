@@ -9,6 +9,7 @@ import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -113,10 +114,10 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
                         pos = pos.add(transform);
 
                         Vec3d end = pos.add(player.getRotationVec(1).multiply(20));
-                        Optional<LivingEntity> target = this.hitScan(player, pos, end, 100);
+                        Optional<Entity> target = this.hitScan(player, pos, end, 100);
                         if (target.isPresent())
                         {
-                            LivingEntity entity = target.get();
+                            Entity entity = target.get();
                             target.get().damage(DamageSource.player(player), 2);
                             entity.timeUntilRegen = 0;
                         }
