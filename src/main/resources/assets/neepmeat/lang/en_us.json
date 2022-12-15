@@ -344,5 +344,26 @@
   "category.neepmeat.alloy_smelting.time": "Time: %ds",
   "category.neepmeat.heart_extraction": "Heart Extraction",
   "category.neepmeat.enlightening": "Enlightening",
-  "category.neepmeat.enlightening.data": "Data: %d"
+  "category.neepmeat.enlightening.data": "Data: %d",
+
+  "advancements.neepmeat.main.root.title": "NEEPMeat",
+  "advancements.neepmeat.main.root.description": "Rusty machinery, cosmic horror and meat.",
+
+  "advancements.neepmeat.main.obtain_guide.title": "RTFM",
+  "advancements.neepmeat.main.obtain_guide.description": "Craft your Owner's Manual with Rotten Flesh and a book.",
+
+  "advancements.neepmeat.main.obtain_integrator.title": "Angel's Egg",
+  "advancements.neepmeat.main.obtain_integrator.description": "Obtain an Integrator Egg from a dungeon chest.",
+
+  "advancements.neepmeat.main.place_grinder.title": "Scrunch Scrunch",
+  "advancements.neepmeat.main.place_grinder.description": "Place a Grinder.",
+
+  "advancements.neepmeat.main.enlightenment.title": "Enlightenment",
+  "advancements.neepmeat.main.enlightenment.description": "Use a Pedestal connected to an Integrator to produce strange new forms.",
+
+  "advancements.neepmeat.main.obtain_enlightened_brain.title": "Grant Us Eyes!",
+  "advancements.neepmeat.main.obtain_enlightened_brain.description": "Advance a brain to its Enlightened form.",
+
+  "advancements.neepmeat.main.obtain_whisper_flour.title": "The Yeast of Thoughts and Minds",
+  "advancements.neepmeat.main.obtain_whisper_flour.description": "Crush some Whisper Wheat into Whisper Flour."
 }
