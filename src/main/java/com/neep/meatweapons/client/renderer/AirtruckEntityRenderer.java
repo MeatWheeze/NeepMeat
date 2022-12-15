@@ -20,6 +20,7 @@ import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.compat.PatchouliCompat;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
+import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -28,12 +29,21 @@ import software.bernie.geckolib3.model.provider.data.EntityModelData;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.geckolib3.util.AnimationUtils;
 
 import java.util.Collections;
 import java.util.List;
 
 public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> extends EntityRenderer<T> implements IGeoRenderer<T>
 {
+    // If this class extended GeoEntityRenderer, this would be automatically executed. Unfortunately, I can't extend
+    // any of the built-in renderers because they have incompatible class parameter bounds.
+    static
+    {
+        AnimationController.addModelFetcher(animatable -> animatable instanceof Entity entity ?
+                (IAnimatableModel<Object>) AnimationUtils.getGeoModelForEntity(entity) : null);
+    }
+
     protected GeoModelProvider<T> modelProvider;
     protected final List<GeoLayerRenderer<T>> layerRenderers = Lists.newArrayList();
     private Identifier whTexture;
