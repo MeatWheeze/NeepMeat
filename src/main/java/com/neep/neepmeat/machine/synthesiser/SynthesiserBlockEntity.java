@@ -1,12 +1,11 @@
 package com.neep.neepmeat.machine.synthesiser;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
-import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.item.EssentialSaltesItem;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -18,15 +17,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SynthesiserBlockEntity extends SyncableBlockEntity
@@ -40,6 +38,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
     protected int maxProgress;
     protected float increment = 1;
     protected long requiredAmount;
+    protected Random random;
 
     protected SynthesiserStorage storage = new SynthesiserStorage(this);
     private EntityType<?> entityType = null;
@@ -47,6 +46,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
     public SynthesiserBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        this.random = new Random(pos.asLong());
     }
 
     public SynthesiserBlockEntity(BlockPos pos, BlockState state)
@@ -97,9 +97,10 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
             Vec3d entityPos;
             if (extracted == entry.meat() && (entityPos = getEntityPos(getEntityType(), pos, world)) != null)
             {
-                Entity entity = getEntityType().create(world);
+                Entity entity = new EggEntity(world, entityType);
+//                Entity entity = getEntityType().create(world);
                 entity.setPos(entityPos.x, entityPos.y, entityPos.z);
-                entity.setVelocity(0, -0.2, 0);
+                entity.setVelocity((random.nextFloat() - 0.5) * 0.1, -0.2, (random.nextFloat() - 0.5) * 0.1);
                 world.spawnEntity(entity);
                 ((ServerWorld) world).spawnParticles(ParticleTypes.FALLING_SPORE_BLOSSOM, entityPos.x, pos.getY(), entityPos.z, 50, 0.5, 0, 0.5, 0.02);
                 transaction.commit();
@@ -130,7 +131,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
         nbt.putFloat("increment", increment);
         nbt.putInt("state", state.ordinal());
         nbt.putLong("requiredAmount", requiredAmount);
-        nbt.putString("entityType", Registry.ENTITY_TYPE.getId(entityType).toString());
+        if (entityType != null) nbt.putString("entityType", Registry.ENTITY_TYPE.getId(entityType).toString());
         storage.writeNbt(nbt);
     }
 
@@ -143,7 +144,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
         this.increment = nbt.getFloat("increment");
         this.state = State.values()[nbt.getInt("state")];
         this.requiredAmount = nbt.getLong("requiredAmount");
-        this.entityType = Registry.ENTITY_TYPE.get(new Identifier(nbt.getString("entityType")));
+        this.entityType = nbt.contains("entityType") ? Registry.ENTITY_TYPE.get(new Identifier(nbt.getString("entityType"))) : null;
         storage.readNbt(nbt);
     }
 
@@ -158,9 +159,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
 
         if (getEntityType() != null)
         {
-            ItemStack stack = new ItemStack(NMItems.ESSENTIAL_SALTES);
-            EssentialSaltesItem.putEntityType(stack, getEntityType());
-            player.giveItemStack(stack);
+            player.giveItemStack(createItem());
             setEntityType(null);
         }
 
@@ -172,6 +171,17 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
             return entityType != null;
         }
         return false;
+    }
+
+    protected ItemStack createItem()
+    {
+        if (getEntityType() != null)
+        {
+            ItemStack stack = new ItemStack(NMItems.ESSENTIAL_SALTES);
+            EssentialSaltesItem.putEntityType(stack, getEntityType());
+            return stack;
+        }
+        return null;
     }
 
     protected enum State

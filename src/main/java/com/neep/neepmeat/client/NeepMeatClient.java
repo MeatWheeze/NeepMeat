@@ -60,6 +60,7 @@ public class NeepMeatClient implements ClientModInitializer
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
     public static final EntityModelLayer TANK_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "tank_minecart"), "main");
     public static final EntityModelLayer GLOME = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glome"), "main");
+    public static final EntityModelLayer EGG = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "egg"), "main");
 
     public static final Identifier BLOOD_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/blood_flowing");
     public static final Identifier BLOOD = new Identifier(NeepMeat.NAMESPACE, "block/blood_still");
@@ -98,6 +99,7 @@ public class NeepMeatClient implements ClientModInitializer
     public static void registerRenderers()
     {
         EntityModelLayerRegistry.registerModelLayer(GLOME, GlomeEntityModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(EGG, GlomeEntityModel::getTexturedModelData);
 
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
@@ -154,8 +156,9 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererRegistry.register(NMBlockEntities.TABLE_CONTROLLER, TableControllerRenderer::new);
 
-        EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
-        EntityRendererRegistry.register(NMEntities.GLOME, (ctx) -> new GlomeEntityRenderer(ctx, GLOME));
+        EntityRendererRegistry.register(NMEntities.TANK_MINECART, ctx -> new TankMinecartRenderer(ctx, TANK_MINECART));
+        EntityRendererRegistry.register(NMEntities.GLOME, ctx -> new GlomeEntityRenderer(ctx, GLOME));
+        EntityRendererRegistry.register(NMEntities.EGG, ctx -> new EggEntityRenderer(ctx, EGG));
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 
