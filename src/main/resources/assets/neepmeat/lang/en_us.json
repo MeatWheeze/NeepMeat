@@ -311,6 +311,9 @@
   "block.neepmeat.animal_feed": "Animal Feed",
   "item.neepmeat.animal_feed_bucket": "Animal Feed Bucket",
 
+  "item.neepmeat.pinkdrink_bucket": "Pinkdrink",
+  "block.neepmeat.pinkdrink": "Pinkdrink",
+
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
   "item.neepmeat.essential_saltes": "Essential Saltes: %s",

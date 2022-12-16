@@ -77,10 +77,5 @@ public class NeepMeat implements ModInitializer
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
 
 
-		FluidStorage.combinedItemApiProvider(Items.MILK_BUCKET).register(context ->
-				new FullItemFluidStorage(context, Items.BUCKET, FluidVariant.of(NMFluids.STILL_MILK), FluidConstants.BUCKET));
-
-		FluidStorage.combinedItemApiProvider(Items.BUCKET).register(context ->
-				new EmptyItemFluidStorage(context, Items.MILK_BUCKET, NMFluids.STILL_MILK, FluidConstants.BUCKET));
 	}
 }

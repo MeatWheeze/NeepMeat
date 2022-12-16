@@ -4,13 +4,18 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidFuelRegistry;
 import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
+@SuppressWarnings("UnstableApiUsage")
 public class NMFluids
 {
     public static FlowableFluid FLOWING_BLOOD;
@@ -82,6 +87,12 @@ public class NMFluids
     public static Block FEED;
     public static FluidFactory FEED_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "animal_feed", false, 5, 2);
 
+    public static FlowableFluid FLOWING_PINKDRINK;
+    public static FlowableFluid STILL_PINKDRINK;
+    public static Item PINKDRINK_BUCKET;
+    public static Block PINKDRINK;
+    public static FluidFactory PINKDRINK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pinkdrink", false, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -144,11 +155,26 @@ public class NMFluids
         FEED_BUCKET = FEED_FACTORY.registerItem();
         FEED = FEED_FACTORY.registerBlock();
 
+        STILL_PINKDRINK = PINKDRINK_FACTORY.registerStill();
+        FLOWING_PINKDRINK = PINKDRINK_FACTORY.registerFlowing();
+        PINKDRINK_BUCKET = PINKDRINK_FACTORY.registerItem();
+        PINKDRINK = PINKDRINK_FACTORY.registerBlock();
+
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
         FluidFuelRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 7, true, STILL_WORK_FLUID);
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);
+
+        FluidStorage.combinedItemApiProvider(NMItems.PINKDRINK).register(context ->
+                new FullItemFluidStorage(context, Items.GLASS_BOTTLE, FluidVariant.of(NMFluids.STILL_PINKDRINK), FluidConstants.BOTTLE));
+        FluidStorage.combinedItemApiProvider(Items.GLASS_BOTTLE).register(context ->
+                new EmptyItemFluidStorage(context, NMItems.PINKDRINK, NMFluids.STILL_PINKDRINK, FluidConstants.BOTTLE));
+
+        FluidStorage.combinedItemApiProvider(Items.MILK_BUCKET).register(context ->
+                new FullItemFluidStorage(context, Items.BUCKET, FluidVariant.of(NMFluids.STILL_MILK), FluidConstants.BUCKET));
+        FluidStorage.combinedItemApiProvider(Items.BUCKET).register(context ->
+                new EmptyItemFluidStorage(context, Items.MILK_BUCKET, NMFluids.STILL_MILK, FluidConstants.BUCKET));
     }
 }
