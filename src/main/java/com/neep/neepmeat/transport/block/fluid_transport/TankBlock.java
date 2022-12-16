@@ -67,19 +67,20 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
     @Override
     public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
     {
+        List<ItemStack> stacks = super.getDroppedStacks(state, builder);
         BlockEntity blockEntity = builder.getNullable(LootContextParameters.BLOCK_ENTITY);
         if (blockEntity instanceof TankBlockEntity be)
         {
-            LootContext lootContext = builder.parameter(LootContextParameters.BLOCK_STATE, state).build(LootContextTypes.BLOCK);
-            ServerWorld serverWorld = lootContext.getWorld();
-            LootTable lootTable = serverWorld.getServer().getLootManager().getTable(this.getLootTableId());
-            List<ItemStack> stacks = lootTable.generateLoot(lootContext);
+//            LootContext lootContext = builder.parameter(LootContextParameters.BLOCK_STATE, state).build(LootContextTypes.BLOCK);
+//            ServerWorld serverWorld = lootContext.getWorld();
+//            LootTable lootTable = serverWorld.getServer().getLootManager().getTable(this.getLootTableId());
+//            List<ItemStack> stacks = lootTable.generateLoot(lootContext);
 
             if (!be.getStorage(null).isResourceBlank()) stacks.forEach(be::setStackNbt);
 
             return stacks;
         }
-        return super.getDroppedStacks(state, builder);
+        return stacks;
     }
 
     @Override
