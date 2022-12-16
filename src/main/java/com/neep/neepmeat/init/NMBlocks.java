@@ -208,7 +208,7 @@ public class NMBlocks
 
     public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", 64, false, FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
 
-    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
+//    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
 
 }
 
