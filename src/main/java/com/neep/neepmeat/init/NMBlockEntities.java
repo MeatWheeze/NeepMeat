@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
@@ -128,6 +129,7 @@ public class NMBlockEntities
     public static BlockEntityType<PylonBlockEntity> PYLON;
     public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
+    public static BlockEntityType<MincerBlockEnity> MINCER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -247,6 +249,8 @@ public class NMBlockEntities
 
         FEEDING_TROUGH = registerBlockEntity("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
         FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
+
+        MINCER = registerBlockEntity("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

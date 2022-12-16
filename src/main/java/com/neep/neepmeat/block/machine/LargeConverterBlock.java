@@ -108,7 +108,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.LARGE_CONVERTER, ConverterBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.LARGE_CONVERTER, ConverterBlockEntity::serverTick, null, world);
     }
 
     public boolean checkValid(World world, BlockPos pos)

@@ -4,8 +4,6 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.init.NMItems;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.util.MiscUtils;
@@ -75,7 +73,7 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ASSEMBLER, AssemblerBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.ASSEMBLER, AssemblerBlockEntity::serverTick, null, world);
     }
 
     @Override

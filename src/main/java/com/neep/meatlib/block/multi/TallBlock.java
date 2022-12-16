@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 public abstract class TallBlock extends BaseBlock
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32, 16);
-    public static final VoxelShape OUTLINE_TOP = Block.createCuboidShape(0, -16, 0, 16, 16, 16);
 
     private final Block structureBlock;
 

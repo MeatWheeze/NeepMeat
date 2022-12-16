@@ -149,7 +149,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, ItemPipeBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, ItemPipeBlockEntity::serverTick, null, world);
     }
 
     // Creates blockstate connections to fluid containers after placing
