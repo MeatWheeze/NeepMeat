@@ -1,30 +1,45 @@
 package com.neep.neepmeat.machine.mincer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
+import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.CampfireBlock;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.CampfireBlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.Random;
 
-public class MincerBlockEnity extends SyncableBlockEntity
+public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedBlock
 {
     private int damageTime;
+    protected boolean running;
+
+    protected WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, this::markDirty)
+    {
+        @Override
+        public boolean supportsInsertion()
+        {
+            return false;
+        }
+    };
 
     public MincerBlockEnity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -36,12 +51,12 @@ public class MincerBlockEnity extends SyncableBlockEntity
         this(NMBlockEntities.MINCER, pos, state);
     }
 
-    public void serverTick()
+    public void serverTick(World world)
     {
-        processEntity();
+        if (running) processEntity(world);
     }
 
-    protected void processEntity()
+    protected void processEntity(World world)
     {
         damageTime = Math.max(0, damageTime - 1);
         Box catchmentBox = new Box(pos.getX(), pos.getY() + 1, pos.getZ(), pos.getX() + 1, pos.getY() + 3.5, pos.getZ() + 1);
@@ -75,12 +90,13 @@ public class MincerBlockEnity extends SyncableBlockEntity
         }
     }
 
-    void damageEntity(ServerWorld world, LivingEntity entity)
+    protected void damageEntity(ServerWorld world, LivingEntity entity)
     {
         float damageAmount = 1;
         if (entity.getHealth() <= damageAmount)
         {
             entity.remove(Entity.RemovalReason.DISCARDED);
+            insertFluidFromEntity(this, entity);
             world.spawnParticles(NMParticles.MEAT_FOUNTAIN, pos.getX(), pos.getY() + 1 + 14 / 16f, pos.getZ(), 20, 0.4, 0.4, 0.4, 0.01);
         }
         else
@@ -89,10 +105,20 @@ public class MincerBlockEnity extends SyncableBlockEntity
         }
     }
 
-    public void clientTick()
+    @SuppressWarnings("UnstableApiUsage")
+    protected static void insertFluidFromEntity(MincerBlockEnity be, LivingEntity entity)
+    {
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            be.getFluidStorage(null).insert(FluidVariant.of(NMFluids.STILL_MEAT), DeathBladesBlockEntity.getEntityAmount(entity), transaction);
+            transaction.commit();
+        }
+    }
+
+    public void clientTickRunning(World world)
     {
         Random random = world.random;
-        if (random.nextFloat() < 0.11f)
+        if (random.nextFloat() < 0.1f)
         {
             for (int i = 0; i < random.nextInt(2) + 2; ++i)
             {
@@ -104,5 +130,55 @@ public class MincerBlockEnity extends SyncableBlockEntity
     protected float getYOffset(LivingEntity entity)
     {
         return entity.getHealth() / entity.getMaxHealth();
+    }
+
+    public WritableSingleFluidStorage getFluidStorage(Direction direction)
+    {
+        return fluidStorage;
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.putInt("damageTime", damageTime);
+        fluidStorage.writeNbt(nbt);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        this.damageTime = nbt.getInt("damageTime");
+        fluidStorage.readNbt(nbt);
+    }
+
+    @Override
+    public boolean tick(IMotorBlockEntity motor)
+    {
+        return false;
+    }
+
+    protected void updateBlockstate()
+    {
+        BlockState state = world.getBlockState(pos);
+        if (state.get(MincerBlock.RUNNING) != running)
+        {
+            world.setBlockState(pos, state.with(MincerBlock.RUNNING, running));
+        }
+    }
+
+    @Override
+    public void setWorkMultiplier(float multiplier)
+    {
+        running = multiplier >= 0.1;
+        updateBlockstate();
+    }
+
+    @Override
+    public void onMotorRemoved()
+    {
+        running = false;
+        updateBlockstate();
     }
 }

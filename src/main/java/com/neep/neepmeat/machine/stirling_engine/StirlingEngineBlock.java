@@ -53,6 +53,7 @@ public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityP
             if (world.getBlockEntity(pos) instanceof StirlingEngineBlockEntity be)
             {
                 be.getStorage().dropItems(world, pos);
+                be.onRemoved();
             }
         }
         super.onStateReplaced(state, world, pos, newState, moved);

@@ -13,4 +13,6 @@ public interface IMotorisedBlock
     {
         return true;
     }
+
+    default void onMotorRemoved() {};
 }
