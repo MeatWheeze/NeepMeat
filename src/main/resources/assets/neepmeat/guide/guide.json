@@ -267,7 +267,7 @@
     ]},
     {"id": "synthesiser", "contents": [
       {"type": "text", "text": "Oviparous Synthesiser\n", "bold": true},
-      {"type": "text", "text": "To cast off the vestige of nature is to inch towards revelation, to replicate the natural forms of flesh, finding wisdom in their madness, is to step towards Enlightenment.\n"},
+      {"type": "text", "text": "To cast off the vestige of nature is to inch towards revelation; to replicate the natural forms of flesh - finding wisdom in their madness - is to step towards Enlightenment.\n"},
       {"type": "text", "text": "Usage\n", "bold": true},
       {"type": "text", "text": [{"text": "The Oviparous Synthesiser creates eggs of a template organism through its "},{"text": "Essential Saltes.","italic": true},{"text": "Right-clicking the machine with the corresponding "},{"text": "Essential Saltes ","italic": true},{"text": "will install or remove the template."}]},
       {"type": "text", "text": "In order to operate, the machine must be fed Purified Meat and body compound. The amount of meat to produce an egg varies depending on the size of the organism.\n"},
