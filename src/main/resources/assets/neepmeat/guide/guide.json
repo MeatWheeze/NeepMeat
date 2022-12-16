@@ -19,7 +19,8 @@
       ]},
     {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Fluid Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
-      {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"}
+      {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"},
+      {"type": "page", "id": "surgery", "icon": "neepmeat:surgery_controller", "text": "Machine Surgery"}
     ]},
     {"type": "menu", "id": "ore_processing", "icon": "neepmeat:motor_unit", "text": "Ore Processing", "entries": [
       {"type": "page", "id": "eldritch_enzymes", "icon": "neepmeat:eldritch_enzymes_bucket", "text": "Eldritch Enzymes"},
@@ -256,6 +257,16 @@
     {"id": "heater", "contents": [
       {"type": "text", "text": "Heater\n", "bold": true},
       {"type": "text", "text": "The Heater warms any furnace-like block that it faces, allowing it to smelt items without fuel. It can also oxidise copper blocks that are exposed to Patina Treatment. It must be supplied with an energetic fluid in order to function."}
+    ]},
+    {"id": "surgery", "contents": [
+      {"type": "text", "text": "Machine Surgery\n", "bold": true},
+      {"type": "text", "text": "A workbench may be sufficient for cobbling together rudimentary machines, but a finer touch is required to assemble more delicate cybernetic organisms.\n"},
+      {"type": "text", "text": "Assembly\n", "bold": true},
+      {"type": "image", "width": 224, "height": 158, "path": "neepmeat:guide/images/surgery_2.png"},
+      {"type": "text", "text": "To assemble the machine, a Surgery Controller must be placed one block below and facing a 3x3 grid of supported inventories, as shown above. \nRecipes can take both items and fluids as ingredients, so the inventory at the corresponding position should match the required resource.\n"},
+      {"type": "text", "text": [{"text": "Supported inventories:\n"},{"text": " - Display Platform (item)\n - Fluid Buffer (fluid)\n - Glass Tank (fluid)\n"}]},
+      {"type": "text", "text": "Usage\n", "bold": true},
+      {"type": "text", "text": "Replicate the pattern shown in the recipe on the table by placing items and fluids into the corresponding containers. On the rising edge of a redstone signal, the Surgery Controller will detect a valid pattern and begin assembling. If successful, the output item will be ejected into a pipe or inventory directly behind the Surgery controller.\n"}
     ]},
 
     {"id": "cloning", "contents": [
