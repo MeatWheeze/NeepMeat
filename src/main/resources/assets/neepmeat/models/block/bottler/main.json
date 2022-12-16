@@ -6,6 +6,7 @@
 		"3": "neepmeat:block/canning_machine/base",
 		"5": "neepmeat:block/canning_machine/frame",
 		"6": "neepmeat:block/canning_machine/back",
+		"7": "neepmeat:block/rusty_panel",
 		"particle": "neepmeat:block/canning_machine/side"
 	},
 	"elements": [
@@ -50,11 +51,11 @@
 			"to": [11, 0, 11],
 			"color": 3,
 			"faces": {
-				"north": {"uv": [0, 0, 3, 3], "texture": "#missing"},
-				"east": {"uv": [0, 0, 3, 3], "texture": "#missing"},
-				"south": {"uv": [0, 0, 3, 3], "texture": "#missing"},
-				"west": {"uv": [0, 0, 3, 3], "texture": "#missing"},
-				"down": {"uv": [0, 0, 3, 3], "texture": "#missing"}
+				"north": {"uv": [0, 0, 3, 3], "texture": "#7"},
+				"east": {"uv": [0, 0, 3, 3], "texture": "#7"},
+				"south": {"uv": [0, 0, 3, 3], "texture": "#7"},
+				"west": {"uv": [0, 0, 3, 3], "texture": "#7"},
+				"down": {"uv": [0, 0, 3, 3], "texture": "#7"}
 			}
 		},
 		{
