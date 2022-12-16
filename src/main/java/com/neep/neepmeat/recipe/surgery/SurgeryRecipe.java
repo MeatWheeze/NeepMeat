@@ -8,6 +8,7 @@ import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.ingredient.GenericIngredient;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
@@ -152,6 +153,21 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     public int getGridSize()
     {
         return width * height;
+    }
+
+    public int getHeight()
+    {
+        return 3;
+    }
+
+    public int getWidth()
+    {
+        return 3;
+    }
+
+    public RecipeOutput<Item> getOutput()
+    {
+        return output;
     }
 
     public static class Serializer implements MeatRecipeSerialiser<SurgeryRecipe>

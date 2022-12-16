@@ -37,7 +37,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     protected Entry<T> entry;
 
     protected long amount;
-    @Nullable protected T[] matchingStacks;
+    @Nullable protected T[] matchingObjects;
 
     protected RecipeInput(Entry<T> entry, long amount, Serialiser<T> serialiser, Identifier type)
     {
@@ -108,9 +108,9 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
 
     public void cacheMatching()
     {
-        if (this.matchingStacks == null)
+        if (this.matchingObjects == null)
         {
-            this.matchingStacks = (T[]) (entry.getMatching().stream()).distinct().toArray();
+            this.matchingObjects = (T[]) (entry.getMatching().stream()).distinct().toArray();
         }
     }
 
@@ -118,13 +118,13 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public boolean test(StorageView<? extends TransferVariant<T>> storageView)
     {
         cacheMatching();
-        return Arrays.stream(matchingStacks).anyMatch(o -> storageView.getResource().getObject().equals(o));
+        return Arrays.stream(matchingObjects).anyMatch(o -> storageView.getResource().getObject().equals(o));
     }
 
     public boolean test(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
     {
         cacheMatching();
-        Stream<?> entries = Arrays.stream(matchingStacks);
+        Stream<?> entries = Arrays.stream(matchingObjects);
         for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
         {
             if (entries.anyMatch(o -> view.getResource().getObject().equals(o))) return true;
@@ -135,7 +135,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public Optional<T> getFirstMatching(StorageView<? extends TransferVariant<T>> view)
     {
         cacheMatching();
-        return Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
+        return Arrays.stream(matchingObjects).filter(t -> view.getResource().getObject().equals(t)).findFirst();
     }
 
     public Optional<T> getFirstMatching(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
@@ -143,7 +143,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         cacheMatching();
         for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
         {
-            Optional<T> optional = Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
+            Optional<T> optional = Arrays.stream(matchingObjects).filter(t -> view.getResource().getObject().equals(t)).findFirst();
             if (optional.isPresent())
                 return optional;
         }
@@ -155,7 +155,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         cacheMatching();
         for (StorageView<V> view : storage.iterable(transaction))
         {
-            Optional<T> optional = Arrays.stream(matchingStacks).filter(t ->
+            Optional<T> optional = Arrays.stream(matchingObjects).filter(t ->
             {
                 V variant = view.getResource();
                 return variant.getObject().equals(t) && variant.nbtMatches(nbt);
@@ -172,6 +172,11 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public Collection<T> getAll()
     {
         return entry.getMatching();
+    }
+
+    public T[] getMatching()
+    {
+        return matchingObjects;
     }
 
     public interface Entry<T>
