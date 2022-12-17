@@ -136,7 +136,7 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
                 sync();
                 inner.abort();
             }
-            else
+            else if (StorageUtil.findStoredResource(getInputStorage(), inner) != null)
             {
                 ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, inner);
                 inner.commit();
