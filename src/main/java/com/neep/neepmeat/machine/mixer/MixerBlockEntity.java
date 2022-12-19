@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.ingredient.FluidIngredient;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -18,6 +17,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
@@ -114,7 +114,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
-            if (recipe != null && getOutputStorage().simulateInsert(recipe.fluidOutput.resource(),
+            if (recipe != null && getOutputStorage().simulateInsert(FluidVariant.of(recipe.fluidOutput.resource()),
                         recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
@@ -215,8 +215,8 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
 
         if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
         {
-            spawnMixingParticles(currentRecipe.fluidInput1, 2, 0.2, 0.5);
-            spawnMixingParticles(currentRecipe.fluidInput2, 2, 0.2, 0.5);
+            spawnMixingParticles(storage.displayInput1, 2, 0.2, 0.5);
+            spawnMixingParticles(storage.displayInput2, 2, 0.2, 0.5);
         }
 //        sync();
     }
@@ -233,12 +233,12 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
         transaction.commit();
     }
 
-    public void spawnMixingParticles(FluidIngredient ingredient, int count, double dy, double speed)
+    public void spawnMixingParticles(FluidVariant ingredient, int count, double dy, double speed)
     {
-        if (world instanceof ServerWorld serverWorld)
+        if (!ingredient.isBlank() && getWorld() instanceof ServerWorld serverWorld)
         {
             serverWorld.spawnParticles(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,
-                    ingredient.resource().getObject().getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5 + 1, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
+                    ingredient.getObject().getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5 + 1, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
         }
     }
 

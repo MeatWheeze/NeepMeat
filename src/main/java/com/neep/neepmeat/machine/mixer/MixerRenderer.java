@@ -1,16 +1,11 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
-import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.machine.motor.MotorRenderer;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -56,8 +51,8 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 
         if (be.getCurrentRecipe() != null)
         {
-            FluidVariant var1 = be.getCurrentRecipe().fluidInput1.resource();
-            FluidVariant var2 = be.getCurrentRecipe().fluidInput2.resource();
+            FluidVariant var1 = be.storage.displayInput1;
+            FluidVariant var2 = be.storage.displayInput2;
 
             float scale = (-Math.abs(2 * progress - 1) + 1) * 0.1f;
 

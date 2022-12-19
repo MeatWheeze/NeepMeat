@@ -58,6 +58,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     }
 
     /**
+     * Requires a 'type' field in the JSON object.
      * @param json Recipe JSON object
      * @return A RecipeInput based on the detected resource type
      */
@@ -81,7 +82,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     {
         Identifier type = new Identifier(buf.readString());
         Serialiser<?> serialiser = RecipeInputs.SERIALISERS.get(type);
-        if (serialiser == null) throw new IllegalStateException("Error reading meatlib recipe packet: invalid type");
+        if (serialiser == null) throw new IllegalStateException("Error reading recipe packet: invalid type");
 
         return (RecipeInput<R>) serialiser.fromBuffer(buf);
     }

@@ -32,10 +32,12 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
 
     public SurgeryDisplay(SurgeryRecipe recipe)
     {
-        super(inputsToEntries(recipe.getInputs()), Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getOutput().resource()), (int) recipe.getOutput().minAmount())));
+        super(inputsToEntries(recipe.getInputs()),
+                Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getOutput().resource()), (int) recipe.getOutput().minAmount())));
         this.recipe = recipe;
     }
 
+    // AAAAAAAAAAAAAAAAAAAAAAAa
     public static List<EntryIngredient> inputsToEntries(DefaultedList<RecipeInput<?>> inputs)
     {
         if (inputs.size() == 0) return Collections.emptyList();
@@ -57,9 +59,11 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         return ImmutableList.copyOf(result);
     }
 
+    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
     public static final Map<Identifier, EntryType<?>> ENTRY_TYPE_MAP = new HashMap<>();
     public static final Map<Identifier, Function<RecipeInput<?>, EntryIngredient>> ENTRY_STACK_MAP = new HashMap<>();
 
+    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
     public static <T> EntryIngredient entryFromInput(RecipeInput<T> input)
     {
         if (input.isEmpty()) return EntryIngredient.empty();
