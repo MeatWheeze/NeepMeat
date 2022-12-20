@@ -88,30 +88,44 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
     public boolean tick(IMotorBlockEntity motor)
     {
 
-        if (state == State.IDLE)
+        try (Transaction transaction = Transaction.openOuter())
         {
-            try (Transaction transaction = Transaction.openOuter())
+            switch (state)
             {
-                tryStart(transaction);
-                transaction.commit();
-            }
-        }
-
-        if (state == State.FILLING)
-        {
-            if (storage.getItemStorage().isEmpty()) interrupt();
-
-            this.progress = Math.min(maxProgress, progress + increment);
-            if (progress == maxProgress)
-            {
-                progress = 0;
-                try (Transaction transaction = Transaction.openOuter())
+                case IDLE:
                 {
-                    succeed(transaction);
+                    {
+                        tryStart(transaction);
+                        transaction.commit();
+                    }
+                    break;
+                }
+
+                case FILLING:
+                {
+                    // Stop if item is removed
+                    if (storage.getItemStorage().isEmpty()) interrupt();
+
+                    // Increment progress
+                    this.progress = Math.min(maxProgress, progress + increment);
+                    if (progress == maxProgress)
+                    {
+                        progress = 0;
+                        succeed(transaction);
+                        transaction.commit();
+                    }
+                    return true;
+                }
+
+                case EJECTING:
+                {
+                    Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
+                    ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, transaction);
                     transaction.commit();
+                    state = State.IDLE;
+                    return true;
                 }
             }
-            return true;
         }
         return false;
     }
@@ -125,7 +139,6 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
 
     protected void tryStart(TransactionContext transaction)
     {
-        Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
         try (Transaction inner = transaction.openNested())
         {
             if (moveToItem(inner) > 0)
@@ -136,20 +149,13 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
                 sync();
                 inner.abort();
             }
-            else if (StorageUtil.findStoredResource(getInputStorage(), inner) != null)
-            {
-                ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, inner);
-                inner.commit();
-            }
         }
     }
 
     protected void succeed(TransactionContext transaction)
     {
-        Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
         moveToItem(transaction);
-        ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, transaction);
-        state = State.IDLE;
+        state = State.EJECTING;
         sync();
     }
 
@@ -183,6 +189,7 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
     private enum State
     {
         IDLE,
-        FILLING;
+        FILLING,
+        EJECTING
     }
 }
