@@ -13,6 +13,7 @@ import net.minecraft.block.CandleBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -85,5 +86,11 @@ public class CronenCakeBlock extends CakeBlock implements IMeatBlock
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         super.appendProperties(builder);
+    }
+
+    @Override
+    public boolean autoGenDrop()
+    {
+        return false;
     }
 }

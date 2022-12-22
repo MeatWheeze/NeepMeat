@@ -123,6 +123,7 @@
     "neepmeat:vat_item_port",
     "neepmeat:vat_fluid_port",
     "neepmeat:clear_tank_wall",
+    "neepmeat:flame_jet",
     "neepmeat:pump",
     "neepmeat:basic_tank",
     "neepmeat:multi_tank",
