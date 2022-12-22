@@ -63,6 +63,16 @@ public class CandleCronenCakeBlock extends CandleCakeBlock implements IMeatBlock
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (newState.isOf(this) && newState.get(LIT) && !state.get(LIT))
+        {
+            world.playSound(null, pos, NMSounds.CAKE_FIRE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
     {
         return NMBlocks.CRONENCAKE.getPickStack(world, pos, state);
