@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bob",
+    "bab",
+    "ctc"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:nether_bricks"
+    },
+    "c": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "a": {
+      "item": "minecraft:fire_charge"
+    },
+    "o": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "t": {
+      "item": "neepmeat:basic_tank"
+    }
+  },
+  "result": {
+    "item": "neepmeat:flame_jet",
+    "count": 1
+  }
+}
