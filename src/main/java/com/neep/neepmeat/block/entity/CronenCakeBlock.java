@@ -35,7 +35,7 @@ public class CronenCakeBlock extends CakeBlock implements IMeatBlock
     {
         super(settings);
         this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, 64, 0, new FabricItemSettings().group(NMItemGroups.FOOD));
+        this.blockItem = new BaseBlockItem(this, registryName, 64, 1, new FabricItemSettings().group(NMItemGroups.FOOD));
     }
 
     @Override
