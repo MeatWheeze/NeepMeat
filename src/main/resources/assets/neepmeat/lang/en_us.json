@@ -131,7 +131,7 @@
   "block.neepmeat.basic_glass_tank": "Glass Tank",
   "block.neepmeat.basic_glass_tank.filled": "Glass Tank (%s)",
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
-  "block.neepmeat.fluid_buffer.lore_0": "Holds 1/3 of a bucket.",
+  "block.neepmeat.fluid_buffer.lore_0": "Holds a bucket's worth of fluid.",
   "block.neepmeat.fluid_drain": "Fluid Drain",
   "block.neepmeat.fluid_drain.lore_0": "Collects fluids from the world.",
   "block.neepmeat.fluid_interface": "Fluid Interface",
