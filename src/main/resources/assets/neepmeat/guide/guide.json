@@ -15,8 +15,9 @@
         {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
-        {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"}
-      ]},
+        {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"},
+        {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"}
+    ]},
     {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Fluid Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
       {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"},
@@ -100,7 +101,13 @@
       {"type": "text", "text": "Grinder\n", "bold": true},
       {"type": "text", "text": "The Grinder rends both flesh and stone into dust, revealing the hidden treasures within."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Processing certain ore blocks with the Grinder gives slightly higher yields. Meat-scraps can be obtained by grinding raw meat."}
+      {"type": "text", "text": "Processing certain ore blocks with the Grinder gives slightly higher yields. Meat-scraps can be obtained by grinding raw meat. A running motor must be connected for this machine to function."}
+    ]},
+    {"id": "bottler", "contents": [
+      {"type": "text", "text": "Bottler\n", "bold": true},
+      {"type": "text", "text": "The Bottler automatically inserts fluids from a tank below into item containers."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "When active, this machine will move fluid from a tank placed directly below into the item in its inventory. Fluid container items can be inserted or removed with hoppers or by right-clicking. Once filled, items will be ejected from the front of the machine into tubes or a container. A running motor must be connected for this machine to function."}
     ]},
 
     {"id": "gland_potato", "contents": [
@@ -127,7 +134,7 @@
       {"type": "text", "text": "Trommel\n", "bold": true},
       {"type": "text", "text": "This trommel lifts impurities from fat as others might remove rocks water. Mundane contaminants remain within the rotating mesh while the fluent fats drain away."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Fluid inputs are inserted into the top of the nearest block and outputs leave through the bottom of the far end. The machine must be connected to a motor in order to function."}
+      {"type": "text", "text": "Fluid inputs are inserted into the top of the nearest block and outputs leave through the bottom of the far end. A running motor must be connected for this machine to function."}
     ]
     },
     {"id": "crucible", "contents": [
