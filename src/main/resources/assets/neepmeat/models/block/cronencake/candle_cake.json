@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/template_cake_with_candle",
+  "textures": {
+    "candle": "neepmeat:block/cronencake/candle",
+    "bottom": "neepmeat:block/cronencake/cake_bottom",
+    "side": "neepmeat:block/cronencake/cake_side",
+    "top": "neepmeat:block/cronencake/candle_cake_top",
+    "particle": "neepmeat:block/cronencake/cake_side"
+  }
+}

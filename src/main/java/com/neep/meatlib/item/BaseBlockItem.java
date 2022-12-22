@@ -2,7 +2,6 @@ package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
@@ -31,6 +30,14 @@ public class BaseBlockItem extends BlockItem implements IMeatItem
     public BaseBlockItem(Block block, String registryName, int itemMaxStack, int loreLines)
     {
         super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
+        this.name = registryName;
+        this.loreLines = loreLines;
+        ItemRegistry.queueItem(this);
+    }
+
+    public BaseBlockItem(Block block, String registryName, int itemMaxStack, int loreLines, Settings settings)
+    {
+        super(block, settings);
         this.name = registryName;
         this.loreLines = loreLines;
         ItemRegistry.queueItem(this);
