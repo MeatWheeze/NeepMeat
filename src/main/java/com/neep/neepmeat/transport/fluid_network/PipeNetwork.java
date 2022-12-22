@@ -245,6 +245,7 @@ public class PipeNetwork
     }
 
     // This abomination is responsible for transferring the fluid from node to node
+    // I don't like looking at this or thinking about it.
     public void tick()
     {
         this.isTicking = true;
@@ -366,8 +367,8 @@ public class PipeNetwork
         Queue<BlockPos> pipeQueue = new LinkedList<>();
         connectedNodes.clear();
 
-        // List of pipes to be searched in next iteration
-        List<BlockPos> visited = new ArrayList<>();
+        // Positions that have been checked
+        Set<BlockPos> visited = new HashSet<>();
 
         pipeQueue.add(startPos);
         networkPipes.put(startPos, new PipeState(world.getBlockState(startPos)));
@@ -378,13 +379,14 @@ public class PipeNetwork
         while (!pipeQueue.isEmpty() && depth < UPDATE_DISTANCE)
         {
             ++depth;
+
             BlockPos current = pipeQueue.poll();
             BlockState state1 = world.getBlockState(current);
-//                PipeState pipeState
 
             if (!(state1.getBlock() instanceof IFluidPipe))
                 continue;
 
+            // Find the pipe at this position and check adjacent pipes it is connected to
             for (Direction direction : ((IFluidPipe) state1.getBlock()).getConnections(state1, dir -> true))
             {
                 BlockPos next = current.offset(direction);
@@ -423,7 +425,6 @@ public class PipeNetwork
 
     public void removeNode(NodePos pos)
     {
-//        notTicking();
         synchronized (connectedNodes)
         {
             connectedNodes.remove(FluidNodeManager.getInstance(world).getNodeSupplier(pos));
