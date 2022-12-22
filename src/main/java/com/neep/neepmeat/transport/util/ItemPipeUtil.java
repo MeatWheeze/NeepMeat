@@ -63,8 +63,9 @@ public class ItemPipeUtil
     }
 
     /** Ejects the entire contents of the given storage into a pipe network of the world.
+     * @return Whether more than zero items were successfully ejected
      */
-    public static void storageToAny(ServerWorld world, Storage<ItemVariant> storage, BlockPos pos, Direction facing, TransactionContext transaction)
+    public static boolean storageToAny(ServerWorld world, Storage<ItemVariant> storage, BlockPos pos, Direction facing, TransactionContext transaction)
     {
         for (StorageView<ItemVariant> view : storage.iterable(transaction))
         {
@@ -78,10 +79,15 @@ public class ItemPipeUtil
 
                 long ejected = stackToAny(world, pos, facing, view.getResource(), view.getAmount(), inner);
                 long extracted = view.extract(view.getResource(), ejected, inner);
-                if (ejected == extracted) inner.commit();
+                if (ejected == extracted)
+                {
+                    inner.commit();
+                    return ejected != 0;
+                }
                 else inner.abort();
             }
         }
+        return false;
     }
 
     /**

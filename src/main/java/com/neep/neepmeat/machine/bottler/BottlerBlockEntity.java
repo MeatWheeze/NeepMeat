@@ -120,9 +120,11 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
                 case EJECTING:
                 {
                     Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
-                    ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, transaction);
+                    if (ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, transaction))
+                    {
+                        state = State.IDLE;
+                    }
                     transaction.commit();
-                    state = State.IDLE;
                     return true;
                 }
             }
