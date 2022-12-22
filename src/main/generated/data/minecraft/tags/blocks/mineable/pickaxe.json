@@ -115,6 +115,8 @@
     "neepmeat:pylon",
     "neepmeat:synthesiser_structure",
     "neepmeat:synthesiser",
+    "neepmeat:mincer_structure",
+    "neepmeat:mincer",
     "neepmeat:surgery_controller",
     "neepmeat:vat_casing",
     "neepmeat:vat_controller",
@@ -147,6 +149,8 @@
     "neepmeat:blood_bubble_planks",
     "neepmeat:big_lever",
     "neepmeat:integrator_egg",
-    "neepmeat:statue"
+    "neepmeat:statue",
+    "neepmeat:cronencake",
+    "neepmeat:candle_cronencake"
   ]
 }
