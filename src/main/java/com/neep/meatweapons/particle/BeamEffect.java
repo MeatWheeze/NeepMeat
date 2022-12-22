@@ -4,21 +4,36 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.render.Camera;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+import static net.minecraft.client.render.RenderPhase.BEACON_BEAM_SHADER;
+import static net.minecraft.client.render.RenderPhase.ENTITY_TRANSLUCENT_SHADER;
 
 public class BeamEffect extends GraphicsEffect
 {
+    public static final Function<Identifier, RenderLayer> BEAM_FUNC = Util.memoize((texture) ->
+    {
+        RenderLayer.MultiPhaseParameters multiPhaseParameters = RenderLayer.MultiPhaseParameters.builder()
+                .shader(BEACON_BEAM_SHADER)
+                .texture(new RenderPhase.Texture(texture, false, false))
+                .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
+                .cull(RenderPhase.DISABLE_CULLING)
+                .writeMaskState(RenderPhase.COLOR_MASK)
+                .build(false);
+        return RenderLayer.of("beam", VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, false, true, multiPhaseParameters);
+    });
+
     public static final Identifier BEAM_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
-    public static final RenderLayer BEAM_LAYER = RenderLayer.getEntityTranslucent(BEAM_TEXTURE);
+    public static final RenderLayer BEAM_LAYER = BEAM_FUNC.apply(BEAM_TEXTURE);
 
     public BeamEffect(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
@@ -55,6 +70,5 @@ public class BeamEffect extends GraphicsEffect
                 start, end, 123, 171, 254,
                 maxTime > 0 ? (int) (255f * x) : 255, scale);
         matrices.pop();
-
     }
 }
