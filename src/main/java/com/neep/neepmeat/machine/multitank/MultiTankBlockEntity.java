@@ -24,7 +24,7 @@ public class MultiTankBlockEntity extends SyncableBlockEntity
     public MultiTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new MultiFluidBuffer(this, 8 * FluidConstants.BUCKET, variant -> true);
+        this.buffer = new MultiFluidBuffer(8 * FluidConstants.BUCKET, variant -> true, this::sync);
     }
 
     public MultiTankBlockEntity(BlockPos pos, BlockState state)

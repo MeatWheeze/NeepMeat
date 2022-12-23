@@ -286,7 +286,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
 //            fluidInput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
 //            fluidOutput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
 //            fluids = new CombinedFluidStorage(List.of(fluidInput, fluidOutput));
-            fluids = new MultiFluidBuffer(parent, 16 * FluidConstants.BUCKET, type -> true);
+            fluids = new MultiFluidBuffer(16 * FluidConstants.BUCKET, type -> true, parent::sync);
         }
 
         public void readNbt(NbtCompound nbt)

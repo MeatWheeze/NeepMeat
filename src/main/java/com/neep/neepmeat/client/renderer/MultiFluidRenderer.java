@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.transfer.MultiFluidBuffer;
-import com.neep.neepmeat.init.NMFluids;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -9,10 +9,15 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Blocks;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayers;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
+
+import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MultiFluidRenderer
@@ -23,11 +28,11 @@ public class MultiFluidRenderer
         matrices.translate(0.05, 0, 0.05);
         matrices.scale(2 * radius - 0.1f, maxHeight, 2 * radius - 0.1f);
         int max = 0;
-        for (MultiFluidBuffer.Slot slot : multi.getSlots())
+        for (Map.Entry<FluidVariant, Long> slot : multi.getSlots())
         {
-            float height = slot.getAmount() / (float) multi.getCapacity();
+            float height = slot.getValue() / (float) multi.getCapacity();
             renderFluidCuboid(vertexConsumers, matrices,
-                    slot.getResource(),
+                    slot.getKey(),
                     start,
                     start + height,
                     start + height,

@@ -1,143 +1,134 @@
 package com.neep.meatlib.transfer;
 
-import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
+import it.unimi.dsi.fastutil.objects.*;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MultiFluidBuffer implements Storage<FluidVariant>
+public class MultiFluidBuffer extends SnapshotParticipant<Map<FluidVariant, Long>> implements Storage<FluidVariant>
 {
     long capacity;
-    long totalAmount; // Cumulative contents of all slots
-    long stagedTotalAmount; // Keeps track of the total amount within a single transaction
-    BlockEntity parent;
+    protected final Runnable finalCallback;
 
     Predicate<FluidVariant> validTypes;
-    ArrayList<Slot> slots = new ArrayList<>();
+    protected final Object2LongOpenHashMap<FluidVariant> map = new Object2LongOpenHashMap<>();
 
-    public MultiFluidBuffer(@Nullable BlockEntity parent, long capacity, Predicate<FluidVariant> validTypes)
+    public MultiFluidBuffer(long capacity, Predicate<FluidVariant> validTypes, Runnable finalCallback)
     {
         this.capacity = capacity;
         this.validTypes = validTypes;
-        this.parent = parent;
-        this.totalAmount = 0;
+        this.finalCallback = finalCallback;
 
-        slots.add(new Slot(FluidVariant.blank(), this));
+//        slots.add(new Slot(FluidVariant.blank(), this));
     }
 
     @Override
     public String toString()
     {
-        return slots.stream().map(slot -> slot.getResource().getFluid().toString() + " " + slot.getAmount() / FluidConstants.BUCKET).collect(Collectors.toList()).toString();
+        return map.toString();
+//        return slots.stream().map(slot -> slot.getResource().getFluid().toString() + " " + slot.getAmount() / FluidConstants.BUCKET).collect(Collectors.toList()).toString();
     }
 
     @Override
     public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
         StoragePreconditions.notBlankNotNegative(resource, maxAmount);
-        if (!resource.isBlank())
-        {
-            Slot slot = getOrCreateSlot(resource);
-            if (slot == null)
-            {
-                slot = new Slot(FluidVariant.blank(), this);
-                slots.add(slot);
-            }
 
-            long insertedAmount = Math.min(maxAmount, capacity - totalAmount);
-            if (insertedAmount > 0)
-            {
-                slot.insert(resource, insertedAmount, transaction);
-            }
-            syncIfPossible();
-            return insertedAmount;
-        }
-        return 0;
-    }
-
-    protected void partInsertCallback(TransactionContext transaction, TransactionContext.Result result, long insertedAmount)
-    {
-        if (result.wasCommitted())
+        long insertedAmount = Math.min(maxAmount, getSpace());
+        if (insertedAmount > 0)
         {
-            totalAmount = stagedTotalAmount;
+            updateSnapshots(transaction);
+            return map.compute(resource, (r, a) -> a != null ? a + insertedAmount : insertedAmount);
         }
-        else
-        {
-            stagedTotalAmount = totalAmount;
-        }
+        return insertedAmount;
     }
 
     @Override
     public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
         StoragePreconditions.notBlankNotNegative(resource, maxAmount);
-        if (!resource.isBlank())
-        {
-            Slot slot = getOrCreateSlot(resource);
-            if (slot == null)
-                return 0;
 
-            long extractedAmount = Math.min(maxAmount, slot.getAmount());
-            if (extractedAmount > 0)
-            {
-                slot.extract(resource, extractedAmount, transaction);
-                if (slot.getAmount() <= 0)
-                {
-                    slots.remove(slot);
-                }
-            }
-            syncIfPossible();
-            return extractedAmount;
+        long amount = map.getLong(resource);
+        long extracted = (Math.min(maxAmount, amount));
+        if (extracted > 0)
+        {
+            updateSnapshots(transaction);
+            map.addTo(resource, -extracted);
+            if ((amount - extracted) <= 0) map.remove(resource);
         }
-        return 0;
+        return extracted;
     }
 
     @Override
     public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
     {
-        if (slots.isEmpty())
+        return map.object2LongEntrySet().stream().map(this::ofEntry).iterator();
+    }
+
+    // This is probably highly inefficient and not a proper solution. Help.
+    protected StorageView<FluidVariant> ofEntry(Map.Entry<FluidVariant, Long> entry)
+    {
+        SingleVariantStorage<FluidVariant> view = new SingleVariantStorage<>()
         {
-//            return
-        }
-        return slots.stream().map(slot -> (StorageView<FluidVariant>) slot).iterator();
+            @Override
+            protected FluidVariant getBlankVariant()
+            {
+                return FluidVariant.blank();
+            }
+
+            @Override
+            protected long getCapacity(FluidVariant variant)
+            {
+                return getCapacity();
+            }
+
+            @Override
+            public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
+            {
+                return MultiFluidBuffer.this.insert(insertedVariant, maxAmount, transaction);
+            }
+
+            @Override
+            public long extract(FluidVariant extractedVariant, long maxAmount, TransactionContext transaction)
+            {
+                return MultiFluidBuffer.this.extract(extractedVariant, maxAmount, transaction);
+            }
+        };
+
+        view.variant = entry.getKey();
+        view.amount = entry.getValue();
+
+        return view;
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.putLong("total_amount", totalAmount);
         NbtList list = new NbtList();
-        list.addAll(slots.stream()
-                .filter(slot -> !slot.isResourceBlank())
-                .map(slot ->
+        map.forEach((r, a) ->
         {
-            NbtCompound compound = new NbtCompound();
-            slot.writeNbt(compound);
-            return compound;
-        }).collect(Collectors.toList()));
+            NbtCompound comp = r.toNbt();
+            comp.putLong("amount", a);
+            list.add(comp);
+        });
         nbt.put("parts", list);
 
         return nbt;
@@ -145,43 +136,20 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
 
     public void readNbt(NbtCompound nbt)
     {
-        this.totalAmount = nbt.getLong("total_amount");
-        NbtList list = (NbtList) nbt.get("parts");
+        NbtList list = nbt.getList("parts", 10);
+
         if (list == null)
             return;
 
-        slots.clear();
-        slots.addAll(list.stream().map(
-                        compound -> Slot.fromNbt(this, (NbtCompound) compound)).collect(Collectors.toList()));
-    }
-
-    protected Slot getOrCreateSlot(FluidVariant variant)
-    {
-        for (Slot slot : slots)
-        {
-            if (slot.getResource().equals(variant))
-                return slot;
-        }
-        return null;
-    }
-
-    public void syncIfPossible()
-    {
-        if (parent != null)
-        {
-            parent.markDirty();
-        }
-        if (parent instanceof BlockEntityClientSerializable serializable)
-        {
-            serializable.sync();
-        }
+        map.clear();
+        list.forEach(c -> map.put(FluidVariant.fromNbt((NbtCompound) c), ((NbtCompound) c).getLong("amount")));
     }
 
     public boolean handleInteract(World world, PlayerEntity player, Hand hand)
     {
         ItemStack stack = player.getStackInHand(hand);
         Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
-//        SoundEvent fill = this.variant.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
+//        SoundEvent fill = s.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
         if (storage != null)
         {
             if (StorageUtil.move(storage, this, variant -> true, Long.MAX_VALUE, null) > 0)
@@ -199,11 +167,6 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         return false;
     }
 
-    public List<Slot> getSlots()
-    {
-        return slots;
-    }
-
     public long getCapacity()
     {
         return capacity;
@@ -211,116 +174,39 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
 
     public long getTotalAmount()
     {
-        return totalAmount;
+        // Not sure if there is a better way
+        AtomicLong l = new AtomicLong();
+        Object2LongMaps.fastForEach(map, (entry) -> l.addAndGet(entry.getLongValue()));
+        return l.get();
     }
 
-    public static class Slot extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements SingleSlotStorage<FluidVariant>, StorageView<FluidVariant>
+    public long getSpace()
     {
-        protected long amount;
-        protected FluidVariant variant;
-        protected MultiFluidBuffer parent;
-
-        public Slot(FluidVariant variant, MultiFluidBuffer parent)
-        {
-            this.variant = variant;
-            this.parent = parent;
-        }
-
-        @Override
-        public String toString()
-        {
-            return variant.toString() + " " + amount;
-        }
-
-        public static Slot fromNbt(MultiFluidBuffer parent, NbtCompound nbt)
-        {
-            long amount = nbt.getLong("amount");
-            FluidVariant variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));
-            Slot slot = new Slot(variant, parent);
-            slot.amount = amount;
-            return slot;
-        }
-
-        public NbtCompound writeNbt(NbtCompound nbt)
-        {
-            nbt.putLong("amount", getAmount());
-            nbt.put("resource", getResource().toNbt());
-            return nbt;
-        }
-
-        @Override
-        public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
-        {
-            StoragePreconditions.notBlankNotNegative(insertedVariant, maxAmount);
-            if ((insertedVariant.equals(variant) || variant.isBlank()))
-            {
-                this.variant = insertedVariant;
-                long insertedAmount = Math.min(maxAmount, getCapacity() - getAmount() + maxAmount);
-                if (insertedAmount > 0)
-                {
-                    updateSnapshots(transaction);
-                    amount += insertedAmount;
-                    parent.stagedTotalAmount += insertedAmount;
-                    transaction.addCloseCallback((transaction1, result) -> parent.partInsertCallback(transaction1, result, insertedAmount));
-                }
-                return insertedAmount;
-            }
-            return 0;
-        }
-
-        @Override
-        public long extract(FluidVariant extractedVariant, long maxAmount, TransactionContext transaction)
-        {
-            StoragePreconditions.notBlankNotNegative(extractedVariant, maxAmount);
-            updateSnapshots(transaction);
-            long extractedAmount = Math.min(maxAmount, amount);
-            amount -= extractedAmount;
-            parent.stagedTotalAmount -= extractedAmount;
-
-            if (amount <= 0)
-                this.variant = FluidVariant.blank();
-
-            transaction.addCloseCallback(((transaction1, result) -> parent.partInsertCallback(transaction1, result, extractedAmount)));
-            parent.syncIfPossible();
-            return extractedAmount;
-        }
-
-        @Override
-        public boolean isResourceBlank()
-        {
-            return variant.isBlank();
-        }
-
-        @Override
-        public FluidVariant getResource()
-        {
-            return variant;
-        }
-
-        @Override
-        public long getAmount()
-        {
-            return amount;
-        }
-
-        @Override
-        public long getCapacity()
-        {
-            return parent.capacity - parent.stagedTotalAmount + amount;
-        }
-
-        @Override
-        protected ResourceAmount<FluidVariant> createSnapshot()
-        {
-            return new ResourceAmount<>(variant, amount);
-        }
-
-        @Override
-        protected void readSnapshot(ResourceAmount<FluidVariant> snapshot)
-        {
-            this.variant = snapshot.resource();
-            this.amount = snapshot.amount();
-        }
+        return getCapacity() - getTotalAmount();
     }
 
+    public Object2LongMap.FastEntrySet<FluidVariant> getSlots()
+    {
+        return map.object2LongEntrySet();
+    }
+
+    @Override
+    protected Map<FluidVariant, Long> createSnapshot()
+    {
+        return map.clone();
+    }
+
+    @Override
+    protected void readSnapshot(Map<FluidVariant, Long> snapshot)
+    {
+        map.clear();
+        map.putAll(snapshot);
+    }
+
+    @Override
+    protected void onFinalCommit()
+    {
+        super.onFinalCommit();
+        finalCallback.run();
+    }
 }
