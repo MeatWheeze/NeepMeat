@@ -158,6 +158,7 @@
   "block.neepmeat.heater": "Heater",
   "block.neepmeat.trommel": "Blasphemous Trommel",
   "block.neepmeat.integrator_egg": "Integrator Egg",
+  "block.neepmeat.integrator_egg.lore_0": "It pulsates, inexplicably communicating a desire for blood.",
 
   "block.neepmeat.deployer": "Deployer",
   "block.neepmeat.mixer": "Mixer",
