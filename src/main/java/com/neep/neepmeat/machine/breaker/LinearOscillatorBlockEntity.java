@@ -7,6 +7,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -90,8 +91,11 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
 
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
         BlockPos facingPos = getPos().offset(facing);
+        BlockState facingState = world.getBlockState(facingPos);
+        float hardness = facingState.getHardness(world, facingPos);
 
-        if (!world.getBlockState(facingPos).isAir() && world.getBlockState(facingPos).getFluidState().isEmpty())
+        // Break the block hardness is lower than obsidian
+        if (!facingState.isAir() && facingState.getFluidState().isEmpty() && hardness >= 0 && hardness < Blocks.OBSIDIAN.getHardness())
         {
             getWorld().breakBlock(facingPos, true);
         }
