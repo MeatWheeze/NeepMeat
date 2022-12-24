@@ -1,0 +1,62 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "x": 0,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "x": 0,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "x": -90,
+        "y": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/filter_pipe",
+        "x": 90,
+        "y": 0
+      }
+    }
+  ]
+}

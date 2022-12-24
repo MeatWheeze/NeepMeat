@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
@@ -184,7 +185,11 @@ public class FluidNodeManager
 
     private void removeBlockEntity(ServerWorld world, BlockPos pos)
     {
-        world.removeBlockEntity(pos);
+        // Perform checks before removing
+        if (world.getBlockEntity(pos) instanceof NodeContainerBlockEntity be && be.isCreatedDynamically())
+        {
+            world.removeBlockEntity(pos);
+        }
     }
 
     private boolean shouldPosHaveEntity(BlockPos pos)
@@ -299,6 +304,10 @@ public class FluidNodeManager
     public void entityUnloaded(BlockPos pos)
     {
         List<FluidNode> nodes = getNodes(pos);
+
+        // Some pipes variants need to retain their block entity even when there are no nodes
+        if (nodes.isEmpty()) return;
+
         PipeNetwork network = nodes.get(0).getNetwork();
         if (network == null || network.isSaved) return;
 

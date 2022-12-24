@@ -106,6 +106,7 @@ public class NMBlocks
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", 64, true, FLUID_PIPE_SETTINGS));
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", 64, true, FLUID_PIPE_SETTINGS));
+    public static Block FILTER_PIPE = BlockRegistry.queue(new FilterPipeBlock("filter_pipe", 64, true, FLUID_PIPE_SETTINGS));
 
     // --- Machines
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

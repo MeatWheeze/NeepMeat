@@ -22,7 +22,7 @@ import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
-import com.neep.neepmeat.transport.block.fluid_transport.entity.StopValveBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.*;
 import com.neep.neepmeat.transport.machine.fluid.*;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
@@ -57,7 +57,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -69,7 +68,7 @@ public class NMBlockEntities
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
     public static BlockEntityType<CheckValveBlockEntity> CHECK_VALVE;
-    public static BlockEntityType<StopValveBlockEntity> STOP_VALVE;
+    public static BlockEntityType<FilterPipeBlockEntity> FILTER_PIPE;
 
     public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
@@ -154,7 +153,7 @@ public class NMBlockEntities
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
         FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, NMBlockEntities.GLASS_TANK_BLOCK_ENTITY);
         NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
-        STOP_VALVE = registerBlockEntity("stop_valve", StopValveBlockEntity::new, NMBlocks.STOP_VALVE);
+        FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, NMBlocks.FILTER_PIPE);
 
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
         FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);

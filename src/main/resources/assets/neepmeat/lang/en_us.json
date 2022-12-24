@@ -102,7 +102,12 @@
   "block.neepmeat.fluid_pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",
   "block.neepmeat.stop_valve": "Stop Valve",
+  "block.neepmeat.stop_valve.lore_0": "Prevents flow when closed. Responds to redstone.",
   "block.neepmeat.check_valve": "Check Valve",
+  "block.neepmeat.check_valve.lore_0": "Only allows flow in one direction.",
+  "block.neepmeat.filter_pipe": "Filter Pipe",
+  "block.neepmeat.filter_pipe.lore_0": "Only allows a fluid type through.",
+  "message.neepmeat.filter_pipe.filter": "Filter: %s",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
   "block.neepmeat.item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",
