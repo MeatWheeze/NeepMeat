@@ -5,7 +5,7 @@
     "amount": 1
   },
   "fluid1": {
-    "resource": "neepmeat:milk",
+    "resource": "neepmeat:pasteurised_milk",
     "amount": 13500
   },
   "fluid2":{

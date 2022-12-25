@@ -133,6 +133,12 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return false;
     }
 
+    public boolean test(TransferVariant<?> variant, long amount)
+    {
+        cacheMatching();
+        return Arrays.stream(matchingObjects).anyMatch(o -> variant.getObject().equals(o)) && amount >= amount();
+    }
+
     public Optional<T> getFirstMatching(StorageView<? extends TransferVariant<T>> view)
     {
         cacheMatching();

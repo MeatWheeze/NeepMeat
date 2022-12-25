@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    "ctc",
+    "ccc"
+  ],
+  "key": {
+    "t": {
+      "item": "neepmeat:basic_glass_tank"
+    },
+    "c": {
+      "tag": "c:iron_ingots"
+    }
+  },
+  "result": {
+    "item": "neepmeat:multi_tank",
+    "count": 1
+  }
+}

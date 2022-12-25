@@ -50,4 +50,6 @@ public class NMrecipeTypes
     public static final MeatRecipeSerialiser<SurgeryRecipe> SURGERY_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "surgery", new SurgeryRecipe.Serializer());
     public static final MeatRecipeType<SurgeryRecipe> SURGERY = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "surgery");
 
+    public static final MeatRecipeSerialiser<FluidHeatingRecipe> HEATING_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "heating", new FluidHeatingRecipe.Serializer(FluidHeatingRecipe::new, 60));
+    public static final MeatRecipeType<FluidHeatingRecipe> HEATING = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "heating");
 }
