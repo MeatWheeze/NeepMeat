@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.util.FluidPipeRouteFinder;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
@@ -28,8 +29,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
             NodePos start = list.get(0).get().getNodePos();
             NodePos end = list.get(1).get().getNodePos();
-            PipeState.FilterFunction distances = searchDFS(world, start, end, pipes);
-            System.out.println(distances);
+//            PipeState.FilterFunction distances = searchDFS(world, start, end, pipes);
+//            System.out.println(distances);
         }
         else
         {
@@ -52,6 +53,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
     public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, Set<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
+        FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
         int size = nodes.size();
 
         // Initialise matrix
@@ -84,11 +86,13 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
                     NodePos start = fromNode.get().getNodePos();
                     NodePos end = toNode.get().getNodePos();
-                    PipeState.FilterFunction filterFunction;
 
-                    if (/*(fromNode.get().isDriven() || toNode.get().isDriven()) &&*/ (filterFunction = searchDFS(world, start, end, pipes)) != null)
+                    finder.init(start, end);
+                    finder.loop(100);
+                    PipeState.FilterFunction function;
+                    if (finder.hasResult() && (function = finder.getResult().right()) != null)
                     {
-                        matrix[i][j] = filterFunction;
+                        matrix[i][j] = function;
                     }
                     else
                     {
@@ -102,98 +106,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
             e.printStackTrace();
         }
         long tt2 = System.nanoTime();
-//        System.out.println((tt2-tt1) / 1000000);
         return matrix;
-    }
-
-    /** It's rather inefficient and janky. It doesn't actually give the shortest path.
-     * @return Resulting flow-limiting function of all special pipes in the shortest route. Null if there is no route between two nodes,
-     */
-    public static PipeState.FilterFunction searchDFS(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
-    {
-        // Reset visited flag on all pipes
-        pipes.forEach(p -> p.flag = false);
-
-        // Oh crumbs... so many deques...
-        PipeState.FilterFunction flowFunc = PipeState::identity;
-        Deque<BlockPos> posStack = new ArrayDeque<>();
-        Deque<PipeState> pipeStack = new ArrayDeque<>();
-        Deque<PipeState.FilterFunction> filterStack = new ArrayDeque<>();
-
-        posStack.add(end.pos);
-        pipeStack.add(pipes.get(end.pos));
-        BlockPos current = end.pos;
-        PipeState currentPipe = pipes.get(end.pos);
-        Direction currentDir = end.face.getOpposite();
-        currentPipe.flag = true;
-
-        PipeState offsetPipe;
-        BlockPos offset;
-        boolean vertexFound;
-
-        // Early return if the end is blocked.
-        if (!processPipe(current, currentPipe, currentDir.getOpposite(), world, filterStack)) return null;
-
-        while (!current.equals(start.pos))
-        {
-            vertexFound = false;
-
-            // Push a non-visited vertex to the stack
-            for (Direction connection : currentPipe.connections)
-            {
-                offset = current.offset(connection);
-                offsetPipe = currentPipe.getAdjacent(connection);
-
-                if (offsetPipe != null && !offsetPipe.flag)
-                {
-                    // Flag next pipe as visited
-                    offsetPipe.flag = true;
-
-                    if (!processPipe(offset, offsetPipe, connection.getOpposite(), world, filterStack)) continue;
-
-                    posStack.push(current);
-                    pipeStack.push(currentPipe);
-
-                    current = offset;
-                    currentPipe = offsetPipe;
-
-                    vertexFound = true;
-
-                    // Move to the new vertex, temporarily ignore all other connections
-                    break;
-                }
-            }
-
-            // Move to next vertex if one was found
-            if (vertexFound) continue;
-
-            current = posStack.pop();
-            currentPipe = pipeStack.pop();
-            filterStack.pop();
-        }
-
-        for (PipeState.FilterFunction function : filterStack)
-        {
-            flowFunc = flowFunc.andThen(function);
-        }
-        return flowFunc;
-    }
-
-    private static boolean processPipe(BlockPos pos, PipeState pipe, Direction direction, World world, Deque<PipeState.FilterFunction> filterStack)
-    {
-        // Check if pipe can transfer fluid in the opposite direction
-        BlockState currentState = world.getBlockState(pos);
-        if (!pipe.canFluidFlow(direction, currentState))
-        {
-            return false;
-        }
-
-        // Check if pipe has a special flow function.
-        if (pipe.isSpecial())
-        {
-            filterStack.push(pipe.getSpecial().getFlowFunction(world, direction, pos, currentState));
-        }
-        else filterStack.push(PipeState::identity);
-        return true;
     }
 }

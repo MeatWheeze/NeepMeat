@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,11 @@ public class PipeState
         return distance;
     }
 
+    public List<Direction> getConnections()
+    {
+        return connections;
+    }
+
     public interface ISpecialPipe
     {
         FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state);
@@ -136,9 +142,10 @@ public class PipeState
     {
         long applyVariant(FluidVariant variant, long l);
 
-        default FilterFunction andThen(FilterFunction after)
+        default FilterFunction andThen(@Nullable FilterFunction after)
         {
-            Objects.requireNonNull(after);
+            if (after == null) return this;
+
             return (v, l) ->
             {
                 return after.applyVariant(v, this.applyVariant(v, l));
