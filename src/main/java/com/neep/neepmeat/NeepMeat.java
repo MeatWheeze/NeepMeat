@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
+import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -62,6 +63,8 @@ public class NeepMeat implements ModInitializer
 		NMPotions.init();
 		MobSynthesisRegistry.initDefaults();
 
+		ToolTransformPacket.registerReceiver();
+
 		NMFeatures.init();
 
 		ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
@@ -70,12 +73,9 @@ public class NeepMeat implements ModInitializer
 		ScreenHandlerInit.registerScreenHandlers();
 
 		FluidNodeManager.registerEvents();
-//		NetworkRebuilding.init();
 		FluidNetworkManager.init();
 		StagedTransactions.init();
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
-
-
 	}
 }

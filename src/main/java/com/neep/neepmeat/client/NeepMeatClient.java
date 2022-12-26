@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
-import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
@@ -35,6 +34,8 @@ import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -57,6 +58,7 @@ import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
+@Environment(value= EnvType.CLIENT)
 public class NeepMeatClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
@@ -98,7 +100,7 @@ public class NeepMeatClient implements ClientModInitializer
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
-        AirtruckSoundInstance.initEvent();
+        NMKeys.registerKeybindings();
     }
 
     public static void registerRenderers()
