@@ -40,6 +40,10 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         {
             update((ServerWorld) world, pos, pos, getCachedState());
         }
+        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        {
+            motorised.tick(this);
+        }
     }
 
     @Override
@@ -49,7 +53,6 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
             motorised.setWorkMultiplier(getRunningRate());
-            motorised.tick(this);
         }
     }
 
