@@ -134,10 +134,10 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.workMultiplier = multiplier;
-        this.progressIncrement = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
+        this.workMultiplier = power;
+        this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 
     public static class Structure extends BlockEntity

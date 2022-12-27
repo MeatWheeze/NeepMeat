@@ -169,9 +169,9 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        running = multiplier >= 0.1;
+        running = power >= 0.1;
         updateBlockstate();
     }
 

@@ -52,7 +52,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         super.onRateChange();
         if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            motorised.setWorkMultiplier(getRunningRate());
+            motorised.setInputPower(getRunningRate());
         }
     }
 
@@ -84,6 +84,12 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     public static float rateToSpeed(float rate)
     {
         return rate * 20;
+    }
+
+    @Override
+    public float getOutputPower()
+    {
+        return getRunningRate();
     }
 
     @Override

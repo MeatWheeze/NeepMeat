@@ -174,9 +174,9 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.running = multiplier != 0;
-        this.cooldownIncrement = INCREMENT_MIN + multiplier * (INCREMENT_MAX - INCREMENT_MIN);
+        this.running = power != 0;
+        this.cooldownIncrement = INCREMENT_MIN + power * (INCREMENT_MAX - INCREMENT_MIN);
     }
 }

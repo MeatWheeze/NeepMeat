@@ -8,8 +8,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
 
 public interface IMotorBlockEntity
 {
@@ -19,6 +17,7 @@ public interface IMotorBlockEntity
         if ((world.getBlockEntity(pos.offset(facing)) instanceof IMotorisedBlock block))
         {
             setConnectedBlock(BlockApiCache.create(MeatLib.VOID_LOOKUP, world, pos.offset(facing)));
+            block.setInputPower(getOutputPower());
         }
     }
 
@@ -26,7 +25,7 @@ public interface IMotorBlockEntity
     {
         if (getConnectedBlock() != null && getConnectedBlock().getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            motorised.setWorkMultiplier(0);
+            motorised.setInputPower(0);
             motorised.onMotorRemoved();
         }
     }
@@ -36,6 +35,8 @@ public interface IMotorBlockEntity
     float getRotorAngle();
 
     float getSpeed();
+
+    float getOutputPower();
 
     BlockApiCache<Void, Void> getConnectedBlock();
 }

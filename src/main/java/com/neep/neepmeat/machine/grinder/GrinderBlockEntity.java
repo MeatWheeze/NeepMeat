@@ -215,9 +215,9 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.progressIncrement = MathHelper.lerp(multiplier, 0, INCREMENT_MAX);
-        if (multiplier < MULTIPLIER_MIN) progressIncrement = 0;
+        this.progressIncrement = MathHelper.lerp(power, 0, INCREMENT_MAX);
+        if (power < MULTIPLIER_MIN) progressIncrement = 0;
     }
 }
