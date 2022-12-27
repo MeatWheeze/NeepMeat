@@ -81,7 +81,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         return NMrecipeTypes.ORE_FAT_RENDERING;
     }
 
-    public Item takeInputs(CrucibleStorage storage, int amount, TransactionContext transaction)
+    public Item takeInputs(CrucibleStorage storage, int itemAmount, TransactionContext transaction)
     {
         SingleSlotStorage<ItemVariant> itemStorage = storage.getItemStorage(null);
         Storage<FluidVariant> fluidStorage = storage.getStorage(null);
@@ -96,13 +96,17 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
                 throw new IllegalStateException("Storage contents do not conform to recipe");
             }
 
-            long ex1 = itemStorage.extract(ItemVariant.of(item), amount, take);
-            long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * amount, take);
-            if (ex1 == amount && ex2 == fluidInput.amount() * amount)
+            long ex1 = itemStorage.extract(ItemVariant.of(item), itemAmount, take);
+            long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * itemAmount, take);
+            if (ex1 == itemAmount && ex2 == fluidInput.amount() * itemAmount)
             {
                 take.commit();
             }
-            else take.abort();
+            else
+            {
+                take.abort();
+                return null;
+            }
         }
 
         try (Transaction eject = transaction.openNested())
@@ -111,7 +115,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 
             boolean bl1 = true;
             fluidOutput.setNbt(entry.toNbt());
-            for (int i = 0; i < amount; ++i)
+            for (int i = 0; i < itemAmount; ++i)
             {
                 bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, eject);
             }

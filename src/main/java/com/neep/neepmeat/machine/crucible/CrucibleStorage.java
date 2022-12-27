@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
@@ -29,16 +30,23 @@ public class CrucibleStorage implements NbtSerialisable, ImplementedRecipe.Dummy
         this.parent = parent;
         this.fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET, parent::sync);
 
-        this.itemStorage = new WritableStackStorage(parent::sync, 16)
+        this.itemStorage = new WritableStackStorage(parent::sync, 3)
         {
             @Override
             public long insert(ItemVariant insertedVariant, long maxAmount, TransactionContext transaction)
             {
-                long processed;
+                // Sometimes empty item stack entities can appear
+                if (insertedVariant.isBlank() || maxAmount == 0) return 0;
+
+                long processed = 0;
                 try (Transaction inner = transaction.openNested())
                 {
                     long inserted = super.insert(insertedVariant, maxAmount, inner);
-                    processed = parent.processItem(insertedVariant, inserted, inner);
+                    if (inserted > 0)
+                    {
+                        processed = parent.processItem(insertedVariant, inserted, inner);
+                    }
+
                     if (processed > 0)
                         inner.commit();
                     else

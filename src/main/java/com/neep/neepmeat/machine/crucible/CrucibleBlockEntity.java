@@ -80,11 +80,6 @@ public class CrucibleBlockEntity extends SyncableBlockEntity
         storage.readNbt(nbt);
     }
 
-    public static int timeToFluid(int fuelTime)
-    {
-        return fuelTime * 16;
-    }
-
     public void receiveItemEntity(ItemEntity entity)
     {
         ItemStack stack = entity.getStack();
