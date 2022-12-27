@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.model.block.FluidPipeModel;
 import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import com.neep.neepmeat.client.model.block.SlopeTest;
@@ -72,6 +73,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
                 NMBlocks.YELLOW_SCAFFOLD);
 
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_test"), FluidPipeModel::new);
     }
 
     public static void putScaffoldModels(Identifier topId, Identifier bottomId, Identifier itemId, Identifier sideTexture, Identifier topTexture, Block block)
