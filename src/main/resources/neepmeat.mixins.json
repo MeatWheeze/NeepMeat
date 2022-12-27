@@ -12,7 +12,6 @@
   ],
   "client": [
     "BlockModelRendererAccessor",
-    "CowEntityRendererMixin",
     "HeldItemRendererMixin",
     "ParticleManagerMixin"
   ],
