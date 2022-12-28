@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class SoundRegistry
 {
-    protected static Map<Identifier, SoundEvent> SOUNDS = new LinkedHashMap<>();
+    protected static final Map<Identifier, SoundEvent> SOUNDS = new LinkedHashMap<>();
 
     public static SoundEvent registerSound(String namespace, String path)
     {
