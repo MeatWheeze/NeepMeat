@@ -70,6 +70,12 @@ public class NMFluids
     public static Block CLEAN_ORE_FAT;
     public static OreFatFluidFactory CLEAN_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "clean_ore_fat", false, 5, 2);
 
+    public static FlowableFluid FLOWING_C_MEAT;
+    public static FlowableFluid STILL_C_MEAT;
+    public static Item C_MEAT_BUCKET;
+    public static Block C_MEAT;
+    public static OreFatFluidFactory C_MEAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "coarse_meat", false, 5, 2);
+
     public static FlowableFluid FLOWING_MEAT;
     public static FlowableFluid STILL_MEAT;
     public static Item MEAT_BUCKET;
@@ -147,6 +153,11 @@ public class NMFluids
         FLOWING_CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerFlowing();
         CLEAN_ORE_FAT = CLEAN_ORE_FAT_FACTORY.registerBlock();
 
+        STILL_C_MEAT = C_MEAT_FACTORY.registerStill();
+        FLOWING_C_MEAT = C_MEAT_FACTORY.registerFlowing();
+        C_MEAT_BUCKET = C_MEAT_FACTORY.registerItem();
+        C_MEAT = C_MEAT_FACTORY.registerBlock();
+
         STILL_MEAT = MEAT_FACTORY.registerStill();
         FLOWING_MEAT = MEAT_FACTORY.registerFlowing();
         MEAT_BUCKET = MEAT_FACTORY.registerItem();
@@ -182,6 +193,11 @@ public class NMFluids
                 new FullItemFluidStorage(context, Items.GLASS_BOTTLE, FluidVariant.of(NMFluids.STILL_PINKDRINK), FluidConstants.BOTTLE));
         FluidStorage.combinedItemApiProvider(Items.GLASS_BOTTLE).register(context ->
                 new EmptyItemFluidStorage(context, NMItems.PINKDRINK, NMFluids.STILL_PINKDRINK, FluidConstants.BOTTLE));
+
+        FluidStorage.combinedItemApiProvider(NMItems.MILK_CARTON).register(context ->
+                new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_P_MILK), FluidConstants.BOTTLE));
+        FluidStorage.combinedItemApiProvider(NMItems.CARTON).register(context ->
+                new EmptyItemFluidStorage(context, NMItems.MILK_CARTON, NMFluids.STILL_P_MILK, FluidConstants.BOTTLE));
 
         FluidStorage.combinedItemApiProvider(Items.MILK_BUCKET).register(context ->
                 new FullItemFluidStorage(context, Items.BUCKET, FluidVariant.of(NMFluids.STILL_MILK), FluidConstants.BUCKET));

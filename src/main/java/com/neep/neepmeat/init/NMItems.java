@@ -8,6 +8,7 @@ import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterials;
+import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 
 @SuppressWarnings("unused")
@@ -62,6 +63,10 @@ public class NMItems
     public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
+
+    public static Item CAN = new BaseCraftingItem("can", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
+    public static Item CARTON = new BaseCraftingItem("carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
+    public static Item MILK_CARTON = new BaseCraftingItem("milk_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MILK_BOTTLE));
 
     // Mob cloning
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());

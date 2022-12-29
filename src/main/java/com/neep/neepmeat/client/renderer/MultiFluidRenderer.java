@@ -46,13 +46,11 @@ public class MultiFluidRenderer
     public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float endXZ, float endY, float scaleY)
     {
         Sprite sprite = FluidVariantRendering.getSprite(fluid);
-//        VertexConsumer consumer = vertices.getBuffer(TexturedRenderLayers.getItemEntityTranslucentCull());
         VertexConsumer consumer = vertices.getBuffer(RenderLayers.getEntityBlockLayer(Blocks.BLACK_STAINED_GLASS.getDefaultState(), false));
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
         int col = FluidVariantRendering.getColor(fluid);
 
-        // Magic colourspace transformation copied from Modern Industrialisation
         float r = ((col >> 16) & 255) / 256f;
         float g = ((col >> 8) & 255) / 256f;
         float b = (col & 255) / 256f;
@@ -81,8 +79,12 @@ public class MultiFluidRenderer
                 emitter.square(direction, depth, startY, 1 - depth, dist, depth);
             }
 
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
+            if (sprite != null)
+            {
+                emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+                emitter.spriteColor(0, -1, -1, -1, -1);
+            }
+
             consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
         }
     }
