@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " w ",
+    "w w",
+    "www"
+  ],
+  "key": {
+    "w": {
+      "item": "minecraft:paper"
+    }
+  },
+  "result": {
+    "item": "neepmeat:carton",
+    "count": 4
+  }
+}

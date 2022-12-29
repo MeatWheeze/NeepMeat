@@ -2,6 +2,7 @@ package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.fluid.CoarseMeatVariantRenderHandler;
 import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
 import com.neep.neepmeat.client.hud.HUDOverlays;
@@ -236,6 +237,7 @@ public class NeepMeatClient implements ClientModInitializer
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_DIRTY_ORE_FAT, NMFluids.FLOWING_DIRTY_ORE_FAT, new SimpleFluidRenderHandler(DIRTY_ORE_FAT, DIRTY_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CLEAN_ORE_FAT, NMFluids.FLOWING_CLEAN_ORE_FAT, new SimpleFluidRenderHandler(CLEAN_ORE_FAT, CLEAN_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MEAT, NMFluids.FLOWING_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_C_MEAT, NMFluids.FLOWING_C_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MILK, NMFluids.FLOWING_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_P_MILK, NMFluids.FLOWING_P_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_FEED, NMFluids.FLOWING_FEED, new SimpleFluidRenderHandler(FEED, FEED_FLOWING));
@@ -249,6 +251,9 @@ public class NeepMeatClient implements ClientModInitializer
         FluidVariantRendering.register(NMFluids.FLOWING_CLEAN_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantAttributes.register(NMFluids.STILL_CLEAN_ORE_FAT, new OreFatAttributeHandler());
         FluidVariantAttributes.register(NMFluids.FLOWING_CLEAN_ORE_FAT, new OreFatAttributeHandler());
+
+        FluidVariantRendering.register(NMFluids.STILL_C_MEAT, new CoarseMeatVariantRenderHandler());
+        FluidVariantRendering.register(NMFluids.FLOWING_C_MEAT, new CoarseMeatVariantRenderHandler());
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
