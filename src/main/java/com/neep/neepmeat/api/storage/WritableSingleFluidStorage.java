@@ -2,6 +2,7 @@ package com.neep.neepmeat.api.storage;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -36,6 +37,12 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
     protected long getCapacity(FluidVariant variant)
     {
         return capacity;
+    }
+
+    @Override
+    public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
+    {
+        return super.insert(insertedVariant, maxAmount, transaction);
     }
 
     protected void onFinalCommit()

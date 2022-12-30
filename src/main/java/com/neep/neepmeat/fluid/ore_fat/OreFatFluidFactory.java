@@ -118,7 +118,7 @@ public class OreFatFluidFactory
         }
     }
 
-    public class Still extends Main
+    private class Still extends Main
     {
         @Override
         public int getLevel(FluidState fluidState)
@@ -133,7 +133,7 @@ public class OreFatFluidFactory
         }
     }
 
-    public class Flowing extends Main
+    private class Flowing extends Main
     {
         @Override
         protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder)
@@ -154,118 +154,4 @@ public class OreFatFluidFactory
             return false;
         }
     }
-
-//    public final FlowableFluid mainFluid = new BaseFluid()
-//    {
-//        @Override
-//        public Fluid getFlowing()
-//        {
-//            return flowing;
-//        }
-//
-//        @Override
-//        public Fluid getStill()
-//        {
-//            return still;
-//        }
-//
-//        @Override
-//        protected boolean isInfinite()
-//        {
-//            return isInfinite;
-//        }
-//
-//        @Override
-//        public Item getBucketItem()
-//        {
-//            return item;
-//        }
-//
-//        @Override
-//        protected int getFlowSpeed(WorldView world)
-//        {
-//            return flowSpeed;
-//        }
-//
-//        @Override
-//        protected int getLevelDecreasePerBlock(WorldView world)
-//        {
-//            return levelDecrease;
-//        }
-//
-//        @Override
-//        public int getTickRate(WorldView world)
-//        {
-//            return tickRate;
-//        }
-//
-//        @Override
-//        protected BlockState toBlockState(FluidState state)
-//        {
-//            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-//        }
-//
-//        @Override
-//        public boolean isStill(FluidState state)
-//        {
-//            return true;
-//        }
-//    };
-//
-//    public final FlowableFluid flowingFluid = new BaseFluid()
-//    {
-//        @Override
-//        public Fluid getFlowing()
-//        {
-//            return flowing;
-//        }
-//
-//        @Override
-//        public Fluid getStill()
-//        {
-//            return still;
-//        }
-//
-//        @Override
-//        protected boolean isInfinite()
-//        {
-//            return isInfinite;
-//        }
-//
-//        @Override
-//        public Item getBucketItem()
-//        {
-//            return item;
-//        }
-//
-//        @Override
-//        protected int getFlowSpeed(WorldView world)
-//        {
-//            return flowSpeed;
-//        }
-//
-//        @Override
-//        protected int getLevelDecreasePerBlock(WorldView world)
-//        {
-//            return levelDecrease;
-//        }
-//
-//        @Override
-//        public int getTickRate(WorldView world)
-//        {
-//            return tickRate;
-//        }
-//
-//        @Override
-//        protected BlockState toBlockState(FluidState state)
-//        {
-//            return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-//        }
-//
-//        @Override
-//        public boolean isStill(FluidState state)
-//        {
-//            return true;
-//        }
-//    };
 }

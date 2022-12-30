@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidFuelRegistry;
 import com.neep.neepmeat.fluid.FluidFactory;
+import com.neep.neepmeat.fluid.MeatFluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -74,13 +75,13 @@ public class NMFluids
     public static FlowableFluid STILL_C_MEAT;
     public static Item C_MEAT_BUCKET;
     public static Block C_MEAT;
-    public static OreFatFluidFactory C_MEAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "coarse_meat", false, 5, 2);
+    public static FluidFactory C_MEAT_FACTORY = new MeatFluidFactory(NeepMeat.NAMESPACE, "coarse_meat", false, 5, 2);
 
     public static FlowableFluid FLOWING_MEAT;
     public static FlowableFluid STILL_MEAT;
     public static Item MEAT_BUCKET;
     public static Block MEAT;
-    public static OreFatFluidFactory MEAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "meat", false, 5, 2);
+    public static FluidFactory MEAT_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "meat", false, 5, 2);
 
     public static FlowableFluid FLOWING_MILK;
     public static FlowableFluid STILL_MILK;
