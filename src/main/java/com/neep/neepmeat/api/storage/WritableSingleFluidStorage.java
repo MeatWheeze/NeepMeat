@@ -1,6 +1,8 @@
 package com.neep.neepmeat.api.storage;
 
+import com.neep.neepmeat.fluid.MixableFluid;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
@@ -42,7 +44,36 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
     @Override
     public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
     {
-        return super.insert(insertedVariant, maxAmount, transaction);
+        StoragePreconditions.notBlankNotNegative(insertedVariant, maxAmount);
+
+
+        if ((insertedVariant.isOf(variant.getFluid()) || variant.isBlank()) && canInsert(insertedVariant))
+        {
+            long insertedAmount = Math.min(maxAmount, getCapacity(insertedVariant) - amount);
+
+            if (insertedAmount > 0)
+            {
+                updateSnapshots(transaction);
+
+                if (variant.isBlank())
+                {
+                    variant = insertedVariant;
+                    amount = insertedAmount;
+                }
+                else
+                {
+                    if (MixableFluid.canVariantsMix(variant, insertedVariant))
+                    {
+                       variant = ((MixableFluid) variant.getFluid()).mixNbt(variant, amount, insertedVariant, insertedAmount);
+                    }
+
+                    amount += insertedAmount;
+                }
+
+                return insertedAmount;
+            }
+        }
+        return 0;
     }
 
     protected void onFinalCommit()

@@ -7,9 +7,11 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
@@ -35,8 +37,20 @@ public class MeatFluidFactory extends FluidFactory
     public abstract class MixableMain extends FluidFactory.Main implements MixableFluid
     {
         @Override
-        public void mixNbt(FluidVariant thisVariant, long thisAmount, FluidVariant otherVariant, long otherAmount)
+        public FluidVariant mixNbt(FluidVariant thisVariant, long thisAmount, FluidVariant otherVariant, long otherAmount)
         {
+            NbtCompound nbt = new NbtCompound();
+
+            // Treat hunger and saturation as intrinsic properties.
+            float hunger1 = MeatFluidHelper.getHunger(thisVariant);
+            float hunger2 = MeatFluidHelper.getHunger(otherVariant);
+            MeatFluidHelper.setHunger(nbt, ((hunger1 * thisAmount + hunger2 * otherAmount) / (float) (thisAmount + otherAmount)));
+
+            float sat1 = MeatFluidHelper.getSaturation(thisVariant);
+            float sat2 = MeatFluidHelper.getSaturation(otherVariant);
+            MeatFluidHelper.setSaturation(nbt, ((sat1 * thisAmount + sat2 * otherAmount) / (float) (thisAmount + otherAmount)));
+
+            return FluidVariant.of(this, nbt);
         }
 
         @Override
