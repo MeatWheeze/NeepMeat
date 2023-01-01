@@ -16,6 +16,7 @@ public class ItemRegistry
 
     public static Item queueItem(String namespace, IMeatItem item)
     {
+        MeatLib.assertActive(item);
         if (!(item instanceof Item))
         {
             throw new IllegalArgumentException("tried to queue a non-item for item registration");
@@ -25,6 +26,7 @@ public class ItemRegistry
 
     public static Item queueItem(IMeatItem item)
     {
+        MeatLib.assertActive(item);
         if (!(item instanceof Item))
         {
             throw new IllegalArgumentException("tried to queue a non-item for item registration");
@@ -34,17 +36,19 @@ public class ItemRegistry
 
     public static Item queueItem(String path, Item item)
     {
+        MeatLib.assertActive(item);
         return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
     }
 
-    public static void init()
+    public static void flush()
     {
         for (Iterator<Map.Entry<Identifier, Item>> it = ITEMS.entrySet().iterator(); it.hasNext();)
         {
             Map.Entry<Identifier, Item> entry = it.next();
             // TODO: Remove the jank
-            Registry.register(Registry.ITEM, new Identifier(MeatLib.CURRENT_NAMESPACE, entry.getKey().getPath()), entry.getValue());
+            Registry.register(Registry.ITEM, entry.getKey(), entry.getValue());
             it.remove();
         }
+        ITEMS.clear();
     }
 }

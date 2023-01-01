@@ -1,7 +1,6 @@
 package com.neep.meatlib;
 
 import com.neep.meatlib.recipe.MeatRecipeManager;
-import com.neep.meatlib.recipe.MeatRecipeReloadListener;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.SoundRegistry;
@@ -19,10 +18,30 @@ public class MeatLib implements ModInitializer
     public static final String NAMESPACE = "meatlib";
     public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
     public static String CURRENT_NAMESPACE;
+    private static boolean active;
+
+    public static void assertActive(Object object)
+    {
+        if (!active) throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
+    }
 
     public static void setNamespace(String string)
     {
+        if (active) throw new IllegalStateException();
         CURRENT_NAMESPACE = string;
+        active = true;
+    }
+
+    public static void flush()
+    {
+        if (!active) throw new IllegalStateException();
+
+        BlockRegistry.flush();
+        ItemRegistry.flush();
+
+        CURRENT_NAMESPACE = null;
+        active = false;
+
     }
 
     public static BlockApiLookup<Void, Void> VOID_LOOKUP =
@@ -31,8 +50,6 @@ public class MeatLib implements ModInitializer
     @Override
     public void onInitialize()
     {
-        BlockRegistry.init();
-        ItemRegistry.init();
         SoundRegistry.init();
 
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());

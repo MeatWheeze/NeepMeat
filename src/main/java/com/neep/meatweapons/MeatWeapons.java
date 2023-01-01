@@ -1,23 +1,18 @@
 package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.item.BaseCraftingItem;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.*;
-import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
@@ -67,7 +62,7 @@ public class MeatWeapons implements ModInitializer
 
         MeatLib.setNamespace(NAMESPACE);
         new MWItems();
-        ItemRegistry.init();
+        MeatLib.flush();
         MWParticles.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
