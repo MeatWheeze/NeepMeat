@@ -124,7 +124,7 @@ public class NMBlocks
     public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", 64, false, FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", 64, false, FLUID_PIPE_SETTINGS));
-    public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("collector", 64, false, FLUID_PIPE_SETTINGS));
+    public static Block COLLECTOR = BlockRegistry.queue(new AlembicBlock("collector", 64, false, FLUID_PIPE_SETTINGS));
     public static Block ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", 64, false, BRASS_BLOCKS));
     public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
