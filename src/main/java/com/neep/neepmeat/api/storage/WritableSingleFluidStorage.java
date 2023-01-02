@@ -41,13 +41,18 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
         return capacity;
     }
 
+    protected boolean variantsCompatible(FluidVariant insertedVariant)
+    {
+        return insertedVariant.equals(variant)
+                || MixableFluid.canVariantsMix(variant, insertedVariant) && insertedVariant.isOf(variant.getFluid());
+    }
+
     @Override
     public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
     {
         StoragePreconditions.notBlankNotNegative(insertedVariant, maxAmount);
 
-
-        if ((insertedVariant.isOf(variant.getFluid()) || variant.isBlank()) && canInsert(insertedVariant))
+        if ((variantsCompatible(insertedVariant) || variant.isBlank()) && canInsert(insertedVariant))
         {
             long insertedAmount = Math.min(maxAmount, getCapacity(insertedVariant) - amount);
 
