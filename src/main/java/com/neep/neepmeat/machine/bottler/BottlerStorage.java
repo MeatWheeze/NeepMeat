@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.nbt.NbtCompound;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -15,8 +14,6 @@ public class BottlerStorage implements NbtSerialisable
 {
     private final BottlerBlockEntity parent;
     private final WritableStackStorage itemStorage;
-
-//    private final WritableSingleFluidStorage fluidStorage;
 
     private Storage<FluidVariant> fillingStorage = null;
 
@@ -28,8 +25,7 @@ public class BottlerStorage implements NbtSerialisable
             @Override
             protected boolean canInsert(ItemVariant variant)
             {
-                Storage<FluidVariant> storage = FluidStorage.ITEM.find(variant.toStack(), ContainerItemContext.withInitial(variant.toStack()));
-                return super.canInsert(variant) && storage != null;
+                return super.canInsert(variant);
             }
 
             @Override
@@ -39,7 +35,6 @@ public class BottlerStorage implements NbtSerialisable
                 super.onFinalCommit();
             }
         };
-//        fluidStorage = new InternalFluidStorage(0, parent::sync);
     }
 
     public void updateFillingStorage()

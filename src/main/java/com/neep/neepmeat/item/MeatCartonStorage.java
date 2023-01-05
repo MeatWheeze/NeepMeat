@@ -46,7 +46,8 @@ public class MeatCartonStorage implements InsertionOnlyStorage<FluidVariant>
             NbtCompound nbt = MeatFluidHelper.copyRootRounded(new NbtCompound(), resource.getNbt());
             ItemVariant newVariant = ItemVariant.of(fullitem, nbt);
 
-            if (context.exchange(newVariant, 1, transaction) == 1)
+            long exc = context.exchange(newVariant, 1, transaction);
+            if (exc == 1)
             {
                 return insertableAmount;
             }
