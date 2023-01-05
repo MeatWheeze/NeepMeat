@@ -2,19 +2,24 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidFuelRegistry;
+import com.neep.neepmeat.api.processing.MeatFluidHelper;
 import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.fluid.MeatFluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
+import com.neep.neepmeat.item.MeatCartonItem;
+import com.neep.neepmeat.item.MeatCartonStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluids
@@ -199,6 +204,11 @@ public class NMFluids
                 new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_P_MILK), FluidConstants.BOTTLE));
         FluidStorage.combinedItemApiProvider(NMItems.CARTON).register(context ->
                 new EmptyItemFluidStorage(context, NMItems.MILK_CARTON, NMFluids.STILL_P_MILK, FluidConstants.BOTTLE));
+
+//        FluidStorage.combinedItemApiProvider(NMItems.MILK_CARTON).register(context ->
+//                new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_P_MILK), FluidConstants.BOTTLE));
+        FluidStorage.combinedItemApiProvider(NMItems.CARTON).register(context ->
+                new MeatCartonStorage(context, NMItems.CARTON, NMItems.MEAT_CARTON, NMFluids.STILL_C_MEAT, FluidConstants.INGOT));
 
         FluidStorage.combinedItemApiProvider(Items.MILK_BUCKET).register(context ->
                 new FullItemFluidStorage(context, Items.BUCKET, FluidVariant.of(NMFluids.STILL_MILK), FluidConstants.BUCKET));
