@@ -16,7 +16,9 @@
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
         {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"},
-        {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"}
+        {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"},
+        {"type": "page", "id": "item_mincer", "icon": "neepmeat:small_mincer", "text": "Small Mincer"},
+        {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
     ]},
     {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Fluid Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
@@ -108,6 +110,18 @@
       {"type": "text", "text": "The Bottler automatically inserts fluids from a tank below into item containers."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "When active, this machine will move fluid from a tank placed directly below into the item in its inventory. Fluid container items can be inserted or removed with hoppers or by right-clicking. Once filled, items will be ejected from the front of the machine into tubes or a container. A running motor must be connected for this machine to function."}
+    ]},
+    {"id": "small_mincer", "contents": [
+      {"type": "text", "text": "Small Mincer\n", "bold": true},
+      {"type": "text", "text": "The Small Mincer squeezes food items into a coarse meat slurry. The quality of the resulting substance is determined by the quality of the inserted meat."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "Items can be inserted through hoppers or pipes or by dropping them into the hopper. Coarse meat is accessible by pipes on the machine's front face. A running motor must be connected for this machine to function.\n\nEach meat item produces 111mb of Meat Slurry, but the hunger and saturation values of the food are retained by the fluid. Slurries of differing quality can be mixed in any NEEPMeat fluid tank."}
+    ]},
+    {"id": "large_mincer", "contents": [
+      {"type": "text", "text": "Large Mincer\n", "bold": true},
+      {"type": "text", "text": "The Large Mincer provides a compact means of converting substrate organisms into industrial-grade meat."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "Substrate organisms must be inserted into the machine's awaiting jaws from above. Meat can be extracted from the lower block. A running motor must be connected to the base for this machine to function."}
     ]},
 
     {"id": "gland_potato", "contents": [
@@ -263,7 +277,9 @@
     ]},
     {"id": "heater", "contents": [
       {"type": "text", "text": "Heater\n", "bold": true},
-      {"type": "text", "text": "The Heater warms any furnace-like block that it faces, allowing it to smelt items without fuel. It can also oxidise copper blocks that are exposed to Patina Treatment. It must be supplied with an energetic fluid in order to function."}
+      {"type": "text", "text": "The Heater warms any furnace-like block that it faces, allowing it to smelt items without fuel. It can also oxidise copper blocks that are exposed to Patina Treatment. It must be supplied with an energetic fluid in order to function.\n"},
+      {"type": "text", "text": "Fluid Heating\n", "bold": true},
+      {"type": "text", "text": "When facing a Multi-Tank, fluids can be heated. This can be used to pasteurise Milk or to cook Meat Slurry. The power output of the heater influences the processing rate.\n"}
     ]},
     {"id": "surgery", "contents": [
       {"type": "text", "text": "Machine Surgery\n", "bold": true},
