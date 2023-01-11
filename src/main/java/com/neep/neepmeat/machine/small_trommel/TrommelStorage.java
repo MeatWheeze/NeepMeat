@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 
 import java.util.Objects;
 
-public class TrommelStorage implements NbtSerialisable, ImplementedRecipe.DummyInventory
+public class TrommelStorage implements NbtSerialisable
 {
     protected WritableSingleFluidStorage fluidInput;
     protected WritableSingleFluidStorage fluidOutput;
@@ -27,7 +27,8 @@ public class TrommelStorage implements NbtSerialisable, ImplementedRecipe.DummyI
             @Override
             protected boolean canInsert(FluidVariant variant)
             {
-                return OreFatRegistry.getFromVariant(variant) != null;
+                return true;
+//                return OreFatRegistry.getFromVariant(variant) != null;
             }
         };
 

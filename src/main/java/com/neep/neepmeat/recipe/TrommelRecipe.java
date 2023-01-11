@@ -41,7 +41,7 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
     public boolean matches(TrommelStorage inventory)
     {
         WritableSingleFluidStorage storage = inventory.input();
-        return fluidInput.test(storage) && fluidInput.amount() == storage.getAmount();
+        return fluidInput.test(storage) && fluidInput.amount() <= storage.getAmount();
     }
 
     public RecipeInput<Fluid> getFluidInput()
@@ -126,10 +126,10 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
         @Override
         public TrommelRecipe read(Identifier id, JsonObject json)
         {
-            JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
+            JsonObject fluidInputElement = JsonHelper.getObject(json, "input");
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
-            JsonObject fluidOutputElement = JsonHelper.getObject(json, "fluid_output");
+            JsonObject fluidOutputElement = JsonHelper.getObject(json, "output");
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, fluidOutputElement);
 
             return this.factory.create(id, fluidInput, fluidOutput);
