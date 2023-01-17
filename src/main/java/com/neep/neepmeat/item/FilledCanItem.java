@@ -9,7 +9,7 @@ public class FilledCanItem extends BaseItem
 {
     public FilledCanItem(String registryName, Settings settings)
     {
-        super(registryName, 0, settings);
+        super(registryName, settings);
     }
 
     @Override

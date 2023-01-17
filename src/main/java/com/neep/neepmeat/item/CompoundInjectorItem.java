@@ -1,10 +1,13 @@
 package com.neep.neepmeat.item;
 
+import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
@@ -26,23 +29,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class CompoundInjectorItem extends Item implements IMeatItem
+public class CompoundInjectorItem extends BaseItem
 {
-    protected final String registryName;
     public final int healsFor = 8; // Health replenished each use (discounting initial damage)
     public final int initialDamage = 2;
 
-    public CompoundInjectorItem(String name, FabricItemSettings settings)
+    public CompoundInjectorItem(final String registryName, FabricItemSettings settings)
     {
-          super(settings.maxDamage(2).maxDamageIfAbsent(2));
-          this.registryName = name;
+        super(registryName, CompoundInjectorItem::applyTooltip, settings.maxDamage(2).maxDamageIfAbsent(2));
         ItemRegistry.queueItem(this);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     @Override
@@ -113,12 +108,11 @@ public class CompoundInjectorItem extends Item implements IMeatItem
         return stack.getDamage() < this.getMaxDamage();
     }
 
-    @Override
-    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
+
+    protected static void applyTooltip(Item item, List<Text> tooltip)
     {
-        super.appendTooltip(stack, world, tooltip, context);
-        tooltip.add(new TranslatableText(getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
-        tooltip.add(new TranslatableText(getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
+        tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
+        tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
     }
 
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)

@@ -8,7 +8,7 @@ public class BaseCraftingItem extends BaseItem implements IMeatItem
 
     public BaseCraftingItem(String registryName, int loreLines, Settings settings)
     {
-        super(registryName, loreLines, settings);
+        super(registryName, TooltipSupplier.simple(loreLines), settings);
         this.registryName = registryName;
         ItemRegistry.queueItem(this);
     }

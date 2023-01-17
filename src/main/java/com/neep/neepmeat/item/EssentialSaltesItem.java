@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
@@ -28,9 +29,9 @@ import java.util.List;
 
 public class EssentialSaltesItem extends BaseItem
 {
-    public EssentialSaltesItem(String registryName, int loreLines, Settings settings)
+    public EssentialSaltesItem(String registryName, TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, loreLines, settings);
+        super(registryName, tooltip, settings);
         ItemRegistry.queueItem(this);
     }
 

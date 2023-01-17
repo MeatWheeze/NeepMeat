@@ -2,6 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.mojang.datafixers.util.Pair;
 import com.neep.meatlib.item.BaseItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.MeatFluidHelper;
 import net.minecraft.client.item.TooltipContext;
@@ -26,9 +27,9 @@ import java.util.List;
 
 public class MeatCartonItem extends BaseItem
 {
-    public MeatCartonItem(String registryName, int loreLines, Settings settings)
+    public MeatCartonItem(String registryName, TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, loreLines, settings);
+        super(registryName, tooltip, settings);
     }
 
     @Override
