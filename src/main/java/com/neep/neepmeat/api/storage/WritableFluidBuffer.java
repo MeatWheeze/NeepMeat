@@ -89,16 +89,29 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
                 }
             }
 
-            if (StorageUtil.move(storage, buffer, variant -> true, Long.MAX_VALUE, null) > 0)
+            Transaction inner;
+            try (Transaction transaction = Transaction.openOuter())
             {
-                world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
-                return true;
-            }
+                inner = transaction.openNested();
+                if (StorageUtil.move(storage, buffer, variant -> true, Long.MAX_VALUE, inner) > 0)
+                {
+                    world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                    inner.commit();
+                    transaction.commit();
+                    return true;
+                }
+                inner.abort();
 
-            if (StorageUtil.move(buffer, storage, variant -> true, Long.MAX_VALUE, null) > 0)
-            {
-                world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
-                return true;
+                inner = transaction.openNested();
+                if (StorageUtil.move(buffer, storage, variant -> true, Long.MAX_VALUE, inner) > 0)
+                {
+                    world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                    inner.commit();
+                    transaction.commit();
+                    return true;
+                }
+                inner.abort();
+                transaction.abort();
             }
         }
         return false;

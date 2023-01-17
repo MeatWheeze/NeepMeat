@@ -262,6 +262,12 @@
   "item.neepmeat.projector": "Guide Projector",
   "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",
 
+  "item.neepmeat.pipette": "Pipette",
+  "item.neepmeat.pipette.full": "Pipette: %s (%s mb)",
+  "item.neepmeat.pipette.lore_0": "Holds up to one bucket of fluid.",
+  "item.neepmeat.pipette.lore_1": "Use on a block to extract or deposit fluid.",
+  "item.neepmeat.pipette.lore_2": "Shift-click to dump contents.",
+
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
   "item.neepmeat.flywheel": "Flywheel",
