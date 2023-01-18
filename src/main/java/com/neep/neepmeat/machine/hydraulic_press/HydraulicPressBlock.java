@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.hydraulic_press;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.util.MiscUtils;
@@ -20,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public HydraulicPressBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public HydraulicPressBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
     }
 
     @Nullable

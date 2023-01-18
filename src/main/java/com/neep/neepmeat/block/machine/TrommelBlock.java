@@ -2,6 +2,7 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
@@ -30,9 +31,9 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
             VoxelShapes.cuboid(0f, 0d, 0d, 1d, 1d, 1d)
     };
 
-    public TrommelBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public TrommelBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
 //        this.setDefaultState(getDefaultState().with(CENTRE, false).with(FACING, Direction.NORTH));
     }
 

@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -26,9 +28,9 @@ import java.util.function.Predicate;
 
 public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItemPipe
 {
-    public RouterBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public RouterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)

@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
-import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -33,9 +33,9 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
 {
     public static final DirectionProperty FACING = Properties.FACING;
 
-    public ItemDuctBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public ItemDuctBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
+        super(itemName, itemSettings, settings);
 
         this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }

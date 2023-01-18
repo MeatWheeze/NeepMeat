@@ -2,6 +2,8 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.machine.fluid.FluidBufferBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
@@ -46,9 +48,9 @@ public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProv
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(3, 0, 3, 13, 16, 13);
     public static final VoxelShape Z_SHAPE = Block.createCuboidShape(3, 3, 0, 13, 13, 16);
 
-    public FluidBufferBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidBufferBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

@@ -1,6 +1,8 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.BlockItem;
@@ -8,15 +10,13 @@ import net.minecraft.item.BlockItem;
 public class BaseStairsBlock extends StairsBlock implements IMeatBlock
 {
     protected String registryName;
-    protected int maxStack;
     protected BlockItem blockItem;
 
-    public BaseStairsBlock(BlockState baseBlockState, String blockName, int itemMaxStack, Settings settings)
+    public BaseStairsBlock(BlockState baseBlockState, String blockName, ItemSettings itemSettings, Settings settings)
     {
         super(baseBlockState, settings);
         this.registryName = blockName;
-        this.maxStack = itemMaxStack;
-        this.blockItem = new BaseBlockItem(this, blockName, itemMaxStack, false);
+        this.blockItem = itemSettings.create(this, blockName, itemSettings);
     }
 
     @Override

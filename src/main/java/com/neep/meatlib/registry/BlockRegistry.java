@@ -4,6 +4,8 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.block.BaseLeavesBlock;
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
@@ -54,9 +56,9 @@ public class BlockRegistry
         BLOCKS.clear();
     }
 
-    public static IMeatBlock createLogBlock(String name, boolean hasLore)
+    public static IMeatBlock createLogBlock(String name, TooltipSupplier tooltipSupplier)
     {
-        return new BaseColumnBlock(name, 64, hasLore, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD))
+        return new BaseColumnBlock(name, ItemSettings.block(), FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD))
         {
             @Override
             public TagKey<Block> getPreferredTool()

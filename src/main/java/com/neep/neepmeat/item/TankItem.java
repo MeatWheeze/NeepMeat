@@ -1,5 +1,7 @@
 package com.neep.neepmeat.item;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -14,14 +16,15 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.world.World;
 
+import javax.tools.Tool;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TankItem extends FluidComponentItem
 {
-    public TankItem(Block block, String registryName, int itemMaxStack, boolean hasLore)
+    public TankItem(Block block, String registryName, ItemSettings itemSettings)
     {
-        super(block, registryName, itemMaxStack, hasLore);
+        super(block, registryName, itemSettings);
     }
 
     @Override

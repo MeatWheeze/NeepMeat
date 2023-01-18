@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.assembler;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
@@ -34,9 +35,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public AssemblerBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public AssemblerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.neep.meatlib.block;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemPlacementContext;
@@ -12,14 +14,9 @@ public class BaseVertFacingBlock extends BaseBlock
 {
     public static final DirectionProperty FACING = Properties.VERTICAL_DIRECTION;
 
-    public BaseVertFacingBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseVertFacingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
-    }
-
-    public BaseVertFacingBlock(String registryName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
-    {
-        super(registryName, itemMaxStack, hasLore, factory, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Override

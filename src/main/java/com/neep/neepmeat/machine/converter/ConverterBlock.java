@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.converter;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -24,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public ConverterBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
+    public ConverterBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Override

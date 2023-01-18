@@ -1,6 +1,6 @@
 package com.neep.meatlib.block;
 
-import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.item.BlockItem;
@@ -10,15 +10,13 @@ import net.minecraft.tag.TagKey;
 public class BaseWallBlock extends WallBlock implements IMeatBlock
 {
     protected String registryName;
-    protected int maxStack;
     protected BlockItem blockItem;
 
-    protected BaseWallBlock(String blockName, int itemMaxStack, Settings settings)
+    protected BaseWallBlock(String blockName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
         this.registryName = blockName;
-        this.maxStack = itemMaxStack;
-        this.blockItem = new BaseBlockItem(this, blockName, itemMaxStack, false);
+        this.blockItem = itemSettings.getFactory().create(this, blockName, itemSettings);
     }
 
     public TagKey<Block> getWallTag()

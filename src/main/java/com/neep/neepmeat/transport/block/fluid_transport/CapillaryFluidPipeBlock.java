@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -27,9 +29,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe, ICapillaryPipe
 {
-    public CapillaryFluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    public CapillaryFluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, factory, settings);
+        super(itemName, itemSettings, settings);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)

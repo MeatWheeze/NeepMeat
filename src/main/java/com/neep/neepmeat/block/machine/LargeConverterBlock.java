@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
@@ -30,9 +31,9 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
 {
     public static final EnumProperty<Type> TYPE = EnumProperty.of("type", Type.class);
 
-    public LargeConverterBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
+    public LargeConverterBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(TYPE, Type.UNASSEMBLED));
     }
 

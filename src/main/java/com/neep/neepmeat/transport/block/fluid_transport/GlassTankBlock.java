@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.machine.fluid.GlassTankBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -15,9 +17,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class GlassTankBlock extends TankBlock implements BlockEntityProvider
 {
-    public GlassTankBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public GlassTankBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

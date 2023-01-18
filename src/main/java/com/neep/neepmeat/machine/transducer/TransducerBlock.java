@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.transducer;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
@@ -14,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class TransducerBlock extends BaseBlock implements BlockEntityProvider
 {
-    public TransducerBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public TransducerBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Nullable

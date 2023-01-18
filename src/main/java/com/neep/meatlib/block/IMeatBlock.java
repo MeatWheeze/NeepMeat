@@ -1,7 +1,7 @@
 package com.neep.meatlib.block;
 
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.datagen.tag.BlockTagProvider;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
@@ -51,6 +51,6 @@ public interface IMeatBlock extends ItemConvertible
     @FunctionalInterface
     interface ItemFactory
     {
-        BlockItem get(Block block, String name, int stack, boolean hasLore);
+        BlockItem create(Block block, String name, ItemSettings settings);
     }
 }

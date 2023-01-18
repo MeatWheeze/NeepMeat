@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -41,9 +42,9 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
             Block.createCuboidShape(3, 20, 3, 13, 22, 13)
             );
 
-    public AlloyKilnBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public AlloyKilnBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemSettings, settings);
         this.setDefaultState(getStateManager().getDefaultState().with(LIT, false));
     }
 

@@ -5,6 +5,8 @@ import com.neep.meatlib.block.BaseSlabBlock;
 import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.datagen.NMRecipes;
 import net.minecraft.block.*;
@@ -32,14 +34,14 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
     public final IMeatBlock stairs;
     public final IMeatBlock slab;
 
-    public MetalScaffoldingBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public MetalScaffoldingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
 
-        stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
+        stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemSettings, settings);
         BlockRegistry.queue(stairs);
 
-        slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
+        slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemSettings, settings);
         BlockRegistry.queue(slab);
 
         this.registryName = registryName;

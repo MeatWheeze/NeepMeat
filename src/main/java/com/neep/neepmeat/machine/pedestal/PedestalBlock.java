@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.pedestal;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
@@ -29,9 +30,9 @@ import java.util.Random;
 
 public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDataCable
 {
-    public PedestalBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public PedestalBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Override

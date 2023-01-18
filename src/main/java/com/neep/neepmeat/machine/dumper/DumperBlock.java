@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.dumper;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
@@ -34,9 +36,9 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
             Block.createCuboidShape(2, 0, 2, 14, 7, 14),
             BooleanBiFunction.ONLY_FIRST);
 
-    public DumperBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public DumperBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Override

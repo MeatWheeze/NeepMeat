@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.deployer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -18,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public DeployerBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public DeployerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

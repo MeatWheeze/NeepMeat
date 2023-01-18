@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.heater;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -20,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public HeaterBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
+    public HeaterBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

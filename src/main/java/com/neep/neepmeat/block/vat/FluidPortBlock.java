@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block.vat;
 
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.multiblock.IPortBlock;
 import com.neep.neepmeat.api.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -18,9 +19,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPortBlock extends VatCasingBlock implements IPortBlock<FluidVariant>, IVatComponent, BlockEntityProvider
 {
-    public FluidPortBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidPortBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Override

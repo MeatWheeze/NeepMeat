@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -33,9 +35,9 @@ import java.util.function.Supplier;
 
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    public PumpBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

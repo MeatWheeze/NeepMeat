@@ -1,6 +1,8 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.BlockItem;
 
@@ -13,7 +15,7 @@ public class BaseLeavesBlock extends LeavesBlock implements IMeatBlock
     {
         super(settings);
         this.registryName = name;
-        this.blockItem = new BaseBlockItem(this, registryName, 64, 0);
+        this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block());
     }
 
     @Override

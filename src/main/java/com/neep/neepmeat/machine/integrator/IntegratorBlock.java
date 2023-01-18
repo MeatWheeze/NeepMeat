@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.integrator;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
@@ -20,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, IDataCable
 {
-    public IntegratorBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public IntegratorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override
