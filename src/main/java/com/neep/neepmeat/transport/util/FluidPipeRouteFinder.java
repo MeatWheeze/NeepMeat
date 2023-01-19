@@ -114,6 +114,11 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
 
             if (offsetPipe != null && !offsetPipe.flag)
             {
+                // Ignore potential branch if no fluid can flow.
+                // This is necessary to allow parallel stop valves and check valves.
+                BlockState offsetState = world.getBlockState(offset);
+                if (!offsetPipe.canFluidFlow(connection, offsetState)) continue;
+
                 // Flag next pipe as visited
                 offsetPipe.flag = true;
                 setVisited(offset);
@@ -124,8 +129,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
 
                 if (offsetPipe.isSpecial())
                 {
-                    BlockState currentState = world.getBlockState(offset);
-                    filterStack.push(offsetPipe.getSpecial().getFlowFunction(world, connection, offset, currentState));
+                    filterStack.push(offsetPipe.getSpecial().getFlowFunction(world, connection, offset, offsetState));
                 }
                 else filterStack.push(PipeState.IDENTITY); // Default to identity function
 

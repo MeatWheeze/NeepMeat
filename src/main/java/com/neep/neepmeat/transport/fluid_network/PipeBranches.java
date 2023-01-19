@@ -57,6 +57,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
         // Initialise matrix
         PipeState.FilterFunction[][] matrix = (PipeState.FilterFunction[][]) Array.newInstance(PipeState.FilterFunction.class, size, size);
+        FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
@@ -86,7 +87,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
                     NodePos start = fromNode.get().getNodePos();
                     NodePos end = toNode.get().getNodePos();
 
-                    FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
                     finder.init(start, end);
                     finder.loop(100);
                     PipeState.FilterFunction function;

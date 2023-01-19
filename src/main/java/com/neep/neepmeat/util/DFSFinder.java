@@ -70,11 +70,7 @@ public abstract class DFSFinder<T>
 
     public void loop(int maxDepth)
     {
-        int oo = 0;
-        while (propagate(maxDepth))
-        {
-            ++oo;
-        }
+        while (propagate(maxDepth));
     }
 
     public boolean propagate(int maxDepth)
