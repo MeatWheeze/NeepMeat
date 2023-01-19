@@ -21,7 +21,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider
     @Override
     protected void generateTags()
     {
-        for (Map.Entry<Identifier, Block> entry : BlockRegistry.BLOCKS.entrySet())
+        for (Map.Entry<Identifier, Block> entry : BlockRegistry.REGISTERED_BLOCKS.entrySet())
         {
             if (entry.getValue() instanceof IMeatBlock meatBlock)
             {

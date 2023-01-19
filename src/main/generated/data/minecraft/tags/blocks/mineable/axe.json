@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "neepmeat:buffer",
+    "neepmeat:dumper",
+    "neepmeat:blood_bubble_log",
+    "neepmeat:blood_bubble_wood"
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "neepmeat:polished_metal_small_bricks"
+  },
+  "result": "neepmeat:polished_metal_small_bricks_slab",
+  "count": 2
+}

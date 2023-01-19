@@ -57,15 +57,15 @@ public class MeatRecipeProvider extends FabricRecipeProvider
     @Override
     protected void generateRecipes(Consumer<RecipeJsonProvider> exporter)
     {
-        BlockRegistry.BLOCKS.values().stream()
+        BlockRegistry.REGISTERED_BLOCKS.values().stream()
                 .filter(block -> block instanceof BaseBuildingBlock)
                 .forEach(block -> ((BaseBuildingBlock) block).generateRecipes(exporter));
 
-        BlockRegistry.BLOCKS.values().stream()
+        BlockRegistry.REGISTERED_BLOCKS.values().stream()
                     .filter(block -> block instanceof BasePaintedBlock.PaintedBlock)
                     .forEach(block -> ((BasePaintedBlock.PaintedBlock) block).generateRecipe(exporter));
 
-        BlockRegistry.BLOCKS.values().stream()
+        BlockRegistry.REGISTERED_BLOCKS.values().stream()
                 .filter(block -> block instanceof MetalScaffoldingBlock)
                 .forEach(block -> ((MetalScaffoldingBlock) block).generateRecipe(exporter));
 

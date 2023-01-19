@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:smooth_stone"
+    },
+    "d": {
+      "item": "minecraft:light_blue_dye"
+    }
+  },
+  "result": {
+    "item": "neepmeat:smooth_tile_light_blue",
+    "count": 8
+  }
+}

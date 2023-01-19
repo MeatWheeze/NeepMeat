@@ -20,7 +20,7 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider
     @Override
     protected void generateBlockLootTables()
     {
-        for (Map.Entry<Identifier, Block> entry : BlockRegistry.BLOCKS.entrySet())
+        for (Map.Entry<Identifier, Block> entry : BlockRegistry.REGISTERED_BLOCKS.entrySet())
         {
             if (entry.getValue() instanceof IMeatBlock meatBlock)
             {
