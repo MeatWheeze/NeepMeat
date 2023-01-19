@@ -205,6 +205,7 @@ public class PipeNetwork
             };
 //            NetworkRebuilding.getExecutor().execute(runnable);
             runnable.run();
+            if (isValid()) PipeBranches.displayMatrix(this.nodeMatrix);
 //            StagedTransactions.getExecutor().execute(runnable);
         }
     }

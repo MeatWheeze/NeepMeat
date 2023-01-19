@@ -53,7 +53,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
     public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, Set<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
-        FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
         int size = nodes.size();
 
         // Initialise matrix
@@ -87,6 +86,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
                     NodePos start = fromNode.get().getNodePos();
                     NodePos end = toNode.get().getNodePos();
 
+                    FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
                     finder.init(start, end);
                     finder.loop(100);
                     PipeState.FilterFunction function;

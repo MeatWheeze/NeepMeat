@@ -9,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.nio.channels.Pipe;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
@@ -17,7 +18,6 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
     protected PipeState.FilterFunction flowFunc;
     protected final Deque<PipeState.FilterFunction> filterStack = new ArrayDeque<>();
     protected final Deque<PipeState> pipeStack = new ArrayDeque<>();
-    protected final Deque<Direction> directions = new ArrayDeque<>();
     protected PipeState currentPipe;
     protected final World world;
     protected final IndexedHashMap<BlockPos, PipeState> pipes;
@@ -49,7 +49,6 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
         super.reset();
         filterStack.clear();
         pipeStack.clear();
-        directions.clear();
         flowFunc = PipeState::identity;
         currentPipe = null;
     }
@@ -59,34 +58,44 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
         reset();
         this.start = start;
         this.end = end;
-        prepare(start.pos);
+        prepare(start.pos, start.face.getOpposite());
     }
 
     @Override
-    public void prepare(BlockPos start)
+    public void prepare(BlockPos start, Direction startDir)
     {
-        super.prepare(start);
+        super.prepare(start, startDir);
         currentPipe = pipes.get(start);
-        directions.push(this.start.face);
+//        directions.push(this.start.face);
         pipeStack.push(pipes.get(start));
         pipes.forEach(p -> p.flag = false);
-        if (!processPipe(start, pipeStack.peek(), directions.peek(), world, filterStack))
-        {
-        }
+        filterStack.push(PipeState.IDENTITY);
+//        if (!processPipe(start, pipeStack.peek(), directions.peek(), world, filterStack))
+//        {
+//            // This should cause an early return if the starting pipe is blocked.
+//            // I hate myself for working around my own system
+//            for (PipeState.FilterFunction function : filterStack)
+//            {
+//                flowFunc = flowFunc.andThen(function);
+//            }
+//            pushBlock(end.pos);
+//            setResult(start, flowFunc);
+//        }
     }
 
-    @Override
-    public BlockPos popBlock()
-    {
-        return super.popBlock();
-    }
-
-    private BlockPos offset;
+    private BlockPos.Mutable offset = new BlockPos.Mutable();
     private PipeState offsetPipe;
 
     @Override
-    protected State processPos(BlockPos current)
+    protected State processPos(BlockPos current, Direction fromDir)
     {
+        currentPipe = pipeStack.peek();
+
+        if (!canFlow(current, currentPipe, fromDir, world, filterStack))
+        {
+            return State.FAIL;
+        }
+
         if (current.equals(end.pos))
         {
             for (PipeState.FilterFunction function : filterStack)
@@ -97,55 +106,54 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
             return State.SUCCESS;
         }
 
-        currentPipe = pipeStack.peek();
-
-        // Find an unvisited adjacent vertex and push it
+        // Find the first non-visited adjacent vertex and push it.
         for (Direction connection : currentPipe.getConnections())
         {
-            offset = current.offset(connection);
+            offset.set(current, connection);
             offsetPipe = currentPipe.getAdjacent(connection);
 
             if (offsetPipe != null && !offsetPipe.flag)
             {
-
                 // Flag next pipe as visited
                 offsetPipe.flag = true;
                 setVisited(offset);
 
-                if (!processPipe(offset, offsetPipe, connection, world, filterStack)) continue;
-
-                pushBlock(offset);
+                // Push next vertex to the stack
+                pushBlock(offset, connection);
                 pipeStack.push(offsetPipe);
-                directions.push(connection);
 
-                // Move to the new vertex, temporarily ignore all other connections
+                if (offsetPipe.isSpecial())
+                {
+                    BlockState currentState = world.getBlockState(offset);
+                    filterStack.push(offsetPipe.getSpecial().getFlowFunction(world, connection, offset, currentState));
+                }
+                else filterStack.push(PipeState.IDENTITY); // Default to identity function
+
+                // Temporarily ignore all other connections
                 return State.CONTINUE;
             }
         }
 
+        // Remove the current vertex from the stack.
         popBlock();
+        popDir();
         pipeStack.pop();
-        directions.pop();
         filterStack.pop();
 
         return State.CONTINUE;
     }
 
-    private static boolean processPipe(BlockPos pos, PipeState pipe, Direction direction, World world, Deque<PipeState.FilterFunction> filterStack)
+    private static boolean canFlow(BlockPos pos, PipeState pipe, Direction direction, World world, Deque<PipeState.FilterFunction> filterStack)
     {
         // Check if pipe can transfer fluid in the opposite direction
         BlockState currentState = world.getBlockState(pos);
-        if (!pipe.canFluidFlow(direction, currentState))
-        {
-            return false;
-        }
+        return pipe.canFluidFlow(direction, currentState);
 
         // Check if pipe has a special flow function.
-        if (pipe.isSpecial())
-        {
-            filterStack.push(pipe.getSpecial().getFlowFunction(world, direction, pos, currentState));
-        }
-        else filterStack.push(PipeState::identity); // Default to identity function
-        return true;
+//        if (pipe.isSpecial())
+//        {
+//            filterStack.push(pipe.getSpecial().getFlowFunction(world, direction, pos, currentState));
+//        }
+//        else filterStack.push(PipeState.IDENTITY); // Default to identity function
     }
 }

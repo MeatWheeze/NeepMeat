@@ -30,12 +30,12 @@ public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityPro
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (!world.isClient())
-        {
-            Direction facing = state.get(FACING);
-            System.out.println(FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pos, facing)).get());
-        }
-        return ActionResult.SUCCESS;
+//        if (!world.isClient())
+//        {
+//            Direction facing = state.get(FACING);
+//            System.out.println(FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pos, facing)).get());
+//        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
