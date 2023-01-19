@@ -28,6 +28,7 @@ import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.machine.heater.HeaterBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
@@ -186,6 +187,8 @@ public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("c
 
     public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
 
+    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(1)), FLUID_MACHINE_SETTINGS));
+
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), FabricBlockSettings.copyOf(Blocks.HOPPER)));
     public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
@@ -232,7 +235,7 @@ public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("c
 
     protected static ItemSettings block()
     {
-        return block();
+        return ItemSettings.block();
     }
 }
 

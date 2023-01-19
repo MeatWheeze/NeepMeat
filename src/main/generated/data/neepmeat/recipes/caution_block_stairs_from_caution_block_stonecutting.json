@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "neepmeat:caution_block"
-  },
-  "result": "neepmeat:caution_block_stairs",
-  "count": 1
-}

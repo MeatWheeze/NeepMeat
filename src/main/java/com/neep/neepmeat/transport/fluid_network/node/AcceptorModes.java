@@ -37,6 +37,11 @@ public enum AcceptorModes
         return this == INSERT_ONLY || this == INSERT_EXTRACT || this == PULL;
     }
 
+    public boolean canFlow()
+    {
+        return this != NONE;
+    }
+
     public boolean canExtract()
     {
         return this == EXTRACT_ONLY || this == INSERT_EXTRACT || this == PUSH;
