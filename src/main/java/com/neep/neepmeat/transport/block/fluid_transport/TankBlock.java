@@ -2,8 +2,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.BlockEntityProvider;

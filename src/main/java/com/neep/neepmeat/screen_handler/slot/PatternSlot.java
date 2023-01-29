@@ -32,6 +32,12 @@ public class PatternSlot extends Slot
     }
 
     @Override
+    public void setStack(ItemStack stack)
+    {
+        super.setStack(stack);
+    }
+
+    @Override
     public ItemStack insertStack(ItemStack stack, int amount)
     {
         ItemStack thisStack = stack.copy();
