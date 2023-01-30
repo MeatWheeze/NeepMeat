@@ -89,44 +89,31 @@ public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockE
             matrices.scale(-1, -1, 1);
         }
 
-//        for (Direction direction : Direction.values())
-        {
-            QuadEmitter emitter = renderer.meshBuilder().getEmitter();
+        QuadEmitter emitter = renderer.meshBuilder().getEmitter();
 
-//            if (direction.getAxis().isVertical())
-//            {
-//                emitter.square(direction, endXZ, endXZ, 1 - endXZ, startXYZ, direction == Direction.UP ? 1 - dist : startY);
-//            }
-//            else
-//            {
-//                emitter.square(direction, endXZ, startXYZ, startXYZ, dist, endXZ);
-//            }
+        emitter.square(Direction.NORTH, 0.1f, 0.1f, 0.9f, dist, 0.1f);
+        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+        emitter.spriteColor(0, -1, -1, -1, -1);
+        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
 
-            emitter.square(Direction.NORTH, 0.1f, 0.1f, 0.9f, dist, 0.1f);
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+        emitter.square(Direction.SOUTH, 0.1f, 0.1f, 0.9f, dist, 0.55f);
+        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+        emitter.spriteColor(0, -1, -1, -1, -1);
+        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
 
-            emitter.square(Direction.SOUTH, 0.1f, 0.1f, 0.9f, dist, 0.55f);
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+        emitter.square(Direction.EAST, 0.55f, 0.1f, 0.9f, dist, 0.1f);
+        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+        emitter.spriteColor(0, -1, -1, -1, -1);
+        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
 
-            emitter.square(Direction.EAST, 0.55f, 0.1f, 0.9f, dist, 0.1f);
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+        emitter.square(Direction.WEST, 0.1f, 0.1f, 1 - 0.55f, dist, 0.1f);
+        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+        emitter.spriteColor(0, -1, -1, -1, -1);
+        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
 
-            emitter.square(Direction.WEST, 0.1f, 0.1f, 1 - 0.55f, dist, 0.1f);
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-
-            emitter.square(Direction.UP, 0.1f, 0.55f, 0.9f, 0.9f, 1 - dist);
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-
-        }
+        emitter.square(Direction.UP, 0.1f, 0.55f, 0.9f, 0.9f, 1 - dist);
+        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+        emitter.spriteColor(0, -1, -1, -1, -1);
+        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
     }
 }
