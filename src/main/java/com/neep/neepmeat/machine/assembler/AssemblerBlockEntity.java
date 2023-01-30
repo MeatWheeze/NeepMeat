@@ -192,9 +192,9 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         spinTicks = Math.max(0, spinTicks - 1);
         if (prevSpinTicks == 1 && spinTicks == 0) sync();
 
-        if (getRunningRate() < 0.05) return;
+        if (getPUPower() < 0.05) return;
 
-        increment = MathHelper.lerp(getRunningRate(), MIN_INCREMENT, MAX_INCREMENT);
+        increment = (float) MathHelper.lerp(getPUPower(), MIN_INCREMENT, MAX_INCREMENT);
 
         progress = Math.min(MAX_PROGRESS, progress + increment);
 

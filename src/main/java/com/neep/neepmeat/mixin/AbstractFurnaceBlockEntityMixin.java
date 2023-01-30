@@ -106,7 +106,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
     @Inject(method = "tick", at = @At(value = "HEAD"))
     private static void tick(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci)
     {
-        // Increment cookTime twice per tick if the heat multiplier rises above a certain value.
+        // Increment cookTime twice per tick if the heat baseEnergy rises above a certain value.
         float multiplier = blockEntity.getHeat();
         if (blockEntity.isCooking())
         {

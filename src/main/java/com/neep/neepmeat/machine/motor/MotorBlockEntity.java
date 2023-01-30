@@ -3,27 +3,29 @@ package com.neep.neepmeat.machine.motor;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.PowerUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorBlockEntity
 {
-    public boolean starting;
     public float rotorSpeed = 1f; // rad per tick
     public float currentSpeed = 0;
     public float angle;
+
+    protected float loadTorque;
 
     protected BlockApiCache<Void, Void> cache = null;
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.maxRunningRate = FluidConstants.BUCKET / 2;
     }
 
     public MotorBlockEntity(BlockPos pos, BlockState state)
@@ -47,13 +49,15 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     }
 
     @Override
-    protected void onRateChange()
+    protected void onPowerChange()
     {
-        super.onRateChange();
+
         if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            motorised.setInputPower(getRunningRate());
+            // TODO: Decide on float or double
+            motorised.setInputPower((float) this.getMechPUPower());
         }
+        super.onPowerChange();
     }
 
     @Override
@@ -73,6 +77,8 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     {
         IMotorBlockEntity.super.update(world, pos, fromPos, state);
         enabled = (!world.isReceivingRedstonePower(pos));
+        loadTorque = updateLoadTorque();
+        sync();
     }
 
     @Override
@@ -81,20 +87,36 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         return cache;
     }
 
-    public static float rateToSpeed(float rate)
-    {
-        return rate * 20;
-    }
-
     @Override
-    public float getOutputPower()
+    public double getMechPUPower()
     {
-        return getRunningRate();
+        return getPUPower();
     }
 
     @Override
     public float getSpeed()
     {
-        return MotorBlockEntity.rateToSpeed(getRunningRate());
+        double P = PowerUtils.perUnitToAbsWatt(getMechPUPower());
+        return  (float) (P / (loadTorque != 0 ? loadTorque : PowerUtils.MOTOR_TORQUE_LOSS));
+    }
+
+    @Override
+    public long getMaxInsert()
+    {
+        return FluidConstants.BUCKET / 2;
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.putFloat("loadTorque", loadTorque);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        this.loadTorque = nbt.getFloat("loadTorque");
     }
 }

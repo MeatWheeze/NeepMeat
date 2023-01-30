@@ -1,3 +1,3 @@
 Buggs
 
-- Fix stop valves admitting fluid when opened and then closed.
+- [done] Fix stop valves admitting fluid when opened and then closed.

@@ -1,25 +1,22 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.processing.FluidFuelRegistry;
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.fluid.MeatFluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
-import com.neep.neepmeat.item.MeatCartonItem;
 import com.neep.neepmeat.item.MeatCartonStorage;
+import com.neep.neepmeat.util.PowerUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
-import net.minecraft.nbt.NbtCompound;
 
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluids
@@ -188,9 +185,9 @@ public class NMFluids
         PINKDRINK_BUCKET = PINKDRINK_FACTORY.registerItem();
         PINKDRINK = PINKDRINK_FACTORY.registerBlock();
 
-        FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3, true, null);
-        FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
-        FluidFuelRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 7, true, STILL_WORK_FLUID);
+        FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3 * PowerUtils.DROPLET_POWER, true, null);
+        FluidEnegyRegistry.getInstance().register(Fluids.WATER, 1 * PowerUtils.DROPLET_POWER, false, null);
+        FluidEnegyRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 7 * PowerUtils.DROPLET_POWER, true, STILL_WORK_FLUID);
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);

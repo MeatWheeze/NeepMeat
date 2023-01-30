@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.PowerUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,7 +17,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -39,7 +39,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
 
         if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
         {
-            player.sendMessage(Text.of(Float.toString(be.getRunningRate())), true);
+            player.sendMessage(PowerUtils.perUnitToText(be.getMechPUPower()), true);
         }
 
         return ActionResult.SUCCESS;

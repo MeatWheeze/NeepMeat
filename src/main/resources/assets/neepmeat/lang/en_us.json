@@ -5,6 +5,9 @@
 
   "message.neepmeat.shift_for_info": "Hold SHIFT for more info.",
 
+  "message.neepmeat.power": "Power: ",
+  "message.neepmeat.power_unit": "eJ/t",
+
   "block.neepmeat.polished_metal_bricks": "Polished Metal Bricks",
   "block.neepmeat.polished_metal_bricks_slab": "Polished Metal Bricks Slab",
   "block.neepmeat.polished_metal_bricks_stairs": "Polished Metal Bricks Stairs",
