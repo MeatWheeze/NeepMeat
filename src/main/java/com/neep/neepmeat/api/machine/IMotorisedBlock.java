@@ -1,7 +1,7 @@
 package com.neep.neepmeat.api.machine;
 
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
-import com.neep.neepmeat.util.PowerUtils;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import net.minecraft.util.math.Direction;
 
 public interface IMotorisedBlock

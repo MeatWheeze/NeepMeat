@@ -1,6 +1,7 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.machine.HeatableFurnace;
+import com.neep.neepmeat.machine.IHeatable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FurnaceBlock;
@@ -112,7 +113,8 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         {
             int cookTime = blockEntity.getCookTime();
             int total = blockEntity.getCookTimeTotal();
-            int tickIncrement = (int) Math.floor(multiplier * 3);
+            // Subtract 1 since the Vanilla method will increment the counter once after this
+            int tickIncrement = IHeatable.getFurnaceTickIncrement(multiplier) - 1;
             // The comparison in AbstractFurnaceBlockEntity uses ==
             blockEntity.setCookTime(Math.min(total - 1, cookTime + tickIncrement));
         }

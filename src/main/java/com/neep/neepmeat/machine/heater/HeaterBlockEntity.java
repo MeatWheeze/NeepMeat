@@ -71,7 +71,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         if (heatable != null)
         {
             float runningRate = (float) getPUPower();
-            if (this.getPUPower() > 0.05)
+            if (this.getPUPower() > 0.039)
             {
                 heatable.setBurning();
                 heatable.setHeat(runningRate);

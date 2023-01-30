@@ -19,4 +19,8 @@ public interface IHeatable
     void setHeat(float heat);
     float getHeat();
 
+    static int getFurnaceTickIncrement(float heat)
+    {
+        return  (int) Math.floor(heat * 3) + 1;
+    }
 }

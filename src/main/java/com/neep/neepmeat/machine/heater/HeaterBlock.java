@@ -3,8 +3,9 @@ package com.neep.neepmeat.machine.heater;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.util.ItemUtils;
-import com.neep.neepmeat.util.PowerUtils;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -71,7 +72,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof HeaterBlockEntity be)
             {
-                player.sendMessage(PowerUtils.perUnitToText(be.getPUPower()), true);
+                player.sendMessage(PowerUtils.perUnitToText(be.getPUPower()).append(", Furnace speed: " + IHeatable.getFurnaceTickIncrement((float) be.getPUPower()) + "x"), true);
             }
         }
         return ActionResult.SUCCESS;

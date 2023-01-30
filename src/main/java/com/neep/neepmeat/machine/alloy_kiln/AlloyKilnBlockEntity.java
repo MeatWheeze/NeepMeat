@@ -119,7 +119,7 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         {
             if (isCooking())
             {
-                int tickIncrement = (int) Math.floor(heatMultiplier * 3) + 1;
+                int tickIncrement = IHeatable.getFurnaceTickIncrement(heatMultiplier);
                 this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + tickIncrement);
             }
             else
