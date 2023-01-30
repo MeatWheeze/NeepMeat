@@ -303,6 +303,7 @@
   "item.neepmeat.can": "Can",
   "item.neepmeat.carton": "Carton",
   "item.neepmeat.milk_carton": "Milk Carton",
+  "item.neepmeat.milk_carton.lore_0": "Clears effects and is stackable.",
   "item.neepmeat.meat_carton": "Meat Carton",
   "item.neepmeat.meat_carton.hunger": "Hunger: %s",
   "item.neepmeat.meat_carton.saturation": "Saturation: %s",
