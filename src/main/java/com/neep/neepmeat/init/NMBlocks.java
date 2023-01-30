@@ -100,6 +100,7 @@ public class NMBlocks
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", block(), FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
+    public static Block DIRTY_SINK = BlockRegistry.queue(new BaseBlock("dirty_sink", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
 
 //    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 

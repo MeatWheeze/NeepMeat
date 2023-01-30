@@ -17,7 +17,7 @@
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
         {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"},
         {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"},
-        {"type": "page", "id": "item_mincer", "icon": "neepmeat:small_mincer", "text": "Small Mincer"},
+        {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
     ]},
     {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Fluid Machines", "entries": [
