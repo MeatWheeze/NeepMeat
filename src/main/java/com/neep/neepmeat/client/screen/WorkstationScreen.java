@@ -58,6 +58,12 @@ public class WorkstationScreen extends HandledScreen<WorkstationScreenHandler>
     }
 
     @Override
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    {
+        this.textRenderer.draw(matrices, this.title, (float)this.playerInventoryTitleX, (float)this.titleY, 0x404040);
+    }
+
+    @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
