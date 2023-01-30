@@ -2,6 +2,8 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -9,6 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 public class TableControllerRenderer implements BlockEntityRenderer<TableControllerBlockEntity>
 {
     public TableControllerRenderer(BlockEntityRendererFactory.Context ctx)

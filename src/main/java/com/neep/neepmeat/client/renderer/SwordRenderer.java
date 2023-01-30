@@ -2,6 +2,8 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.item.AnimatedSword;
 import com.neep.neepmeat.item.SlasherItem;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -18,6 +20,7 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import java.awt.*;
 import java.util.Collections;
 
+@Environment(value = EnvType.CLIENT)
 public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
 {
     public SwordRenderer(AnimatedGeoModel<T> modelProvider)

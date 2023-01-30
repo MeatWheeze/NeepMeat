@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.crucible;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -19,6 +21,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
 public class CrucibleRenderer implements BlockEntityRenderer<CrucibleBlockEntity>
 {

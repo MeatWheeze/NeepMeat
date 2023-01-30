@@ -2,12 +2,15 @@ package com.neep.neepmeat.machine.trough;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
 public class TroughRenderer implements BlockEntityRenderer<TroughBlockEntity>
 {

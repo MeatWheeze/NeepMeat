@@ -5,6 +5,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.button.TextToggleWidget;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -18,6 +20,7 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
+@Environment(value = EnvType.CLIENT)
 public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
 {
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/assembler.png");

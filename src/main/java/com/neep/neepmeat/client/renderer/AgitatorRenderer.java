@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.block.machine.AgitatorBlock;
 import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -10,6 +12,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class AgitatorRenderer implements BlockEntityRenderer<AgitatorBlockEntity>
 {
     public AgitatorRenderer(BlockEntityRendererFactory.Context context)

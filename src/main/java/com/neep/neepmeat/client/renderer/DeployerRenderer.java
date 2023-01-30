@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -14,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 public class DeployerRenderer implements BlockEntityRenderer<DeployerBlockEntity>
 {
     public DeployerRenderer(BlockEntityRendererFactory.Context context)

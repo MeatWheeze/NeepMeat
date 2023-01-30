@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -10,6 +12,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 public class LinearOscillatorRenderer implements BlockEntityRenderer<LinearOscillatorBlockEntity>
 {
     public LinearOscillatorRenderer(BlockEntityRendererFactory.Context context)

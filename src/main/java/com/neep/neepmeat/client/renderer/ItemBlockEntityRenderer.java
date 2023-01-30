@@ -1,5 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -13,6 +15,7 @@ import net.minecraft.util.math.Vec3f;
 
 import java.util.function.Function;
 
+@Environment(value = EnvType.CLIENT)
 public class ItemBlockEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T>
 {
     private final Function<T, ItemStack> stackFunction;

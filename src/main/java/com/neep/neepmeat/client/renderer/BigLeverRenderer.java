@@ -6,6 +6,8 @@ import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.client.MinecraftClient;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.Vec3f;
 
 import java.util.Random;
 
+@Environment(value = EnvType.CLIENT)
 public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEntityRenderer<T>
 {
     Model model;

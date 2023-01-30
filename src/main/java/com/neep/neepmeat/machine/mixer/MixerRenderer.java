@@ -5,6 +5,8 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -16,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
 public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 {
@@ -47,7 +50,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.translate(0.5, 0.5, 0.5);
         matrices.scale(0.9f, 1, 0.9f);
         matrices.translate(-0.5, -0.5, -0.5);
-        MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, output, 0, outputEnd, outputEnd, 1);
+        MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, output, 0, outputEnd, outputEnd, 1, light);
 
         if (be.getCurrentRecipe() != null)
         {
@@ -56,8 +59,8 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 
             float scale = (-Math.abs(2 * progress - 1) + 1) * 0.1f;
 
-            MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var1, outputEnd, outputEnd + scale, outputEnd + scale, 1);
-            MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var2, outputEnd + scale, outputEnd + scale * 2, outputEnd + scale * 2, 1);
+            MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var1, outputEnd, outputEnd + scale, outputEnd + scale, 1, light);
+            MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var2, outputEnd + scale, outputEnd + scale * 2, outputEnd + scale * 2, 1, light);
         }
         matrices.pop();
         matrices.pop();

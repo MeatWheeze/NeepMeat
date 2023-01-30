@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.entity.EggEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
@@ -13,6 +15,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class EggEntityRenderer extends EntityRenderer<EggEntity>
 {
     public EggEntityRenderer(EntityRendererFactory.Context ctx, EntityModelLayer layer)
