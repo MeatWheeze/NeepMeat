@@ -224,6 +224,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     @Override
     public float getLoadTorque()
     {
-        return 200f;
+        return 400f;
     }
 }

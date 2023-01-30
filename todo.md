@@ -176,7 +176,12 @@ What about a VR helmet that, when used in conjunction with DHRUBGGS or high Enli
 Requires a mob surgery processor to be attached to the Surgery Machine
 
 - Extra mouth: Automatically eats food from your inventory
-- Step assist: Walk up full blocks
+- Extra leg joints: Walk up full blocks
+- Pineal eye: Reveals hidden things, increases rate of Enlightenment.
+- Subsidiary brain: A modified ward-brain that reduces the maddening effects of Enlightenment.
+- General-purpose tentacle: Works as a toggleable item magnet.
+- Blessing of Mr Skeltal: Permanent feather-falling
+- Control port: Allows upgrades to be controlled using a special item.
 
 ## Meat Refining
 
@@ -259,11 +264,6 @@ Certain recipes require the presence of extra blocks
 
 ### Upgrades
 
-- Pineal eye: Reveals hidden things, increases rate of Enlightenment.
-- Subsidiary brain: A modified ward-brain that reduces the maddening effects of Enlightenment.
-- General-purpose tentacle: Works as a toggleable item magnet.
-- Blessing of Mr Skeltal: Permanent feather-falling
-- Control port: Allows upgrades to be controlled using a special item.
 
 Morphogenetic Substrate is made by mixing Body Compound with Charged Work Fluid. It can be pressed into plates.
 
