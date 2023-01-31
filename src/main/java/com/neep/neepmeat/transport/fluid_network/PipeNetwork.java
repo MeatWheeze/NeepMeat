@@ -37,7 +37,7 @@ public class PipeNetwork
     private final BlockPos origin;
     public static int UPDATE_DISTANCE = 50;
 
-    public static short TICK_RATE = 3;
+    public static short TICK_RATE = 1;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
 
     private final HashSet<NodeSupplier> connectedNodes = new HashSet<>();
