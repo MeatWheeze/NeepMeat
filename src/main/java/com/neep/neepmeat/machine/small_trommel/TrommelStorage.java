@@ -69,4 +69,9 @@ public class TrommelStorage implements NbtSerialisable
     {
         return fluidOutput;
     }
+
+    public WritableStackStorage itemOutput()
+    {
+        return itemOutput;
+    }
 }

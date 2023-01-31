@@ -11,10 +11,12 @@ import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
@@ -26,14 +28,16 @@ import java.util.Optional;
 @SuppressWarnings("UnstableApiUsage")
 public class TrommelRecipe implements MeatRecipe<TrommelStorage>
 {
-    protected Identifier id;
-    protected RecipeInput<Fluid> fluidInput;
-    protected RecipeOutput<Fluid> fluidOutput;
+    protected final Identifier id;
+    protected final RecipeInput<Fluid> fluidInput;
+    protected final RecipeOutput<Fluid> fluidOutput;
+    protected final RecipeOutput<Item> itemOutput;
 
-    public TrommelRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput)
+    public TrommelRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput, RecipeOutput<Item> itemOutput)
     {
         this.fluidInput = fluidInput;
         this.fluidOutput = fluidOutput;
+        this.itemOutput = itemOutput;
         this.id = id;
     }
 
@@ -101,8 +105,10 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
         try (Transaction inner = transaction.openNested())
         {
             fluidOutput.update();
+            itemOutput.update();
 
             boolean bl1 = fluidOutput.insertInto(context.output(), FluidVariant::of, inner);
+            boolean bl2 = itemOutput.insertInto(context.itemOutput(), ItemVariant::of, inner);
 
             if (bl1)
             {
@@ -132,7 +138,10 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
             JsonObject fluidOutputElement = JsonHelper.getObject(json, "output");
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, fluidOutputElement);
 
-            return this.factory.create(id, fluidInput, fluidOutput);
+            JsonObject itemOutputElement = JsonHelper.getObject(json, "aux_output");
+            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, itemOutputElement);
+
+            return this.factory.create(id, fluidInput, fluidOutput, itemOutput);
         }
 
         @Override
@@ -140,8 +149,9 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
+            RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
-            return this.factory.create(id, fluidInput, fluidOutput);
+            return this.factory.create(id, fluidInput, fluidOutput, itemOutput);
         }
 
         @Override
@@ -149,12 +159,13 @@ public class TrommelRecipe implements MeatRecipe<TrommelStorage>
         {
             recipe.fluidInput.write(buf);
             recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.itemOutput.write(Registry.ITEM, buf);
         }
 
         @FunctionalInterface
         public interface RecipeFactory<T extends TrommelRecipe>
         {
-            T create(Identifier id, RecipeInput<Fluid> in, RecipeOutput<Fluid> out);
+            T create(Identifier id, RecipeInput<Fluid> in, RecipeOutput<Fluid> out, RecipeOutput<Item> itemOut);
         }
     }
 }

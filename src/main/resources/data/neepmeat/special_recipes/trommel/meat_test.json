@@ -1,0 +1,16 @@
+{
+  "type": "neepmeat:trommel",
+  "input": {
+    "resource": "minecraft:water",
+    "amount": 81000
+  },
+  "output": {
+    "resource": "neepmeat:meat",
+    "amount": 81000
+  },
+  "aux_output": {
+    "resource": "minecraft:iron_ingot",
+    "amount": 1,
+    "chance": 0.5
+  }
+}

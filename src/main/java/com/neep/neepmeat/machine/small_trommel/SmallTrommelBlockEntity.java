@@ -4,18 +4,22 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.TrommelRecipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -132,6 +136,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     @Override
     public boolean tick(IMotorBlockEntity motor)
     {
+        Direction facing = getCachedState().get(TrommelBlock.FACING);
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            ItemPipeUtil.storageToAny((ServerWorld) world, storage.itemOutput(), pos.offset(facing), facing, transaction);
+            transaction.commit();
+        }
+
         totalProgress = 30;
         currentFluid = !storage.fluidInput.getResource().isBlank() ? storage.fluidInput.getResource() : null;
         if (currentFluid != null && progressIncrement != INCREMENT_MIN)
@@ -153,6 +164,11 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     {
         this.workMultiplier = power;
         this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
+    }
+
+    public Storage<ItemVariant> getOutputItemStorage()
+    {
+        return storage.itemOutput;
     }
 
     public static class Structure extends BlockEntity

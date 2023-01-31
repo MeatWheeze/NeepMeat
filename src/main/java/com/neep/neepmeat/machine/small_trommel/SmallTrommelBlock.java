@@ -149,6 +149,12 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
 
         public static Storage<ItemVariant> getItemStorage(World world, BlockPos pos, BlockState state, @Nullable BlockEntity entity, Direction direction)
         {
+            Direction facing = state.get(FACING);
+            BlockPos offsetPos = pos.offset(facing.getOpposite());
+            if (direction == facing && world.getBlockEntity(offsetPos) instanceof SmallTrommelBlockEntity be)
+            {
+                return be.getOutputItemStorage();
+            }
             return null;
         }
     }
