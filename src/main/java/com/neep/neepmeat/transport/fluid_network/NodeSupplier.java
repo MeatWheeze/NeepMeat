@@ -5,6 +5,7 @@ import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -50,6 +51,15 @@ public class NodeSupplier implements Supplier<FluidNode>
     public FluidNode get()
     {
         return FluidNodeManager.getInstance(world).getOrCreateMap(pos.toChunkPos()).get(pos);
+    }
+
+    public void ifPresent(Consumer<FluidNode> consumer)
+    {
+        FluidNode node = get();
+        if (get() != null)
+        {
+            consumer.accept(node);
+        }
     }
 
     public boolean exists()

@@ -32,7 +32,9 @@ public class FluidNetworkManager extends PersistentState
 
     public NbtCompound getNetwork(UUID uuid)
     {
-        return unloaded.get(uuid);
+        NbtCompound nbt = unloaded.get(uuid);
+        unloaded.remove(uuid);
+        return nbt;
     }
 
     protected void readNetworks(NbtCompound nbt)
