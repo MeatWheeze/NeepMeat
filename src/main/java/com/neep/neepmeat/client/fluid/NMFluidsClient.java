@@ -37,6 +37,9 @@ public class NMFluidsClient
     public static final Identifier CLEAN_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/clean_ore_fat_still");
     public static final Identifier MEAT = new Identifier(NeepMeat.NAMESPACE, "block/meat_still");
     public static final Identifier MEAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/meat_flowing");
+
+    public static final Identifier TISSUE_SLURRY_STILL = new Identifier(NeepMeat.NAMESPACE, "block/tissue_slurry_still");
+    public static final Identifier TISSUE_SLURRY_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/tissue_slurry_flowing");
     public static final Identifier MILK = new Identifier(NeepMeat.NAMESPACE, "block/milk_still");
     public static final Identifier MILK_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/milk_flowing");
     public static final Identifier FEED = new Identifier(NeepMeat.NAMESPACE, "block/animal_feed_still");
@@ -104,19 +107,15 @@ public class NMFluidsClient
                 0x3657a2
         ));
 
-        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(
-                PINKDRINK,
-                PINKDRINK_FLOWING,
-                0xd28dab
-        ));
-
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_DIRTY_ORE_FAT, NMFluids.FLOWING_DIRTY_ORE_FAT, new SimpleFluidRenderHandler(DIRTY_ORE_FAT, DIRTY_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CLEAN_ORE_FAT, NMFluids.FLOWING_CLEAN_ORE_FAT, new SimpleFluidRenderHandler(CLEAN_ORE_FAT, CLEAN_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MEAT, NMFluids.FLOWING_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_C_MEAT, NMFluids.FLOWING_C_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_TISSUE_SLURRY, NMFluids.FLOWING_TISSUE_SLURRY, new SimpleFluidRenderHandler(TISSUE_SLURRY_STILL, TISSUE_SLURRY_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MILK, NMFluids.FLOWING_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_P_MILK, NMFluids.FLOWING_P_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_FEED, NMFluids.FLOWING_FEED, new SimpleFluidRenderHandler(FEED, FEED_FLOWING));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(PINKDRINK, PINKDRINK_FLOWING, 0xd28dab));
 
         FluidVariantRendering.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantRendering.register(NMFluids.FLOWING_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
@@ -151,6 +150,8 @@ public class NMFluidsClient
             registry.register(BLOOD_FLOWING);
             registry.register(MEAT);
             registry.register(MEAT_FLOWING);
+            registry.register(TISSUE_SLURRY_STILL);
+            registry.register(TISSUE_SLURRY_FLOWING);
             registry.register(MILK);
             registry.register(MILK_FLOWING);
             registry.register(FEED);

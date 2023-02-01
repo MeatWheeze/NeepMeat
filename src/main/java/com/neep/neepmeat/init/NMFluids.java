@@ -85,6 +85,12 @@ public class NMFluids
     public static Block MEAT;
     public static FluidFactory MEAT_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "meat", false, 5, 2);
 
+    public static FlowableFluid FLOWING_TISSUE_SLURRY;
+    public static FlowableFluid STILL_TISSUE_SLURRY;
+    public static Item TISSUE_SLURRY_BUCKET;
+    public static Block TISSUE_SLURRY;
+    public static FluidFactory TISSUE_SLURRY_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "tissue_slurry", false, 5, 2);
+
     public static FlowableFluid FLOWING_MILK;
     public static FlowableFluid STILL_MILK;
     public static Block MILK;
@@ -165,6 +171,11 @@ public class NMFluids
         FLOWING_MEAT = MEAT_FACTORY.registerFlowing();
         MEAT_BUCKET = MEAT_FACTORY.registerItem();
         MEAT = MEAT_FACTORY.registerBlock();
+
+        STILL_TISSUE_SLURRY = TISSUE_SLURRY_FACTORY.registerStill();
+        FLOWING_TISSUE_SLURRY = TISSUE_SLURRY_FACTORY.registerFlowing();
+        TISSUE_SLURRY_BUCKET = TISSUE_SLURRY_FACTORY.registerItem();
+        TISSUE_SLURRY = TISSUE_SLURRY_FACTORY.registerBlock();
 
         STILL_MILK = MILK_FACTORY.registerStill();
         FLOWING_MILK = MILK_FACTORY.registerFlowing();
