@@ -5,11 +5,16 @@ import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.world.World;
 
 @SuppressWarnings("unused")
 public class NMItems
@@ -58,7 +63,16 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
+    public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD))
+    {
+//        @Override
+//        public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
+//        {
+//            ItemStack stack1 = super.finishUsing(stack, world, user);
+//            if (user instanceof ServerPlayerEntity serverPlayer) EnlightenmentUtil.addEnlightenment(serverPlayer, 1000);
+//            return stack1;
+//        }
+    };
 
     public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 

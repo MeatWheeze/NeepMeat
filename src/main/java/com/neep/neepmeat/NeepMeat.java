@@ -1,6 +1,8 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.guide.GuideReloadListener;
@@ -58,6 +60,9 @@ public class NeepMeat implements ModInitializer
 		NMStatusEffects.init();
 		NMPotions.init();
 		MobSynthesisRegistry.initDefaults();
+
+//		EnlightenmentUtil.init();
+//		EnlightenmentEventManager.init();
 
 		ToolTransformPacket.registerReceiver();
 
