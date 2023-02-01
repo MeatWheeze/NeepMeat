@@ -13,10 +13,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
-import com.neep.neepmeat.recipe.AlloyKilnRecipe;
-import com.neep.neepmeat.recipe.EnlighteningRecipe;
-import com.neep.neepmeat.recipe.GrindingRecipe;
-import com.neep.neepmeat.recipe.PressingRecipe;
+import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -52,6 +49,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registerRecipeFiller(registry, SurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
+        registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
         registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
         registry.registerRecipeFiller(EnlighteningRecipe.class, NMrecipeTypes.ENLIGHTENING, EnlighteningDisplay::new);
@@ -76,6 +74,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.add(
                 new SurgeryCategory(),
                 new GrindingCategory(),
+                new TrommelCategory(),
                 new CompactingCategory(),
                 new MixingCategory(),
                 new AlloyKilnCategory(),
@@ -86,6 +85,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
+        registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
