@@ -1,0 +1,33 @@
+{
+  "parent": "neepmeat:main/place_grinder",
+  "display": {
+    "icon": {
+      "item": "neepmeat:meat_bucket"
+    },
+    "title": {
+      "translate": "advancements.neepmeat.main.obtain_meat_bucket.title"
+    },
+    "description": {
+      "translate": "advancements.neepmeat.main.obtain_meat_bucket.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "obtain_brain": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "player": [],
+        "items": [
+          {
+            "items": [
+              "neepmeat:meat_bucket"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
