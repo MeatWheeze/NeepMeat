@@ -96,9 +96,11 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (recipe.takeInputs(storage, transaction))
-                    recipe.ejectOutputs(storage, transaction);
-                transaction.commit();
+                if (recipe.takeInputs(storage, transaction) && recipe.ejectOutputs(storage, transaction))
+                {
+                    transaction.commit();
+                }
+                else transaction.abort();
             }
             return;
         }

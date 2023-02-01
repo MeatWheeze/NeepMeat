@@ -92,7 +92,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                be.getBuffer(null).insert(FluidVariant.of(NMFluids.STILL_MEAT), getEntityAmount(entity), transaction);
+                be.getBuffer(null).insert(FluidVariant.of(NMFluids.STILL_TISSUE_SLURRY), getEntityAmount(entity), transaction);
                 world.spawnParticles(NMParticles.MEAT_SPLASH, entity.getX(), entity.getY(), entity.getZ(), 20, 0.4, 0.4, 0.4, 0.01);
                 entity.setDropsLoot(false);
                 transaction.commit();
