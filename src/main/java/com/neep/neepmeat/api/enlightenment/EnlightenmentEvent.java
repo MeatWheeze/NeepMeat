@@ -12,8 +12,8 @@ public interface EnlightenmentEvent
 
     interface Factory
     {
-        EnlightenmentEvent create(EnlightenmentEventManager manager, ServerWorld world, ServerPlayerEntity player);
+        EnlightenmentEvent create(ServerWorld world, ServerPlayerEntity player);
 
-        boolean willSpawn(EnlightenmentEventManager manager, ServerWorld world, ServerPlayerEntity player);
+        boolean willSpawn(ServerWorld world, ServerPlayerEntity player);
     }
 }

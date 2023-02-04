@@ -1,12 +1,15 @@
 package com.neep.meatweapons.client;
 
+import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
-import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
+import com.neep.meatweapons.particle.BeamEffect;
+import com.neep.meatweapons.particle.BulletTrailEffect;
+import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -57,12 +60,13 @@ public class MWClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        BeamPacket.Client.registerReceiver();
         registerEntityModels();
         registerAnimations();
         MWParticles.initClient();
         MWKeys.registerKeybinds();
         AirtruckSoundInstance.initEvent();
-    }
 
+        GraphicsEffectClient.registerEffect(MWGraphicsEffects.BEAM, BeamEffect::new);
+        GraphicsEffectClient.registerEffect(MWGraphicsEffects.BULLET_TRAIL, BulletTrailEffect::new);
+    }
 }

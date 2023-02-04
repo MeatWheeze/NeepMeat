@@ -3,9 +3,8 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
+import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -169,8 +168,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, velocity, 0.5f, 5, MWNetwork.EFFECT_ID);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+            MWGraphicsEffects.syncBeamEffect(player, MWGraphicsEffects.BEAM, world, pos, end, velocity, 0.5f, 5);
         }
     }
 

@@ -60,6 +60,7 @@ public class NeepMeat implements ModInitializer
 		NMStatusEffects.init();
 		NMPotions.init();
 		MobSynthesisRegistry.initDefaults();
+		NMGraphicsEffects.init();
 
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();

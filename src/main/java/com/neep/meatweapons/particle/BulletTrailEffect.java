@@ -7,18 +7,21 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class BulletTrailEffect extends GraphicsEffect
+import java.util.UUID;
+
+public class BulletTrailEffect extends BeamGraphicsEffect
 {
     public static final Identifier TRAIL_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/bullet_trail.png");
     public static final RenderLayer TRAIL_LAYER = RenderLayer.getEntityTranslucent(TRAIL_TEXTURE);
 
-    public BulletTrailEffect(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
+    public BulletTrailEffect(World world, UUID uuid, PacketByteBuf buf)
     {
-        super(world, start, end, velocity, scale, maxTime);
+        super(world, uuid, buf);
     }
 
     @Override

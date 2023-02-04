@@ -4,21 +4,14 @@ import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
-import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.GraphicsEffect;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -173,19 +166,17 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             }
 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, GraphicsEffects.BEAM, 100);
+            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, 100);
 
             return Optional.ofNullable(entity);
         }
         return Optional.empty();
     }
 
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, GraphicsEffect.Factory type, double showRadius)
+    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, type, pos, end, velocity, width, maxTime, MWNetwork.EFFECT_ID);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
 
