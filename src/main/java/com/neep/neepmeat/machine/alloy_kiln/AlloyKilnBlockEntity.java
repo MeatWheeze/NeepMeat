@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -189,7 +189,7 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         {
             return false;
         }
-        RecipeOutput<Item> output = recipe.getItemOutput();
+        RecipeOutputImpl<Item> output = recipe.getItemOutput();
         ItemStack outputStack = slots.get(AlloyKilnStorage.OUTPUT);
         if (outputStack.isEmpty())
         {

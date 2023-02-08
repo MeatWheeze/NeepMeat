@@ -20,30 +20,11 @@ public class MWKeys
         return KeyBindingHelper.registerKeyBinding(new KeyBinding("key." + namespace + "." + id,
                 InputUtil.Type.KEYSYM,
                 def,
-                "category." + namespace + "." + category));
+                "key." + namespace + ".category." + category));
     }
 
     public static void registerKeybinds()
     {
-        AIRTRUCK_DOWN = registerKeyBinding(MeatWeapons.NAMESPACE, "forwards", "movement", GLFW.GLFW_KEY_X);
-
-        ClientTickEvents.START_CLIENT_TICK.register(client ->
-        {
-            if (client.player == null)
-                return;
-
-            if (client.player.getRootVehicle() instanceof AbstractVehicleEntity vehicle)
-            {
-//                while (AIRTRUCK_FORWARDS.wasPressed())
-//                {
-//                    vehicle.keyForwards(true);
-//                }
-            }
-
-        });
-    }
-
-    static
-    {
+        AIRTRUCK_DOWN = registerKeyBinding(MeatWeapons.NAMESPACE, "down", "general", GLFW.GLFW_KEY_BACKSLASH);
     }
 }

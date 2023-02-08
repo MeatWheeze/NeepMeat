@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
@@ -31,9 +31,9 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 {
     protected Identifier id;
     protected RecipeInput<Fluid> fluidInput;
-    protected RecipeOutput<Fluid> fluidOutput;
+    protected RecipeOutputImpl<Fluid> fluidOutput;
 
-    public OreFatRenderingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput)
+    public OreFatRenderingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Fluid> fluidOutput)
     {
         this.fluidInput = fluidInput;
         this.fluidOutput = fluidOutput;
@@ -58,7 +58,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         return fluidInput;
     }
 
-    public RecipeOutput<Fluid> getFluidOutput()
+    public RecipeOutputImpl<Fluid> getFluidOutput()
     {
         return fluidOutput;
     }
@@ -147,7 +147,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
 
             return this.factory.create(id, fluidInput, fluidOutput);
         }
@@ -156,7 +156,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         public OreFatRenderingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, fluidInput, fluidOutput);
         }
@@ -171,7 +171,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends OreFatRenderingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Fluid> in2, RecipeOutput<Fluid> out);
+            T create(Identifier var1, RecipeInput<Fluid> in2, RecipeOutputImpl<Fluid> out);
         }
     }
 }

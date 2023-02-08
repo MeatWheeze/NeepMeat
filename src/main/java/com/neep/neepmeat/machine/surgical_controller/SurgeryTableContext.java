@@ -24,6 +24,8 @@ public class SurgeryTableContext implements NbtSerialisable
     private final List<BlockApiCache<TableComponent<?>, Void>> caches = new ArrayList<>(9);
     private final List<BlockPos> posList = new ArrayList<>(9);
 
+    public boolean isAssembled;
+
     WritableStackStorage storage = new WritableStackStorage(() -> {}, Integer.MAX_VALUE)
     {
         @Override

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client;
 
-import com.neep.meatweapons.MeatWeapons;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -17,7 +17,7 @@ public class NMKeys
 
     public static void registerKeybindings()
     {
-        TOOL_TRANSFORM = registerKeyBinding(MeatWeapons.NAMESPACE, "transform", "neepmeat", GLFW.GLFW_KEY_C);
+        TOOL_TRANSFORM = registerKeyBinding(NeepMeat.NAMESPACE, "transform", "neepmeat", GLFW.GLFW_KEY_C);
 
         ClientTickEvents.END_CLIENT_TICK.register(client ->
         {

@@ -3,7 +3,7 @@ package com.neep.neepmeat.recipe;
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -34,10 +34,10 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     protected Identifier id;
     protected RecipeInput<Item> itemInput1;
     protected RecipeInput<Item> itemInput2;
-    protected RecipeOutput<Item> itemOutput;
+    protected RecipeOutputImpl<Item> itemOutput;
     protected int processTime;
 
-    public AlloyKilnRecipe(Identifier id, RecipeInput<Item> itemInput1, RecipeInput<Item> itemInput2, RecipeOutput<Item> itemOutput, int processTime)
+    public AlloyKilnRecipe(Identifier id, RecipeInput<Item> itemInput1, RecipeInput<Item> itemInput2, RecipeOutputImpl<Item> itemOutput, int processTime)
     {
         this.itemInput1 = itemInput1;
         this.itemInput2 = itemInput2;
@@ -99,7 +99,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         return itemInput2;
     }
 
-    public RecipeOutput<Item> getItemOutput()
+    public RecipeOutputImpl<Item> getItemOutput()
     {
         return itemOutput;
     }
@@ -199,7 +199,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
             RecipeInput<Item> itemInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement2);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, outputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput1, itemInput2, itemOutput, time);
@@ -210,7 +210,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         {
             RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(buf);
             RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
 
             int time = buf.readVarInt();
 
@@ -230,7 +230,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends AlloyKilnRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in1, RecipeInput<Item> in2, RecipeOutput<Item> out, int time);
+            T create(Identifier var1, RecipeInput<Item> in1, RecipeInput<Item> in2, RecipeOutputImpl<Item> out, int time);
         }
     }
 }
