@@ -2,7 +2,7 @@
   "type": "neepmeat:transforming_tool",
   "pattern": [
     "cbc",
-    " c ",
+    " m ",
     "   "
   ],
   "key": {
@@ -13,7 +13,12 @@
     },
     "c": {
       "type": "minecraft:item",
-      "resource": "neepmeat:integration_charge_adv",
+      "resource": "neepmeat:integration_charge_crude",
+      "amount": 1
+    },
+    "m": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:meat_steel_component",
       "amount": 1
     }
   }

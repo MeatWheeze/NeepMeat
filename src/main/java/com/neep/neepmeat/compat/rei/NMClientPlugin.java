@@ -15,6 +15,7 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -48,6 +49,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     public void registerDisplays(DisplayRegistry registry)
     {
         registerRecipeFiller(registry, SurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
+        registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);
@@ -74,6 +76,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registry.add(
                 new SurgeryCategory(),
+                new TransformingToolCategory(),
                 new GrindingCategory(),
                 new TrommelCategory(),
                 new HeatingCategory(),
@@ -86,6 +89,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         );
 
         registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
+        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(NMBlocks.MULTI_TANK.asItem()));
