@@ -1,10 +1,8 @@
 package com.neep.meatlib.graphics.client;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.graphics.GraphicsEffect;
 import com.neep.meatlib.graphics.GraphicsEffectType;
 import com.neep.meatlib.graphics.GraphicsEffects;
-import com.neep.neepmeat.NeepMeat;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.fabricmc.api.EnvType;
@@ -28,7 +26,7 @@ import java.util.UUID;
 public class GraphicsEffectClient
 {
     public static List<GraphicsEffect> EFFECTS = new ArrayList<>();
-    private static Int2ObjectMap<GraphicsEffectFactory> FACTORIES = new Int2ObjectOpenHashMap<>();
+    private static final Int2ObjectMap<GraphicsEffectFactory> FACTORIES = new Int2ObjectOpenHashMap<>();
 
     public static void addEffect(GraphicsEffect effect)
     {
@@ -79,8 +77,8 @@ public class GraphicsEffectClient
 
                 if (world.getRegistryKey().getValue().equals(worldId))
                 {
-                    MeatLib.LOGGER.info("Spawning graphics effect with uuid " + uuid + " in world " + worldId + ".");
-                    GraphicsEffect effect = FACTORIES.get(rawId).create(world, uuid, (PacketByteBuf) copiedBuf);
+//                    MeatLib.LOGGER.debug("Spawning graphics effect with uuid " + uuid + " in world " + worldId + ".");
+                    GraphicsEffect effect = FACTORIES.get(rawId).create(world, uuid, copiedBuf);
                     GraphicsEffectClient.addEffect(effect);
                 }
             });

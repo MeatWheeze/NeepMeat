@@ -187,21 +187,20 @@
 
     {"id": "heart_extraction", "contents": [
       {"type": "text", "text": "Heart Extraction\n", "bold": true},
-      {"type": "text", "text": "The heart of a zombie can only be extracted with a Sacrificial Dagger. When held and released, the dagger will inflict 3 hearts of damage. If this kills the zombie, its heart will yielded."}
+      {"type": "text", "text": "The heart of a zombie can only be extracted with a Sacrificial Scalpel. When held and released, the dagger will inflict 3 hearts of damage. If this kills the zombie, its heart will yielded."}
     ]},
     {"id": "blood", "contents": [
       {"type": "text", "text": "Blood\n", "bold": true},
       {"type": "text", "text": "Blood is an important precursor for many industrial processes."},
-      {"type": "text", "text": "[note: Blood can't be automated yet and there aren't that many uses for it.]"},
       {"type": "text", "text": "\nAcquisition\n", "bold": true},
-      {"type": "text", "text": "Blood can be obtained by killing a living entity with a Sacrificial Dagger above a Drain. Alternatively, the fruit of the Blood Bubble tree can be pressed into a bucket or blended in a Mixer to obtain fresh blood."}
+      {"type": "text", "text": "Blood can be obtained by killing a living entity with a Sacrificial Scalpel above a Drain. Alternatively, the fruit of the Blood Bubble tree can be pressed into a bucket or blended in a Mixer to obtain fresh blood."}
     ]},
     {"id": "meat", "contents": [
       {"type": "text", "text": "Meat\n", "bold": true},
       {"type": "text", "text": "As well as a being a nourishing food, purest Meat is the precursor to Meat Steel."},
       {"type": "text", "text": "\nAcquisition\n", "bold": true},
       {"type": "text", "text": "Crushing any item of impure meat in a Grinder will produce 1-2 meat scraps. Nine of these can be crafted into a Raw Meat Brick."},
-      {"type": "text", "text": "\nMeat in its liquid form comes from purifying Tissue Slurry, which can be obtained through various means, using a Trommel. Liquid Meat can be converted into solid bricks using a Hydraulic Press."}
+      {"type": "text", "text": "\nMeat in its liquid form comes from purifying Tissue Slurry Trommel. Liquid Meat can be converted into solid bricks using a Hydraulic Press."}
     ]},
     {"id": "integrator", "contents": [
       {"type": "text", "text": "Integrator Organism\n", "bold": true},
