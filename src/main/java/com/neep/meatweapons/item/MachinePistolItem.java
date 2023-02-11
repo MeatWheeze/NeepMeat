@@ -3,30 +3,18 @@ package com.neep.meatweapons.item;
 import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
-
-import java.util.Optional;
 
 public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAimable
 {
@@ -77,7 +65,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {
-            if (isLoaded(stack, 0))
+            if (getShots(stack, 0) > 0)
             {
                 player.getItemCooldownManager().set(this, 1);
 

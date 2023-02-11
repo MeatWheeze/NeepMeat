@@ -132,17 +132,23 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
     }
 
     @Override
+    public int getShots(ItemStack stack, int trigger)
+    {
+        return switch (trigger)
+        {
+            case 1: yield maxShots - stack.getDamage();
+            case 2: yield 10;
+            default: yield -1;
+        };
+    }
+
+    @Override
     public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
             MWGraphicsEffects.syncBeamEffect(player, MWGraphicsEffects.BULLET_TRAIL, world, pos, end, velocity, 0.1f, 1);
         }
-    }
-
-    private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-        return PlayState.CONTINUE;
     }
 
     @Override

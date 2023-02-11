@@ -157,11 +157,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         }
     }
 
-    private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-        return PlayState.CONTINUE;
-    }
-
     @Override
     public void onAnimationSync(int id, int state)
     {

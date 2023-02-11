@@ -1,5 +1,7 @@
 package com.neep.meatweapons.item;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.meatlib.api.event.RenderItemGuiCallback;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
@@ -9,6 +11,8 @@ import com.neep.meatweapons.entity.ExplodingShellEntity;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.BufferBuilder;
+import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
@@ -126,9 +130,9 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     }
 
     @Override
-    public boolean isLoaded(ItemStack stack, int trigger)
+    public int getShots(ItemStack stack, int trigger)
     {
-        return  stack.getDamage() != this.maxShots;
+        return trigger == 0 ? this.maxShots - stack.getDamage() : -1;
     }
 
     // Should only be called on server.
@@ -277,5 +281,27 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.CONTINUE;
+    }
+
+    static
+    {
+        RenderItemGuiCallback.EVENT.register((textRenderer, stack, x, y, countLabel) ->
+        {
+            if (stack.getItem() instanceof BaseGunItem baseGunItem && baseGunItem.getShots(stack, 1) >= 0)
+            {
+                RenderSystem.disableDepthTest();
+                RenderSystem.disableTexture();
+                RenderSystem.disableBlend();
+                Tessellator tessellator = Tessellator.getInstance();
+                BufferBuilder bufferBuilder = tessellator.getBuffer();
+                int i = stack.getItemBarStep();
+                int j = stack.getItemBarColor();
+                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
+                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
+                RenderSystem.enableBlend();
+                RenderSystem.enableTexture();
+                RenderSystem.enableDepthTest();
+            }
+        });
     }
 }
