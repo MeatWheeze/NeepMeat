@@ -7,11 +7,14 @@
   "item.meatweapons.hand_cannon": "Hand Cannon",
   "item.meatweapons.machine_pistol": "Machine Pistol",
   "item.meatweapons.light_machine_gun": "Light Machine Gun",
+  "item.meatweapons.ma75": "MA-75",
+  "item.meatweapons.ma75.lore_0": "Marathon is a good game.",
   "item.meatweapons.heavy_cannon": "Pocket Howitzer",
   "item.meatweapons.engine": "Engine",
 
   "item.meatweapons.airtruck": "Airtruck",
 
   "key.meatweapons.category.general": "MeatWeapons",
-  "key.meatweapons.down": "Vehicle Down"
+  "key.meatweapons.down": "Vehicle Down",
+  "key.meatweapons.fire_secondary": "Secondary Trigger"
 }

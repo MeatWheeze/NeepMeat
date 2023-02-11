@@ -17,7 +17,6 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -28,7 +27,6 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Optional;
@@ -37,7 +35,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller1";
-
     public FusionCannonItem()
     {
         super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new FabricItemSettings());
@@ -48,7 +45,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void registerControllers(AnimationData animationData)
     {
-        animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
+        animationData.addAnimationController(new AnimationController<>(this, controllerName, 1, this::predicate));
     }
 
     @Override
@@ -118,35 +115,36 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
                 if (!world.isClient)
                 {
-                    double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
-                    double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (rand.nextFloat() - 0.5);
-
-                    // Get projectile starting position and direction.
-                    Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-                    Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
-                    pos = pos.add(transform);
-
-                    Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
-                    Optional<Entity> target = this.hitScan(player, pos, end, 20);
-                    target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
-
-                    // Play fire sound
-                    playSound(world, player, GunSounds.FIRE_PRIMARY);
-
-                    if (!player.isCreative())
-                    {
-                        stack.setDamage(stack.getDamage() + 1);
-                    }
-
-                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                    GeckoLibNetwork.syncAnimation(player, this, id, ANIM_FIRE);
-                    for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
-                    {
-                        GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_FIRE);
-                    }
+                    fireBeam(world, player, stack);
                 }
             }
         }
+    }
+
+    @Override
+    protected void fireBeam(World world, PlayerEntity player, ItemStack stack)
+    {
+        double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (random.nextFloat() - 0.5);
+        double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (random.nextFloat() - 0.5);
+
+        // Get projectile starting position and direction.
+        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
+        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
+        pos = pos.add(transform);
+
+        Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
+        Optional<Entity> target = hitScan(player, pos, end, 20, this);
+        target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
+
+        // Play fire sound
+        playSound(world, player, GunSounds.FIRE_PRIMARY);
+
+        if (!player.isCreative())
+        {
+            stack.setDamage(stack.getDamage() + 1);
+        }
+
+        syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
 
     @Override
@@ -179,19 +177,5 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             controller.markNeedsReload();
             controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
         }
-    }
-
-    public static float transformWeapon(LivingEntity entity, ItemStack itemStack, boolean isAiming, float itemXOffset)
-    {
-        boolean left = entity.getMainArm() == Arm.RIGHT;
-        if (itemStack.getItem() instanceof BaseGunItem && isAiming)
-        {
-            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, (left ? -1 : 1) * -0.34);
-        }
-        else
-        {
-            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, 0);
-        }
-        return 0;
     }
 }

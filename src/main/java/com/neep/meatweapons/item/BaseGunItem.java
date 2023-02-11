@@ -4,6 +4,8 @@ import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
+import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.meatweapons.entity.ExplodingShellEntity;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
@@ -13,13 +15,15 @@ import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.*;
+import net.minecraft.util.ClickType;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.util.UseAction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
@@ -28,6 +32,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.core.manager.SingletonAnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -37,7 +43,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.*;
 import java.util.function.Predicate;
 
-public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable, ISyncable
+public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, IAnimatable, ISyncable
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
@@ -45,9 +51,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     public boolean hasLore;
     public final int maxShots;
     public final int cooldown;
-    public static final int ANIM_FIRE = 0;
-    public static final int ANIM_RELOAD = 1;
-    protected final Random rand = new Random(0);
+    protected final Random random = new Random(0);
     protected String registryName;
 
     public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, FabricItemSettings settings)
@@ -61,6 +65,12 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         this.cooldown = cooldown;
         GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queueItem(this);
+    }
+
+    @Override
+    public Random getRandom()
+    {
+        return random;
     }
 
     @Override
@@ -110,22 +120,23 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         if (cursorStackReference.get().getItem().equals(ammunition) && stack.getDamage() != 0)
         {
             this.reload(player, stack, cursorStackReference.get());
-//            cursorStackReference.get().decrement(1);
             return true;
         }
         return false;
     }
 
-    public abstract void fire(World world, PlayerEntity user, ItemStack stack);
-
-    public abstract Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
+    @Override
+    public boolean isLoaded(ItemStack stack, int trigger)
+    {
+        return  stack.getDamage() != this.maxShots;
+    }
 
     // Should only be called on server.
     public void reload(PlayerEntity user, ItemStack stack, @Nullable ItemStack ammoStack)
     {
         user.getItemCooldownManager().set(this, 7);
-        ammoStack = ammoStack == null ? getStack(this.ammunition, user) : ammoStack;
-        if (ammoStack != null || ammoStack != null)
+        ammoStack = ammoStack == null ? IGunItem.removeStack(this.ammunition, user) : ammoStack;
+        if (ammoStack != null)
         {
             stack.setDamage(0);
             ammoStack.decrement(1);
@@ -141,7 +152,69 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         }
     }
 
-    public Optional<Entity> hitScan(@NotNull PlayerEntity caster, Vec3d start, Vec3d end, double distance)
+    protected void fireBeam(World world, PlayerEntity player, ItemStack stack)
+    {
+        Random random = getRandom();
+
+        double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (random.nextFloat() - 0.5);
+        double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (random.nextFloat() - 0.5);
+
+        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
+        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
+        pos = pos.add(transform);
+
+        double d = 0.2;
+        Vec3d perturb = new Vec3d(random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5)
+                .multiply(d);
+        Vec3d end = pos.add(player.getRotationVec(1)
+                .add(perturb)
+                .multiply(40));
+        Optional<Entity> target = hitScan(player, pos, end, 40, this);
+        if (target.isPresent())
+        {
+            Entity entity = target.get();
+            target.get().damage(BulletDamageSource.create(player, 0.1f), 2);
+            entity.timeUntilRegen = 0;
+        }
+
+        playSound(world, player, GunSounds.FIRE_PRIMARY);
+        if (!player.isCreative())
+        {
+            stack.setDamage(stack.getDamage() + 1);
+        }
+
+        syncAnimation(world, player, stack, ANIM_FIRE, true);
+    }
+
+    protected void fireShell(World world, PlayerEntity player, ItemStack stack)
+    {
+        double yaw = Math.toRadians(player.getHeadYaw());
+        double pitch = Math.toRadians(player.getPitch(0.1f));
+
+        double mult = 1; // Multiplier for bullet speed.
+        double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
+        double vy = mult * -Math.sin(pitch) + player.getVelocity().getY();
+        double vz = mult * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
+
+        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
+        if (!player.isSneaking())
+        {
+            Vec3d transform = getMuzzleOffset(player, stack).rotateY((float) -yaw);
+            pos = pos.add(transform);
+        }
+
+        ExplodingShellEntity shell = new ExplodingShellEntity(world, 1, pos.x, pos.y, pos.z, vx, vy, vz);
+        shell.setOwner(player);
+        world.spawnEntity(shell);
+
+        playSound(world, player, GunSounds.FIRE_SECONDARY);
+
+        stack.setDamage(stack.getDamage() + 1);
+
+        syncAnimation(world, player, stack, ANIM_FIRE, true);
+    }
+
+    public static Optional<Entity> hitScan(@NotNull PlayerEntity caster, Vec3d start, Vec3d end, double distance, IGunItem gunItem)
     {
         World world = caster.world;
         if (!world.isClient)
@@ -166,32 +239,24 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             }
 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, 100);
+            gunItem.syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, 100);
 
             return Optional.ofNullable(entity);
         }
         return Optional.empty();
     }
 
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius)
+    public void syncAnimation(World world, PlayerEntity player, ItemStack stack, int animation, boolean broadcast)
     {
-        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
+        final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+        if (broadcast)
         {
-        }
-    }
-
-    // Removes ammunition from inventory. Returns null if none present.
-    public ItemStack getStack(Item type, PlayerEntity player)
-    {
-        for (int i = 0; i < player.getInventory().size(); ++i)
-        {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (stack.getItem().equals(type))
+            GeckoLibNetwork.syncAnimation(player, this, id, animation);
+            for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
             {
-                return stack;
+                GeckoLibNetwork.syncAnimation(otherPlayer, this, id, animation);
             }
         }
-        return null;
     }
 
     public void playSound(World world, PlayerEntity player, GunSounds sound)
@@ -209,10 +274,8 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         }
     }
 
-    public enum GunSounds
+    protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
-        FIRE_PRIMARY,
-        RELOAD,
-        EMPTY,
+        return PlayState.CONTINUE;
     }
 }

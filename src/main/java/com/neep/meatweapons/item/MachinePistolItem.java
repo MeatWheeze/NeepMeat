@@ -1,20 +1,14 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
-import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.BeamGraphicsEffect;
-import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -64,20 +58,6 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        ItemStack itemStack = user.getStackInHand(hand);
-        fire(world, user, itemStack);
-
-        if (world.isClient)
-        {
-//            GraphicsEffect.addEffect(new BeamEffect((ClientWorld) user.world, user.getPos(), user.getPos().add(0, 3, 0), 40));
-        }
-
-        return TypedActionResult.fail(itemStack);
-    }
-
-    @Override
     public Vec3f getAimOffset()
     {
         return new Vec3f(0.0f, 0, 0);
@@ -95,60 +75,30 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
 
     public void fire(World world, PlayerEntity player, ItemStack stack)
     {
+        if (!player.getItemCooldownManager().isCoolingDown(this))
         {
-            if (!player.getItemCooldownManager().isCoolingDown(this))
+            if (isLoaded(stack, 0))
             {
-                if (stack.getDamage() != this.maxShots)
+                player.getItemCooldownManager().set(this, 1);
+
+                if (!world.isClient)
                 {
-                    player.getItemCooldownManager().set(this, 1);
-
-                    if (!world.isClient)
-                    {
-                        double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
-                        double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (rand.nextFloat() - 0.5);
-
-                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-                        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
-                        pos = pos.add(transform);
-
-                        Vec3d end = pos.add(player.getRotationVec(1).multiply(20));
-                        Optional<Entity> target = this.hitScan(player, pos, end, 100);
-                        if (target.isPresent())
-                        {
-                            Entity entity = target.get();
-                            target.get().damage(DamageSource.player(player), 2);
-                            entity.timeUntilRegen = 0;
-                        }
-
-                        playSound(world, player, GunSounds.FIRE_PRIMARY);
-                        stack.setDamage(stack.getDamage() + 1);
-
-                        final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                        GeckoLibNetwork.syncAnimation(player, this, id, ANIM_FIRE);
-                        for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
-                        {
-                            GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_FIRE);
-                        }
-                    }
+                    fireBeam(world, player, stack);
                 }
-                else // Weapon is out of ammunition.
+            }
+            else // Weapon is out of ammunition.
+            {
+                if (world.isClient)
                 {
-                    if (world.isClient)
-                    {
-                        // Play empty sound.
-                    } else
-                    {
-                        // Try to reload
-                        this.reload(player, stack, null);
-                    }
+                    // Play empty sound.
+                }
+                else
+                {
+                    // Try to reload
+                    this.reload(player, stack, null);
                 }
             }
         }
-    }
-
-    private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-        return PlayState.CONTINUE;
     }
 
     @Override
