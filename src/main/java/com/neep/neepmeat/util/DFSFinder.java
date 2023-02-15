@@ -21,7 +21,7 @@ public abstract class DFSFinder<T>
 
     protected void setResult(BlockPos pos, T result)
     {
-        this.result = Pair.of(pos, result);
+        this.result = Pair.of(pos.toImmutable(), result);
     }
 
     public Pair<BlockPos, T> getResult()
@@ -70,10 +70,14 @@ public abstract class DFSFinder<T>
 
     public void loop(int maxDepth)
     {
-        while (propagate(maxDepth));
+        int depth = 0;
+        while (depth < maxDepth && propagate())
+        {
+            ++depth;
+        }
     }
 
-    public boolean propagate(int maxDepth)
+    public boolean propagate()
     {
         if (!posStack.isEmpty())
         {

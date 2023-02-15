@@ -37,7 +37,7 @@ public abstract class BFSGroupFinder<T>
 
     public void queueBlock(BlockPos pos)
     {
-        if (!visited.contains(pos)) posQueue.add(pos);
+        if (!visited.contains(pos)) posQueue.add(pos.toImmutable());
     }
 
     public void loop(int maxDepth)
@@ -51,11 +51,17 @@ public abstract class BFSGroupFinder<T>
         {
             BlockPos current = posQueue.poll();
             visited.add(current);
-            DFSFinder.State state = processPos(current);
-            return state == DFSFinder.State.CONTINUE;
+            State state = processPos(current);
+            return state == State.CONTINUE;
         }
         return false;
     }
 
-    protected abstract DFSFinder.State processPos(BlockPos pos);
+    protected abstract State processPos(BlockPos pos);
+
+    protected enum State
+    {
+        CONTINUE,
+        SUCCESS;
+    }
 }

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.transport.api.IItemNetwork;
+import com.neep.neepmeat.transport.api.ItemNetwork;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -17,13 +17,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
-public class ItemNetwork implements IItemNetwork
+public class ItemNetworkImpl implements ItemNetwork
 {
     protected final ServerWorld world;
 
     protected final Long2ObjectMap<ItemPipeState> pipes = new Long2ObjectArrayMap<>();
 
-    public ItemNetwork(ServerWorld world)
+    public ItemNetworkImpl(ServerWorld world)
     {
         this.world = world;
     }
@@ -41,9 +41,9 @@ public class ItemNetwork implements IItemNetwork
     }
 
     @Override
-    public long route(BlockPos from, Direction in, BlockPos to, Direction out, ItemVariant variant, int amount, TransactionContext transaction)
+    public long route(BlockPos from, Direction in, BlockPos to, Direction out, ItemVariant variant, long amount, TransactionContext transaction)
     {
-        ItemInPipe item = new ItemInPipe(null, null, variant, amount, world.getTime());
+        ItemInPipe item = new ItemInPipe(null, null, variant, (int) amount, world.getTime());
         Stack<Direction> route = findPath(from, in, to, out, variant, amount);
         item.setRoute(route);
         return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
-import com.neep.neepmeat.transport.item_network.ItemNetwork;
+import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
@@ -18,7 +18,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     @Shadow public abstract void removePlayer(ServerPlayerEntity player, Entity.RemovalReason reason);
 
     @Unique public FluidNodeManager neepmeat$nodeManager = new FluidNodeManager((ServerWorld) (Object) this);
-    @Unique public ItemNetwork neepmeat$itemNetwork = new ItemNetwork((ServerWorld) (Object) this);
+    @Unique public ItemNetworkImpl neepmeat$itemNetwork = new ItemNetworkImpl((ServerWorld) (Object) this);
     @Unique public EnlightenmentEventManager neepmeat$enlightenmentEventManager = new EnlightenmentEventManager();
     @Unique public FluidNetworkManager neepmeat$networkManager;
 
@@ -42,7 +42,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     }
 
     @Override
-    public ItemNetwork getItemNetwork()
+    public ItemNetworkImpl getItemNetwork()
     {
         return neepmeat$itemNetwork;
     }

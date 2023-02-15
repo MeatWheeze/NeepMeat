@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class RetrievalTarget<T extends TransferVariant<?>>
@@ -16,6 +17,11 @@ public class RetrievalTarget<T extends TransferVariant<?>>
     {
         this.cache = cache;
         this.accessFace = accessFace;
+    }
+
+    public static <T extends TransferVariant<?>> RetrievalTarget<T> of(BlockApiCache<Storage<T>, Direction> cache, Direction accessFace)
+    {
+        return new RetrievalTarget<>(cache, accessFace);
     }
 
     public BlockApiCache<Storage<T>, Direction> getCache()
@@ -33,7 +39,7 @@ public class RetrievalTarget<T extends TransferVariant<?>>
         return cache.getPos();
     }
 
-    public Storage<T> find()
+    @Nullable public Storage<T> find()
     {
         return cache.find(accessFace);
     }
