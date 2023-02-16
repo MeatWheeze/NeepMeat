@@ -4,9 +4,12 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -57,6 +60,12 @@ public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProv
         }
 
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, ItemTransport.ITEM_REQUESTER_BE, ItemRequesterBlockEntity::serverTick, null, world);
     }
 
     @Nullable
