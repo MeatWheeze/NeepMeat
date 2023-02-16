@@ -18,7 +18,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -66,7 +65,7 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
     {
         RoutingNetworkDFSFinder finder = new RoutingNetworkDFSFinder(world);
         finder.pushBlock(pos, Direction.UP);
-        finder.loop(50);
+        finder.loop(ItemTransport.BFS_MAX_DEPTH);
         return finder.hasResult() ? finder.getResult().right() : null;
     }
 

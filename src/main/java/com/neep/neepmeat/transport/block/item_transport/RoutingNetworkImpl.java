@@ -22,6 +22,7 @@ import net.minecraft.util.math.Direction;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -71,9 +72,19 @@ public class RoutingNetworkImpl implements RoutingNetwork
         routablePipes.clear();
         finder.reset();
         finder.queueBlock(pos);
-        finder.loop(50);
+        finder.loop(ItemTransport.BFS_MAX_DEPTH);
+
+        if (finder.controllers > 1) return;
+
         finder.getResult().forEach((l, c) -> routablePipes.add(c));
-//        routablePipes.addAll(finder.getResult());
+
+        finder.getVisited().forEach(p ->
+        {
+            if (worldSupplier.get().getBlockEntity(BlockPos.fromLong(p)) instanceof ItemPipeBlockEntity be)
+            {
+                be.getCache().setNetwork(worldSupplier.get(), RoutingNetworkImpl.this.pos);
+            }
+        });
     }
 
     @Override
@@ -118,15 +129,27 @@ public class RoutingNetworkImpl implements RoutingNetwork
 
     protected class GroupFinder extends BFSGroupFinder<BlockApiCache<RoutablePipe, Direction>>
     {
+        protected int controllers = 0;
+
+        @Override
+        public void reset()
+        {
+            super.reset();
+            controllers = 0;
+        }
+
+        public Set<Long> getVisited()
+        {
+            return visited;
+        }
+
         @Override
         protected State processPos(BlockPos pos)
         {
             IItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(worldSupplier.get(), pos, null);
-            if (worldSupplier.get().getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
-            {
-//                be.setNetwork(BlockApiCache.create(RoutingNetwork.LOOKUP, worldSupplier.get(), RoutingNetworkImpl.this.pos));
-                be.getCache().setNetwork(worldSupplier.get(), RoutingNetworkImpl.this.pos);
-            }
+
+            // Fail if there is a second controller in the network.
+            if (checkController(worldSupplier.get(), pos)) return State.FAIL;
 
             BlockPos.Mutable mutable = pos.mutableCopy();
             for (Direction direction : fromPipe.getConnections(worldSupplier.get().getBlockState(pos), d -> true))
@@ -146,6 +169,16 @@ public class RoutingNetworkImpl implements RoutingNetwork
             }
 
             return State.CONTINUE;
+        }
+
+        protected boolean checkController(ServerWorld world, BlockPos current)
+        {
+            BlockApiCache<RoutingNetwork, Void> cache = BlockApiCache.create(RoutingNetwork.LOOKUP, (ServerWorld) world, current);
+            if (cache.find(null) != null)
+            {
+                ++controllers;
+            }
+            return false;
         }
     }
 }

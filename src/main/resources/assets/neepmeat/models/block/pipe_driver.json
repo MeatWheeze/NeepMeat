@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "particle": "neepmeat:block/pipe_driver/top",
+    "north": "neepmeat:block/pipe_driver/side",
+    "south": "neepmeat:block/pipe_driver/side",
+    "east": "neepmeat:block/pipe_driver/side",
+    "west": "neepmeat:block/pipe_driver/side",
+    "up": "neepmeat:block/pipe_driver/top",
+    "down": "neepmeat:block/pipe_driver/bottom"
+  }
+}

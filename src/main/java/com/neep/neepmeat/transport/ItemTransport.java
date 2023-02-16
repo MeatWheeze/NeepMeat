@@ -28,6 +28,8 @@ import net.minecraft.util.math.Direction;
 
 public class ItemTransport
 {
+    public static final int BFS_MAX_DEPTH = 800;
+
     public static BlockApiLookup<IItemPipe, Direction> ITEM_PIPE = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), IItemPipe.class, Direction.class);
 
     public static BlockEntityType<PipeDriverBlock.PDBlockEntity> PIPE_DRIVER_BE;
