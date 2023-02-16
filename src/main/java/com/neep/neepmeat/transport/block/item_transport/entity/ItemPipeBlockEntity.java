@@ -2,7 +2,9 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.item_network.RoutingNetworkCache;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -13,20 +15,21 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ItemPipeBlockEntity extends SyncableBlockEntity
 {
     protected List<ItemInPipe> items = new ArrayList<>();
+
+    protected RoutingNetworkCache cache = new RoutingNetworkCache();
 
     public ItemPipeBlockEntity(BlockPos pos, BlockState state)
     {
@@ -122,5 +125,10 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
             getWorld().spawnEntity(itemEntity);
         }
         items.clear();
+    }
+
+    public RoutingNetworkCache getCache()
+    {
+        return cache;
     }
 }

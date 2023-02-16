@@ -34,7 +34,7 @@ public class ScreenHandlerInit
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
     }
 
-    private static <T extends ScreenHandler> ScreenHandlerType<T> register(String namespace, String id, ScreenHandlerType.Factory<T> factory)
+    public static <T extends ScreenHandler> ScreenHandlerType<T> register(String namespace, String id, ScreenHandlerType.Factory<T> factory)
     {
         return Registry.register(Registry.SCREEN_HANDLER, new Identifier(namespace, id), new ScreenHandlerType<>(factory));
     }

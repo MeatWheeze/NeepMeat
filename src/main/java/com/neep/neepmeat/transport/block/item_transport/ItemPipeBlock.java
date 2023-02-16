@@ -1,8 +1,6 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
-import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
@@ -50,6 +48,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
             if (world.getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
             {
                 be.dropItems();
+                be.getCache().update();
             }
             world.removeBlockEntity(pos);
         }
@@ -67,7 +66,13 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
         }
 
         if (world instanceof ServerWorld serverWorld)
+        {
             onAdded(pos, state, serverWorld);
+            if (world.getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
+            {
+                be.getCache().update();
+            }
+        }
 
     }
 
