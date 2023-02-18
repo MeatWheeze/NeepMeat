@@ -38,4 +38,9 @@ public class ScreenHandlerInit
     {
         return Registry.register(Registry.SCREEN_HANDLER, new Identifier(namespace, id), new ScreenHandlerType<>(factory));
     }
+
+    public static <T extends ScreenHandler> ExtendedScreenHandlerType<T> registerExtended(String namespace, String id, ExtendedScreenHandlerType.ExtendedFactory<T> factory)
+    {
+        return Registry.register(Registry.SCREEN_HANDLER, new Identifier(namespace, id), new ExtendedScreenHandlerType<>(factory));
+    }
 }

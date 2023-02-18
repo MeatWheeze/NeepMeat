@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 public class ScreenPropertyC2sPacket
 {
 
-    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "screen_int_updata");
+    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "screen_int_update");
     public static PacketByteBuf create(int id, int value)
     {
         PacketByteBuf buf = PacketByteBufs.create();
