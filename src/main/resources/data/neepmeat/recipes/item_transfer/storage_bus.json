@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " p ",
+    " e "
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:item_pipe"
+    },
+    "e": {
+      "item": "neepmeat:ejector"
+    }
+  },
+  "result": {
+    "item": "neepmeat:storage_bus",
+    "count": 2
+  }
+}
