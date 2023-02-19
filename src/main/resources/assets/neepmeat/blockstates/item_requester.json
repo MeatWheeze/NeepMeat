@@ -1,6 +1,13 @@
 {
   "multipart": [
     {
+     "apply":
+      {
+        "model": "neepmeat:block/pneumatic_pipe/requester_centre"
+      }
+    },
+    {
+
       "when": {
         "OR": [
           {"up": "true", "north": "true"},

@@ -16,7 +16,10 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -38,6 +41,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
     protected final BlockPos pos;
 
     protected final ObjectList<BlockApiCache<RoutablePipe, Direction>> routablePipes = new ObjectArrayList<>(10);
+    protected boolean valid;
 
     public RoutingNetworkImpl(BlockPos pos, Supplier<ServerWorld> worldSupplier)
     {
@@ -73,7 +77,11 @@ public class RoutingNetworkImpl implements RoutingNetwork
         finder.queueBlock(pos);
         finder.loop(ItemTransport.BFS_MAX_DEPTH);
 
-        if (finder.controllers > 1) return;
+        if (finder.controllers > 1)
+        {
+            valid = false;
+            return;
+        }
 
         finder.getResult().forEach((l, c) -> routablePipes.add(c));
 
@@ -84,12 +92,20 @@ public class RoutingNetworkImpl implements RoutingNetwork
                 be.getCache().setNetwork(worldSupplier.get(), RoutingNetworkImpl.this.pos);
             }
         });
+
+        valid = true;
     }
 
     @Override
     public long getVersion()
     {
         return version;
+    }
+
+    @Override
+    public boolean isValid()
+    {
+        return valid;
     }
 
     public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction)
@@ -115,7 +131,6 @@ public class RoutingNetworkImpl implements RoutingNetwork
     {
         StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
 
-
         try (Transaction inner = transaction.openNested())
         {
             AtomicLong amount = new AtomicLong(stack.amount());
@@ -128,6 +143,8 @@ public class RoutingNetworkImpl implements RoutingNetwork
 
             if (type.satisfied(stack.amount(), stack.amount() - amount.get()))
             {
+                worldSupplier.get().spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 20, 0.1, 0, 0.1, 0.01);
+                worldSupplier.get().playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_PIGLIN_CELEBRATE, SoundCategory.BLOCKS, 1, 1);
                 inner.commit();
             }
             else inner.abort();
