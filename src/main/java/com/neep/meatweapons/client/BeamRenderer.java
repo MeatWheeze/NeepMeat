@@ -2,7 +2,6 @@ package com.neep.meatweapons.client;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
@@ -17,7 +16,7 @@ import java.nio.FloatBuffer;
 @Environment(value= EnvType.CLIENT)
 public class BeamRenderer
 {
-    public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, int r, int g, int b, int a, float t)
+    public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, int r, int g, int b, int a, float t, int l)
     {
         matrices.push();
         Vec3d beam = p1.subtract(p0);
@@ -28,7 +27,6 @@ public class BeamRenderer
         // Transform from world to local space
         Matrix4f transform = new Matrix4f();
         transform.loadIdentity();
-        float time = MinecraftClient.getInstance().world.getTime() + MinecraftClient.getInstance().getTickDelta();
         beam.normalize();
         transform.multiply(rotationMatrix((float) Math.atan2(beam.getX(), beam.getZ()), 0, (float) Math.asin(-beam.getY() / beam.length())));
 
@@ -37,17 +35,16 @@ public class BeamRenderer
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f model = entry.getPositionMatrix();
         Matrix3f normal = entry.getNormalMatrix();
-        int light = 255;
 
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, -t / 2, 0), 0, 1); // p0
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, -t / 2, beam.length()), 1, 1); // p1
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, t / 2, beam.length()), 1, 0); // p1
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(0, t / 2, 0), 0, 0); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, -t / 2, 0), 0, 1); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, -t / 2, beam.length()), 1, 1); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, t / 2, beam.length()), 1, 0); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, t / 2, 0), 0, 0); // p0
 
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(-t / 2, 0, 0), 0, 1); // p0
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(-t / 2, 0, beam.length()), 1, 1); // p1
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(t / 2, 0, beam.length()), 1, 0); // p1
-        vertex(vertexConsumer, model, normal, r, g, b, a, light, new Vec3d(t / 2, 0, 0), 0, 0); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(-t / 2, 0, 0), 0, 1); // p0
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(-t / 2, 0, beam.length()), 1, 1); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(t / 2, 0, beam.length()), 1, 0); // p1
+        vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(t / 2, 0, 0), 0, 0); // p0
 
         matrices.pop();
     }

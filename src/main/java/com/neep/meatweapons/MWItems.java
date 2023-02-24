@@ -15,6 +15,8 @@ public class MWItems
     public static Item LMG = new LMGItem();
 
     public static Item MA75 = new MA75Item();
+
+    public static Item BLASTER = new BlasterItem();
     public static Item HEAVY_CANNON = new HeavyCannonItem();
     public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(MeatWeapons.WEAPONS));
 }

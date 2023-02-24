@@ -54,7 +54,7 @@ public class BeamEffect extends BeamGraphicsEffect
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
 //                startPos.add(norm.multiply(beam.length() * (1 - x))), endPos, 123, 171, 254,
                 start, end, 123, 171, 254,
-                maxTime > 0 ? (int) (255f * x) : 255, scale);
+                maxTime > 0 ? (int) (255f * x) : 255, scale, 255);
         matrices.pop();
     }
 

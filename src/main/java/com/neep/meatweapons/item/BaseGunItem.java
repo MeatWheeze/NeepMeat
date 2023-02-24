@@ -1,7 +1,5 @@
 package com.neep.meatweapons.item;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.neep.meatlib.api.event.RenderItemGuiCallback;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
@@ -11,8 +9,6 @@ import com.neep.meatweapons.entity.ExplodingShellEntity;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;

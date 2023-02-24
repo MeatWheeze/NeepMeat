@@ -10,10 +10,7 @@ import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
-import com.neep.meatweapons.particle.BeamEffect;
-import com.neep.meatweapons.particle.BulletTrailEffect;
-import com.neep.meatweapons.particle.MWGraphicsEffects;
-import com.neep.meatweapons.particle.MWParticles;
+import com.neep.meatweapons.particle.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -30,6 +27,8 @@ public class MWClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_BULLET_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "bullet"), "main");
     public static final EntityModelLayer MODEL_CANNON_BULLET_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "cannon_bullet"), "main");
+
+    public static final EntityModelLayer ZAP_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "zap"), "main");
     public static final EntityModelLayer MODEL_PLASMA_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "plasma"), "main");
     public static final EntityModelLayer MODEL_SHELL_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "shell"), "main");
 
@@ -40,6 +39,9 @@ public class MWClient implements ClientModInitializer
 
         EntityRendererRegistry.INSTANCE.register(MeatWeapons.CANNON_BULLET, CannonBulletEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_CANNON_BULLET_LAYER, CannonBulletEntityModel::getTexturedModelData);
+
+        EntityRendererRegistry.INSTANCE.register(MeatWeapons.ZAP, ZapEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(ZAP_LAYER, CannonBulletEntityModel::getTexturedModelData);
 
         EntityRendererRegistry.INSTANCE.register(MeatWeapons.PLASMA, PlasmaEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_PLASMA_LAYER, PlasmaEntityModel::getTexturedModelData);
@@ -58,6 +60,7 @@ public class MWClient implements ClientModInitializer
         GeoItemRenderer.registerItemRenderer(MWItems.LMG, new BaseGunRenderer<>(new LMGItemModel()));
         GeoItemRenderer.registerItemRenderer(MWItems.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
         GeoItemRenderer.registerItemRenderer(MWItems.MA75, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/ma75.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/ma75.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/ma75.animation.json"))));
+        GeoItemRenderer.registerItemRenderer(MWItems.BLASTER, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/blaster.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/thingy.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/blaster.animation.json"))));
 
         net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(MeatWeapons.AIRTRUCK, AirtruckEntityRenderer::new);
 
@@ -74,6 +77,7 @@ public class MWClient implements ClientModInitializer
 
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BEAM, BeamEffect::new);
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BULLET_TRAIL, BulletTrailEffect::new);
+        GraphicsEffectClient.registerEffect(MWGraphicsEffects.ZAP, ZapBeamEffect::new);
 
 
         RenderItemGuiCallback.EVENT.register((textRenderer, stack, x, y, countLabel) ->

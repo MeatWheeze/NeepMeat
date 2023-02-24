@@ -24,6 +24,20 @@
     ]
   },
 
+  "zap_fire": {
+    "subtitle": "subtitles.meatweapons.zap_fire",
+    "sounds": [
+      "meatweapons:zap_fire"
+    ]
+  },
+
+  "zap_hit": {
+    "subtitle": "subtitles.meatweapons.zap_hit",
+    "sounds": [
+      "meatweapons:zap_hit"
+    ]
+  },
+
   "light_machine_gun_fire": {
     "subtitle": "subtitles.meatweapons.lmg_fire",
     "sounds": [

@@ -4,10 +4,6 @@ import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
-import java.util.Map;
 
 public class NMSounds
 {
@@ -16,8 +12,10 @@ public class NMSounds
     public static SoundEvent CLICK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "click");
 
     public static SoundEvent FUSION_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_fire");
-    public static SoundEvent FUSION_HIT = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
     public static SoundEvent RELOAD = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_reload");
+    public static SoundEvent ZAP_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "zap_fire");
+    public static SoundEvent ZAP_HIT = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "zap_hit");
+
 
     public static SoundEvent HAND_CANNON_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "hand_cannon_fire");
     public static SoundEvent HAND_CANNON_HIT = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
