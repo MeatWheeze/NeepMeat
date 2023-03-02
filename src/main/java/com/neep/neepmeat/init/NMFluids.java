@@ -196,9 +196,9 @@ public class NMFluids
         PINKDRINK_BUCKET = PINKDRINK_FACTORY.registerItem();
         PINKDRINK = PINKDRINK_FACTORY.registerBlock();
 
-        FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3 * PowerUtils.DROPLET_POWER, true, null);
+        FluidEnegyRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 6 * PowerUtils.DROPLET_POWER, true, null);
         FluidEnegyRegistry.getInstance().register(Fluids.WATER, 1 * PowerUtils.DROPLET_POWER, false, null);
-        FluidEnegyRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 7 * PowerUtils.DROPLET_POWER, true, STILL_WORK_FLUID);
+        FluidEnegyRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 14 * PowerUtils.DROPLET_POWER, true, STILL_WORK_FLUID);
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);

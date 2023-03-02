@@ -1,9 +1,9 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
+import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.datagen.NMRecipes;
@@ -23,6 +23,8 @@ import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.resource.ResourceType;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,6 +76,9 @@ public class NeepMeat implements ModInitializer
 
 		ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
 		FluidStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> blockEntity instanceof IntegratorBlockEntity be ? be.getStorage(world, pos, state, direction) : null, NMBlocks.INTEGRATOR_EGG);
+
+		Burner.LOOKUP.registerForBlockEntity(FurnaceBurnerImpl::get, BlockEntityType.FURNACE);
+		Burner.LOOKUP.registerForBlocks((world, pos, state, blockEntity, context) -> () -> 20, Blocks.LAVA, Blocks.LAVA_CAULDRON, Blocks.MAGMA_BLOCK);
 
 		ScreenHandlerInit.registerScreenHandlers();
 
