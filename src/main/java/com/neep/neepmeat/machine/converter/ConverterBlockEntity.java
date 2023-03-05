@@ -1,26 +1,26 @@
 package com.neep.neepmeat.machine.converter;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.Burner;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.mixin.FurnaceAccessor;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -32,9 +32,10 @@ public class ConverterBlockEntity extends SyncableBlockEntity
 
     public boolean stage;
     public boolean running;
-    protected long conversionTime;
-    protected short baseAmount = (short) (FluidConstants.BUCKET / 150);
-    protected float multiplier = 1;
+    protected boolean needsUpdate = true;
+    protected long outputPower;
+
+    protected List<Burner> burners = new ArrayList<>(1);
 
     // Rendering only
     public float renderIn;
@@ -62,66 +63,36 @@ public class ConverterBlockEntity extends SyncableBlockEntity
         return Optional.ofNullable(FluidStorage.SIDED.find(world, pos, Direction.DOWN));
     }
 
-    public void checkBurnerBlock()
+    protected void updateBurner()
     {
-        Direction facing = getCachedState().get(HorizontalFacingBlock.FACING).getOpposite();
-        BlockPos burnerPos = pos.offset(facing);
-        BlockState burnerState = world.getBlockState(burnerPos);
-        if (burnerState.isOf(Blocks.FURNACE))
-        {
-            FurnaceAccessor furnace = (FurnaceAccessor) world.getBlockEntity(burnerPos);
-            if (furnace.getBurnTime() == 0)
-            {
-                ItemStack itemStack = furnace.getInventory().get(1);
-                int time = furnace.callGetFuelTime(itemStack);
-                furnace.setFuelTime(time);
-                furnace.setBurnTime(time);
-                itemStack.decrement(1);
-                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, false));
-            }
-            else
-            {
-                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, true));
-            }
-            furnace.setCookTime(0);
-            this.conversionTime = furnace.getBurnTime();
-            this.multiplier = 2f;
-        }
-        else if (burnerState.isOf(Blocks.FIRE))
-        {
-            this.conversionTime = 1;
-            this.multiplier = 1;
-        }
-        else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
-        {
-            this.conversionTime = 1;
-            this.multiplier = 1.5f;
-        }
-        else
-        {
-            this.conversionTime = 0;
-            this.multiplier = 1;
-        }
+        burners.clear();
+        BlockPos burnerPos = pos.offset(getCachedState().get(HorizontalFacingBlock.FACING).getOpposite());
+        Burner burner = Burner.LOOKUP.find(world, burnerPos, null);
+        if (burner != null) burners.add(burner);
     }
 
     public void tick()
     {
-        --cooldown;
-//        if (cooldown > 0)
-//            return;
-
-//        cooldown = 2;
-
-        if (conversionTime > 0)
+        if (needsUpdate)
         {
-            Transaction transaction = Transaction.openOuter();
-            long convertAmount = (long) (baseAmount * multiplier);
-            this.running = convert(convertAmount, transaction) == convertAmount;
+            updateBurner();
+        }
+
+        outputPower = 0;
+        for (Burner burner : burners)
+        {
+            burner.tickPowerConsumption();
+            outputPower += burner.getOutputPower();
+        }
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            // Calculate amount of fluid to be produced from current power output
+            long produceAmount = PowerUtils.absToAmount(NMFluids.STILL_CHARGED_WORK_FLUID, outputPower);
+
+            this.running = convert(produceAmount, transaction) == produceAmount;
             transaction.commit();
         }
-        this.running = running && conversionTime > 0;
-        checkBurnerBlock();
-        this.sync();
     }
 
     @Override
@@ -159,6 +130,11 @@ public class ConverterBlockEntity extends SyncableBlockEntity
     public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, ConverterBlockEntity be)
     {
         be.tick();
+    }
+
+    public void update()
+    {
+        needsUpdate = true;
     }
 
     @Override

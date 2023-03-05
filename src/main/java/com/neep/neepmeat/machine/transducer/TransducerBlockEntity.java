@@ -85,44 +85,6 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
         mutable.set(pos, Direction.DOWN);
         inputCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, mutable);
-
-//        BlockPos burnerPos = pos.down();
-//        BlockState burnerState = world.getBlockState(burnerPos);
-//        if (burnerState.isOf(Blocks.FURNACE))
-//        {
-//            FurnaceAccessor furnace = (FurnaceAccessor) world.getBlockEntity(burnerPos);
-//            if (furnace.getBurnTime() == 0)
-//            {
-//                ItemStack itemStack = furnace.getInventory().get(1);
-//                int time = furnace.callGetFuelTime(itemStack);
-//                furnace.setFuelTime(time);
-//                furnace.setBurnTime(time);
-//                itemStack.decrement(1);
-//                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, false));
-//            }
-//            else
-//            {
-//                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, true));
-//            }
-//            furnace.setCookTime(0);
-//            this.conversionTime = furnace.getBurnTime();
-//            this.outputPower = 2 * 20;
-//        }
-//        else if (burnerState.isOf(Blocks.FIRE))
-//        {
-//            this.conversionTime = 1;
-//            this.outputPower = 1 * 15;
-//        }
-//        else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
-//        {
-//            this.conversionTime = 1;
-//            this.outputPower = (long) (1.5f * 20);
-//        }
-//        else
-//        {
-//            this.conversionTime = 0;
-//            this.outputPower = 0;
-//        }
     }
 
     public void tick()

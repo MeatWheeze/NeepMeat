@@ -1,7 +1,6 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.multiblock.IMultiBlock;
@@ -14,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlockEntity;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
@@ -61,7 +61,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.ai.brain.task.RangedApproachTask;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -136,6 +135,7 @@ public class NMBlockEntities
     public static BlockEntityType<FlameJetBlockEntity> FLAME_JET;
     public static BlockEntityType<ItemMincerBlockEntity> ITEM_MINCER;
     public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
+    public static BlockEntityType<FluidExciterBlockEntity> FLUID_EXCITER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -231,6 +231,10 @@ public class NMBlockEntities
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
+        FLUID_EXCITER = registerBlockEntity("fluid_exciter", FluidExciterBlockEntity::new, NMBlocks.FLUID_EXCITER);
+        FluidStorage.SIDED.registerForBlockEntity(FluidExciterBlockEntity::getInputStorage, FLUID_EXCITER);
+        FluidStorage.SIDED.registerForBlocks((world, pos, state, be, context) -> world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity fbe ? fbe.getOutputStorage(context) : null, NMBlocks.FLUID_EXCITER.getStructureBlock());
+        FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
         MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
