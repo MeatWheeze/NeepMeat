@@ -1,5 +1,6 @@
 package com.neep.meatlib.registry;
 
+import com.ibm.icu.impl.locale.BaseLocale;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.block.BaseLeavesBlock;
@@ -25,6 +26,18 @@ public class BlockRegistry
 {
     public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
     public static final Map<Identifier, Block> REGISTERED_BLOCKS = new LinkedHashMap<>();
+
+    public static <T extends Block & IMeatBlock> T queue(T block)
+    {
+        MeatLib.assertActive(block);
+        if (block == null)
+        {
+            throw new IllegalArgumentException("tried to queue something that wasn't a block.");
+        }
+
+        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
+        return block;
+    }
 
     public static Block queue(IMeatBlock block)
     {
@@ -56,7 +69,7 @@ public class BlockRegistry
         BLOCKS.clear();
     }
 
-    public static IMeatBlock createLogBlock(String name, TooltipSupplier tooltipSupplier)
+    public static BaseColumnBlock createLogBlock(String name, TooltipSupplier tooltipSupplier)
     {
         return new BaseColumnBlock(name, ItemSettings.block(), FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD))
         {
@@ -68,7 +81,7 @@ public class BlockRegistry
         };
     }
 
-    public static IMeatBlock createLeavesBlock(String name, BlockSoundGroup soundGroup)
+    public static BaseLeavesBlock createLeavesBlock(String name, BlockSoundGroup soundGroup)
     {
         return new BaseLeavesBlock(name, AbstractBlock.Settings.of(Material.LEAVES)
                 .strength(0.2f)
