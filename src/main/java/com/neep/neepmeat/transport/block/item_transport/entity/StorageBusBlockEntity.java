@@ -36,7 +36,7 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     protected BlockApiCache<RoutingNetwork, Void> controller;
     protected final List<RetrievalTarget<ItemVariant>> targets = new ArrayList<>(6);
     protected final List<Pair<BlockPos, Direction>> storageFaces = new ArrayList<>(6);
-    protected boolean needsUpdate = false;
+    protected boolean needsUpdate = true;
 
     public StorageBusBlockEntity(BlockPos pos, BlockState state)
     {
@@ -94,14 +94,14 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     {
         super.readNbt(nbt);
         NbtList posList = nbt.getList("storage_pos", NbtType.COMPOUND);
-        posList.forEach(c ->
-        {
-            NbtCompound compound = (NbtCompound) c;
-            BlockPos pos = NbtHelper.toBlockPos(compound);
-            Direction direction = Direction.values()[compound.getInt("direction")];
-            storageFaces.add(Pair.of(pos, direction));
-        });
-        needsUpdate = true;
+//        posList.forEach(c ->
+//        {
+//            NbtCompound compound = (NbtCompound) c;
+//            BlockPos pos = NbtHelper.toBlockPos(compound);
+//            Direction direction = Direction.values()[compound.getInt("direction")];
+//            storageFaces.add(Pair.of(pos, direction));
+//        });
+//        needsUpdate = true;
     }
 
     @Override
@@ -123,6 +123,7 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     {
         if (needsUpdate)
         {
+            updateTargets();
             if (getWorld() != null && getWorld() instanceof ServerWorld)
             {
                 targets.clear();
