@@ -233,6 +233,8 @@ public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("c
 
     public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", block(), FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
 
+    public static Block DIRTY_TOILET = BlockRegistry.queue(new ToiletBlock("dirty_toilet", block(), FabricBlockSettings.copyOf(Blocks.STONE)));
+
 
     public static Block CRONENCAKE = BlockRegistry.queue(new CronenCakeBlock("cronencake", FabricBlockSettings.copyOf(Blocks.CAKE).sounds(BlockSoundGroup.SLIME)));
     public static Block CANDLE_CRONENCAKE = BlockRegistry.queue(new CandleCronenCakeBlock("candle_cronencake", FabricBlockSettings.copyOf(Blocks.CANDLE_CAKE).sounds(BlockSoundGroup.SLIME)));
