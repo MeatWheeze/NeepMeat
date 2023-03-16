@@ -85,6 +85,7 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
         mutable.set(pos, Direction.DOWN);
         inputCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, mutable);
+        needsUpdate = false;
     }
 
     public void tick()

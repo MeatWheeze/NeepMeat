@@ -58,5 +58,24 @@
     "sounds": [
       "neepmeat:cake_fire"
     ]
+  },
+
+  "mechanical_machine_place": {
+    "subtitle": "subtitles.neepmeat.mechanical_machine_place",
+    "sounds": [
+      "neepmeat:mechanical_machine_place"
+    ]
+  },
+  "mechanical_machine_break": {
+    "subtitle": "subtitles.neepmeat.mechanical_machine_break",
+    "sounds": [
+      "neepmeat:mechanical_machine_break"
+    ]
+  },
+  "flesh_machine_place": {
+    "subtitle": "subtitles.neepmeat.flesh_machine_place",
+    "sounds": [
+      "neepmeat:flesh_machine_place"
+    ]
   }
 }
