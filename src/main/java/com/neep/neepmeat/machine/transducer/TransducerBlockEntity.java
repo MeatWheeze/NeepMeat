@@ -46,8 +46,6 @@ public class TransducerBlockEntity extends SyncableBlockEntity
     protected BlockApiCache<Storage<FluidVariant>, Direction> inputCache;
 
     protected long outputPower;
-    protected int conversionTime;
-    public boolean running;
     protected boolean needsUpdate = true;
 
     public TransducerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -118,18 +116,14 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
                 if (inserted == produceAmount)
                 {
-                    this.running = true;
                     transaction.commit();
                 }
                 else
                 {
-                    this.running = false;
                     transaction.abort();
                 }
             }
         }
-        this.running = running && conversionTime > 0;
-
     }
 
     public void update()
@@ -147,7 +141,6 @@ public class TransducerBlockEntity extends SyncableBlockEntity
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
-        nbt.putInt("conversionTime", conversionTime);
     }
 
     @Override
@@ -155,6 +148,5 @@ public class TransducerBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
-        this.conversionTime = nbt.getInt("conversionTime");
     }
 }
