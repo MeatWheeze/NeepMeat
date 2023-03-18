@@ -105,7 +105,8 @@ public class FluidNodeManager
                     if (network.getWorld().equals(world)) network.tick();
                 }
             };
-            StagedTransactions.getExecutor().execute(runnable);
+            runnable.run();
+//            StagedTransactions.getExecutor().execute(runnable);
         }
     }
 

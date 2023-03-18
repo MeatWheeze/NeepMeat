@@ -5,15 +5,14 @@ import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.util.FluidPipeRouteFinder;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -51,7 +50,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, Set<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         int size = nodes.size();
 
