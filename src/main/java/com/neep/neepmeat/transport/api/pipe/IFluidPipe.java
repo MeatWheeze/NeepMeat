@@ -1,8 +1,10 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.SimplePipeVertex;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
@@ -76,7 +78,7 @@ public interface IFluidPipe
         }
     }
 
-    default void updateNetwork(ServerWorld world, BlockPos pos, PipeNetwork.UpdateReason reason)
+    default void updateNetwork(ServerWorld world, BlockPos pos, PipeNetworkImpl1.UpdateReason reason)
     {
         try
         {
@@ -100,7 +102,7 @@ public interface IFluidPipe
         world.removeBlockEntity(pos); // Just in case
         for (Direction direction : getConnections(state, dir -> true))
         {
-            updateNetwork(world, pos.offset(direction), PipeNetwork.UpdateReason.PIPE_BROKEN);
+            updateNetwork(world, pos.offset(direction), PipeNetworkImpl1.UpdateReason.PIPE_BROKEN);
         }
     }
 
@@ -112,5 +114,10 @@ public interface IFluidPipe
     default AcceptorModes getDirectionMode(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return AcceptorModes.INSERT_EXTRACT;
+    }
+
+    default SimplePipeVertex createVertex(World world, BlockPos pos, BlockState state)
+    {
+        return new SimplePipeVertex(state);
     }
 }
