@@ -419,6 +419,12 @@ public class PipeNetworkImpl1 implements PipeNetwork
         this.isTicking = false;
     }
 
+    @Override
+    public boolean merge(BlockPos pos, PipeNetwork other)
+    {
+        return false;
+    }
+
     public void discoverNodes(BlockPos startPos)
     {
         networkPipes.clear();

@@ -53,7 +53,7 @@ public class StopValveBlock extends AbstractAxialPipe implements ISpecialPipe, B
         if (!world.isClient())
         {
             world.setBlockState(pos, state.cycle(OPEN));
-            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
+            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
 
         return ActionResult.success(world.isClient);
@@ -74,7 +74,7 @@ public class StopValveBlock extends AbstractAxialPipe implements ISpecialPipe, B
                 state = state.with(OPEN, !powered);
             }
             world.setBlockState(pos, state.with(POWERED, powered), Block.NOTIFY_LISTENERS);
-            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
+            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
     }
 
