@@ -1,8 +1,12 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Set;
@@ -42,8 +46,37 @@ public interface PipeNetwork
     }
 
     boolean isValid();
-
     UUID getUUID();
-
     boolean canTick(ServerWorld world);
+
+    void update(BlockPos vertexPos, @Nullable PipeVertex vertex, UpdateReason reason);
+
+    void remove();
+
+    enum UpdateReason
+    {
+        PIPE_REMOVED(true, false),
+        PIPE_ADDED(false, true),
+        CONNECTION_CHANGED(false, false),
+        NODE_CHANGED(false, false),
+        VALVE_CHANGED(false, false);
+
+        private final boolean removed;
+        private final boolean newPart;
+
+        public boolean isRemoved()
+        {
+            return removed;
+        }
+
+        public boolean isNewPart() {return newPart; }
+
+        UpdateReason(boolean removed, boolean newPart)
+        {
+            this.removed = removed;
+            this.newPart = newPart;
+        }
+    }
+
+    BlockApiLookup<PipeNetwork, Void> LOOKUP = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "fluid_network"), PipeNetwork.class, Void.class);
 }

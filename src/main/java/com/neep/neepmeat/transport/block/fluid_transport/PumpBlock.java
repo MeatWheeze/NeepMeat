@@ -96,6 +96,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
             }
             else
             {
+                System.out.println("All ticking fluid networks:");
                 for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
 //                    System.out.println(network.connectedNodes);

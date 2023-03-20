@@ -15,7 +15,6 @@ import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
-import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.bottler.BottlerBlock;
@@ -112,14 +111,6 @@ public class NMBlocks
 
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
-    // --- Fluid Pipes ---
-    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", block().factory(FluidComponentItem::new) , FLUID_PIPE_SETTINGS));
-//    public static Block IRON_PIPE = BlockRegistry.queue(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
-    public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
-    public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
-    public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
-    public static Block FILTER_PIPE = BlockRegistry.queue(new FilterPipeBlock("filter_pipe", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
-
     // --- Machines
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -180,11 +171,7 @@ public class NMBlocks
 
     public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", block().factory(FluidComponentItem::new), MACHINE_SETTINGS));
 
-    // --- Fluid Transfer ---
-    public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
-    public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", block().factory(TankItem::new), FLUID_MACHINE_SETTINGS));
     public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", block(), FLUID_MACHINE_SETTINGS));
-    public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", block().factory(TankItem::new), FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
     public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", block(), FLUID_MACHINE_SETTINGS));
 //    public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FLUID_MACHINE_SETTINGS));
@@ -243,7 +230,7 @@ public class NMBlocks
 //    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
 
 
-    protected static ItemSettings block()
+    public static ItemSettings block()
     {
         return ItemSettings.block();
     }

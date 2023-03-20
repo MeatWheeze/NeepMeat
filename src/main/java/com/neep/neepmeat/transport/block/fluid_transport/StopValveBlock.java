@@ -4,7 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.fluid_network.FilterFunction;
 import com.neep.neepmeat.transport.fluid_network.ISpecialPipe;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -53,7 +53,7 @@ public class StopValveBlock extends AbstractAxialPipe implements ISpecialPipe, B
         if (!world.isClient())
         {
             world.setBlockState(pos, state.cycle(OPEN));
-            updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.VALVE_CHANGED);
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
 
         return ActionResult.success(world.isClient);
@@ -74,7 +74,7 @@ public class StopValveBlock extends AbstractAxialPipe implements ISpecialPipe, B
                 state = state.with(OPEN, !powered);
             }
             world.setBlockState(pos, state.with(POWERED, powered), Block.NOTIFY_LISTENERS);
-            updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.VALVE_CHANGED);
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
     }
 

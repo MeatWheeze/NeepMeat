@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.model.block;
 
 import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
@@ -150,7 +150,7 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
             if (!state.get(property).isConnected()) continue;
 
             BlockState offsetState = blockView.getBlockState(pos.offset(direction));
-            if (!state.get(backProperty).isConnected() || !offsetState.isOf(NMBlocks.PIPE) || !offsetState.get(property).isConnected())
+            if (!state.get(backProperty).isConnected() || !offsetState.isOf(FluidTransport.PIPE) || !offsetState.get(property).isConnected())
             {
                 ((FabricBakedModel) connectors[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
             }
@@ -170,7 +170,7 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     boolean renderConnector(Direction face, BlockState state, BlockState offsetState)
     {
         EnumProperty<PipeConnectionType> connection = FluidPipeBlock.DIR_TO_CONNECTION.get(face);
-        return state.get(connection).isConnected() && (!offsetState.isOf(NMBlocks.PIPE) || !offsetState.get(connection).isConnected());
+        return state.get(connection).isConnected() && (!offsetState.isOf(FluidTransport.PIPE) || !offsetState.get(connection).isConnected());
     }
 
     /* BakedModel */

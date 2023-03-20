@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
 import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,7 +13,7 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 
-public class FilterPipeBlockEntity extends NodeContainerBlockEntity implements BlockEntityClientSerializable
+public class FilterPipeBlockEntity extends FluidPipeBlockEntity implements BlockEntityClientSerializable
 {
     protected FluidVariant filterVariant = FluidVariant.blank();
 

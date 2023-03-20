@@ -139,7 +139,7 @@ public class FluidNode
             NbtCompound netNbt = ((IServerWorld) world).getFluidNetworkManager().getNetwork(networkUUID);
             if (netNbt != null)
             {
-                Optional<PipeNetworkImpl1> net = PipeNetworkImpl1.createFromNbt(world, netNbt);
+//                Optional<PipeNetworkImpl1> net = PipeNetworkImpl1.createFromNbt(world, netNbt);
             }
         }
         needsDeferredLoading = false;
