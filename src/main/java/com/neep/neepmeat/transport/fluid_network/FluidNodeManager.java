@@ -224,7 +224,7 @@ public class FluidNodeManager
 
         // Get connected storage, remove node if there isn't one
         Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null
+        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) == null
                 && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof IFluidNodeProvider))
         {
             if (getNodeSupplier(pos).exists())
@@ -249,7 +249,7 @@ public class FluidNodeManager
             newNode = true;
         }
 
-        validatePos(serverWorld, pos.pos);
+        validatePos(serverWorld, pos);
 
 //        System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
@@ -272,7 +272,7 @@ public class FluidNodeManager
             return;
         }
         removeNode(pos);
-        validatePos(serverWorld, pos.pos);
+        validatePos(serverWorld, pos);
     }
 
     public List<FluidNode> getNodes(BlockPos pos)

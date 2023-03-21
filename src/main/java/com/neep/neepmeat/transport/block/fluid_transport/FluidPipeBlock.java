@@ -3,9 +3,8 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.*;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -54,12 +53,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         BlockState nextState = getStateForNeighborUpdate(state, direction, world.getBlockState(fromPos), world, pos, fromPos);
 
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
-//        world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
+        world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
 
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
             if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, nextState, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -168,10 +167,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     }
 
     @Override
-    public PipeVertex getPipeVertex(World world, BlockPos pos, BlockState state)
+    public PipeVertex getPipeVertex(ServerWorld world, BlockPos pos, BlockState state)
     {
         if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
         {
+            be.getPipeVertex().updateNodes(world, pos, state);
             return be.getPipeVertex();
         }
         return IFluidPipe.super.getPipeVertex(world, pos, state);

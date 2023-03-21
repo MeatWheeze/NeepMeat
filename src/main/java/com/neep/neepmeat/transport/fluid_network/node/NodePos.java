@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
+import com.google.common.base.MoreObjects;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -7,20 +8,19 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class NodePos
+public class NodePos extends BlockPos
 {
-    public final BlockPos pos;
-    public final Direction face;
+    protected final Direction face;
 
     public NodePos(BlockPos pos, Direction face)
     {
-        this.pos = pos;
+        super(pos);
         this.face = face;
     }
 
     public NbtCompound toNbt(NbtCompound nbt)
     {
-        nbt.putLong("pos", pos.asLong());
+        nbt.putLong("pos", asLong());
         nbt.putInt("face", face.getId());
         return nbt;
     }
@@ -35,7 +35,7 @@ public class NodePos
     @Override
     public String toString()
     {
-        return pos + ", " + face;
+        return MoreObjects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).add("face", face).toString();
     }
 
     @Override
@@ -45,26 +45,30 @@ public class NodePos
         {
             return false;
         }
-        return nodePos.pos.equals(pos) && nodePos.face.equals(face);
+        return super.equals(nodePos) && nodePos.face == face;
     }
 
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder(3, 19)
-                .append(pos)
+                .append(super.hashCode())
                 .append(face)
                 .toHashCode();
     }
 
     public ChunkPos toChunkPos()
     {
-        return ChunkSectionPos.from(pos).toChunkPos();
+        return ChunkSectionPos.from(this).toChunkPos();
     }
 
     public BlockPos facingBlock()
     {
-        return pos.offset(face);
+        return offset(face);
     }
 
+    public Direction face()
+    {
+        return face;
+    }
 }

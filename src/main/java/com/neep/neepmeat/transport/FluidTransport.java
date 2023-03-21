@@ -15,6 +15,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+
 public class FluidTransport
 {
     // --- Fluid Pipes ---
@@ -38,10 +40,10 @@ public class FluidTransport
         PipeNetwork.registerEvent();
     }
 
-    public static IFluidPipe findFluidPipe(World world, BlockPos pos, BlockState state)
+    public static Optional<IFluidPipe> findFluidPipe(World world, BlockPos pos, BlockState state)
     {
-        if (state.getBlock() instanceof IFluidPipe pipe) return pipe;
-        return null;
+        if (state.getBlock() instanceof IFluidPipe pipe) return Optional.of(pipe);
+        return Optional.empty();
     }
 
     public static PipeNetwork getNetwork(World world, BlockPos pos, BlockState state, BlockEntity be, Void context)
