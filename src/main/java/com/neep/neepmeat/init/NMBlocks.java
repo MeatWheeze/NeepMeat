@@ -87,6 +87,7 @@ public class NMBlocks
     public static Block YELLOW_TILES = new BaseBuildingBlock("yellow_tiles", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block CAUTION_BLOCK = new BaseBuildingBlock("caution_block", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block DIRTY_RED_TILES = new BaseBuildingBlock("dirty_red_tiles", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock("dirty_white_tiles", true, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block SAND_BRICKS = new BaseBuildingBlock("sandy_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
     public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock("meat_steel_block", true, FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
 
