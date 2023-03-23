@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.api.pipe;
 
+import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
@@ -15,6 +16,7 @@ import org.w3c.dom.css.CSSStyleSheet;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -101,14 +103,16 @@ public interface IFluidPipe
             else if (reason.isRemoved())
             {
                 // Look for adjacent networks and add this pipe to the first one.
+                Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
                 BlockPos.Mutable mutable = pos.mutableCopy();
                 for (Direction direction : this.getConnections(state, d -> true))
                 {
                     mutable.set(pos, direction);
                     net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                    if (net != null)
+                    if (net != null && !updatedNetworks.contains(net))
                     {
                         net.update(mutable.toImmutable(), null, reason);
+                        updatedNetworks.add(net);
                     }
                     else
                     {
