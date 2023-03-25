@@ -39,6 +39,7 @@ public class PipeNetworkImpl2 implements PipeNetwork
         if (removed) return; // This indicates a problem. TODO: throw an exception
 
         validate();
+        graph.getVertices().long2ObjectEntrySet().fastForEach(e -> e.getValue().preTick());
         graph.getVertices().long2ObjectEntrySet().fastForEach(e -> e.getValue().tick());
     }
 
