@@ -4,7 +4,6 @@ import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -17,25 +16,20 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.function.Supplier;
 
 public class BlockPipeVertex extends SimplePipeVertex
 {
     private final FluidPipeBlockEntity parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
-    protected long[] newAmounts = new long[6];
-    protected long[] amounts = new long[6];
-    protected long[] newVelocity = new long[6];
     protected long[] velocity = new long[6];
-
-//    protected Vec3d newVelocity;
-//    protected Vec3d velocity;
+    private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
 
     public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
     {
         this.parent = fluidPipeBlockEntity;
+        components.size(6);
     }
 
     @Override
@@ -81,14 +75,12 @@ public class BlockPipeVertex extends SimplePipeVertex
     {
         return switch (dir)
         {
-            case 0 -> elevationHead + pressureHead;
-            case 1 -> elevationHead + pressureHead + 1;
-            default -> elevationHead + pressureHead + 0.5f;
+            case 0 -> elevationHead + pressureHead - 0.5f;
+            case 1 -> elevationHead + pressureHead + 0.5f;
+            default -> elevationHead + pressureHead;
         };
     }
 
-    private final List<PipeFlowComponent> components = new ObjectArrayList<>(6);
-    private final List<Integer> directions = new IntArrayList(6);
 
     @Override
     public void tick()
@@ -109,34 +101,39 @@ public class BlockPipeVertex extends SimplePipeVertex
 //        }
 
 
-        int dir;
         try (Transaction transaction = Transaction.openOuter())
         {
             components.clear();
-            for (dir = 0; dir < nodes.length; ++dir)
+            components.size(6);
+            int outputs = 0;
+            for (int dir = 0; dir < nodes.length; ++dir)
             {
                 NodeSupplier node = nodes[dir];
-                if (node != null && node.get() != null && getNodeEfflux(node) <= 0)
+                if (node != null && node.get() != null && getNodeInflux(node) >= 0)
                 {
-                    components.add(dir, node);
+                    components.set(dir, node);
+                    ++outputs;
                 }
             }
 
-            for (dir = 0; dir < getAdjVertices().length; ++dir)
+            for (int dir = 0; dir < getAdjVertices().length; ++dir)
             {
                 PipeVertex vertex = getAdjacent(dir);
-                if (vertex != null && vertex.getTotalHead() - this.getTotalHead() < 0)
+                if (vertex != null && vertex.getTotalHead() - this.getTotalHead() <= 0)
                 {
-                    components.add(dir, vertex);
+                    components.set(dir, vertex);
+                    ++outputs;
                 }
             }
 
-            for (dir = 0; dir < components.size(); ++dir)
+            final int[] ints = parent.getWorld().getRandom().ints(0, 6).distinct().limit(6).toArray();
+
+            for (int dir : ints)
             {
                 PipeFlowComponent component = components.get(dir);
                 if (component == null) continue;
 
-                long transferAmount = Math.min(amount, oldAmount / components.size());
+                long transferAmount = (long) Math.min(amount, Math.ceil(oldAmount / (float) outputs));
                 long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), FluidVariant.of(Fluids.WATER), transaction);
                 amount -= received;
             }
@@ -146,9 +143,11 @@ public class BlockPipeVertex extends SimplePipeVertex
     }
 
     // Get the flow with respect to the node
-    protected float getNodeEfflux(NodeSupplier nodeSupplier)
+    protected float getNodeInflux(NodeSupplier nodeSupplier)
     {
-        return getTotalHead() - nodeSupplier.get().getFlow();
+        float nodeFlow = nodeSupplier.get().getFlow();
+        float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
+        return Math.abs(nodeFlow) > Math.abs(otherFlow) ? nodeFlow : otherFlow;
     }
 
     @Override
@@ -159,12 +158,15 @@ public class BlockPipeVertex extends SimplePipeVertex
         {
             for (int dir = 0; dir < nodes.length; ++dir)
             {
-                if (nodes[dir] == null) return;
+                if (nodes[dir] == null) continue;
                 FluidNode node = nodes[dir].get();
+                if (node == null) continue;
+
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-                float dH = getTotalHead() + 0.5f - getHead(dir); // Negative for extraction, positive for insertion
-                long transferAmount = (long) (dH * FluidConstants.BUCKET / 8);
+//                float dH = getTotalHead() + 0.5f - getHead(dir); // Negative for extraction, positive for insertion
+                float f = getNodeInflux(nodes[dir]);
+                long transferAmount = (long) Math.ceil(f * FluidConstants.BUCKET / 8);
                 if (transferAmount < 0)
                 {
                     extracted = storage.extract(FluidVariant.of(Fluids.WATER), -transferAmount, transaction);
@@ -219,6 +221,12 @@ public class BlockPipeVertex extends SimplePipeVertex
     {
 
         return super.insert(fromDir, toDir, maxAmount, world, variant, transaction);
+    }
+
+    @Override
+    public boolean keepNetworkValid()
+    {
+        return numNodes() >= 2;
     }
 
     @Override

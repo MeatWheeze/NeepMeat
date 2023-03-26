@@ -8,19 +8,11 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-public class NodePos extends BlockPos
+public record NodePos(BlockPos pos, Direction face)
 {
-    protected final Direction face;
-
-    public NodePos(BlockPos pos, Direction face)
-    {
-        super(pos);
-        this.face = face;
-    }
-
     public NbtCompound toNbt(NbtCompound nbt)
     {
-        nbt.putLong("pos", asLong());
+        nbt.putLong("pos", pos.asLong());
         nbt.putInt("face", face.getId());
         return nbt;
     }
@@ -35,40 +27,34 @@ public class NodePos extends BlockPos
     @Override
     public String toString()
     {
-        return MoreObjects.toStringHelper(this).add("x", this.getX()).add("y", this.getY()).add("z", this.getZ()).add("face", face).toString();
+        return MoreObjects.toStringHelper(this).add("x", pos.getX()).add("y", pos.getY()).add("z", pos.getZ()).add("face", face).toString();
     }
 
     @Override
     public boolean equals(Object object)
     {
-        if (!(object instanceof NodePos nodePos))
-        {
+        if (!(object instanceof NodePos nodePos)) {
             return false;
         }
-        return super.equals(nodePos) && nodePos.face == face;
+        return pos.equals(nodePos.pos) && nodePos.face == face;
     }
 
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder(3, 19)
-                .append(super.hashCode())
+                .append(pos.hashCode())
                 .append(face)
                 .toHashCode();
     }
 
     public ChunkPos toChunkPos()
     {
-        return ChunkSectionPos.from(this).toChunkPos();
+        return ChunkSectionPos.from(pos).toChunkPos();
     }
 
     public BlockPos facingBlock()
     {
-        return offset(face);
-    }
-
-    public Direction face()
-    {
-        return face;
+        return pos.offset(face);
     }
 }

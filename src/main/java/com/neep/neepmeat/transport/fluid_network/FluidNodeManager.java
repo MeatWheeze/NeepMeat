@@ -249,7 +249,7 @@ public class FluidNodeManager
             newNode = true;
         }
 
-        validatePos(serverWorld, pos);
+        validatePos(serverWorld, pos.pos());
 
 //        System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
@@ -272,7 +272,7 @@ public class FluidNodeManager
             return;
         }
         removeNode(pos);
-        validatePos(serverWorld, pos);
+        validatePos(serverWorld, pos.pos());
     }
 
     public List<FluidNode> getNodes(BlockPos pos)

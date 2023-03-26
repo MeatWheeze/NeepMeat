@@ -11,9 +11,9 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -164,7 +164,8 @@ public class FluidNode
     public boolean findStorage(ServerWorld world)
     {
         Storage<FluidVariant> storage;
-       if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) != null)
+        BlockEntity be = world.getBlockEntity(pos.facingBlock());
+        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), null, be, pos.face().getOpposite())) != null)
         {
             this.storage = storage;
             return true;
@@ -225,11 +226,6 @@ public class FluidNode
         return pos.facingBlock().getY();
     }
 
-    public BlockPos getPos()
-    {
-        return pos;
-    }
-
     public NodePos getNodePos()
     {
         return this.nodePos;
@@ -244,9 +240,9 @@ public class FluidNode
     public static double exactDistance(FluidNode node1, FluidNode node2)
     {
         Vec3d offset1 = new Vec3d(node1.pos.face().getUnitVector()).multiply(0.5);
-        Vec3d v1 = Vec3d.ofCenter(node1.pos).add(offset1);
+        Vec3d v1 = Vec3d.ofCenter(node1.pos.pos()).add(offset1);
         Vec3d offset2 = new Vec3d(node2.pos.face().getUnitVector()).multiply(0.5);
-        Vec3d v2 = Vec3d.ofCenter(node2.pos).add(offset2);
+        Vec3d v2 = Vec3d.ofCenter(node2.pos.pos()).add(offset2);
         return NMMaths.manhattanDistance(v1, v2);
     }
 
