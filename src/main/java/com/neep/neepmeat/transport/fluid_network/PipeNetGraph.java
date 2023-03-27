@@ -1,17 +1,24 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
-import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.w3c.dom.Node;
 
 import java.util.ArrayDeque;
+import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -29,11 +36,14 @@ public class PipeNetGraph
 
         Pressure head:
         - Pumps make this happen. Decrement each pump's contribution by a scaled unit with every block of distance. (?)
+
+        BREAKING NEWS! The quantity that we're calling head no longer bears any resemblance to head in real life!
      */
 
     protected final ServerWorld world;
     protected final Long2ObjectOpenHashMap<PipeVertex> vertices = new Long2ObjectOpenHashMap<>();
     protected final Long2ObjectOpenHashMap<PipeVertex> allVertices = new Long2ObjectOpenHashMap<>();
+    protected final Object2ObjectOpenHashMap<NodePos, FluidPump> pumps = new Object2ObjectOpenHashMap<>();
     protected final ArrayDeque<BlockPos> posQueue = new ArrayDeque<>(10);
 //    protected final HashSet<NodeSupplier> connectedNodes = new HashSet<>();
 
@@ -46,6 +56,7 @@ public class PipeNetGraph
     {
         vertices.clear();
         allVertices.clear();
+        pumps.clear();
 
         buildGraph(startPos);
         vertices.forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
@@ -60,7 +71,7 @@ public class PipeNetGraph
         posQueue.add(startPos);
 
         BlockState startState = world.getBlockState(startPos);
-        IFluidPipe startPipe = FluidTransport.findFluidPipe(world, startPos, world.getBlockState(startPos)).orElse(null);
+        IFluidPipe startPipe = IFluidPipe.findFluidPipe(world, startPos, world.getBlockState(startPos)).orElse(null);
         if (startPipe == null) return;
         PipeVertex startVertex = startPipe.getPipeVertex(world, startPos, startState);
         startVertex.reset();
@@ -82,6 +93,8 @@ public class PipeNetGraph
                     if (visited.contains(mutable.asLong())) continue;
                     visited.add(mutable.asLong());
 
+                    findFluidPump(mutable, direction.getOpposite());
+
                     // Check for opposite connection in next pipe
                     BlockState nextState = world.getBlockState(mutable);
                     if (nextState.getBlock() instanceof IFluidPipe nextPipe)
@@ -95,6 +108,15 @@ public class PipeNetGraph
                     }
                 }
             }
+        }
+    }
+
+    protected void findFluidPump(BlockPos pos, Direction direction)
+    {
+        FluidPump pump = FluidPump.SIDED.find(world, pos, direction);
+        if (pump != null)
+        {
+            pumps.put(new NodePos(pos, direction), pump);
         }
     }
 
@@ -144,9 +166,36 @@ public class PipeNetGraph
             // Set elevation head relative to the lowest vertex in the network.
             int vertexY = BlockPos.unpackLongY(entry.getLongKey());
             entry.getValue().setElevationHead(vertexY - minY.intValue());
-
-
         }
+
+        pumps.object2ObjectEntrySet().fastForEach(e ->
+        {
+            if (e.getValue().getMode() != AcceptorModes.PULL) return;
+
+            int depth = 0;
+
+            HashSet<PipeVertex> visited = Sets.newHashSet();
+            Queue<PipeVertex> queue = Queues.newArrayDeque();
+            PipeVertex startVertex = allVertices.get(e.getKey().pos().offset(e.getKey().face()).asLong());
+            startVertex.addHead(depth);
+            queue.add(startVertex);
+            visited.add(startVertex);
+
+            while (!queue.isEmpty() && depth < 10)
+            {
+                ++depth;
+                PipeVertex current = queue.poll();
+                for (PipeVertex next : current.getAdjVertices())
+                {
+                    if (next == null || visited.contains(next)) continue;
+
+                    visited.add(next);
+
+                    next.addHead(depth);
+                    queue.add(next);
+                }
+            }
+        });
     }
 
     public Long2ObjectOpenHashMap<PipeVertex> getVertices()

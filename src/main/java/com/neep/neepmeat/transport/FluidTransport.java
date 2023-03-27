@@ -5,7 +5,6 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.item.TankItem;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -14,8 +13,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Optional;
 
 public class FluidTransport
 {
@@ -38,12 +35,6 @@ public class FluidTransport
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, CHECK_VALVE);
 
         PipeNetwork.registerEvent();
-    }
-
-    public static Optional<IFluidPipe> findFluidPipe(World world, BlockPos pos, BlockState state)
-    {
-        if (state.getBlock() instanceof IFluidPipe pipe) return Optional.of(pipe);
-        return Optional.empty();
     }
 
     public static PipeNetwork getNetwork(World world, BlockPos pos, BlockState state, BlockEntity be, Void context)
