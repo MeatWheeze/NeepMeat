@@ -109,10 +109,13 @@ public interface IFluidPipe
                 {
                     mutable.set(pos, direction);
                     net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                    if (net != null && !updatedNetworks.contains(net))
+                    if (net != null)
                     {
-                        net.update(mutable.toImmutable(), null, reason);
-                        updatedNetworks.add(net);
+                        if (!updatedNetworks.contains(net))
+                        {
+                            net.update(mutable.toImmutable(), null, reason);
+                            updatedNetworks.add(net);
+                        }
                     }
                     else
                     {
