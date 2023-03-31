@@ -1,13 +1,14 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 
-import java.util.Arrays;
-
-public class SimplePipeVertex implements PipeVertex
+@SuppressWarnings("UnstableApiUsage")
+public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements PipeVertex
 {
 //    protected final List<Direction> connections = new ArrayList<>();
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];
@@ -21,6 +22,19 @@ public class SimplePipeVertex implements PipeVertex
 
     public SimplePipeVertex()
     {
+    }
+
+    @Override
+    protected ResourceAmount<FluidVariant> createSnapshot()
+    {
+        return new ResourceAmount<>(variant, amount);
+    }
+
+    @Override
+    protected void readSnapshot(ResourceAmount<FluidVariant> snapshot)
+    {
+        this.variant = snapshot.resource();
+        this.amount = snapshot.amount();
     }
 
     public void tick()
@@ -38,6 +52,7 @@ public class SimplePipeVertex implements PipeVertex
     {
         if (!insertVariant.isBlank() && (variant.isBlank() || insertVariant.equals(variant)))
         {
+            updateSnapshots(transaction);
             this.amount += maxAmount;
             variant = insertVariant;
             return maxAmount;
