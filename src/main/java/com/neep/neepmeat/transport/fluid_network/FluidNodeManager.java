@@ -185,7 +185,7 @@ public class FluidNodeManager
             return be;
         }
         BlockState state = world.getBlockState(pos);
-        world.addBlockEntity(new FluidPipeBlockEntity(pos, state));
+//        world.addBlockEntity(new FluidPipeBlockEntity(pos, state));
         return world.getBlockEntity(pos);
     }
 

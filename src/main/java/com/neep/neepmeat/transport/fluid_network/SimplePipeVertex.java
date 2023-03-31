@@ -53,9 +53,26 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
         if (!insertVariant.isBlank() && (variant.isBlank() || insertVariant.equals(variant)))
         {
             updateSnapshots(transaction);
-            this.amount += maxAmount;
-            variant = insertVariant;
-            return maxAmount;
+
+            long permittedAmount = canInsert(world, toDir, insertVariant, maxAmount);
+
+            if (permittedAmount > 0)
+            {
+                this.amount += permittedAmount;
+                variant = insertVariant;
+                return permittedAmount;
+            }
+            return 0;
+        }
+        return 0;
+    }
+
+    @Override
+    public int getConnectionDir(PipeVertex from)
+    {
+        for (int i = 0; i < adjacentVertices.length; ++i)
+        {
+            if (from.equals(adjacentVertices[i])) return i;
         }
         return 0;
     }
@@ -168,8 +185,8 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
     {
         pressureHead = 0;
         elevationHead = 0;
-        amount = 0;
-        oldAmount = 0;
+//        amount = 0;
+//        oldAmount = 0;
         network = null;
         clearEdges();
     }
@@ -242,5 +259,10 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 
             setAdjVertex(i, null);
         }
+    }
+
+    public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
+    {
+        return maxAmount;
     }
 }

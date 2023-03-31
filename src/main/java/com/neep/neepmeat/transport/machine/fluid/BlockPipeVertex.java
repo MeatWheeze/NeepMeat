@@ -22,11 +22,10 @@ import java.util.Arrays;
 @SuppressWarnings("UnstableApiUsage")
 public class BlockPipeVertex extends SimplePipeVertex
 {
-    private final FluidPipeBlockEntity parent;
+    protected final FluidPipeBlockEntity parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
     protected long[] velocity = new long[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
-    private final ObjectArrayList<Long> componentAmounts = new ObjectArrayList<>(6);
 
     public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
     {
@@ -91,11 +90,8 @@ public class BlockPipeVertex extends SimplePipeVertex
         {
             components.clear();
             components.size(6);
-//            componentAmounts.clear();
-//            componentAmounts.size(6);
 
-//            long transferToNodes = 0;
-
+            // The number of remaining transfers
             int transfers = 0;
 
             for (int dir = 0; dir < nodes.length; ++dir)
@@ -108,7 +104,6 @@ public class BlockPipeVertex extends SimplePipeVertex
                 }
             }
 
-
             for (int dir = 0; dir < getAdjVertices().length; ++dir)
             {
                 PipeVertex vertex = getAdjacent(dir);
@@ -119,7 +114,6 @@ public class BlockPipeVertex extends SimplePipeVertex
                 }
             }
 
-
             // Randomise transfer order to reduce opportunities for fluid to get stuck in loops.
             final int[] ints = parent.getWorld().getRandom().ints(0, 6).distinct().limit(6).toArray();
 
@@ -128,6 +122,7 @@ public class BlockPipeVertex extends SimplePipeVertex
                 PipeFlowComponent component = components.get(dir);
                 if (component == null) continue;
 
+                // Even if previous transfers failed, the remaining fluid should all be transferred.
                 long transferAmount = (long) Math.min(amount, Math.ceil(amount / (float) transfers));
 
                 long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), variant, transaction);
@@ -153,7 +148,7 @@ public class BlockPipeVertex extends SimplePipeVertex
     {
         float nodeFlow = nodeSupplier.get().getFlow();
 //        float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
-        float otherFlow = -getTotalHead() < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
+        float otherFlow = -getHead(nodeSupplier.getPos().face().ordinal()) < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
         return nodeFlow != 0 ? nodeFlow : otherFlow;
     }
 
@@ -176,9 +171,10 @@ public class BlockPipeVertex extends SimplePipeVertex
                 if (transferAmount < 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
+                    long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), variant, transferAmount);
                     if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
                     {
-                        extracted = storage.extract(foundVariant, -transferAmount, transaction);
+                        extracted = storage.extract(foundVariant, -permittedAmount, transaction);
                         variant = foundVariant;
                         amount += extracted;
                     }
@@ -188,38 +184,6 @@ public class BlockPipeVertex extends SimplePipeVertex
         }
         super.preTick();
     }
-
-//    protected void transferVertex(int dir, List<PipeFlowComponent> components, TransactionContext transaction)
-//    {
-////        PipeVertex adj = getAdjVertex(dir);
-////        if (adj == null || adj.getTotalHead() - this.getTotalHead() > 0) return;
-//
-//        // Determine which direction this vertex is connected to the adjacent one in. Argh.
-//        for (int i = 0; i < adj.getAdjVertices().length; ++i)
-//        {
-//            if (adj.getAdjVertices()[i] != this) continue;
-//
-//            long transferAmount = Math.min(amount, oldAmount / components.size());
-//            long received = adj.insert(dir, i, transferAmount, world, , transaction);
-//            amount -= received;
-//            break;
-//        }
-//
-//    }
-
-//    protected void transferNode(int dir, List<PipeFlowComponent> components, TransactionContext transaction)
-//    {
-//        if (nodes[dir] == null) return;
-//        FluidNode node = nodes[dir].get();
-//
-//        long extracted;
-//        if (transferAmount >= 0)
-//        {
-//            transferAmount = Math.min(oldAmount, transferAmount);
-//            amount -= extracted;
-//        }
-//
-//    }
 
     @Override
     public long[] getVelocity()
