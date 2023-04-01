@@ -1,9 +1,8 @@
-package com.neep.neepmeat.transport.machine.fluid;
+package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
-import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
-import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -37,7 +36,7 @@ public class BlockPipeVertex extends SimplePipeVertex
     public void setNetwork(PipeNetwork network)
     {
         super.setNetwork(network);
-        parent.network = network;
+        parent.setNetwork(network);
     }
 
     @Override
@@ -81,7 +80,6 @@ public class BlockPipeVertex extends SimplePipeVertex
             default -> elevationHead + pressureHead;
         };
     }
-
 
     @Override
     public void tick()
@@ -155,22 +153,22 @@ public class BlockPipeVertex extends SimplePipeVertex
     @Override
     public void preTick()
     {
-        long extracted;
         try (Transaction transaction = Transaction.openOuter())
         {
-            for (int dir = 0; dir < nodes.length; ++dir)
+            for (NodeSupplier nodeSupplier : nodes)
             {
-                if (nodes[dir] == null) continue;
-                FluidNode node = nodes[dir].get();
+                if (nodeSupplier == null) continue;
+                FluidNode node = nodeSupplier.get();
                 if (node == null) continue;
 
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-                float f = getNodeInflux(nodes[dir]);
+                float f = getNodeInflux(nodeSupplier);
                 long transferAmount = (long) Math.ceil(f * FluidConstants.BUCKET / 8);
                 if (transferAmount < 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
+                    long extracted;
                     if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
                     {
                         long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
@@ -183,6 +181,45 @@ public class BlockPipeVertex extends SimplePipeVertex
             transaction.commit();
         }
         super.preTick();
+    }
+
+    protected void checkBlocked()
+    {
+        components.clear();
+        components.size(6);
+
+        // The number of remaining transfers
+        int transfers = 0;
+
+        for (int dir = 0; dir < nodes.length; ++dir)
+        {
+            NodeSupplier node = nodes[dir];
+            if (node != null && node.get() != null && getNodeInflux(node) >= 0)
+            {
+                components.set(dir, node);
+                ++transfers;
+            }
+        }
+
+        for (int dir = 0; dir < getAdjVertices().length; ++dir)
+        {
+            PipeVertex vertex = getAdjacent(dir);
+            if (vertex != null && vertex.getTotalHead() - this.getTotalHead() <= 0)
+            {
+                components.set(dir, vertex);
+                ++transfers;
+            }
+        }
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            for (int dir = 0; dir < components.size(); ++dir)
+            {
+                PipeFlowComponent component = components.get(dir);
+                long transferred = component.insert(dir, component.getConnectionDir(this), 1, (ServerWorld) parent.getWorld(), variant, transaction);
+            }
+            transaction.abort();
+        }
     }
 
     @Override

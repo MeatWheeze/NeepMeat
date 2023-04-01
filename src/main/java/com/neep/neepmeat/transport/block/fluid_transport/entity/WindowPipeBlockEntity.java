@@ -1,0 +1,77 @@
+package com.neep.neepmeat.transport.block.fluid_transport.entity;
+
+import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.util.math.BlockPos;
+
+public class WindowPipeBlockEntity extends FluidPipeBlockEntity implements BlockEntityClientSerializable
+{
+    public WindowPipeBlockEntity(BlockPos pos, BlockState state)
+    {
+        this(NMBlockEntities.WINDOW_PIPE, pos, state, FilterPipeBlock.FilterPipeVertex::new);
+    }
+
+    public WindowPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor constructor)
+    {
+        super(type, pos, state, constructor);
+    }
+
+    @Override
+    public boolean isCreatedDynamically()
+    {
+        return false;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+    }
+
+    @Override
+    public void sync()
+    {
+        markDirty();
+        world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket()
+    {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt()
+    {
+        return createNbt();
+    }
+
+    @Override
+    public void fromClientTag(NbtCompound nbt)
+    {
+
+    }
+
+    @Override
+    public NbtCompound toClientTag(NbtCompound nbt)
+    {
+        return null;
+    }
+}
