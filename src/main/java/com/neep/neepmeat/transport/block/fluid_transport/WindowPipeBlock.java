@@ -4,14 +4,10 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
-import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -55,17 +51,4 @@ public class WindowPipeBlock extends AbstractAxialPipe implements BlockEntityPro
         return NMBlockEntities.WINDOW_PIPE.instantiate(pos, state);
     }
 
-    public static class WindowPipeVertex extends BlockPipeVertex
-    {
-        public WindowPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
-        {
-            super(fluidPipeBlockEntity);
-        }
-
-        @Override
-        public boolean canSimplify()
-        {
-            return false;
-        }
-    }
 }

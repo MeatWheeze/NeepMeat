@@ -80,7 +80,7 @@ public class NMBlockEntities
     public static BlockEntityType<?> CHECK_VALVE;
     public static BlockEntityType<?> STOP_VALVE;
     public static BlockEntityType<FilterPipeBlockEntity> FILTER_PIPE;
-    public static BlockEntityType<?> WINDOW_PIPE;
+    public static BlockEntityType<WindowPipeBlockEntity> WINDOW_PIPE;
     public static BlockEntityType<PumpBlockEntity> PUMP;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
@@ -171,9 +171,9 @@ public class NMBlockEntities
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
         FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, NMBlockEntities.GLASS_TANK_BLOCK_ENTITY);
-        FLUID_PIPE = registerBlockEntity("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
-        STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
-        CHECK_VALVE = registerBlockEntity("check_valve", (pos, state) -> new FluidPipeBlockEntity(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
+        FLUID_PIPE = registerBlockEntity("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
+        STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
+        CHECK_VALVE = registerBlockEntity("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
         FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);
         WINDOW_PIPE = registerBlockEntity("window_pipe", WindowPipeBlockEntity::new, FluidTransport.WINDOW_PIPE);
 

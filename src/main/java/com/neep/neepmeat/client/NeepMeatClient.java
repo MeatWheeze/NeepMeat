@@ -36,6 +36,7 @@ import com.neep.neepmeat.network.TankMessagePacket;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
+import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -91,6 +92,8 @@ public class NeepMeatClient implements ClientModInitializer
         NMParticles.Client.init();
 
         // BlockEntity renderers
+        BlockEntityRendererRegistry.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
+
         BlockEntityRendererRegistry.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
         BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);

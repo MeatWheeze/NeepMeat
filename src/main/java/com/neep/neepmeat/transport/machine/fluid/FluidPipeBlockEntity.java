@@ -4,7 +4,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
-import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -13,19 +12,19 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class FluidPipeBlockEntity extends BlockEntity
+public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
 {
     public NbtCompound queuedNbt;
     protected PipeNetwork network;
-    protected final PipeVertex vertex;
-    protected final PipeConstructor constructor;
+    protected final T vertex;
+    protected final PipeConstructor<T> constructor;
 
-    public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor constructor)
+    public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
         this(NMBlockEntities.FLUID_PIPE, pos, state, constructor);
     }
 
-    public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor constructor)
+    public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
         super(type, pos, state);
         this.vertex = constructor.create(this);
@@ -92,16 +91,14 @@ public class FluidPipeBlockEntity extends BlockEntity
         return false;
     }
 
-    public PipeVertex getPipeVertex()
+    public T getPipeVertex()
     {
-        // TODO: remove this cast
-        ((BlockPipeVertex) vertex).updateNodes((ServerWorld) world, pos.toImmutable(), getCachedState());
         return vertex;
     }
 
     @FunctionalInterface
-    public interface PipeConstructor
+    public interface PipeConstructor<T extends PipeVertex>
     {
-        PipeVertex create(FluidPipeBlockEntity parent);
+        T create(FluidPipeBlockEntity parent);
     }
 }

@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.api.pipe;
 import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.minecraft.block.BlockState;
@@ -193,6 +194,8 @@ public interface IFluidPipe
     {
         if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
         {
+            // TODO: remove this cast
+            ((BlockPipeVertex) be.getPipeVertex()).updateNodes((ServerWorld) world, pos.toImmutable(), state);
             return be.getPipeVertex();
         }
         return null;
