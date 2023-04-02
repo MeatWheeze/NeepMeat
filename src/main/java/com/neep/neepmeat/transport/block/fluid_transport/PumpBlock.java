@@ -7,7 +7,6 @@ import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl2;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
@@ -31,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
 import java.util.function.Supplier;
 
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
@@ -101,14 +99,14 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
                 {
 //                    System.out.println(network.connectedNodes);
                     System.out.print("\n" + network.getUUID() + " nodes: ");
-                    if (network instanceof PipeNetworkImpl1 impl1)
-                    {
-                        for (Supplier<FluidNode> supplier : impl1.getNodes())
-                        {
-                            System.out.print(supplier.get());
-                        }
-                    }
-                    else if (network instanceof PipeNetworkImpl2 impl2)
+//                    if (network instanceof PipeNetworkImpl1 impl1)
+//                    {
+//                        for (Supplier<FluidNode> supplier : impl1.getNodes())
+//                        {
+//                            System.out.print(supplier.get());
+//                        }
+//                    }
+                    if (network instanceof PipeNetworkImpl2 impl2)
                     {
                         System.out.print("\n");
                         impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));

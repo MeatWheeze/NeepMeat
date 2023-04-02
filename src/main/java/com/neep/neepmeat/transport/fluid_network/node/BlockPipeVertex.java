@@ -74,9 +74,19 @@ public class BlockPipeVertex extends SimplePipeVertex
     {
         return switch (dir)
         {
-            case 0 -> elevationHead + pressureHead - 0.5f;
-            case 1 -> elevationHead + pressureHead + 0.5f;
-            default -> elevationHead + pressureHead;
+            case 0 -> getHeight() + pressureHeight - 0.5f;
+            case 1 -> getHeight() + pressureHeight + 0.5f;
+            default -> getHeight() + pressureHeight;
+        };
+    }
+
+    protected float getHeight(int dir)
+    {
+        return switch (dir)
+        {
+            case 0 -> height - 0.5f;
+            case 1 -> height + 0.5f;
+            default -> height;
         };
     }
 
@@ -94,7 +104,7 @@ public class BlockPipeVertex extends SimplePipeVertex
             for (int dir = 0; dir < nodes.length; ++dir)
             {
                 NodeSupplier node = nodes[dir];
-                if (node != null && node.get() != null && getNodeInflux(node) >= 0)
+                if (node != null && node.get() != null && getNodeFlow(node) >= 0)
                 {
                     components.set(dir, node);
                     ++transfers;
@@ -134,12 +144,16 @@ public class BlockPipeVertex extends SimplePipeVertex
     }
 
     // Get the flow with respect to the node
-    protected float getNodeInflux(NodeSupplier nodeSupplier)
+    protected float getNodeFlow(NodeSupplier nodeSupplier)
     {
+        // Negative for influx, positive for efflux.
         float nodeFlow = nodeSupplier.get().getFlow();
-//        float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
-        float otherFlow = -getHead(nodeSupplier.getPos().face().ordinal()) < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
-        return nodeFlow != 0 ? nodeFlow : otherFlow;
+
+//        float heightFlow = -getHead(nodeSupplier.getPos().face().ordinal()) < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
+        // If a node is above this vertex, the height difference should be -0.5.
+        float heightFlow = -(getHeight(nodeSupplier.getPos().face().ordinal()) - height) - (nodeSupplier.get().getPressureHeight() - pressureHeight);
+
+        return nodeFlow != 0 ? nodeFlow : heightFlow;
     }
 
     @Override
@@ -155,7 +169,7 @@ public class BlockPipeVertex extends SimplePipeVertex
 
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-                float f = getNodeInflux(nodeSupplier);
+                float f = getNodeFlow(nodeSupplier);
 
                 // Calculate the amount with respect to this vertex.
                 long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 8);
@@ -178,50 +192,32 @@ public class BlockPipeVertex extends SimplePipeVertex
         super.preTick();
     }
 
-    protected void checkBlocked()
+    @Override
+    public void setHeight(float height)
     {
-        components.clear();
-        components.size(6);
+        this.height = height;
+//        for (NodeSupplier nodeSupplier : nodes)
+//        {
+//            if (nodeSupplier == null || !nodeSupplier.exists()) continue;
+//            FluidNode node = nodeSupplier.get();
+//
+//            node.setPressureHeight(pressureHeight - Math.signum(height) * 1);
+//        }
 
-        // The number of remaining transfers
-        int transfers = 0;
-
-        for (int dir = 0; dir < nodes.length; ++dir)
-        {
-            NodeSupplier node = nodes[dir];
-            if (node != null && node.get() != null && getNodeInflux(node) >= 0)
-            {
-                components.set(dir, node);
-                ++transfers;
-            }
-        }
-
-        for (int dir = 0; dir < getAdjVertices().length; ++dir)
-        {
-            PipeVertex vertex = getAdjacent(dir);
-            if (vertex != null && vertex.getTotalHead() - this.getTotalHead() <= 0)
-            {
-                components.set(dir, vertex);
-                ++transfers;
-            }
-        }
-
-        try (Transaction transaction = Transaction.openOuter())
-        {
-            for (int dir = 0; dir < components.size(); ++dir)
-            {
-                PipeFlowComponent component = components.get(dir);
-                long transferred = component.insert(dir, component.getConnectionDir(this), 1, (ServerWorld) parent.getWorld(), variant, transaction);
-            }
-            transaction.abort();
-        }
     }
 
-//    @Override
-//    public long[] getVelocity()
-//    {
-//        return velocity;
-//    }
+    @Override
+    public void addHead(int h)
+    {
+        pressureHeight += h;
+        for (NodeSupplier nodeSupplier : nodes)
+        {
+            if (nodeSupplier == null || !nodeSupplier.exists()) continue;
+            FluidNode node = nodeSupplier.get();
+
+            node.setPressureHeight(pressureHeight - Math.signum(h) * 1);
+        }
+    }
 
     @Override
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)

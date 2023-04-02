@@ -14,7 +14,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import org.w3c.dom.Node;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -27,7 +26,7 @@ public class PipeNetGraph
     /*
         1. Convert blocks from the world into a graph.
         2. Optimise graph by swallowing vertices with two connections.
-        2. Compute head at each vertex.
+        2. Compute 'head' at each vertex.
         3. ???
         4. Profit
 
@@ -165,14 +164,16 @@ public class PipeNetGraph
 
             // Set elevation head relative to the lowest vertex in the network.
             int vertexY = BlockPos.unpackLongY(entry.getLongKey());
-            entry.getValue().setElevationHead(vertexY - minY.intValue());
+            entry.getValue().setHeight(vertexY - minY.intValue());
         }
 
         pumps.object2ObjectEntrySet().fastForEach(e ->
         {
-            if (e.getValue().getMode() != AcceptorModes.PULL) return;
+            AcceptorModes mode = e.getValue().getMode();
+            if (!mode.isDriving()) return;
 
-            int depth = 0;
+            // When pulling, the effective height at the pump will be -16 and will go to zero further from the pump.
+            int depth = mode == AcceptorModes.PULL ? -getPumpDepth() : getPumpDepth();
 
             HashSet<PipeVertex> visited = Sets.newHashSet();
             Queue<PipeVertex> queue = Queues.newArrayDeque();
@@ -181,9 +182,10 @@ public class PipeNetGraph
             queue.add(startVertex);
             visited.add(startVertex);
 
-            while (!queue.isEmpty() && depth < 10)
+            while (!queue.isEmpty() && Math.abs(depth) != 0)
             {
-                ++depth;
+                // Increment elevation if pulling, decrement if pushing
+                depth += mode == AcceptorModes.PULL ? 1 : -1;
                 PipeVertex current = queue.poll();
                 for (PipeVertex next : current.getAdjVertices())
                 {
@@ -196,6 +198,11 @@ public class PipeNetGraph
                 }
             }
         });
+    }
+
+    public static int getPumpDepth()
+    {
+        return 15;
     }
 
     public Long2ObjectOpenHashMap<PipeVertex> getVertices()

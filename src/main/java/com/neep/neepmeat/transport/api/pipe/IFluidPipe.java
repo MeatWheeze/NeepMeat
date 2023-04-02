@@ -1,7 +1,9 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.google.common.collect.Sets;
-import com.neep.neepmeat.transport.fluid_network.*;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
@@ -14,7 +16,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.w3c.dom.css.CSSStyleSheet;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -96,7 +97,7 @@ public interface IFluidPipe
         return Collections.emptyList();
     }
 
-    default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetworkImpl1.UpdateReason reason)
+    default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetwork.UpdateReason reason)
     {
         try
         {

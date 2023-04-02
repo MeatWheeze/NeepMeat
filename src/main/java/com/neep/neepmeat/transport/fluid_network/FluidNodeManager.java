@@ -82,9 +82,11 @@ public class FluidNodeManager
         }
     }
 
+    public static int TICK_RATE = 1;
+
     public static boolean shouldTick(long worldTime)
     {
-        return (worldTime % PipeNetworkImpl1.TICK_RATE) == 0;
+        return (worldTime % TICK_RATE) == 0;
     }
 
     public static void tickNetwork(ServerWorld world)
@@ -314,16 +316,16 @@ public class FluidNodeManager
         // Some pipes variants need to retain their block entity even when there are no nodes
         if (nodes.isEmpty()) return;
 
-        PipeNetworkImpl1 network = nodes.get(0).getNetwork();
-        if (network == null || network.isSaved) return;
+//        PipeNetworkImpl1 network = nodes.get(0).getNetwork();
+//        if (network == null || network.isSaved) return;
 
-        NbtCompound nbt = network.toNbt();
-        if (!network.isValid())
-        {
-            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
-        }
-        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
-        network.isSaved = true;
+//        NbtCompound nbt = network.toNbt();
+//        if (!network.isValid())
+//        {
+//            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
+//        }
+//        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
+//        network.isSaved = true;
         nodes.forEach(FluidNode::onRemove);
     }
 
@@ -333,7 +335,7 @@ public class FluidNodeManager
         {
             NbtCompound nodeNbt = new NbtCompound();
             nodeNbt = node.writeNbt(nodeNbt);
-            nbt.put(node.getFace().toString(), nodeNbt);
+            nbt.put(node.getNodePos().face().toString(), nodeNbt);
         }
         return nbt;
     }

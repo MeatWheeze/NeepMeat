@@ -13,8 +13,8 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 {
 //    protected final List<Direction> connections = new ArrayList<>();
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];
-    protected float pressureHead;
-    protected float elevationHead;
+    protected float pressureHeight;
+    protected float height;
 
     protected long amount;
     protected long oldAmount;
@@ -148,20 +148,26 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
         return adjacentVertices;
     }
 
-    public void setElevationHead(float value)
+    public void setHeight(float value)
     {
-        this.elevationHead = value;
+        this.height = value;
     }
 
     @Override
     public void addHead(int h)
     {
-        pressureHead += h;
+        pressureHeight += h;
     }
 
     public float getTotalHead()
     {
-        return pressureHead + elevationHead;
+        return pressureHeight + getHeight();
+    }
+
+    protected float getHeight()
+    {
+//        return Math.min(elevationHead, 1);
+        return 0;
     }
 
     @Override
@@ -200,8 +206,8 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
     @Override
     public void reset()
     {
-        pressureHead = 0;
-        elevationHead = 0;
+        pressureHeight = 0;
+        height = 0;
 //        amount = 0;
 //        oldAmount = 0;
         network = null;
