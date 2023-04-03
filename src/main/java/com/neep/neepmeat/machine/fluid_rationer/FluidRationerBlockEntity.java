@@ -36,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
 public class FluidRationerBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
     protected final FluidRationerStorage outputStorage;
-    protected final FluidPump outPump = FluidPump.of(0.1f, this::getOutMode, true);
+    protected final FluidPump outPump = FluidPump.of(-0.1f, this::getOutMode, true);
 
     protected AcceptorModes inMode = AcceptorModes.PULL;
     protected AcceptorModes outMode = AcceptorModes.NONE;
