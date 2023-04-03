@@ -27,6 +27,7 @@ public class BlockPipeVertex extends SimplePipeVertex
 
     public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
     {
+        super(fluidPipeBlockEntity.getPos().asLong());
         this.parent = fluidPipeBlockEntity;
         components.size(6);
     }
@@ -52,6 +53,13 @@ public class BlockPipeVertex extends SimplePipeVertex
             if (node != null) ++number;
         }
         return number;
+    }
+
+    @Override
+    public void reset()
+    {
+        parent.setNetwork(null);
+        super.reset();
     }
 
     public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)

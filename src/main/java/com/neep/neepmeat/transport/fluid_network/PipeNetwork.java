@@ -1,14 +1,17 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.transport.data.FluidNetworkManager;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -18,24 +21,45 @@ public interface PipeNetwork
     // My pet memory leak.
     Set<PipeNetwork> LOADED_NETWORKS = new CopyOnWriteArraySet<>();
 
-    static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos)
+    static void tryCreateNetwork(ServerWorld world, BlockPos pos)
     {
 //        System.out.println("trying fluid network at " + pos);
         UUID uuid = UUID.randomUUID();
 //        PipeNetworkImpl1 network = new PipeNetworkImpl1(world, uuid, pos);
-        PipeNetwork network = new PipeNetworkImpl2(world, uuid, pos);
+        PipeNetwork network = new PipeNetworkImpl(world, uuid);
         network.rebuild(pos);
         if (network.isValid())
         {
             LOADED_NETWORKS.add(network);
-            return Optional.of(network);
+            return;
         }
         else
         {
             network.remove();
         }
         System.out.println("fluid network failed");
-        return Optional.empty();
+    }
+
+    static void createFromNbt(ServerWorld world, UUID uuid)
+    {
+        FluidNetworkManager manager = ((IServerWorld) world).getFluidNetworkManager();
+        NbtCompound networkNbt = manager.getNetwork(uuid);
+
+        // If the world didn't save properly, this could be null.
+        if (networkNbt == null) return;
+
+        PipeNetwork network = PipeNetworkImpl.fromNbt(world, networkNbt);
+        LOADED_NETWORKS.add(network);
+    }
+
+    static void addNetwork(PipeNetwork network)
+    {
+        LOADED_NETWORKS.add(network);
+    }
+
+    static void removeNetwork(PipeNetwork network)
+    {
+        LOADED_NETWORKS.remove(network);
     }
 
     void rebuild(BlockPos startPos);
@@ -46,6 +70,11 @@ public interface PipeNetwork
         ServerLifecycleEvents.SERVER_STOPPING.register(server ->
         {
             LOADED_NETWORKS.clear();
+        });
+
+        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) ->
+        {
+//            ((IServerWorld) world).getFluidNetworkManager().getNetwork().
         });
     }
 
@@ -58,6 +87,8 @@ public interface PipeNetwork
     void update(BlockPos vertexPos, @Nullable PipeVertex vertex, UpdateReason reason);
 
     void remove();
+
+    NbtCompound toNbt();
 
     enum UpdateReason
     {

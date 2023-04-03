@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.fluid_network;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
@@ -10,7 +11,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -21,7 +25,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PipeNetGraph
+public class PipeNetGraph implements NbtSerialisable
 {
     /*
         1. Convert blocks from the world into a graph.
@@ -53,12 +57,15 @@ public class PipeNetGraph
 
     public void rebuild(BlockPos startPos)
     {
+        reset();
+        buildGraph(startPos);
+    }
+
+    private void reset()
+    {
         vertices.clear();
         allVertices.clear();
         pumps.clear();
-
-        buildGraph(startPos);
-        vertices.forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
     }
 
     public void buildGraph(BlockPos startPos)
@@ -210,64 +217,110 @@ public class PipeNetGraph
         return vertices;
     }
 
-//    public void removeVertex(BlockPos pos, @Nullable PipeVertex vertex)
-//    {
-//        if (vertex != null)
-//        {
-//            removeVertex(pos.asLong());
-//            removeAdjacent(vertex);
-//        }
-//        else
-//        {
-//            vertex = allVertices.get(pos.asLong());
-//            removeAdjacent(vertex);
-//            removeVertex(pos.asLong());
-//        }
-//    }
-
     private void removeVertex(long pos)
     {
         vertices.remove(pos);
         allVertices.remove(pos);
     }
 
-//    private void removeAdjacent(@NotNull PipeVertex toRemove)
-//    {
-//        // Check all of toRemove's adjacent vertices.
-//        for (PipeVertex adj : toRemove.getAdjVertices())
-//        {
-//            if (adj == null) continue;
-//
-//            // Find the direction in which the vertex connects to toRemove and remove the connection.
-//            for (int i = 0; i < 6; ++i)
-//            {
-//                if (adj.getAdjVertex(i) == toRemove)
-//                {
-//                    adj.setAdjVertex(i, null);
-//                }
-//            }
-//        }
-//    }
-
     public PipeVertex getVertex(BlockPos pos)
     {
         return allVertices.get(pos.asLong());
     }
 
-//    public void addVertex(BlockPos pos)
-//    {
-//        BlockState state = world.getBlockState(pos);
-//        IFluidPipe pipe = FluidTransport.findFluidPipe(world, pos, state);
-//        if (pipe != null)
-//        {
-//            PipeVertex vertex = pipe.getPipeVertex(world, pos, state);
-//            putVertex(pos, vertex);
-//        }
-//    }
-//
-//    protected void putVertex(BlockPos pos, PipeVertex vertex)
-//    {
-//        vertices.put(pos.asLong(), vertex);
-//
-//    }
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        NbtList posList = new NbtList();
+
+        allVertices.long2ObjectEntrySet().forEach(e -> posList.add(writeVertex(e.getValue())));
+
+        nbt.put("vertices", posList);
+
+        allVertices.long2ObjectEntrySet().forEach(e -> e.getValue().setNetwork(null));
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        reset();
+
+        NbtList vertexList = nbt.getList("vertices", NbtType.COMPOUND);
+
+        vertexList.forEach(c -> readVertex((NbtCompound) c));
+    }
+
+    protected NbtCompound writeVertex(PipeVertex vertex)
+    {
+        NbtCompound compound = new NbtCompound();
+        compound.putLong("pos", vertex.getPos());
+
+        NbtList adjacent = new NbtList();
+        for (int i = 0; i < vertex.getAdjVertices().length; ++i)
+        {
+            NbtCompound compound1 = new NbtCompound();
+            PipeVertex adj = vertex.getAdjVertex(i);
+            if (adj == null)
+            {
+                compound1.putBoolean("present", false);
+            }
+            else
+            {
+                compound1.putBoolean("present", true);
+                compound1.putLong("pos", adj.getPos());
+            }
+            adjacent.add(compound1);
+        }
+        compound.put("adjacent", adjacent);
+
+        return compound;
+    }
+
+    protected PipeVertex readVertex(NbtCompound nbt)
+    {
+        long longPos = nbt.getLong("pos");
+        BlockPos pos = BlockPos.fromLong(longPos);
+        BlockState state = world.getBlockState(pos);
+        IFluidPipe pipe = IFluidPipe.findFluidPipe(world, pos, state).orElse(null);
+
+        for (Direction direction : Direction.values())
+        {
+            findFluidPump(pos, direction);
+        }
+
+        PipeVertex vertex = pipe.getPipeVertex(world, pos, state);
+
+        allVertices.put(longPos, vertex);
+
+        // Read the vertex's neighbours.
+        NbtList adjList = nbt.getList("adjacent", NbtType.COMPOUND);
+        for (int dir = 0; dir < adjList.size(); ++dir)
+        {
+            NbtCompound adjNbt = adjList.getCompound(dir);
+
+            // There is no neighbour in this direction
+            if (!adjNbt.getBoolean("present")) continue;
+
+            // Try to quickly retrieve the adjacent vertex from the map.
+            long adjLongPos = adjNbt.getLong("pos");
+            PipeVertex adjacent = allVertices.get(adjLongPos);
+            if (adjacent == null)
+            {
+                // If the vertex has not already been found, try to retrieve it from the world.
+                BlockPos adjPos = BlockPos.fromLong(adjLongPos);
+                BlockState adjState = world.getBlockState(adjPos);
+                IFluidPipe adjacentPipe = IFluidPipe.findFluidPipe(world, adjPos, adjState).orElse(null);
+                if (adjacentPipe == null) continue;
+
+                adjacent = adjacentPipe.getPipeVertex(world, adjPos, adjState);
+            }
+
+            // If it still isn't found, ignore it. Hopefully it will go away.
+            if (adjacent == null) continue;
+
+            vertex.getAdjVertices()[dir] = adjacent;
+        }
+
+        return vertex;
+    }
 }

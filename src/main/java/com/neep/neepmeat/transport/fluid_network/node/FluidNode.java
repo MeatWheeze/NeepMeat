@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
+import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -63,7 +64,8 @@ public class FluidNode
         this.hasPump = hasPump;
         this.needsDeferredLoading = true;
 
-        FluidNodeManager.getInstance(world).queueNode(this);
+//        FluidNodeManager.getInstance(world).queueNode(this);
+        InitialTicks.getInstance(world).queue(this::loadDeferred);
     }
 
     @Override

@@ -1,20 +1,21 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
-public class PipeNetworkImpl2 implements PipeNetwork
+public class PipeNetworkImpl implements PipeNetwork
 {
     protected final PipeNetGraph graph;
     protected final ServerWorld world;
     protected final UUID uuid;
     protected boolean removed;
 
-    public PipeNetworkImpl2(ServerWorld world, UUID uuid, BlockPos pos)
+    public PipeNetworkImpl(ServerWorld world, UUID uuid)
     {
         this.world = world;
         this.graph = new PipeNetGraph(world);
@@ -26,6 +27,46 @@ public class PipeNetworkImpl2 implements PipeNetwork
         // TODO: feature envy
         graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().reset());
         graph.rebuild(startPos);
+        graph.minimiseGraph();
+
+        if (!isValid())
+        {
+            removed = true;
+            return;
+        }
+
+        graph.allVertices.long2ObjectEntrySet().fastForEach(e ->
+        {
+            e.getValue().setNetwork(this);
+        });
+        graph.calculateHead();
+    }
+
+    public NbtCompound toNbt()
+    {
+        NbtCompound nbt = new NbtCompound();
+
+        nbt.putUuid("uuid", uuid);
+        graph.writeNbt(nbt);
+
+        remove();
+
+        return nbt;
+    }
+
+    public static PipeNetworkImpl fromNbt(ServerWorld world, NbtCompound nbt)
+    {
+        UUID uuid = nbt.getUuid("uuid");
+        PipeNetworkImpl network =  new PipeNetworkImpl(world, uuid);
+        network.readNbt(nbt);
+
+        return network;
+    }
+
+    public void readNbt(NbtCompound nbt)
+    {
+        graph.readNbt(nbt);
+
         graph.allVertices.long2ObjectEntrySet().fastForEach(e ->
         {
             e.getValue().setNetwork(this);
@@ -53,7 +94,7 @@ public class PipeNetworkImpl2 implements PipeNetwork
             return true;
         }
 
-        if (other instanceof PipeNetworkImpl2 impl2)
+        if (other instanceof PipeNetworkImpl impl2)
         {
             impl2.remove();
 
@@ -76,6 +117,8 @@ public class PipeNetworkImpl2 implements PipeNetwork
     @Override
     public boolean isValid()
     {
+        if (removed) return false;
+
         // A network is definitely valid if there are two or more vertices.
         if (graph.getVertices().size() >= 2) return true;
         else
@@ -136,7 +179,7 @@ public class PipeNetworkImpl2 implements PipeNetwork
     {
         removed = true;
         graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().setNetwork(null));
-        PipeNetwork.LOADED_NETWORKS.remove(this);
+        PipeNetwork.removeNetwork(this);
     }
 
     public PipeNetGraph getGraph()
