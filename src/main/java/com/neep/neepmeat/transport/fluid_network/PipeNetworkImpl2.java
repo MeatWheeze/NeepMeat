@@ -125,6 +125,8 @@ public class PipeNetworkImpl2 implements PipeNetwork
 //            rebuild(vertexPos);
 //        }
 
+        if (reason == UpdateReason.VALVE_CHANGED) return;
+
         rebuild(vertexPos);
         validate();
     }
