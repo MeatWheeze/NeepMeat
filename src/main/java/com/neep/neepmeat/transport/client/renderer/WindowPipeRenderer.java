@@ -37,10 +37,10 @@ public class WindowPipeRenderer implements BlockEntityRenderer<WindowPipeBlockEn
         be.clientFraction = MathHelper.lerp(0.1f, be.clientFraction, (float) be.clientAmount / vertex.getCapacity());
 
         BERenderUtils.rotateFacing(be.getCachedState().get(WindowPipeBlock.FACING), matrices);
-        renderFluidCuboid(vertexConsumers, matrices, variant, be.clientFraction, light);
+        renderFluidCuboid(vertexConsumers, matrices, variant, 5.3f / 16f, 5.3f / 16f, be.clientFraction, light);
     }
 
-    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float fraction, int light)
+    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float width, float length, float fraction, int light)
     {
         if (fluid == null || fluid.isBlank() || fraction == 0) return;
 
@@ -65,11 +65,11 @@ public class WindowPipeRenderer implements BlockEntityRenderer<WindowPipeBlockEn
             }
             else if (direction == Direction.WEST || direction == Direction.EAST)
             {
-                emitter.square(direction,  5 / 16f, (8 / 16f) - (3 / 16f) * fraction, (16 - 5) / 16f, (8 / 16f) + (3 / 16f) * fraction, (8 / 16f) - (3 / 16f) * fraction);
+                emitter.square(direction,  1/2f - width / 2, 1/2f - width / 2 * fraction, 1/2f + width / 2, 1/2f + width / 2 * fraction, 1/2f - width / 2 * fraction);
             }
             else if (direction == Direction.UP || direction == Direction.DOWN)
             {
-                emitter.square(direction,  (8 / 16f) - (3 / 16f) * fraction, 5 / 16f, (8 / 16f) + (3 / 16f) * fraction, (16 - 5) / 16f, (8 / 16f) - (3 / 16f) * fraction);
+                emitter.square(direction,  1/2f - (length / 2) * fraction, (1 - width) / 2, 1/2f + (length / 2) * fraction, 1/2f + width / 2, 1/2f - length / 2 * fraction);
             }
 
             emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
