@@ -18,7 +18,7 @@ public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
 {
     public FluidExciterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings.factory(FluidComponentItem::new), settings);
+        super(registryName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override
