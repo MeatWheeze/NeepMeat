@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FilterPipeBlock extends AbstractAxialPipe implements BlockEntityProvider
+public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEntityProvider
 {
     public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {

@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -14,6 +16,7 @@ public class PipeNetworkImpl implements PipeNetwork
     protected final ServerWorld world;
     protected final UUID uuid;
     protected boolean removed;
+    protected boolean dirty;
 
     public PipeNetworkImpl(ServerWorld world, UUID uuid)
     {
@@ -29,17 +32,32 @@ public class PipeNetworkImpl implements PipeNetwork
         graph.rebuild(startPos);
         graph.minimiseGraph();
 
+        // Vertices are not yet marked as belonging to this network, so it can be discarded without resetting everything.
         if (!isValid())
         {
             removed = true;
             return;
         }
 
-        graph.allVertices.long2ObjectEntrySet().fastForEach(e ->
+        graph.allVertices.values().forEach(v ->
         {
-            e.getValue().setNetwork(this);
+            v.setNetwork(this);
+            v.setSaveState(PipeVertex.SaveState.LOADED);
         });
         graph.calculateHead();
+
+        markDirty();
+    }
+
+
+    public boolean isDirty()
+    {
+        return dirty;
+    }
+
+    public void markDirty()
+    {
+        this.dirty = true;
     }
 
     public NbtCompound toNbt()
@@ -49,9 +67,19 @@ public class PipeNetworkImpl implements PipeNetwork
         nbt.putUuid("uuid", uuid);
         graph.writeNbt(nbt);
 
-        remove();
+//        graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().setSaveState(PipeVertex.SaveState.CACHED));
 
         return nbt;
+    }
+
+    @Override
+    public void unload()
+    {
+        graph.getVertices().values().forEach(v ->
+        {
+            v.setSaveState(PipeVertex.SaveState.PENDING_LOAD);
+        });
+//        ((IServerWorld) world).getPipeNetworkManager().unloadNetwork(pos ,this);
     }
 
     public static PipeNetworkImpl fromNbt(ServerWorld world, NbtCompound nbt)
@@ -70,6 +98,7 @@ public class PipeNetworkImpl implements PipeNetwork
         graph.allVertices.long2ObjectEntrySet().fastForEach(e ->
         {
             e.getValue().setNetwork(this);
+            e.getValue().setSaveState(PipeVertex.SaveState.LOADED);
         });
         graph.minimiseGraph();
         graph.calculateHead();
@@ -79,6 +108,18 @@ public class PipeNetworkImpl implements PipeNetwork
     public void tick()
     {
         if (removed) return; // This indicates a problem. TODO: throw an exception
+
+        if (isDirty())
+        {
+            PipeNetwork.storeNetwork(world, this);
+        }
+
+        boolean unloaded = graph.getVertices().long2ObjectEntrySet().stream().anyMatch(e -> e.getValue().getState() == PipeVertex.SaveState.PENDING_LOAD);
+        if (unloaded)
+        {
+            PipeNetwork.stopTickingNetwork(this);
+            return;
+        }
 
         validate();
         graph.getVertices().long2ObjectEntrySet().fastForEach(e -> e.getValue().preTick());
@@ -179,7 +220,7 @@ public class PipeNetworkImpl implements PipeNetwork
     {
         removed = true;
         graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().setNetwork(null));
-        PipeNetwork.removeNetwork(this);
+        PipeNetwork.discardNetwork(world, this);
     }
 
     public PipeNetGraph getGraph()

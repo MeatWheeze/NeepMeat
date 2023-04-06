@@ -9,7 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements PipeVertex
+public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements PipeVertex
 {
 //    protected final List<Direction> connections = new ArrayList<>();
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];

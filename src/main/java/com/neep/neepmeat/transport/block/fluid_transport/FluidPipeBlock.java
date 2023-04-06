@@ -6,8 +6,6 @@ import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.fluid_network.PipeVertex;
-import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -39,6 +37,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        IFluidPipe.onStateReplaced(world, pos, state, newState);
         super.onStateReplaced(state, world, pos, newState, moved);
         if (world.isClient())
             return;
@@ -47,6 +46,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         {
             removePipe((ServerWorld) world, state, pos);
         }
+    }
+
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        super.onBlockAdded(state, world, pos, oldState, notify);
     }
 
     @Override

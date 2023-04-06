@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -20,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider
+public class CheckValveBlock extends AbstractAxialFluidPipe implements BlockEntityProvider
 {
     public CheckValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {

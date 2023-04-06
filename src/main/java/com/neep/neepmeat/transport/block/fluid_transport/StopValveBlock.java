@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class StopValveBlock extends AbstractAxialPipe implements BlockEntityProvider
+public class StopValveBlock extends AbstractAxialFluidPipe implements BlockEntityProvider
 {
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
     public static final BooleanProperty POWERED = Properties.POWERED;

@@ -237,7 +237,7 @@ public class PipeNetGraph implements NbtSerialisable
 
         nbt.put("vertices", posList);
 
-        allVertices.long2ObjectEntrySet().forEach(e -> e.getValue().setNetwork(null));
+//        allVertices.long2ObjectEntrySet().forEach(e -> e.getValue().setNetwork(null));
     }
 
     @Override
