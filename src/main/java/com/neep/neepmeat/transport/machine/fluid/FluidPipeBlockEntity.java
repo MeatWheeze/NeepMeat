@@ -6,7 +6,6 @@ import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,8 +24,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
     protected final T vertex;
     protected final PipeConstructor<T> constructor;
 
-    public PipeVertex.SaveState state = PipeVertex.SaveState.NEW;
-
+//    public PipeVertex.SaveState state = PipeVertex.SaveState.NEW;
 
     public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
@@ -79,7 +77,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
     {
         super.readNbt(nbt);
         queuedNbt = nbt.copy();
-        this.state = PipeVertex.SaveState.values()[nbt.getInt("state")];
+//        this.state = PipeVertex.SaveState.values()[nbt.getInt("state")];
 
         if (nbt.get("networkUUID") != null) networkUUID = nbt.getUuid("networkUUID");
     }
@@ -94,12 +92,12 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
 
         if (networkUUID != null && network != null)
         {
-            nbt.putInt("state", PipeVertex.SaveState.PENDING_LOAD.ordinal());
+//            nbt.putInt("state", PipeVertex.SaveState.PENDING_LOAD.ordinal());
             nbt.putUuid("networkUUID", networkUUID);
         }
         else
         {
-            nbt.putInt("state", state.ordinal());
+//            nbt.putInt("state", state.ordinal());
         }
     }
 
@@ -142,26 +140,34 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
         return vertex;
     }
 
-    public void setSaveState(PipeVertex.SaveState saveState)
+//    public void setSaveState(PipeVertex.SaveState saveState)
+//    {
+//        this.state = saveState;
+//        markDirty();
+//    }
+
+    public void onLoad(ServerWorld world)
     {
-        this.state = saveState;
-        markDirty();
+        // If the pipe had an attached network when it was saved
+        if (network == null && networkUUID != null)
+        {
+            // Load the attached network from NBT
+            PipeNetwork.retrieveNetwork(world, networkUUID);
+        }
     }
 
-    public void onUnloaded(ServerWorld world)
+    public void onUnload(ServerWorld world)
     {
         FluidNodeManager.getInstance(world).entityUnloaded(getPos());
 
         if (network != null)
         {
+            // Hopefully allow the network and all attached block entities to be garbage collected
             PipeNetwork.stopTickingNetwork(network);
-
-            state = PipeVertex.SaveState.PENDING_LOAD;
-            markDirty();
         }
     }
 
-    public void onRemoved(ServerWorld world)
+    public void onRemove(ServerWorld world)
     {
         FluidNodeManager.getInstance(world).entityRemoved(getPos());
     }
@@ -180,11 +186,11 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
             {
                 if (!be.replaced)
                 {
-                    be.onUnloaded(world);
+                    be.onUnload(world);
                 }
                 else
                 {
-                    be.onRemoved(world);
+                    be.onRemove(world);
                 }
             }
         });
@@ -195,9 +201,9 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
             {
                 InitialTicks.getInstance(world).queue(w ->
                 {
-                    if (!be.replaced && be.network == null && be.networkUUID != null)
+                    if (!be.replaced)
                     {
-                        PipeNetwork.retrieveNetwork(world, be.networkUUID);
+                        be.onLoad(world);
                     }
                     else
                     {
@@ -205,22 +211,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
                     }
                 });
             }
-        });
-
-        ServerChunkEvents.CHUNK_UNLOAD.register((world, chunk) ->
-        {
-            chunk.getBlockEntities().values().forEach(blockEntity ->
-            {
-                if (blockEntity instanceof FluidPipeBlockEntity<?> be)
-                {
-//                    FluidNodeManager.getInstance(world).entityUnloaded(be.getPos());
-//                    PipeNetwork network = be.getPipeVertex().getNetwork();
-
-//                    if (!be.replaced && network != null)
-//                    {
-//                    }
-                }
-            });
         });
     }
 }
