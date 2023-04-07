@@ -57,11 +57,14 @@ import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.transport.machine.item.EjectorBlock;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.Material;
+import net.minecraft.block.*;
+import net.minecraft.entity.EntityType;
 import net.minecraft.sound.BlockSoundGroup;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 
 @SuppressWarnings("unused")
 public class NMBlocks
@@ -91,6 +94,38 @@ public class NMBlocks
     public static Block SAND_BRICKS = new BaseBuildingBlock("sandy_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
     public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock("meat_steel_block", true, FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
 
+    public static Block REINFORCED_GLASS = new BaseBuildingBlock("reinforced_glass", false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
+    {
+        @Override
+        public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction)
+        {
+            if (stateFrom.isOf(this) || stateFrom.isOf((Block) stairs) && stateFrom.get(StairsBlock.FACING).equals(direction.getOpposite()))
+            {
+                return true;
+            }
+            return super.isSideInvisible(state, stateFrom, direction);
+        }
+
+        @Override
+        public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+        {
+            return VoxelShapes.empty();
+        }
+
+        @Override
+        public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos)
+        {
+            return 1.0f;
+        }
+
+        @Override
+        public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+        {
+            return true;
+        }
+    };
+
+
 //    public static Block FILLED_SCAFFOLD = new BaseBuildingBlock("filled_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE));
 
     public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
@@ -103,7 +138,7 @@ public class NMBlocks
     public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", block(), FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(NMSoundGroups.METAL)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
-    public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", block(), FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
+//    public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", block(), FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
     public static Block DIRTY_SINK = BlockRegistry.queue(new BaseBlock("dirty_sink", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
 
 //    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
@@ -230,6 +265,15 @@ public class NMBlocks
 
 //    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
 
+    public static boolean never(BlockState state, BlockView world, BlockPos pos)
+    {
+        return false;
+    }
+
+    private static boolean never(BlockState blockState, BlockView blockView, BlockPos blockPos, EntityType<?> entityType)
+    {
+        return false;
+    }
 
     public static ItemSettings block()
     {
