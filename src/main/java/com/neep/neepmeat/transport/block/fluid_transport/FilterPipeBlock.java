@@ -1,13 +1,12 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.item.FluidComponentItem;
-import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
-import com.neep.neepmeat.transport.fluid_network.PipeState;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
@@ -29,47 +28,17 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
+public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEntityProvider
 {
     public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState());
-    }
-
-    @Override
-    public PipeState.FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state)
-    {
-        FilterPipeBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.FILTER_PIPE).orElse(null);
-        if (be != null)
-        {
-            return (v, a) -> be.getFilterVariant().isBlank() || v.equals(be.getFilterVariant()) ? a : 0;
-        }
-        return PipeState::identity;
-    }
-
-    @Override
-    public boolean canTransferFluid(Direction bias, BlockState state)
-    {
-        return true;
-    }
-
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
-    {
-        if (world.isClient())
-            return;
-
-        if (!state.isOf(newState.getBlock()))
-        {
-            removePipe((ServerWorld) world, state, pos);
-        }
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
@@ -122,6 +91,30 @@ public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpe
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
        return new FilterPipeBlockEntity(pos, state);
+    }
+
+    public static class FilterPipeVertex extends BlockPipeVertex
+    {
+        public FilterPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
+        {
+            super(fluidPipeBlockEntity);
+        }
+
+        @Override
+        public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
+        {
+            if (parent instanceof FilterPipeBlockEntity be)
+            {
+                return be.getFilterVariant().isBlank() || variant.equals(be.getFilterVariant()) ? maxAmount : 0;
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean canSimplify()
+        {
+            return false;
+        }
     }
 
     @Environment(value=EnvType.CLIENT)

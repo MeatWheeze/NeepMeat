@@ -1,0 +1,9 @@
+{
+  "parent": "neepmeat:block/glass_stairs",
+  "textures": {
+    "bottom": "neepmeat:block/reinforced_glass_bottom",
+    "half": "neepmeat:block/reinforced_glass_half",
+    "whole": "neepmeat:block/reinforced_glass",
+    "stairs": "neepmeat:block/reinforced_glass_stairs"
+  }
+}

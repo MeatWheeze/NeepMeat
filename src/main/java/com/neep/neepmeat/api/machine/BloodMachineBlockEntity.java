@@ -6,7 +6,6 @@ import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -56,7 +55,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
             double prevPower = this.powerIn;
 
             // Get effective input power
-            this.powerIn = PowerUtils.fluidPower(inputStorage.lastFluid, inputStorage.lastInput, PipeNetwork.TICK_RATE);
+            this.powerIn = PowerUtils.fluidPower(inputStorage.lastFluid, inputStorage.lastInput, FluidNodeManager.TICK_RATE);
 
             if (prevPower != powerIn)
             {

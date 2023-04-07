@@ -65,7 +65,7 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
     public FluidPump getPump(Direction direction)
     {
-        return FluidPump.of(0.5f, true);
+        return FluidPump.of(-0.5f, true);
     }
 
     public void updateBurners()

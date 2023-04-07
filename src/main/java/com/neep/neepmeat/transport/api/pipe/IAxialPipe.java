@@ -5,6 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public interface IAxialPipe extends IFluidPipe
@@ -23,7 +24,7 @@ public interface IAxialPipe extends IFluidPipe
     }
 
     @Override
-    default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
+    default boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof FacingBlock)
         {

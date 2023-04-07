@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ii ",
+    "prb",
+    "ii "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "neepmeat:pump"
+    },
+    "r": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    }
+  },
+  "result": {
+    "item": "neepmeat:fluid_rationer",
+    "count": 1
+  }
+}

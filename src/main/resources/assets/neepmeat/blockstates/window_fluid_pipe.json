@@ -1,0 +1,35 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north|south"
+      },
+      "apply": {
+        "model": "neepmeat:block/rusty_pipe/window_ns"
+      }
+    },
+    {
+      "when": {
+        "facing": "east|west"
+      },
+      "apply": {
+        "model": "neepmeat:block/rusty_pipe/window_ns",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/rusty_pipe/window_ns",
+        "x": 90
+      }
+    },
+    {
+      "apply": {
+        "model": "neepmeat:block/rusty_pipe/pipe_test"
+      }
+    }
+  ]
+}

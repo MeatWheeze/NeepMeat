@@ -2,7 +2,7 @@
   "multipart": [
     {
       "when": {
-        "facing": "north"
+        "facing": "north|south"
       },
       "apply": {
         "model": "neepmeat:block/filter_pipe",
@@ -12,35 +12,16 @@
     },
     {
       "when": {
-        "facing": "east"
+        "facing": "east|west"
       },
       "apply": {
         "model": "neepmeat:block/filter_pipe",
-        "x": 0,
         "y": 90
       }
     },
     {
       "when": {
-        "facing": "south"
-      },
-      "apply": {
-        "model": "neepmeat:block/filter_pipe",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "facing": "west"
-      },
-      "apply": {
-        "model": "neepmeat:block/filter_pipe",
-        "y": -90
-      }
-    },
-    {
-      "when": {
-        "facing": "up"
+        "facing": "up|down"
       },
       "apply": {
         "model": "neepmeat:block/filter_pipe",
@@ -48,14 +29,10 @@
         "y": 0
       }
     },
+
     {
-      "when": {
-        "facing": "down"
-      },
       "apply": {
-        "model": "neepmeat:block/filter_pipe",
-        "x": 90,
-        "y": 0
+        "model": "neepmeat:block/rusty_pipe/pipe_test"
       }
     }
   ]

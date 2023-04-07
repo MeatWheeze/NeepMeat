@@ -44,7 +44,7 @@ public class StagedTransactions
             try (Transaction transaction = Transaction.openOuter())
             {
                 StagedTransaction entry = TRANSACTIONS.poll();
-                entry.move(transaction);
+                long transferred = entry.move(transaction);
                 transaction.commit();
             }
             catch (Exception e)

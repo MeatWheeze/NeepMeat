@@ -2,7 +2,7 @@ package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
-import com.neep.neepmeat.transport.data.FluidNetworkManager;
+import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.minecraft.entity.Entity;
@@ -20,11 +20,11 @@ public abstract class ServerWorldMixin implements IServerWorld
     @Unique public FluidNodeManager neepmeat$nodeManager = new FluidNodeManager((ServerWorld) (Object) this);
     @Unique public ItemNetworkImpl neepmeat$itemNetwork = new ItemNetworkImpl((ServerWorld) (Object) this);
     @Unique public EnlightenmentEventManager neepmeat$enlightenmentEventManager = new EnlightenmentEventManager();
-    @Unique public FluidNetworkManager neepmeat$networkManager;
+    @Unique public PipeNetworkSerialiser neepmeat$networkManager;
 
 
     @Override
-    public void setFluidNetworkManager(FluidNetworkManager manager)
+    public void setFluidNetworkManager(PipeNetworkSerialiser manager)
     {
         this.neepmeat$networkManager = manager;
     }
@@ -36,7 +36,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     }
 
     @Override
-    public FluidNetworkManager getFluidNetworkManager()
+    public PipeNetworkSerialiser getPipeNetworkManager()
     {
         return neepmeat$networkManager;
     }

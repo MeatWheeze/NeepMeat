@@ -15,7 +15,8 @@ blocks = [
 'dirty_white_tiles',
 'sandy_bricks',
 'blood_bubble_planks',
-'meat_steel_block'
+'meat_steel_block',
+'reinforced_glass'
 ]
 
 for name in blocks:

@@ -1,11 +1,9 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
-import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -82,19 +80,21 @@ public class FluidNodeManager
         }
     }
 
+    public static int TICK_RATE = 1;
+
     public static boolean shouldTick(long worldTime)
     {
-        return (worldTime % PipeNetwork.TICK_RATE) == 0;
+        return (worldTime % TICK_RATE) == 0;
     }
 
     public static void tickNetwork(ServerWorld world)
     {
-        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
-        while (!queue.isEmpty())
-        {
-            FluidNode node = queue.poll();
-            node.loadDeferred(world);
-        }
+//        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
+//        while (!queue.isEmpty())
+//        {
+//            FluidNode node = queue.poll();
+//            node.loadDeferred(world);
+//        }
 
         if (shouldTick(world.getTime()))
         {
@@ -102,10 +102,8 @@ public class FluidNodeManager
 //            {
                 for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
-                    if (network.getWorld().equals(world)) network.tick();
+                    if (network.canTick(world)) network.tick();
                 }
-//            };
-//            StagedTransactions.getExecutor().execute(runnable);
         }
     }
 
@@ -184,14 +182,14 @@ public class FluidNodeManager
             return be;
         }
         BlockState state = world.getBlockState(pos);
-        world.addBlockEntity(new NodeContainerBlockEntity(pos, state));
+//        world.addBlockEntity(new FluidPipeBlockEntity(pos, state));
         return world.getBlockEntity(pos);
     }
 
     private void removeBlockEntity(ServerWorld world, BlockPos pos)
     {
         // Perform checks before removing
-        if (world.getBlockEntity(pos) instanceof NodeContainerBlockEntity be && be.isCreatedDynamically())
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be && be.isCreatedDynamically())
         {
             world.removeBlockEntity(pos);
         }
@@ -223,7 +221,7 @@ public class FluidNodeManager
 
         // Get connected storage, remove node if there isn't one
         Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null
+        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) == null
                 && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof IFluidNodeProvider))
         {
             if (getNodeSupplier(pos).exists())
@@ -248,7 +246,7 @@ public class FluidNodeManager
             newNode = true;
         }
 
-        validatePos(serverWorld, pos.pos);
+        validatePos(serverWorld, pos.pos());
 
 //        System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
@@ -271,7 +269,7 @@ public class FluidNodeManager
             return;
         }
         removeNode(pos);
-        validatePos(serverWorld, pos.pos);
+        validatePos(serverWorld, pos.pos());
     }
 
     public List<FluidNode> getNodes(BlockPos pos)
@@ -313,16 +311,16 @@ public class FluidNodeManager
         // Some pipes variants need to retain their block entity even when there are no nodes
         if (nodes.isEmpty()) return;
 
-        PipeNetwork network = nodes.get(0).getNetwork();
-        if (network == null || network.isSaved) return;
+//        PipeNetworkImpl1 network = nodes.get(0).getNetwork();
+//        if (network == null || network.isSaved) return;
 
-        NbtCompound nbt = network.toNbt();
-        if (!network.isValid())
-        {
-            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
-        }
-        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
-        network.isSaved = true;
+//        NbtCompound nbt = network.toNbt();
+//        if (!network.isValid())
+//        {
+//            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
+//        }
+//        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
+//        network.isSaved = true;
         nodes.forEach(FluidNode::onRemove);
     }
 
@@ -332,7 +330,7 @@ public class FluidNodeManager
         {
             NbtCompound nodeNbt = new NbtCompound();
             nodeNbt = node.writeNbt(nodeNbt);
-            nbt.put(node.getFace().toString(), nodeNbt);
+            nbt.put(node.getNodePos().face().toString(), nodeNbt);
         }
         return nbt;
     }

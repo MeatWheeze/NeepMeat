@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
 {
     public FluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
@@ -36,6 +37,8 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        IFluidPipe.onStateReplaced(world, pos, state, newState);
+        super.onStateReplaced(state, world, pos, newState, moved);
         if (world.isClient())
             return;
 
@@ -46,6 +49,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     }
 
     @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+    }
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         Direction direction = Direction.fromVector(fromPos.subtract(pos));
@@ -53,11 +62,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
         world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
-//
-        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+
+//        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        if (IFluidPipe.findFluidPipe(world, fromPos, world.getBlockState(fromPos)).isEmpty())
         {
             if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, nextState, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -70,7 +80,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
-            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
         }
     }
 
@@ -120,14 +130,14 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return;
 
         createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
+        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return null;
+        return NMBlockEntities.FLUID_PIPE.instantiate(pos, state);
     }
 
     // Only takes into account other pipes, connections to storages are enforced later.

@@ -14,8 +14,9 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.potion.NMPotions;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.data.FluidNetworkManager;
+import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
 import com.neep.neepmeat.world.NMFeatures;
@@ -65,11 +66,16 @@ public class NeepMeat implements ModInitializer
 		MobSynthesisRegistry.initDefaults();
 		NMGraphicsEffects.init();
 
+		// --- Transport module ---
 		ItemTransport.init();
+		FluidTransport.init();
+
 
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();
 
+
+		// --- Other misc things ---
 		ToolTransformPacket.registerReceiver();
 
 		NMFeatures.init();
@@ -83,7 +89,7 @@ public class NeepMeat implements ModInitializer
 		ScreenHandlerInit.registerScreenHandlers();
 
 		FluidNodeManager.registerEvents();
-		FluidNetworkManager.init();
+		PipeNetworkSerialiser.init();
 		StagedTransactions.init();
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());

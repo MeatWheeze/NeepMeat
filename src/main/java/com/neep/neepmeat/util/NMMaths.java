@@ -1,5 +1,6 @@
 package com.neep.neepmeat.util;
 
+import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -99,5 +100,14 @@ public class NMMaths
         t %= s;
         if (t < 0) t += s;
         return min + t;
+    }
+
+    public static double exactDistance(FluidNode node1, FluidNode node2)
+    {
+        Vec3d offset1 = new Vec3d(node1.getNodePos().face().getUnitVector()).multiply(0.5);
+        Vec3d v1 = Vec3d.ofCenter(node1.getNodePos().pos()).add(offset1);
+        Vec3d offset2 = new Vec3d(node2.getNodePos().face().getUnitVector()).multiply(0.5);
+        Vec3d v2 = Vec3d.ofCenter(node2.getNodePos().pos()).add(offset2);
+        return manhattanDistance(v1, v2);
     }
 }

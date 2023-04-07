@@ -2,7 +2,7 @@
   "multipart": [
     {
       "when": {
-        "facing": "north"
+        "facing": "north|south"
       },
       "apply": {
         "model": "neepmeat:block/stop_valve",
@@ -12,7 +12,7 @@
     },
     {
       "when": {
-        "facing": "east"
+        "facing": "east|west"
       },
       "apply": {
         "model": "neepmeat:block/stop_valve",
@@ -22,25 +22,7 @@
     },
     {
       "when": {
-        "facing": "south"
-      },
-      "apply": {
-        "model": "neepmeat:block/stop_valve",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "facing": "west"
-      },
-      "apply": {
-        "model": "neepmeat:block/stop_valve",
-        "y": -90
-      }
-    },
-    {
-      "when": {
-        "facing": "up"
+        "facing": "up|down"
       },
       "apply": {
         "model": "neepmeat:block/stop_valve",
@@ -49,13 +31,8 @@
       }
     },
     {
-      "when": {
-        "facing": "down"
-      },
       "apply": {
-        "model": "neepmeat:block/stop_valve",
-        "x": 90,
-        "y": 0
+        "model": "neepmeat:block/rusty_pipe/pipe_test"
       }
     },
 

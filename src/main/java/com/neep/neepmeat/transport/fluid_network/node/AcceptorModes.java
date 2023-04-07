@@ -54,7 +54,7 @@ public enum AcceptorModes
 
     public static AcceptorModes byFlow(float flow)
     {
-        return flow > 0 ? PUSH : flow < 0 ? PULL : INSERT_EXTRACT;
+        return flow < 0 ? PUSH : flow > 0 ? PULL : INSERT_EXTRACT;
     }
 
     AcceptorModes(int id, float pressure)
