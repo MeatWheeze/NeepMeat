@@ -34,7 +34,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotor
         @Override
         public float getFlow()
         {
-            return 0.5f;
+            return -0.5f;
         }
 
         @Override
