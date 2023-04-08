@@ -2,8 +2,7 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -17,8 +16,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ItemStackParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -32,7 +29,7 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
 {
     public GrinderBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
     }
 
     @Override

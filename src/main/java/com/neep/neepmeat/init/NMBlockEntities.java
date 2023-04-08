@@ -18,7 +18,7 @@ import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBlockEntity;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlockEntity;
 import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
@@ -86,7 +86,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
 
     public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
-    public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
+    public static BlockEntityType<InventoryDetectorBlockEntity> INVENTORY_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
@@ -189,7 +189,8 @@ public class NMBlockEntities
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
-        CONTENT_DETECTOR = registerBlockEntity("content_detector", ContentDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
+        INVENTORY_DETECTOR = registerBlockEntity("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
+        ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
         ROUTER = registerBlockEntity("router", RouterBlockEntity::new, NMBlocks.ROUTER);

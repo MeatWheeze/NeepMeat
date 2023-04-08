@@ -1,31 +1,31 @@
 {
   "variants": {
     "facing=east": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "y": 90,
       "x": 0
     },
     "facing=north": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "y": 0,
       "x": 0
     },
     "facing=south": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "y": 180,
       "x": 0
     },
     "facing=west": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "y": -90,
       "x": 0
     },
     "facing=up": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "x": -90
     },
     "facing=down": {
-      "model": "neepmeat:block/content_detector_hor",
+      "model": "neepmeat:block/inventory_detector",
       "x": 90
     }
   }

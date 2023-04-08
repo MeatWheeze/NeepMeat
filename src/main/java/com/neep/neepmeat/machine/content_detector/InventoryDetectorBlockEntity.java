@@ -1,9 +1,7 @@
 package com.neep.neepmeat.machine.content_detector;
 
-import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.machine.item.ContentDetectorInventory;
-import com.neep.meatlib.inventory.ImplementedInventory;
+import com.neep.neepmeat.transport.machine.item.InventoryDetectorInventory;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import com.neep.neepmeat.util.FilterUtils;
 import com.neep.neepmeat.util.ItemUtils;
@@ -14,7 +12,6 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -32,23 +29,20 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ContentDetectorBlockEntity extends BlockEntity implements
-        Storage<ItemVariant>,
-        NamedScreenHandlerFactory
+public class InventoryDetectorBlockEntity extends BlockEntity implements NamedScreenHandlerFactory
 {
     public static final String NBT_POWERED = "powered";
     public static final String NBT_MODE = "mode";
     public static final String NBT_COUNT_MODE = "count_mode";
     public static final String NBT_BEHAVIOUR_MODE = "behaviour_mode";
 
-    public ImplementedInventory filterInventory = new ContentDetectorInventory();
+    public InventoryDetectorInventory filterInventory = new InventoryDetectorInventory();
 
     protected BlockApiCache<Storage<ItemVariant>, Direction> cache;
     protected boolean powered;
@@ -63,8 +57,8 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
         {
             return switch (index)
             {
-                case ContentDetectorBehaviour.DEL_COUNT -> countMode;
-                case ContentDetectorBehaviour.DEL_BEHAVIOUR -> behaviourMode;
+                case InventoryDetectorBehaviour.DEL_COUNT -> countMode;
+                case InventoryDetectorBehaviour.DEL_BEHAVIOUR -> behaviourMode;
                 default -> 0;
             };
         }
@@ -74,8 +68,8 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
         {
             switch (index)
             {
-                case ContentDetectorBehaviour.DEL_COUNT -> countMode = value;
-                case ContentDetectorBehaviour.DEL_BEHAVIOUR -> behaviourMode = value;
+                case InventoryDetectorBehaviour.DEL_COUNT -> countMode = value;
+                case InventoryDetectorBehaviour.DEL_BEHAVIOUR -> behaviourMode = value;
             }
         }
 
@@ -86,12 +80,12 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
         }
     };
 
-    public ContentDetectorBlockEntity(BlockPos pos, BlockState state)
+    public InventoryDetectorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.CONTENT_DETECTOR, pos, state);
+        super(NMBlockEntities.INVENTORY_DETECTOR, pos, state);
     }
 
-    public ContentDetectorBlockEntity(BlockEntityType<ContentDetectorBlockEntity> type, BlockPos pos, BlockState state)
+    public InventoryDetectorBlockEntity(BlockEntityType<InventoryDetectorBlockEntity> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -131,43 +125,43 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
         return new ContentDetectorScreenHandler(syncId, inv, this.filterInventory, modeDelegate);
     }
 
-    @Override
-    public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
-    {
-        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
-        return storage.insert(resource, maxAmount, transaction);
-    }
-
-    @Override
-    public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
-    {
-        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
-        if (getCachedState().get(BufferBlock.POWERED))
-        {
-            return 0;
-        }
-        return storage.extract(resource, maxAmount, transaction);
-    }
-
-    @Override
-    public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
-    {
-        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
-        return (Iterator<StorageView<ItemVariant>>) storage.iterator(transaction);
-    }
+//    @Override
+//    public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
+//    {
+//        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
+//        return storage.insert(resource, maxAmount, transaction);
+//    }
+//
+//    @Override
+//    public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
+//    {
+//        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
+//        if (getCachedState().get(BufferBlock.POWERED))
+//        {
+//            return 0;
+//        }
+//        return storage.extract(resource, maxAmount, transaction);
+//    }
+//
+//    @Override
+//    public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
+//    {
+//        InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
+//        return (Iterator<StorageView<ItemVariant>>) storage.iterator(transaction);
+//    }
 
     public void refreshCache()
     {
         if (world instanceof ServerWorld serverWorld)
         {
-            Direction facing = getCachedState().get(ContentDetectorBlock.FACING);
+            Direction facing = getCachedState().get(InventoryDetectorBlock.FACING);
             cache = BlockApiCache.create(ItemStorage.SIDED, serverWorld, pos.offset(facing));
         }
     }
 
     public boolean observeStorage()
     {
-        Direction facing = getCachedState().get(ContentDetectorBlock.FACING);
+        Direction facing = getCachedState().get(InventoryDetectorBlock.FACING);
         Storage<ItemVariant> observedStorage;
         if (cache != null && (observedStorage = cache.find(facing.getOpposite())) != null)
         {
@@ -183,9 +177,9 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
             // Determine the check to perform
             FilterUtils.Filter filter = switch (countMode)
                     {
-                        case ContentDetectorBehaviour.STORAGE_GREATER -> ((obs, filt) -> obs < filt);
-                        case ContentDetectorBehaviour.STORAGE_LESS -> ((obs, filt) -> obs > filt);
-                        case ContentDetectorBehaviour.STORAGE_EQUALS -> ((obs, filt) -> obs == filt);
+                        case InventoryDetectorBehaviour.STORAGE_GREATER -> ((obs, filt) -> obs < filt);
+                        case InventoryDetectorBehaviour.STORAGE_LESS -> ((obs, filt) -> obs > filt);
+                        case InventoryDetectorBehaviour.STORAGE_EQUALS -> ((obs, filt) -> obs == filt);
                         default -> ((obs, filt) -> true);
                     };
 
@@ -233,10 +227,12 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
 
             transaction.commit();
         }
+        else powered = false;
+
         return powered;
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState state, ContentDetectorBlockEntity be)
+    public static void serverTick(World world, BlockPos pos, BlockState state, InventoryDetectorBlockEntity be)
     {
         if ((world.getTime() % 10) != 0)
             return;
@@ -245,7 +241,12 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
             be.refreshCache();
 
         be.observeStorage();
-        world.setBlockState(pos, state.with(ContentDetectorBlock.POWERED, be.powered));
+        world.setBlockState(pos, state.with(InventoryDetectorBlock.POWERED, be.powered));
+    }
+
+    public Storage<ItemVariant> getStorage(Direction direction)
+    {
+        return filterInventory.getStorage();
     }
 
 }
