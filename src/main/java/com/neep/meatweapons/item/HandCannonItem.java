@@ -1,25 +1,21 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.entity.CannonBulletEntity;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -55,23 +51,6 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        if (world.isClient)
-        {
-//            Renderer renderer = RendererAccess.INSTANCE.getRenderer();
-//            MeshBuilder meshBuilder = renderer.meshBuilder();
-//            QuadEmitter emitter = meshBuilder.getEmitter().square(Direction.UP, 1, 1, 0, 0, 2).emit();
-//            MinecraftClient.getInstance().
-        }
-
-        ItemStack itemStack = user.getStackInHand(hand);
-//        user.setCurrentHand(hand);
-        fire(world, user, itemStack);
-        return TypedActionResult.fail(itemStack);
-    }
-
-    @Override
     public Vec3f getAimOffset()
     {
         return new Vec3f(0.46f, 0, 0);
@@ -85,7 +64,13 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
                 0);
     }
 
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    @Override
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    {
+        fire(world, player, stack, pitch, yaw);
+    }
+
+    public void fire(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)
     {
         {
             if (!player.getItemCooldownManager().isCoolingDown(this))
@@ -96,8 +81,8 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
 
                     if (!world.isClient)
                     {
-                        double yaw = Math.toRadians(player.getHeadYaw());
-                        double pitch = Math.toRadians(player.getPitch(0.1f));
+//                        double yaw = Math.toRadians(player.getHeadYaw());
+//                        double pitch = Math.toRadians(player.getPitch(0.1f));
 
                         double mult = 5; // Multiplier for bullet speed.
                         double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();

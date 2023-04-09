@@ -1,30 +1,25 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -65,26 +60,26 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
     {
-        fire(world, user, user.getStackInHand(hand));
-
-        ItemStack stack = user.getStackInHand(hand);
-        if (!user.getItemCooldownManager().isCoolingDown(this) && stack.getDamage() == this.maxShots)
+        if (!player.getItemCooldownManager().isCoolingDown(this))
         {
-            this.reload(user, stack, null);
-            return TypedActionResult.pass(stack);
+            if (stack.getDamage() != this.maxShots)
+            {
+                player.getItemCooldownManager().set(this, cooldown);
+
+//                if (world.isClient) System.out.println("Client: " + System.currentTimeMillis());
+                if (!world.isClient)
+                {
+//                    System.out.println("Server: " + System.currentTimeMillis());
+                    fireBeam(world, player, stack, pitch, yaw);
+                }
+            }
         }
-        return TypedActionResult.pass(user.getStackInHand(hand));
-    }
 
-    @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
-    {
-        ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        if (user instanceof PlayerEntity)
+        if (!player.getItemCooldownManager().isCoolingDown(this) && stack.getDamage() == this.maxShots)
         {
-            fire(world, (PlayerEntity) user, itemStack);
+            this.reload(player, stack, null);
         }
     }
 
@@ -104,29 +99,8 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                 .5);
     }
 
-    @Override
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)
     {
-        if (!player.getItemCooldownManager().isCoolingDown(this))
-        {
-            if (stack.getDamage() != this.maxShots)
-            {
-                player.getItemCooldownManager().set(this, cooldown);
-
-                if (!world.isClient)
-                {
-                    fireBeam(world, player, stack);
-                }
-            }
-        }
-    }
-
-    @Override
-    protected void fireBeam(World world, PlayerEntity player, ItemStack stack)
-    {
-        double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (random.nextFloat() - 0.5);
-        double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (random.nextFloat() - 0.5);
-
         // Get projectile starting position and direction.
         Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);

@@ -109,8 +109,8 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
         ItemStack itemStack = user.getStackInHand(hand);
-        user.setCurrentHand(hand);
-        fire(world, user, itemStack);
+//        user.setCurrentHand(hand);
+//        fire(world, user, itemStack);
         return TypedActionResult.fail(itemStack);
     }
 

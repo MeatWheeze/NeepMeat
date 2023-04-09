@@ -1,5 +1,6 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,11 +15,9 @@ public interface IGunItem
     int ANIM_FIRE = 0;
     int ANIM_RELOAD = 1;
 
-    void fire(World world, PlayerEntity user, ItemStack stack);
-
     Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
 
-    default void trigger(World world, PlayerEntity player, ItemStack stack, int id) {}
+    default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType) {}
 
     void playSound(World world, PlayerEntity player, GunSounds sound);
 
@@ -43,6 +42,8 @@ public interface IGunItem
         }
         return null;
     }
+
+    default boolean redirectClicks() { return true; };
 
     enum GunSounds
     {

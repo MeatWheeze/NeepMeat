@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.player.PlayerEntity;
@@ -61,7 +62,8 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
                 .2);
     }
 
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    @Override
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {
