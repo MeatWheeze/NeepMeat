@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -51,20 +51,26 @@ public class MWKeys
                     double pitch = Math.toRadians(client.player.getPitch(1));
                     double yaw = Math.toRadians(client.player.getYaw(1));
 
-                    while (client.options.useKey.wasPressed())
+                    if (client.options.useKey.isPressed())
                     {
-                        sendTrigger(GunFireC2SPacket.create(0, pitch, yaw, handType, GunFireC2SPacket.ActionType.PRESS));
+                        if (!primaryHeld) sendTrigger(MWAttackC2SPacket.create(MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, handType, MWAttackC2SPacket.ActionType.PRESS));
+                        primaryHeld = true;
+                    }
+                    else if (primaryHeld)
+                    {
+                        primaryHeld = false;
+                        sendTrigger(MWAttackC2SPacket.create(MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, handType, MWAttackC2SPacket.ActionType.RELEASE));
                     }
 
                     if (client.options.attackKey.isPressed())
                     {
-                        if (!secondaryHeld) sendTrigger(GunFireC2SPacket.create(1, pitch, yaw, handType, GunFireC2SPacket.ActionType.PRESS));
+                        if (!secondaryHeld) sendTrigger(MWAttackC2SPacket.create(MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, handType, MWAttackC2SPacket.ActionType.PRESS));
                         secondaryHeld = true;
                     }
                     else if (secondaryHeld)
                     {
                         secondaryHeld = false;
-                        sendTrigger(GunFireC2SPacket.create(1, pitch, yaw, handType, GunFireC2SPacket.ActionType.RELEASE));
+                        sendTrigger(MWAttackC2SPacket.create(MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, handType, MWAttackC2SPacket.ActionType.RELEASE));
                     }
 
                     // Suppress the base game's attack processing
@@ -76,6 +82,6 @@ public class MWKeys
 
     public static void sendTrigger(PacketByteBuf buf)
     {
-        ClientPlayNetworking.send(GunFireC2SPacket.ID, buf);
+        ClientPlayNetworking.send(MWAttackC2SPacket.ID, buf);
     }
 }

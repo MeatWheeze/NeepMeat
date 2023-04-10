@@ -4,7 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.player.PlayerAttachmentManager;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.IGunItem;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
@@ -73,7 +73,7 @@ public class MeatWeapons implements ModInitializer
         MeatLib.flush();
         MWParticles.init();
         MWGraphicsEffects.init();
-        GunFireC2SPacket.init();
+        MWAttackC2SPacket.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
 
@@ -83,5 +83,10 @@ public class MeatWeapons implements ModInitializer
     public static boolean redirectClicks(ItemStack stack)
     {
         return stack.getItem() instanceof IGunItem gun && gun.redirectClicks();
+    }
+
+    public static IGunItem getGun(ItemStack stack)
+    {
+        return stack.getItem() instanceof IGunItem gun ? gun : null;
     }
 }

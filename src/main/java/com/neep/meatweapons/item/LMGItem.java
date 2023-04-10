@@ -1,7 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -67,7 +67,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
     {
         ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), GunFireC2SPacket.HandType.MAIN);
+        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), MWAttackC2SPacket.HandType.MAIN);
     }
 
     @Override
@@ -81,7 +81,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         {
             if (!player.getItemCooldownManager().isCoolingDown(this))
