@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.FusionBlastEntity;
 import com.neep.meatweapons.entity.WeaponCooldownAttachment;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
@@ -69,7 +70,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-//        System.out.println("Trigger: " + System.currentTimeMillis());
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
         {
@@ -77,13 +77,10 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             {
                 if (stack.getDamage() != this.maxShots)
                 {
+                    // Primary trigger
                     manager.set(stack, cooldown);
-
-                    if (!world.isClient)
-                    {
-                        fireBeam(world, player, stack, pitch, yaw);
-                        if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
-                    }
+                    fireBeam(world, player, stack, pitch, yaw);
+                    if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
                 }
             }
 
@@ -96,6 +93,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                 return;
             }
 
+            // Start charging secondary attack
             NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
             nbt.putInt("charge", 0);
             nbt.putBoolean("charging", true);
@@ -112,11 +110,13 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
+        // Continuously try to use the primary attack
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
         {
             trigger(world, player, stack, id, pitch, yaw, handType);
         }
 
+        // Increase charge in the secondary attack
         if (id == MWAttackC2SPacket.TRIGGER_SECONDARY)
         {
             NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
@@ -144,6 +144,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
+        // Check that the charge exceeds a threshold. If so, shoot the projectile.
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
         if (id == MWAttackC2SPacket.TRIGGER_SECONDARY
                 && stack.getDamage() + 2 <= maxShots
@@ -202,7 +203,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
         pos = pos.add(transform);
 
-        Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
+        Vec3d end = pos.add(Util.getRotationVector((float) pitch, (float) yaw).multiply(20));
         Optional<Entity> target = hitScan(player, pos, end, 20, this);
         target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
 

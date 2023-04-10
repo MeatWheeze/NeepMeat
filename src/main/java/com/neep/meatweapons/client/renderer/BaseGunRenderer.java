@@ -19,6 +19,7 @@ import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoItemRenderer<T>
 {
@@ -48,8 +49,11 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
             Vec3f transform = item instanceof IAimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
             float delta = 0.2f;
             currentTransform.lerp(isAiming ? transform : new Vec3f(0, 0, 0), delta);
+
+            boolean stackInMain = GeckoLibUtil.getIDFromStack(player.getStackInHand(Hand.MAIN_HAND)) == GeckoLibUtil.getIDFromStack(itemStack);
+
             matrices.translate(
-                    player.getStackInHand(Hand.MAIN_HAND).equals(itemStack) == (player.getMainArm() == Arm.RIGHT) ? -currentTransform.getX() : currentTransform.getX(),
+                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.getX() : currentTransform.getX(),
                     currentTransform.getY(),
                     currentTransform.getZ());
         }
