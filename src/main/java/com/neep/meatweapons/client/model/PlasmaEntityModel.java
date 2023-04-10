@@ -1,13 +1,14 @@
 package com.neep.meatweapons.client.model;
 
-import com.neep.meatweapons.entity.PlasmaProjectileEntity;
+import com.neep.meatweapons.entity.FusionBlastEntity;
+import com.neep.meatweapons.entity.FusionBlastEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class PlasmaEntityModel extends EntityModel<PlasmaProjectileEntity>
+public class PlasmaEntityModel extends EntityModel<FusionBlastEntity>
 {
 	private final ModelPart bb_main;
 
@@ -24,7 +25,7 @@ public class PlasmaEntityModel extends EntityModel<PlasmaProjectileEntity>
 	}
 
 	@Override
-	public void setAngles(PlasmaProjectileEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch)
+	public void setAngles(FusionBlastEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch)
 	{
 
 	}
@@ -39,7 +40,7 @@ public class PlasmaEntityModel extends EntityModel<PlasmaProjectileEntity>
 	{
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
-		modelPartData.addChild(EntityModelPartNames.CUBE, ModelPartBuilder.create().uv(0, 0).cuboid(-0.5F, -0.5F, -0.5F, 1F, 1F, 1F), ModelTransform.pivot(0F, 0F, 0F));
+		modelPartData.addChild(EntityModelPartNames.CUBE, ModelPartBuilder.create().uv(0, 0).cuboid(-1F, -1F, -1F, 2F, 2F, 2F), ModelTransform.pivot(0F, 0F, 0F));
 		return TexturedModelData.of(modelData, 32, 32);
 	}
 

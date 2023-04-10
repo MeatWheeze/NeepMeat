@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.GameRules;
@@ -78,6 +80,12 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
         {
             explode();
         }
+    }
+
+    @Override
+    protected SoundEvent getHitSound()
+    {
+        return SoundEvents.BLOCK_STONE_HIT;
     }
 
     @Override

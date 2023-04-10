@@ -5,6 +5,18 @@
       "meatweapons:fusion_fire"
     ]
   },
+  "fusion_blast_fire": {
+    "subtitle": "subtitles.meatweapons.fusion_blast_fire",
+    "sounds": [
+      "meatweapons:fusion_blast_fire"
+    ]
+  },
+  "fusion_blast_charge": {
+    "subtitle": "subtitles.meatweapons.fusion_blast_charge",
+    "sounds": [
+      "meatweapons:fusion_blast_charge"
+    ]
+  },
   "fusion_reload": {
     "subtitle": "subtitles.meatweapons.fusion_reload",
     "sounds": [

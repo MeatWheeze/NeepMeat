@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.neep.meatlib.api.event.RenderItemGuiCallback;
+import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
@@ -29,6 +29,7 @@ public class MWClient implements ClientModInitializer
     public static final EntityModelLayer MODEL_CANNON_BULLET_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "cannon_bullet"), "main");
 
     public static final EntityModelLayer ZAP_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "zap"), "main");
+    public static final EntityModelLayer FUSION_BLAST_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "fusion_blast"), "main");
     public static final EntityModelLayer MODEL_PLASMA_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "plasma"), "main");
     public static final EntityModelLayer MODEL_SHELL_LAYER = new EntityModelLayer(new Identifier(MeatWeapons.NAMESPACE, "shell"), "main");
 
@@ -43,7 +44,10 @@ public class MWClient implements ClientModInitializer
         EntityRendererRegistry.INSTANCE.register(MeatWeapons.ZAP, ZapEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ZAP_LAYER, CannonBulletEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.PLASMA, PlasmaEntityRenderer::new);
+        EntityRendererRegistry.INSTANCE.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
+        EntityModelLayerRegistry.registerModelLayer(FUSION_BLAST_LAYER, PlasmaEntityModel::getTexturedModelData);
+
+        EntityRendererRegistry.INSTANCE.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_PLASMA_LAYER, PlasmaEntityModel::getTexturedModelData);
 
         EntityRendererRegistry.INSTANCE.register(MeatWeapons.EXPLODING_SHELL, ShellEntityRenderer::new);
@@ -80,7 +84,7 @@ public class MWClient implements ClientModInitializer
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.ZAP, ZapBeamEffect::new);
 
 
-        RenderItemGuiCallback.EVENT.register((textRenderer, stack, x, y, countLabel) ->
+        RenderItemGuiEvent.EVENT.register((textRenderer, stack, x, y, countLabel) ->
         {
             if (stack.getItem() instanceof BaseGunItem baseGunItem && baseGunItem.getShots(stack, 1) >= 0)
             {
@@ -91,8 +95,8 @@ public class MWClient implements ClientModInitializer
                 BufferBuilder bufferBuilder = tessellator.getBuffer();
                 int i = stack.getItemBarStep();
                 int j = stack.getItemBarColor();
-                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
-                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
+                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
+                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
                 RenderSystem.enableBlend();
                 RenderSystem.enableTexture();
                 RenderSystem.enableDepthTest();

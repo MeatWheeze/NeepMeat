@@ -1,18 +1,15 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.entity.AbstractVehicleEntity;
-import com.neep.meatweapons.item.IGunItem;
 import com.neep.meatweapons.network.GunFireC2SPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.client.screen.v1.ScreenKeyboardEvents;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.network.PacketByteBuf;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(value= EnvType.CLIENT)
@@ -30,6 +27,10 @@ public class MWKeys
                 "key." + namespace + ".category." + category));
     }
 
+    public static boolean primaryHeld;
+    public static boolean secondaryHeld;
+
+
     public static void registerKeybinds()
     {
         AIRTRUCK_DOWN = registerKeyBinding(MeatWeapons.NAMESPACE, "down", "general", GLFW.GLFW_KEY_BACKSLASH);
@@ -45,24 +46,36 @@ public class MWKeys
 
                 if (redirectMainHand || redirectOffHand)
                 {
-                    int handType = (redirectMainHand ? 1 : 0) + (redirectOffHand ? 0 : 1 << 1);
+                    int handType = (redirectMainHand ? 1 : 0) + (redirectOffHand ? 1 << 1 : 0);
+
+                    double pitch = Math.toRadians(client.player.getPitch(1));
+                    double yaw = Math.toRadians(client.player.getYaw(1));
 
                     while (client.options.useKey.wasPressed())
                     {
-                        ClientPlayNetworking.send(GunFireC2SPacket.ID, GunFireC2SPacket.create(0,
-                                Math.toRadians(client.player.getPitch(1)), Math.toRadians(client.player.getYaw(1)), handType));
+                        sendTrigger(GunFireC2SPacket.create(0, pitch, yaw, handType, GunFireC2SPacket.ActionType.PRESS));
                     }
 
                     if (client.options.attackKey.isPressed())
                     {
-                        ClientPlayNetworking.send(GunFireC2SPacket.ID, GunFireC2SPacket.create(1,
-                                Math.toRadians(client.player.getPitch(1)), Math.toRadians(client.player.getYaw(1)), handType));
+                        if (!secondaryHeld) sendTrigger(GunFireC2SPacket.create(1, pitch, yaw, handType, GunFireC2SPacket.ActionType.PRESS));
+                        secondaryHeld = true;
+                    }
+                    else if (secondaryHeld)
+                    {
+                        secondaryHeld = false;
+                        sendTrigger(GunFireC2SPacket.create(1, pitch, yaw, handType, GunFireC2SPacket.ActionType.RELEASE));
                     }
 
                     // Suppress the base game's attack processing
-                    while (client.options.attackKey.wasPressed()) ;
+                    while (client.options.attackKey.wasPressed());
                 }
             }
         });
+    }
+
+    public static void sendTrigger(PacketByteBuf buf)
+    {
+        ClientPlayNetworking.send(GunFireC2SPacket.ID, buf);
     }
 }

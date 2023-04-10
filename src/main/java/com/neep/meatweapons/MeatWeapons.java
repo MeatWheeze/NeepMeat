@@ -1,6 +1,7 @@
 package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.player.PlayerAttachmentManager;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.IGunItem;
 import com.neep.meatweapons.network.GunFireC2SPacket;
@@ -33,6 +34,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
     public static EntityType<ZapProjectileEntity> ZAP;
+    public static EntityType<FusionBlastEntity> FUSION_BLAST;
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
 
@@ -56,6 +58,7 @@ public class MeatWeapons implements ModInitializer
         BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
         CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
         ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
+        FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
         EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
 
         AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
@@ -73,6 +76,8 @@ public class MeatWeapons implements ModInitializer
         GunFireC2SPacket.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
+
+        PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
     }
 
     public static boolean redirectClicks(ItemStack stack)

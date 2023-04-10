@@ -8,12 +8,12 @@ import net.minecraft.client.render.*;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
-public interface RenderItemGuiCallback
+public interface RenderItemGuiEvent
 {
-    Event<RenderItemGuiCallback> EVENT = EventFactory.createArrayBacked(RenderItemGuiCallback.class,
+    Event<RenderItemGuiEvent> EVENT = EventFactory.createArrayBacked(RenderItemGuiEvent.class,
             (listeners) -> (textRenderer, stack, x, y, countLabel) ->
             {
-                for (RenderItemGuiCallback listener : listeners)
+                for (RenderItemGuiEvent listener : listeners)
                 {
                     listener.interact(textRenderer, stack, x, y, countLabel);
                 }

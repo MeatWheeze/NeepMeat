@@ -67,7 +67,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
     {
         ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), handType);
+        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), GunFireC2SPacket.HandType.MAIN);
     }
 
     @Override
