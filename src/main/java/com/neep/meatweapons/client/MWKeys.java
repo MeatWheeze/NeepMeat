@@ -1,18 +1,24 @@
 package com.neep.meatweapons.client;
 
 import com.neep.meatlib.api.event.InputEvents;
+import com.neep.meatlib.api.event.UseAttackCallback;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.impl.event.interaction.InteractionEventsRouter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.TypedActionResult;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(value= EnvType.CLIENT)
@@ -78,13 +84,27 @@ public class MWKeys
                     sendTrigger(MWAttackC2SPacket.create(MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, handType, MWAttackC2SPacket.ActionType.RELEASE));
                 }
 
-                // Suppress the base game's attack processing
+                // Suppress the base game's input processing.
                 while (client.options.attackKey.wasPressed())
                 {
-                    System.out.println("attak");
-                };
+                }
+
+                while (client.options.useKey.wasPressed())
+                {
+                }
+            }
+            else
+            {
+                // Release held keys when the special item is no longer held.
+                // This should fix switching to a new item without releasing the key.
+                primaryHeld = false;
+                secondaryHeld = false;
             }
         });
+
+        // Suppress use item and attack events when we are listening for key release events
+        UseAttackCallback.DO_USE.register(client -> !primaryHeld);
+        UseAttackCallback.DO_ATTACK.register(client -> !secondaryHeld);
     }
 
     public static void sendTrigger(PacketByteBuf buf)
