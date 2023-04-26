@@ -97,7 +97,7 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
         {
             player.getItemCooldownManager().set(this, 3);
             fireShell(world, player, stack, 1, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, x, y, z, vx, vy, vz)));
-            manager.set(stack, 5);
+            manager.set(stack, 15);
             if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
         }
     }

@@ -17,7 +17,6 @@ public final class NodePos
     private static final long BITS_Y;
     private static final long BITS_Z;
     private static final long BITS_D;
-    private static final int field_33083 = 0;
     private static final int BIT_SHIFT_Z;
     private static final int BIT_SHIFT_X;
     private static final int BIT_SHIFT_D;
