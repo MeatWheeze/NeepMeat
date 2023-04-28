@@ -35,7 +35,7 @@ public class HeatingCategory implements DisplayCategory<HeatingDisplay>
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMBlocks.SMALL_TROMMEL);
+        return EntryStacks.of(NMBlocks.MULTI_TANK);
     }
 
     @Override
