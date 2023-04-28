@@ -10,11 +10,11 @@
       "item": "neepmeat:fluid_pipe"
     },
     "c": {
-      "item": "minecraft:lever"
+      "item": "minecraft:glass"
     }
   },
   "result": {
-    "item": "neepmeat:stop_valve",
+    "item": "neepmeat:window_fluid_pipe",
     "count": 1
   }
 }
