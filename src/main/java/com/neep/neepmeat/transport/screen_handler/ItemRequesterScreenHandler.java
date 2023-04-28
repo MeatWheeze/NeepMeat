@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.screen_handler;
 
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.BasicScreenHandler;
-import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -10,11 +9,9 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.client.gui.screen.pack.ResourcePackOrganizer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
@@ -51,7 +48,7 @@ public class ItemRequesterScreenHandler extends BasicScreenHandler
     // Server
     public ItemRequesterScreenHandler(int syncId, PlayerInventory playerInventory, Inventory inventory, RoutingNetwork network, BlockPos pos, PlayerEntity player, PropertyDelegate delegate)
     {
-        super(ItemTransport.ITEM_REQUESTER_HANDLER, playerInventory, inventory, syncId, delegate);
+        super(TransportScreenHandlers.ITEM_REQUESTER_HANDLER, playerInventory, inventory, syncId, delegate);
         this.routingNetwork = network;
         this.pos = pos;
         this.player = player;

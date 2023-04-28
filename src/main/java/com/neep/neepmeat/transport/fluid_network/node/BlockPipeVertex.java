@@ -20,12 +20,12 @@ import java.util.Arrays;
 @SuppressWarnings("UnstableApiUsage")
 public class BlockPipeVertex extends SimplePipeVertex
 {
-    protected final FluidPipeBlockEntity parent;
+    protected final FluidPipeBlockEntity<?> parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
 //    protected long[] velocity = new long[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
 
-    public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
+    public BlockPipeVertex(FluidPipeBlockEntity<?> fluidPipeBlockEntity)
     {
         super(fluidPipeBlockEntity.getPos().asLong());
         this.parent = fluidPipeBlockEntity;

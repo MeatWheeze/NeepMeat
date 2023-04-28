@@ -196,7 +196,6 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
     @Override
     public Text getDisplayName()
     {
-//        return new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer");
         return NMBlocks.FLUID_RATIONER.getName();
     }
 

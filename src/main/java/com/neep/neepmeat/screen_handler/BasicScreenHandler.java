@@ -114,6 +114,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
     @Override
     public boolean canUse(PlayerEntity player)
     {
-        return this.inventory.canPlayerUse(player);
+        return true;
+//        return this.inventory.canPlayerUse(player);
     }
 }

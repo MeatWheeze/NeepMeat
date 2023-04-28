@@ -95,7 +95,7 @@ public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEnti
 
     public static class FilterPipeVertex extends BlockPipeVertex
     {
-        public FilterPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
+        public FilterPipeVertex(FluidPipeBlockEntity<FilterPipeVertex> fluidPipeBlockEntity)
         {
             super(fluidPipeBlockEntity);
         }

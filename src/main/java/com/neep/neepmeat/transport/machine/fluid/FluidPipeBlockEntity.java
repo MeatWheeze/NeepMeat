@@ -175,7 +175,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
     @FunctionalInterface
     public interface PipeConstructor<T extends PipeVertex>
     {
-        T create(FluidPipeBlockEntity parent);
+        T create(FluidPipeBlockEntity<T> parent);
     }
 
     static

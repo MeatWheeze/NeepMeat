@@ -218,7 +218,7 @@ public class NMBlocks
 
     public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
 
-    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(1)), FLUID_MACHINE_SETTINGS));
+    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(2)), FLUID_MACHINE_SETTINGS));
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), FabricBlockSettings.copyOf(Blocks.HOPPER)));

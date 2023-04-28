@@ -120,8 +120,12 @@
   "block.neepmeat.check_valve": "Check Valve",
   "block.neepmeat.check_valve.lore_0": "Only allows flow in one direction.",
   "block.neepmeat.filter_pipe": "Filter Pipe",
-  "block.neepmeat.filter_pipe.lore_0": "Only allows a fluid type through.",
+  "block.neepmeat.filter_pipe.lore_0": "Only allows a specific fluid type through.",
+  "block.neepmeat.filter_pipe.lore_1": "Right-click with a fluid container to set the filter.",
   "message.neepmeat.filter_pipe.filter": "Filter: %s",
+  "block.neepmeat.limiter_valve": "Flow Limiter Valve",
+  "block.neepmeat.limiter_valve.lore_0": "Controls the rate at which fluid passes.",
+  "block.neepmeat.limiter_valve.lore_1": "Set the maximum flow rate in the GUI.",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
   "block.neepmeat.item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",
@@ -219,8 +223,8 @@
   "block.neepmeat.synthesiser": "Oviparous Synthesiser",
 
   "block.neepmeat.fluid_rationer": "Fluid Rationer",
-  "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from",
-  "block.neepmeat.fluid_rationer.lore_1": "a connected tank.",
+  "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from the facing",
+  "block.neepmeat.fluid_rationer.lore_1": "storage into a pipe network.",
 
 
 
@@ -415,6 +419,14 @@
   "screen.neepmeat.fluid_rationer.text.bucket": "Bucket",
   "screen.neepmeat.fluid_rationer.text.amount": "Amount (droplets)",
 
+  "screen.neepmeat.limiter_valve": "Limiter Valve",
+  "screen.neepmeat.limiter_valve.text.rate": "Set maximum flow rate",
+  "screen.neepmeat.limiter_valve.text.unit": "Fluid unit:",
+  "screen.neepmeat.limiter_valve.text.droplet": "d / t",
+  "screen.neepmeat.limiter_valve.text.droplet_info": "Droplets per tick (one bucket = 81000d)",
+  "screen.neepmeat.limiter_valve.text.mb": "mb / t",
+  "screen.neepmeat.limiter_valve.text.mb_info": "Millibuckets per tick (one bucket = 1000mb)",
+
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.compacting": "Charnel Compacting",
@@ -428,6 +440,7 @@
   "category.neepmeat.surgery": "Machine Surgery",
   "category.neepmeat.transforming_tool": "Transforming Tool Manufacture",
   "category.neepmeat.trommel": "Trommel",
+  "category.neepmeat.heating": "Heating",
 
   "advancements.neepmeat.main.root.title": "NEEPMeat",
   "advancements.neepmeat.main.root.description": "Rusty machinery, cosmic horror and meat.",
