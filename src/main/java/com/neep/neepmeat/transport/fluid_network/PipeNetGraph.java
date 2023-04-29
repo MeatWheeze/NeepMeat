@@ -229,7 +229,7 @@ public class PipeNetGraph implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtList posList = new NbtList();
 
@@ -238,6 +238,8 @@ public class PipeNetGraph implements NbtSerialisable
         nbt.put("vertices", posList);
 
 //        allVertices.long2ObjectEntrySet().forEach(e -> e.getValue().setNetwork(null));
+
+        return nbt;
     }
 
     @Override

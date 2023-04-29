@@ -1,5 +1,6 @@
 package com.neep.meatlib.inventory;
 
+import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
@@ -7,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.collection.DefaultedList;
 
-public interface ImplementedInventory extends Inventory
+public interface ImplementedInventory extends Inventory, NbtSerialisable
 {
     DefaultedList<ItemStack> getItems();
 
@@ -86,9 +87,10 @@ public interface ImplementedInventory extends Inventory
         return true;
     }
 
-    default void writeNbt(NbtCompound tag)
+    default NbtCompound writeNbt(NbtCompound nbt)
     {
-        Inventories.writeNbt(tag, getItems());
+        Inventories.writeNbt(nbt, getItems());
+        return nbt;
     }
 
     default void readNbt(NbtCompound tag)

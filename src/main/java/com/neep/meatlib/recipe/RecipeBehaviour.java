@@ -43,12 +43,13 @@ public abstract class RecipeBehaviour<T extends ImplementedRecipe<? extends Impl
     }
 
     @Override
-    public void writeNbt(NbtCompound tag)
+    public NbtCompound writeNbt(NbtCompound tag)
     {
         if (currentRecipe != null)
         {
             tag.putString("recipe", currentRecipe.getId().toString());
         }
+        return tag;
     }
 
     @Override

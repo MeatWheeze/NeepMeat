@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
+import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -11,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -18,7 +20,7 @@ import net.minecraft.util.math.Direction;
 import java.util.Arrays;
 
 @SuppressWarnings("UnstableApiUsage")
-public class BlockPipeVertex extends SimplePipeVertex
+public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 {
     protected final FluidPipeBlockEntity<?> parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
@@ -266,5 +268,17 @@ public class BlockPipeVertex extends SimplePipeVertex
     public int hashCode()
     {
         return super.hashCode();
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+
     }
 }
