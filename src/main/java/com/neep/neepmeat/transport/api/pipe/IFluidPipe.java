@@ -110,70 +110,62 @@ public interface IFluidPipe
 
     default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetwork.UpdateReason reason)
     {
-        try
+        PipeNetwork net = PipeNetwork.LOOKUP.find(world, pos, null);
+        if (net != null)
         {
-            PipeNetwork net = PipeNetwork.LOOKUP.find(world, pos, null);
-            if (net != null)
-            {
-                net.update(pos, null, reason);
-                return;
-            }
-            else if (reason.isRemoved())
-            {
-
-                // Look for adjacent networks and add this pipe to the first one.
-                Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
-                BlockPos.Mutable mutable = pos.mutableCopy();
-                for (Direction direction : this.getConnections(state, d -> true))
-                {
-                    mutable.set(pos, direction);
-                    net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                    if (net != null)
-                    {
-                        if (!updatedNetworks.contains(net))
-                        {
-                            net.update(mutable.toImmutable(), null, reason);
-                            updatedNetworks.add(net);
-                        }
-                    }
-                    else
-                    {
-                        PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
-                    }
-                }
-                return;
-            }
-            else if (reason.isNewPart())
-            {
-                List<PipeNetwork> mergeNetworks = Lists.newArrayList();
-                BlockPos.Mutable mutable = pos.mutableCopy();
-                boolean merged = false;
-                for (Direction direction : this.getConnections(state, d -> true))
-                {
-                    mutable.set(pos, direction);
-                    net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                    if (net != null)
-                    {
-                        mergeNetworks.add(net);
-                    }
-                }
-                for (PipeNetwork network : mergeNetworks)
-                {
-                    mergeNetworks.get(0).merge(pos, network);
-                    merged = true;
-                }
-                if (merged) return;
-            }
-
-            {
-                // If there are no adjacent networks, try to create one here.
-                PipeNetwork.tryCreateNetwork(world, pos);
-            }
+            net.update(pos, null, reason);
+            return;
         }
-        catch (Exception e)
+        else if (reason.isRemoved())
         {
-            ExceptionUtils.getRootCause(e).printStackTrace();
-            throw e;
+
+            // Look for adjacent networks and add this pipe to the first one.
+            Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
+            BlockPos.Mutable mutable = pos.mutableCopy();
+            for (Direction direction : this.getConnections(state, d -> true))
+            {
+                mutable.set(pos, direction);
+                net = PipeNetwork.LOOKUP.find(world, mutable, null);
+                if (net != null)
+                {
+                    if (!updatedNetworks.contains(net))
+                    {
+                        net.update(mutable.toImmutable(), null, reason);
+                        updatedNetworks.add(net);
+                    }
+                }
+                else
+                {
+                    PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
+                }
+            }
+            return;
+        }
+        else if (reason.isNewPart())
+        {
+            List<PipeNetwork> mergeNetworks = Lists.newArrayList();
+            BlockPos.Mutable mutable = pos.mutableCopy();
+            boolean merged = false;
+            for (Direction direction : this.getConnections(state, d -> true))
+            {
+                mutable.set(pos, direction);
+                net = PipeNetwork.LOOKUP.find(world, mutable, null);
+                if (net != null)
+                {
+                    mergeNetworks.add(net);
+                }
+            }
+            for (PipeNetwork network : mergeNetworks)
+            {
+                mergeNetworks.get(0).merge(pos, network);
+                merged = true;
+            }
+            if (merged) return;
+        }
+
+        {
+            // If there are no adjacent networks, try to create one here.
+            PipeNetwork.tryCreateNetwork(world, pos);
         }
     }
 

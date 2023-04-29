@@ -126,6 +126,7 @@
   "block.neepmeat.limiter_valve": "Flow Limiter Valve",
   "block.neepmeat.limiter_valve.lore_0": "Controls the rate at which fluid passes.",
   "block.neepmeat.limiter_valve.lore_1": "Set the maximum flow rate in the GUI.",
+  "block.neepmeat.window_fluid_pipe": "Window Fluid pipe",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
   "block.neepmeat.item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",
