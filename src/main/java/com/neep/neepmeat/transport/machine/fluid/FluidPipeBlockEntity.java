@@ -24,8 +24,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
     protected final T vertex;
     protected final PipeConstructor<T> constructor;
 
-//    public PipeVertex.SaveState state = PipeVertex.SaveState.NEW;
-
     public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
         this(NMBlockEntities.FLUID_PIPE, pos, state, constructor);
