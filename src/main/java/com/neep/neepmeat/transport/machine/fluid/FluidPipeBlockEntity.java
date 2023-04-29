@@ -72,32 +72,28 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     }
 
     @Override
-    public void readNbt(NbtCompound nbt)
-    {
-        super.readNbt(nbt);
-        queuedNbt = nbt.copy();
-//        this.state = PipeVertex.SaveState.values()[nbt.getInt("state")];
-
-        if (nbt.get("networkUUID") != null) networkUUID = nbt.getUuid("networkUUID");
-    }
-
-    @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt = FluidNodeManager.getInstance(getWorld()).writeNodes(getPos(), nbt);
 
-//        boolean l = world.isChunkLoaded(ChunkSectionPos.getSectionCoord(pos.getX()), ChunkSectionPos.getSectionCoord(pos.getZ()));
-
         if (networkUUID != null && network != null)
         {
-//            nbt.putInt("state", PipeVertex.SaveState.PENDING_LOAD.ordinal());
             nbt.putUuid("networkUUID", networkUUID);
         }
-        else
-        {
-//            nbt.putInt("state", state.ordinal());
-        }
+
+        nbt.put("vertex", vertex.writeNbt(new NbtCompound()));
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        queuedNbt = nbt.copy();
+
+        if (nbt.get("networkUUID") != null) networkUUID = nbt.getUuid("networkUUID");
+
+        vertex.readNbt(nbt.getCompound("vertex"));
     }
 
     @Override
