@@ -1,6 +1,9 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.AbstractVehicleEntity;
 import com.neep.meatweapons.entity.AirtruckEntity;
@@ -17,21 +20,13 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public class AirtruckItem extends Item implements IMeatItem
+public class AirtruckItem extends BaseItem
 {
-    protected String registryName;
 
-    public AirtruckItem(String registryName, Settings settings)
+    public AirtruckItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(settings);
-        this.registryName = registryName;
+        super(registryName, tooltipSupplier, settings);
         ItemRegistry.queueItem(this);
-    }
-
-    @Override
-    public String getRegistryName()
-    {
-        return registryName;
     }
 
     public ActionResult useOnBlock(ItemUsageContext context)

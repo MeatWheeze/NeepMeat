@@ -57,7 +57,8 @@
     ]},
     {"type": "menu", "id": "misc", "icon": "neepmeat:essential_saltes", "text": "Misc", "entries": [
       {"type": "page", "id": "cloning", "icon": "neepmeat:essential_saltes", "text": "Cloning"},
-      {"type": "page", "id": "synthesiser", "icon": "neepmeat:synthesiser", "text": "Oviparous Synthesiser"}
+      {"type": "page", "id": "synthesiser", "icon": "neepmeat:synthesiser", "text": "Oviparous Synthesiser"},
+      {"type": "page", "id": "airtruck", "icon": "meatweapons:airtruck", "text": "Airtruck"}
     ]}
   ]},
 
@@ -321,6 +322,11 @@
       {"type": "text", "text": "In order to operate, the machine must be fed Purified Meat and body compound. The amount of meat to produce an egg varies depending on the size of the organism.\n"},
       {"type": "text", "text": "Eggs\n", "bold": true},
       {"type": "text", "text": "Eggs can be moved in standard ways, such as with water streams and pistons. They can also be picked up as items by hitting them. Immersion in blood will trigger eggs to hatch.\n"}
+    ]},
+
+    {"id": "airtruck", "contents": [
+      {"type": "text", "text": "Airtruck\n", "bold": true},
+      {"type": "text", "text": "The Airtruck is a flying vehicle that can carry one pilot and a passenger. Mobs will board the vehicle when they collide with it, much like a with a boat.\nAll the controls are the same as in creative flight except for the down key, which is '\\' by default. Shift-right clicking will disassemble the vehicle."}
     ]}
   ]
 }

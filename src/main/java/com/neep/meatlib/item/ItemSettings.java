@@ -26,6 +26,11 @@ public class ItemSettings implements IMeatBlock.ItemFactory
         return new ItemSettings().factory(BaseBlockItem::new);
     }
 
+    public static ItemSettings item()
+    {
+        return new ItemSettings();
+    }
+
     public ItemSettings maxCount(int maxCount)
     {
         this.maxCount = maxCount;
