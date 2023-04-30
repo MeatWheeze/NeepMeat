@@ -10,6 +10,11 @@
       {"type": "page", "id": "enlightening", "icon": "neepmeat:pedestal", "text": "Enlightening"},
       {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
     ]},
+    {"type": "menu", "id": "power", "icon": "neepmeat:motor_unit", "text": "Power", "entries": [
+      {"type": "page", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Energetic Fluids"},
+      {"type": "page", "id": "fuel_transducer", "icon": "neepmeat:transducer", "text": "Fuel Transducer"},
+      {"type": "page", "id": "fluid_exciter", "icon": "neepmeat:fluid_exciter", "text": "Fluid Exciter"}
+      ]},
     {"type": "menu", "id": "crops", "icon": "neepmeat:motor_unit", "text": "Crops", "entries": [
       {"type": "page", "id": "gland_potato", "icon": "neepmeat:flesh_potato", "text": "Gland Potato"},
       {"type": "page", "id": "whisper_wheat", "icon": "neepmeat:whisper_wheat", "text": "Whisper Wheat"},
@@ -81,13 +86,25 @@
     {"id": "fluids", "contents": [
       {"type": "text", "text": "Energetic Fluids\n", "bold": true},
       {"type": "text", "text": "Unlike other products which use such inferior elements as electricity, NEEP machines are powered by the Divine itself."},
-      {"type": "text", "text": "\nWater (1x work multiplier)\n", "bold": true},
-      {"type": "text", "text": "Water is the simplest example of an energetic fluid. Only Motors can accept it and its energy content is determined solely by its velocity. Nevertheless, motors can be run sustainably at high speeds using gravity-fed hydropower systems."},
-      {"type": "text", "text": "\nEthereal Fuel (3x work multiplier)\n", "bold": true},
-      {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. Unlike Work Fluid, Ethereal Fuel is consumed totally by the machine it powers. To produce it, a Fuel Transducer must be placed over a hot block, such as lava or a lit furnace."},
-      {"type": "text", "text": "\nWork Fluid (5x work multiplier)\n", "bold": true},
-      {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened animalcules that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Charger when depleted."}
+      {"type": "text", "text": "\nEthereal Fuel\n", "bold": true},
+      {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. Unlike Work Fluid, Ethereal Fuel is consumed totally by the machine it powers."},
+      {"type": "text", "text": "\nWork Fluid\n", "bold": true},
+      {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened animalcules that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Exciter when depleted."}
     ]},
+
+    {"id": "fuel_transducer", "contents": [
+      {"type": "text", "text": "Fuel Transducer\n", "bold": true},
+      {"type": "text", "text": "The Fuel Transducer receives heat and imbues it into a transmutative substrate, producing Ethereal Fuel."},
+      {"type": "text", "text": "To function, a Fuel Transducer must have one or more hot blocks adjacent to its dome. These can include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. Additional heat sources add to the output power. Ethereal fuel is ejected at pressure from the top of the dome."},
+      {"type": "text", "text": "Water can be supplied by placing a tank below its base. Doing so will double the output power at the cost of water."},
+      {"type": "text", "text": "\nHeat sources and power outputs:\n", "bold": true},
+      {"type": "text", "text": "Lava: 20eJ/t"},
+      {"type": "text", "text": "Lava Cauldron: 20eJ/t"},
+      {"type": "text", "text": "Magma Block: 20eJ/t"},
+      {"type": "text", "text": "Lit Furnace: 40eJ/t"}
+    ]},
+
+
     {"id": "mixer", "contents": [
       {"type": "text", "text": "Mixer\n", "bold": true},
       {"type": "text", "text": "The Mixer is a two block tall machine that combines fluids and items. It requires a source of rotation to function."},
@@ -96,7 +113,7 @@
     ]},
     {"id": "motor", "contents": [
       {"type": "text", "text": "Motor\n", "bold": true},
-      {"type": "text", "text": "Arcane artifice, a blessing of the Integrator, allows a motor to convert the energy of an energetic fluid into mechanical work."},
+      {"type": "text", "text": "Arcane artifice, a blessing of the Integrator, allows a motor to convert the subtle efficacies of an energetic fluid into mechanical work."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Many blocks cannot accept energetic fluids directly, instead they require an adjacent motor. In many cases, the Motor must face the machine.\nThe Motor's speed is determined by the type of fluid and the rate at which the fluid is inserted. The speed of the motor often affects the speed of the connected machine. If an energetic fluid that has a remainder is used, this will be ejected from the Motor's lower face."}
     ]},
@@ -118,7 +135,7 @@
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "When active, this machine will move fluid from a tank placed directly below into the item in its inventory. Fluid container items can be inserted or removed with hoppers or by right-clicking. Once filled, items will be ejected from the front of the machine into tubes or a container. A running motor must be connected for this machine to function."}
     ]},
-    {"id": "small_mincer", "contents": [
+    {"id": "item_mincer", "contents": [
       {"type": "text", "text": "Small Mincer\n", "bold": true},
       {"type": "text", "text": "The Small Mincer squeezes food items into a coarse meat slurry. The quality of the resulting substance is determined by the quality of the inserted meat."},
       {"type": "text", "text": "\nUsage\n", "bold": true},

@@ -49,6 +49,7 @@ public class ConverterBlockEntity extends SyncableBlockEntity
     public ConverterBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.CONVERTER, pos, state);
+//        this(null, pos, state);
     }
 
     public Optional<Storage<FluidVariant>> getInputTank()

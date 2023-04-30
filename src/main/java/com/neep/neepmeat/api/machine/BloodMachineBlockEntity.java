@@ -98,7 +98,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     public FluidPump getPump(Direction direction)
     {
-        return direction == Direction.DOWN ? FluidPump.of(1, true) : null;
+        return direction == Direction.DOWN ? FluidPump.of(-1, true) : null;
     }
 
     @Override
