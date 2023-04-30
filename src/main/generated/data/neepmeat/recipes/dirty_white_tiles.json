@@ -10,11 +10,11 @@
       "item": "minecraft:terracotta"
     },
     "d": {
-      "item": "neepmeat:blood_bucket"
+      "item": "minecraft:dirt"
     }
   },
   "result": {
-    "item": "neepmeat:dirty_red_tiles",
+    "item": "neepmeat:dirty_white_tiles",
     "count": 8
   }
 }

@@ -51,7 +51,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
             {
                 try (Transaction inner = transaction.openNested())
                 {
-                    double baseEnergy1 = FluidEnegyRegistry.getInstance().getOrEmpty(insertedVariant.getFluid()).baseEnergy();
+                    double baseEnergy1 = FluidEnegyRegistry.getInstance().getOrEmpty(insertedVariant.getFluid()).baseEnergy() * 1.5;
                     double baseEnergy2 = FluidEnegyRegistry.getInstance().getOrEmpty(NMFluids.STILL_CHARGED_WORK_FLUID).baseEnergy();
 
                     // Find amount of work fluid with equivalent energy

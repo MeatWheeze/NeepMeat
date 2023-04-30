@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "neepmeat:converter"
+          "name": "neepmeat:limiter_valve"
         }
       ],
       "conditions": [
