@@ -1,0 +1,12 @@
+{
+    "providers": [
+        {
+            "type": "ttf",
+            "file": "neepmeat:vt323_regular.ttf",
+            "shift": ["10, 10"],
+            "size": 1,
+            "oversample": 1
+
+        }
+    ]
+}

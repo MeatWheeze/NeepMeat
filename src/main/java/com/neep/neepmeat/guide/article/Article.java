@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 public class Article
 {
-    public static final Identifier FONT_ID = new Identifier(NeepMeat.NAMESPACE, "vt323_regular.ttf");
+    public static final Identifier FONT_ID = new Identifier(NeepMeat.NAMESPACE, "vt323");
 
     public static Map<String, Function<JsonObject, Content>> DESERIALISERS = new HashMap<>();
 
@@ -39,6 +39,7 @@ public class Article
             return new TextContent(text);
         }
         MutableText text = Text.Serializer.fromJson(object);
+//        text.setStyle(text.getStyle().withFont(FONT_ID));
         return new TextContent(text);
     });
 
