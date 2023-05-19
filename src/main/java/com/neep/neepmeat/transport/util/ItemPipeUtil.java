@@ -54,7 +54,7 @@ public class ItemPipeUtil
         }
 
         // TODO: is this condition necessary?
-        if (amountInserted != item.getAmount())
+        if (amountInserted != item.amount())
         {
         item.decrement((int) amountInserted);
         }
@@ -99,7 +99,7 @@ public class ItemPipeUtil
     {
         try (Transaction nested = transaction.openNested())
         {
-            long transferred = storage.insert(item.toResourceAmount().resource(), item.getAmount(), nested);
+            long transferred = storage.insert(item.toResourceAmount().resource(), item.amount(), nested);
             if (transferred > 0)
             {
                 nested.commit();
@@ -135,18 +135,19 @@ public class ItemPipeUtil
     public static long itemToPipe(ItemInPipe item, IItemPipe pipe, World world, BlockPos toPos, BlockState toState, Direction out, boolean simpleCheck, TransactionContext transaction)
     {
         long amountInserted = 0;
-//        if (IItemPipe.isConnectedIn(world, pos, state, out))
+        long maxAmount = item.amount();
 
         if (pipe.canItemEnter(item.toResourceAmount(), world, toPos, toState, out.getOpposite()))
         {
             if (simpleCheck)
             {
+                // Limit maximum transfer amount to this
                 long simpleAmount = canEjectSimple(item.toResourceAmount(), world, toPos, out, transaction);
-                item.setAmount((int) simpleAmount);
+                maxAmount = Math.min(maxAmount, simpleAmount);
             }
-            if (item.amount() != 0)
+            if (maxAmount != 0)
             {
-                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item, transaction);
+                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item.copyWith((int) maxAmount), transaction);
             }
         }
         return amountInserted;

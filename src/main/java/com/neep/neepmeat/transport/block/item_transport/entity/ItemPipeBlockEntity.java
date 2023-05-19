@@ -90,7 +90,7 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     long transferred = ItemPipeUtil.pipeToAny(item, blockPos, item.out, world, transaction, false);
-                    if (transferred == item.getAmount() || item.getItemStack().isEmpty())
+                    if (transferred == item.amount() || item.getItemStack().isEmpty())
                     {
                         it.remove();
                     } else
