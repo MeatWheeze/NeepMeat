@@ -4,14 +4,15 @@
   "package": "com.neep.neepmeat.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "AbstractFurnaceBlockEntityMixin",
     "BrewingRecipeRegistryAccessor",
     "FurnaceAccessor",
-    "AbstractFurnaceBlockEntityMixin",
     "LivingEntityMixin",
     "ServerWorldMixin"
   ],
   "client": [
     "BlockModelRendererAccessor",
+    "CowEntityRendererMixin",
     "HeldItemRendererMixin",
     "ParticleManagerMixin"
   ],
