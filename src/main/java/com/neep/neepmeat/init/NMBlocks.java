@@ -140,6 +140,7 @@ public class NMBlocks
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 //    public static Block LEADED_GLASS = BlockRegistry.queue(new BaseGlassBlock("leaded_glass", block(), FabricBlockSettings.copy(Blocks.GLASS).strength(3.5f).sounds(BlockSoundGroup.GLASS).solidBlock(ContentDetectorBlock::never)));
     public static Block DIRTY_SINK = BlockRegistry.queue(new BaseBlock("dirty_sink", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
+    public static Block SMALL_SINK = BlockRegistry.queue(new SinkBlock("small_sink", block(), FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
 
 //    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
@@ -189,7 +190,7 @@ public class NMBlocks
 
     public static Block FEEDING_TROUGH = BlockRegistry.queue(new TroughBlock("feeding_trough", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(FLUID_MACHINE_SETTINGS)));
 
-    public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 //    public static Block SIFTER_HOPPER = BlockRegistry.queue(new SifterHopperBlock("hopper", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block PYLON = BlockRegistry.queue(new PylonBlock("pylon", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

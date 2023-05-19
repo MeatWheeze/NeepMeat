@@ -172,6 +172,7 @@
   "block.neepmeat.fluid_interface.lore_0": "Acts as a proxy for the block it faces.",
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
+  "block.neepmeat.fluid_exciter": "Fluid Exciter",
 
   "block.neepmeat.item_buffer": "Display Platform",
 
@@ -180,6 +181,7 @@
   "block.neepmeat.rusty_panel": "Rusty Panel",
 
   "block.neepmeat.dirty_sink": "Dirty Sink",
+  "block.neepmeat.small_sink": "Small Sink",
   "block.neepmeat.dirty_toilet": "Dirty Toilet",
 
   "block.neepmeat.big_lever": "Big Lever",
