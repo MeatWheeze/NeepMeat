@@ -116,7 +116,8 @@ public class PowerUtils
         // Arbitrary constant that makes the result a user-friendly number.
         double C = 2;
 
-        return (long) (1d/2d * (Q*Q*Q)/(A*A) * density * C);
+//        return (long) (1d/2d * (Q*Q*Q)/(A*A) * density * C);
+        return 1000;
     }
 
     public static double dropletPower()

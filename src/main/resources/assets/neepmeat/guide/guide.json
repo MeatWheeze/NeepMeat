@@ -108,7 +108,7 @@
     ]},
     {"id": "fluid_exciter", "contents": [
       {"type": "text", "text": "Fluid Exciter\n", "bold": true},
-      {"type": "text", "text": "Ethereal fuel holds a lot of energy, but most of it cannot be harnessed directly in a motor, making it quite inefficient to use directly. The Fluid Exciter consumes Ethereal Fuel to charge Work Fluid. In the process, it liberates three times as much energy than would be obtained by sending the Ethereal Fuel directly into a motor."},
+      {"type": "text", "text": "Ethereal fuel holds a lot of energy, but most of it cannot be harnessed directly in a motor, making it quite inefficient to use directly. The Fluid Exciter consumes Ethereal Fuel to charge Work Fluid. In the process, it liberates 1.5 times as much energy than would be obtained by sending the Ethereal Fuel directly into a motor."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "The Work Fluid input tank must be placed below the base of the Fluid Exciter. When ethereal fuel is pumped into the bottom block of the machine, Charged Work Fluid will be emitted at pressure from the upper dome. This can be piped into motors and other powered machines. Remember to pump the uncharged Work Fluid from the bottom of each Motor back into the Exciter's input tank."}
     ]},
