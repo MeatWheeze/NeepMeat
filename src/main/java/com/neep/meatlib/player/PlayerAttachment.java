@@ -4,7 +4,7 @@ import net.minecraft.entity.player.PlayerEntity;
 
 public interface PlayerAttachment
 {
-    void tick();
+    void tickAttachment();
 
     @FunctionalInterface
     interface Factory

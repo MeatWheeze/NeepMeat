@@ -19,7 +19,7 @@ public class WeaponCooldownAttachment implements PlayerAttachment
 
     public static WeaponCooldownAttachment get(PlayerEntity player)
     {
-        return ((MeatPlayerEntity) player).neepmeat$getAttachmentManager().getAttachment(ID);
+        return player.neepmeat$getAttachmentManager().getAttachment(ID);
     }
 
     public WeaponCooldownAttachment(PlayerEntity player)
@@ -28,7 +28,7 @@ public class WeaponCooldownAttachment implements PlayerAttachment
     }
 
     @Override
-    public void tick()
+    public void tickAttachment()
     {
         ++time;
         ObjectIterator<Int2ObjectMap.Entry<Entry>> it = map.int2ObjectEntrySet().fastIterator();

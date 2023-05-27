@@ -1,9 +1,7 @@
 package com.neep.meatlib.player;
 
 import com.google.common.collect.Maps;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.player.PlayerEntity;
-import org.lwjgl.system.CallbackI;
 
 import java.util.Map;
 
@@ -25,7 +23,7 @@ public class PlayerAttachmentManager
 
     public void tick()
     {
-        attachments.values().forEach(PlayerAttachment::tick);
+        attachments.values().forEach(PlayerAttachment::tickAttachment);
     }
 
     public <T extends PlayerAttachment> T getAttachment(String id)
