@@ -1,7 +1,6 @@
 package com.neep.meatweapons.entity;
 
-import com.neep.meatlib.player.MeatPlayerEntity;
-import com.neep.meatlib.player.PlayerAttachment;
+import com.neep.meatlib.attachment.player.PlayerAttachment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;

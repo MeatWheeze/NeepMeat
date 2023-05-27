@@ -3,7 +3,7 @@ package com.neep.meatweapons.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
-import com.neep.meatlib.player.PlayerAttachmentManager;
+import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;

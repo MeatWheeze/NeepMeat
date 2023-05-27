@@ -1,4 +1,4 @@
-package com.neep.meatlib.player;
+package com.neep.meatlib.attachment.player;
 
 public interface MeatPlayerEntity
 {
