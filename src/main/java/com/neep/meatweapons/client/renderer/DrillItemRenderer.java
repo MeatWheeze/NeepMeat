@@ -40,7 +40,7 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 
         if (b && !using)
         {
-            System.out.println("End");
+//            System.out.println("End");
         }
 
         b = using;
@@ -54,7 +54,7 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 //        float currentSpeed = renderNbt.getFloat("currentSpeed");
         double angle = parser.getVariable("angle", null).get();
         double currentSpeed = parser.getVariable("currentSpeed", null).get();
-        float targetSpeed = using ? 3 : 0;
+        float targetSpeed = using ? 10 : 0;
 
         float shake = (float) (0.01f * Math.sin(Math.toRadians(timeDegrees) * 140));
         if (!using) shake = 0;

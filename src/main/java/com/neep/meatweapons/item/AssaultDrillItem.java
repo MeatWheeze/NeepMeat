@@ -1,33 +1,37 @@
 package com.neep.meatweapons.item;
 
+import com.google.common.collect.Lists;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.BulletDamageSource;
-import com.neep.neepmeat.init.NMParticles;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.item.TooltipData;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnchantmentLevelEntry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ClickType;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -42,14 +46,18 @@ import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, ISyncable
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
-    public Item ammunition;
     public boolean hasLore;
     protected String registryName;
+
+    protected float attackDamage;
 
     public final String controllerName = "controller";
 
@@ -57,6 +65,8 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     {
         super(settings.maxCount(1));
         this.registryName = registryName;
+
+        this.attackDamage = 1;
 
         GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queueItem(this);
@@ -71,10 +81,8 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        if (hasLore)
-        {
-            tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
-        }
+        tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
+        tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null)).formatted(Formatting.BLUE));
     }
 
     @Override
@@ -100,16 +108,37 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         return this.factory;
     }
 
+    public static List<EnchantmentLevelEntry> getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed) {
+        ArrayList<EnchantmentLevelEntry> list = Lists.newArrayList();
+        Item item = stack.getItem();
+        boolean bl = stack.isOf(Items.BOOK);
+        block0: for (Enchantment enchantment : Registry.ENCHANTMENT) {
+            if (enchantment.isTreasure() && !treasureAllowed || !enchantment.isAvailableForRandomSelection() || !enchantment.type.isAcceptableItem(item) && !bl) continue;
+            for (int i = enchantment.getMaxLevel(); i > enchantment.getMinLevel() - 1; --i) {
+                int minp = enchantment.getMinPower(i);
+                int maxp = enchantment.getMaxPower(i);
+                if (power < enchantment.getMinPower(i) || power > enchantment.getMaxPower(i)) continue;
+                list.add(new EnchantmentLevelEntry(enchantment, i));
+                continue block0;
+            }
+        }
+        return list;
+    }
+
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
+        var l1 = getPossibleEntries(30, user.getStackInHand(hand), false);
+        var l = EnchantmentHelper.generateEnchantments(new Random(0), user.getMainHandStack(), 3, true);
+        System.out.println(l1);
+
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
 
         if (!world.isClient())
         {
             final int id = GeckoLibUtil.guaranteeIDForStack(user.getStackInHand(hand), (ServerWorld) world);
-            GeckoLibNetwork.syncAnimation(user, this, id, 0);
+            world.getPlayers().forEach(p -> GeckoLibNetwork.syncAnimation(user, this, id, 0));
         }
 
         itemStack.getOrCreateNbt().putBoolean("using", true);
@@ -133,8 +162,7 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
                 {
                     if (entity instanceof LivingEntity && entity.isAlive() && user instanceof PlayerEntity player)
                     {
-                        entity.damage(BulletDamageSource.create(player, 0.04f), 1);
-                        entity.timeUntilRegen = 1;
+                        entity.damage(BulletDamageSource.create(player, 0.04f, 13), getDamage(stack, entity));
 
                         serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()), tip.x, tip.y, tip.z, 3, 0.02, 0.02, 0.02, 0.2);
                     }
@@ -146,8 +174,15 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         super.usageTick(world, user, stack, remainingUseTicks);
     }
 
+    @Override
+    public Optional<TooltipData> getTooltipData(ItemStack stack)
+    {
+        return super.getTooltipData(stack);
+    }
+
     public static boolean using(ItemStack stack)
     {
+
         if (stack.getItem() instanceof AssaultDrillItem)
         {
             return stack.getOrCreateNbt().getBoolean("using");
@@ -167,6 +202,26 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     public SoundEvent getEquipSound()
     {
         return super.getEquipSound();
+    }
+
+    protected float getDamage(ItemStack stack, @Nullable Entity target)
+    {
+        float damage = target instanceof LivingEntity livingTarget ?
+                EnchantmentHelper.getAttackDamage(stack, livingTarget.getGroup()) : EnchantmentHelper.getAttackDamage(stack, EntityGroup.DEFAULT);
+
+        return attackDamage + damage;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public int getEnchantability()
+    {
+        return 1;
     }
 
     @Override

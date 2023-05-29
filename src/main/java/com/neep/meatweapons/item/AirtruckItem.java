@@ -29,6 +29,18 @@ public class AirtruckItem extends BaseItem
         ItemRegistry.queueItem(this);
     }
 
+    @Override
+    public boolean isEnchantable(ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public int getEnchantability()
+    {
+        return 1;
+    }
+
     public ActionResult useOnBlock(ItemUsageContext context)
     {
         PlayerEntity user = context.getPlayer();
