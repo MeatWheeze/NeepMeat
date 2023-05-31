@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
@@ -26,9 +27,11 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -123,10 +126,6 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-//        var l1 = getPossibleEntries(30, user.getStackInHand(hand), false);
-//        var l = EnchantmentHelper.generateEnchantments(new Random(0), user.getMainHandStack(), 3, true);
-//        System.out.println(l1);
-
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
 
@@ -137,6 +136,12 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         }
 
         itemStack.getOrCreateNbt().putBoolean("using", true);
+
+        if (user instanceof ServerPlayerEntity player && world instanceof ServerWorld serverWorld)
+        {
+            BlockPos targetPos = raycast(serverWorld, player, RaycastContext.FluidHandling.NONE).getBlockPos();
+//            player.interactionManager.processBlockBreakingAction(targetPos, PlayerActionC2SPacket.Action.START_DESTROY_BLOCK, Direction.DOWN, player.world.getTopY());
+        }
 
         return TypedActionResult.fail(itemStack);
     }
@@ -158,24 +163,33 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         if (world instanceof ServerWorld serverWorld && canUse)
         {
             // Damage all entities within a small box at the end of the drill model
-            world.getOtherEntities(user, box, e -> true).forEach(entity ->
+            List<Entity> entities = world.getOtherEntities(user, box, e -> true);
+            if (!entities.isEmpty())
             {
-                if (entity instanceof LivingEntity && entity.isAlive() && user instanceof PlayerEntity player)
+                entities.forEach(entity ->
                 {
-                    // Set entity damage cooldown to 4 ticks (20 - 14)
-                    entity.damage(BulletDamageSource.create(player, 0.04f, 14), getDamage(stack, entity));
+                    if (entity instanceof LivingEntity && entity.isAlive() && user instanceof PlayerEntity player)
+                    {
+                        // Set entity damage cooldown to 4 ticks (20 - 14)
+                        entity.damage(BulletDamageSource.create(player, 0.04f, 14), getDamage(stack, entity));
 
-                    // Spawn blood particles
-                    serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()), tip.x, tip.y, tip.z, 3, 0.05, 0.05, 0.05, 0.2);
-                }
-            });
+                        // Spawn blood particles
+                        serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()), tip.x, tip.y, tip.z, 3, 0.05, 0.05, 0.05, 0.2);
+                    }
+                });
+            }
+            else
+            {
+            }
 
+            // Reduce durability
             if (!(user instanceof PlayerEntity player && player.isCreative())
                 && stack.getDamage() < getMaxDamage(stack))
             {
                 stack.setDamage(stack.getDamage() + 1);
             }
         }
+
 
         super.usageTick(world, user, stack, remainingUseTicks);
     }
