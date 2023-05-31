@@ -156,6 +156,8 @@
   "block.neepmeat.content_detector": "Item Detector",
   "block.neepmeat.content_detector.lore_0": "Detects certain items in the inventory it faces.",
   "block.neepmeat.content_detector.lore_1": "Filter items can be added and removed with hoppers.",
+  "block.neepmeat.solidity_detector": "Solidity Detector",
+  "block.neepmeat.solidity_detector.lore_0": "Emits redstone when the block it faces is not air or fluid.",
 
   "block.neepmeat.bottler": "Bottler",
   "block.neepmeat.bottler.lore_0": "Inserts fluids into items.",

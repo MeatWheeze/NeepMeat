@@ -1,0 +1,60 @@
+{
+  "variants": {
+    "facing=east,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "x": -90
+    },
+    "facing=down,powered=false": {
+      "model": "neepmeat:block/solidity_detector",
+      "x": 90
+    },
+    "facing=east,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "x": -90
+    },
+    "facing=down,powered=true": {
+      "model": "neepmeat:block/solidity_detector_on",
+      "x": 90
+    }
+  }
+}
