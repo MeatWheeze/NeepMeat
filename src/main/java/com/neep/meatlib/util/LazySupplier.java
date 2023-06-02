@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 
 /**
  * This is not indended for optimisation, but rather for situations where lazy initialisation is the only option.
- * An example is a field in a BlockEntity that requires a World instance to be initialised.
+ * An example could be a field in a BlockEntity that requires a World instance to be initialised.
  */
 public interface LazySupplier<T> extends Supplier<T>
 {
@@ -15,6 +15,8 @@ public interface LazySupplier<T> extends Supplier<T>
     T get();
 
     boolean isInitialised();
+
+    void invalidate();
 
     static <T> LazySupplier<T> of(Supplier<T> supplier)
     {
@@ -46,6 +48,12 @@ public interface LazySupplier<T> extends Supplier<T>
         public boolean isInitialised()
         {
             return object != null;
+        }
+
+        @Override
+        public void invalidate()
+        {
+            object = null;
         }
     }
 }
