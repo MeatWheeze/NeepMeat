@@ -269,6 +269,8 @@ public class NMBlocks
 
 //    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
 
+    public static Block HOLDING_TRACK = BlockRegistry.queue(new HoldingTrackBlock("holding_track", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(Blocks.RAIL)));
+
     public static boolean never(BlockState state, BlockView world, BlockPos pos)
     {
         return false;

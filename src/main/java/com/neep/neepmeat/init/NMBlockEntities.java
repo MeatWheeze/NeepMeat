@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.multiblock.IMultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.block.HoldingTrackBlock;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
@@ -155,6 +156,8 @@ public class NMBlockEntities
     public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
     public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
 
+    public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
+
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
@@ -300,6 +303,8 @@ public class NMBlockEntities
         FLUID_RATIONER = registerBlockEntity("fluid_rationer", FluidRationerBlockEntity::new, NMBlocks.FLUID_RATIONER);
         FluidStorage.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getStorage, FLUID_RATIONER);
         FluidPump.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getPump, FLUID_RATIONER);
+
+        HOLDING_TRACK = registerBlockEntity("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

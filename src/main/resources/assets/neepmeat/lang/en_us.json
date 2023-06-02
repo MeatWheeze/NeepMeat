@@ -298,6 +298,8 @@
 
   "block.neepmeat.flame_jet": "Flame Jet",
 
+  "block.neepmeat.holding_track": "Holding Rail",
+  "block.neepmeat.holding_track.lore_0": "Holds carts in place when unpowered.",
 
   "item.neepmeat.projector": "Guide Projector",
   "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",
