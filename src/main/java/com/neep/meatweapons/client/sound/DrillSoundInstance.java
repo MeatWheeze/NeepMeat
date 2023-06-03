@@ -21,7 +21,7 @@ public class DrillSoundInstance extends MovingSoundInstance implements PlayerAtt
 
     public static DrillSoundInstance get(PlayerEntity player)
     {
-        return player.neepmeat$getAttachmentManager().getAttachment(ATTACHMENT_ID);
+        return player.meatlib$getAttachmentManager().getAttachment(ATTACHMENT_ID);
     }
 
     public DrillSoundInstance(PlayerEntity player)

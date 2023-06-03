@@ -1,8 +1,11 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.player.upgrade.ExtraMouthUpgrade;
+import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.guide.GuideReloadListener;
@@ -13,6 +16,8 @@ import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.ToolTransformPacket;
+import com.neep.neepmeat.player.upgrade.PlayerUpgradeRegistry;
+import com.neep.neepmeat.player.upgrade.ExtraKneeUpgrade;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
@@ -27,6 +32,8 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
@@ -93,6 +100,13 @@ public class NeepMeat implements ModInitializer
 		StagedTransactions.init();
 
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
+
+
+		// Register all blocks and items
 		MeatLib.flush();
+
+		PlayerAttachmentManager.registerAttachment(PlayerUpgradeManager.ID, PlayerUpgradeManager::new);
+		Registry.register(PlayerUpgradeRegistry.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "extra_mouth"), ExtraMouthUpgrade::new);
+		Registry.register(PlayerUpgradeRegistry.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "extra_knee"), ExtraKneeUpgrade::new);
 	}
 }
