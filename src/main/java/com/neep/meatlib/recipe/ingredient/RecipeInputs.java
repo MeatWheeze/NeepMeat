@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
@@ -22,6 +23,7 @@ public class RecipeInputs
 
     public static final Identifier FLUID_ID = Registry.FLUID.getKey().getValue();
     public static final Identifier ITEM_ID = Registry.ITEM.getKey().getValue();
+    public static final Identifier ENTITY_MUTATE_ID = Registry.ENTITY_TYPE.getKey().getValue();
 
     public static final RecipeInput.Serialiser<Object> EMPTY_SERIALISER = Registry.register(SERIALISERS, EMPTY_ID, new RecipeInput.Serialiser<>()
     {
@@ -58,6 +60,7 @@ public class RecipeInputs
 
     public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
     public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
+    public static final RecipeInput.Serialiser<EntityType<?>> ENTITY = Registry.register(SERIALISERS, ENTITY_MUTATE_ID, new RecipeInput.RegistrySerialiser<>(Registry.ENTITY_TYPE));
 
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, EMPTY_SERIALISER, EMPTY_ID);
 }

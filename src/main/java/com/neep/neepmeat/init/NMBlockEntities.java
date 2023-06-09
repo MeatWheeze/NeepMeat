@@ -46,6 +46,7 @@ import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
+import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserStorage;
@@ -155,6 +156,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidExciterBlockEntity> FLUID_EXCITER;
     public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
     public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
+    public static BlockEntityType<? extends SurgeryPlatformBlockEntity> SURGERY_PLATFORM;
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
 
@@ -192,11 +194,15 @@ public class NMBlockEntities
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
 //        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
 
+        // --- Surgery Machine ---
+        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
+        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
+        SURGERY_PLATFORM = registerBlockEntity("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
+        TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(SurgeryPlatformBlockEntity::getTableComponent, SURGERY_PLATFORM);
+
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
-        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
-        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
-        TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
@@ -303,6 +309,7 @@ public class NMBlockEntities
         FLUID_RATIONER = registerBlockEntity("fluid_rationer", FluidRationerBlockEntity::new, NMBlocks.FLUID_RATIONER);
         FluidStorage.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getStorage, FLUID_RATIONER);
         FluidPump.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getPump, FLUID_RATIONER);
+
 
         HOLDING_TRACK = registerBlockEntity("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
 

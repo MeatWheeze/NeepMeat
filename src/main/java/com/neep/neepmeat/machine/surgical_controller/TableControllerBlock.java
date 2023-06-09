@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -18,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TableControllerBlock extends BaseHorFacingBlock implements BlockEntityProvider
+public class TableControllerBlock extends BaseHorFacingBlock implements BlockEntityProvider, IDataCable
 {
     public TableControllerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {

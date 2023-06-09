@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -75,7 +76,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
         Direction facing = getCachedState().get(BaseHorFacingBlock.FACING).getOpposite();
         Direction left = facing.rotateYCounterclockwise();
-        BlockPos corner = pos.offset(facing).offset(left).up();
+        BlockPos corner = pos.offset(facing).offset(left);
 
         BlockPos.Mutable mutable = corner.mutableCopy();
         for (int j = 2; j >= 0; --j)
@@ -86,6 +87,18 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 Vec3i zVec = facing.getVector().multiply(j);
                 mutable.set(corner, xVec);
                 mutable.set(mutable, zVec);
+
+                // Check the lower block first. If a structure is found, ignore the upper block.
+                TableComponent<?> component = TableComponent.STRUCTURE_LOOKUP.find(world, mutable, null);
+                if (component != null)
+                {
+                    context.add((ServerWorld) world, mutable);
+                    continue;
+                }
+
+                mutable.set(mutable, Direction.UP);
+
+                // Add the upper block.
                 context.add((ServerWorld) world, mutable);
             }
         }
