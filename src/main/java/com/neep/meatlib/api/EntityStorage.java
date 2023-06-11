@@ -1,7 +1,9 @@
-package com.neep.neepmeat.api;
+package com.neep.meatlib.api;
 
 import com.google.common.base.Preconditions;
+import com.neep.meatlib.transfer.EntityVariant;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.DataStorage;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.util.Identifier;

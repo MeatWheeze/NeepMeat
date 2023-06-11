@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.surgery_platform;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -28,6 +29,6 @@ public class SurgeryPlatformBlock extends BaseBlock implements IDataCable, Block
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return null;
+        return NMBlockEntities.SURGERY_PLATFORM.instantiate(pos, state);
     }
 }

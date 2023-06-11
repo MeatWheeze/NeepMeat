@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.network.ScreenPropertyC2sPacket;
+import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.screen_handler.FluidRationerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -58,7 +58,7 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
             int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
 //            this.client.getNetworkHandler().sendPacket(new BookUpdateC2SPacket());
 //            handler.setProperty(FluidRationerScreenHandler.PROP_TARGE_AMOUNT, parsed);
-            ClientPlayNetworking.send(ScreenPropertyC2sPacket.ID, ScreenPropertyC2sPacket.create(FluidRationerScreenHandler.PROP_TARGET_AMOUNT, parsed));
+            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(FluidRationerScreenHandler.PROP_TARGET_AMOUNT, parsed));
         });
         this.addDrawableChild(textField);
 

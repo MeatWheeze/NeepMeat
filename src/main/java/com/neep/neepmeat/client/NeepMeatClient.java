@@ -33,6 +33,7 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
+import com.neep.neepmeat.network.PlayerUpgradeStatusS2CPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
@@ -77,6 +78,7 @@ public class NeepMeatClient implements ClientModInitializer
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
+        PlayerUpgradeStatusS2CPacket.Client.registerReceiver();
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);

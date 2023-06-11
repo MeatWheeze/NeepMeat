@@ -1,0 +1,11 @@
+{
+  "type": "neepmeat:upgrade_install",
+  "input": {
+    "type": "minecraft:item",
+    "resource": "minecraft:bone",
+    "amount": 1
+  },
+  "module": {
+    "id": "neepmeat:extra_knee"
+  }
+}

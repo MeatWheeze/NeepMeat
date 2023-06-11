@@ -6,9 +6,7 @@ import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
-import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
+import com.neep.neepmeat.recipe.surgery.*;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -97,6 +95,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 }
 
                 mutable.set(mutable, Direction.UP);
+                component = TableComponent.STRUCTURE_LOOKUP.find(world, mutable, null);
 
                 // Add the upper block.
                 context.add((ServerWorld) world, mutable);
@@ -106,16 +105,24 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public void tryRecipe()
     {
-        SurgeryRecipe surgeryRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
+        GeneralSurgeryRecipe surgeryRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
         if (surgeryRecipe != null)
         {
             startRecipe(surgeryRecipe);
             return;
         }
+
         TransformingToolRecipe toolRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TRANSFORMING_TOOL, context).orElse(null);
         if (toolRecipe != null)
         {
             startRecipe(toolRecipe);
+            return;
+        }
+
+        UpgradeInstallRecipe mobRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.UPGRADE_INSTALL, context).orElse(null);
+        if (mobRecipe != null)
+        {
+            startRecipe(mobRecipe);
             return;
         }
     }
