@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client;
 
+import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
@@ -35,6 +36,7 @@ import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.PlayerUpgradeStatusS2CPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
+import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
@@ -72,6 +74,8 @@ public class NeepMeatClient implements ClientModInitializer
         registerScreens();
         NMFluidsClient.registerFluidRenderers();
         HUDOverlays.init();
+
+        PlayerUpgradeManager.Client.init();
 
         TransportClient.init();
 

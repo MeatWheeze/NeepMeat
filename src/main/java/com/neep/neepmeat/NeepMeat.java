@@ -102,6 +102,8 @@ public class NeepMeat implements ModInitializer
 		// Register all blocks and items
 		MeatLib.flush();
 
+		PlayerUpgradeManager.init();
+
 		PlayerAttachmentManager.registerAttachment(PlayerUpgradeManager.ID, PlayerUpgradeManager::new);
 		Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraMouthUpgrade.ID, ExtraMouthUpgrade::new);
 		Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraKneeUpgrade.ID, ExtraKneeUpgrade::new);

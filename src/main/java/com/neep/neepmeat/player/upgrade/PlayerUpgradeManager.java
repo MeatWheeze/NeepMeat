@@ -6,6 +6,8 @@ import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.attachment.player.PlayerAttachment;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.network.PlayerUpgradeStatusS2CPacket;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -155,17 +157,11 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
         return player.meatlib$getAttachmentManager().getAttachment(ID);
     }
 
-    static
+    public static void init()
     {
         ServerPlayConnectionEvents.INIT.register((handler, server) ->
         {
             get(handler.getPlayer()).upgrades.values().forEach(PlayerUpgrade::onPlayerInit);
-        });
-
-        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
-        {
-            if (client.player != null)
-                get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerInit);
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
@@ -184,11 +180,6 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
             manager.upgrades.values().forEach(PlayerUpgrade::onPlayerRemove);
         });
 
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
-        {
-            if (client.player != null)
-                get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerRemove);
-        });
 
         ServerPlayConnectionEvents.JOIN.register(((handler, sender, server) ->
         {
@@ -223,5 +214,24 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
                 InitialTicks.getInstance(serverWorld).queue(w -> manager.deferredLoad(nbtCompound));
             }
         });
+    }
+
+    @Environment(value= EnvType.CLIENT)
+    public static class Client
+    {
+        public static void init()
+        {
+            ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
+            {
+                if (client.player != null)
+                    get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerRemove);
+            });
+
+            ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
+            {
+                if (client.player != null)
+                    get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerInit);
+            });
+        }
     }
 }
