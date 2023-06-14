@@ -6,7 +6,6 @@ import com.neep.neepmeat.entity.GlomeEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -15,6 +14,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3f;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(value = EnvType.CLIENT)
@@ -26,14 +26,26 @@ public class GlomeEntityRenderer extends LivingEntityRenderer<GlomeEntity, Glome
     }
 
     @Override
-    public void render(GlomeEntity livingEntity, float f, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int i)
+    public void render(GlomeEntity entity, float f, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumerProvider, int i)
     {
-        float a = livingEntity.getLifeTime() / 20f;
+        float a = entity.age / 20f;
         float b = tickDelta / 20;
         float sin = (float) (Math.sin(a) * Math.cos(b) + Math.cos(a) * Math.sin(b));
-        float scale = MathHelper.lerp((sin + 1f) / 2f, 0.2f, 1f);
-        matrices.scale(scale, scale, scale);
-        super.render(livingEntity, f, b, matrices, vertexConsumerProvider, i);
+
+        float easeEnvelope = (float) (1f - Math.pow((entity.age + tickDelta) / (float) entity.getMaxTime(), 3f));
+
+        float scale1 = MathHelper.lerp((sin + 1f) / 2f * easeEnvelope, 0.2f, 1f);
+
+        float angle = (entity.getInitialRandom() + entity.age + tickDelta) * 10f;
+
+        matrices.push();
+        matrices.translate(0, entity.getHeight() / 2, 0);
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(angle));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(angle));
+        matrices.scale(scale1, scale1, scale1);
+        matrices.translate(0, -entity.getHeight() / 2, 0);
+        super.render(entity, f, b, matrices, vertexConsumerProvider, i);
+        matrices.pop();
     }
 
     @Nullable
