@@ -1,9 +1,10 @@
 {
   "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
+  "parent": "neepmeat:block/outer_glass_stairs",
   "textures": {
     "bottom": "neepmeat:block/reinforced_glass",
-    "top": "neepmeat:block/reinforced_glass",
-    "side": "neepmeat:block/reinforced_glass"
+    "top": "neepmeat:block/reinforced_glass_quad",
+    "side": "neepmeat:block/reinforced_glass_half",
+    "stairs": "neepmeat:block/reinforced_glass_stairs"
   }
 }

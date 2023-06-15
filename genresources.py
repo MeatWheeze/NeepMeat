@@ -16,7 +16,6 @@ blocks = [
 'sandy_bricks',
 'blood_bubble_planks',
 'meat_steel_block',
-'reinforced_glass',
 'duat_stone',
 'duat_cobblestone'
 ]
