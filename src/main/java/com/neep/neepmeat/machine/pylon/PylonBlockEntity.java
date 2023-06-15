@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.pylon;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -13,12 +14,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -28,6 +29,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
     public static final float RUNNING_SPEED = 16;
 
     private boolean hasSoundInstance = false;
+    protected final int radius = 7;
     public float angle;
     private float speed;
 
@@ -49,6 +51,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
         super.setWorld(world);
         if (world.isClient() && !hasSoundInstance)
         {
+            // This somehow works on servers.
             Client.spawnSound(this, pos);
             this.hasSoundInstance = true;
         }
@@ -68,6 +71,20 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
         return getSpeed() >= RUNNING_SPEED;
     }
 
+    public void clientTick()
+    {
+        float clamped = MathHelper.clamp(getSpeed() - RUNNING_SPEED, 0, RUNNING_SPEED * 2) / (RUNNING_SPEED * 2);
+        float threshold = MathHelper.lerp(clamped, 0f, 0.6f);
+        float p = random.nextFloat();
+        if (p < threshold)
+        {
+            world.getNonSpectatingEntities(PlayerEntity.class, getBox()).stream().findFirst().ifPresent(pl ->
+            {
+                Client.causeVignette();
+            });
+        }
+    }
+
     @Override
     public boolean tick(IMotorBlockEntity motor)
     {
@@ -83,9 +100,15 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
         return false;
     }
 
+    protected Box getBox()
+    {
+        BlockPos volumeStart = getPos().subtract(new Vec3i(radius, radius, radius));
+        int end = 2 * radius + 1;
+        return new Box(volumeStart, volumeStart.add(end, end, end));
+    }
+
     private void spawnGlomes()
     {
-        int radius = 7;
         BlockPos volumeStart = getPos().subtract(new Vec3i(radius, radius, radius));
         int end = 2 * radius + 1;
         if (random.nextFloat() < 0.05)
@@ -128,9 +151,14 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
     @Environment(value=EnvType.CLIENT)
     private static class Client
     {
-        public static void spawnSound(PylonBlockEntity be, BlockPos pos)
+        protected static void spawnSound(PylonBlockEntity be, BlockPos pos)
         {
             MinecraftClient.getInstance().getSoundManager().play(new PylonSoundInstance(be, pos, NMSounds.PYLON_START, NMSounds.AIRTRUCK_RUNNING, SoundCategory.BLOCKS));
+        }
+
+        protected static void causeVignette()
+        {
+            HUDOverlays.startPylonVignette();
         }
     }
 }

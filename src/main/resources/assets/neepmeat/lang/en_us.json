@@ -226,13 +226,13 @@
   "block.neepmeat.feeding_trough": "Feeding Trough",
   "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.",
 
+  "block.neepmeat.pylon": "Pylon",
+
   "block.neepmeat.synthesiser": "Oviparous Synthesiser",
 
   "block.neepmeat.fluid_rationer": "Fluid Rationer",
   "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from the facing",
   "block.neepmeat.fluid_rationer.lore_1": "storage into a pipe network.",
-
-
 
   "block.neepmeat.surgery_controller": "Surgery Controller",
 

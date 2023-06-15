@@ -20,6 +20,7 @@ public class HUDOverlays
 {
     public final MinecraftClient client;
     private static final Identifier INJECTOR_VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/heal_vignette.png");
+    private static final Identifier PYLON_VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/pylon_vignette.png");
     private static double scaledHeight;
     private static double scaledWidth;
     private static float opacity;
@@ -30,7 +31,7 @@ public class HUDOverlays
         this.client = client;
     }
 
-    public static void renderVignettes(MatrixStack stack)
+    public static void renderVignettes(MatrixStack stack, float tickDelta)
     {
         RenderSystem.setShader(GameRenderer::getPositionShader);
         MinecraftClient client = MinecraftClient.getInstance();
@@ -53,7 +54,7 @@ public class HUDOverlays
         if (vignetteState == 1)
         {
             // Fade vignette in quickly
-            opacity = (float) MathHelper.lerp(0.8F * f, opacity, 1.00F);
+            opacity = MathHelper.lerp(0.8F * f, opacity, 1.00F);
             renderOverlay(INJECTOR_VIGNETTE, opacity, 1.1f);
             if (opacity > 0.99)
                 vignetteState = 2;
@@ -69,6 +70,39 @@ public class HUDOverlays
                 opacity = 0;
             }
         }
+
+        pylonVignette(stack, tickDelta);
+    }
+
+    protected static int pylonVignetteState = 0;
+    protected static float pylonVignetteEnvelope = 0;
+
+    protected static void pylonVignette(MatrixStack matrices, float tickDelta)
+    {
+        // LPF
+        pylonVignetteEnvelope = MathHelper.lerp(0.04f * MinecraftClient.getInstance().getLastFrameDuration(),
+                pylonVignetteEnvelope,
+                pylonVignetteState == 1 ? 1 : 0);
+
+        if (pylonVignetteState == 1 && pylonVignetteEnvelope > 0.9) pylonVignetteState = 0;
+
+        // There may be imprecision problems here when the world time gets too large, but I'm not sure how to fix it.
+        double den = 20L;
+        long a = MinecraftClient.getInstance().world.getTime();
+//        float b = tickDelta / 1;
+//        float sin = (float) ((float) Math.sin(a) * Math.cos(b) + (float) Math.cos(a) * Math.sin(b));
+//        float cos = (float) ((float) Math.cos(a) * Math.cos(b) - (float) Math.sin(a) * Math.sin(b));
+        float sin = (float) Math.sin(a / den + tickDelta / den) + 1;
+        float cos = (float) Math.cos(a / den + tickDelta / den) + 1;
+
+        float scale = MathHelper.lerp(sin / 2, 1.3f, 1.5f);
+        float opacity = pylonVignetteEnvelope * MathHelper.lerp(cos / 2, 0.5f, 1f);
+        renderOverlay(PYLON_VIGNETTE, opacity, scale);
+    }
+
+    public static void startPylonVignette()
+    {
+        if (pylonVignetteState == 0) pylonVignetteState = 1;
     }
 
     private static void renderOverlay(Identifier texture, float opacity, float scale) {
@@ -108,6 +142,6 @@ public class HUDOverlays
 
     public static void init()
     {
-        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> renderVignettes(matrixStack));
+        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> renderVignettes(matrixStack, tickDelta));
     }
 }
