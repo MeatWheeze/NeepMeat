@@ -11,6 +11,7 @@ import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.renderer.*;
+import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideScreen;
 import com.neep.neepmeat.client.world.DuatDimensionEffects;
@@ -159,6 +160,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, ctx -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityRendererRegistry.register(NMEntities.GLOME, ctx -> new GlomeEntityRenderer(ctx, GLOME));
         EntityRendererRegistry.register(NMEntities.EGG, ctx -> new EggEntityRenderer(ctx, EGG));
+        EntityRendererRegistry.register(NMEntities.WORM, WormEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.MOB_PLATFORM, MobPlatformEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

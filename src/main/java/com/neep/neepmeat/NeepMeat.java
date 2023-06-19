@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.entity.worm.WormActions;
 import com.neep.neepmeat.player.upgrade.*;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
@@ -92,11 +93,15 @@ public class NeepMeat implements ModInitializer
 
 		ScreenHandlerInit.registerScreenHandlers();
 
+		// Fluid transfer things
 		FluidNodeManager.registerEvents();
 		PipeNetworkSerialiser.init();
 		StagedTransactions.init();
 
+		// Guide resources
 		ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
+
+		WormActions.init();
 
 
 		// Register all blocks and items
