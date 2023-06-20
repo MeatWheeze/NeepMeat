@@ -22,6 +22,7 @@ import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
+import com.neep.neepmeat.util.Bezier;
 import com.neep.neepmeat.world.NMFeatures;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -48,6 +49,7 @@ public class NeepMeat implements ModInitializer
 	public void onInitialize()
 	{
 		LOGGER.info("Hello from NeepMeat!");
+		new Bezier();
 
 		GeckoLib.initialize();
 
