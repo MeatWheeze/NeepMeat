@@ -41,7 +41,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         }
         else
         {
-            Vec2f vec = NMMaths.flatten(be.getLookTarget().subtract(Vec3d.ofCenter(be.getPos())));
+            Vec2f vec = NMMaths.flattenY(be.getLookTarget().subtract(Vec3d.ofCenter(be.getPos())));
             be.targetFacing = NMMaths.getAngle(vec);
 
             be.facing = NMMaths.angleLerp(0.03f, be.facing, be.targetFacing);

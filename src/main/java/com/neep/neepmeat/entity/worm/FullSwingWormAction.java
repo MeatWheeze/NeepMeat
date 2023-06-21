@@ -1,6 +1,7 @@
 package com.neep.neepmeat.entity.worm;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.util.Easing;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.nbt.NbtCompound;
@@ -14,7 +15,7 @@ public class FullSwingWormAction implements WormAction
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "full_swing");
 
-    protected final WormEntity entity;
+    protected final WormEntity parent;
     protected final int maxTicks;
     protected int age;
 
@@ -22,21 +23,23 @@ public class FullSwingWormAction implements WormAction
     protected int[] timings =
             {
                     20,
-                    40,
-                    60
+                    60,
+                    90
             };
     protected float angle;
     protected float finalAngle;
     protected float speed;
     protected boolean finished;
+    protected float radius;
 
     public FullSwingWormAction(WormEntity entity)
     {
-        this.entity = entity;
+        this.parent = entity;
         this.maxTicks = 3 * 20;
-        this.angle = entity.getYaw() - 60;
+        this.angle = entity.getYaw();
         this.finalAngle = angle - 360;
         this.speed = (float) -360 / (timings[1] - timings[0]);
+        this.radius = 8;
     }
 
     @Override
@@ -49,27 +52,45 @@ public class FullSwingWormAction implements WormAction
     public void tick()
     {
         ++age;
-        if (age >= maxTicks) this.finished = true;
+        if (age >= timings[2]) this.finished = true;
 
+        if (age > 0 && age < timings[0])
+        {
+            parent.lerpHeadPos(age, timings[0], getHeadPos(angle));
+            parent.lerpHeadAngles(age, timings[0], 0, angle);
+        }
         if (age > timings[0] && age < timings[1])
         {
-            angle += speed;
-            Vec3d centre = entity.getPos();
-            Vec3d end = centre.add(Vec3d.fromPolar(0, angle).multiply(10));
-            Box box = Box.of(centre, 15, 15, 15);
-            entity.world.getOtherEntities(entity, box, e -> e instanceof LivingEntity).forEach(e ->
-            {
-                e.getBoundingBox().raycast(centre, end).ifPresent(v ->
-                {
-                    e.damage(DamageSource.mob(entity), 5);
-                });
-            });
+            float dt = timings[1] - timings[0];
 
-            if (entity.world instanceof ServerWorld serverWorld)
-            {
-                serverWorld.spawnParticles(ParticleTypes.END_ROD, end.x, end.y, end.z, 3, 0.0, 0.0, 0.0, 0.0);
-            }
+            angle = (float) (-360 * Easing.easeOutBack((age - timings[0]) / dt));
+
+            apply(angle);
         }
+        if (age == timings[1])
+        {
+            parent.setHeadAngles(0, angle + 360);
+        }
+        if (age > timings[1])
+        {
+            parent.returnHeadToNeutral(age - timings[1], timings[2] - timings[1]);
+        }
+    }
+
+    protected Vec3d getHeadPos(float angle)
+    {
+        return new Vec3d(
+                parent.getX() + radius * Math.sin(Math.toRadians(angle)),
+                parent.getY() + 5,
+                parent.getZ() + radius * Math.cos(Math.toRadians(angle))
+        );
+    }
+
+    protected void apply(float angle)
+    {
+        parent.setHeadAngles(0, angle);
+        Vec3d headPos = getHeadPos(angle);
+        parent.setHeadPos(headPos.x, headPos.y, headPos.z);
     }
 
     @Override

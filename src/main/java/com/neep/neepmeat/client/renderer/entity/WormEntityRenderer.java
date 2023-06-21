@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -78,11 +79,15 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
         {
             matrices.push();
             matrices.translate(
-                    segment.getX() - entity.getX(),
-                    segment.getY() - entity.getY(),
-                    segment.getZ() - entity.getZ());
+                    MathHelper.lerp(tickDelta, segment.lastRenderX - entity.getX(), segment.getX() - entity.getX()),
+                    MathHelper.lerp(tickDelta, segment.lastRenderY - entity.getY(), segment.getY() - entity.getY()),
+                    MathHelper.lerp(tickDelta, segment.lastRenderZ - entity.getZ(), segment.getZ() - entity.getZ()));
             renderSegment(entity, segment, matrices, tickDelta, vcp, packedLight);
             matrices.pop();
+
+            segment.lastRenderX = segment.getX();
+            segment.lastRenderY = segment.getY();
+            segment.lastRenderZ = segment.getZ();
         }
     }
 
