@@ -43,12 +43,6 @@ public class FullSwingWormAction implements WormAction
     }
 
     @Override
-    public Identifier getId()
-    {
-        return ID;
-    }
-
-    @Override
     public void tick()
     {
         ++age;
@@ -91,12 +85,6 @@ public class FullSwingWormAction implements WormAction
         parent.setHeadAngles(0, angle);
         Vec3d headPos = getHeadPos(angle);
         parent.setHeadPos(headPos.x, headPos.y, headPos.z);
-    }
-
-    @Override
-    public boolean isFinished()
-    {
-        return finished;
     }
 
     @Override

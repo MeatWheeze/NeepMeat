@@ -9,10 +9,19 @@ public interface WormAction extends NbtSerialisable
 {
     default void init() {}
 
-    Identifier getId();
-
     void tick();
-    boolean isFinished();
+
+    @Override
+    default NbtCompound writeNbt(NbtCompound nbt) {return nbt;}
+
+    @Override
+    default void readNbt(NbtCompound nbt) {};
+
+    @FunctionalInterface
+    interface Sequence<T extends WormAction>
+    {
+        void tick(T parent, int counter);
+    }
 
     class EmptyAction implements WormAction
     {
@@ -24,21 +33,9 @@ public interface WormAction extends NbtSerialisable
         }
 
         @Override
-        public Identifier getId()
-        {
-            return ID;
-        }
-
-        @Override
         public void tick()
         {
 
-        }
-
-        @Override
-        public boolean isFinished()
-        {
-            return true;
         }
 
         @Override

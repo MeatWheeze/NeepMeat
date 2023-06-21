@@ -1,11 +1,8 @@
 package com.neep.neepmeat.entity.worm;
 
 import com.neep.neepmeat.util.RandomMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
 
 public class WormActions
 {
@@ -33,7 +30,7 @@ public class WormActions
 
 //        put(IdleWormAction.ID, IdleWormAction::new, 1);
 //        put(FullSwingWormAction.ID, FullSwingWormAction::new, 1);
-        put(BiteWormAction.ID, BiteWormAction::new, 1);
+        put(WormBiteGoal.ID, WormBiteGoal::new, 1);
     }
 
     public static NbtCompound toNbt(WormAction action)
