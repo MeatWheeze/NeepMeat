@@ -103,7 +103,8 @@ public class WormBiteGoal extends AnimatedWormGoal<WormBiteGoal>
     @Override
     public boolean canStart()
     {
-        return parent.getTarget() != null;
+        return parent.getTarget() != null
+            && parent.getRandom().nextBoolean();
     }
 
     @Override

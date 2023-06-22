@@ -130,8 +130,4 @@ public class NMMaths
         return rectToPol(vec.x, vec.y, vec.z);
     }
 
-    public static double nlerp(double delta, double from, double to, Easing.Curve function)
-    {
-        return 0;
-    }
 }
