@@ -79,9 +79,9 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
         {
             matrices.push();
             matrices.translate(
-                    MathHelper.lerp(tickDelta, segment.lastRenderX - entity.getX(), segment.getX() - entity.getX()),
-                    MathHelper.lerp(tickDelta, segment.lastRenderY - entity.getY(), segment.getY() - entity.getY()),
-                    MathHelper.lerp(tickDelta, segment.lastRenderZ - entity.getZ(), segment.getZ() - entity.getZ()));
+                    MathHelper.lerp(tickDelta, segment.prevX - entity.getX(), segment.getX() - entity.getX()),
+                    MathHelper.lerp(tickDelta, segment.prevY - entity.getY(), segment.getY() - entity.getY()),
+                    MathHelper.lerp(tickDelta, segment.prevZ - entity.getZ(), segment.getZ() - entity.getZ()));
             renderSegment(entity, segment, matrices, tickDelta, vcp, packedLight);
             matrices.pop();
 
