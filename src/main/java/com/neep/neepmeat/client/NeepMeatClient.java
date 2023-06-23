@@ -10,7 +10,9 @@ import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
+import com.neep.neepmeat.client.model.entity.KeeperEntityModel;
 import com.neep.neepmeat.client.renderer.*;
+import com.neep.neepmeat.client.renderer.entity.KeeperEntityRenderer;
 import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideScreen;
@@ -55,9 +57,13 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
+import net.minecraft.client.model.Dilation;
+import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -97,6 +103,13 @@ public class NeepMeatClient implements ClientModInitializer
     {
         EntityModelLayerRegistry.registerModelLayer(GLOME, GlomeEntityModel::getTexturedModelData);
         EntityModelLayerRegistry.registerModelLayer(EGG, GlomeEntityModel::getTexturedModelData);
+
+        TexturedModelData keeperMainData = TexturedModelData.of(BipedEntityModel.getModelData(Dilation.NONE, 0), 64, 64);
+        TexturedModelData keeperInnerLayer = TexturedModelData.of(BipedEntityModel.getModelData(new Dilation(0.5f), 0), 64, 64);
+        TexturedModelData keeperOuterLayer = TexturedModelData.of(BipedEntityModel.getModelData(new Dilation(1f), 0), 64, 64);
+        EntityModelLayerRegistry.registerModelLayer(KeeperEntityRenderer.KEEPER, () -> keeperMainData);
+        EntityModelLayerRegistry.registerModelLayer(KeeperEntityRenderer.KEEPER_INNER, () -> keeperInnerLayer);
+        EntityModelLayerRegistry.registerModelLayer(KeeperEntityRenderer.KEEPER_OUTER, () -> keeperOuterLayer);
 
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
@@ -161,6 +174,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.GLOME, ctx -> new GlomeEntityRenderer(ctx, GLOME));
         EntityRendererRegistry.register(NMEntities.EGG, ctx -> new EggEntityRenderer(ctx, EGG));
         EntityRendererRegistry.register(NMEntities.WORM, WormEntityRenderer::new);
+        EntityRendererRegistry.register(NMEntities.KEEPER, KeeperEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.MOB_PLATFORM, MobPlatformEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

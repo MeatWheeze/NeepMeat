@@ -4,6 +4,7 @@ import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.UseAction;
@@ -53,11 +54,11 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
     }
 
     @Override
-    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
     {
-        boolean sneak = player.isSneaking();
+        boolean sneak = entity.isSneaking();
         return new Vec3d(
-                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? 0 : entity.getMainHandStack().equals(stack) ? -0.2 : 0.2,
                 sneak ? -0.25 : 0.1,
                 .2);
     }

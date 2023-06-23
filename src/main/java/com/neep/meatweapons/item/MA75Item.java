@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -61,11 +60,11 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
     }
 
     @Override
-    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
     {
-        boolean sneak = player.isSneaking();
+        boolean sneak = entity.isSneaking();
         return new Vec3d(
-                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? 0 : entity.getMainHandStack().equals(stack) ? -0.2 : 0.2,
                 sneak ? -0.25 : 0.1,
                 .2);
     }
