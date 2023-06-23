@@ -179,10 +179,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         }
 
         playSound(world, player, GunSounds.FIRE_PRIMARY);
-        if (!player.isCreative())
-        {
-            stack.setDamage(stack.getDamage() + 1);
-        }
 
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
@@ -208,7 +204,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         world.spawnEntity(shell);
 
         playSound(world, player, GunSounds.FIRE_SECONDARY);
-
 
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }

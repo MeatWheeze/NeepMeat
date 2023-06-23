@@ -8,6 +8,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.Objects;
+
 // A minimal implementation of ItemCooldownManager that works for individual stacks
 public class WeaponCooldownAttachment implements PlayerAttachment
 {
@@ -37,22 +39,23 @@ public class WeaponCooldownAttachment implements PlayerAttachment
         }
     }
 
-    public boolean isCoolingDown(ItemStack stack)
+    public boolean isCoolingDown(ItemStack stack, int trigger)
     {
-        Entry entry = map.get(getStackId(stack));
+        int id = getStackId(stack, trigger);
+        Entry entry = map.get(getStackId(stack, trigger));
         return entry != null && entry.endTime > time;
     }
 
     // Returns a unique ID for each stack (hopefully).
-    public static int getStackId(ItemStack stack)
+    public static int getStackId(ItemStack stack, int trigger)
     {
-        // Currently using GeckoLib because I can't be bothered to implement it myself.
-        return GeckoLibUtil.getIDFromStack(stack);
+        return GeckoLibUtil.getIDFromStack(stack) + trigger;
+//        return Objects.hash(stack.getItem().getTranslationKey(), stack.getNbt(), stack.getCount(), trigger);
     }
 
-    public void set(ItemStack stack, int cooldown)
+    public void set(ItemStack stack, int trigger, int cooldown)
     {
-        map.put(getStackId(stack), new Entry(time, time + cooldown));
+        map.put(getStackId(stack, trigger), new Entry(time, time + cooldown));
     }
 
     protected static class Entry

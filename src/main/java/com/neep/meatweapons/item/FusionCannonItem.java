@@ -9,11 +9,11 @@ import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -21,7 +21,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -76,12 +75,12 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
         {
-            if (!manager.isCoolingDown(stack))
+            if (!manager.isCoolingDown(stack, 0))
             {
                 if (stack.getDamage() != this.maxShots)
                 {
                     // Primary trigger
-                    manager.set(stack, cooldown);
+                    manager.set(stack, 0, cooldown);
                     fireBeam(world, player, stack, pitch, yaw);
                     if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
                 }
@@ -104,7 +103,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_CHARGE, SoundCategory.PLAYERS, 1f, 1f);
         }
 
-        if (!manager.isCoolingDown(stack) && stack.getDamage() >= this.maxShots)
+        if (!manager.isCoolingDown(stack, 0) && stack.getDamage() >= this.maxShots)
         {
             this.reload(player, stack, null);
         }
@@ -173,6 +172,22 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
+    protected void fireShell(World world, PlayerEntity player, ItemStack stack, double speed, ProjectileFactory factory)
+    {
+        Vec3d vec = Vec3d.fromPolar(player.getPitch(), player.getHeadYaw()).multiply(speed);
+
+        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
+
+        PersistentProjectileEntity shell = factory.create(world, pos.x, pos.y, pos.z, vec.x, vec.y, vec.z);
+        shell.setOwner(player);
+        world.spawnEntity(shell);
+
+        playSound(world, player, GunSounds.FIRE_SECONDARY);
+
+        syncAnimation(world, player, stack, ANIM_FIRE, true);
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
     {
         super.inventoryTick(stack, world, entity, slot, selected);
@@ -219,7 +234,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
 
-
         syncAnimation(world, entity, stack, ANIM_FIRE, true);
     }
 
@@ -235,7 +249,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
-
 
         syncAnimation(world, entity, stack, ANIM_FIRE, true);
 
