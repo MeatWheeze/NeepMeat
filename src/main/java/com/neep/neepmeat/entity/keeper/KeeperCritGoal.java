@@ -1,23 +1,35 @@
 package com.neep.neepmeat.entity.keeper;
 
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
-import net.minecraft.entity.mob.PathAwareEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.goal.Goal;
 
-public class KeeperCritGoal extends MeleeAttackGoal
+import java.util.EnumSet;
+
+public class KeeperCritGoal extends Goal
 {
     protected int ticks;
-    protected int maxCooldown;
+    protected float range;
+    protected int cooldown;
+    protected final KeeperEntity entity;
 
-    public KeeperCritGoal(PathAwareEntity mob, double speed, int cooldown)
+    public KeeperCritGoal(KeeperEntity entity, float range)
     {
-        super(mob, speed, false);
-        this.maxCooldown = cooldown;
+//        super(mob, speed, false);
+        this.entity = entity;
+        this.range = range;
+        this.setControls(EnumSet.of(Control.JUMP));
     }
 
+//    @Override
+//    protected int getMaxCooldown()
+//    {
+//        return this.getTickCount(maxCooldown);
+//    }
+
     @Override
-    protected int getMaxCooldown()
+    public boolean canStart()
     {
-        return this.getTickCount(maxCooldown);
+        return entity.getTarget() != null;
     }
 
     @Override
@@ -31,7 +43,6 @@ public class KeeperCritGoal extends MeleeAttackGoal
     public void stop()
     {
         super.stop();
-        this.mob.setAttacking(false);
     }
 
     @Override
@@ -39,13 +50,23 @@ public class KeeperCritGoal extends MeleeAttackGoal
     {
         super.tick();
         ++this.ticks;
-        if (this.ticks >= 5 && this.getCooldown() < this.getMaxCooldown() / 2)
+        LivingEntity target = entity.getTarget();
+        cooldown = Math.max(this.cooldown - 1, 0);
+        if (cooldown == 0 && target != null && entity.isInRange(target, range))
         {
-            this.mob.setAttacking(true);
+            if (entity.squaredDistanceTo(target) < entity.meleeAttackGoal.getSquaredMaxAttackDistance(target))
+            {
+                entity.getJumpControl().setActive();
+                cooldown = getTickCount(25);
+            }
         }
-        else
-        {
-            this.mob.setAttacking(false);
-        }
+//        if (this.ticks >= 5 && this.getCooldown() < this.getMaxCooldown() / 2)
+//        {
+//            this.mob.setAttacking(true);
+//        }
+//        else
+//        {
+//            this.mob.setAttacking(false);
+//        }
     }
 }

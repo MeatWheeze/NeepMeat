@@ -32,11 +32,11 @@ import java.util.List;
 public class CompoundInjectorItem extends BaseItem
 {
     public final int healsFor = 8; // Health replenished each use (discounting initial damage)
-    public final int initialDamage = 2;
+    public final int initialDamage = 1;
 
     public CompoundInjectorItem(final String registryName, FabricItemSettings settings)
     {
-        super(registryName, CompoundInjectorItem::applyTooltip, settings.maxDamage(2).maxDamageIfAbsent(2));
+        super(registryName, CompoundInjectorItem::applyTooltip, settings.maxDamage(3).maxDamageIfAbsent(3));
         ItemRegistry.queueItem(this);
     }
 
@@ -55,7 +55,7 @@ public class CompoundInjectorItem extends BaseItem
     @Override
     public int getMaxUseTime(ItemStack stack)
     {
-        return 20;
+        return 15;
     }
 
     @Override
