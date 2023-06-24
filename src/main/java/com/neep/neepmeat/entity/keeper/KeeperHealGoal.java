@@ -29,9 +29,8 @@ public class KeeperHealGoal extends Goal
     public boolean canStart()
     {
         return
-                (entity.getAttacker() != null
-                && entity.distanceTo(entity.getAttacker()) > range)
-                && entity.shouldHeal();
+                (entity.getAttacker() != null && entity.distanceTo(entity.getAttacker()) > range && entity.shouldHeal())
+                || (entity.getAttacker() == null && entity.getTarget() == null && entity.getHealth() < entity.getMaxHealth());
     }
 
     @Override

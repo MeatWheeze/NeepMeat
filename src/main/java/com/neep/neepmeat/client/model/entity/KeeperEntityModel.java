@@ -27,7 +27,7 @@ extends BipedEntityModel<com.neep.neepmeat.entity.keeper.KeeperEntity>
     {
         super.setAngles(hostileEntity, f, g, h, i, j);
 //        this.leftArm.
-        this.leftArm.pitch = -90;
+        this.leftArm.pitch = -0;
 //        CrossbowPosing.meleeAttack(this.leftArm, this.rightArm, this.isAttacking(hostileEntity), this.handSwingProgress, h);
     }
 

@@ -1,8 +1,15 @@
 package com.neep.neepmeat.entity.keeper;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 
 import java.util.EnumSet;
 
@@ -26,8 +33,8 @@ public class KeeperDodgeGoal extends Goal
     public boolean canStart()
     {
         return
-                entity.getTarget() != null
-                && entity.isPlayerStaring(entity.getTarget())
+                entity.getAttacker() != null
+                && entity.isPlayerStaring(entity.getAttacker())
                 && entity.getWorld().getTime() > lastDodge + maxTicks;
     }
 
@@ -56,21 +63,29 @@ public class KeeperDodgeGoal extends Goal
         {
             boolean b1 = entity.getRandom().nextBoolean();
 
-            Vec3d v = target.getPos().subtract(entity.getPos()).rotateY((float) (b1 ? Math.PI / 2 : -Math.PI));
-            Vec3d newPos = target.getPos().add(v);
+            float angle = (float) (b1 ? -Math.PI / 2 : Math.PI / 2);
+            Vec3d v = target.getPos().subtract(entity.getPos()).rotateY(angle);
+            Vec3d newPos = findTeleportPos(entity.world, target.getPos().add(v));
 
-            boolean b2 = entity.getRandom().nextBoolean();
-//            entity.getMoveControl().moveTo(newPos.x, newPos.y, newPos.z, 40);
+            if (entity.world instanceof ServerWorld serverWorld)
+            {
+                serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()),
+                        entity.getX(), entity.getBodyY(0.5), entity.getZ(), 20, 0.1, 1, 0.1,2);
+            }
             entity.teleport(newPos.x, newPos.y, newPos.z);
         }
         ++ticks;
     }
 
-//    @Override
-//    public boolean canStop()
-//    {
-//        return ticks > 60;
-//    }
+    protected static Vec3d findTeleportPos(World world, Vec3d v)
+    {
+        BlockPos.Mutable mutable = new BlockPos(v).mutableCopy();
+        while (world.getBlockState(mutable).getMaterial().blocksMovement())
+        {
+            mutable.set(mutable, Direction.UP);
+        }
+        return new Vec3d(v.x, mutable.getY(), v.z);
+    }
 
     @Override
     public boolean shouldContinue()

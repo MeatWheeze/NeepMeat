@@ -88,7 +88,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
         goalSelector.add(4, new KeeperCritGoal(this, 8f));
         goalSelector.add(3, new KeeperDodgeGoal(this, 8f));
         goalSelector.add(3, new KeeperRetreatGoal(this, 8f, 16));
-        goalSelector.add(2, new KeeperHealGoal(this, 8f, 16));
+        goalSelector.add(4, new KeeperHealGoal(this, 8f, 16));
     }
 
     public boolean shouldHeal()
