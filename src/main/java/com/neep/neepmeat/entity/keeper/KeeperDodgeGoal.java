@@ -12,6 +12,7 @@ public class KeeperDodgeGoal extends Goal
     protected float range;
     protected int ticks;
     protected final KeeperEntity entity;
+    protected final int maxTicks = 20;
 
     public KeeperDodgeGoal(KeeperEntity entity, float range)
     {
@@ -24,8 +25,10 @@ public class KeeperDodgeGoal extends Goal
     @Override
     public boolean canStart()
     {
-        return entity.getTarget() != null && entity.isPlayerStaring(entity.getTarget())
-                && entity.getWorld().getTime() > lastDodge + 20;
+        return
+                entity.getTarget() != null
+                && entity.isPlayerStaring(entity.getTarget())
+                && entity.getWorld().getTime() > lastDodge + maxTicks;
     }
 
     @Override
@@ -48,34 +51,30 @@ public class KeeperDodgeGoal extends Goal
     {
         super.tick();
 
-//        entity.setSidewaysSpeed(entity.getRandom().nextBoolean() ? 1f : -2f);
         LivingEntity target = entity.getTarget();
-        if (target != null)
+        if (ticks == 0 && target != null)
         {
             boolean b1 = entity.getRandom().nextBoolean();
 
-            float yaw = target.getYaw();
             Vec3d v = target.getPos().subtract(entity.getPos()).rotateY((float) (b1 ? Math.PI / 2 : -Math.PI));
             Vec3d newPos = target.getPos().add(v);
 
             boolean b2 = entity.getRandom().nextBoolean();
-//            entity.getMoveControl().moveTo(entity.getX() + 4, entity.getY(), entity.getZ(), 40);
-            entity.getMoveControl().moveTo(newPos.x, newPos.y, newPos.z, 40);
-//            entity.getMoveControl().moveTo(entity.getX() + (b1 ? -4 : 4), entity.getY(), entity.getZ() + (b2 ? -4 : 4), 5);
-//            entity.getMoveControl().strafeTo(-2f, entity.getRandom().nextBoolean() ? 4f : -4f);
+//            entity.getMoveControl().moveTo(newPos.x, newPos.y, newPos.z, 40);
+            entity.teleport(newPos.x, newPos.y, newPos.z);
         }
         ++ticks;
     }
 
-    @Override
-    public boolean canStop()
-    {
-        return ticks > 60;
-    }
+//    @Override
+//    public boolean canStop()
+//    {
+//        return ticks > 60;
+//    }
 
     @Override
     public boolean shouldContinue()
     {
-        return ticks <= 60;
+        return false;
     }
 }

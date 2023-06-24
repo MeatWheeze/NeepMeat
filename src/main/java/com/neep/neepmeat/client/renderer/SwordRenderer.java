@@ -50,7 +50,7 @@ public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
 //        if (!mode.equals(ModelTransformation.Mode.GUI))
         if (mode.isFirstPerson() && !mode.equals(ModelTransformation.Mode.GUI))
         {
-            getGeoModelProvider().setCustomAnimations(animatable, this.getInstanceId(animatable), itemEvent);
+//            getGeoModelProvider().setCustomAnimations(animatable, this.getInstanceId(animatable), itemEvent);
         }
 
         stack.push();

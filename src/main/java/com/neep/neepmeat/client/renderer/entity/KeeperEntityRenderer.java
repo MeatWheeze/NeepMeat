@@ -15,7 +15,7 @@ import net.minecraft.util.Identifier;
 @Environment(value= EnvType.CLIENT)
 public class KeeperEntityRenderer extends BipedEntityRenderer<KeeperEntity, KeeperEntityModel>
 {
-    protected static final Identifier TEXTURE = new Identifier("textures/entity/zombie/zombie.png");
+    protected static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/entity/keeper/keeper.png");
 
     public static final EntityModelLayer KEEPER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "keeper"), "main");
     public static final EntityModelLayer KEEPER_INNER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "keeper"), "inner_armor");
@@ -36,7 +36,7 @@ public class KeeperEntityRenderer extends BipedEntityRenderer<KeeperEntity, Keep
     @Override
     public Identifier getTexture(KeeperEntity mobEntity)
     {
-        return super.getTexture(mobEntity);
+        return TEXTURE;
     }
 }
 

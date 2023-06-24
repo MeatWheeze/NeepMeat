@@ -25,7 +25,7 @@ public class HeldItemRendererMixin
         {
             if (player.handSwinging)
             {
-                ((AnimatedSword) item.getItem()).onAnimationSync(GeckoLibUtil.getIDFromStack(item), AnimatedSword.ANIM_SWING);
+//                ((AnimatedSword) item.getItem()).onAnimationSync(GeckoLibUtil.getIDFromStack(item), AnimatedSword.ANIM_SWING);
                 player.handSwinging = false;
             }
         }
