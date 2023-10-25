@@ -8,15 +8,19 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.*;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import dev.architectury.event.events.common.ChatEvent;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
@@ -240,5 +244,34 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
             tryRecipe();
         }
         redstone = receiving;
+    }
+
+    public void showBlocks(PlayerEntity player)
+    {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            assemble();
+
+            int count = 0;
+            for (int i = 0; i < context.getWidth(); ++i)
+            {
+                for (int j = 0; j < context.getHeight(); ++j)
+                {
+                    int idx = i * context.getWidth() + j;
+                    var thing = context.getStructure(idx);
+                    var pos = context.getPos(idx);
+
+                    if (thing != null && pos != null)
+                    {
+                        ++count;
+                        serverWorld.spawnParticles(ParticleTypes.COMPOSTER,
+                                                 pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 7,
+                                                   0.15, 0.45, 0.15, 0.1);
+                    }
+                }
+            }
+
+            player.sendMessage(Text.of("Structure consists of " + count + " blocks."), true);
+        }
     }
 }

@@ -29,11 +29,17 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
+//        if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
         {
 //            be.assemble();
 //            be.tryRecipe();
         }
+
+        world.getBlockEntity(pos, NMBlockEntities.TABLE_CONTROLLER).ifPresent(be ->
+        {
+            be.showBlocks(player);
+        });
+
         return ActionResult.SUCCESS;
     }
 
