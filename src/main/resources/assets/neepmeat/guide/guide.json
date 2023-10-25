@@ -30,7 +30,7 @@
         {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
     ]},
-    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Energetic Fluid-Powered Machines", "entries": [
+    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Energetic Fluid Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
       {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"},
       {"type": "page", "id": "surgery", "icon": "neepmeat:surgery_controller", "text": "Machine Surgery"}
@@ -64,6 +64,9 @@
       {"type": "page", "id": "cloning", "icon": "neepmeat:essential_saltes", "text": "Cloning"},
       {"type": "page", "id": "synthesiser", "icon": "neepmeat:synthesiser", "text": "Oviparous Synthesiser"},
       {"type": "page", "id": "airtruck", "icon": "meatweapons:airtruck", "text": "Airtruck"}
+    ]},
+    {"type": "menu", "id": "weapons", "icon": "meatweapons:assault_drill", "text": "Weapons", "entries": [
+      {"type": "page", "id": "assault_drill", "icon": "meatweapons:assault_drill", "text": "Assault Drill"}
     ]}
   ]},
 
@@ -352,6 +355,12 @@
     {"id": "airtruck", "contents": [
       {"type": "text", "text": "Airtruck\n", "bold": true},
       {"type": "text", "text": "The Airtruck is a flying vehicle that can carry one pilot and a passenger. Mobs will board the vehicle when they collide with it, much like a with a boat.\nAll the controls are the same as in creative flight except for the down key, which is '\\' by default. Shift-right clicking will disassemble the vehicle."}
+    ]},
+
+    {"id": "assault_drill", "contents": [
+      {"type": "text", "text": "Assault Drill\n", "bold": true},
+      {"type": "text", "text": "The Assault Drill is a drill rated for offensive use. It continuously damages entities with a range of one block. \n"},
+      {"type": "text", "text": "The drill runs on Ethereal Fuel. To refuel, right-click on a container of Ethereal Fuel or use a bottler. This item can also be enchanted to increase its damage output."}
     ]}
   ]
 }
