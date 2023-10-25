@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "neepmeat:duat_cobblestone"
+    }
+  },
+  "result": {
+    "item": "neepmeat:duat_cobblestone_stairs",
+    "count": 4
+  }
+}
