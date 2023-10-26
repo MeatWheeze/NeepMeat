@@ -175,7 +175,6 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.EGG, ctx -> new EggEntityRenderer(ctx, EGG));
         EntityRendererRegistry.register(NMEntities.WORM, WormEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.KEEPER, KeeperEntityRenderer::new);
-        EntityRendererRegistry.register(NMEntities.MOB_PLATFORM, MobPlatformEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 

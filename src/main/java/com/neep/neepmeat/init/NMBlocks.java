@@ -218,7 +218,7 @@ public class NMBlocks
     public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", block(), FLUID_MACHINE_SETTINGS));
     public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
     public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", block(), MACHINE_SETTINGS));
-    public static Block MOB_PLATFORM = BlockRegistry.queue(new MobPlatformBlock("mob_platform", block(), MACHINE_SETTINGS));
+//    public static Block MOB_PLATFORM = BlockRegistry.queue(new MobPlatformBlock("mob_platform", block(), MACHINE_SETTINGS));
 //    public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FLUID_MACHINE_SETTINGS));
 //    public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), FLUID_MACHINE_SETTINGS));
