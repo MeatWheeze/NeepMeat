@@ -1,8 +1,8 @@
 package com.neep.meatweapons.enchantment;
 
+import com.neep.meatlib.enchantment.CustomEnchantment;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.neepmeat.NeepMeat;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EntityGroup;
@@ -19,7 +19,7 @@ public class MWEnchantments
 
     public static void init()
     {
-        SPIKES = register("spikes", new ThingEnchantment(Enchantment.Rarity.UNCOMMON, MWEnchantmentTargets.ASSAULT_DRILL, 4, EquipmentSlot.MAINHAND));
+        SPIKES = register("spikes", new ThingEnchantment(Enchantment.Rarity.UNCOMMON, EnchantmentTarget.WEAPON, 4, EquipmentSlot.MAINHAND));
     }
 
     private static Enchantment register(String name, Enchantment enchantment)
@@ -27,7 +27,7 @@ public class MWEnchantments
         return Registry.register(Registry.ENCHANTMENT, new Identifier(MeatWeapons.NAMESPACE, name), enchantment);
     }
 
-    protected static class ThingEnchantment extends Enchantment
+    protected static class ThingEnchantment extends Enchantment implements CustomEnchantment
     {
         protected final int maxLevel;
 
@@ -60,38 +60,11 @@ public class MWEnchantments
         {
             return 4;
         }
-    }
-
-    protected static class ArghEnchantment extends Enchantment
-    {
-        protected ArghEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot... slotTypes)
-        {
-            super(weight, type, slotTypes);
-        }
-
-        @Override
-        public float getAttackDamage(int level, EntityGroup group)
-        {
-            return Math.max(0f, level) * 0.5f;
-        }
-
-
-        @Override
-        public int getMinLevel()
-        {
-            return 1;
-        }
-
-        @Override
-        public int getMaxLevel()
-        {
-            return 4;
-        }
 
         @Override
         public boolean isAcceptableItem(ItemStack stack)
         {
-            return stack.isOf(MWItems.AIRTRUCK_ITEM);
+            return stack.isOf(MWItems.ASSAULT_DRILL);
         }
     }
 }

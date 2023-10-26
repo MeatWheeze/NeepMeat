@@ -1,5 +1,6 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
@@ -60,7 +61,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, ISyncable, PoweredItem
+public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     protected String registryName;
@@ -116,7 +117,7 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         return this.factory;
     }
 
-    // Trying to get to the bottom of how enchantments are selected. I copied a method here since breakpoints don't work in remapped code.
+    // Trying to get to tVjjjjjhe bottom of how enchantments are selected. I copied a method here since breakpoints don't work in remapped code.
 //    public static List<EnchantmentLevelEntry> getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed) {
 //        ArrayList<EnchantmentLevelEntry> list = Lists.newArrayList();
 //        Item item = stack.getItem();

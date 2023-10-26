@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "neepmeat:duat_stone"
-  },
-  "result": "neepmeat:duat_stone_wall",
-  "count": 1
-}
