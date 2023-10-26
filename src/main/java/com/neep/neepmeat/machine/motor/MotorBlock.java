@@ -21,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,17 +50,27 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         World world = context.getWorld();
+        Direction facing = context.getSide();
         BlockPos pos = context.getBlockPos().offset(context.getSide().getOpposite());
         if (world.getBlockEntity(pos) instanceof IMotorisedBlock)
         {
-            BlockState state = world.getBlockState(pos);
-            if(state.getBlock() instanceof BaseFacingBlock)
+//            BlockState state = world.getBlockState(pos);
+            return getDefaultState().with(FACING, facing.getOpposite());
+//            else if (state.getBlock() instanceof BaseVertFacingBlock)
+//            {
+//                return getDefaultState().with(FACING, facing);
+//            }
+        }
+        else
+        {
+            BlockPos.Mutable mutable = context.getBlockPos().mutableCopy();
+            for (Direction direction : Direction.values())
             {
-                return getDefaultState().with(FACING, state.get(BaseFacingBlock.FACING));
-            }
-            else if (state.getBlock() instanceof BaseVertFacingBlock)
-            {
-                return getDefaultState().with(FACING, state.get(BaseVertFacingBlock.FACING));
+                mutable.set(context.getBlockPos(), direction);
+                if (world.getBlockEntity(mutable) instanceof IMotorisedBlock motorised)
+                {
+                    return getDefaultState().with(FACING, direction);
+                }
             }
         }
         return super.getPlacementState(context);
