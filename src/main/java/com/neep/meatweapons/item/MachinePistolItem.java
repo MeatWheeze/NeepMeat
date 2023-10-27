@@ -9,8 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -48,9 +48,9 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
     }
 
     @Override
-    public Vec3f getAimOffset()
+    public Vector3f getAimOffset()
     {
-        return new Vec3f(0.0f, 0, 0);
+        return new Vector3f(0.0f, 0, 0);
     }
 
     @Override

@@ -43,8 +43,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-
+import net.minecraft.text.TranslatableTextContent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class CompactingCategory implements DisplayCategory<CompactingDisplay>
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".compacting");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".compacting");
     }
     
     @Override
@@ -74,7 +73,7 @@ public class CompactingCategory implements DisplayCategory<CompactingDisplay>
     {
         return new DisplayRenderer()
         {
-            private final Text text = new TranslatableText("text." + NeepMeat.NAMESPACE + ".compacting.page", display.getPage() + 1);
+            private final Text text = Text.translatable("text." + NeepMeat.NAMESPACE + ".compacting.page", display.getPage() + 1);
             
             @Override
             public int getHeight() {

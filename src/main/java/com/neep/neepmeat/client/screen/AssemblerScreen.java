@@ -3,21 +3,14 @@ package com.neep.neepmeat.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.button.TextToggleWidget;
-import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.gui.widget.ToggleButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.screen.slot.Slot;
-import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 @Environment(value = EnvType.CLIENT)
@@ -38,7 +31,7 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
@@ -98,7 +91,7 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(matrices, new TranslatableText("container.neepmeat.assembler.display"), this.titleX, this.titleY, 0x404040);
+        this.textRenderer.draw(matrices, Text.translatable("container.neepmeat.assembler.display"), this.titleX, this.titleY, 0x404040);
 //        this.textRenderer.draw(matrices, this.playerInventoryTitle, (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 0x404040);
     }
 
@@ -107,7 +100,7 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     {
         super.init();
         titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2;
-        this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, new TranslatableText("button." + NeepMeat.NAMESPACE + ".assembler.select"),
+        this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, Text.translatable("button." + NeepMeat.NAMESPACE + ".assembler.select"),
                 handler.getProperty(2) > 0, (b, t) ->
         {
 

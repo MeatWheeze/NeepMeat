@@ -1,6 +1,5 @@
 package com.neep.meatweapons.enchantment;
 
-import com.chocohead.mm.api.ClassTinkerers;
 import com.neep.meatweapons.MWItems;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.item.Item;

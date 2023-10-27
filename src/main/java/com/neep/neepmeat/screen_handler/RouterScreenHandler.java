@@ -53,7 +53,7 @@ public class RouterScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack quickMove(PlayerEntity player, int invSlot)
     {
         return ItemStack.EMPTY;
     }

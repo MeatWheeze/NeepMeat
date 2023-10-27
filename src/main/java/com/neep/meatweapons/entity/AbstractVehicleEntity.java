@@ -18,13 +18,14 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -34,7 +35,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -145,7 +145,7 @@ extends Entity {
         this.health -= amount;
 
         this.scheduleVelocityUpdate();
-        this.emitGameEvent(GameEvent.ENTITY_DAMAGED, source.getAttacker());
+        this.emitGameEvent(GameEvent.ENTITY_DAMAGE, source.getAttacker());
         world.playSoundFromEntity(null, this, getDamageSound(), SoundCategory.NEUTRAL, 1, 1);
 
         if (health <= 0)
@@ -172,13 +172,13 @@ extends Entity {
     }
 
     @Override
-    public void animateDamage()
+    public void animateDamage(float yaw)
     {
         getEntityWorld().addParticle(ParticleTypes.SMOKE, this.x, this.y, this.z, 0, 0, 0);
     }
 
     @Override
-    public boolean collides()
+    public boolean canHit()
     {
         return !this.isRemoved();
     }
@@ -222,7 +222,7 @@ extends Entity {
 
         List<Entity> otherEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
         if (!otherEntities.isEmpty()) {
-            boolean soundEvent = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
+            boolean soundEvent = !this.world.isClient && !(this.getControllingPassenger() instanceof PlayerEntity);
             for (Entity entity : otherEntities)
             {
                 if (entity.hasPassenger(this))
@@ -388,9 +388,8 @@ extends Entity {
         double e;
         Vec3d vec3d = AbstractVehicleEntity.getPassengerDismountOffset(this.getWidth() * MathHelper.SQUARE_ROOT_OF_TWO, passenger.getWidth(), passenger.getYaw());
         double d = this.getX() + vec3d.x;
-        BlockPos blockPos = new BlockPos(d, this.getBoundingBox().maxY, e = this.getZ() + vec3d.z);
-        BlockPos blockPos2 = blockPos.down();
-        if (!this.world.isWater(blockPos2))
+        BlockPos blockPos = new BlockPos((int) d, (int) this.getBoundingBox().maxY, (int) (e = this.getZ() + vec3d.z)).down();
+        if (!this.world.isWater(blockPos))
         {
             double g;
             ArrayList<Vec3d> list = Lists.newArrayList();
@@ -398,9 +397,9 @@ extends Entity {
             if (Dismounting.canDismountInBlock(f)) {
                 list.add(new Vec3d(d, (double)blockPos.getY() + f, e));
             }
-            if (Dismounting.canDismountInBlock(g = this.world.getDismountHeight(blockPos2)))
+            if (Dismounting.canDismountInBlock(g = this.world.getDismountHeight(blockPos)))
             {
-                list.add(new Vec3d(d, (double)blockPos2.getY() + g, e));
+                list.add(new Vec3d(d, (double)blockPos.getY() + g, e));
             }
             for (EntityPose entityPose : passenger.getPoses())
             {
@@ -457,7 +456,7 @@ extends Entity {
         {
             if (this.fallDistance > 3.0f && !powered)
             {
-                this.handleFallDamage(this.fallDistance, 1.0f, DamageSource.FALL);
+                this.handleFallDamage(this.fallDistance, 1.0f, world.getDamageSources().fall());
                 if (!this.world.isClient && !this.isRemoved())
                 {
                     this.kill();
@@ -489,14 +488,13 @@ extends Entity {
     }
 
     @Override
-    @Nullable
-    public Entity getPrimaryPassenger()
+    public LivingEntity getControllingPassenger()
     {
-        return this.getFirstPassenger();
+        return this.getFirstPassenger() instanceof LivingEntity living ? living : null;
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
         return new EntitySpawnS2CPacket(this);
     }

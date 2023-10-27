@@ -61,7 +61,7 @@ public class ScaffoldTrapdoorBlock extends BaseTrapdoorBlock
         state = (BlockState)state.cycle(OPEN);
         world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
         if (state.get(WATERLOGGED).booleanValue()) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         this.playToggleSound(player, world, pos, state.get(OPEN));
         return ActionResult.success(world.isClient);

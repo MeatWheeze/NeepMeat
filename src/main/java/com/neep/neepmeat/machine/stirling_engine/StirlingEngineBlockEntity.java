@@ -19,7 +19,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -184,7 +184,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     @Override
     public Text getDisplayName()
     {
-        return new TranslatableText("container." + NeepMeat.NAMESPACE + ".stirling_engine");
+        return Text.translatable("container." + NeepMeat.NAMESPACE + ".stirling_engine");
     }
 
     @Nullable

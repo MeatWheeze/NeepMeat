@@ -9,7 +9,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
-import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor;
 import net.minecraft.client.MinecraftClient;
@@ -17,9 +16,7 @@ import net.minecraft.client.particle.*;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class NMParticles
 {
@@ -42,17 +39,17 @@ public class NMParticles
     {
         public static void init()
         {
-            ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(((atlasTexture, registry) ->
-            {
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_0"));
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_1"));
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_2"));
-
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_0"));
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_1"));
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_2"));
-                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_3"));
-            }));
+//            ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register(((atlasTexture, registry) ->
+//            {
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_0"));
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_1"));
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_splash_2"));
+//
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_0"));
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_1"));
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_2"));
+//                registry.register(new Identifier(NeepMeat.NAMESPACE, "particle/meat_bit_3"));
+//            }));
 
             ParticleFactoryRegistry.getInstance().register(BLOCK_SWIRL, new SwirlingParticle.Factory());
             ParticleFactoryRegistry.getInstance().register(MEAT_SPLASH, FlameParticle.Factory::new);
@@ -65,8 +62,8 @@ public class NMParticles
         {
             ParticleManager manager = MinecraftClient.getInstance().particleManager;
             ParticleManager.SimpleSpriteProvider simpleSpriteProvider = ParticleManagerMixin.invokeConstructor();
-            ((ParticleManagerAccessor) manager).getSpriteAwareFactories().put(Registry.PARTICLE_TYPE.getId(type), simpleSpriteProvider);
-            ((ParticleManagerAccessor) manager).getFactories().put(Registry.PARTICLE_TYPE.getRawId(type), factory.create(simpleSpriteProvider));
+            ((ParticleManagerAccessor) manager).getSpriteAwareFactories().put(Registries.PARTICLE_TYPE.getId(type), simpleSpriteProvider);
+            ((ParticleManagerAccessor) manager).getFactories().put(Registries.PARTICLE_TYPE.getRawId(type), factory.create(simpleSpriteProvider));
         }
 
         @FunctionalInterface

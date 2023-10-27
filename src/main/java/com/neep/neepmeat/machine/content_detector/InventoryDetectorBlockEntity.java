@@ -23,7 +23,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -115,7 +115,7 @@ public class InventoryDetectorBlockEntity extends BlockEntity implements NamedSc
     @Override
     public Text getDisplayName()
     {
-        return new TranslatableText(getCachedState().getBlock().getTranslationKey());
+        return Text.translatable(getCachedState().getBlock().getTranslationKey());
     }
 
     @Nullable
@@ -168,7 +168,7 @@ public class InventoryDetectorBlockEntity extends BlockEntity implements NamedSc
             Transaction transaction = Transaction.openOuter();
 
             // Get a list of ItemVariants in the filter with no duplicates
-            List<ItemVariant> variants = StreamSupport.stream(InventoryStorage.of(filterInventory, facing).iterable(transaction).spliterator(), false)
+            List<ItemVariant> variants = StreamSupport.stream(InventoryStorage.of(filterInventory, facing).spliterator(), false)
                     .filter(ItemUtils::notBlank)
                     .map(StorageView::getResource)
                     .distinct()
@@ -196,7 +196,7 @@ public class InventoryDetectorBlockEntity extends BlockEntity implements NamedSc
             }).collect(Collectors.toList());
 
             int size = filtered.size();
-            int size2 = StreamSupport.stream(observedStorage.iterable(transaction).spliterator(), false)
+            int size2 = StreamSupport.stream(observedStorage.spliterator(), false)
                     .map(StorageView::getResource)
                     .filter(FilterUtils.containsVariant(variants))
                     .collect(Collectors.toList()).size();

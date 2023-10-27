@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.EntityDamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -18,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -27,7 +27,6 @@ public abstract class LivingEntityMixin
 {
     // Intercepts the custom bullet DamageSource in order to prevent silly amounts of knockback
     @Shadow protected int playerHitTimer;
-    @Shadow public float knockbackVelocity;
     @Shadow protected PlayerEntity attackingPlayer;
 
     @Shadow public abstract void setAttacker(@Nullable LivingEntity attacker);
@@ -109,7 +108,7 @@ public abstract class LivingEntityMixin
             }
 
             // Not entirely sure what this does
-            sendStatus(thisEntity, (EntityDamageSource) source, shielded);
+            sendStatus(thisEntity, shielded);
 
             // Apply knockback
             if (sourceEntity != null)
@@ -124,25 +123,27 @@ public abstract class LivingEntityMixin
         }
     }
 
-    protected void sendStatus(LivingEntity thisEntity, EntityDamageSource source, boolean shielded)
+    @Unique
+    protected void sendStatus(LivingEntity thisEntity, boolean shielded)
     {
         if (shielded)
         {
             // Shield bonk?
             thisEntity.getEntityWorld().sendEntityStatus(thisEntity, (byte) 29);
         }
-        else if (source.isThorns())
-        {
-            // Thorns or something
-            thisEntity.getEntityWorld().sendEntityStatus(thisEntity, (byte) 33);
-        }
-        else
+//        else if (source.isThorns())
+//        {
+//            // Thorns or something
+//            thisEntity.getEntityWorld().sendEntityStatus(thisEntity, (byte) 33);
+//        }
+//        else
         {
             // Generic damage?
             thisEntity.getEntityWorld().sendEntityStatus(thisEntity, (byte) 2);
         }
     }
 
+    @Unique
     protected void updateStats(LivingEntity thisEntity, DamageSource source, float amount, float shieldedDamage, boolean shielded)
     {
         if (thisEntity instanceof ServerPlayerEntity)
@@ -168,7 +169,8 @@ public abstract class LivingEntityMixin
             dz = (Math.random() - Math.random()) * 0.01;
         }
 
-        knockbackVelocity = (float)(MathHelper.atan2(dz, dx) * 57.2957763671875 - (double) thisEntity.getYaw());
+        // Not sure what this was for
+        float knockback = (float)(MathHelper.atan2(dz, dx) * 57.2957763671875 - (double) thisEntity.getYaw());
         thisEntity.takeKnockback(bulletSource.getPunch(), dx, dz);
     }
 

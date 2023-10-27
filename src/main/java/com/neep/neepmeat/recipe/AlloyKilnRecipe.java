@@ -18,9 +18,11 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.LinkedList;
@@ -72,7 +74,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     }
 
     @Override
-    public ItemStack craft(AlloyKilnStorage inventory)
+    public ItemStack craft(AlloyKilnStorage inventory, DynamicRegistryManager manager)
     {
         return ItemStack.EMPTY;
     }
@@ -84,7 +86,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     }
 
     @Override
-    public ItemStack getOutput()
+    public ItemStack getOutput(DynamicRegistryManager manager)
     {
         throw new UnsupportedOperationException("use getItemOutput instead");
     }
@@ -199,7 +201,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
             RecipeInput<Item> itemInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement2);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, outputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput1, itemInput2, itemOutput, time);
@@ -210,7 +212,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         {
             RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(buf);
             RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
             int time = buf.readVarInt();
 
@@ -222,7 +224,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         {
             recipe.itemInput1.write(buf);
             recipe.itemInput2.write(buf);
-            recipe.itemOutput.write(Registry.ITEM, buf);
+            recipe.itemOutput.write(Registries.ITEM, buf);
 
             buf.writeVarInt(recipe.processTime);
         }

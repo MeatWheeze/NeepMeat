@@ -36,7 +36,7 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return getDefaultState().with(FACING, context.getPlayerFacing());
+        return getDefaultState().with(FACING, context.getHorizontalPlayerFacing());
     }
 
     @Override

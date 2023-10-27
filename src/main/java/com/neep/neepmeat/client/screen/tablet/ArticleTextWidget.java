@@ -15,6 +15,7 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
     private double scrollAmount;
     private double scrollLag;
     private int x, y, width, height;
+    protected boolean focused;
     private final TextRenderer textRenderer;
     private final Article article;
 
@@ -75,5 +76,17 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
     {
         scrollLag = MathHelper.clamp(scrollLag - 7 * amount, 0, Double.MAX_VALUE);
         return true;
+    }
+
+    @Override
+    public void setFocused(boolean focused)
+    {
+        this.focused = focused;
+    }
+
+    @Override
+    public boolean isFocused()
+    {
+        return focused;
     }
 }

@@ -149,9 +149,9 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
     }
 
     @Override
-    public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
+    public Iterator<StorageView<ItemVariant>> iterator()
     {
-        return storage.iterator(transaction);
+        return storage.iterator();
     }
 
     public ItemVariant getResource()

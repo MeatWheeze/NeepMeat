@@ -9,7 +9,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -43,7 +42,7 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt(tag);
+        buffer.writeNbt1(tag);
     }
 
     @Override

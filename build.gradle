@@ -1,12 +1,12 @@
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.4-SNAPSHOT'
 	id 'maven-publish'
 
 	id "com.modrinth.minotaur" version "2.+"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_19
+targetCompatibility = JavaVersion.VERSION_19
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -18,6 +18,7 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+//	maven { url 'https://maven.fabricmc.net/'}
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://www.jitpack.io' }
@@ -35,7 +36,7 @@ dependencies {
 
 //	implementation "com.github.chocohead:fabric-asm:${project.mm_version}"
 
-	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.78'
+	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
@@ -51,7 +52,6 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.17 (21w19a) upwards uses Java 16.
 	it.options.release = 17
 }
 
@@ -96,6 +96,7 @@ sourceSets {
 }
 
 loom {
+//	splitEnvironemntSourceSets()
 	runs {
 		datagen {
 			server()
@@ -116,8 +117,6 @@ import com.modrinth.minotaur.dependencies.ModDependency
 modrinth {
 	token = token = System.getenv("MODRINTH_TOKEN")
 	projectId = 'Hagcl1FT'
-//	versionNumber = '0.1.2'
-//	versionName = 'v'
 	versionType = "alpha"
 	uploadFile = remapJar // Tells Minotaur to use the remapped jar
 	gameVersions = ['1.18', '1.18.1', '1.18.2'] // An array of game versions the version supports

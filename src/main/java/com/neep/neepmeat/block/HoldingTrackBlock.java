@@ -5,7 +5,6 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.util.AxialDirection;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.AbstractRailBlock;
@@ -21,13 +20,16 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
-import net.minecraft.state.property.*;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.state.property.Property;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 
 public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityProvider, IMeatBlock
 {
@@ -206,7 +208,7 @@ public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityP
         FluidState fluidState = ctx.getWorld().getFluidState(ctx.getBlockPos());
         boolean waterlogged = fluidState.getFluid() == Fluids.WATER;
         BlockState blockState = super.getDefaultState();
-        Direction direction = ctx.getPlayerFacing();
+        Direction direction = ctx.getHorizontalPlayerFacing();
         boolean eastWest = direction == Direction.EAST || direction == Direction.WEST;
         return blockState
                 .with(this.getShapeProperty(), eastWest ? RailShape.EAST_WEST : RailShape.NORTH_SOUTH)
@@ -262,8 +264,8 @@ public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityP
                 }
                 else
                 {
-                    Vec3f vel = direction.with(axis(railShape));
-                    e.setVelocity(vel.getX(), vel.getY(), vel.getZ());
+                    Vector3f vel = direction.with(axis(railShape));
+                    e.setVelocity(vel.x, vel.y, vel.z);
                 }
             });
         }

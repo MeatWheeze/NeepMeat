@@ -22,8 +22,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class SmallTrommelRenderer implements BlockEntityRenderer<SmallTrommelBlockEntity>
@@ -47,7 +46,7 @@ public class SmallTrommelRenderer implements BlockEntityRenderer<SmallTrommelBlo
 
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(angle));
+        matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(angle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.SMALL_TROMMEL_MESH, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
         FluidVariant fluid = be.currentFluid;
@@ -58,7 +57,7 @@ public class SmallTrommelRenderer implements BlockEntityRenderer<SmallTrommelBlo
             matrices.translate(0.5, 0.5, 0.7);
             matrices.scale(0.6f, 0.6f, 1.7f);
             matrices.translate(-0.5, -0.5, 0);
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
             renderFluidColumn(vertexConsumers, matrices, be.currentFluid, 0, 1, 1, be.renderProgress);
             matrices.pop();
         }

@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
@@ -22,10 +21,10 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -262,7 +261,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
             int w = strings[0].length();
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);
-            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, JsonHelper.getObject(json, "result"));
             return new GeneralSurgeryRecipe(id, w, h, inputs, output);
         }
 
@@ -276,7 +275,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
 
             inputs.replaceAll(ignored -> RecipeInput.fromBuffer(buf));
 
-            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
             return new GeneralSurgeryRecipe(id, width, height, inputs, output);
         }
 
@@ -291,7 +290,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
                 input.write(buf);
             }
 
-            recipe.output.write(Registry.ITEM, buf);
+            recipe.output.write(Registries.ITEM, buf);
         }
     }
 }

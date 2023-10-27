@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -83,7 +84,7 @@ public class DumperBlockEntity extends SyncableBlockEntity
         }
 
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos, Direction.UP);
-        return storage == null || storage.simulateInsert(resource, amount, transaction) == amount;
+        return storage == null || StorageUtil.simulateInsert(storage, resource, amount, transaction) == amount;
     }
 
     public void tick()

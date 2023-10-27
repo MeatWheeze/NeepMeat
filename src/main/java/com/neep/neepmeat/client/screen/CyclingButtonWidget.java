@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -26,9 +27,9 @@ public class CyclingButtonWidget extends ButtonWidget
     protected final MousePressAction onPress;
 
     @Environment(value= EnvType.CLIENT)
-    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, MousePressAction onPress, TooltipSupplier tooltipSupplier)
+    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, MousePressAction onPress)
     {
-        super(x, y, width, height, message, button -> {},tooltipSupplier);
+        super(x, y, width, height, message, button -> { }, button -> { return null; });
 
         this.texture = texture;
         this.u = u;
@@ -45,13 +46,14 @@ public class CyclingButtonWidget extends ButtonWidget
     @Override
     public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderTexture(0, this.texture);
         RenderSystem.enableDepthTest();
-        TexturedButtonWidget.drawTexture(matrices, this.x, this.y, this.u, this.v + this.vOffset * this.index, this.width, this.height, this.tw, this.th);
-        if (this.isHovered())
+        TexturedButtonWidget.drawTexture(matrices, this.getX(), this.getY(), this.u, this.v + this.vOffset * this.index, this.width, this.height, this.tw, this.th);
+
+        if (this.isSelected())
         {
-            super.renderTooltip(matrices, mouseX, mouseY);
+//            super.renderTooltip(matrices, mouseX, mouseY);
         }
     }
 

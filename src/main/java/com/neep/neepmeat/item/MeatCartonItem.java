@@ -16,7 +16,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -72,7 +72,7 @@ public class MeatCartonItem extends BaseItem
     {
         if (stack.isFood())
         {
-            world.emitGameEvent(user, GameEvent.EAT, user.getCameraBlockPos());
+            world.emitGameEvent(user, GameEvent.EAT, user.getCameraPosVec(0));
             world.playSound(null, user.getX(), user.getY(), user.getZ(), getEatSound(), SoundCategory.NEUTRAL, 1.0f, 1.0f + (world.random.nextFloat() - world.random.nextFloat()) * 0.4f);
             applyFoodEffects(user, stack, world);
             if (!(user instanceof PlayerEntity player && player.isCreative()))
@@ -113,8 +113,8 @@ public class MeatCartonItem extends BaseItem
         NbtCompound nbt = itemStack.getNbt();
         float hunger = MeatFluidHelper.getHunger(nbt);
         float saturation = MeatFluidHelper.getSaturation(nbt);
-        tooltip.add(new TranslatableText("item." + NeepMeat.NAMESPACE + ".meat_carton.hunger", hunger));
-        tooltip.add(new TranslatableText("item." + NeepMeat.NAMESPACE + ".meat_carton.saturation", saturation));
+        tooltip.add(Text.translatable("item." + NeepMeat.NAMESPACE + ".meat_carton.hunger", hunger));
+        tooltip.add(Text.translatable("item." + NeepMeat.NAMESPACE + ".meat_carton.saturation", saturation));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.EnlighteningDisplay;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
 import com.neep.neepmeat.init.NMBlocks;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -16,11 +15,10 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -36,7 +34,7 @@ public class EnlighteningCategory implements DisplayCategory<EnlighteningDisplay
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".enlightening");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".enlightening");
     }
 
     @Override
@@ -55,12 +53,10 @@ public class EnlighteningCategory implements DisplayCategory<EnlighteningDisplay
         widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 61, startPoint.y + 9)));
 
         widgets.add(Widgets.createLabel(new Point(bounds.x + bounds.width - 5, bounds.y + 5),
-                new TranslatableText("category." + NeepMeat.NAMESPACE + ".enlightening.data", df.format(display.getData()))).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
+                Text.translatable("category." + NeepMeat.NAMESPACE + ".enlightening.data", df.format(display.getData()))).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
         widgets.add(Widgets.createArrow(new Point(startPoint.x + 25, startPoint.y + 9)));
         widgets.add(Widgets.createSlot(new Point(startPoint.x + 1, startPoint.y + 9)).entries(display.getInputEntries().get(0)).markInput());
         widgets.add(Widgets.createSlot(new Point(startPoint.x + 61, startPoint.y + 9)).entries(display.getOutputEntries().get(0)).markOutput().disableBackground());
-        int oo = widgets.get(0).getZ();
-        int ee = widgets.get(0).getZOffset();
         widgets.add(Widgets.wrapRenderer(bounds, new PedestalRenderer()));
         if (display.getOutputEntries().size() > 1)
         {
@@ -83,7 +79,7 @@ public class EnlighteningCategory implements DisplayCategory<EnlighteningDisplay
         public void render(MatrixStack matrices, Rectangle bounds, int mouseX, int mouseY, float delta)
         {
             VertexConsumerProvider verts = MinecraftClient.getInstance().getBufferBuilders().getEffectVertexConsumers();
-            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(NMBlocks.PEDESTAL), ModelTransformation.Mode.GUI, 255, 1, matrices, verts, 0);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(NMBlocks.PEDESTAL), ModelTransformationMode.GUI, 255, 1, matrices, verts, null, 0);
         }
 
         @Override

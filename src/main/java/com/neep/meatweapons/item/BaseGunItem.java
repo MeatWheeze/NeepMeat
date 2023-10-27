@@ -20,7 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ClickType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -57,9 +57,9 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
 
     public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, FabricItemSettings settings)
     {
-        super(settings.group(MeatWeapons.WEAPONS).maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots));
+        super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots));
+        group(MeatWeapons.WEAPONS);
         this.registryName = registryName;
-
         this.ammunition = ammunition;
         this.maxShots = maxShots;
         this.hasLore = hasLore;
@@ -85,7 +85,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     {
         if (hasLore)
         {
-            tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
+            tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
         }
     }
 
@@ -217,7 +217,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
             RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
             BlockHitResult blockResult = world.raycast(ctx);
 
-            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides();
+            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.canHit();
 
             double minDistance = distance;
             Entity entity = null;

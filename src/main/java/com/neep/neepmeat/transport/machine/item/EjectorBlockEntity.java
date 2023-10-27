@@ -137,7 +137,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-            return storage.simulateInsert(amount.resource(), amount.amount(), transaction);
+            return StorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
         }
 //        return TubeUtils.canEjectSimple(amount, world, pos.offset(facing), transaction);
         return amount.amount();

@@ -23,7 +23,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -83,7 +84,7 @@ public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEnti
 
     public static void sendMessage(PlayerEntity player, FluidVariant variant)
     {
-        player.sendMessage(new TranslatableText("message." + NeepMeat.NAMESPACE + ".filter_pipe.filter", FluidVariantAttributes.getName(variant)), true);
+        player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".filter_pipe.filter", FluidVariantAttributes.getName(variant)), true);
     }
 
     @Nullable

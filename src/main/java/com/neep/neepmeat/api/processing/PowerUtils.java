@@ -4,10 +4,10 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;
@@ -29,8 +29,8 @@ public class PowerUtils
     /**
      * The name of the power unit used can be defined in lang, but the default is eJ/t (esoteric joules per tick)
      */
-    public static final Text POWER_UNIT = new TranslatableText("message." + NeepMeat.NAMESPACE + ".power_unit");
-    public static final Text POWER = new TranslatableText("message." + NeepMeat.NAMESPACE + ".power");
+    public static final Text POWER_UNIT = Text.translatable("message." + NeepMeat.NAMESPACE + ".power_unit");
+    public static final Text POWER = Text.translatable("message." + NeepMeat.NAMESPACE + ".power");
     public static final DecimalFormat POWER_FORMAT = new DecimalFormat("###.##");
 
     public static double perUnitToAbsolute(double perUnit)
@@ -50,7 +50,7 @@ public class PowerUtils
 
     public static MutableText perUnitToText(double perUnit)
     {
-        return POWER.copy().append(new LiteralText(POWER_FORMAT.format(perUnitToAbsolute(perUnit))).append(POWER_UNIT));
+        return POWER.copyContentOnly().append(Text.literal(POWER_FORMAT.format(perUnitToAbsolute(perUnit))).append(POWER_UNIT));
     }
 
     public static long absToAmount(Fluid fluid, long energy)

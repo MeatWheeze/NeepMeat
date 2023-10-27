@@ -10,7 +10,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
+import software.bernie.geckolib3.core.util.Axis;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -95,44 +96,42 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
     {
         matrices.push();
 
-        this.dispatchedMat = matrices.peek().getPositionMatrix().copy();
-
-//        float lerpYaw = MathHelper.lerpAngleDegrees(tickDelta, segment.prevYaw, segment.getYaw());
-//        float lerpPitch = MathHelper.lerp(tickDelta, segment.prevPitch, segment.getPitch());
-        float lerpYaw = segment.getYaw();
-        float lerpPitch = segment.getPitch();
-
-        float ageInTicks = base.age + tickDelta;
-
-        applyRotations(segment, matrices, lerpPitch, lerpYaw, tickDelta);
-
-        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(base));
-
-        this.modelProvider.setCustomAnimations(base, getInstanceId(base));
-
-        matrices.translate(0, 0.01f, 0);
-        RenderSystem.setShaderTexture(0, getTextureLocation(base));
-
-        Color renderColor = getRenderColor(base, tickDelta, matrices, vcp, null, packedLight);
-        RenderLayer renderType = getRenderType(base, tickDelta, matrices, vcp, null, packedLight,
-                getTextureLocation(base));
-
-        VertexConsumer glintBuffer = vcp.getBuffer(RenderLayer.getDirectEntityGlint());
-        VertexConsumer translucentBuffer = vcp
-                .getBuffer(RenderLayer.getEntityTranslucentCull(getTextureLocation(base)));
-
-        render(model, base, tickDelta, renderType, matrices, vcp,
-                glintBuffer != translucentBuffer ? VertexConsumers.union(glintBuffer, translucentBuffer)
-                        : null,
-                packedLight, getOverlay(base, 0), renderColor.getRed() / 255f,
-                renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
-                renderColor.getAlpha() / 255f);
-
-        for (GeoLayerRenderer<WormEntity> layerRenderer : this.layerRenderers)
-        {
-            renderLayer(matrices, vcp, packedLight, base, 0, 0, tickDelta, ageInTicks,
-                    0, lerpPitch, vcp, layerRenderer);
-        }
+//        this.dispatchedMat = matrices.peek().getPositionMatrix();
+//
+//        float lerpYaw = segment.getYaw();
+//        float lerpPitch = segment.getPitch();
+//
+//        float ageInTicks = base.age + tickDelta;
+//
+//        applyRotations(segment, matrices, lerpPitch, lerpYaw, tickDelta);
+//
+//        GeoModel model = this.modelProvider.getModel(this.modelProvider.getModelLocation(base));
+//
+//        this.modelProvider.setCustomAnimations(base, getInstanceId(base));
+//
+//        matrices.translate(0, 0.01f, 0);
+//        RenderSystem.setShaderTexture(0, getTextureLocation(base));
+//
+//        Color renderColor = getRenderColor(base, tickDelta, matrices, vcp, null, packedLight);
+//        RenderLayer renderType = getRenderType(base, tickDelta, matrices, vcp, null, packedLight,
+//                getTextureLocation(base));
+//
+//        VertexConsumer glintBuffer = vcp.getBuffer(RenderLayer.getDirectEntityGlint());
+//        VertexConsumer translucentBuffer = vcp
+//                .getBuffer(RenderLayer.getEntityTranslucentCull(getTextureLocation(base)));
+//
+//        render(model, base, tickDelta, renderType, matrices, vcp,
+//                glintBuffer != translucentBuffer ? VertexConsumers.union(glintBuffer, translucentBuffer)
+//                        : null,
+//                packedLight, getOverlay(base, 0), renderColor.getRed() / 255f,
+//                renderColor.getGreen() / 255f, renderColor.getBlue() / 255f,
+//                renderColor.getAlpha() / 255f);
+//
+//        for (GeoLayerRenderer<WormEntity> layerRenderer : this.layerRenderers)
+//        {
+//            renderLayer(matrices, vcp, packedLight, base, 0, 0, tickDelta, ageInTicks,
+//                    0, lerpPitch, vcp, layerRenderer);
+//        }
 
         matrices.pop();
 
@@ -147,8 +146,8 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
     protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)
     {
         matrices.translate(0, 0.5, 0);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - yaw));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f - pitch));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - yaw));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f - pitch));
         matrices.translate(0, -0.5, 0);
     }
 

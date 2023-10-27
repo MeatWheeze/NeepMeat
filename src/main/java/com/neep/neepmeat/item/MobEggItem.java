@@ -14,12 +14,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -49,7 +48,7 @@ public class MobEggItem extends Item implements IMeatItem
             if (world.isSpaceEmpty(egg))
             {
                 world.spawnEntity(egg);
-                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, new BlockPos(hit));
+                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
                 if (!user.isCreative())
                 {
                     stack.decrement(1);
@@ -66,7 +65,7 @@ public class MobEggItem extends Item implements IMeatItem
         EntityType<?> type = EssentialSaltesItem.getEntityType(stack);
         if (type != null)
         {
-            return new TranslatableText(this.getTranslationKey(), type.getName());
+            return Text.translatable(this.getTranslationKey(), type.getName());
         }
         else return super.getName(stack);
     }

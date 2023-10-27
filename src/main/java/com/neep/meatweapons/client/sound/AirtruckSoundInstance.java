@@ -9,6 +9,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 
 @Environment(value= EnvType.CLIENT)
 public class AirtruckSoundInstance extends MovingSoundInstance
@@ -19,7 +20,7 @@ public class AirtruckSoundInstance extends MovingSoundInstance
 
     public AirtruckSoundInstance(AirtruckEntity entity)
     {
-        super(NMSounds.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL);
+        super(NMSounds.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL, Random.create());
 //        super(SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.NEUTRAL);
         this.entity = entity;
         this.repeat = true;

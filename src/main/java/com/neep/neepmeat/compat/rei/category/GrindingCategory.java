@@ -14,8 +14,7 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-
+import net.minecraft.text.TranslatableTextContent;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class GrindingCategory implements DisplayCategory<GrindingDisplay>
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".grinding");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".grinding");
     }
 
     @Override

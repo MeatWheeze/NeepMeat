@@ -112,7 +112,7 @@ public class DaggerItem extends BaseSwordItem
             if (optional.isPresent())
             {
                 LivingEntity entity = optional.get();
-                entity.damage(DamageSource.player(player), 3);
+                entity.damage(user.getDamageSources().playerAttack(player), 3);
                 if (entity.getHealth() <= MAX_HEALTH)
                 {
                     spawnSpecialDrop(world, entity.getPos(), entity);
@@ -142,7 +142,7 @@ public class DaggerItem extends BaseSwordItem
             RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
             BlockHitResult blockResult = world.raycast(ctx);
 
-            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
+            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.canHit() && entity instanceof LivingEntity;
 
             double minDistance = distance;
             Entity entity = null;

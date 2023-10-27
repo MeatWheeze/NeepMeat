@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -9,7 +8,6 @@ import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,7 +20,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TankBlockEntity extends SyncableBlockEntity
@@ -49,7 +46,7 @@ public class TankBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt(tag);
+        buffer.writeNbt1(tag);
     }
 
     @Override

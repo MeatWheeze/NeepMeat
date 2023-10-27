@@ -3,7 +3,6 @@ package com.neep.neepmeat.compat.rei.category;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
 import com.neep.neepmeat.compat.rei.display.SurgeryDisplay;
 import com.neep.neepmeat.init.NMBlocks;
 import me.shedaniel.math.Point;
@@ -18,9 +17,7 @@ import me.shedaniel.rei.api.common.entry.EntryStack;
 import me.shedaniel.rei.api.common.entry.InputIngredient;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class SurgeryCategory implements DisplayCategory<SurgeryDisplay>
@@ -34,7 +31,7 @@ public class SurgeryCategory implements DisplayCategory<SurgeryDisplay>
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".surgery");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".surgery");
     }
 
     @Override

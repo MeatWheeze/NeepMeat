@@ -20,7 +20,7 @@ public class MultiItemBuffer extends CombinedStorage<ItemVariant, WritableStackS
         for (int i = 0; i < parts.size(); ++i)
         {
             NbtCompound nbt2 = new NbtCompound();
-            nbt2 = parts.get(i).writeNbt(nbt2);
+            nbt2 = parts.get(i).writeNbt1(nbt2);
             nbt.put("part_" + i, nbt2);
         }
         return nbt;

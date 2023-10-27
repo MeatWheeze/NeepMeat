@@ -41,9 +41,9 @@ public class AssemblerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public void close(PlayerEntity player)
+    public void onClosed(PlayerEntity player)
     {
-        super.close(player);
+        super.onClosed(player);
         propertyDelegate.set(2, 0); // Ensure that selection mode is disabled when closed
     }
 
@@ -54,7 +54,7 @@ public class AssemblerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack quickMove(PlayerEntity player, int invSlot)
     {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
@@ -76,7 +76,7 @@ public class AssemblerScreenHandler extends BasicScreenHandler
 
             if (originalStack.isEmpty())
             {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setStackNoCallbacks(ItemStack.EMPTY);
             }
             else
             {

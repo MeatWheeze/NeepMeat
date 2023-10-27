@@ -40,7 +40,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
     }
 
     @Override
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
     {
         return true;
     }
@@ -167,7 +167,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         }
 
         @Override
-        public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+        public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
         {
             return true;
         }

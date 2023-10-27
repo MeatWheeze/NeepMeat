@@ -38,7 +38,7 @@ public class TroughBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        storage.writeNbt(nbt);
+        storage.writeNbt1(nbt);
     }
 
     @Override

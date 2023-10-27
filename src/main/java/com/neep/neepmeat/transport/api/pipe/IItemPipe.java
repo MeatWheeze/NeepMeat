@@ -75,7 +75,7 @@ public interface IItemPipe
         Direction out = item.getPreferredOutputDirection(state, in, this);
         if (out != null && connections.contains(out)) return out;
 
-        Random rand = world.getRandom();
+        var rand = world.getRandom();
         if (!connections.isEmpty())
         {
             out = connections.get(rand.nextInt(connections.size()));

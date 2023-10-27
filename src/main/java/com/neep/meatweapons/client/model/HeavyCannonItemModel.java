@@ -9,20 +9,20 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class HeavyCannonItemModel extends AnimatedGeoModel<HeavyCannonItem>
 {
     @Override
-    public Identifier getModelLocation(HeavyCannonItem object)
+    public Identifier getModelResource(HeavyCannonItem object)
     {
         // Apparently, the model folder MUST be called 'geo'.
         return new Identifier(MeatWeapons.NAMESPACE, "geo/heavy_cannon.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(HeavyCannonItem object)
+    public Identifier getTextureResource(HeavyCannonItem object)
     {
         return new Identifier(MeatWeapons.NAMESPACE, "textures/general/heavy_cannon.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(HeavyCannonItem animatable)
+    public Identifier getAnimationResource(HeavyCannonItem animatable)
     {
         return new Identifier(MeatWeapons.NAMESPACE, "animations/heavy_cannon.animation.json");
     }

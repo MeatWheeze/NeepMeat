@@ -9,7 +9,8 @@ import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -31,7 +32,7 @@ public class EnchantmentHelperMixin
             ArrayList<EnchantmentLevelEntry> list = Lists.newArrayList();
 
             boolean isBook = stack.isOf(Items.BOOK);
-            mainBlock: for (Enchantment enchantment : Registry.ENCHANTMENT)
+            mainBlock: for (Enchantment enchantment : Registries.ENCHANTMENT)
             {
                 boolean allowed = false;
                 if (enchantment instanceof CustomEnchantment)
@@ -42,7 +43,7 @@ public class EnchantmentHelperMixin
                 else
                 {
                     // Vanilla behaviour for normal enchantments.
-                    allowed = enchantment.type.isAcceptableItem(item);
+                    allowed = enchantment.target.isAcceptableItem(item);
                 }
 
                 if (enchantment.isTreasure() && !treasureAllowed || !enchantment.isAvailableForRandomSelection() || !allowed && !isBook) continue;

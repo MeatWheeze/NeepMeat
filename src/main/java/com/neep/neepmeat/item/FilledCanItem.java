@@ -12,11 +12,4 @@ public class FilledCanItem extends BaseItem
         super(registryName, settings);
     }
 
-    @Override
-    public void appendStacks(ItemGroup group, DefaultedList<ItemStack> stacks)
-    {
-        super.appendStacks(group, stacks);
-    }
-
-
 }

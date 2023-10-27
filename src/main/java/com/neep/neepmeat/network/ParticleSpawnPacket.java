@@ -17,6 +17,8 @@ import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
@@ -24,7 +26,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class ParticleSpawnPacket
@@ -37,7 +38,7 @@ public class ParticleSpawnPacket
 
         buf.writeBlockPos(pos);
         buf.writeInt(amount);
-        buf.writeIdentifier(Registry.PARTICLE_TYPE.getId(particle));
+        buf.writeIdentifier(Registries.PARTICLE_TYPE.getId(particle));
 
         ServerPlayNetworking.send(player, PARTICLE_SPAWN, buf);
     }

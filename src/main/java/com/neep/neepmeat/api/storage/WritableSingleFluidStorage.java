@@ -5,9 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 
 @SuppressWarnings("UnstableApiUsage")
 public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVariant>
@@ -90,7 +88,7 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
             finalCallback.run();
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt1(NbtCompound nbt)
     {
         nbt.put(KEY_RESOURCE, getResource().toNbt());
         nbt.putLong(KEY_AMOUNT, amount);

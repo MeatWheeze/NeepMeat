@@ -7,7 +7,7 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
@@ -24,7 +24,7 @@ public class OreFatBucketItem extends BaseBucketItem
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
-        tooltip.add(new TranslatableText(".lore").formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable(".lore").formatted(Formatting.GRAY));
     }
 
 }

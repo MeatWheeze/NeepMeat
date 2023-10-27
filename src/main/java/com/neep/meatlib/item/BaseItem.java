@@ -2,6 +2,7 @@ package com.neep.meatlib.item;
 
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
@@ -24,6 +25,12 @@ public class BaseItem extends Item implements IMeatItem
         super(settings);
         this.registryName = registryName;
         this.tooltipSupplier = TooltipSupplier.blank();
+    }
+
+    public BaseItem group(ItemGroup group)
+    {
+        MeatItemGroups.queueItem(group, this);
+        return this;
     }
 
     @Override

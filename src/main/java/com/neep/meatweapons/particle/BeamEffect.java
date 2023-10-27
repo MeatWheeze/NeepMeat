@@ -16,7 +16,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static net.minecraft.client.render.RenderPhase.BEACON_BEAM_SHADER;
+import static net.minecraft.client.render.RenderPhase.BEACON_BEAM_PROGRAM;
 
 public class BeamEffect extends BeamGraphicsEffect
 {
@@ -64,7 +64,7 @@ public class BeamEffect extends BeamGraphicsEffect
         public static final Function<Identifier, RenderLayer> BEAM_FUNC = Util.memoize((texture) ->
         {
             RenderLayer.MultiPhaseParameters multiPhaseParameters = RenderLayer.MultiPhaseParameters.builder()
-                    .shader(BEACON_BEAM_SHADER)
+                    .program(BEACON_BEAM_PROGRAM)
                     .texture(new RenderPhase.Texture(texture, false, false))
                     .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
                     .cull(RenderPhase.DISABLE_CULLING)

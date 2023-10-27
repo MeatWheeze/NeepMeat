@@ -1,6 +1,7 @@
 package com.neep.meatlib.util;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -22,7 +23,7 @@ public class MeatStorageUtil
 
         if (extractableResource != null)
         {
-            long extractableAmount = storage.simulateExtract(extractableResource, Long.MAX_VALUE, transaction);
+            long extractableAmount = StorageUtil.simulateExtract(storage, extractableResource, Long.MAX_VALUE, transaction);
 
             if (extractableAmount > 0)
             {
@@ -63,7 +64,7 @@ public class MeatStorageUtil
 
         try (Transaction nested = Transaction.openNested(transaction))
         {
-            for (StorageView<T> view : storage.iterable(nested))
+            for (StorageView<T> view : storage)
             {
                 // Extract below could change the resource, so we have to query it before extracting.
                 T resource = view.getResource();

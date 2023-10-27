@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -40,12 +40,12 @@ public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
     @Override
     public Text getDisplayName()
     {
-        return new TranslatableText(NeepMeat.NAMESPACE + "screen.guide");
+        return Text.translatable(NeepMeat.NAMESPACE + "screen.guide");
     }
 
     public static void applyTooltip(Item item, List<Text> tooltip)
     {
-        tooltip.add(new TranslatableText(item.getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
+        tooltip.add(Text.translatable(item.getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
     }
 
     @Nullable

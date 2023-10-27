@@ -8,7 +8,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinStorage;
-import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.recipe.AbstractPressingRecipe;
 import com.neep.neepmeat.recipe.MobSqueezingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -18,7 +17,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -206,7 +204,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        fluidStorage.writeNbt(nbt);
+        fluidStorage.writeNbt1(nbt);
         nbt.putShort("recipeState", recipeState);
         nbt.putBoolean("recipeControlled", recipeControlled);
         if (currentRecipe != null)

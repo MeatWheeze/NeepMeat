@@ -12,9 +12,11 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -33,16 +35,6 @@ public abstract class LivingEntityMixin implements ILivingEntity
 
     @Shadow public abstract boolean hasStatusEffect(StatusEffect effect);
 
-    @Shadow protected abstract void dropInventory();
-
-    @Shadow public abstract ItemStack getEquippedStack(EquipmentSlot var1);
-
-    @Shadow protected abstract void playBlockFallSound();
-
-    @Shadow public abstract Vec3d applyMovementInput(Vec3d movementInput, float slipperiness);
-
-    @Shadow public abstract void setOnGround(boolean onGround);
-
     @Unique public boolean neepmeat$dropsLoot = true;
 
     @Override
@@ -60,26 +52,27 @@ public abstract class LivingEntityMixin implements ILivingEntity
     @Inject(method = "onDeath", at = @At(value = "HEAD"))
     public void onDeath(DamageSource source, CallbackInfo ci)
     {
-        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION))
+        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
         {
             EssentialSaltesItem.onEntityDeath((LivingEntity) (Object) this);
         }
     }
-    @Inject(method = "applyEnchantmentsToDamage", at = @At(value = "TAIL"), cancellable = true)
-    public void applyEnchantments(DamageSource source, float amount, CallbackInfoReturnable<Float> cir)
-    {
-        if ((LivingEntity) (Object) this instanceof PlayerEntity player)
-        {
-            PlayerUpgradeManager upgradeManager = PlayerUpgradeManager.get(player);
 
-            // Get total protection from enchantments and upgrades
-            float protection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), source)
-                    + upgradeManager.getProtectionAmount(source, amount);
-            float newAmount = DamageUtil.getInflictedDamage(amount, protection + protection);
-
-            // Replace the vanilla protection amount with this one. This may conflict with other mods. Sorry.
-            cir.setReturnValue(newAmount);
-            cir.cancel();
-        }
-    }
+//    @Inject(method = "applyEnchantmentsToDamage", at = @At(value = "TAIL"), cancellable = true)
+//    public void applyEnchantments(DamageSource source, float amount, CallbackInfoReturnable<Float> cir)
+//    {
+//        if ((LivingEntity) (Object) this instanceof PlayerEntity player)
+//        {
+//            PlayerUpgradeManager upgradeManager = PlayerUpgradeManager.get(player);
+//
+//            // Get total protection from enchantments and upgrades
+//            float protection = EnchantmentHelper.getProtectionAmount(player.getArmorItems(), source)
+//                    + upgradeManager.getProtectionAmount(source, amount);
+//            float newAmount = DamageUtil.getInflictedDamage(amount, protection + protection);
+//
+//            // Replace the vanilla protection amount with this one. This may conflict with other mods. Sorry.
+//            cir.setReturnValue(newAmount);
+//            cir.cancel();
+//        }
+//    }
 }

@@ -2,27 +2,24 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.neepmeat.entity.TankMinecartEntity;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;
 import net.minecraft.block.dispenser.DispenserBehavior;
 import net.minecraft.block.dispenser.ItemDispenserBehavior;
 import net.minecraft.block.enums.RailShape;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.item.MinecartItem;
+import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPointer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
-import net.minecraft.world.event.GameEvent;
 
 public class TankMinecartItem extends MinecartItem implements IMeatItem
 {
@@ -90,42 +87,43 @@ public class TankMinecartItem extends MinecartItem implements IMeatItem
 
     public static boolean vanillaPlacement(ItemUsageContext context)
     {
-        BlockPos blockPos;
-        World world = context.getWorld();
-        BlockState blockState = world.getBlockState(blockPos = context.getBlockPos());
-        if (!blockState.isIn(BlockTags.RAILS))
-        {
-            return false;
-        }
-        ItemStack itemStack = context.getStack();
-        if (!world.isClient)
-        {
-            RailShape railShape = blockState.getBlock() instanceof AbstractRailBlock ? blockState.get(((AbstractRailBlock)blockState.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
-            double d = 0.0;
-            if (railShape.isAscending())
-            {
-                d = 0.5;
-            }
-            TankMinecartEntity minecart = new TankMinecartEntity(world, blockPos.getX() + 0.5, blockPos.getY() + 0.0625, blockPos.getZ() + 0.5);
-            if (itemStack.hasCustomName())
-            {
-                minecart.setCustomName(itemStack.getName());
-            }
-            world.spawnEntity(minecart);
-            world.emitGameEvent((Entity)context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
-        }
-        itemStack.decrement(1);
+//        BlockPos blockPos;
+//        World world = context.getWorld();
+//        BlockState blockState = world.getBlockState(blockPos = context.getBlockPos());
+//        if (!blockState.isIn(BlockTags.RAILS))
+//        {
+//            return false;
+//        }
+//        ItemStack itemStack = context.getStack();
+//        if (!world.isClient)
+//        {
+//            RailShape railShape = blockState.getBlock() instanceof AbstractRailBlock ? blockState.get(((AbstractRailBlock)blockState.getBlock()).getShapeProperty()) : RailShape.NORTH_SOUTH;
+//            double d = 0.0;
+//            if (railShape.isAscending())
+//            {
+//                d = 0.5;
+//            }
+//
+//            TankMinecartEntity minecart = new TankMinecartEntity(world, blockPos.getX() + 0.5, blockPos.getY() + 0.0625, blockPos.getZ() + 0.5);
+//            if (itemStack.hasCustomName())
+//            {
+//                minecart.setCustomName(itemStack.getName());
+//            }
+//            world.spawnEntity(minecart);
+//            world.emitGameEvent((Entity)context.getPlayer(), GameEvent.ENTITY_PLACE, blockPos);
+//        }
+//        itemStack.decrement(1);
         return true;
     }
 
-    private static final DispenserBehavior DISPENSER_BEHAVIOR = vanillaDispenserBehaviour(TankMinecartEntity::new);
+//    private static final DispenserBehavior DISPENSER_BEHAVIOR = vanillaDispenserBehaviour(TankMinecartEntity::new);
 
     public TankMinecartItem(String registryName, Settings settings)
     {
         super(AbstractMinecartEntity.Type.RIDEABLE, settings);
         this.registryName = registryName;
         ItemRegistry.queueItem(this);
-        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
+//        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 
     @Override

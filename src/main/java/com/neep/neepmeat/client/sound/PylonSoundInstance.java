@@ -7,6 +7,7 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 
 public class PylonSoundInstance extends AbstractSoundInstance implements TickableSoundInstance
 {
@@ -19,7 +20,7 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
 
     public PylonSoundInstance(PylonBlockEntity be, BlockPos pos, SoundEvent startSound, SoundEvent sound, SoundCategory category)
     {
-        super(startSound, category);
+        super(startSound, category, Random.create());
         this.blockEntity = be;
 
         this.repeat = true;
@@ -47,9 +48,9 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
     public WeightedSoundSet getSoundSet(SoundManager soundManager)
     {
         WeightedSoundSet startSet = soundManager.get(this.startId);
-        this.startSound = startSet == null ? SoundManager.MISSING_SOUND : startSet.getSound();
+        this.startSound = startSet == null ? SoundManager.MISSING_SOUND : startSet.getSound(random);
         WeightedSoundSet runningSet = soundManager.get(this.runningId);
-        this.runningSound = runningSet == null ? SoundManager.MISSING_SOUND : runningSet.getSound();
+        this.runningSound = runningSet == null ? SoundManager.MISSING_SOUND : runningSet.getSound(random);
         return runningSet;
     }
 
@@ -69,13 +70,13 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
     @Override
     public float getVolume()
     {
-        return this.volume * getSound().getVolume();
+        return this.volume * getSound().getVolume().get(random);
     }
 
     @Override
     public float getPitch()
     {
-        return this.pitch * getSound().getPitch();
+        return this.pitch * getSound().getPitch().get(random);
     }
 
     @Override

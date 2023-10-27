@@ -104,7 +104,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
         List<LivingEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, entity -> true);
         entities.forEach(entity ->
         {
-            entity.damage(DamageSource.GENERIC, 2);
+            entity.damage(world.getDamageSources().generic(), 2);
             double mult = 0.5;
             entity.addVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
         });

@@ -3,6 +3,7 @@ package com.neep.meatlib.datagen.loot;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemConvertible;
@@ -12,13 +13,13 @@ import java.util.Map;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider
 {
-    public BlockLootTableProvider(FabricDataGenerator dataGenerator)
+    public BlockLootTableProvider(FabricDataOutput output)
     {
-        super(dataGenerator);
+        super(output);
     }
 
     @Override
-    protected void generateBlockLootTables()
+    public void generate()
     {
         for (Map.Entry<Identifier, Block> entry : BlockRegistry.REGISTERED_BLOCKS.entrySet())
         {

@@ -1,22 +1,16 @@
 package com.neep.neepmeat.machine.item_mincer;
 
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
-import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3f;
 
 import java.util.Random;
 

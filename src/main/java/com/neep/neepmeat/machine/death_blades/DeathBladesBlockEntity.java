@@ -79,7 +79,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
                     .filter(e -> e.hurtTime == 0 && !e.isDead()).forEach(e ->
                     {
                         if (e.getHealth() > damageAmount)
-                            e.damage(DamageSource.GENERIC, damageAmount);
+                            e.damage(world.getDamageSources().generic(), damageAmount);
                         else killEntity((ServerWorld) world, e);
                     });
         }

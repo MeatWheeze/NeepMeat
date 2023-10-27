@@ -11,6 +11,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.random.Random;
 
 @Environment(value= EnvType.CLIENT)
 public class DrillSoundInstance extends MovingSoundInstance implements PlayerAttachment
@@ -26,7 +27,7 @@ public class DrillSoundInstance extends MovingSoundInstance implements PlayerAtt
 
     public DrillSoundInstance(PlayerEntity player)
     {
-        super(NMSounds.DRILL_RUNNING, SoundCategory.NEUTRAL);
+        super(NMSounds.DRILL_RUNNING, SoundCategory.NEUTRAL, Random.create());
         this.player = player;
 
         this.repeat = true;

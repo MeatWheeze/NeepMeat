@@ -19,9 +19,10 @@ import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.LinkedList;
@@ -75,7 +76,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
         List<RecipeInput<Fluid>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
 
         ListIterator<RecipeInput<Fluid>> it = queue.listIterator();
-        Iterable<? extends StorageView<FluidVariant>> parentStorages = inventory.getInputStorages().iterable(transaction);
+        var parentStorages = inventory.getInputStorages();
         while (it.hasNext())
         {
             RecipeInput<Fluid> ingredient = it.next();
@@ -191,7 +192,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             RecipeInput<Fluid> fluidInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidElement2);
 
             JsonObject fluidElement3 = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, fluidElement3);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, fluidElement3);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput, fluidInput1, fluidInput2, fluidOutput, time);
@@ -203,7 +204,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             RecipeInput<Item> ingredient = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput1 = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput2 = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
             int time = buf.readVarInt();
 
             return this.factory.create(id, ingredient, fluidInput1, fluidInput2, fluidOutput, time);
@@ -215,7 +216,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             recipe.itemInput.write(buf);
             recipe.fluidInput1.write(buf);
             recipe.fluidInput2.write(buf);
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.fluidOutput.write(Registries.FLUID, buf);
             buf.writeVarInt(recipe.processTime);
         }
 

@@ -22,15 +22,14 @@ import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class CharnelCompactorBlock extends BaseBlock implements IDataCable
 {
@@ -71,11 +70,11 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
             }
             else if (integrator == null)
             {
-                player.sendMessage(new TranslatableText("message." + NeepMeat.NAMESPACE + ".compactor.not_found"), true);
+                player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".compactor.not_found"), true);
             }
             else if (!integrator.isMature())
             {
-                player.sendMessage(new TranslatableText("message." + NeepMeat.NAMESPACE + ".compactor.immature"), true);
+                player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".compactor.immature"), true);
             }
         }
 
@@ -92,7 +91,7 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
     {
         if (state.get(LEVEL) == 7)
         {
-            world.createAndScheduleBlockTick(pos, state.getBlock(), 20);
+            world.scheduleBlockTick(pos, state.getBlock(), 20);
         }
     }
 

@@ -49,7 +49,7 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtCompound inputNbt = new NbtCompound();
-        inputStorage.writeNbt(inputNbt);
+        inputStorage.writeNbt1(inputNbt);
         nbt.put("input", inputNbt);
 
         NbtCompound outputNbt = new NbtCompound();

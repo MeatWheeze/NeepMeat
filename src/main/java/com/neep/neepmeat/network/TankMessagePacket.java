@@ -45,7 +45,7 @@ public class TankMessagePacket
                 BlockPos pos = buf.readBlockPos();
                 long amount = buf.readLong();
                 FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
-                MutableText text = FluidVariantAttributes.getName(resource).shallowCopy();
+                MutableText text = FluidVariantAttributes.getName(resource).copy();
 
                 client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtils.dropletsToMb(amount) + "mb"), true);
             });

@@ -22,9 +22,9 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import org.joml.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -134,7 +134,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                 // Damage the player if they hold for too long.
                 if (charge > EXPLOSION_TIME)
                 {
-                    world.createExplosion(player, player.getX(), player.getY(), player.getZ(), 1, Explosion.DestructionType.NONE);
+                    world.createExplosion(player, player.getX(), player.getY(), player.getZ(), 1, World.ExplosionSourceType.NONE);
                     world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
                     nbt.putInt("charge", 0);
                     nbt.putBoolean("charging", false);
@@ -204,9 +204,9 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
 
     @Override
-    public Vec3f getAimOffset()
+    public Vector3f getAimOffset()
     {
-        return new Vec3f(0.56f, 0, 0);
+        return new Vector3f(0.56f, 0, 0);
     }
 
     @Override
@@ -228,7 +228,8 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
         Vec3d end = pos.add(Util.getRotationVector((float) pitch, (float) yaw).multiply(20));
         Optional<Entity> target = hitScan(entity, pos, end, 20, this);
-        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+//        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        DamageSource damage = entity instanceof PlayerEntity player ? world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
         target.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
 
         // Play fire sound
@@ -244,7 +245,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         Vec3d end = target.getPos().add(0, target.getHeight() / 2, 0);
 
         Optional<Entity> foundTarget = hitScan(entity, pos, end, 20, this);
-        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        DamageSource damage = entity instanceof PlayerEntity player ? world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
         foundTarget.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
 
         // Play fire sound

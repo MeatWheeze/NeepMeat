@@ -19,7 +19,6 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -76,14 +75,14 @@ public class ItemUtils
 
     public static void scatterItems(World world, BlockPos pos, Storage<ItemVariant> storage)
     {
-        Transaction transaction = Transaction.openOuter();
-        Iterator<? extends StorageView<ItemVariant>> it = storage.iterator(transaction);
-        while (it.hasNext())
+        try (Transaction transaction = Transaction.openOuter())
         {
-            StorageView<ItemVariant> view = it.next();
-            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+            for (StorageView<ItemVariant> view : storage)
+            {
+                ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+            }
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     public static boolean singleVariantInteract(PlayerEntity player, Hand hand, SingleVariantStorage<ItemVariant> storage)
@@ -118,7 +117,7 @@ public class ItemUtils
 
     public static <T extends TransferVariant<?>> Optional<Long> totalAmount(Storage<T> storage, T resource, Transaction transaction)
     {
-        return StreamSupport.stream(storage.iterable(transaction).spliterator(), false)
+        return StreamSupport.stream(storage.spliterator(), false)
                 .filter(view -> view.getResource().equals(resource))
                 .map(StorageView::getAmount)
                 .reduce(Long::sum);

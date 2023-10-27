@@ -89,7 +89,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
     }
 
     @Override
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
     {
         return true;
     }

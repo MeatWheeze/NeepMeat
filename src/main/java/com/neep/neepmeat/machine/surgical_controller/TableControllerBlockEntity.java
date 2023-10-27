@@ -136,7 +136,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         this.recipeProgress = 0;
         this.currentRecipe = recipe.getId();
         Direction facing = getCachedState().get(TableControllerBlock.FACING);
-        robot.setTarget(pos.add(0, 2.2, 0).offset(facing.getOpposite(), 2));
+        robot.setTarget(pos.add(0, 2, 0).offset(facing.getOpposite(), 2));
         nextIngredient(recipe);
     }
 

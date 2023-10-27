@@ -22,7 +22,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
@@ -83,9 +83,9 @@ public class PipetteItem extends BaseItem
         long amount = StackStorage.getAmount(stack);
         if (amount > 0)
         {
-            return new TranslatableText(getTranslationKey() + ".full", FluidVariantAttributes.getName(variant), MiscUtils.dropletsToMb(amount));
+            return Text.translatable(getTranslationKey() + ".full", FluidVariantAttributes.getName(variant), MiscUtils.dropletsToMb(amount));
         }
-        return new TranslatableText(getTranslationKey(stack));
+        return Text.translatable(getTranslationKey(stack));
     }
 
     @Override

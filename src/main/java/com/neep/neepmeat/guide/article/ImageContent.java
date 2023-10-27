@@ -4,10 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
 
 public class ImageContent implements Article.Content
 {
@@ -28,9 +25,6 @@ public class ImageContent implements Article.Content
     @Override
     public int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent)
     {
-//        TextRenderer renderer = parent.getTextRenderer();
-//        List<OrderedText> lines = renderer.wrapLines(caption, (int) width);
-
         matrices.push();
         RenderSystem.setShaderTexture(0, image);
 

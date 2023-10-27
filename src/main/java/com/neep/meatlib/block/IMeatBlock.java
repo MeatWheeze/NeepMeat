@@ -5,9 +5,8 @@ import com.neep.neepmeat.datagen.tag.BlockTagProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
-
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import java.util.List;
 
 public interface IMeatBlock extends ItemConvertible
@@ -28,7 +27,7 @@ public interface IMeatBlock extends ItemConvertible
     {
         for (TagKey<Block> id : getBlockTags())
         {
-            BlockTagProvider.addToTag(id, (Block) this);
+//            BlockTagProvider.addToTag(id, (Block) this);
         }
     }
 

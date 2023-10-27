@@ -13,11 +13,12 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -102,7 +103,7 @@ public class EggEntity extends SimpleEntity
         setWobbleTicks(10);
         setWobbleStrength(getWobbleStrength() + amount * 10.0f);
         invertWobbleDirection();
-        this.emitGameEvent(GameEvent.ENTITY_DAMAGED, source.getAttacker());
+        this.emitGameEvent(GameEvent.ENTITY_DAMAGE, source.getAttacker());
         if (!world.isClient() && getWobbleStrength() > 30.0f)
         {
             this.onDeath();
@@ -132,7 +133,7 @@ public class EggEntity extends SimpleEntity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        if (hatchType != null) nbt.putString("hatchType", Registry.ENTITY_TYPE.getId(hatchType).toString());
+        if (hatchType != null) nbt.putString("hatchType", Registries.ENTITY_TYPE.getId(hatchType).toString());
         return nbt;
     }
 
@@ -140,7 +141,7 @@ public class EggEntity extends SimpleEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.hatchType = nbt.contains("hatchType") ? Registry.ENTITY_TYPE.get(new Identifier(nbt.getString("hatchType"))) : null;
+        this.hatchType = nbt.contains("hatchType") ? Registries.ENTITY_TYPE.get(new Identifier(nbt.getString("hatchType"))) : null;
     }
 
     @Override
@@ -186,7 +187,7 @@ public class EggEntity extends SimpleEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
         return new EntitySpawnS2CPacket(this);
     }

@@ -14,6 +14,8 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Identifier;
@@ -21,7 +23,6 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -102,10 +103,10 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
         {
             JsonObject entityElement = JsonHelper.getObject(json, "entity");
             Identifier entityId = new Identifier(JsonHelper.getString(entityElement, "id"));
-            EntityType<? extends Entity> entityType = Registry.ENTITY_TYPE.get(entityId);
+            EntityType<? extends Entity> entityType = Registries.ENTITY_TYPE.get(entityId);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, itemOutputElement);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, itemOutputElement);
 
             return this.factory.create(id, entityType, itemOutput);
         }
@@ -115,8 +116,8 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
         {
 //            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
             Identifier entityId = buf.readIdentifier();
-            EntityType<? extends Entity> entityType = Registry.ENTITY_TYPE.get(entityId);
-            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            EntityType<? extends Entity> entityType = Registries.ENTITY_TYPE.get(entityId);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
 
             return this.factory.create(id, entityType, itemOutput);
         }
@@ -124,8 +125,8 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
         @Override
         public void write(PacketByteBuf buf, MobSqueezingRecipe recipe)
         {
-            buf.writeIdentifier(Registry.ENTITY_TYPE.getId(recipe.entityType));
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            buf.writeIdentifier(Registries.ENTITY_TYPE.getId(recipe.entityType));
+            recipe.fluidOutput.write(Registries.FLUID, buf);
         }
 
         @FunctionalInterface

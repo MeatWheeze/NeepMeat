@@ -17,11 +17,11 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -38,7 +38,7 @@ public class CronenCakeBlock extends CakeBlock implements IMeatBlock
     {
         super(settings);
         this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), new FabricItemSettings().group(NMItemGroups.FOOD));
+        this.blockItem = (BlockItem) new BaseBlockItem(this, registryName, ItemSettings.block().tooltip(TooltipSupplier.simple(1)), new FabricItemSettings()).group(NMItemGroups.FOOD);
     }
 
     @Override

@@ -30,8 +30,11 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
     @Shadow int burnTime;
 
     @Shadow protected DefaultedList<ItemStack> inventory;
-    @Shadow @Final private RecipeType<? extends AbstractCookingRecipe> recipeType;
+//    @Shadow @Final private RecipeType<? extends AbstractCookingRecipe> recipeType;
     @Shadow private int cookTime;
+
+    @Shadow public abstract @Nullable Recipe<?> getLastRecipe();
+
     protected float heatMultiplier;
 
     @Override
@@ -70,20 +73,21 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         AbstractFurnaceBlockEntity furnace = ((AbstractFurnaceBlockEntity) (Object) this);
         if (isBurning() || !itemStack.isEmpty() && !inventory.get(0).isEmpty())
         {
-            Recipe<?> recipe = world.getRecipeManager().getFirstMatch(recipeType, furnace, world).orElse(null);
+//            Recipe<?> recipe = world.getRecipeManager().getFirstMatch(recipeType, furnace, world).orElse(null);
+            Recipe<?> recipe = getLastRecipe();
             int i = furnace.getMaxCountPerStack();
-            return isBurning() && canAcceptRecipeOutput(recipe, inventory, i);
+            return isBurning() && canAcceptRecipeOutput(recipe, inventory, i, world);
         }
         return false;
     }
 
-    private static boolean canAcceptRecipeOutput(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count)
+    private static boolean canAcceptRecipeOutput(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count, World world)
     {
         if (slots.get(0).isEmpty() || recipe == null)
         {
             return false;
         }
-        ItemStack itemStack = recipe.getOutput();
+        ItemStack itemStack = recipe.getOutput(world.getRegistryManager());
         if (itemStack.isEmpty())
         {
             return false;
@@ -93,7 +97,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         {
             return true;
         }
-        if (!itemStack2.isItemEqualIgnoreDamage(itemStack))
+        if (!itemStack2.isItemEqual(itemStack))
         {
             return false;
         }

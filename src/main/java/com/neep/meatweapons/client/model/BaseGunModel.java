@@ -19,19 +19,19 @@ public class BaseGunModel<T extends BaseGunItem> extends AnimatedGeoModel<T>
 
 
     @Override
-    public Identifier getModelLocation(T object)
+    public Identifier getModelResource(T object)
     {
         return modelPath;
     }
 
     @Override
-    public Identifier getTextureLocation(T object)
+    public Identifier getTextureResource(T object)
     {
         return texturePath;
     }
 
     @Override
-    public Identifier getAnimationFileLocation(T animatable)
+    public Identifier getAnimationResource(T animatable)
     {
         return animationPath;
     }

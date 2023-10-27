@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class FluidEnegyRegistry extends HashMap<Fluid, FluidEnegyRegistry.Entry>
 {
     protected static final FluidEnegyRegistry INSTANCE = new FluidEnegyRegistry();
-    public static final Entry EMPTY = new Entry(0, false, null);
+    public static final com.neep.neepmeat.api.processing.FluidEnegyRegistry.Entry EMPTY = new com.neep.neepmeat.api.processing.FluidEnegyRegistry.Entry(0, false, null);
 
     public static FluidEnegyRegistry getInstance()
     {
@@ -26,7 +26,7 @@ public class FluidEnegyRegistry extends HashMap<Fluid, FluidEnegyRegistry.Entry>
     }
 
     @NotNull
-    public Entry getOrEmpty(Fluid fluid)
+    public com.neep.neepmeat.api.processing.FluidEnegyRegistry.Entry getOrEmpty(Fluid fluid)
     {
         return getOrDefault(fluid, EMPTY);
     }

@@ -19,7 +19,7 @@ public class BaseBlockItem extends BlockItem implements IMeatItem
 
     public BaseBlockItem(Block block, String registryName, ItemSettings itemSettings)
     {
-        this(block, registryName, itemSettings, new FabricItemSettings().maxCount(itemSettings.maxCount).group(NMItemGroups.GENERAL));
+        this(block, registryName, itemSettings, new FabricItemSettings().maxCount(itemSettings.maxCount));
     }
 
     public BaseBlockItem(Block block, String registryName, ItemSettings itemSettings, Settings settings)

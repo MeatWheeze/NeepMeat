@@ -4,8 +4,8 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.util.Identifier;
 
-import static net.minecraft.util.registry.Registry.SCREEN_HANDLER;
-import static net.minecraft.util.registry.Registry.register;
+import static net.minecraft.registry.Registries.SCREEN_HANDLER;
+import static net.minecraft.registry.Registry.register;
 
 public class TransportScreenHandlers
 {

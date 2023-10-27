@@ -27,7 +27,7 @@ public class SwirlingParticle extends SpriteBillboardParticle
 
     public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state)
     {
-        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, new BlockPos(x, y, z));
+        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, BlockPos.ofFloored(x, y, z));
     }
 
     public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state, BlockPos blockPos)

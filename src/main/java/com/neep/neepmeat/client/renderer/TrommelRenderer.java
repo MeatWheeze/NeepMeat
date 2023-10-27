@@ -4,22 +4,16 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
-
-import java.util.Random;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntityRenderer<T>
@@ -38,7 +32,7 @@ public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntit
         Direction facing = be.getCachedState().get(BaseHorFacingBlock.FACING);
 
         matrices.translate(0.5, 0.5f, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.scale(1.5f, 1.5f, 1.1f);

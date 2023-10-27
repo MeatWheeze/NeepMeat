@@ -66,7 +66,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
@@ -103,6 +103,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         protected int startY;
         protected int width;
         protected int height;
+        protected boolean focused;
         protected int scroll;
         protected int offset;
         protected final ItemRenderer itemRenderer;
@@ -206,6 +207,18 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
             return mouseInGrid(mouseX, mouseY);
         }
 
+        @Override
+        public void setFocused(boolean focused)
+        {
+            this.focused = focused;
+        }
+
+        @Override
+        public boolean isFocused()
+        {
+            return focused;
+        }
+
         protected ResourceAmount<ItemVariant> getGridItem(int i, int j)
         {
             if (!isInGrid(i, j)) return null;
@@ -234,16 +247,16 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
             ItemStack itemStack = ra.resource().toStack((int) ra.amount());
             String string = null;
 
-            this.setZOffset(100);
-            itemRenderer.zOffset = 100.0f;
+//            this.setZOffset(100);
+//            itemRenderer.zOffset = 100.0f;
 
             RenderSystem.enableDepthTest();
 //            this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, x, y, slot.x + slot.y * this.backgroundWidth);
-            itemRenderer.renderInGuiWithOverrides(itemStack, x, y);
-            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y, string);
+            itemRenderer.renderInGuiWithOverrides(matrices, itemStack, x, y);
+            itemRenderer.renderGuiItemOverlay(matrices, textRenderer, itemStack, x, y, string);
 
-            itemRenderer.zOffset = 0.0f;
-            this.setZOffset(0);
+//            itemRenderer.zOffset = 0.0f;
+//            this.setZOffset(0);
         }
     }
 }

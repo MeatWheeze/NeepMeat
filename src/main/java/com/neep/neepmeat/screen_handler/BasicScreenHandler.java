@@ -72,7 +72,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
 
     // For some reason, not implementing this causes the game to freeze when shift-clicking.
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack quickMove(PlayerEntity player, int invSlot)
     {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
@@ -94,7 +94,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
 
             if (originalStack.isEmpty())
             {
-                slot.setStack(ItemStack.EMPTY);
+                slot.setStackNoCallbacks(ItemStack.EMPTY);
             }
             else
             {

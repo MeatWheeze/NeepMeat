@@ -8,9 +8,10 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.InvalidIdentifierException;
-import net.minecraft.util.registry.Registry;
 import org.apache.commons.lang3.NotImplementedException;
 
 public class RecipeInputs
@@ -21,9 +22,9 @@ public class RecipeInputs
             new Identifier(MeatLib.NAMESPACE, "recipe_input"),
             EMPTY_ID).buildAndRegister();
 
-    public static final Identifier FLUID_ID = Registry.FLUID.getKey().getValue();
-    public static final Identifier ITEM_ID = Registry.ITEM.getKey().getValue();
-    public static final Identifier ENTITY_MUTATE_ID = Registry.ENTITY_TYPE.getKey().getValue();
+    public static final Identifier FLUID_ID = Registries.FLUID.getKey().getValue();
+    public static final Identifier ITEM_ID = Registries.ITEM.getKey().getValue();
+    public static final Identifier ENTITY_MUTATE_ID = Registries.ENTITY_TYPE.getKey().getValue();
 
     public static final RecipeInput.Serialiser<Object> EMPTY_SERIALISER = Registry.register(SERIALISERS, EMPTY_ID, new RecipeInput.Serialiser<>()
     {
@@ -58,9 +59,9 @@ public class RecipeInputs
         }
     });
 
-    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
-    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
-    public static final RecipeInput.Serialiser<EntityType<?>> ENTITY = Registry.register(SERIALISERS, ENTITY_MUTATE_ID, new RecipeInput.RegistrySerialiser<>(Registry.ENTITY_TYPE));
+    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registries.FLUID));
+    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registries.ITEM));
+    public static final RecipeInput.Serialiser<EntityType<?>> ENTITY = Registry.register(SERIALISERS, ENTITY_MUTATE_ID, new RecipeInput.RegistrySerialiser<>(Registries.ENTITY_TYPE));
 
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, EMPTY_SERIALISER, EMPTY_ID);
 }

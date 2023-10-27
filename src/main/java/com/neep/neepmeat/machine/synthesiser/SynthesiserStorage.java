@@ -52,7 +52,7 @@ public class SynthesiserStorage implements NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.put("meatStorage", meatStorage.writeNbt(new NbtCompound()));
+        nbt.put("meatStorage", meatStorage.writeNbt1(new NbtCompound()));
 
         return nbt;
     }

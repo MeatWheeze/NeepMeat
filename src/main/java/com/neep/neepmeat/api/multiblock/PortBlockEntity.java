@@ -42,12 +42,12 @@ public abstract class PortBlockEntity<T extends TransferVariant<?>> extends IMul
     }
 
     @Override
-    public Iterator<StorageView<T>> iterator(TransactionContext transaction)
+    public Iterator<StorageView<T>> iterator()
     {
         VatControllerBlockEntity be;
         if ((be = (VatControllerBlockEntity) getController()) != null)
         {
-            return (Iterator<StorageView<T>>) be.getStorage(resourceClazz).iterator(transaction);
+            return be.getStorage(resourceClazz).iterator();
         }
         return Collections.emptyIterator();
     }

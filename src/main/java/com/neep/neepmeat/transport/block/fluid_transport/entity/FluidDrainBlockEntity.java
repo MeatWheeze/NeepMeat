@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -148,7 +147,7 @@ public class FluidDrainBlockEntity extends SyncableBlockEntity implements FluidB
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt(tag);
+        buffer.writeNbt1(tag);
     }
 
     @Override

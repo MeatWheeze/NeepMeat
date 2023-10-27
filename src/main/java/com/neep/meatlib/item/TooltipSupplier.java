@@ -28,7 +28,8 @@ public interface TooltipSupplier
         {
             for (int i = 0; i < lines; ++i)
             {
-                Text txt = new TranslatableText(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
+                var txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
+//                Text txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
                 list.add(txt);
             }
         };
@@ -41,7 +42,7 @@ public interface TooltipSupplier
 
     static void applyMessage(List<Text> tooltip)
     {
-        tooltip.add(new TranslatableText("message." + NeepMeat.NAMESPACE + ".shift_for_info").formatted(Formatting.GRAY));
+        tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".shift_for_info").formatted(Formatting.GRAY));
     }
 
     class ShiftHidden implements TooltipSupplier
@@ -62,7 +63,7 @@ public interface TooltipSupplier
             {
                 for (int i = 0; i < lines; ++i)
                 {
-                    tooltip.add(new TranslatableText(item.getTranslationKey() + ".lore_" + i).formatted(formatting));
+                    tooltip.add(Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(formatting));
                 }
             }
             else
@@ -134,15 +135,6 @@ public interface TooltipSupplier
         public void offset(int extraOffset)
         {
             this.startOffset += extraOffset;
-        }
-    }
-
-    class TooltipText extends BaseText
-    {
-        @Override
-        public BaseText copy()
-        {
-            return null;
         }
     }
 }

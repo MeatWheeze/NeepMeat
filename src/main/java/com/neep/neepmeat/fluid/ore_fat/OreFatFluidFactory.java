@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid.ore_fat;
 
+import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.fluid.BaseFluid;
 import com.neep.neepmeat.item.BaseBucketItem;
@@ -13,10 +14,12 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class OreFatFluidFactory
@@ -51,25 +54,27 @@ public class OreFatFluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 
     public Item registerItem()
     {
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1));
+        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
+
         return bucketItem;
     }
 
     public Block registerBlock()
     {
-        block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
+        block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
         return block;
     }
 
@@ -88,7 +93,7 @@ public class OreFatFluidFactory
         }
 
         @Override
-        protected boolean isInfinite()
+        protected boolean isInfinite(World world)
         {
             return isInfinite;
         }
