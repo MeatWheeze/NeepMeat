@@ -15,7 +15,7 @@ import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -79,7 +79,7 @@ public class EnlighteningCategory implements DisplayCategory<EnlighteningDisplay
         public void render(MatrixStack matrices, Rectangle bounds, int mouseX, int mouseY, float delta)
         {
             VertexConsumerProvider verts = MinecraftClient.getInstance().getBufferBuilders().getEffectVertexConsumers();
-            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(NMBlocks.PEDESTAL), ModelTransformationMode.GUI, 255, 1, matrices, verts, null, 0);
+            MinecraftClient.getInstance().getItemRenderer().renderItem(new ItemStack(NMBlocks.PEDESTAL), ModelTransformation.Mode.GUI, 255, 1, matrices, verts, 0);
         }
 
         @Override

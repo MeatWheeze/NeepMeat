@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.AlloySmeltingDisplay;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
 import com.neep.neepmeat.init.NMBlocks;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -15,7 +14,7 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
+
 import java.text.DecimalFormat;
 import java.util.List;
 

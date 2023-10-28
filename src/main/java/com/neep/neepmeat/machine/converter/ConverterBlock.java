@@ -5,18 +5,17 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -52,7 +51,7 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
     }
 
     @Override
@@ -62,7 +61,7 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     }
 
     @Override
-    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
     {
         return true;
     }

@@ -15,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
@@ -100,7 +101,8 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
         }
         else
         {
-            entity.damage(world.getDamageSources().generic(), damageAmount);
+//            entity.damage(world.getDamageSources().generic(), damageAmount);
+            entity.damage(DamageSource.GENERIC, damageAmount);
         }
     }
 

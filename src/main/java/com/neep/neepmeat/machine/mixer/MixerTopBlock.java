@@ -1,8 +1,8 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.IMeatBlock;
-import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemConvertible;

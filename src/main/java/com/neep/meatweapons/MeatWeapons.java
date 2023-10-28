@@ -13,7 +13,7 @@ import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.entity.Entity;
@@ -22,17 +22,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class MeatWeapons implements ModInitializer
 {
     public static final String NAMESPACE = "meatweapons";
 
-    public static final ItemGroup WEAPONS = FabricItemGroup.builder(
-            new Identifier(NeepMeat.NAMESPACE, "weapons"))
-            .icon(() -> new ItemStack(NMItems.SLASHER)).build();
+    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
+            new Identifier(NeepMeat.NAMESPACE, "weapons"), () -> new ItemStack(NMItems.SLASHER));
 
     public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
@@ -44,7 +42,7 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
-        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id),
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                                    builder
                         .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
@@ -53,7 +51,7 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, EntityType<T> type)
     {
-        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
     }
 
     @Override

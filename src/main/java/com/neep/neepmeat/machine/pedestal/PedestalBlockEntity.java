@@ -5,12 +5,12 @@ import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -138,7 +138,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             hasRecipe = true;
 
             getIntegrator().setLookPos(pos);
-            world.scheduleBlockTick(pos, getCachedState().getBlock(), 50);
+            world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
             world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
             spawnBeam((ServerWorld) world, integrator.up(), pos);
             sync();

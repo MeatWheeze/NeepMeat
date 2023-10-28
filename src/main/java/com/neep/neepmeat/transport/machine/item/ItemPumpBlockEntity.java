@@ -3,12 +3,12 @@ package com.neep.neepmeat.transport.machine.item;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -147,7 +147,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             {
                 Transaction nested2 = nested1.openNested();
                 extractable = MeatStorageUtil.findExtractableContent(targetStorage,
-                        (t, itemVariant) -> StorageUtil.simulateInsert(facingStorage, itemVariant, Long.MAX_VALUE, t) > 0, nested2);
+                        (t, itemVariant) -> MeatStorageUtil.simulateInsert(facingStorage, itemVariant, Long.MAX_VALUE, t) > 0, nested2);
                 nested2.abort();
             }
             else
@@ -249,7 +249,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-            return StorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
+            return MeatStorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
         }
         return amount.amount();
     }

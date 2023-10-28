@@ -10,8 +10,7 @@ import net.minecraft.command.argument.BlockArgumentParser;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
+import net.minecraft.util.registry.Registry;
 
 public class SwirlingParticleEffect implements ParticleEffect
 {
@@ -21,7 +20,7 @@ public class SwirlingParticleEffect implements ParticleEffect
         public SwirlingParticleEffect read(ParticleType<SwirlingParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException
         {
             stringReader.expect(' ');
-            BlockState state = (BlockArgumentParser.block(Registries.BLOCK.getReadOnlyWrapper(), stringReader, false)).blockState();
+            BlockState state = (BlockArgumentParser.block(Registry.BLOCK, stringReader, false)).blockState();
             stringReader.expect(' ');
             double radius = stringReader.readDouble();
             stringReader.expect(' ');
@@ -76,7 +75,7 @@ public class SwirlingParticleEffect implements ParticleEffect
     @Override
     public String asString()
     {
-        return Registries.PARTICLE_TYPE.getId(this.getType()) + " " + BlockArgumentParser.stringifyBlockState(this.blockState);
+        return Registry.PARTICLE_TYPE.getId(this.getType()) + " " + BlockArgumentParser.stringifyBlockState(this.blockState);
     }
 
     public BlockState getBlockState()

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.item_network;
 
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.api.ItemNetwork;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;

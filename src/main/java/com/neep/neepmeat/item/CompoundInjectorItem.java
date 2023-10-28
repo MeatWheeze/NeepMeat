@@ -1,19 +1,16 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
-import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -22,11 +19,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -157,7 +152,8 @@ public class CompoundInjectorItem extends BaseItem
                 stack.setDamage(stack.getDamage() + 1);
             }
             // Damage player by one heart.
-            player.damage(player.getDamageSources().magic(), initialDamage);
+//            player.damage(player.getDamageSources().magic(), initialDamage);
+            player.damage(DamageSource.GENERIC, initialDamage);
             setHealsRemaining(stack, healsFor + initialDamage);
         }
     }

@@ -4,14 +4,12 @@ import com.neep.meatweapons.item.IWeakTwoHanded;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.RotationAxis;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -78,7 +76,7 @@ public class HeldItemRendererMixin
             {
                 matrices.push();
                 // Change rotation if main hand is left.
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(player.getMainArm() == Arm.RIGHT ? -55 : 55));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(player.getMainArm() == Arm.RIGHT ? -55 : 55));
                 this.renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, player.getMainArm().getOpposite());
                 matrices.pop();
             }

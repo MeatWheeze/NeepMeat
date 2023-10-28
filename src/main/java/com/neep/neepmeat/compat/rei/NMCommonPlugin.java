@@ -1,7 +1,6 @@
 package com.neep.neepmeat.compat.rei;
 
 import com.neep.neepmeat.compat.rei.display.*;
-import dev.architectury.event.events.common.ExplosionEvent;
 import me.shedaniel.rei.api.common.display.DisplaySerializerRegistry;
 import me.shedaniel.rei.api.common.plugins.REIServerPlugin;
 

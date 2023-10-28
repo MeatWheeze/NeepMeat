@@ -2,7 +2,6 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.init.NMSounds;
@@ -11,7 +10,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -22,23 +20,21 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Environment(value= EnvType.CLIENT)
 public class GuideListPane extends ContentPane implements Drawable, Element, Selectable
@@ -175,15 +171,15 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
     {
         entries.clear();
 
-        // Create a deduplicated set of matching entries.
+        // Create a de-duplicated set of matching entries.
         // GuideNode.GuideNodeImpl::equals() only checks the ID string since there is no reason for multiple entries to share an ID but have different contents.
         Iterator<GuideNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().distinct().filter(
-                a -> a.getText().getContent().toString().toLowerCase().contains(searchString)).iterator();
+                a -> a.getText().toString().toLowerCase().contains(searchString)).iterator();
 
         for (int i = 0; filtered.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)
         {
             GuideNode node = filtered.next();
-            ItemStack icon = new ItemStack(Registries.ITEM.get(node.getIcon()));
+            ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
             entries.add(new EntryWidget(i,
                     screenOffsetX + this.x,
                     screenOffsetY + this.y + (i) * entryHeight,
@@ -210,7 +206,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         for (int i = 0; i < nodes.size(); ++i)
         {
             GuideNode node = nodes.get(i);
-            ItemStack icon = new ItemStack(Registries.ITEM.get(node.getIcon()));
+            ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
             entries.add(new EntryWidget(i + 1,
                     screenOffsetX + this.x,
                     screenOffsetY + this.y + (i + 1) * entryHeight,
@@ -267,7 +263,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         }
 
         @Override
-        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        public void appendNarrations(NarrationMessageBuilder builder)
         {
 
         }
@@ -277,11 +273,11 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         {
             if (!searchMode)
             {
-                textRenderer.draw(matrices, searchMessage, this.getX() + 2, this.getY() + (this.height - 7) / 2f, 0x008800);
+                textRenderer.draw(matrices, searchMessage, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
             }
             else
             {
-                textRenderer.draw(matrices, "/" + searchString, this.getX() + 2, this.getY() + (this.height - 7) / 2f, 0x008800);
+                textRenderer.draw(matrices, "/" + searchString, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
             }
         }
     }
@@ -319,7 +315,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         }
 
         @Override
-        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        public void appendNarrations(NarrationMessageBuilder builder)
         {
 
         }
@@ -331,22 +327,22 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
             if (parent.getAnimationTicks() < (animationTicks <= 32 ? 16 : 0) + entryAnimationStart + index) return;
 
             VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-//            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
+            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
 //            int borderCol = getSelected() == index ? 0xFF00CC00 : 0xFF008800;
             int borderCol = 0xFF008800;
-            drawHorizontalLine(matrices, this.getX(), this.getX() + width, this.getY() + height, borderCol);
-            drawHorizontalLine(matrices, this.getX(), this.getX() + width, this.getY(), borderCol);
-            drawVerticalLine(matrices, this.getX(), this.getY(), this.getY() + height, borderCol);
-            drawVerticalLine(matrices, this.getX() + width, this.getY(), this.getY() + height, borderCol);
-
-            textRenderer.draw(matrices, this.getMessage(), this.getX() + 2, this.getY() + (this.height - 7) / 2f, 0x008800);
+            this.drawHorizontalLine(matrices, this.x, this.x + width, this.y + height, borderCol);
+            this.drawHorizontalLine(matrices, this.x, this.x + width, this.y, borderCol);
+            this.drawVerticalLine(matrices, this.x, this.y, this.y + height, borderCol);
+            this.drawVerticalLine(matrices, this.x + width, this.y, this.y + height, borderCol);
+//            int j = this.active ? 0xFFFFFF : 0xA0A0A0;
+            textRenderer.draw(matrices, this.getMessage(), this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
             if (node.getChildren().size() > 0)
             {
-                textRenderer.draw(matrices, "\u2192", this.getX() + this.width - 9, this.getY() + (this.height - 7) / 2f, 0x008800);
+                textRenderer.draw(matrices, "\u2192", this.x + this.width - 9, this.y + (this.height - 7) / 2f, 0x008800);
             }
             else
             {
-                renderItemIcon(this.getX() + width - 16, this.getY() - 1, itemRenderer, 0, icon, matrices, vertexConsumers, 15, 0);
+                renderItemIcon(this.x + width - 16, this.y - 1, itemRenderer, getZOffset(), icon, matrices, vertexConsumers, 15, 0);
             }
         }
     }
@@ -390,7 +386,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
 
     public static void renderItem(ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model)
     {
-        ModelTransformationMode renderMode = ModelTransformationMode.GUI;
+        ModelTransformation.Mode renderMode = ModelTransformation.Mode.GUI;
         matrices.push();
         model.getTransformation().getTransformation(renderMode).apply(false, matrices);
         matrices.translate(-0.5, -0.5, -0.5);

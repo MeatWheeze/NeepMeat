@@ -1,6 +1,8 @@
 package com.neep.neepmeat.client.model.block;
 
+import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.meatlib.block.BaseStairsBlock;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
@@ -8,6 +10,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
+import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.JsonUnbakedModel;
@@ -16,12 +19,18 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class SlopeTest implements UnbakedModel, BakedModel, FabricBakedModel
 {
@@ -60,20 +69,14 @@ public class SlopeTest implements UnbakedModel, BakedModel, FabricBakedModel
     }
 
     @Override
-    public void setParents(Function<Identifier, UnbakedModel> modelLoader)
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
     {
-
+        return Arrays.asList(SPRITE_IDS);
     }
-
-//    @Override
-//    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
-//    {
-//        return Arrays.asList(SPRITE_IDS);
-//    }
 
     @Nullable
     @Override
-    public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
+    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
         // Get the sprites
         for(int i = 0; i < 1; ++i) {
@@ -137,7 +140,7 @@ public class SlopeTest implements UnbakedModel, BakedModel, FabricBakedModel
 
         mesh = builder.build();
 
-        JsonUnbakedModel defaultBlockModel = (JsonUnbakedModel) baker.getOrLoadModel(DEFAULT_BLOCK_MODEL);
+        JsonUnbakedModel defaultBlockModel = (JsonUnbakedModel) loader.getOrLoadModel(DEFAULT_BLOCK_MODEL);
         transformation = defaultBlockModel.getTransformations();
 
         return this;
@@ -149,39 +152,39 @@ public class SlopeTest implements UnbakedModel, BakedModel, FabricBakedModel
         return false;
     }
 
-//    @Override
-//    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
-//    {
-//        Direction direction = state.get(BaseStairsBlock.FACING);
-////        context.pushTransform(Vec3f.POSITIVE_Y.getDegreesQuaternion(direction.asRotation()));
-//        context.pushTransform((quad -> {
-//            for (int i = 0; i < 4; ++i)
-//            {
-//                Vec3f vert1 = quad.copyPos(i, null);
-//                Vec3f vert = quad.copyPos(i, null);
-//                vert.add(-0.5f, 0, -0.5f);
-//                vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(-direction.asRotation() - 180f));
-////                vert1.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(0f));
-//                vert.add(0.5f, 0, 0.5f);
-//                quad.pos(i, vert);
-//            }
-//            return true;
-//        }));
-//        context.meshConsumer().accept(mesh);
-//        context.popTransform();
-//    }
-
-//    @Override
-//    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
-//    {
-//        for (Direction direction : Direction.values())
-//        {
-//            context.meshConsumer().accept(SIDES[direction.getId()]);
-//        }
-//    }
+    @Override
+    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
+    {
+        Direction direction = state.get(BaseStairsBlock.FACING);
+//        context.pushTransform(Vec3f.POSITIVE_Y.getDegreesQuaternion(direction.asRotation()));
+        context.pushTransform((quad -> {
+            for (int i = 0; i < 4; ++i)
+            {
+                Vec3f vert1 = quad.copyPos(i, null);
+                Vec3f vert = quad.copyPos(i, null);
+                vert.add(-0.5f, 0, -0.5f);
+                vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(-direction.asRotation() - 180f));
+//                vert1.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(0f));
+                vert.add(0.5f, 0, 0.5f);
+                quad.pos(i, vert);
+            }
+            return true;
+        }));
+        context.meshConsumer().accept(mesh);
+        context.popTransform();
+    }
 
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, net.minecraft.util.math.random.Random random)
+    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
+    {
+        for (Direction direction : Direction.values())
+        {
+            context.meshConsumer().accept(SIDES[direction.getId()]);
+        }
+    }
+
+    @Override
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random)
     {
         return Collections.emptyList();
     }

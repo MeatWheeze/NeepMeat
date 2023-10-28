@@ -75,9 +75,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class NMBlockEntities
 {
@@ -161,7 +160,7 @@ public class NMBlockEntities
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
-        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                                  FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 

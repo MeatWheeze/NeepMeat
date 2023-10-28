@@ -5,10 +5,11 @@ import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
-import net.minecraft.registry.SimpleDefaultedRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.DefaultedRegistry;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,7 @@ public class EnlightenmentEventManager
     private final Random random;
     protected final List<EnlightenmentEvent> tickingEvents = new ArrayList<>(16);
 
-    public static SimpleDefaultedRegistry<EnlightenmentEvent.Factory> EVENTS = FabricRegistryBuilder.createDefaulted(EnlightenmentEvent.Factory.class,
+    public static DefaultedRegistry<EnlightenmentEvent.Factory> EVENTS = FabricRegistryBuilder.createDefaulted(EnlightenmentEvent.Factory.class,
             new Identifier(NeepMeat.NAMESPACE, "enlightenment_event"),
             new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
 

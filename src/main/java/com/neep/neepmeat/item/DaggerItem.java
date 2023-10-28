@@ -112,7 +112,8 @@ public class DaggerItem extends BaseSwordItem
             if (optional.isPresent())
             {
                 LivingEntity entity = optional.get();
-                entity.damage(user.getDamageSources().playerAttack(player), 3);
+                entity.damage(DamageSource.player(player), 3);
+//                entity.damage(user.getDamageSources().playerAttack(player), 3);
                 if (entity.getHealth() <= MAX_HEALTH)
                 {
                     spawnSpecialDrop(world, entity.getPos(), entity);

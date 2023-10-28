@@ -1,7 +1,6 @@
 package com.neep.meatweapons;
 
 import com.neep.meatlib.item.BaseCraftingItem;
-import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;

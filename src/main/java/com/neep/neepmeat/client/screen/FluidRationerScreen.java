@@ -64,21 +64,20 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
         int startY = 20;
         int w = 40;
         int h = 20;
-
-        addDrawableChild(ButtonWidget.builder(BOTTLE, button ->
+        this.addDrawableChild(new ButtonWidget(x + 5, y + startY, w, h, BOTTLE, button ->
         {
             textField.setText(String.valueOf(FluidConstants.BOTTLE));
-        }).position(x + 5, y + startY).size(w, h).build());
+        }));
 
-        this.addDrawableChild(ButtonWidget.builder(BUCKET, button ->
+        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + (h + 1) , w, h, BUCKET, button ->
         {
             textField.setText(String.valueOf(FluidConstants.BUCKET));
-        }).dimensions(x + 5, y + startY + (h + 1), w, h).build());
+        }));
 
-        this.addDrawableChild(ButtonWidget.builder( INGOT, button ->
+        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + 2 * (h + 1), w, h, INGOT, button ->
         {
             textField.setText(String.valueOf(FluidConstants.INGOT));
-        }).dimensions(x + 5, y + startY + 2 * (h + 1), w, h).build());
+        }));
 
         this.titleX = 29;
     }
@@ -94,7 +93,7 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;

@@ -1,8 +1,8 @@
 package com.neep.neepmeat.transport.block.item_transport.entity;
 
-import com.neep.neepmeat.transport.block.item_transport.ItemDuctBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.block.item_transport.ItemDuctBlock;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

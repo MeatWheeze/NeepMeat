@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

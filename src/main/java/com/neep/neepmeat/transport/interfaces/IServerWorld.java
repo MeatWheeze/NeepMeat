@@ -1,9 +1,9 @@
 package com.neep.neepmeat.transport.interfaces;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
-import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
 
 public interface IServerWorld
 {

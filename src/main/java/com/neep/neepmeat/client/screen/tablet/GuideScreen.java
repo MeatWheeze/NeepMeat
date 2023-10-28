@@ -17,10 +17,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import org.joml.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Deque;
@@ -192,7 +191,7 @@ public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IG
 
     protected void drawLogo(MatrixStack matrices, float delta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
         int logoHeight = 24;
@@ -232,18 +231,15 @@ public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IG
 
     private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y)
     {
-        // TODO: I dont't know what's going on here. This was copied and mutilated from Minecraft.
         TooltipComponent tooltipComponent2;
         int s;
         int k;
-        if (components.isEmpty())
-        {
+        if (components.isEmpty()) {
             return;
         }
         int i = 0;
         int j = components.size() == 1 ? -2 : 0;
-        for (TooltipComponent tooltipComponent : components)
-        {
+        for (TooltipComponent tooltipComponent : components) {
             k = tooltipComponent.getWidth(this.textRenderer);
             if (k > i) {
                 i = k;
@@ -254,24 +250,22 @@ public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IG
         int startY = y - 12;
         k = i;
         int m = j;
-        if (l + i > this.width)
-        {
+        if (l + i > this.width) {
             l -= 28 + i;
         }
-        if (startY + m + 6 > this.height)
-        {
+        if (startY + m + 6 > this.height) {
             startY = this.height - m - 6;
         }
         matrices.push();
-//        int n = -267386864;
-//        int o = 0x505000FF;
-//        int p = 1344798847;
-//        int q = 400;
-//        float f = this.itemRenderer.z;
-//        this.itemRenderer.zOffset = 400.0f;
+        int n = -267386864;
+        int o = 0x505000FF;
+        int p = 1344798847;
+        int q = 400;
+        float f = this.itemRenderer.zOffset;
+        this.itemRenderer.zOffset = 400.0f;
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
 
@@ -296,18 +290,16 @@ public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IG
         Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY + m + 2, l + k + 3, startY + m + 3, 400, borderCol, borderCol);
 
         RenderSystem.enableDepthTest();
-//        RenderSystem.disableTexture();
+        RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
-        var built = bufferBuilder.end();
-        BufferRenderer.draw(built);
+        BufferRenderer.drawWithShader(bufferBuilder.end());
         RenderSystem.disableBlend();
-//        RenderSystem.enableTexture();
+        RenderSystem.enableTexture();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         matrices.translate(0.0, 0.0, 400.0);
         int r = startY;
-        for (s = 0; s < components.size(); ++s)
-        {
+        for (s = 0; s < components.size(); ++s) {
             tooltipComponent2 = components.get(s);
             tooltipComponent2.drawText(this.textRenderer, l, r, matrix4f, immediate);
             r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
@@ -315,12 +307,11 @@ public class GuideScreen extends HandledScreen<GuideScreenHandler> implements IG
         immediate.draw();
         matrices.pop();
         r = startY;
-        for (s = 0; s < components.size(); ++s)
-        {
+        for (s = 0; s < components.size(); ++s) {
             tooltipComponent2 = components.get(s);
-            tooltipComponent2.drawItems(this.textRenderer, l, r, matrices, this.itemRenderer);
+            tooltipComponent2.drawItems(this.textRenderer, l, r, matrices, this.itemRenderer, 400);
             r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
         }
-//        this.itemRenderer.zOffset = f;
+        this.itemRenderer.zOffset = f;
     }
 }

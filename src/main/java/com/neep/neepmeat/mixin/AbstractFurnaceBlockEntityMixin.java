@@ -8,14 +8,11 @@ import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -87,7 +84,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         {
             return false;
         }
-        ItemStack itemStack = recipe.getOutput(world.getRegistryManager());
+        ItemStack itemStack = recipe.getOutput();
         if (itemStack.isEmpty())
         {
             return false;
@@ -97,7 +94,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         {
             return true;
         }
-        if (!itemStack2.isItemEqual(itemStack))
+        if (!itemStack2.isItemEqualIgnoreDamage(itemStack))
         {
             return false;
         }

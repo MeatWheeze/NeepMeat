@@ -1,8 +1,6 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.item.AnimatedSword;
-import com.neep.neepmeat.item.AttackTypes;
-import com.neep.neepmeat.item.SlasherItem;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
@@ -13,7 +11,6 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import software.bernie.geckolib3.util.GeckoLibUtil;
 
 @Mixin(HeldItemRenderer.class)
 public class HeldItemRendererMixin

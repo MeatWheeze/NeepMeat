@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.block.item_transport.entity;
 
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.meatlib.inventory.ImplementedInventory;
-import com.neep.neepmeat.transport.machine.item.RouterInventory;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.RouterScreenHandler;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
+import com.neep.neepmeat.transport.machine.item.RouterInventory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -15,7 +15,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;

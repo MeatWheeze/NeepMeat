@@ -2,7 +2,6 @@ package com.neep.neepmeat.machine.death_blades;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;

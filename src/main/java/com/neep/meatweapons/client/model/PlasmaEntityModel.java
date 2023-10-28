@@ -1,7 +1,6 @@
 package com.neep.meatweapons.client.model;
 
 import com.neep.meatweapons.entity.FusionBlastEntity;
-import com.neep.meatweapons.entity.FusionBlastEntity;
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;

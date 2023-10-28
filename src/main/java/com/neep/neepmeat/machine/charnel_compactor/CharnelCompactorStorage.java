@@ -1,8 +1,8 @@
 package com.neep.neepmeat.machine.charnel_compactor;
 
 import com.google.common.collect.MapMaker;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
@@ -140,7 +140,7 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
 
         if (newLevel == 7)
         {
-            location.world.scheduleBlockTick(location.pos, state.getBlock(), 20);
+            location.world.createAndScheduleBlockTick(location.pos, state.getBlock(), 20);
         }
 
     }

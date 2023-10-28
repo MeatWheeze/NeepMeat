@@ -4,7 +4,6 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.gen.AccessorGeneratorFieldGetter;
 
 import java.util.function.Consumer;
 

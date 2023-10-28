@@ -31,9 +31,9 @@ public class HUDOverlays
         this.client = client;
     }
 
-    public static void renderVignettes(MatrixStack stack, float tickDelta)
+    public static void renderVignettes(float tickDelta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
         MinecraftClient client = MinecraftClient.getInstance();
         scaledWidth = client.getWindow().getScaledWidth();
         scaledHeight = client.getWindow().getScaledHeight();
@@ -71,13 +71,13 @@ public class HUDOverlays
             }
         }
 
-        pylonVignette(stack, tickDelta);
+        pylonVignette(tickDelta);
     }
 
     protected static int pylonVignetteState = 0;
     protected static float pylonVignetteEnvelope = 0;
 
-    protected static void pylonVignette(MatrixStack matrices, float tickDelta)
+    protected static void pylonVignette(float tickDelta)
     {
         // LPF
         pylonVignetteEnvelope = MathHelper.lerp(0.04f * MinecraftClient.getInstance().getLastFrameDuration(),
@@ -121,7 +121,7 @@ public class HUDOverlays
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, opacity);
         RenderSystem.setShaderTexture(0, texture);
 
@@ -142,6 +142,7 @@ public class HUDOverlays
 
     public static void init()
     {
-        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> renderVignettes(matrixStack, tickDelta));
+//        HudRenderCallback.EVENT.register((matrixStack, tickDelta) -> renderVignettes(matrixStack, tickDelta));
+        HudRenderCallback.EVENT.register((drawContext, tickDelta) -> renderVignettes(tickDelta));
     }
 }

@@ -1,9 +1,10 @@
 package com.neep.neepmeat.transport.util;
 
+import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
-import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -256,7 +257,7 @@ public class ItemPipeUtil
                     }
                     else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                     {
-                        return StorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
+                        return MeatStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
                     }
                 }
             }

@@ -6,15 +6,14 @@ import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.neepmeat.datagen.NMRecipes;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Waterloggable;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -78,11 +77,11 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
 
         if (state.get(WATERLOGGED))
         {
-            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         if (!world.isClient())
         {
-            world.scheduleBlockTick(pos, this, 1);
+            world.createAndScheduleBlockTick(pos, this, 1);
         }
         return state;
     }
@@ -101,6 +100,6 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
     public void generateRecipe(Consumer<RecipeJsonProvider> exporter)
     {
         MeatRecipeProvider.offerStairsRecipe(exporter, stairs, this);
-        MeatRecipeProvider.offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, slab, this);
+        MeatRecipeProvider.offerSlabRecipe(exporter, slab, this);
     }
 }

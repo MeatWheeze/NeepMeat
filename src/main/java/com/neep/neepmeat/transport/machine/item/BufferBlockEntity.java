@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.meatlib.inventory.ImplementedInventory;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -17,7 +17,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;

@@ -3,8 +3,8 @@ package com.neep.neepmeat.datagen.tag;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.command.CommandRegistryWrapper;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Pair;
 
 import java.util.ArrayList;
@@ -15,9 +15,9 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider
 {
     protected static List<Pair<TagKey<Block>, Block>> TAGS = new ArrayList<>();
 
-    public BlockTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registriesFuture)
+    public BlockTagProvider(FabricDataOutput output, CompletableFuture<CommandRegistryWrapper.WrapperLookup> RegistryFuture)
     {
-        super(output, registriesFuture);
+        super(output, RegistryFuture);
     }
 
 //    public BlockTagProvider(FabricDataOutput dataGenerator)
@@ -36,7 +36,7 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider
     }
 
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup arg)
+    protected void configure(CommandRegistryWrapper.WrapperLookup arg)
     {
         for (Pair<TagKey<Block>, Block> pair : TAGS)
         {

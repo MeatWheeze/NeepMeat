@@ -1,25 +1,13 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
-import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.interfaces.ILivingEntity;
 import com.neep.neepmeat.item.EssentialSaltesItem;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
 import net.minecraft.block.BlockState;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.DamageUtil;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -52,7 +40,8 @@ public abstract class LivingEntityMixin implements ILivingEntity
     @Inject(method = "onDeath", at = @At(value = "HEAD"))
     public void onDeath(DamageSource source, CallbackInfo ci)
     {
-        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
+//        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
+        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isFire())
         {
             EssentialSaltesItem.onEntityDeath((LivingEntity) (Object) this);
         }

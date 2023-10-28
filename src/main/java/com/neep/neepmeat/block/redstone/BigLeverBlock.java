@@ -1,11 +1,11 @@
 package com.neep.neepmeat.block.redstone;
 
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;

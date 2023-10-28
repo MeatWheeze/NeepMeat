@@ -1,14 +1,14 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.network.MWNetwork;
+import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.packet.Packet;
+import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 

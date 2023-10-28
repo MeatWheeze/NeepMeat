@@ -1,28 +1,21 @@
 package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.block.IMeatBlock;
-import com.neep.meatlib.item.BaseBlockItem;
-import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.block.*;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.CandleCakeBlock;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.stat.Stats;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.event.GameEvent;
 
 public class CandleCronenCakeBlock extends CandleCakeBlock implements IMeatBlock
 {

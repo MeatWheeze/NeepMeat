@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe.Serializer.getPattern;
 import static com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe.Serializer.createPatternMatrix;
+import static com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe.Serializer.getPattern;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TransformingToolRecipe extends GeneralSurgeryRecipe

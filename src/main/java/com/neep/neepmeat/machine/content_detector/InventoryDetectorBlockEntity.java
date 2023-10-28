@@ -1,8 +1,8 @@
 package com.neep.neepmeat.machine.content_detector;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.machine.item.InventoryDetectorInventory;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
+import com.neep.neepmeat.transport.machine.item.InventoryDetectorInventory;
 import com.neep.neepmeat.util.FilterUtils;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -23,7 +23,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;

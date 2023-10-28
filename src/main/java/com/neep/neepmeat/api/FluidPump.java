@@ -5,7 +5,6 @@ import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import org.lwjgl.system.CallbackI;
 
 import java.util.function.Supplier;
 

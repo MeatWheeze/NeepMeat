@@ -5,8 +5,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 
-import java.io.InputStream;
-
 public class MeatRecipeReloadListener implements SimpleSynchronousResourceReloadListener
 {
     private static final MeatRecipeReloadListener INSTANCE = new MeatRecipeReloadListener();

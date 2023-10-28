@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.item.AnimatedSword;
-import com.neep.neepmeat.item.SlasherItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -9,7 +8,6 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -18,7 +16,6 @@ import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
-import java.awt.*;
 import java.util.Collections;
 
 @Environment(value = EnvType.CLIENT)
@@ -30,7 +27,7 @@ public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
     }
 
     @Override
-    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrixStackIn,
+    public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStackIn,
                        VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         this.render((T) itemStack.getItem(), matrixStackIn, bufferIn, combinedLightIn, itemStack, mode);
@@ -42,7 +39,7 @@ public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
     }
 
     public void render(T animatable, MatrixStack stack, VertexConsumerProvider bufferIn, int packedLightIn,
-                       ItemStack itemStack, ModelTransformationMode mode)
+                       ItemStack itemStack, ModelTransformation.Mode mode)
     {
         this.currentItemStack = itemStack;
         AnimationEvent<AnimatedSword> itemEvent = new AnimationEvent<>(animatable, 0, 0,

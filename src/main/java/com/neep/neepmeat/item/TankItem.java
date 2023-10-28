@@ -1,7 +1,6 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -13,10 +12,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.world.World;
 
-import javax.tools.Tool;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")

@@ -1,8 +1,6 @@
 package com.neep.meatlib.block;
 
-import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.AbstractGlassBlock;
 import net.minecraft.item.BlockItem;
 

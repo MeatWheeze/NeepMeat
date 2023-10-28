@@ -31,7 +31,6 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -116,7 +115,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         {
             fakePlayer.openHandledScreen(factory);
             ScreenHandler handler = fakePlayer.currentScreenHandler;
-            handler.getSlot(1).setStackNoCallbacks(Items.STONE.getDefaultStack());
+            handler.getSlot(1).setStack(Items.STONE.getDefaultStack());
         }
         fakePlayer.remove(Entity.RemovalReason.DISCARDED);
     }
@@ -164,7 +163,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                 }
 
                 ItemStack filterStack = storage.getInventory().getStack(i);
-                if (!(filterStack.isEmpty() || filterStack.isItemEqual(stack))) return false;
+                if (!(filterStack.isEmpty() || filterStack.isItemEqualIgnoreDamage(stack))) return false;
 
                 try (Transaction transaction = Transaction.openOuter())
                 {

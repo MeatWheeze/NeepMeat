@@ -16,6 +16,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
@@ -31,9 +32,9 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     protected static final Text RATE = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.rate");
     protected static final Text UNIT = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.unit");
     protected static final Text DROPLET_MODE = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.droplet");
-    protected static final Text DROPLET_MODE_INFO = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.droplet_info").formatted(Formatting.GRAY);
+    protected static final MutableText DROPLET_MODE_INFO = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.droplet_info").formatted(Formatting.GRAY);
     protected static final Text MB_MODE = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.mb");
-    protected static final Text MB_MODE_INFO = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.mb_info").formatted(Formatting.GRAY);
+    protected static final MutableText MB_MODE_INFO = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.mb_info").formatted(Formatting.GRAY);
 
     protected TextField textField;
 
@@ -62,12 +63,12 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
 
         textField = new TextField(this.textRenderer, textFieldX, buttonY, textFieldWidth, buttonHeight, Text.of(""))
         {
-//            @Override
-//            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
-//            {
-//                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
-//                super.renderTooltip(matrices, mouseX, mouseY);
-//            }
+            @Override
+            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+            {
+                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
+                super.renderTooltip(matrices, mouseX, mouseY);
+            }
         };
         textField.setText(Integer.toString(handler.getProperty(LimiterValveScreenHandler.PROP_MAX_AMOUNT)));
 
@@ -78,27 +79,29 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         });
         this.addDrawableChild(textField);
 
-//        this.addDrawableChild(new ButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {})
-        this.addDrawableChild(ButtonWidget.builder(getButtonText(), button ->
+        this.addDrawableChild(new ButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {})
         {
-//            super.onPress();
-            int oldMode = handler.getProperty(PROP_MB_MODE);
-            int newMode = oldMode == 0 ? 1 : 0;
-            handler.setProperty(PROP_MB_MODE, newMode);
-            updateText(oldMode, newMode);
-            button.setMessage(getButtonText());
+            @Override
+            public void onPress()
+            {
+                super.onPress();
+                int oldMode = handler.getProperty(PROP_MB_MODE);
+                int newMode = oldMode == 0 ? 1 : 0;
+                handler.setProperty(PROP_MB_MODE, newMode);
+                updateText(oldMode, newMode);
+                setMessage(getButtonText());
 
-            // Update server
-            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(PROP_MB_MODE, newMode));
-        }).dimensions(buttonX, buttonY, buttonWidth, buttonHeight).build());
+                // Update server
+                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(PROP_MB_MODE, newMode));
+            }
 
-//            @Override
-//            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
-//            {
-//                LimiterValveScreen.this.renderTooltip(matrices, getButtonTooltip(), mouseX, mouseY);
-//                super.renderTooltip(matrices, mouseX, mouseY);
-//            }
-//        });
+            @Override
+            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+            {
+                LimiterValveScreen.this.renderTooltip(matrices, getButtonTooltip(), mouseX, mouseY);
+                super.renderTooltip(matrices, mouseX, mouseY);
+            }
+        });
     }
 
     protected Text getButtonText()
@@ -138,7 +141,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;

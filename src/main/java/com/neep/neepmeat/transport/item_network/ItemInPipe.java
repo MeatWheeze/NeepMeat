@@ -8,12 +8,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtByteArray;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")

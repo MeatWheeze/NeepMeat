@@ -21,11 +21,13 @@ import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
-import org.joml.Vector3f;
+
 
 import java.util.BitSet;
 import java.util.List;
@@ -82,14 +84,14 @@ public class BERenderUtils
         }
     }
 
-    public static Direction nearestDirection(Vector3f vec)
+    public static Direction nearestDirection(Vec3f vec)
     {
         Direction closest = Direction.NORTH;
         float closestDist = 100;
         for (Direction direction : Direction.values())
         {
-            Vector3f vec1 = closest.getUnitVector();
-            vec1.sub(vec);
+            Vec3f vec1 = closest.getUnitVector();
+            vec1.subtract(vec);
             float len = length(vec1);
             if (len < closestDist)
             {
@@ -100,11 +102,11 @@ public class BERenderUtils
         return Direction.UP;
     }
 
-    private static float length(Vector3f vec)
+    private static float length(Vec3f vec)
     {
-        float u = vec.x;
-        float v = vec.y;
-        float w = vec.z;
+        float u = vec.getX();
+        float v = vec.getY();
+        float w = vec.getZ();
         return (float) Math.sqrt(u * u + v * v + w * w);
     }
 
@@ -119,12 +121,12 @@ public class BERenderUtils
         {
             case SOUTH:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
                 break;
             }
             case WEST:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
                 break;
             }
             case NORTH:
@@ -133,17 +135,17 @@ public class BERenderUtils
             }
             case EAST:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
                 break;
             }
             case DOWN:
             {
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
                 break;
             }
             case UP:
             {
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
                 break;
             }
         }
@@ -158,12 +160,12 @@ public class BERenderUtils
         {
             case NORTH:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
                 break;
             }
             case EAST:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
                 break;
             }
             case SOUTH:
@@ -172,17 +174,17 @@ public class BERenderUtils
             }
             case WEST:
             {
-                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90));
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
                 break;
             }
             case UP:
             {
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
                 break;
             }
             case DOWN:
             {
-                matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90));
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
                 break;
             }
         }

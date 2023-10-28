@@ -2,13 +2,11 @@ package com.neep.neepmeat.compat.rei.display;
 
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
-import com.neep.neepmeat.recipe.GrindingRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
 import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 

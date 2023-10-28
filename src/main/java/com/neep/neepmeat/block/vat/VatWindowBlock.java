@@ -6,12 +6,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class VatWindowBlock extends VatCasingBlock implements IVatComponent
@@ -33,7 +31,7 @@ public class VatWindowBlock extends VatCasingBlock implements IVatComponent
     }
 
     @Override
-    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos) {
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
         return true;
     }
 

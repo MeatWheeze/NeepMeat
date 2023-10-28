@@ -4,10 +4,8 @@ import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.DecimalFormat;

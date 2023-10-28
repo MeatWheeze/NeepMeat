@@ -3,7 +3,6 @@ package com.neep.neepmeat.api.big_block;
 import blue.endless.jankson.annotation.Nullable;
 import com.neep.meatlib.block.IMeatBlock;
 import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +16,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
-import org.lwjgl.system.CallbackI;
 
 public abstract class BigBlock extends Block implements IMeatBlock
 {

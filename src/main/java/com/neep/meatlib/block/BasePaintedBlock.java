@@ -1,10 +1,9 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.datagen.MeatRecipeProvider;
-import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.BlockRegistry;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;

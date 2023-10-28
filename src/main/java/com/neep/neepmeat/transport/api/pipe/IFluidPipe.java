@@ -15,7 +15,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.*;
 import java.util.function.Predicate;

@@ -8,8 +8,6 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.Objects;
-
 // A minimal implementation of ItemCooldownManager that works for individual stacks
 public class WeaponCooldownAttachment implements PlayerAttachment
 {

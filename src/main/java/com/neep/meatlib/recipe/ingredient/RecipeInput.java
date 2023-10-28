@@ -9,13 +9,12 @@ import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
+import net.minecraft.util.registry.RegistryKey;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
@@ -219,13 +218,13 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         @SuppressWarnings("unchecked")
         public static <T> Registry<T> getRegistry(RegistryKey<? extends Registry<T>> key)
         {
-            if (Registries.ITEM.getKey().equals(key))
+            if (Registry.ITEM.getKey().equals(key))
             {
-                return (Registry<T>) Registries.ITEM;
+                return (Registry<T>) Registry.ITEM;
             }
-            else if (Registries.FLUID.getKey().equals(key))
+            else if (Registry.FLUID.getKey().equals(key))
             {
-                return (Registry<T>) Registries.FLUID;
+                return (Registry<T>) Registry.FLUID;
             }
             throw new NotImplementedException();
         }

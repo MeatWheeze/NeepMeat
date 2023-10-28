@@ -1,8 +1,9 @@
 package com.neep.meatweapons.item;
 
-import org.joml.Vector3f;
+
+import net.minecraft.util.math.Vec3f;
 
 public interface IAimable
 {
-    Vector3f getAimOffset();
+    Vec3f getAimOffset();
 }

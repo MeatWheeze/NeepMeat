@@ -1,8 +1,8 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.transfer.MultiFluidBuffer;
-import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
+import com.neep.neepmeat.block.vat.VatControllerBlock;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -13,12 +13,9 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
-import org.joml.Quaternionf;
-
-import java.util.Iterator;
+import net.minecraft.util.math.Quaternion;
 
 @Environment(value = EnvType.CLIENT)
 public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity>
@@ -52,12 +49,12 @@ public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity
         for (StorageView<ItemVariant> view : be.getItemStorage())
         {
             matrices.push();
-            matrices.multiply(new Quaternionf(0f, (angle * angleOffset * 2) / 20f, 0f, 1f));
+            matrices.multiply(Quaternion.fromEulerXyz(0f, (angle * angleOffset * 2) / 20f, 0f));
             float height = (float) ((Math.sin(angle / 20 + angleOffset) + 0.4) / 2 * fluidHeight) + 0.2f;
             matrices.translate(0, height, offset);
 
             MinecraftClient.getInstance().getItemRenderer()
-                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformationMode.GROUND, 255, overlay, matrices, vertexConsumers, null, 0);
+                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
             angleOffset += Math.PI / 3;
             matrices.pop();
         }

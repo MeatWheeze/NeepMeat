@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;

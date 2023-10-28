@@ -1,6 +1,5 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
-import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;

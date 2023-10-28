@@ -18,10 +18,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
-import org.joml.Vector3f;
+
 
 @Environment(value = EnvType.CLIENT)
 public class ItemPumpRenderer implements BlockEntityRenderer<ItemPumpBlockEntity>
@@ -40,7 +40,7 @@ public class ItemPumpRenderer implements BlockEntityRenderer<ItemPumpBlockEntity
         BlockModelRenderer renderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
 
         Direction facing = be.getCachedState().get(ItemPumpBlock.FACING);
-        Vector3f vec = be.getCachedState().get(ItemPumpBlock.FACING).getUnitVector();
+        Vec3f vec = be.getCachedState().get(ItemPumpBlock.FACING).getUnitVector();
         World world = be.getWorld();
 
         matrices.push();
@@ -50,19 +50,19 @@ public class ItemPumpRenderer implements BlockEntityRenderer<ItemPumpBlockEntity
 
         be.offset = (float) MathHelper.lerp(0.3, be.offset, be.shuttle > 0 ? (float) 0.2 : 0);
 
-        vec.mul((float) be.offset, (float) be.offset, (float) be.offset);
-        matrices.translate(vec.x, vec.y, vec.z);
+        vec.multiplyComponentwise((float) be.offset, (float) be.offset, (float) be.offset);
+        matrices.translate(vec.getX(), vec.getY(), vec.getZ());
 
-        matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation()));
+        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()));
         if (facing == Direction.DOWN)
         {
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(-90));
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(-90));
         }
         else if (facing == Direction.UP)
         {
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90));
-            matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(90));
+            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(90));
         }
 
         matrices.translate(-0.5, -0.5, -0.5);

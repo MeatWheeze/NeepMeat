@@ -2,11 +2,9 @@ package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

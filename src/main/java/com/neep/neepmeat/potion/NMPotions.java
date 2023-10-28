@@ -7,9 +7,8 @@ import com.neep.neepmeat.mixin.BrewingRecipeRegistryAccessor;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.Potions;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class NMPotions
 {
@@ -22,6 +21,6 @@ public class NMPotions
 
     private static Potion register(String namespace, String name, Potion potion)
     {
-        return Registry.register(Registries.POTION, new Identifier(namespace, name), potion);
+        return Registry.register(Registry.POTION, new Identifier(namespace, name), potion);
     }
 }

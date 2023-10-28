@@ -2,8 +2,8 @@ package com.neep.meatweapons.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
-import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
+import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
@@ -16,8 +16,8 @@ import com.neep.meatweapons.particle.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -37,22 +37,22 @@ public class MWClient implements ClientModInitializer
 
     public static void registerEntityModels()
     {
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.BULLET, BulletEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.BULLET, BulletEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_BULLET_LAYER, BulletEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.CANNON_BULLET, CannonBulletEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.CANNON_BULLET, CannonBulletEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_CANNON_BULLET_LAYER, CannonBulletEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.ZAP, ZapEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.ZAP, ZapEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(ZAP_LAYER, CannonBulletEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(FUSION_BLAST_LAYER, PlasmaEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.FUSION_BLAST, PlasmaEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_PLASMA_LAYER, PlasmaEntityModel::getTexturedModelData);
 
-        EntityRendererRegistry.INSTANCE.register(MeatWeapons.EXPLODING_SHELL, ShellEntityRenderer::new);
+        EntityRendererRegistry.register(MeatWeapons.EXPLODING_SHELL, ShellEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_SHELL_LAYER, PlasmaEntityModel::getTexturedModelData);
 
         ProjectileSpawnPacket.Client.registerReceiver();

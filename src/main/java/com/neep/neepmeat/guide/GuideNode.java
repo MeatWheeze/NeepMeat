@@ -3,7 +3,6 @@ package com.neep.neepmeat.guide;
 import com.neep.neepmeat.client.screen.tablet.GuideArticlePane;
 import com.neep.neepmeat.client.screen.tablet.IGuideScreen;
 import com.neep.neepmeat.guide.article.Article;
-import me.shedaniel.autoconfig.annotation.Config;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
