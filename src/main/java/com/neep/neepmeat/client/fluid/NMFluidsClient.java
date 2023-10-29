@@ -9,8 +9,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
+import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
@@ -128,33 +130,33 @@ public class NMFluidsClient
         FluidVariantAttributes.register(NMFluids.STILL_C_MEAT, new MeatAttribtuteHandler());
         FluidVariantAttributes.register(NMFluids.FLOWING_C_MEAT, new MeatAttribtuteHandler());
 
-//        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
-//        {
-//            registry.register(WORK_FLUID);
-//            registry.register(WORK_FLUID_FLOWING);
-//            registry.register(CHARGED_WORK_FLUID);
-//            registry.register(CHARGED_WORK_FLUID_FLOWING);
-//            registry.register(ETHEREAL_FUEL);
-//            registry.register(ETHEREAL_FUEL_FLOWING);
-//            registry.register(ELDRITCH_ENZYMES);
-//            registry.register(ELDRITCH_ENZYMES_FLOWING);
-//            registry.register(DIRTY_ORE_FAT);
-//            registry.register(DIRTY_ORE_FAT_FLOWING);
-//            registry.register(CLEAN_ORE_FAT);
-//            registry.register(CLEAN_ORE_FAT_FLOWING);
-//            registry.register(BLOOD);
-//            registry.register(BLOOD_FLOWING);
-//            registry.register(MEAT);
-//            registry.register(MEAT_FLOWING);
-//            registry.register(TISSUE_SLURRY_STILL);
-//            registry.register(TISSUE_SLURRY_FLOWING);
-//            registry.register(MILK);
-//            registry.register(MILK_FLOWING);
-//            registry.register(FEED);
-//            registry.register(FEED_FLOWING);
-//            registry.register(PINKDRINK);
-//            registry.register(PINKDRINK_FLOWING);
-//        });
+        ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
+        {
+            registry.register(WORK_FLUID);
+            registry.register(WORK_FLUID_FLOWING);
+            registry.register(CHARGED_WORK_FLUID);
+            registry.register(CHARGED_WORK_FLUID_FLOWING);
+            registry.register(ETHEREAL_FUEL);
+            registry.register(ETHEREAL_FUEL_FLOWING);
+            registry.register(ELDRITCH_ENZYMES);
+            registry.register(ELDRITCH_ENZYMES_FLOWING);
+            registry.register(DIRTY_ORE_FAT);
+            registry.register(DIRTY_ORE_FAT_FLOWING);
+            registry.register(CLEAN_ORE_FAT);
+            registry.register(CLEAN_ORE_FAT_FLOWING);
+            registry.register(BLOOD);
+            registry.register(BLOOD_FLOWING);
+            registry.register(MEAT);
+            registry.register(MEAT_FLOWING);
+            registry.register(TISSUE_SLURRY_STILL);
+            registry.register(TISSUE_SLURRY_FLOWING);
+            registry.register(MILK);
+            registry.register(MILK_FLOWING);
+            registry.register(FEED);
+            registry.register(FEED_FLOWING);
+            registry.register(PINKDRINK);
+            registry.register(PINKDRINK_FLOWING);
+        });
 
     }
 }
