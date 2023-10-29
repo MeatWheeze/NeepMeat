@@ -28,9 +28,10 @@ public class CannonBulletEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet createSpawnPacket()
+    public Packet<?> createSpawnPacket()
     {
-        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+//        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+        return super.createSpawnPacket();
     }
 
     @Override
