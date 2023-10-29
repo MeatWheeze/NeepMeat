@@ -1,6 +1,5 @@
 package com.neep.neepmeat.fluid;
 
-import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -65,8 +64,8 @@ public class FluidFactory
     public Item registerItem()
     {
         if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET));
-        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET)).group(NMItemGroups.GENERAL);
+//        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
         return bucketItem;
     }
 

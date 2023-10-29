@@ -4,11 +4,12 @@
   "package": "com.neep.meatlib.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "EnchantmentHelperMixin",
     "EntityMixin",
+    "ItemMixin",
     "ItemStackMixin",
     "PlayerEntityMixin",
-    "ServerEntityManagerMixin",
-    "EnchantmentHelperMixin"
+    "ServerEntityManagerMixin"
   ],
   "client": [
     "ItemRendererMixin",

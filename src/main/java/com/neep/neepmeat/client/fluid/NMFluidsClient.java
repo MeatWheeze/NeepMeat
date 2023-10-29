@@ -2,7 +2,6 @@ package com.neep.neepmeat.client.fluid;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GenericModel;
-import com.neep.neepmeat.client.renderer.MeatSteelArmourRenderer;
 import com.neep.neepmeat.client.renderer.SwordRenderer;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
@@ -13,7 +12,6 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 @Environment(value= EnvType.CLIENT)
@@ -61,13 +59,13 @@ public class NMFluidsClient
                 "animations/cheese_cleaver.animation.json"
         )));
 
-        GeoArmorRenderer.registerArmorRenderer(new MeatSteelArmourRenderer(new GenericModel<>(
-                        NeepMeat.NAMESPACE,
-                        "geo/meat_steel_armour.geo.json",
-                        "textures/entity/armour/meat_steel_armour.png",
-                        "animations/meat_steel_armour.animation.json"
-                )),
-                NMItems.MEAT_STEEL_BOOTS, NMItems.MEAT_STEEL_LEGS, NMItems.MEAT_STEEL_CHESTPLATE);
+//        GeoArmorRenderer.registerArmorRenderer(new MeatSteelArmourRenderer(new GenericModel<>(
+//                        NeepMeat.NAMESPACE,
+//                        "geo/meat_steel_armour.geo.json",
+//                        "textures/entity/armour/meat_steel_armour.png",
+//                        "animations/meat_steel_armour.animation.json"
+//                )),
+//                NMItems.MEAT_STEEL_BOOTS, NMItems.MEAT_STEEL_LEGS, NMItems.MEAT_STEEL_CHESTPLATE);
 
         // Fluid textures
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD, new SimpleFluidRenderHandler(

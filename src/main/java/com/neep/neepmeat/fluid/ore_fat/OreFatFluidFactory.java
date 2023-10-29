@@ -1,6 +1,5 @@
 package com.neep.neepmeat.fluid.ore_fat;
 
-import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.fluid.BaseFluid;
 import com.neep.neepmeat.item.BaseBucketItem;
@@ -18,7 +17,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class OreFatFluidFactory
@@ -65,8 +63,8 @@ public class OreFatFluidFactory
 
     public Item registerItem()
     {
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1));
-        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1)).group(NMItemGroups.GENERAL);
+//        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
 
         return bucketItem;
     }
