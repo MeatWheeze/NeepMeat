@@ -55,6 +55,7 @@ import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
@@ -157,6 +158,7 @@ public class NMBlockEntities
     public static BlockEntityType<? extends SurgeryPlatformBlockEntity> SURGERY_PLATFORM;
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
+    public static BlockEntityType<?> VASCULAR_CONDUIT;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -190,6 +192,8 @@ public class NMBlockEntities
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
         FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
+
+        VASCULAR_CONDUIT = registerBlockEntity("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
 
         // --- Surgery Machine ---
 //        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);

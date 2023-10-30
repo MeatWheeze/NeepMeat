@@ -1,6 +1,7 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
+import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
@@ -21,6 +22,8 @@ public abstract class ServerWorldMixin implements IServerWorld
     @Unique public ItemNetworkImpl neepmeat$itemNetwork = new ItemNetworkImpl((ServerWorld) (Object) this);
     @Unique public EnlightenmentEventManager neepmeat$enlightenmentEventManager = new EnlightenmentEventManager();
     @Unique public PipeNetworkSerialiser neepmeat$networkManager;
+
+    @Unique private BloodNetworkManager neepmeat$bloodNetworkManager = new BloodNetworkManager((ServerWorld) (Object) this);
 
 
     @Override
@@ -52,4 +55,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     {
         return neepmeat$enlightenmentEventManager;
     }
+
+    @Override
+    public BloodNetworkManager getBloodNetworkManager() { return neepmeat$bloodNetworkManager; }
 }

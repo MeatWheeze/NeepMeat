@@ -20,9 +20,9 @@ import com.neep.neepmeat.player.upgrade.*;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
 import com.neep.neepmeat.util.Bezier;
 import com.neep.neepmeat.world.NMFeatures;
 import net.fabricmc.api.ModInitializer;
@@ -100,7 +100,6 @@ public class NeepMeat implements ModInitializer
 			// Fluid transfer things
 			FluidNodeManager.registerEvents();
 			PipeNetworkSerialiser.init();
-			StagedTransactions.init();
 
 			// Guide resources
 			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
@@ -113,7 +112,6 @@ public class NeepMeat implements ModInitializer
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraMouthUpgrade.ID, ExtraMouthUpgrade::new);
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraKneeUpgrade.ID, ExtraKneeUpgrade::new);
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, SkeltalUpgrade.ID, SkeltalUpgrade::new);
-
 		}
 	}
 }

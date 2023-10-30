@@ -51,6 +51,7 @@ import com.neep.neepmeat.machine.surgical_controller.TableControllerBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
+import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidDrainBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
@@ -243,6 +244,7 @@ public class NMBlocks
 
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), FLUID_PIPE_SETTINGS));
+    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block(), FLUID_PIPE_SETTINGS));
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
