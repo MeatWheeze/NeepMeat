@@ -3,8 +3,10 @@ package com.neep.neepmeat.transport.block.energy_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -13,11 +15,16 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+
+import java.sql.SQLSyntaxErrorException;
 
 public class VascularConduitBlock extends AbstractPipeBlock implements BlockEntityProvider, VascularConduit
 {
@@ -36,7 +43,7 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
         {
             return true;
         }
-        return false;
+        else return BloodAcceptor.SIDED.find(world, pos, direction) != null;
     }
 
     @Override
@@ -76,13 +83,45 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
     {
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+
+        Direction dir = Direction.fromVector(sourcePos.subtract(pos));
+
+        if (isConnectedIn(world, pos, state, dir)
+                && VascularConduit.find(world, sourcePos, world.getBlockState(sourcePos)) == null
+                && !sourceBlock.equals(this))
+        {
+            // We are connected in this direction but the update does not originate from another conduit.
+            // This means that an acceptor has just been destroyed or has emitted an update.
+
+            updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
+        }
+
+        var acceptor = BloodAcceptor.SIDED.find(world, sourcePos, dir);
+        if (acceptor != null)
+        {
+            // This is executed before getStateForNeighborUpdate, so the new connection must be made manually,
+            BlockState newState = addConnection(world, pos, state, dir);
+            world.setBlockState(pos, newState);
+
+            updatePosition(world, pos, newState, VascularConduitEntity.UpdateReason.CHANGED);
+        }
+    }
+
+    private BlockState addConnection(World world, BlockPos pos, BlockState state, Direction dir)
+    {
+        var property = DIR_TO_CONNECTION.get(dir);
+        if (state.get(property).canBeChanged())
+        {
+            return state.with(property, PipeConnectionType.SIDE);
+        }
+        return state;
     }
 
     @Override
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
         super.onConnectionUpdate(world, state, newState, pos, entity);
-//        updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
+        updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
     }
 
     @Override
@@ -94,8 +133,23 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
 
         if (!state.isOf(newState.getBlock()))
         {
-//            updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.REMOVED);
+            updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.REMOVED);
         }
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+//        return super.onUse(state, world, pos, player, hand, hit);
+        if (player.getStackInHand(hand).isEmpty())
+        {
+            if (!world.isClient() && world.getBlockEntity(pos) instanceof VascularConduitBlockEntity be)
+            {
+                System.out.println(be.getNetwork());
+            }
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.PASS;
     }
 
     @Nullable

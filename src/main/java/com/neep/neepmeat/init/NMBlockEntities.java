@@ -55,6 +55,8 @@ import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
@@ -230,6 +232,8 @@ public class NMBlockEntities
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
+        BloodAcceptor.SIDED.registerForBlockEntity(MotorBlockEntity::getBloodAcceptor, MOTOR);
+
         STIRLING_ENGINE = registerBlockEntity("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
@@ -277,6 +281,7 @@ public class NMBlockEntities
         TRANSDUCER = registerBlockEntity("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
+        BloodAcceptor.SIDED.registerForBlockEntity(TransducerBlockEntity::getBloodAcceptor, TRANSDUCER);
 
         PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
         ItemStorage.SIDED.registerForBlockEntity(PedestalBlockEntity::getStorage, PEDESTAL);

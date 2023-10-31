@@ -6,7 +6,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.NotNull;
 
 public class VascularConduitBlockEntity extends BlockEntity implements VascularConduitEntity
 {
@@ -18,14 +17,23 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     }
 
     @Override
-    public @NotNull BloodNetwork getNetwork()
+    public BloodNetwork getNetwork()
     {
         return network;
     }
 
     @Override
-    public void setNetwork(@NotNull BloodNetwork network)
+    public void setNetwork(BloodNetwork network)
     {
         this.network = network;
+    }
+
+    @Override
+    public void markRemoved()
+    {
+        if (network != null)
+        {
+            network.remove(pos, this);
+        }
     }
 }
