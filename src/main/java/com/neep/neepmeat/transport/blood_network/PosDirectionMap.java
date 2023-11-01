@@ -1,28 +1,29 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
-import java.util.Collection;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class Long2ObjectMultimap<T>
+public class PosDirectionMap<T>
 {
-    private final Long2ObjectOpenHashMap<Set<T>> map = new Long2ObjectOpenHashMap<>();
+    private final Class<T> clazz;
+    private final Long2ObjectOpenHashMap<T[]> map = new Long2ObjectOpenHashMap<>();
     private List<T> listCache;
     boolean dirty = true;
 
-    public Long2ObjectMultimap()
+    public PosDirectionMap(Class<T> clazz)
     {
-        map.defaultReturnValue(Collections.emptySet());
+        this.clazz = clazz;
     }
 
-    public void fastForEach(Consumer<Long2ObjectMap.Entry<Set<T>>> consumer)
+    public void fastForEach(Consumer<Long2ObjectMap.Entry<T[]>> consumer)
     {
         map.long2ObjectEntrySet().fastForEach(consumer);
     }
@@ -43,9 +44,13 @@ public class Long2ObjectMultimap<T>
         dirty = true;
     }
 
-    public Collection<T> get(long key)
+    public Iterable<T> get(long key)
     {
-        return Collections.unmodifiableSet(map.computeIfAbsent(key, k -> Sets.newHashSet()));
+        var array = map.get(key);
+        if (array == null)
+            return Collections.emptyList();
+
+        return () -> Arrays.stream(array).iterator();
     }
 
     public void clear()
@@ -56,12 +61,12 @@ public class Long2ObjectMultimap<T>
 
     public Stream<T> flatStream()
     {
-        return map.values().stream().flatMap(Set::stream);
+        return map.values().stream().flatMap(Arrays::stream).filter(Objects::nonNull);
     }
 
-    public void put(long key, T value)
+    public void put(long key, int dir, T value)
     {
-        map.computeIfAbsent(key, k -> Sets.newHashSet()).add(value);
+        map.computeIfAbsent(key, k -> (T[]) Array.newInstance(clazz, 6))[dir] = value;
         dirty = true;
     }
 

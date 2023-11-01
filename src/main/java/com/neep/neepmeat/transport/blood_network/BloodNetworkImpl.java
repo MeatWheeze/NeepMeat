@@ -1,14 +1,20 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
+import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.stream.Stream;
 
 public class BloodNetworkImpl implements BloodNetwork
@@ -19,7 +25,8 @@ public class BloodNetworkImpl implements BloodNetwork
 
     protected AcceptorManager acceptors = new AcceptorManager();
 
-    protected Queue<BloodAcceptor> sinkUpdateQueue = Queues.newArrayDeque();
+//    protected Queue<BloodAcceptor> sinkUpdateQueue = Queues.newArrayDeque();
+    protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
 
     protected float output;
     protected boolean removed = false;
@@ -28,24 +35,6 @@ public class BloodNetworkImpl implements BloodNetwork
     {
         this.world = world;
         this.conduits = new BloodNetGraph(world, acceptors);
-    }
-
-
-    public void sort()
-    {
-//        sources.clear();
-//        sinks.clear();
-//        acceptors.stream().forEach(acceptor ->
-//        {
-//            if (acceptor.getMode() == BloodAcceptor.Mode.OUT)
-//            {
-//                sources.add(acceptor);
-//            }
-//            else
-//            {
-//                sinks.add(acceptor);
-//            }
-//        });
     }
 
     protected boolean validate()
@@ -67,6 +56,7 @@ public class BloodNetworkImpl implements BloodNetwork
         conduits.getConduits().values().forEach(c -> c.setNetwork(null));
         acceptors.stream().forEach(a -> a.updateInflux(0));
         acceptors.clear();
+        sinkUpdateQueue.clear();
 
         // Rediscover conduits and acceptors, leaving disconnected branches with null network.
         conduits.rebuild(pos);
@@ -74,7 +64,6 @@ public class BloodNetworkImpl implements BloodNetwork
         if (!validate()) return;
 
         conduits.getConduits().values().forEach(c -> c.setNetwork(this));
-        sort();
     }
 
     @Override
@@ -93,9 +82,12 @@ public class BloodNetworkImpl implements BloodNetwork
         }
 
         float out = internal / acceptors.sinks().asList().size();
-        while (!sinkUpdateQueue.isEmpty())
+
+        var sit = sinkUpdateQueue.iterator();
+        while (sit.hasNext())
         {
-            var sink = sinkUpdateQueue.poll();
+            var sink = sit.next();
+            sit.remove();
 
             sink.updateInflux(out);
         }
@@ -119,7 +111,7 @@ public class BloodNetworkImpl implements BloodNetwork
     @Override
     public void remove(BlockPos pos, VascularConduitEntity part)
     {
-        acceptors.get(pos).forEach(a -> a.updateInflux(0));
+        acceptors.get(pos).forEach(a -> { if (a != null) a.updateInflux(0); } );
         acceptors.remove(pos);
 
         conduits.remove(pos.asLong());
@@ -132,7 +124,7 @@ public class BloodNetworkImpl implements BloodNetwork
     @Override
     public void update(BlockPos pos, VascularConduitEntity part)
     {
-        acceptors.get(pos).forEach(a -> a.updateInflux(0));
+        acceptors.get(pos).forEach(a -> { if (a != null) a.updateInflux(0); } );
 
         acceptors.remove(pos);
         conduits.remove(pos.asLong());
@@ -143,11 +135,11 @@ public class BloodNetworkImpl implements BloodNetwork
         validate();
     }
 
-    @Override
-    public void addAcceptor(long pos, BloodAcceptor acceptor)
-    {
-        acceptors.add(pos, acceptor);
-    }
+//    @Override
+//    public void addAcceptor(long pos, int dir, BloodAcceptor acceptor)
+//    {
+//        acceptors.add(pos, dir, acceptor);
+//    }
 
 
     public void mergeInto(BloodNetwork network)
@@ -181,21 +173,54 @@ public class BloodNetworkImpl implements BloodNetwork
         return removed;
     }
 
-    static class AcceptorManager
+    public NbtCompound toNbt()
     {
-        protected Long2ObjectMultimap<BloodAcceptor> acceptors = new Long2ObjectMultimap<>();
-        protected Long2ObjectMultimap<BloodAcceptor> sources = new Long2ObjectMultimap<>();
-        protected Long2ObjectMultimap<BloodAcceptor> sinks = new Long2ObjectMultimap<>();
+        NbtCompound root = new NbtCompound();
+
+        root.put("conduits", conduits.toNbt());
+
+        return root;
+    }
+
+//    static class AcceptorReference
+//    {
+//        private @Nullable BloodAcceptor acceptor;
+//
+//        public @Nullable BloodAcceptor get()
+//        {
+//            return acceptor;
+//        }
+//    }
+
+    class AcceptorManager
+    {
+        protected PosDirectionMap<BloodAcceptor> acceptors = new PosDirectionMap<>(BloodAcceptor.class);
+        protected PosDirectionMap<BloodAcceptor> sources = new PosDirectionMap<>(BloodAcceptor.class);
+        protected PosDirectionMap<BloodAcceptor> sinks = new PosDirectionMap<>(BloodAcceptor.class);
         public boolean sort = false;
 
-        public Collection<BloodAcceptor> get(BlockPos pos)
+
+        public void discover(World world, BlockPos pos, BlockState state, VascularConduit conduit)
         {
-            var set = acceptors.get(pos.asLong());
+            BlockPos.Mutable mutable = pos.mutableCopy();
+            for (Direction direction : Direction.values())
+            {
+                if (!conduit.isConnectedIn(world, pos, state, direction)) continue;
 
-            if (set == null)
-                return Collections.emptySet();
+                mutable.set(pos, direction);
 
-            return set;
+                BloodAcceptor acceptor = BloodAcceptor.SIDED.find(world, mutable, direction.getOpposite());
+                if (acceptor != null)
+                {
+                    add(pos.asLong(), direction.getId(), acceptor);
+                    sinkUpdateQueue.add(acceptor);
+                }
+            }
+        }
+
+        public Iterable<BloodAcceptor> get(BlockPos pos)
+        {
+            return acceptors.get(pos.asLong());
         }
 
         public Stream<BloodAcceptor> stream()
@@ -207,23 +232,26 @@ public class BloodNetworkImpl implements BloodNetwork
         {
             acceptors.fastForEach(entry ->
             {
-                // Create an entry in the other map if not present and merge acceptor sets
-                other.acceptors.get(entry.getLongKey()).addAll(entry.getValue());
+                for (int dir = 0; dir < 6; ++dir)
+                {
+                    var a = entry.getValue();
+                    other.acceptors.put(entry.getLongKey(), dir, a[dir]);
+                }
             });
             clear();
             other.sort = true;
         }
 
-        public void add(long pos, BloodAcceptor acceptor)
+        public void add(long pos, int dir, BloodAcceptor acceptor)
         {
-            acceptors.put(pos, acceptor);
+            acceptors.put(pos, dir, acceptor);
             if (acceptor.getMode().isOut())
             {
-                sources.put(pos, acceptor);
+                sources.put(pos, dir, acceptor);
             }
             else
             {
-                sinks.put(pos, acceptor);
+                sinks.put(pos, dir, acceptor);
             }
         }
 
@@ -234,36 +262,36 @@ public class BloodNetworkImpl implements BloodNetwork
 //            acceptors.stream().forEach(acceptor ->
             acceptors.fastForEach(entry ->
             {
-                entry.getValue().forEach(acceptor ->
+                for (int dir = 0; dir < 6; ++dir)
                 {
+                    var acceptor = entry.getValue()[dir];
+                    if (acceptor == null) continue;
+
                     if (acceptor.getMode().isOut())
                     {
-                        sources.put(entry.getLongKey(), acceptor);
+                        sources.put(entry.getLongKey(), dir, acceptor);
                     }
                     else
                     {
-                        sinks.put(entry.getLongKey(), acceptor);
+                        sinks.put(entry.getLongKey(), dir, acceptor);
                     }
-                });
-
+                }
             });
-//            sinkUpdateQueue.addAll(sinks); // Anything could have just happened, so everything nees updating.
             sort = false;
         }
 
         public void remove(BlockPos pos)
         {
-//            acceptors.get(pos.asLong()).forEach(acceptor ->
-//            {
-//                sources.remove(acceptor);
-//                sinks.remove(acceptor);
-//            });
-
             long lpos = pos.asLong();
 
             acceptors.remove(lpos);
             sources.remove(lpos);
             sinks.remove(lpos);
+
+//            for (var sink : sinks.get(lpos))
+//            {
+//
+//            }
         }
 
         public void clear()
@@ -278,9 +306,23 @@ public class BloodNetworkImpl implements BloodNetwork
             return sources.flatStream();
         }
 
-        public Long2ObjectMultimap<BloodAcceptor> sinks()
+        public PosDirectionMap<BloodAcceptor> sinks()
         {
             return sinks;
+        }
+
+        public NbtCompound toNbt()
+        {
+            NbtCompound root = new NbtCompound();
+
+//            var list = new NbtList();
+
+            acceptors.fastForEach(entry ->
+            {
+//                list.add()
+            });
+
+            return root;
         }
     }
 }
