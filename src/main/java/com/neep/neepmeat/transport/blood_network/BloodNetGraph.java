@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.nbt.NbtLong;
 import net.minecraft.util.math.BlockPos;
@@ -119,5 +120,29 @@ public class BloodNetGraph
         root.put("conduits", list);
 
         return root;
+    }
+
+    public void readNbt(NbtCompound nbt)
+    {
+        NbtList list = nbt.getList("conduits", NbtElement.LONG_TYPE);
+
+        for (NbtElement entry : list)
+        {
+            if (entry instanceof NbtLong l)
+            {
+                long lpos = l.longValue();
+                BlockPos pos = BlockPos.fromLong(lpos);
+                BlockState state = world.getBlockState(pos);
+
+//                VascularConduit conduit = VascularConduit.find(world, pos, world.getBlockState(pos));
+//                if (conduit == null) continue;
+//
+//                VascularConduitEntity entity = conduit.getEntity(world, pos, state);
+                var entity = VascularConduitEntity.find(world, pos);
+                if (entity == null) continue;
+
+                conduits.put(lpos, entity);
+            }
+        }
     }
 }
