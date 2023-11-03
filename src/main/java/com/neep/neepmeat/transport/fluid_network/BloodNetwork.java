@@ -1,13 +1,12 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
-import com.neep.neepmeat.transport.blood_network.BloodNetworkImpl;
-import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,7 +18,6 @@ public interface BloodNetwork
     void rebuild(BlockPos pos, VascularConduitEntity.UpdateReason reason);
     void tick();
     void add(BlockPos pos, VascularConduitEntity newPart);
-    void insert(long pos, VascularConduitEntity newPart);
     void remove(BlockPos pos, VascularConduitEntity part);
     void merge(List<BloodNetwork> adjNetworks);
 
@@ -46,4 +44,6 @@ public interface BloodNetwork
     boolean isDirty();
 
     void resetDirty();
+
+    void insert(Collection<VascularConduitEntity> pipes);
 }
