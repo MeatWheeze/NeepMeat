@@ -23,21 +23,35 @@ repositories {
 	maven { url "https://maven.architectury.dev/" }
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://www.jitpack.io' }
+	maven { url 'https://maven.ladysnake.org/releases' }
 }
+
+configurations.configureEach {
+	resolutionStrategy {
+		// Some libraries (cardinal-components) depend on older versions of Fabric. Gradle pulls the older version
+		// and Fabric will detect the duplicate loaders and refuse to launch.
+		force "net.fabricmc:fabric-loader:${project.loader_version}"
+	}
+}
+
 
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
 
-    // To change the versions see the gradle.properties file
+	// Base things
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-//	implementation "com.github.chocohead:fabric-asm:${project.mm_version}"
-
+	// Geckolib
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
+	// Cardinal Components
+	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+	modApi "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cca_version}"
+
+	// REI
 	modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
