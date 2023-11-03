@@ -23,7 +23,7 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_centre"
+        "model": "neepmeat:block/vascular_conduit/pipe_centre"
       }
     },
     {
@@ -35,7 +35,7 @@
           ]
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_centre_ns"
+        "model": "neepmeat:block/vascular_conduit/pipe_centre_ns"
       }
     },
     {
@@ -47,7 +47,8 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_centre_ew"
+        "model": "neepmeat:block/vascular_conduit/pipe_centre_ew",
+        "y": 180
       }
     },
     {
@@ -59,8 +60,8 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_centre_ns",
-        "x": 90
+        "model": "neepmeat:block/vascular_conduit/pipe_centre_ns",
+        "x": -90
       }
     },
 
@@ -69,7 +70,7 @@
         "north": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side"
+        "model": "neepmeat:block/vascular_conduit/pipe_side"
       }
     },
     {
@@ -77,7 +78,7 @@
         "south": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side_alt"
+        "model": "neepmeat:block/vascular_conduit/pipe_side_alt"
       }
     },
     {
@@ -85,7 +86,7 @@
         "east": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side_alt",
+        "model": "neepmeat:block/vascular_conduit/pipe_side_alt",
         "y": 270
       }
     },
@@ -94,7 +95,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side",
+        "model": "neepmeat:block/vascular_conduit/pipe_side",
         "y": 270
       }
     },
@@ -104,7 +105,7 @@
         "west": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side",
+        "model": "neepmeat:block/vascular_conduit/pipe_side",
         "y": 270
       }
     },
@@ -113,7 +114,7 @@
         "up": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side",
+        "model": "neepmeat:block/vascular_conduit/pipe_side",
         "y": 270,
         "x": 270
       }
@@ -123,7 +124,7 @@
         "down": "true"
       },
       "apply": {
-        "model": "neepmeat:block/data_cable/pipe_side_alt",
+        "model": "neepmeat:block/vascular_conduit/pipe_side_alt",
         "y": 270,
         "x": 270
       }

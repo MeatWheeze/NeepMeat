@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"3": "neepmeat:block/data_cable/pipe_side"
+		"3": "neepmeat:block/vascular_conduit/pipe_side"
 	},
 	"elements": [
 		{

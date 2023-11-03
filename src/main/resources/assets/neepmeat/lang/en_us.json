@@ -143,6 +143,7 @@
   "block.neepmeat.dumper.lore_0": "Drops items straight down.",
 
   "block.neepmeat.data_cable": "Data Cable",
+  "block.neepmeat.vascular_conduit": "Vascular Conduit",
 
   "block.neepmeat.pump": "Redstone Pump",
   "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",
