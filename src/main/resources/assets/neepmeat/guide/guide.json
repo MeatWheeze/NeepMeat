@@ -187,9 +187,14 @@
     },
     {"id": "trommel", "contents": [
       {"type": "text", "text": "Trommel\n", "bold": true},
-      {"type": "text", "text": "This trommel lifts impurities from fats and meats as others might remove rocks from water. Mundane contaminants remain within the rotating mesh while the desired products drain away."},
+      {"type": "text", "text": "This trommel lifts impurities from fats and meats as others might remove rocks from water. Mundane contaminants remain within the rotating mesh while the desired products drain away.\n"},
+      {"type": "text", "text": "Dirty Ore Fat can be processed in the Trommel for an approximate 150% yield."},
+      {"type": "text", "text": "Tissue fluid can be separated into Refined Meat with an extra chance of Assorted Biological Solids."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "The Trommel can be used to separate industrial-grade Meat from coarse Tissue Slurry or to roughly purify Ore Fats. \nFluid inputs are inserted into the top of the nearest block and outputs leave through the bottom of the far end. A running motor must be connected for this machine to function."}
+      {"type": "text", "text": "Fluid is inserted into the top of the nearest block and outputs leave through the bottom of the far end."},
+      {"type": "image", "width": 299, "height": 178, "path": "neepmeat:guide/images/trommel.png"},
+      {"type": "text", "text": "A running motor must be connected for this machine to function."},
+      {"type": "image", "width": 322, "height": 237, "path": "neepmeat:guide/images/trommel_image.png"}
     ]
     },
     {"id": "crucible", "contents": [
@@ -225,11 +230,11 @@
       {"type": "text", "text": "Blood can be obtained by killing a living entity with a Sacrificial Scalpel above a Drain. Alternatively, the fruit of the Blood Bubble tree can be pressed into a bucket or blended in a Mixer to obtain fresh blood."}
     ]},
     {"id": "meat", "contents": [
-      {"type": "text", "text": "Meat\n", "bold": true},
-      {"type": "text", "text": "As well as a being a nourishing food, purest Meat is the precursor to Meat Steel."},
+      {"type": "text", "text": "Refined Meat\n", "bold": true},
+      {"type": "text", "text": "As well as a being a nourishing food, Refined Meat is the precursor to Meat Steel."},
       {"type": "text", "text": "\nAcquisition\n", "bold": true},
       {"type": "text", "text": "Crushing any item of impure meat in a Grinder will produce 1-2 meat scraps. Nine of these can be crafted into a Raw Meat Brick."},
-      {"type": "text", "text": "\nMeat in its liquid form comes from purifying Tissue Slurry Trommel. Liquid Meat can be converted into solid bricks using a Hydraulic Press."}
+      {"type": "text", "text": "\nRefined Meat in its liquid form comes from purifying Tissue Slurry in the Trommel. Meat can be converted into solid bricks using a Hydraulic Press."}
     ]},
     {"id": "integrator", "contents": [
       {"type": "text", "text": "Integrator Organism\n", "bold": true},
@@ -347,7 +352,7 @@
       {"type": "text", "text": "To cast off the vestige of nature is to inch towards revelation; to replicate the natural forms of flesh - finding wisdom in their madness - is to step towards Enlightenment.\n"},
       {"type": "text", "text": "Usage\n", "bold": true},
       {"type": "text", "text": [{"text": "The Oviparous Synthesiser creates eggs of a template organism through its "},{"text": "Essential Saltes.","italic": true},{"text": "Right-clicking the machine with the corresponding "},{"text": "Essential Saltes ","italic": true},{"text": "will install or remove the template."}]},
-      {"type": "text", "text": "In order to operate, the machine must be fed Purified Meat and body compound. The amount of meat to produce an egg varies depending on the size of the organism.\n"},
+      {"type": "text", "text": "In order to operate, the machine must be fed Refined Meat and body compound. The amount of meat to produce an egg varies depending on the size of the organism.\n"},
       {"type": "text", "text": "Eggs\n", "bold": true},
       {"type": "text", "text": "Eggs can be moved in standard ways, such as with water streams and pistons. They can also be picked up as items by hitting them. Immersion in blood will trigger eggs to hatch.\n"}
     ]},
