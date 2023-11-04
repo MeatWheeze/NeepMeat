@@ -38,7 +38,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
     protected final FluidPump outPump = FluidPump.of(-0.1f, this::getOutMode, true);
 
     protected AcceptorModes inMode = AcceptorModes.PULL;
-    protected AcceptorModes outMode = AcceptorModes.NONE;
+    protected AcceptorModes outMode = AcceptorModes.EXTRACT_ONLY;
 
     protected State state;
 
@@ -126,7 +126,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
             {
                 state = State.IDLE;
                 inMode = AcceptorModes.PULL;
-                outMode = AcceptorModes.NONE;
+                outMode = AcceptorModes.EXTRACT_ONLY;
             }
         }
     }

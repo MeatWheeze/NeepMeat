@@ -6,6 +6,8 @@ import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -16,6 +18,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -120,6 +123,18 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (player.getStackInHand(hand).isOf(Items.STICK))
+        {
+            if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+            {
+                if (be.getPipeVertex() instanceof BlockPipeVertex vertex)
+                {
+                    System.out.println(vertex.getAmount());
+                    System.out.println(vertex.getVariant());
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 

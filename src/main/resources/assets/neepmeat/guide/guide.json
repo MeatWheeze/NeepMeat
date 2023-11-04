@@ -52,7 +52,8 @@
       {"type": "page", "id": "fluid_pipe", "icon": "neepmeat:fluid_pipe", "text": "Fluid Pipes"},
       {"type": "page", "id": "valves", "icon": "neepmeat:check_valve", "text": "Valves"},
       {"type": "page", "id": "fluid_drain", "icon": "neepmeat:fluid_drain", "text": "Fluid Drain"},
-      {"type": "page", "id": "fluid_interface", "icon": "neepmeat:fluid_interface", "text": "Fluid Interface"}
+      {"type": "page", "id": "fluid_interface", "icon": "neepmeat:fluid_interface", "text": "Fluid Interface"},
+      {"type": "page", "id": "fluid_rationer", "icon": "neepmeat:fluid_rationer", "text": "Fluid Rationer"}
     ]},
     {"type": "menu", "id": "item_transport", "icon": "neepmeat:motor_unit", "text": "Item Transport", "entries": [
       {"type": "page", "id": "item_pipe", "icon": "neepmeat:item_pipe", "text": "Item Pipes"},
@@ -285,6 +286,12 @@
     {"id": "fluid_interface", "contents": [
       {"type": "text", "text": "Fluid Interface\n", "bold": true},
       {"type": "text", "text": "The Fluid Interface acts as a proxy for the fluid storage of the block it is facing. Inserting or extracting fluids from it is equivalent to inserting or extracting directly from the targeted block, making it useful for plumbing in confined spaces."}
+    ]},
+    {"id": "fluid_rationer", "contents": [
+      {"type": "text", "text": "Fluid Rationer\n", "bold": true},
+      {"type": "text", "text": "The Fluid Rationer extracts discrete amounts of fluid from an adjacent tank and ejects it into a connected pipe network. The extracted amount and filter can be specified in the GUI."},
+      {"type": "image", "width": 278, "height": 121, "path":  "neepmeat:guide/images/fluid_rationer_use.png"},
+      {"type": "text", "text": "The machine will wait until all fluid has left its internal buffer before extracting from the tank again. This can be useful for systems that can only process fluids in certain amounts, such as ingot forming."}
     ]},
 
     {"id": "item_pipe", "contents": [
