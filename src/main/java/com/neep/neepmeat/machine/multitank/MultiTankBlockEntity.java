@@ -5,7 +5,7 @@ import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.IHeatable;
+import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.recipe.FluidHeatingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -22,7 +22,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class MultiTankBlockEntity extends SyncableBlockEntity implements IHeatable
+public class MultiTankBlockEntity extends SyncableBlockEntity implements Heatable
 {
     protected MultiFluidBuffer buffer;
     protected float heat;
@@ -92,11 +92,11 @@ public class MultiTankBlockEntity extends SyncableBlockEntity implements IHeatab
         this.increment = heat;
     }
 
-    @Override
-    public float getHeat()
-    {
-        return heat;
-    }
+//    @Override
+//    public float getHeat()
+//    {
+//        return heat;
+//    }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, MultiTankBlockEntity be)
     {
