@@ -12,14 +12,17 @@ import com.neep.neepmeat.recipe.AbstractPressingRecipe;
 import com.neep.neepmeat.recipe.MobSqueezingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -187,8 +190,9 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
 
     public WritableSingleFluidStorage getStorage(Direction direction)
     {
-        Direction facing = getCachedState().get(HydraulicPressBlock.FACING);
-        return direction == null || direction == facing || direction == facing.getOpposite() ? fluidStorage : null;
+//        Direction facing = getCachedState().get(HydraulicPressBlock.FACING);
+//        return direction == null || direction == facing || direction == facing.getOpposite() ? fluidStorage : null;
+        return fluidStorage;
     }
 
     public void loadRecipe()
@@ -258,6 +262,15 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
             load(world);
             getCurrentRecipe().finishRecipe(new MobSqueezeContext(world, pos), world);
         }
+    }
+
+    public static Storage<FluidVariant> getFluidStorageFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, @Nullable Direction direction)
+    {
+        if (world.getBlockEntity(pos.down()) instanceof HydraulicPressBlockEntity press)
+        {
+            return press.fluidStorage;
+        }
+        return null;
     }
 
     public enum Mode

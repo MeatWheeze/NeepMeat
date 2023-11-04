@@ -25,11 +25,11 @@ public class HydraulicPressRenderer implements BlockEntityRenderer<HydraulicPres
     @Override
     public void render(HydraulicPressBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        Direction facing = be.getCachedState().get(HydraulicPressBlock.FACING);
+//        Direction facing = be.getCachedState().get(HydraulicPressBlock.FACING);
         WritableSingleFluidStorage storage = be.getStorage(null);
         float extension = storage.getAmount() / (float) HydraulicPressBlockEntity.EXTEND_AMOUNT;
         be.renderExtension = MathHelper.lerp(0.1f, be.renderExtension, extension);
-        BERenderUtils.rotateFacing(facing, matrices);
+//        BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0, - MAX_DISPLACEMENT * be.renderExtension, 0);
         BERenderUtils.renderModel(NMExtraModels.HYDRAULIC_PRESS_ARM, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
