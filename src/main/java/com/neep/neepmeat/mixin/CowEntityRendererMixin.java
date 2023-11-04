@@ -27,7 +27,8 @@ public class CowEntityRendererMixin
         {
             float height = entity.getHeight();
             float scale = (height - be.renderExtension * HydraulicPressRenderer.MAX_DISPLACEMENT) / height;
-            matrices.scale(1, scale, 1);
+            float scaleH = 1 + (1 - scale) * 0.3f;
+            matrices.scale(scaleH, scale, scaleH);
         }
     }
 }
