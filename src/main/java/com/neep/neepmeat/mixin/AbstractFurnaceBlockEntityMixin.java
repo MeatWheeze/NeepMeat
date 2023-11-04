@@ -7,14 +7,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeManager;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -32,6 +37,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
 
     @Shadow public abstract @Nullable Recipe<?> getLastRecipe();
 
+    @Shadow @Final private RecipeManager.MatchGetter<Inventory, ? extends AbstractCookingRecipe> matchGetter;
     protected float heatMultiplier;
 
     @Override
@@ -65,19 +71,22 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
     @Override
     public boolean isCooking()
     {
-        ItemStack itemStack = inventory.get(1);
+//        ItemStack itemStack = inventory.get(AbstractFurnaceBlockEntity.)
+        ItemStack fuelStack = inventory.get(1);
         World world = ((BlockEntity) (Object) this).getWorld();
         AbstractFurnaceBlockEntity furnace = ((AbstractFurnaceBlockEntity) (Object) this);
-        if (isBurning() || !itemStack.isEmpty() && !inventory.get(0).isEmpty())
+        if (isBurning() || !fuelStack.isEmpty() && !inventory.get(0).isEmpty())
         {
-//            Recipe<?> recipe = world.getRecipeManager().getFirstMatch(recipeType, furnace, world).orElse(null);
-            Recipe<?> recipe = getLastRecipe();
+//            Recipe<?> recipe = world.getRecipeManager().getFirstMatch(recipe, furnace, world).orElse(null);
+//            Recipe<?> recipe = getLastRecipe();
+            Recipe<?> recipe = matchGetter.getFirstMatch(furnace, world).orElse(null);
             int i = furnace.getMaxCountPerStack();
             return isBurning() && canAcceptRecipeOutput(recipe, inventory, i, world);
         }
         return false;
     }
 
+    @Unique
     private static boolean canAcceptRecipeOutput(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count, World world)
     {
         if (slots.get(0).isEmpty() || recipe == null)
