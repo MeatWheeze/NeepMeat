@@ -51,7 +51,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
             boolean powered = world.isReceivingRedstonePower(pos);
             be.setActive(powered);
             be.updateCache();
-            world.updateNeighbors(pos, this);
+//            world.updateNeighbors(pos, this);
         }
     }
 
