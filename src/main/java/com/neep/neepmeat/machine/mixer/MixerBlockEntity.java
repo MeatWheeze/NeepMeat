@@ -27,6 +27,8 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.profiler.DummyRecorder;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
@@ -65,6 +67,24 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
     public Storage<FluidVariant> getFluidStorage(@Nullable Direction direction)
     {
         return getOutputStorage();
+    }
+
+    public static WritableStackStorage getItemStorageFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, @Nullable Direction direction)
+    {
+        if (world.getBlockEntity(pos.down()) instanceof MixerBlockEntity mixer)
+        {
+            return mixer.getItemStorage(Direction.UP);
+        }
+        return null;
+    }
+
+    public static Storage<FluidVariant> getFluidStorageFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, @Nullable Direction direction)
+    {
+        if (world.getBlockEntity(pos.down()) instanceof MixerBlockEntity mixer)
+        {
+            return mixer.getOutputStorage();
+        }
+        return null;
     }
 
     public WritableStackStorage getItemStorage(@Nullable Direction direction)

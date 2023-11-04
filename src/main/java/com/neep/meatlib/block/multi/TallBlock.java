@@ -39,7 +39,7 @@ public abstract class TallBlock extends BaseBlock
     {
         super(registryName, itemSettings, settings);
 //        super(registryName, itemMaxStack, tooltipSupplier, settings);
-        this.structureBlock = getStructure();
+        this.structureBlock = createStructure();
     }
 
     @Override
@@ -53,7 +53,7 @@ public abstract class TallBlock extends BaseBlock
         return structureBlock;
     }
 
-    protected abstract Structure getStructure();
+    protected abstract Structure createStructure();
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
