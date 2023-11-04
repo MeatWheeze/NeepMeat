@@ -10,6 +10,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockRenderView;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -27,6 +29,15 @@ public interface VascularConduit
             return conduit;
 
         return LOOKUP.find(world, pos, null);
+    }
+
+    static boolean isConnected(BlockRenderView blockView, BlockPos pos, BlockState state, Direction direction)
+    {
+        if (state.getBlock() instanceof VascularConduit conduit)
+        {
+            return conduit.isConnectedIn(blockView, pos, state, direction);
+        }
+        return false;
     }
 
     default void updatePosition(World world, BlockPos pos, BlockState state, VascularConduitEntity.UpdateReason reason)
@@ -114,7 +125,7 @@ public interface VascularConduit
         }
     }
 
-    default boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
+    default boolean isConnectedIn(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
         {

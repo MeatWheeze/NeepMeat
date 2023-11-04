@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import com.neep.neepmeat.client.model.block.SlopeTest;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.client.model.VascularConduitModel;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
@@ -76,7 +77,8 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
                 NMBlocks.YELLOW_SCAFFOLD);
 
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_test"), FluidPipeModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_sides"), FluidPipeModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_sides"), VascularConduitModel::new);
     }
 
     public static void putScaffoldModels(Identifier topId, Identifier bottomId, Identifier itemId, Identifier sideTexture, Identifier topTexture, Block block)
