@@ -110,6 +110,7 @@ public class PipeNetworkImpl implements PipeNetwork
         if (isDirty())
         {
             PipeNetwork.storeNetwork(world, this);
+            dirty = false;
         }
 
 //        boolean unloaded = graph.getVertices().long2ObjectEntrySet().stream().anyMatch(e -> e.getValue().getState() == PipeVertex.SaveState.PENDING_LOAD);
