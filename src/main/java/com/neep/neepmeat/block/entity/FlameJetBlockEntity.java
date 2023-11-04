@@ -66,7 +66,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
     {
         super.writeNbt(nbt);
         nbt.putBoolean("powered", powered);
-        storage.writeNbt1(nbt);
+        storage.toNbt(nbt);
     }
 
     @Override

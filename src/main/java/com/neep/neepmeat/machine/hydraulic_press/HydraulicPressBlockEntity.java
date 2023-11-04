@@ -204,7 +204,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        fluidStorage.writeNbt1(nbt);
+        fluidStorage.toNbt(nbt);
         nbt.putShort("recipeState", recipeState);
         nbt.putBoolean("recipeControlled", recipeControlled);
         if (currentRecipe != null)

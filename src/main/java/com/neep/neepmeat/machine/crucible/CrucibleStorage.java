@@ -80,7 +80,7 @@ public class CrucibleStorage implements NbtSerialisable, ImplementedRecipe.Dummy
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        fluidStorage.writeNbt1(nbt);
+        fluidStorage.toNbt(nbt);
         return nbt;
     }
 

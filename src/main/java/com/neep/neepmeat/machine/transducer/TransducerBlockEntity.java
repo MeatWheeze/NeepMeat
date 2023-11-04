@@ -16,7 +16,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
@@ -141,7 +140,7 @@ public class TransducerBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        storage.writeNbt1(nbt);
+        storage.toNbt(nbt);
     }
 
     @Override

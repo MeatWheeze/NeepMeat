@@ -23,7 +23,7 @@ public class CombinedFluidStorage extends CombinedStorage<FluidVariant, Writable
         for (int i = 0; i < parts.size(); ++i)
         {
             NbtCompound nbt2 = new NbtCompound();
-            parts.get(i).writeNbt1(nbt2);
+            parts.get(i).toNbt(nbt2);
             nbt.put("part_" + i, nbt2);
         }
         return nbt;

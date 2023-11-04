@@ -143,7 +143,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
     {
         super.writeNbt(nbt);
         nbt.putInt("damageTime", damageTime);
-        fluidStorage.writeNbt1(nbt);
+        fluidStorage.toNbt(nbt);
     }
 
     @Override

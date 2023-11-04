@@ -33,11 +33,17 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
         syncIfPossible();
     }
 
-    public NbtCompound writeNbt1(NbtCompound nbt)
+    public NbtCompound toNbt(NbtCompound nbt)
+    {
+        writeNbt(nbt);
+        return nbt;
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
     {
         nbt.putLong("amount", getAmount());
         nbt.put("resource", getResource().toNbt());
-        return nbt;
     }
 
     public void readNbt(NbtCompound nbt)
