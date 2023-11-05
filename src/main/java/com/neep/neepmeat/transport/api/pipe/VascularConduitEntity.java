@@ -30,15 +30,15 @@ public interface VascularConduitEntity
 
     BlockPos getPos();
 
-    default void register(World world)
-    {
-        if (world instanceof ServerWorld serverWorld)
-        {
-            BloodNetworkManager.stageEvent(() ->
-                TransportComponents.BLOOD_NETWORK.get(serverWorld.getChunk(getPos()))
-                        .register(this));
-        }
-    }
+//    default void register(World world)
+//    {
+//        if (world instanceof ServerWorld serverWorld)
+//        {
+//            BloodNetworkManager.stageEvent(() ->
+//                TransportComponents.BLOOD_NETWORK.get(serverWorld.getChunk(getPos()))
+//                        .register(this));
+//        }
+//    }
 
     enum UpdateReason
     {

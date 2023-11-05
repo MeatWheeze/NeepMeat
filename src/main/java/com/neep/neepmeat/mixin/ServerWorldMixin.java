@@ -4,6 +4,7 @@ import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
+import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
@@ -11,9 +12,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.PersistentStateManager;
+import net.minecraft.world.chunk.WorldChunk;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ServerWorld.class)
 public abstract class ServerWorldMixin implements IServerWorld
@@ -33,6 +38,11 @@ public abstract class ServerWorldMixin implements IServerWorld
                 () -> new BloodNetworkManager((ServerWorld) (Object) this),
                 BloodNetworkManager.NAME));
 
+    @Inject(method = "unloadEntities", at = @At(value = "HEAD"))
+    public void onUnloadEntities(WorldChunk chunk, CallbackInfo ci)
+    {
+        WorldChunkEvents.UNLOAD_ENTITIES.invoker().load(chunk);
+    }
 
     @Override
     public void setFluidNetworkManager(PipeNetworkSerialiser manager)

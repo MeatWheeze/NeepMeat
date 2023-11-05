@@ -1,16 +1,16 @@
 package com.neep.neepmeat.transport.block.energy_transport.entity;
 
-import com.neep.neepmeat.transport.TransportComponents;
+import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
 
-public class VascularConduitBlockEntity extends BlockEntity implements VascularConduitEntity
+public class VascularConduitBlockEntity extends BlockEntity implements VascularConduitEntity, BlockEntityUnloadListener
 {
     protected BloodNetwork network;
 
@@ -23,7 +23,6 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     public void setWorld(World world)
     {
         super.setWorld(world);
-        register(world);
     }
 
     @Override
@@ -38,12 +37,28 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
         this.network = network;
     }
 
+    private boolean unloaded;
+
     @Override
     public void markRemoved()
     {
+        if (network != null && !unloaded)
+        {
+            // network.remove has some extra stuff for updating nearby acceptors.
+            // If this happens when the world is unloading, it will cause the chunks to load again which
+            // probably has unintended consequences.
+            network.remove(pos, this);
+        }
+        super.markRemoved();
+    }
+
+    @Override
+    public void onUnload(WorldChunk chunk)
+    {
         if (network != null)
         {
-            network.remove(pos, this);
+            network.unload(pos, this);
+            unloaded = true;
         }
     }
 }
