@@ -47,6 +47,11 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
     public void sync()
     {
         this.markDirty();
+        softSync();
+    }
+
+    public void softSync()
+    {
         world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 

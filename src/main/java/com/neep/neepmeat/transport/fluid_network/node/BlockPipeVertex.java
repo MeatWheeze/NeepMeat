@@ -149,9 +149,13 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
                 long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), variant, transaction);
 
-                amount -= received;
-                if (amount <= 0) variant = FluidVariant.blank();
-                dirty = true;
+                if (received > 0)
+                {
+                    amount -= received;
+                    if (amount <= 0)
+                        variant = FluidVariant.blank();
+                    dirty = true;
+                }
 
                 --transfers;
             }
@@ -204,9 +208,12 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                         // Note the negative signs
                         long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
                         extracted = storage.extract(foundVariant, permittedAmount, transaction);
-                        variant = foundVariant;
-                        amount += extracted;
-                        dirty = true;
+                        if (extracted > 0)
+                        {
+                            variant = foundVariant;
+                            amount += extracted;
+                            dirty = true;
+                        }
                     }
                 }
             }

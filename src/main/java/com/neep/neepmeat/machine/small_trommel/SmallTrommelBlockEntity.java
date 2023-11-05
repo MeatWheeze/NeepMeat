@@ -17,6 +17,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -166,7 +167,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
             progress = 0;
             convert();
         }
-        sync();
+        softSync();
         return false;
     }
 
