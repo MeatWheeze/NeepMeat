@@ -40,12 +40,16 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
     @Override
     public void serverTick()
     {
+        if (!pipes.isEmpty())
+        {
+            int i = 0;
+//            ((WorldChunk) chunk).setNeedsSaving(true);
+        }
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt)
     {
-
         NbtList list = nbt.getList("pipes", NbtElement.COMPOUND_TYPE);
         for (var element : list)
         {
@@ -117,6 +121,8 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
                 loadedPipes.put(pair.first(), entity);
                 pipes.add(entity);
             }
+
+            chunk.setNeedsSaving(true);
         }
         return loadedPipes;
     }
@@ -124,5 +130,6 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
     public void register(VascularConduitEntity vascularConduitEntity)
     {
         pipes.add(vascularConduitEntity);
+        chunk.setNeedsSaving(true);
     }
 }

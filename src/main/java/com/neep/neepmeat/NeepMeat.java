@@ -21,6 +21,7 @@ import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.util.Bezier;
@@ -76,6 +77,7 @@ public class NeepMeat implements ModInitializer
 			// --- Transport module ---
 			ItemTransport.init();
 			FluidTransport.init();
+			BloodNetworkManager.init();
 
 
 //		EnlightenmentUtil.init();

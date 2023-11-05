@@ -35,6 +35,7 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     public void setNetwork(BloodNetwork network)
     {
         this.network = network;
+        markDirty();
     }
 
     private boolean unloaded;
