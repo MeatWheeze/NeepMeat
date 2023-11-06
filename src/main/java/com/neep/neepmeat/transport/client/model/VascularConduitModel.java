@@ -39,7 +39,7 @@ public class VascularConduitModel implements UnbakedModel, BakedModel, FabricBak
     private static final Identifier SIDE_ID = new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side_up");
     private static final Identifier STRAIGHT_ID = new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_straight_up");
 
-    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_centre"));
+    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side"));
     private static Sprite PARTICLE_SPRITE;
 
     private final Triple<BakedModel, Float, Float>[] straight = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
