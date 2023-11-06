@@ -132,4 +132,10 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
         pipes.add(vascularConduitEntity);
         chunk.setNeedsSaving(true);
     }
+
+    public void unregister(VascularConduitEntity vascularConduitEntity)
+    {
+        pipes.remove(vascularConduitEntity);
+        chunk.setNeedsSaving(true);
+    }
 }

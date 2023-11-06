@@ -122,10 +122,21 @@ public class BloodNetworkManager extends PersistentState
     {
         WorldChunkEvents.BE_SET_WORLD.register((chunk, be) ->
         {
-            BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
             if (be instanceof VascularConduitEntity conduit)
+            {
+                BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
                 component.register(conduit);
+            }
         });
+
+        WorldChunkEvents.BE_MANUAL_REMOVE.register(((chunk, be) ->
+        {
+            if (be instanceof VascularConduitEntity conduit)
+            {
+                BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
+                component.unregister(conduit);
+            }
+        }));
 
         WorldChunkEvents.UNLOAD_ENTITIES.register(chunk ->
         {

@@ -2,6 +2,8 @@ package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.TransportComponents;
+import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
+import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
@@ -23,6 +25,10 @@ public interface VascularConduitEntity
 
         return LOOKUP.find(world, pos, null);
     }
+
+//    static VascularConduitEntity find(VascularConduitBlockEntity be)
+//    {
+//    }
 
     BloodNetwork getNetwork();
 
