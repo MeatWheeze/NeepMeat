@@ -2,8 +2,10 @@ package com.neep.neepmeat.machine.trough;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -13,6 +15,8 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -86,38 +90,20 @@ public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvid
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (!world.isClient())
+       if (!world.isClient())
         {
-            try (Transaction transaction = Transaction.openOuter())
+            world.getBlockEntity(pos, NMBlockEntities.FEEDING_TROUGH).ifPresent(be ->
             {
-                Box box = Box.from(new BlockBox(pos).expand(5));
-                List<AnimalEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(AnimalEntity.class), box,
-                        e -> e.getLoveTicks() == 0 && !e.isBaby());
-
-                Collections.shuffle(entities);
-
-                if (entities.size() > 1 && extractFeed(TroughBlockEntity.USE_AMOUNT, world, pos, transaction))
-                {
-                    for (int i = 0; i < Math.min(2, entities.size()); ++i)
-                    {
-                        AnimalEntity mob = entities.get(i);
-                        mob.setBreedingAge(0);
-                        mob.lovePlayer(null);
-                    }
-                    transaction.commit();
-                }
-                else transaction.abort();
-            }
+                be.feedAnimals();
+            });
         }
     }
 
-    private boolean extractFeed(long amount, World world, BlockPos pos, TransactionContext transaction)
-    {
-        if (world.getBlockEntity(pos) instanceof TroughBlockEntity be)
-        {
-            SingleVariantStorage<FluidVariant> storage = be.getStorage(null);
-            return storage.extract(TroughBlockEntity.RESOURCE, amount, transaction) == amount;
-        }
-        return false;
-    }
+//    @Nullable
+//    @Override
+//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+//    {
+//        return MiscUtils.checkType(type, NMBlockEntities.FEEDING_TROUGH, null,
+//                ((world1, pos, state1, blockEntity) -> blockEntity.clientTick()));
+//    }
 }

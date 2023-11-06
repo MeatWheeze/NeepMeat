@@ -108,6 +108,7 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
+        this.drawForeground(matrices, mouseX, mouseY);
 
         // Initial animation
         matrices.push();
