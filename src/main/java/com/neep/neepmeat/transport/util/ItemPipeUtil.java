@@ -302,7 +302,7 @@ public class ItemPipeUtil
                                 nextSet.add(next);
                             }
                         }
-                        if (predicate.test(new Pair<>(next, direction)))
+                        if (predicate.test(new Pair<>(next, direction.getOpposite())))
                         {
                             BlockApiCache<Storage<ItemVariant>, Direction> cache = BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) world, next);
                             output.add(new RetrievalTarget(cache, direction.getOpposite()));
