@@ -11,15 +11,13 @@ import net.minecraft.util.collection.DefaultedList;
 
 public class ResultSlot extends Slot
 {
-    private final CraftingInventory input;
     private final PlayerEntity player;
-    private int amount;
+    private int amount; // I have no idea why I have done this, but it seems important.
 
     public ResultSlot(PlayerEntity player, CraftingInventory input, Inventory inventory, int index, int x, int y)
     {
         super(inventory, index, x, y);
         this.player = player;
-        this.input = input;
     }
 
     @Override
@@ -42,6 +40,12 @@ public class ResultSlot extends Slot
             this.amount += Math.min(amount, this.getStack().getCount());
         }
         return super.takeStack(amount);
+    }
+
+    @Override
+    public void onQuickTransfer(ItemStack newItem, ItemStack original)
+    {
+        super.onQuickTransfer(newItem, original);
     }
 
     @Override

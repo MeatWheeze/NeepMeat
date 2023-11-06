@@ -72,27 +72,30 @@ public abstract class BasicScreenHandler extends ScreenHandler
 
     // For some reason, not implementing this causes the game to freeze when shift-clicking.
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack transferSlot(PlayerEntity player, int index)
     {
-        ItemStack newStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(invSlot);
-        if (slot != null && slot.hasStack())
+        ItemStack originalCopy = ItemStack.EMPTY;
+        Slot slot = this.slots.get(index);
+        if (slot.hasStack())
         {
-            ItemStack originalStack = slot.getStack();
-            newStack = originalStack.copy();
-            if (invSlot < this.inventory.size())
+            ItemStack mutableStack = slot.getStack();
+            originalCopy = mutableStack.copy();
+            if (index < this.inventory.size())
             {
-                if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true))
+                if (!this.insertItem(mutableStack, this.inventory.size(), this.slots.size(), true))
                 {
                     return ItemStack.EMPTY;
                 }
+                slot.onQuickTransfer(mutableStack, originalCopy);
+                slot.takeStack(64); // This 'fixes' a strange thing in WorkstationScreenHandler.
+                slot.markDirty();
             }
-            else if (!this.insertItem(originalStack, 0, this.inventory.size(), false))
+            else if (!this.insertItem(mutableStack, 0, this.inventory.size(), false))
             {
                 return ItemStack.EMPTY;
             }
 
-            if (originalStack.isEmpty())
+            if (mutableStack.isEmpty())
             {
                 slot.setStack(ItemStack.EMPTY);
             }
@@ -101,8 +104,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
                 slot.markDirty();
             }
         }
-
-        return newStack;
+        return originalCopy;
     }
 
     @FunctionalInterface

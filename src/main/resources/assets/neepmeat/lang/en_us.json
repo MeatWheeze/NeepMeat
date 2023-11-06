@@ -216,6 +216,7 @@
   "block.neepmeat.assembler.lore_1": "Place above Persistent Crafting Table for auto-craffing.",
 
   "block.neepmeat.workstation": "Persistent Crafting Table",
+  "block.neepmeat.workstation.lore_0": "Keeps items in the grid. Used with the Assembler for auto-crafting.",
 
   "block.neepmeat.pedestal": "Pedestal",
   "block.neepmeat.death_blades": "Death Blades",
