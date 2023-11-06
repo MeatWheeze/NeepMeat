@@ -2,41 +2,26 @@ package com.neep.neepmeat.machine.trough;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUtils;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockBox;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Collections;
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvider
@@ -61,7 +46,7 @@ public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvid
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof TroughBlockEntity be && WritableFluidBuffer.handleInteract(be.getStorage(null), world, player, hand))
+        if (world.getBlockEntity(pos) instanceof TroughBlockEntity be && WritableSingleFluidStorage.handleInteract(be.getStorage(null), world, player, hand))
         {
             return ActionResult.SUCCESS;
         }

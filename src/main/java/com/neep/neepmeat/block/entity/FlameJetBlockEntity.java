@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.block.FlameJetBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -139,7 +138,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (WritableFluidBuffer.handleInteract(storage, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(storage, world, player, hand))
         {
             return true;
         }

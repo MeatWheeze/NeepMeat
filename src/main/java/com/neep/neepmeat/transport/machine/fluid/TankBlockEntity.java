@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.TankMessagePacket;
@@ -64,7 +63,7 @@ public class TankBlockEntity extends SyncableBlockEntity
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(buffer, world, player, hand))
         {
             return true;
         }

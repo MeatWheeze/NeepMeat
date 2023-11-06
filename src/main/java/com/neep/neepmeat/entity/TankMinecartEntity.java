@@ -1,7 +1,6 @@
 package com.neep.neepmeat.entity;
 
 import com.neep.neepmeat.api.storage.FluidBuffer;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
@@ -117,7 +116,7 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
     @Override
     public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand)
     {
-        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(buffer, world, player, hand))
         {
             return ActionResult.SUCCESS;
         }

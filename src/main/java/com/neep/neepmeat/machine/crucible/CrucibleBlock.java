@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -31,7 +31,7 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
     {
         if (world.getBlockEntity(pos) instanceof CrucibleBlockEntity be && !world.isClient)
         {
-            WritableFluidBuffer.handleInteract(be.getStorage().fluidStorage, world, player, hand);
+            WritableSingleFluidStorage.handleInteract(be.getStorage().fluidStorage, world, player, hand);
         }
         return FluidStorage.ITEM.find(player.getStackInHand(hand), ContainerItemContext.ofPlayerHand(player, hand)) != null ? ActionResult.SUCCESS : ActionResult.PASS;
     }
