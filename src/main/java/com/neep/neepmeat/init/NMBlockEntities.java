@@ -3,7 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
-import com.neep.neepmeat.api.multiblock.IMultiBlock;
+import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.HoldingTrackBlock;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
@@ -106,8 +106,8 @@ public class NMBlockEntities
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
     public static BlockEntityType<ItemPortBlock.BlockEntity> VAT_ITEM_PORT;
     public static BlockEntityType<FluidPortBlock.BlockEntity> VAT_FLUID_PORT;
-    public static BlockEntityType<IMultiBlock.Entity> VAT_CASING;
-    public static BlockEntityType<IMultiBlock.Entity> VAT_WINDOW;
+    public static BlockEntityType<MultiBlock.Entity> VAT_CASING;
+    public static BlockEntityType<MultiBlock.Entity> VAT_WINDOW;
     public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
@@ -268,8 +268,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, TABLE_CONTROLLER);
         FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, TABLE_CONTROLLER);
 
-        VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
-        VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
+        VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
+        VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
         VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
         VAT_FLUID_PORT = registerBlockEntity("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);

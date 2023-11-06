@@ -35,7 +35,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Optional;
 
-public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakTwoHanded, IAimable
+public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakTwoHanded, Aimable
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller1";

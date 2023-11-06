@@ -4,7 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.PillarBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseColumnBlock extends PillarBlock implements IMeatBlock
+public class BaseColumnBlock extends PillarBlock implements MeatlibBlock
 {
     public final BlockItem blockItem;
     private final String regsitryName;

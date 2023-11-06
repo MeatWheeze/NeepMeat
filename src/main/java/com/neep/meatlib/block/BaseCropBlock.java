@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 
-public class BaseCropBlock extends CropBlock implements IMeatBlock
+public class BaseCropBlock extends CropBlock implements MeatlibBlock
 {
     protected final String registryName;
     protected final Item seedsItem;

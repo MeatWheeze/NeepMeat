@@ -4,7 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.PaneBlock;
 import net.minecraft.item.BlockItem;
 
-public class BasePaneBlock extends PaneBlock implements IMeatBlock
+public class BasePaneBlock extends PaneBlock implements MeatlibBlock
 {
     protected String registryName;
     protected BlockItem blockItem;

@@ -3,11 +3,11 @@ package com.neep.neepmeat.block.entity.machine;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
-import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
-import com.neep.neepmeat.api.multiblock.IMultiBlock;
+import com.neep.neepmeat.api.multiblock.ControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.MultiItemBuffer;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.block.vat.IVatComponent;
+import com.neep.neepmeat.block.vat.VatComponent;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -37,7 +37,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public class VatControllerBlockEntity extends SyncableBlockEntity implements IControllerBlockEntity
+public class VatControllerBlockEntity extends SyncableBlockEntity implements ControllerBlockEntity
 {
     protected boolean assembled;
     public List<BlockPos> blocks;
@@ -102,7 +102,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
         blocks.remove(this.getPos());
 
         blocks.stream()
-                .map(pos1 -> world.getBlockEntity(pos1) instanceof IMultiBlock.Entity entity ? entity : null)
+                .map(pos1 -> world.getBlockEntity(pos1) instanceof MultiBlock.Entity entity ? entity : null)
                 .filter(Objects::nonNull)
                 .forEach(be -> {be.setController(getPos());});
 
@@ -114,7 +114,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
 
     public boolean disassemble(ServerWorld world, boolean replaced)
     {
-        blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> {if (be instanceof IMultiBlock.Entity entity) entity.setController(null);});
+        blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> {if (be instanceof MultiBlock.Entity entity) entity.setController(null);});
         if (!replaced)
             world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, false), Block.NOTIFY_LISTENERS);
         blocks.clear();
@@ -145,7 +145,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
         List<BlockPos> blocks = new ArrayList<>();
         for (int i = 0; i < 3; ++i)
         {
-            List<BlockPos> list = checkOddSquare(world, centre.add(0, i, 0), 1, state -> state.getBlock() instanceof IVatComponent);
+            List<BlockPos> list = checkOddSquare(world, centre.add(0, i, 0), 1, state -> state.getBlock() instanceof VatComponent);
             if (list != null)
             {
                 blocks.addAll(list);
@@ -156,7 +156,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
             }
         }
 
-        List<BlockPos> list = checkOddRing(world, centre.add(0, 3, 0), 1, state -> state.getBlock() instanceof IVatComponent);
+        List<BlockPos> list = checkOddRing(world, centre.add(0, 3, 0), 1, state -> state.getBlock() instanceof VatComponent);
         if (list != null)
         {
             blocks.addAll(list);

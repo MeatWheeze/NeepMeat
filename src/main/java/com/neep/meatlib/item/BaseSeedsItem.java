@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BaseSeedsItem extends AliasedBlockItem implements IMeatItem
+public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
 {
     protected final String registryName;
     protected int lore;

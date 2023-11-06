@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutablePipe;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.BFSGroupFinder;
@@ -173,7 +173,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
         @Override
         protected State processPos(BlockPos pos)
         {
-            IItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(worldSupplier.get(), pos, null);
+            ItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(worldSupplier.get(), pos, null);
 
             // Fail if there is a second controller in the network.
             if (checkController(worldSupplier.get(), pos)) return State.FAIL;
@@ -188,7 +188,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
                     addResult(mutable, BlockApiCache.create(RoutablePipe.LOOKUP, worldSupplier.get(), mutable));
                 }
 
-                IItemPipe toPipe = ItemTransport.ITEM_PIPE.find(worldSupplier.get(), mutable, null);
+                ItemPipe toPipe = ItemTransport.ITEM_PIPE.find(worldSupplier.get(), mutable, null);
                 if (toPipe != null)
                 {
                     queueBlock(mutable);

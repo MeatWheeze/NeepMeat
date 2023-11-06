@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.renderer;
 
 import com.neep.meatweapons.item.BaseGunItem;
-import com.neep.meatweapons.item.IAimable;
+import com.neep.meatweapons.item.Aimable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -46,7 +46,7 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
         if (mode.isFirstPerson())
         {
             Item item = itemStack.getItem();
-            Vec3f transform = item instanceof IAimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
+            Vec3f transform = item instanceof Aimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
             float delta = 0.2f;
             currentTransform.lerp(isAiming ? transform : new Vec3f(0, 0, 0), delta);
 

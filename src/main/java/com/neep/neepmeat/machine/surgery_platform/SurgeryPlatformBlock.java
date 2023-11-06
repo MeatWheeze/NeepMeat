@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.surgery_platform;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,7 +12,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
-public class SurgeryPlatformBlock extends BaseBlock implements IDataCable, BlockEntityProvider
+public class SurgeryPlatformBlock extends BaseBlock implements DataCable, BlockEntityProvider
 {
     public SurgeryPlatformBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

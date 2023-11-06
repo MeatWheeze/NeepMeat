@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -77,7 +77,7 @@ public class PipeNetGraph implements NbtSerialisable
         posQueue.add(startPos);
 
         BlockState startState = world.getBlockState(startPos);
-        IFluidPipe startPipe = IFluidPipe.findFluidPipe(world, startPos, world.getBlockState(startPos)).orElse(null);
+        FluidPipe startPipe = FluidPipe.findFluidPipe(world, startPos, world.getBlockState(startPos)).orElse(null);
         if (startPipe == null) return;
         PipeVertex startVertex = startPipe.getPipeVertex(world, startPos, startState);
         startVertex.reset();
@@ -90,7 +90,7 @@ public class PipeNetGraph implements NbtSerialisable
             BlockState currentState = world.getBlockState(current);
             PipeVertex currentPipe = allVertices.get(current.asLong());
 
-            if (currentState.getBlock() instanceof IFluidPipe currentPipeBlock)
+            if (currentState.getBlock() instanceof FluidPipe currentPipeBlock)
             {
                 for (Direction direction : currentPipeBlock.getConnections(currentState, direction -> true))
                 {
@@ -103,10 +103,10 @@ public class PipeNetGraph implements NbtSerialisable
 
                     // Check for opposite connection in next pipe
                     BlockState nextState = world.getBlockState(mutable);
-                    if (nextState.getBlock() instanceof IFluidPipe nextPipe)
+                    if (nextState.getBlock() instanceof FluidPipe nextPipe)
                     {
                         // TODO: Replace this static method
-                        if (!IFluidPipe.isConnectedIn(world, mutable, nextState, direction.getOpposite())) continue;
+                        if (!FluidPipe.isConnectedIn(world, mutable, nextState, direction.getOpposite())) continue;
 
                         posQueue.add(mutable.toImmutable());
 
@@ -126,7 +126,7 @@ public class PipeNetGraph implements NbtSerialisable
         }
     }
 
-    private void appendVertex(PipeVertex currentVertex, IFluidPipe nextPipe, Direction from, BlockPos nextPos, BlockState nextState)
+    private void appendVertex(PipeVertex currentVertex, FluidPipe nextPipe, Direction from, BlockPos nextPos, BlockState nextState)
     {
         PipeVertex nextVertex = nextPipe.getPipeVertex(world, nextPos, nextState);
         nextVertex.reset();
@@ -283,7 +283,7 @@ public class PipeNetGraph implements NbtSerialisable
         long longPos = nbt.getLong("pos");
         BlockPos pos = BlockPos.fromLong(longPos);
         BlockState state = world.getBlockState(pos);
-        IFluidPipe pipe = IFluidPipe.findFluidPipe(world, pos, state).orElse(null);
+        FluidPipe pipe = FluidPipe.findFluidPipe(world, pos, state).orElse(null);
 
         BlockPos.Mutable mutable = pos.mutableCopy();
         for (Direction direction : Direction.values())
@@ -313,7 +313,7 @@ public class PipeNetGraph implements NbtSerialisable
                 // If the vertex has not already been found, try to retrieve it from the world.
                 BlockPos adjPos = BlockPos.fromLong(adjLongPos);
                 BlockState adjState = world.getBlockState(adjPos);
-                IFluidPipe adjacentPipe = IFluidPipe.findFluidPipe(world, adjPos, adjState).orElse(null);
+                FluidPipe adjacentPipe = FluidPipe.findFluidPipe(world, adjPos, adjState).orElse(null);
                 if (adjacentPipe == null) continue;
 
                 adjacent = adjacentPipe.getPipeVertex(world, adjPos, adjState);

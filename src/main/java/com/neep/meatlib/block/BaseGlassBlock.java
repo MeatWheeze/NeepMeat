@@ -4,7 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.AbstractGlassBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseGlassBlock extends AbstractGlassBlock implements IMeatBlock
+public class BaseGlassBlock extends AbstractGlassBlock implements MeatlibBlock
 {
     public BlockItem blockItem;
     private String registryName;

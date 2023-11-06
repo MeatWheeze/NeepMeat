@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BaseBlockItem extends BlockItem implements IMeatItem
+public class BaseBlockItem extends BlockItem implements MeatlibItem
 {
     private final String name;
     private final TooltipSupplier tooltipSupplier;

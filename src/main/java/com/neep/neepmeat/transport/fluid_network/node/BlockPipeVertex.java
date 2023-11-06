@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -17,7 +17,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -70,7 +69,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)
     {
         Arrays.fill(nodes, null);
-        IFluidPipe.findFluidPipe(world, pos, state).ifPresent(p ->
+        FluidPipe.findFluidPipe(world, pos, state).ifPresent(p ->
         {
             for (Direction direction : p.getConnections(state, d -> true))
             {

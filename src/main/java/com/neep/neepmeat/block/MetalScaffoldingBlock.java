@@ -3,7 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseSlabBlock;
 import com.neep.meatlib.block.BaseStairsBlock;
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -25,14 +25,14 @@ import net.minecraft.world.WorldAccess;
 
 import java.util.function.Consumer;
 
-public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Waterloggable
+public class MetalScaffoldingBlock extends BaseBlock implements MeatlibBlock, Waterloggable
 {
     private final String registryName;
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final BooleanProperty BOTTOM = Properties.BOTTOM;
-    public final IMeatBlock stairs;
-    public final IMeatBlock slab;
+    public final MeatlibBlock stairs;
+    public final MeatlibBlock slab;
 
     public MetalScaffoldingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

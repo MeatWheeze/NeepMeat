@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProvider, IItemPipe
+public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProvider, ItemPipe
 {
     public ItemRequesterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

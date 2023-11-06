@@ -5,7 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.LeavesBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseLeavesBlock extends LeavesBlock implements IMeatBlock
+public class BaseLeavesBlock extends LeavesBlock implements MeatlibBlock
 {
     protected final String registryName;
     protected BlockItem blockItem;

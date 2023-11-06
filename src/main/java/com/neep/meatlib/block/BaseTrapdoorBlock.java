@@ -5,7 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseTrapdoorBlock extends TrapdoorBlock implements IMeatBlock
+public class BaseTrapdoorBlock extends TrapdoorBlock implements MeatlibBlock
 {
     public BaseBlockItem blockItem;
     private final String registryName;

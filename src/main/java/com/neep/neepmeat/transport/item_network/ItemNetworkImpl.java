@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.api.ItemNetwork;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -57,7 +57,7 @@ public class ItemNetworkImpl implements ItemNetwork
 
     protected ItemPipeState createPipe(BlockPos pos, BlockState state)
     {
-        if (state.getBlock() instanceof IItemPipe pipe)
+        if (state.getBlock() instanceof ItemPipe pipe)
         {
             ItemPipeState pipeState = new ItemPipeState(pipe);
             return pipeState;
@@ -75,9 +75,9 @@ public class ItemNetworkImpl implements ItemNetwork
         pipes.remove(pos.asLong());
     }
 
-    /** To be optionally called when an {@link IItemPipe} is added or changed.
+    /** To be optionally called when an {@link ItemPipe} is added or changed.
      */
-    public void onPipeAdded(IItemPipe pipe, BlockPos pos, BlockState state)
+    public void onPipeAdded(ItemPipe pipe, BlockPos pos, BlockState state)
     {
         ItemPipeState pipeState = new ItemPipeState(pipe);
         putPipe(pos, pipeState);
@@ -95,7 +95,7 @@ public class ItemNetworkImpl implements ItemNetwork
 //        }
     }
 
-    /** Removes the cached pipe at the given position. Must be called whenever an {@link IItemPipe} is removed.
+    /** Removes the cached pipe at the given position. Must be called whenever an {@link ItemPipe} is removed.
      */
     public void onPipeRemove(BlockPos pos)
     {
@@ -180,15 +180,15 @@ public class ItemNetworkImpl implements ItemNetwork
 
     private static class ItemPipeState
     {
-        private final IItemPipe pipe;
+        private final ItemPipe pipe;
 //        private final ItemPipeState[] connected = new ItemPipeState[6];
 
-        public ItemPipeState(IItemPipe pipe)
+        public ItemPipeState(ItemPipe pipe)
         {
             this.pipe = pipe;
         }
 
-        public IItemPipe getPipe()
+        public ItemPipe getPipe()
         {
             return pipe;
         }

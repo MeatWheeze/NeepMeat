@@ -1,6 +1,6 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
@@ -43,7 +43,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.*;
 import java.util.function.Predicate;
 
-public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, IAnimatable, ISyncable
+public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, IAnimatable, ISyncable
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
@@ -135,7 +135,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     public void reload(PlayerEntity user, ItemStack stack, @Nullable ItemStack ammoStack)
     {
         user.getItemCooldownManager().set(this, 7);
-        ammoStack = ammoStack == null ? IGunItem.removeStack(this.ammunition, user) : ammoStack;
+        ammoStack = ammoStack == null ? GunItem.removeStack(this.ammunition, user) : ammoStack;
         if (ammoStack != null)
         {
             stack.setDamage(0);
@@ -207,7 +207,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
 
-    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, IGunItem gunItem)
+    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, GunItem gunItem)
     {
         World world = caster.world;
         if (!world.isClient)

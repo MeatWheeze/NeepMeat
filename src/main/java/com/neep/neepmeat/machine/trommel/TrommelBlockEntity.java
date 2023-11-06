@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.ControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrommelBlockEntity extends SyncableBlockEntity implements IControllerBlockEntity
+public class TrommelBlockEntity extends SyncableBlockEntity implements ControllerBlockEntity
 {
 //    protected TrommelStorage storage;
     protected List<BlockPos> structures = new ArrayList<>();

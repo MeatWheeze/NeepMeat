@@ -3,7 +3,7 @@ package com.neep.meatlib.registry;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.block.BaseLeavesBlock;
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
@@ -26,7 +26,7 @@ public class BlockRegistry
     public static final Map<Identifier, Block> BLOCKS = new LinkedHashMap<>();
     public static final Map<Identifier, Block> REGISTERED_BLOCKS = new LinkedHashMap<>();
 
-    public static <T extends Block & IMeatBlock> T queue(T block)
+    public static <T extends Block & MeatlibBlock> T queue(T block)
     {
         MeatLib.assertActive(block);
         if (block == null)
@@ -38,7 +38,7 @@ public class BlockRegistry
         return block;
     }
 
-    public static Block queue(IMeatBlock block)
+    public static Block queue(MeatlibBlock block)
     {
         MeatLib.assertActive(block);
         if (!(block instanceof Block))

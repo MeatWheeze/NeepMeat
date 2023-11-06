@@ -42,7 +42,7 @@ public class BasePaintedBlock
         }
     }
 
-    public static class PaintedBlock extends Block implements IMeatBlock
+    public static class PaintedBlock extends Block implements MeatlibBlock
     {
         private final String registryName;
         public BlockItem blockItem;

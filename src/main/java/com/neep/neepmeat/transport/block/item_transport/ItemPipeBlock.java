@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
+public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, ItemPipe
 {
 
     public ItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
@@ -95,7 +95,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
         boolean otherConnected = false;
 
         boolean canConnect = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe))
+        if (!world.isClient() && !(neighborState.getBlock() instanceof ItemPipe))
         {
             canConnect = canConnect || (canConnectApi((World) world, pos, state, direction));
         }
@@ -140,7 +140,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IItemPipe pipe)
+        if (state.getBlock() instanceof ItemPipe pipe)
         {
             return pipe.connectInDirection(world, pos, state, direction);
         }

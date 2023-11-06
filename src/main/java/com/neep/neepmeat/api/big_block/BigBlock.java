@@ -1,7 +1,7 @@
 package com.neep.neepmeat.api.big_block;
 
 import blue.endless.jankson.annotation.Nullable;
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
 
-public abstract class BigBlock extends Block implements IMeatBlock
+public abstract class BigBlock extends Block implements MeatlibBlock
 {
     private final String registryName;
     private final Structure structureBlock;
@@ -84,7 +84,7 @@ public abstract class BigBlock extends Block implements IMeatBlock
         return registryName;
     }
 
-    public class Structure extends Block implements IMeatBlock, BlockEntityProvider
+    public class Structure extends Block implements MeatlibBlock, BlockEntityProvider
     {
         private final String registryName;
 

@@ -2,10 +2,10 @@ package com.neep.neepmeat.machine.bottler;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
 @SuppressWarnings("UnstableApiUsage")
-public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class BottlerBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     private final BottlerStorage storage = new BottlerStorage(this);
     public static final float INCREMENT_MIN = 0.1f;
@@ -85,7 +85,7 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
 
         try (Transaction transaction = Transaction.openOuter())

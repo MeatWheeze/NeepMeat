@@ -5,7 +5,7 @@ import net.minecraft.block.SaplingBlock;
 import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.item.BlockItem;
 
-public class BaseSaplingBlock extends SaplingBlock implements IMeatBlock
+public class BaseSaplingBlock extends SaplingBlock implements MeatlibBlock
 {
     protected final String registryName;
     protected BlockItem blockItem;

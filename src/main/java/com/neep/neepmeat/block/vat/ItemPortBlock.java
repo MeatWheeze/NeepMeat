@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVariant>, IVatComponent, BlockEntityProvider
+public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVariant>, VatComponent, BlockEntityProvider
 {
     public ItemPortBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

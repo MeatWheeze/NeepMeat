@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -39,7 +39,7 @@ public class SmallTrommelRenderer implements BlockEntityRenderer<SmallTrommelBlo
 //        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.getRunningRate() * 40));
 //        be.angle = MathHelper.wrapDegrees(be.angle + be.currentSpeed * delta);
         float angle = 0;
-        if (be.getWorld().getBlockEntity(be.getPos().offset(facing.getOpposite())) instanceof IMotorBlockEntity motor)
+        if (be.getWorld().getBlockEntity(be.getPos().offset(facing.getOpposite())) instanceof MotorEntity motor)
         {
             angle = motor.getRotorAngle();
         }

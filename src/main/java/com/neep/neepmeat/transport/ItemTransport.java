@@ -8,7 +8,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.transport.api.item_network.RoutablePipe;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.ItemRequesterBlock;
 import com.neep.neepmeat.transport.block.item_transport.PipeDriverBlock;
 import com.neep.neepmeat.transport.block.item_transport.StorageBusBlock;
@@ -31,7 +31,7 @@ public class ItemTransport
 {
     public static final int BFS_MAX_DEPTH = 800;
 
-    public static BlockApiLookup<IItemPipe, Direction> ITEM_PIPE = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), IItemPipe.class, Direction.class);
+    public static BlockApiLookup<ItemPipe, Direction> ITEM_PIPE = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), ItemPipe.class, Direction.class);
 
     public static BlockEntityType<PipeDriverBlock.PDBlockEntity> PIPE_DRIVER_BE;
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
@@ -50,7 +50,7 @@ public class ItemTransport
         ITEM_REQUESTER_BE = NMBlockEntities.registerBlockEntity("item_requester", ItemRequesterBlockEntity::new, ITEM_REQUESTER);
         RoutablePipe.LOOKUP.registerSelf(ITEM_REQUESTER_BE);
 
-        ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof IItemPipe pipe ? pipe : null);
+        ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);
 
         TransportScreenHandlers.ITEM_REQUESTER_HANDLER = ScreenHandlerInit.registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
     }

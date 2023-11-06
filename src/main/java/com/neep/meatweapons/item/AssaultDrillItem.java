@@ -2,7 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.google.common.collect.Iterators;
 import com.neep.meatlib.item.CustomEnchantable;
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
@@ -59,7 +59,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable
+public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     protected String registryName;

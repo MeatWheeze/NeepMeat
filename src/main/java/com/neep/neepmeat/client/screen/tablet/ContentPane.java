@@ -20,9 +20,9 @@ public abstract class ContentPane extends Screen implements Drawable, Selectable
     protected int x;
     protected int y;
 
-    protected final IGuideScreen parent;
+    protected final GuideScreen parent;
 
-    protected ContentPane(Text title, IGuideScreen parent)
+    protected ContentPane(Text title, GuideScreen parent)
     {
         super(title);
         this.parent = parent;

@@ -2,7 +2,7 @@ package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
 
-public class BaseCraftingItem extends BaseItem implements IMeatItem
+public class BaseCraftingItem extends BaseItem implements MeatlibItem
 {
     private final String registryName;
 

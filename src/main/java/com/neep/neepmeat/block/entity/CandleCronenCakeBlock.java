@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.entity;
 
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.block.BlockState;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-public class CandleCronenCakeBlock extends CandleCakeBlock implements IMeatBlock
+public class CandleCronenCakeBlock extends CandleCakeBlock implements MeatlibBlock
 {
     private final String registryName;
 
