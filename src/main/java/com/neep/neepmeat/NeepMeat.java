@@ -32,7 +32,13 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -114,6 +120,30 @@ public class NeepMeat implements ModInitializer
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraMouthUpgrade.ID, ExtraMouthUpgrade::new);
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraKneeUpgrade.ID, ExtraKneeUpgrade::new);
 			Registry.register(PlayerUpgradeRegistry.REGISTRY, SkeltalUpgrade.ID, SkeltalUpgrade::new);
+		}
+	}
+
+	public static void cowThingy(CowEntity cow, PlayerEntity player, Hand hand)
+	{
+		ItemStack stack = player.getStackInHand(hand);
+		if (stack.isOf(NMItems.ENLIGHTENED_BRAIN))
+		{
+			var random = cow.getRandom();
+			int count = random.nextBetween(2, 4);
+
+			if (!player.isCreative())
+			{
+				stack.decrement(1);
+			}
+
+			for (int i = 0; i < count; ++i)
+			{
+				cow.dropStack(new ItemStack(NMItems.ROUGH_BRAIN), 0.5f);
+			}
+			player.world.playSound(cow.getX(), cow.getY(), cow.getZ(),
+					SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.NEUTRAL, 1, 1, false);
+			cow.setDropsLoot(false);
+			cow.kill();
 		}
 	}
 }

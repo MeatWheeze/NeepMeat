@@ -3,7 +3,7 @@
     {"type": "page", "id": "intro", "icon": "neepmeat:meat_steel_ingot", "text": "Introduction"},
     {"type": "article", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Energetic Fluids"},
     {"type": "menu", "id": "getting_started", "icon": "neepmeat:motor_unit", "text": "Getting Started", "entries": [
-      {"type": "page", "id": "heart_extraction", "icon": "neepmeat:reanimated_heart", "text": "Heart Extraction"},
+      {"type": "page", "id": "brains", "icon": "neepmeat:brain_rough", "text": "Brains"},
       {"type": "page", "id": "meat", "icon": "neepmeat:raw_meat_brick", "text": "Meat"},
       {"type": "page", "id": "blood", "icon": "neepmeat:blood_bucket", "text": "Blood"},
       {"type": "page", "id": "integrator", "icon": "neepmeat:integrator_egg", "text": "Integrator Organism"},
@@ -226,9 +226,11 @@
       {"type": "text", "text": "To milk a cow, place it above a fluid drain and beneath a Hydraulic Press. As the cow is compressed, milk will be deposited in the drain."}
     ]},
 
-    {"id": "heart_extraction", "contents": [
-      {"type": "text", "text": "Heart Extraction\n", "bold": true},
-      {"type": "text", "text": "The heart of a zombie can only be extracted with a Sacrificial Scalpel. When held and released, the dagger will inflict 3 hearts of damage. If this kills the zombie, its heart will yielded."}
+    {"id": "brains", "contents": [
+      {"type": "text", "text": "Brains\n", "bold": true},
+      {"type": "text", "text": "Animal brains are a highly valuable resource. Thought can be reawakened with the application of Body Compound, making them useful for machines that require a small amount of intelligence."},
+      {"type": "text", "text": "\nAcquisition\n", "bold": true},
+      {"type": "text", "text": "It is sometimes possible to salvage the reanimated brain of a Zombie. Feeding an Enlightened Brain to a cow stimulates rapid growth of new neural tissue, yielding more brains. This process is, unfortunately, fatal to the cow."}
     ]},
     {"id": "blood", "contents": [
       {"type": "text", "text": "Blood\n", "bold": true},
