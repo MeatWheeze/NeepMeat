@@ -1,13 +1,13 @@
 package com.neep.neepmeat.machine.transducer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -24,9 +24,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @SuppressWarnings("UnstableApiUsage")
 public class TransducerBlockEntity extends SyncableBlockEntity
 {
@@ -41,7 +38,8 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         }
     };
 
-    protected final List<Burner> burners = new ArrayList<>();
+    protected LazySupplier<BlockApiCache<Burner, Void>> burnerCache = LazySupplier.of(() ->
+            BlockApiCache.create(Burner.LOOKUP, (ServerWorld) this.getWorld(), pos.down(2)));
 
     protected BlockApiCache<Storage<FluidVariant>, Direction> inputCache;
 
@@ -70,19 +68,23 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
     public void updateBurners()
     {
-        burners.clear();
-        BlockPos.Mutable mutable = pos.mutableCopy();
-        for (Direction direction : Direction.values())
-        {
-            if (direction.getAxis().isVertical()) continue;
-            mutable.set(pos, direction);
+//        burners.clear();
+//        BlockPos.Mutable mutable = pos.mutableCopy();
+//        for (Direction direction : Direction.values())
+//        {
+//            if (direction.getAxis().isVertical()) continue;
+//            mutable.set(pos, direction);
+//
+//            Burner burner = Burner.LOOKUP.find(world, mutable, null);
+//            if (burner != null) burners.add(burner);
+//        }
 
-            Burner burner = Burner.LOOKUP.find(world, mutable, null);
-            if (burner != null) burners.add(burner);
-        }
+        BlockPos downTwo = pos.down(2);
+        BlockApiCache<Burner, Void> burnerCache = BlockApiCache.create(Burner.LOOKUP, (ServerWorld) world, downTwo);
+//        if (burnerCache.find(null) != null)
+//            this.burnerCache = burnerCache;
 
-        mutable.set(pos, Direction.DOWN);
-        inputCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, mutable);
+        inputCache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, pos.down());
         needsUpdate = false;
     }
 
@@ -94,11 +96,15 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         }
 
         outputPower = 0;
-        for (Burner burner : burners)
+
+        Burner burner = burnerCache.get().find(null);
+        if (burner != null)
         {
             burner.tickPowerConsumption();
             outputPower += burner.getOutputPower();
         }
+        else
+            updateBurners();
 
         Storage<FluidVariant> inputStorage = inputCache.find(Direction.UP);
         if (inputStorage != null)
@@ -150,29 +156,29 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         storage.readNbt(nbt);
     }
 
-    BloodAcceptor bloodAcceptor = new BloodAcceptor()
-    {
-        @Override
-        public float getRate()
-        {
-            return 0.1f;
-        }
-
-        @Override
-        public void updateInflux(float influx)
-        {
-
-        }
-
-        @Override
-        public Mode getMode()
-        {
-            return Mode.OUT;
-        }
-    };
-
-    public BloodAcceptor getBloodAcceptor(Direction direction)
-    {
-        return bloodAcceptor;
-    }
+//    BloodAcceptor bloodAcceptor = new BloodAcceptor()
+//    {
+//        @Override
+//        public float getRate()
+//        {
+//            return 0.1f;
+//        }
+//
+//        @Override
+//        public void updateInflux(float influx)
+//        {
+//
+//        }
+//
+//        @Override
+//        public Mode getMode()
+//        {
+//            return Mode.OUT;
+//        }
+//    };
+//
+//    public BloodAcceptor getBloodAcceptor(Direction direction)
+//    {
+//        return bloodAcceptor;
+//    }
 }

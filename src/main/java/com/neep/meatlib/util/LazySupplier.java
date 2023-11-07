@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Supplier;
 
 /**
- * This is not indended for optimisation, but rather for situations where lazy initialisation is the only option.
+ * This is not intended for optimisation, but rather for situations where lazy initialisation is the only option.
  * An example could be a field in a BlockEntity that requires a World instance to be initialised.
  */
 public interface LazySupplier<T> extends Supplier<T>
