@@ -16,6 +16,7 @@ import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorRenderer;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
@@ -48,7 +49,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -57,6 +57,8 @@ import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
+import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
@@ -113,58 +115,59 @@ public class NeepMeatClient implements ClientModInitializer
         NMParticles.Client.init();
 
         // BlockEntity renderers
-        BlockEntityRendererRegistry.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
-        BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, c -> new ItemBlockEntityRenderer<>(
+        BlockEntityRendererFactories.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, c -> new ItemBlockEntityRenderer<>(
                 c, be -> be.getStorage(null).getAsStack(), be ->
         {
             be.stackRenderDelta = MathHelper.lerp(0.1f, be.stackRenderDelta, be.getStorage(null).getAmount() <= 0 ? 0.3f : 0f);
             return 0.25f + be.stackRenderDelta;
         }));
-        BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.PNEUMATIC_PIPE, ItemPipeRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
-//        BlockEntityRendererRegistry.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.MOTOR, MotorRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.STIRLING_ENGINE, StirlingEngineRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.PNEUMATIC_PIPE, ItemPipeRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.MOTOR, MotorRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_MOTOR, AdvancedMotorRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.MIXER, MixerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.STIRLING_ENGINE, StirlingEngineRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.ALEMBIC, AlembicRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.HYDRAULIC_PRESS, HydraulicPressRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ALEMBIC, AlembicRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.HYDRAULIC_PRESS, HydraulicPressRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.PEDESTAL, c -> new ItemBlockEntityRenderer<>(
+        BlockEntityRendererFactories.register(NMBlockEntities.PEDESTAL, c -> new ItemBlockEntityRenderer<>(
                 c, be -> be.getStorage(null).getResource().toStack(), be -> 0.67f));
-        BlockEntityRendererRegistry.register(NMBlockEntities.ASSEMBLER, AssemblerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ASSEMBLER, AssemblerRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.DEATH_BLADES, DeathBladesRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.DEATH_BLADES, DeathBladesRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.FEEDING_TROUGH, TroughRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.FEEDING_TROUGH, TroughRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.BOTTLER, BottlerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.BOTTLER, BottlerRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.PYLON, PylonRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.PYLON, PylonRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.TABLE_CONTROLLER, TableControllerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.TABLE_CONTROLLER, TableControllerRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
 
 //        EntityRendererRegistry.register(NMEntities.TANK_MINECART, ctx -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityRendererRegistry.register(NMEntities.GLOME, ctx -> new GlomeEntityRenderer(ctx, GLOME));

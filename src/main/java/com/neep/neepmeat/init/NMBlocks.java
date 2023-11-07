@@ -15,6 +15,7 @@ import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.bottler.BottlerBlock;
@@ -165,6 +166,7 @@ public class NMBlocks
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
