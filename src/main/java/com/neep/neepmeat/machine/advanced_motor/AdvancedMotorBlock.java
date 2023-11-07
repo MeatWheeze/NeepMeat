@@ -5,6 +5,8 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.util.ItemUtils;
@@ -37,8 +39,10 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand))
+        if (player.getStackInHand(hand).isOf(NMBlocks.VASCULAR_CONDUIT.asItem()))
+        {
             return ActionResult.PASS;
+        }
 
         if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
         {

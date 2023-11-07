@@ -76,7 +76,8 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     public double getPUPower()
     {
-        return PowerUtils.absoluteToPerUnit(powerIn);
+//        return PowerUtils.absoluteToPerUnit(powerIn);
+        return 0;
     }
 
     public long getMaxInsert()

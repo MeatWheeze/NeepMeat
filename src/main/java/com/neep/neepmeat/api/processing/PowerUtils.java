@@ -36,9 +36,9 @@ public class PowerUtils
         return Math.floor(perUnit * BASE_POWER);
     }
 
-    public static double absoluteToPerUnit(double abs)
+    public static double absoluteToPerUnit(long abs)
     {
-        return abs / BASE_POWER;
+        return (double) abs / BASE_POWER;
     }
 
     public static double perUnitToAbsWatt(double perUnit)
@@ -103,18 +103,20 @@ public class PowerUtils
      *
      * Parameters: A = 1, rho = 1000.
      */
-        double Q = 1;
+//        double Q = 1;
 
 //      Density of water
-        double density = 1000f;
+//        double density = 1000f;
 
 //      Pipe cross-sectional area
-        double A = 1f;
+//        double A = 1f;
 
         // Arbitrary constant that makes the result a user-friendly number.
-        double C = 2;
+//        double C = 2;
 
 //        return (long) (1d/2d * (Q*Q*Q)/(A*A) * density * C);
+
+        // Okay fine. Let's just make it 1000. A nice round number.
         return 1000;
     }
 

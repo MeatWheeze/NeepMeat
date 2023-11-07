@@ -40,6 +40,7 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
+import com.neep.neepmeat.machine.motor.LiquidFuelMachine;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
@@ -236,9 +237,9 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getItemStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
 
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
+
         MOTOR = registerBlockEntity("motor_unit", (pos, state) -> new MotorBlockEntity(MOTOR, pos, state), NMBlocks.MOTOR);
-        FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
-//        BloodAcceptor.SIDED.registerForBlockEntity(MotorBlockEntity::getBloodAcceptor, MOTOR);
+        FluidStorage.SIDED.registerForBlockEntity(LiquidFuelMachine::getTank, MOTOR);
 
         ADVANCED_MOTOR = registerBlockEntity("advanced_motor", (pos, state) -> new AdvancedMotorBlockEntity(ADVANCED_MOTOR, pos, state), NMBlocks.ADVANCED_MOTOR);
         BloodAcceptor.SIDED.registerForBlockEntity(AdvancedMotorBlockEntity::getBloodAcceptor, ADVANCED_MOTOR);
