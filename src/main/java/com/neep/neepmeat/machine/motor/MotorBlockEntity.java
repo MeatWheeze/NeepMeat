@@ -40,7 +40,7 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
 
         try (Transaction transaction = Transaction.openOuter())
         {
-            long energy = 100;
+            long energy = 1000;
             long extracted = extractEnergy(energy, transaction);
 
             float newPower;

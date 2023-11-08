@@ -197,7 +197,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 float f = getNodeFlow(nodeSupplier.getPos(), node);
 
                 // Calculate the amount with respect to this vertex.
-                long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 8);
+                long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 1);
                 if (transferAmount > 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);

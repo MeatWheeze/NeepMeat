@@ -8,6 +8,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -63,7 +64,7 @@ public class TransducerBlockEntity extends SyncableBlockEntity
 
     public FluidPump getPump(Direction direction)
     {
-        return FluidPump.of(-0.5f, true);
+        return FluidPump.of(-0.5f, () -> AcceptorModes.PUSH, true);
     }
 
     public void updateBurners()
