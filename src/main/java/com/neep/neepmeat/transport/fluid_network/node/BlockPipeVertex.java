@@ -13,6 +13,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -29,6 +31,9 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     protected boolean dirty;
     protected Random jrandom = new Random();
 
+    protected Long[] queuedPositions = null;
+    protected boolean[] queuedNodes = null;
+
     public BlockPipeVertex(FluidPipeBlockEntity<?> fluidPipeBlockEntity)
     {
         super(fluidPipeBlockEntity.getPos().asLong());
@@ -40,6 +45,13 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public boolean canSimplify()
     {
         return super.canSimplify() && numNodes() == 0;
+    }
+
+    @Override
+    public void setAdjVertex(int dir, PipeVertex vertex)
+    {
+        super.setAdjVertex(dir, vertex);
+        parent.markDirty();
     }
 
     public int numNodes()
@@ -71,25 +83,10 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 FluidNode node = nodeSupplier.get();
                 if (node != null)
                 {
-//                    FluidPump pump = node.getPump();
-//                    if (pump != null && pump.getMode().isDriving())
-//                    {
-//
-//                    }
                     nodes[direction.ordinal()] = nodeSupplier;
                 }
             }
         });
-    }
-
-    protected float getHead(int dir)
-    {
-        return switch (dir)
-        {
-            case 0 -> getHeight() + pumpHeight - 0.5f;
-            case 1 -> getHeight() + pumpHeight + 0.5f;
-            default -> getHeight() + pumpHeight;
-        };
     }
 
     protected float getHeight(int dir)
@@ -184,6 +181,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     @Override
     public void preTick()
     {
+        deferredLoad();
+
         // Calculate the new pump head
         int found = 0;
         float total = 0;
@@ -352,6 +351,27 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     {
         nbt.putLong("amount", amount);
         nbt.put("variant", variant.toNbt());
+
+        NbtList adjacent = new NbtList();
+        for (int dir = 0; dir < 6; dir++)
+        {
+            NbtCompound adjNbt = new NbtCompound();
+            adjacent.add(adjNbt);
+
+            PipeVertex adj = getAdjVertex(dir);
+            if (adj != null)
+            {
+                adjNbt.putLong("pos", adj.getPos());
+            }
+
+            if (nodes[dir] != null)
+            {
+                adjNbt.putBoolean("node", true);
+            }
+        }
+
+        nbt.put("adjacent", adjacent);
+
         return nbt;
     }
 
@@ -360,5 +380,57 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     {
         this.amount = nbt.getLong("amount");
         this.variant = FluidVariant.fromNbt(nbt.getCompound("variant"));
+
+        NbtList adjacent = nbt.getList("adjacent", NbtElement.COMPOUND_TYPE);
+
+        queuedPositions = new Long[6];
+        queuedNodes = new boolean[6];
+        for (int dir = 0; dir < 6; ++dir)
+        {
+            NbtCompound adjNbt = adjacent.getCompound(dir);
+
+            if (adjNbt.contains("pos"))
+            {
+                queuedPositions[dir] = adjNbt.getLong("pos");
+            }
+
+            queuedNodes[dir] = adjNbt.contains("node");
+
+        }
+    }
+
+    protected void deferredLoad()
+    {
+        if (queuedPositions != null)
+        {
+            for (int dir = 0; dir < 6; ++dir)
+            {
+                Long adjPos = queuedPositions[dir];
+
+                if (adjPos == null)
+                    continue;
+
+                setAdjVertex(dir, PipeVertex.LOOKUP.find(parent.getWorld(), BlockPos.fromLong(adjPos), null));
+            }
+
+            queuedPositions = null;
+        }
+
+        if (queuedNodes != null)
+        {
+            for (int dir = 0; dir < 6; ++dir)
+            {
+                if (queuedNodes[dir])
+                {
+                    NodeSupplier nodeSupplier = FluidNodeManager.getInstance(parent.getWorld())
+                            .getNodeSupplier(new NodePos(BlockPos.fromLong(pos), Direction.values()[dir]));
+                    FluidNode node = nodeSupplier.get();
+                    if (node != null)
+                    {
+                        nodes[dir] = nodeSupplier;
+                    }
+                }
+            }
+        }
     }
 }
