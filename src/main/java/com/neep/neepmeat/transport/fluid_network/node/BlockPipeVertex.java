@@ -143,6 +143,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 // Even if previous transfers failed, the remaining fluid should all be transferred.
                 long transferAmount = (long) Math.min(amount, Math.ceil(amount / (float) transfers));
 
+                // TODO: determine toDir so that check valves work again.
+                // Apparently they have been broken since April 2023 without me noticing.
                 long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), variant, transaction);
 
                 if (received > 0)
@@ -243,7 +245,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 float f = getNodeFlow(nodeSupplier.getPos(), node);
 
                 // Calculate the amount with respect to this vertex.
-                long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 1);
+                long transferAmount = - (long) Math.ceil(f * getCapacity());
                 if (transferAmount > 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);

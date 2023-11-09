@@ -5,13 +5,20 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.FacingBlock;
-import net.minecraft.block.ShapeContext;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -19,7 +26,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements FluidPipe
+public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements FluidPipe, BlockEntityProvider
 {
     public static final VoxelShape X_SHAPE = Block.createCuboidShape(0, 4, 4, 16, 12, 12);
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
@@ -29,7 +36,6 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
     {
         super(itemName, itemSettings, settings);
     }
-
 
     public VoxelShape getShape(BlockState state)
     {
@@ -66,6 +72,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
                 updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
+        FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(state));
     }
 
     @Override
@@ -76,6 +83,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
 
         createStorageNodes(world, pos, state);
         updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
+        FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(state));
     }
 
     @Override
@@ -104,8 +112,40 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
         return true;
     }
 
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (player.getStackInHand(hand).isOf(Items.STICK))
+        {
+            if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+            {
+                if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
+                {
+                    System.out.println(vertex.getAmount());
+                    System.out.println(vertex.getVariant());
+                    System.out.println(vertex.getPumpHead());
+                }
+            }
+            return ActionResult.SUCCESS;
+        }
+
+        return super.onUse(state, world, pos, player, hand, hit);
+    }
+
     public AcceptorModes getDirectionMode(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return AcceptorModes.INSERT_EXTRACT;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        if (!world.isClient())
+        {
+            // TODO: jank
+            return ((world1, pos, state1, blockEntity) -> ((FluidPipeBlockEntity<?>) blockEntity).tick());
+        }
+        return null;
     }
 }
