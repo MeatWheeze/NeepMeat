@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Iterables;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
@@ -130,8 +131,9 @@ public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProv
         for (Direction direction : Direction.values())
         {
             BlockState pipeState = world.getBlockState(pos.offset(direction));
-            if (pipeState.getBlock() instanceof FluidPipe pipe && pipe.getConnections(pipeState, (d) -> true).contains(direction.getOpposite()))
-//                    && pipeState.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction.getOpposite())).isConnected())
+//            if (pipeState.getBlock() instanceof FluidPipe pipe && pipe.getConnections(pipeState, (d) -> true).contains(direction.getOpposite()))
+            if (pipeState.getBlock() instanceof FluidPipe pipe
+                    && Iterables.contains(pipe.getConnections(pipeState, d -> true), direction.getOpposite()))
             {
                 state = state.with(DIR_TO_CONNECTION.get(direction), true);
             }

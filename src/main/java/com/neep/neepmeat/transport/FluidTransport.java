@@ -7,6 +7,7 @@ import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.Block;
@@ -14,6 +15,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class FluidTransport
 {
@@ -33,22 +35,34 @@ public class FluidTransport
 
     public static void init()
     {
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, PIPE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, COPPER_PIPE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, STOP_VALVE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, FILTER_PIPE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, CHECK_VALVE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, LIMITER_VALVE);
-        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, WINDOW_PIPE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, PIPE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, COPPER_PIPE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, STOP_VALVE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, FILTER_PIPE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, CHECK_VALVE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, LIMITER_VALVE);
+//        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, WINDOW_PIPE);
+
+//        PipeVertex.LOOKUP.registerForBlocks(FluidTransport::getVertex, PIPE);
+        PipeVertex.LOOKUP.registerFallback(FluidTransport::getVertex);
 
         PipeNetwork.registerEvent();
     }
 
+    private static PipeVertex getVertex(World world, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, Void unused)
+    {
+        if (blockEntity instanceof FluidPipeBlockEntity<?> be)
+        {
+            return be.getPipeVertex();
+        }
+        return null;
+    }
+
     public static PipeNetwork getNetwork(World world, BlockPos pos, BlockState state, BlockEntity be, Void context)
     {
-        if (be instanceof FluidPipeBlockEntity pipeBE)
+        if (be instanceof FluidPipeBlockEntity<?> pipeBE)
         {
-            return pipeBE.getPipeVertex().getNetwork();
+//            return pipeBE.getPipeVertex().getNetwork();
         }
         return null;
     }

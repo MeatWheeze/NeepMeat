@@ -15,7 +15,6 @@ import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.HeatableFurnace;
-import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlockEntity;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
@@ -87,7 +86,7 @@ import net.minecraft.util.registry.Registry;
 
 public class NMBlockEntities
 {
-    public static BlockEntityType<?> FLUID_PIPE;
+    public static BlockEntityType<FluidPipeBlockEntity<?>> FLUID_PIPE;
     public static BlockEntityType<?> CHECK_VALVE;
     public static BlockEntityType<?> STOP_VALVE;
     public static BlockEntityType<FilterPipeBlockEntity> FILTER_PIPE;

@@ -13,14 +13,13 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
 {
 //    protected final List<Direction> connections = new ArrayList<>();
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];
-    protected float pressureHeight;
+    protected float pumpHeight = 0;
     protected float height;
 
     protected long amount;
     protected long oldAmount;
 
     protected final long pos;
-    private PipeNetwork network;
     protected FluidVariant variant = FluidVariant.blank();
 
     public SimplePipeVertex(long pos)
@@ -159,7 +158,7 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
     @Override
     public void addHead(int h)
     {
-        pressureHeight += h;
+        pumpHeight += h;
     }
 
     @Override
@@ -170,31 +169,13 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
 
     public float getTotalHead()
     {
-        return pressureHeight + getHeight();
+        return pumpHeight + getHeight();
     }
 
     protected float getHeight()
     {
-//        return Math.min(elevationHead, 1);
         return 0;
     }
-
-    @Override
-    public void setNetwork(PipeNetwork network)
-    {
-        this.network = network;
-    }
-
-    @Override
-    public PipeNetwork getNetwork()
-    {
-        return network;
-    }
-
-//    public List<Direction> getConnections()
-//    {
-//        return connections;
-//    }
 
     protected int numEdges()
     {
@@ -215,11 +196,8 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
     @Override
     public void reset()
     {
-        pressureHeight = 0;
+        pumpHeight = 0;
         height = 0;
-//        amount = 0;
-//        oldAmount = 0;
-        network = null;
         clearEdges();
     }
 

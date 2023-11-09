@@ -1,27 +1,34 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
-import com.neep.meatlib.api.event.InitialTicks;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
+import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.UUID;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends BlockEntity
 {
     public NbtCompound queuedNbt;
-    protected PipeNetwork network;
-    protected UUID networkUUID;
     protected final T vertex;
     protected final PipeConstructor<T> constructor;
 
@@ -39,9 +46,137 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
 
     public void setNetwork(PipeNetwork network)
     {
-        this.network = network;
-        networkUUID = network != null ? network.getUUID() : null;
-        markDirty();
+    }
+
+    public void updateAdjacent(Direction fromDirection)
+    {
+//        FluidPipe pipe = (FluidPipe) getCachedState().getBlock();
+        updateAdjacent();
+    }
+
+    public void updateAdjacent()
+    {
+        FluidPipe pipe = (FluidPipe) getCachedState().getBlock();
+
+        vertex.reset();
+        vertex.updateNodes((ServerWorld) world, pos, getCachedState());
+
+        int connections = pipe.countConnections(getCachedState());
+
+        if (connections > 2 || !vertex.canSimplify())
+        {
+            findAdjacent(pipe);
+        }
+        if (connections == 2)
+        {
+            linkVertices(pipe);
+        }
+    }
+
+    private void jankParticles(PipeVertex vertex)
+    {
+        if (vertex instanceof BlockPipeVertex bpv && world instanceof ServerWorld serverWorld)
+        {
+            BlockPos particlePos = BlockPos.fromLong(bpv.getPos());
+
+            serverWorld.spawnParticles(ParticleTypes.COMPOSTER,
+                    particlePos.getX() + 0.5, particlePos.getY() + 0.5, particlePos.getZ() + 0.5,
+                    10, 0.25, 0.25, 0.25, 0.01);
+        }
+    }
+
+    // For use if this pipe is new and may connect two vertices.
+    private void linkVertices(FluidPipe pipe)
+    {
+        List<Pair<PipeVertex, Direction>> toConnect = Lists.newArrayList();
+        for (Direction direction : pipe.getConnections(getCachedState(), direction -> true))
+        {
+            var nextVertex = findNextVertex(pos, direction);
+            if (nextVertex != null)
+            {
+                toConnect.add(nextVertex);
+            }
+        }
+
+        // No vertices found to link
+        if (toConnect.size() != 2)
+            return;
+
+        var vertex1 = toConnect.get(0);
+        var vertex2 = toConnect.get(1);
+
+        vertex1.first().setAdjVertex(vertex1.second().getId(), vertex2.first());
+        vertex2.first().setAdjVertex(vertex2.second().getId(), vertex1.first());
+
+        jankParticles(vertex1.first());
+        jankParticles(vertex2.first());
+    }
+
+    // For use if this pipe is a vertex. Performs a BFS at each connection to find the closest vertices.
+    private void findAdjacent(FluidPipe pipe)
+    {
+        for (Direction direction : pipe.getConnections(getCachedState(), direction -> true))
+        {
+            var adjacent = findNextVertex(pos, direction);
+            if (adjacent != null)
+            {
+                vertex.setAdjVertex(direction.getId(), adjacent.first());
+                adjacent.first().setAdjVertex(adjacent.second().getId(), vertex);
+            }
+        }
+    }
+
+    private Pair<PipeVertex, Direction> findNextVertex(BlockPos pos, Direction out)
+    {
+        Set<BlockPos> visited = Sets.newHashSet(); // TODO: convert to long set
+        Queue<Pair<BlockPos, Direction>> queue = Queues.newArrayDeque();
+
+        queue.add(Pair.of(pos.offset(out), out));
+        visited.add(pos.offset(out));
+        visited.add(pos);
+
+        while (!queue.isEmpty())
+        {
+            var current = queue.poll();
+            BlockState currentState = world.getBlockState(current.first());
+            FluidPipe pipe = FluidPipe.findFluidPipe(world, current.first(), currentState).orElse(null);
+
+            // This indicates that the connection is to a node, so no further action is required.
+            if (pipe == null)
+                return null;
+
+            int connections = pipe.countConnections(currentState);
+
+            PipeVertex vertex = PipeVertex.LOOKUP.find(world, current.first(), null);
+
+            if (vertex == null)
+                throw new IllegalStateException("Fluid pipe does not have valid vertex lookup");
+
+            if (connections > 2 || !vertex.canSimplify())
+            {
+                jankParticles(vertex);
+                return Pair.of(vertex, current.second().getOpposite());
+            }
+
+            BlockPos.Mutable offsetPos = current.first().mutableCopy();
+            for (Direction direction : pipe.getConnections(currentState, d -> true))
+            {
+                offsetPos.set(current.first(), direction);
+
+                if (!visited.contains(offsetPos))
+                {
+                    PipeVertex offsetVertex = PipeVertex.LOOKUP.find(world, offsetPos, null);
+
+                    if (offsetVertex == null)
+                        continue;
+
+                    visited.add(offsetPos.toImmutable());
+                    queue.add(Pair.of(offsetPos.toImmutable(), direction));
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -77,11 +212,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         super.writeNbt(nbt);
         nbt = FluidNodeManager.getInstance(getWorld()).writeNodes(getPos(), nbt);
 
-        if (networkUUID != null && network != null)
-        {
-            nbt.putUuid("networkUUID", networkUUID);
-        }
-
         nbt.put("vertex", vertex.writeNbt(new NbtCompound()));
     }
 
@@ -91,8 +221,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         super.readNbt(nbt);
         queuedNbt = nbt.copy();
 
-        if (nbt.get("networkUUID") != null) networkUUID = nbt.getUuid("networkUUID");
-
         vertex.readNbt(nbt.getCompound("vertex"));
     }
 
@@ -100,14 +228,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     public void markRemoved()
     {
         super.markRemoved();
-
-        if (world instanceof ServerWorld serverWorld)
-        {
-            if (replaced)
-            {
-//                FluidNodeManager.getInstance(serverWorld).entityRemoved(pos);
-            }
-        }
     }
 
     protected boolean replaced;
@@ -115,14 +235,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     public void markReplaced()
     {
         replaced = true;
-    }
-
-    public void update(PipeNetwork.UpdateReason reason)
-    {
-        if (network != null)
-        {
-            network.update(pos, vertex, reason);
-        }
     }
 
     public boolean isCreatedDynamically()
@@ -135,33 +247,14 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         return vertex;
     }
 
-//    public void setSaveState(PipeVertex.SaveState saveState)
-//    {
-//        this.state = saveState;
-//        markDirty();
-//    }
-
-    public void onLoad(ServerWorld world)
-    {
-        // If the pipe had an attached network when it was saved
-        if (network == null && networkUUID != null)
-        {
-            // Load the attached network from NBT
-            PipeNetwork.retrieveNetwork(world, networkUUID);
-        }
-    }
-
     public void onUnload(ServerWorld world)
     {
         FluidNodeManager.getInstance(world).entityUnloaded(getPos());
-
-        if (network != null)
-        {
-            // Hopefully allow the network and all attached block entities to be garbage collected
-            PipeNetwork.stopTickingNetwork(network);
-        }
     }
 
+    public void onLoad(ServerWorld world)
+    {
+    }
     public void onRemove(ServerWorld world)
     {
         FluidNodeManager.getInstance(world).entityRemoved(getPos());
@@ -192,20 +285,26 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
 
         ServerBlockEntityEvents.BLOCK_ENTITY_LOAD.register((blockEntity, world) ->
         {
-            if (blockEntity instanceof FluidPipeBlockEntity<?> be)
-            {
-                InitialTicks.getInstance(world).queue(w ->
-                {
-                    if (!be.replaced)
-                    {
-                        be.onLoad(world);
-                    }
-                    else
-                    {
-                        be.replaced = false;
-                    }
-                });
-            }
+//            if (blockEntity instanceof FluidPipeBlockEntity<?> be)
+//            {
+//                InitialTicks.getInstance(world).queue(w ->
+//                {
+//                    if (!be.replaced)
+//                    {
+//                        be.onLoad(world);
+//                    }
+//                    else
+//                    {
+//                        be.replaced = false;
+//                    }
+//                });
+//            }
         });
+    }
+
+    public void tick()
+    {
+        vertex.preTick();
+        vertex.tick();
     }
 }
