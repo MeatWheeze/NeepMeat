@@ -71,6 +71,7 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());
         }
+        sync();
     }
 
     @Override
