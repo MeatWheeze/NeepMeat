@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 public interface MeatlibItem
 {
-    // Stopgap measure for 1.19.2 backport
+    // 1.19.2 backport insanity. Ignore.
     @Nullable default ItemGroup getGroupOverride()
     {
         return MeatItemGroups.getGroup((Item) this);
@@ -14,6 +14,7 @@ public interface MeatlibItem
 
     String getRegistryName();
 
+    // 1.19.2 backport insanity. Ignore.
     default Item group(ItemGroup group)
     {
         MeatItemGroups.queueItem(group, (Item) this);

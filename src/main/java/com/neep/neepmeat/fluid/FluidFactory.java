@@ -64,7 +64,7 @@ public class FluidFactory
     public Item registerItem()
     {
         if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET)).group(NMItemGroups.GENERAL);
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
 //        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
         return bucketItem;
     }

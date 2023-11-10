@@ -63,7 +63,7 @@ public class OreFatFluidFactory
 
     public Item registerItem()
     {
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1)).group(NMItemGroups.GENERAL);
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
 //        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
 
         return bucketItem;
