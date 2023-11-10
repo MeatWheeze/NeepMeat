@@ -143,9 +143,12 @@
   "block.neepmeat.dumper.lore_0": "Drops items straight down.",
 
   "block.neepmeat.data_cable": "Data Cable",
+
   "block.neepmeat.vascular_conduit": "Vascular Conduit",
+  "block.neepmeat.vascular_conduit.lore_0": "Cycles blood through machines to give them power.",
 
   "block.neepmeat.power_emitter": "Creative Power Emitter",
+  "block.neepmeat.power_emitter.lore_0": "Emits 100eJ into a vascular network.",
 
   "block.neepmeat.pump": "Redstone Pump",
   "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",
@@ -177,7 +180,7 @@
   "block.neepmeat.fluid_interface.lore_0": "Acts as a proxy for the block it faces.",
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
-  "block.neepmeat.fluid_exciter": "Fluid Exciter",
+  "block.neepmeat.fluid_exciter": "Heart Machine",
 
   "block.neepmeat.item_buffer": "Display Platform",
 
@@ -208,7 +211,14 @@
   "block.neepmeat.mixer": "Mixer",
   "block.neepmeat.mixer.lore_0": "Combines fluids and items from adjacent tanks.",
   "block.neepmeat.breaker": "Motorised Breaker",
+
   "block.neepmeat.motor_unit": "Motor",
+  "block.neepmeat.motor_unit.lore_0": "Powers mechanical blocks.",
+  "block.neepmeat.motor_unit.lore_1": "Runs on Ethereal Fuel.",
+  "block.neepmeat.advanced_motor": "Advanced Motor",
+  "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks.",
+  "block.neepmeat.advanced_motor.lore_1": "Takes power from a connected vascular network.",
+
   "block.neepmeat.stirling_engine": "Stirling Engine",
   "block.neepmeat.agitator": "Fluid Agitator",
   "block.neepmeat.small_trommel": "Small Trommel",
