@@ -145,6 +145,8 @@
   "block.neepmeat.data_cable": "Data Cable",
   "block.neepmeat.vascular_conduit": "Vascular Conduit",
 
+  "block.neepmeat.power_emitter": "Creative Power Emitter",
+
   "block.neepmeat.pump": "Redstone Pump",
   "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",
 
