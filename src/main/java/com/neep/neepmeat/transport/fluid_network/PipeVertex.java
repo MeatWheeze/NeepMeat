@@ -35,7 +35,7 @@ public interface PipeVertex extends PipeFlowComponent
 
     void updateNodes(ServerWorld world, BlockPos pos, BlockState state);
 
-    float getTotalHead();
+    float getTotalHeight();
     void setHeight(float value);
 
     void addHead(int h);

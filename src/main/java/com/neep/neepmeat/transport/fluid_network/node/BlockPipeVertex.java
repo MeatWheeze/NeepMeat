@@ -37,6 +37,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     {
         super(fluidPipeBlockEntity.getPos().asLong());
         this.parent = fluidPipeBlockEntity;
+        setHeight(fluidPipeBlockEntity.getPos().getY());
         components.size(6);
     }
 
@@ -124,7 +125,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             for (int dir = 0; dir < getAdjVertices().length; ++dir)
             {
                 PipeVertex vertex = getAdjacent(dir);
-                if (vertex != null && vertex.getTotalHead() - this.getTotalHead() <= 0)
+                if (vertex != null && vertex.getTotalHeight() - this.getTotalHeight() <= 0)
                 {
                     components.set(dir, vertex);
                     ++transfers;
@@ -172,7 +173,6 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         // Negative for influx, positive for efflux.
         float nodeFlow = node.getFlow();
 
-//        float heightFlow = -getHead(nodeSupplier.getPos().face().ordinal()) < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
         // If a node is above this vertex, the height difference should be -0.5.
         float heightFlow = -(getHeight(pos.face().ordinal()) - height) - (node.getPressureHeight() - pumpHeight);
 
@@ -327,7 +327,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         for (PipeVertex v : getAdjVertices()) {
             if (v != null) adj.append(System.identityHashCode(v)).append(", ");
         }
-        return "Vertex@" + System.identityHashCode(this) + "{connection=" + adj + "nodes: " + Arrays.toString(nodes) + ", head:" + getTotalHead() + "}";
+        return "Vertex@" + System.identityHashCode(this) + "{connection=" + adj + "nodes: " + Arrays.toString(nodes) + ", head:" + getTotalHeight() + "}";
     }
 
     @Override
