@@ -4,6 +4,8 @@
   "itemGroup.neepmeat.food": "NEEPMeat Food",
 
   "message.neepmeat.shift_for_info": "§7Hold §fSHIFT§7 for more info.",
+  "message.neepmeat.requires_motor": "Requires an external motor.",
+  "message.neepmeat.requires_vascular": "Requires a vascular network.",
 
   "message.neepmeat.power": "Power: ",
   "message.neepmeat.power_unit": "eJ/t",
