@@ -7,7 +7,6 @@ import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import it.unimi.dsi.fastutil.Pair;
@@ -53,10 +52,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
             return Optional.of(be);
         }
         return Optional.empty();
-    }
-
-    public void setNetwork(PipeNetwork network)
-    {
     }
 
     public void updateAdjacent(BlockState newState, Direction fromDirection)

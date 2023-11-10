@@ -29,33 +29,16 @@ public interface PipeVertex extends PipeFlowComponent
 
     void reset();
 
-    boolean collapseEdges();
-
-    default boolean keepNetworkValid() {return false;}
-
     void updateNodes(ServerWorld world, BlockPos pos, BlockState state);
 
     float getTotalHeight();
     void setHeight(float value);
 
-    void addHead(int h);
-
     long getPos();
 
-    void setSaveState(SaveState saveState);
-
-    SaveState getState();
-
-    float getPumpHead();
+    float getPumpHeight();
 
     void erase();
-
-    enum SaveState
-    {
-        PENDING_LOAD,
-        LOADED,
-        NEW
-    }
 
     BlockApiLookup<PipeVertex, Void> LOOKUP = BlockApiLookup.get(
             new Identifier(NeepMeat.NAMESPACE, "pipe_vertex"),

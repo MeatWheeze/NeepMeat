@@ -65,13 +65,6 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     }
 
     @Override
-    public void reset()
-    {
-        parent.setNetwork(null);
-        super.reset();
-    }
-
-    @Override
     public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)
     {
         Arrays.fill(nodes, null);
@@ -184,7 +177,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         float total = 0;
         int found = 1;
 
-        total += getPumpHead();
+        total += getPumpHeight();
 
         for (int dir = 0; dir < 6; ++dir)
         {
@@ -193,7 +186,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
             if (vertex != null)
             {
-                total += vertex.getPumpHead();
+                total += vertex.getPumpHeight();
                 found++;
             }
             else if (node != null)
@@ -270,35 +263,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     }
 
     @Override
-    public void addHead(int h)
-    {
-        pumpHeight += h;
-
-        for (FluidNode node : nodes)
-        {
-            if (node == null) continue;
-
-            // Simulate an extra level of depth for each attached node.
-            // If the effective height at this position is -14, all attached nodes will have an effective height of -13.
-            node.setPressureHeight(pumpHeight - Math.signum(h) * 1);
-        }
-    }
-
-    @Override
-    public void setSaveState(SaveState saveState)
-    {
-//        parent.setSaveState(saveState);
-    }
-
-    @Override
-    public SaveState getState()
-    {
-        return SaveState.LOADED;
-//        return parent.state;
-    }
-
-    @Override
-    public float getPumpHead()
+    public float getPumpHeight()
     {
         return pumpHeight;
     }
@@ -307,17 +272,6 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
     {
         return super.insert(fromDir, toDir, maxAmount, world, insertVariant, transaction);
-    }
-
-    @Override
-    public boolean keepNetworkValid()
-    {
-        int count = 0;
-        for (FluidNode node : nodes)
-        {
-            if (node != null) ++count;
-        }
-        return count >= 2;
     }
 
     @Override

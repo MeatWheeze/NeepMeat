@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -42,7 +41,6 @@ public class StopValveBlock extends AbstractAxialFluidPipe implements BlockEntit
         if (!world.isClient())
         {
             world.setBlockState(pos, state.cycle(OPEN));
-            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.VALVE_CHANGED);
         }
 
         return ActionResult.success(world.isClient);
