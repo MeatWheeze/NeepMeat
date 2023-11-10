@@ -48,6 +48,8 @@ public interface PipeVertex extends PipeFlowComponent
 
     float getPumpHead();
 
+    void erase();
+
     enum SaveState
     {
         PENDING_LOAD,
