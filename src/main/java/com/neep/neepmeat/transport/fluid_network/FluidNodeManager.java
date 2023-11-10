@@ -24,9 +24,8 @@ import java.util.*;
 
 public class FluidNodeManager
 {
-    protected static final HashMap<ServerWorld, FluidNodeManager> WORLD_NETWORKS = new HashMap<>();
+    protected static final HashMap<ServerWorld, FluidNodeManager> WORLD_MANAGERS = new HashMap<>();
 
-    protected final Queue<FluidNode> queuedNodes = new LinkedList<>();
     protected final Long2ObjectMap<Map<NodePos, FluidNode>> chunkNodes = new Long2ObjectArrayMap<>();
     protected final ServerWorld world;
 
@@ -37,7 +36,7 @@ public class FluidNodeManager
 
     public static FluidNodeManager getInstance(ServerWorld world)
     {
-        return WORLD_NETWORKS.get(world);
+        return WORLD_MANAGERS.get(world);
     }
 
     public static FluidNodeManager getInstance(World world)
@@ -54,28 +53,28 @@ public class FluidNodeManager
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            getInstance((ServerWorld) world).removeNode(world, nodePos);
+            getInstance((ServerWorld) world).removeNode(nodePos);
         }
     }
 
-    protected static void createNetwork(ServerWorld world)
+    protected static void create(ServerWorld world)
     {
-        FluidNodeManager network = WORLD_NETWORKS.get(world);
-        if (network == null)
+        FluidNodeManager manager = WORLD_MANAGERS.get(world);
+        if (manager == null)
         {
-            network = new FluidNodeManager(world);
-            WORLD_NETWORKS.put(world, network);
+            manager = new FluidNodeManager(world);
+            WORLD_MANAGERS.put(world, manager);
         }
     }
 
     private static void startWorld(MinecraftServer server, ServerWorld world)
     {
-        createNetwork(world);
+        create(world);
     }
 
     private static void stopWorld(MinecraftServer server, ServerWorld world)
     {
-        WORLD_NETWORKS.clear();
+        WORLD_MANAGERS.clear();
     }
 
     @Override
@@ -109,7 +108,7 @@ public class FluidNodeManager
         return out;
     }
 
-    private boolean removeNode(NodePos pos)
+    public boolean removeNode(NodePos pos)
     {
         Map<NodePos, FluidNode> nodes;
         if ((nodes = chunkNodes.get(pos.toChunkPos().toLong())) == null)
@@ -128,20 +127,7 @@ public class FluidNodeManager
         return false;
     }
 
-    private void removeBlockEntity(ServerWorld world, BlockPos pos)
-    {
-        // Perform checks before removing
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be && be.isCreatedDynamically())
-        {
-            world.removeBlockEntity(pos);
-        }
-    }
-
-    private boolean shouldPosHaveEntity(BlockPos pos)
-    {
-        return getNodes(pos).size() > 0;
-    }
-
+    @SuppressWarnings("UnstableApiUsage")
     public boolean updatePosition(World world, NodePos pos)
     {
         // Get connected storage, remove node if there isn't one
@@ -150,7 +136,7 @@ public class FluidNodeManager
         {
             if (get(pos) != null)
             {
-                removeNode(world, pos);
+                removeNode(pos);
                 return true;
             }
             else
@@ -171,11 +157,6 @@ public class FluidNodeManager
         }
 
         return newNode;
-    }
-
-    public boolean removeNode(World world, NodePos pos)
-    {
-        return removeNode(pos);
     }
 
     public List<FluidNode> getNodes(BlockPos pos)

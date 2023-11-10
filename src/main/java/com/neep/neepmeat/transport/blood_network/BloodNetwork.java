@@ -1,4 +1,4 @@
-package com.neep.neepmeat.transport.fluid_network;
+package com.neep.neepmeat.transport.blood_network;
 
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;

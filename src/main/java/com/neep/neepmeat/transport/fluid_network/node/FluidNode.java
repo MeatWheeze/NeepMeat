@@ -145,7 +145,6 @@ public class FluidNode implements PipeFlowComponent
         this.storage = storage;
     }
 
-    // Removes node from and revalidates the network
     public void onRemove()
     {
     }

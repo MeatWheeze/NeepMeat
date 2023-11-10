@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
-import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
+import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;

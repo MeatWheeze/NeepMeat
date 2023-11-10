@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
+@Deprecated
 public class PipeNetworkImpl implements PipeNetwork
 {
     protected final PipeNetGraph graph;

@@ -2,8 +2,7 @@ package com.neep.neepmeat.transport.block.energy_transport.entity;
 
 import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
-import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
-import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
+import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

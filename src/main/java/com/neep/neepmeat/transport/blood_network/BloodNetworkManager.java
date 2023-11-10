@@ -6,7 +6,6 @@ import com.neep.neepmeat.transport.TransportComponents;
 import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.event.WorldChunkEvents;
-import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;

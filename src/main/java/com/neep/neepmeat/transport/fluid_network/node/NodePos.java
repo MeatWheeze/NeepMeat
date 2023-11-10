@@ -83,18 +83,6 @@ public final class NodePos
         return l;
     }
 
-//    public static int unpackLongX(long packedPos) {
-//        return (int)(packedPos << 64 - BIT_SHIFT_X - SIZE_BITS_X >> 64 - SIZE_BITS_X);
-//    }
-//
-//    public static int unpackLongY(long packedPos) {
-//        return (int)(packedPos << 64 - SIZE_BITS_Y >> 64 - SIZE_BITS_Y);
-//    }
-//
-//    public static int unpackLongZ(long packedPos) {
-//        return (int)(packedPos << 64 - BIT_SHIFT_Z - SIZE_BITS_Z >> 64 - SIZE_BITS_Z);
-//    }
-
     public static Direction unpackLongFace(long packedPos)
     {
         int dir = (int) (packedPos << 64 - BIT_SHIFT_D - SIZE_BITS_D >> 64 - SIZE_BITS_D);
