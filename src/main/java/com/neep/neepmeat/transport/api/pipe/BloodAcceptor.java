@@ -12,7 +12,7 @@ public interface BloodAcceptor
             BloodAcceptor.class, Direction.class);
 
 
-    default float getRate()
+    default long getOutput()
     {
         return 0;
     }

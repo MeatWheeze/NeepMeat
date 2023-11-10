@@ -28,22 +28,11 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
     public BloodNetworkChunkComponent(Chunk chunk)
     {
         this.chunk = chunk;
-//        this.world = (ServerWorld) ((WorldChunk) chunk).getWorld();
-    }
-
-
-    public void addNetwork(BloodNetwork network)
-    {
     }
 
     @Override
     public void serverTick()
     {
-        if (!pipes.isEmpty())
-        {
-            int i = 0;
-//            ((WorldChunk) chunk).setNeedsSaving(true);
-        }
     }
 
     @Override
@@ -57,10 +46,6 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
                 UUID uuid = compound.getUuid("uuid");
                 BlockPos pos = BlockPos.fromLong(compound.getLong("pos"));
 
-                // TODO: remove cast
-//                VascularConduitEntity entity = (VascularConduitEntity) chunk.getBlockEntity(pos);
-//                pipes.add(entity);
-//                loadedPipes.put(uuid, entity);
                 pipesToLoad.add(Pair.of(uuid, pos));
             }
         }

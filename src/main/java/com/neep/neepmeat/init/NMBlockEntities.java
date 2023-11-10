@@ -303,7 +303,8 @@ public class NMBlockEntities
 
         ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
-        FluidStorage.SIDED.registerForBlocks(AssemblerBlock.Top::getStorage, NMBlocks.ASSEMBLER_TOP);
+//        FluidStorage.SIDED.registerForBlocks(AssemblerBlock.Top::getStorage, NMBlocks.ASSEMBLER_TOP);
+//        ItemStorage.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER);
 
         WORKSTATION = registerBlockEntity("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
@@ -387,9 +388,9 @@ public class NMBlockEntities
             }
 
             @Override
-            public float getRate()
+            public long getOutput()
             {
-                return 0.1f;
+                return 100;
             }
         }), NMBlocks.POWER_EMITTER);
     }

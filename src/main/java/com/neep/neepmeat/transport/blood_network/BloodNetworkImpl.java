@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.Sets;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
@@ -27,7 +28,7 @@ public class BloodNetworkImpl implements BloodNetwork
 
     protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
 
-    protected float output;
+    protected long output = 0;
     protected boolean removed = false;
     protected boolean dirty = false;
 
@@ -72,7 +73,7 @@ public class BloodNetworkImpl implements BloodNetwork
     @Override
     public void tick()
     {
-        float internal = 0;
+        long internal = 0;
 
         if (acceptors.sort)
             acceptors.sort();
@@ -81,10 +82,17 @@ public class BloodNetworkImpl implements BloodNetwork
         while (it.hasNext())
         {
             var acceptor = it.next();
-            internal += acceptor.getRate();
+            internal += acceptor.getOutput();
         }
 
-        float out = internal / acceptors.sinks().asList().size();
+        int size = acceptors.sinks().asList().size();
+        long out = size != 0 ? internal / size : 0;
+
+        if (out != output)
+        {
+            sinkUpdateQueue.addAll(acceptors.sinks().asList());
+            output = out;
+        }
 
         var sit = sinkUpdateQueue.iterator();
         while (sit.hasNext())
@@ -92,7 +100,7 @@ public class BloodNetworkImpl implements BloodNetwork
             var sink = sit.next();
             sit.remove();
 
-            sink.updateInflux(out);
+            sink.updateInflux(((float) out) / PowerUtils.referencePower());
         }
     }
 
@@ -210,28 +218,6 @@ public class BloodNetworkImpl implements BloodNetwork
         return uuid;
     }
 
-    public NbtCompound toNbt()
-    {
-        NbtCompound root = new NbtCompound();
-
-        root.put("conduits", conduits.toNbt());
-        root.put("acceptors", acceptors.toNbt());
-
-        return root;
-    }
-
-    public static BloodNetwork fromNbt(ServerWorld world, UUID uuid, NbtCompound newtworkNbt)
-    {
-        BloodNetworkImpl network = new BloodNetworkImpl(uuid, world);
-
-        network.acceptors.readNbt(newtworkNbt.getCompound("acceptors"));
-        network.conduits.readNbt(newtworkNbt.getCompound("conduits"));
-
-        network.conduits.getConduits().values().forEach(c -> c.setNetwork(network));
-
-        return network;
-    }
-
     class AcceptorManager
     {
         protected PosDirectionMap<BloodAcceptor> acceptors = new PosDirectionMap<>(BloodAcceptor.class);
@@ -326,11 +312,6 @@ public class BloodNetworkImpl implements BloodNetwork
             acceptors.remove(lpos);
             sources.remove(lpos);
             sinks.remove(lpos);
-
-//            for (var sink : sinks.get(lpos))
-//            {
-//
-//            }
         }
 
         public void clear()
@@ -348,104 +329,6 @@ public class BloodNetworkImpl implements BloodNetwork
         public PosDirectionMap<BloodAcceptor> sinks()
         {
             return sinks;
-        }
-
-        public NbtCompound toNbt()
-        {
-            NbtCompound root = new NbtCompound();
-
-            var acceptorsNbt = mapToNbt(acceptors.map(), BloodNetworkImpl::writeKey, BloodNetworkImpl::writeAcceptors);
-
-            root.put("acceptors", acceptorsNbt);
-
-            return root;
-        }
-
-        public void readNbt(NbtCompound nbt)
-        {
-            clear();
-
-            NbtList acceptorsNbt = nbt.getList("acceptors", NbtElement.BYTE_TYPE);
-
-            for (var entry : acceptorsNbt)
-            {
-                if (entry instanceof NbtCompound compound)
-                {
-                    long pos = compound.getLong("key");
-                    NbtList acceptorList = compound.getList("val", NbtElement.BYTE_TYPE);
-
-                    BloodAcceptor[] array = new BloodAcceptor[6];
-                    for (int dir = 0; dir < acceptorList.size(); ++dir)
-                    {
-                        boolean present = ((NbtByte) acceptorList.get(dir)).byteValue() > 0;
-                        if (present)
-                        {
-                            Direction direction = Direction.byId(dir);
-                            BlockPos acceptorPos = BlockPos.fromLong(pos).offset(direction);
-                            var acceptor = BloodAcceptor.SIDED.find(world, acceptorPos, direction.getOpposite());
-
-                            // This shouldn't happen
-                            if (acceptor == null)
-                                continue;
-
-                            array[dir] = acceptor;
-
-                            if (acceptor.getMode().isOut())
-                            {
-                                sources.put(pos, dir, acceptor);
-                            }
-                            else
-                            {
-                                sinks.put(pos, dir, acceptor);
-                            }
-                        }
-                    }
-
-                    acceptors.put(pos, array);
-                }
-            }
-        }
-    }
-
-
-    protected static NbtList writeAcceptors(BloodAcceptor[] acceptors)
-    {
-        NbtList list = new NbtList();
-        for (BloodAcceptor acceptor : acceptors)
-        {
-            list.add(NbtByte.of(acceptor != null));
-        }
-        return list;
-    }
-
-    protected static NbtLong writeKey(long pos)
-    {
-        return NbtLong.of(pos);
-    }
-
-    public static <K, V> NbtList mapToNbt(Map<K, V> map, Function<K, NbtElement> keyFunc, Function<V, NbtElement> valFunc)
-    {
-        NbtList list = new NbtList();
-        for (var entry : map.entrySet())
-        {
-            NbtCompound entryNbt = new NbtCompound();
-            entryNbt.put("key", keyFunc.apply(entry.getKey()));
-            entryNbt.put("val", valFunc.apply(entry.getValue()));
-        }
-        return list;
-    }
-
-    public static <K, V> void mapFromNbt(Map<K, V> map, Function<NbtElement, K> keyFunc, Function<NbtElement, V> valFunc, NbtList element)
-    {
-        for (var entry : element)
-        {
-            if (entry instanceof NbtCompound compound)
-            {
-                map.put(
-                        keyFunc.apply(compound.get("key")),
-                        valFunc.apply(compound.get("val"))
-                );
-            }
         }
     }
 }
