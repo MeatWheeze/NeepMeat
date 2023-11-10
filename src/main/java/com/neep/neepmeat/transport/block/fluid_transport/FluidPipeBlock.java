@@ -158,6 +158,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                     System.out.println(vertex.getAmount());
                     System.out.println(vertex.getVariant());
                     System.out.println(vertex.getPumpHeight());
+                    System.out.println(vertex.getTotalHeight());
                 }
             }
             return ActionResult.SUCCESS;
