@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
@@ -138,6 +139,12 @@ public abstract class TallBlock extends BaseBlock
         protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
         {
             world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(TallBlock.this.getDefaultState()));
+        }
+
+        @Override
+        public PistonBehavior getPistonBehavior(BlockState state)
+        {
+            return PistonBehavior.IGNORE;
         }
     }
 }

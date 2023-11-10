@@ -17,7 +17,6 @@ import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.HeatableFurnace;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlockEntity;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
-import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
@@ -303,8 +302,7 @@ public class NMBlockEntities
 
         ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
-//        FluidStorage.SIDED.registerForBlocks(AssemblerBlock.Top::getStorage, NMBlocks.ASSEMBLER_TOP);
-//        ItemStorage.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER);
+        BloodAcceptor.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER.getStructureBlock());
 
         WORKSTATION = registerBlockEntity("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
