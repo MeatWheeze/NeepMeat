@@ -49,13 +49,13 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     public void tick()
     {
-        if (FluidNodeManager.shouldTick(world.getTime()))
+//        if (FluidNodeManager.shouldTick(world.getTime()))
         {
             // Get effective influx per tick
             double prevPower = this.powerIn;
 
             // Get effective input power
-            this.powerIn = PowerUtils.fluidPower(inputStorage.lastFluid, inputStorage.lastInput, FluidNodeManager.TICK_RATE);
+            this.powerIn = PowerUtils.fluidPower(inputStorage.lastFluid, inputStorage.lastInput, 1);
 
             if (prevPower != powerIn)
             {

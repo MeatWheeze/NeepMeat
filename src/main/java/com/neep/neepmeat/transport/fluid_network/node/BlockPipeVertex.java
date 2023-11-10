@@ -5,7 +5,6 @@ import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -26,7 +25,7 @@ import java.util.Random;
 public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 {
     protected final FluidPipeBlockEntity<?> parent;
-    protected final NodeSupplier[] nodes = new NodeSupplier[6];
+    protected final FluidNode[] nodes = new FluidNode[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
     protected boolean dirty;
     protected Random jrandom = new Random();
@@ -57,7 +56,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public int numNodes()
     {
         int number = 0;
-        for (NodeSupplier node : nodes)
+        for (var node : nodes)
         {
             if (node != null) ++number;
         }
@@ -79,11 +78,10 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         {
             for (Direction direction : p.getConnections(state, d -> true))
             {
-                NodeSupplier nodeSupplier = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pos, direction));
-                FluidNode node = nodeSupplier.get();
+                FluidNode node = FluidNodeManager.getInstance(world).get(new NodePos(pos, direction));
                 if (node != null)
                 {
-                    nodes[direction.ordinal()] = nodeSupplier;
+                    nodes[direction.ordinal()] = node;
                 }
             }
         });
@@ -112,13 +110,14 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
             for (int dir = 0; dir < nodes.length; ++dir)
             {
-                NodeSupplier nodeSupplier = nodes[dir];
-                FluidNode node;
-                if (nodeSupplier != null && (node = nodeSupplier.get()) != null
-                        && getNodeFlow(nodeSupplier.getPos(), node) >= 0 && node.getMode().canInsert())
+                FluidNode node = nodes[dir];
+                if (node != null)
                 {
-                    components.set(dir, nodeSupplier);
-                    ++transfers;
+                    if (getNodeFlow(node.getNodePos(), node) >= 0 && node.getMode().canInsert())
+                    {
+                        components.set(dir, node);
+                        ++transfers;
+                    }
                 }
             }
 
@@ -180,35 +179,29 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         return nodeFlow != 0 ? nodeFlow : heightFlow;
     }
 
-    @Override
-    public void preTick()
+    protected void stepHead()
     {
-        deferredLoad();
-
-        // Calculate the new pump head
-        int found = 0;
         float total = 0;
+        int found = 1;
+
+        total += getPumpHead();
+
         for (int dir = 0; dir < 6; ++dir)
         {
             PipeVertex vertex = getAdjacent(dir);
-            NodeSupplier nodeSupplier = nodes[dir];
+            FluidNode node = nodes[dir];
+
             if (vertex != null)
             {
                 total += vertex.getPumpHead();
                 found++;
             }
-            else if (nodeSupplier != null)
+            else if (node != null)
             {
-                FluidNode node = nodeSupplier.get();
-                {
-                    total += node.getPressureHeight();
-                    found++;
-                }
+                total += node.getPressureHeight();
+                found++;
             }
         }
-
-        total += getPumpHead();
-        found++;
 
         if (found == 0)
         {
@@ -219,30 +212,31 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             float f = total / found;
             pumpHeight = Math.abs(f) <= 0.01 ? 0 : f;
         }
+    }
 
-        for (NodeSupplier nodeSupplier : nodes)
+    @Override
+    public void preTick()
+    {
+        deferredLoad();
+
+        stepHead();
+
+        for (FluidNode node : nodes)
         {
-            if (nodeSupplier == null || !nodeSupplier.exists()) continue;
-            FluidNode node = nodeSupplier.get();
+            if (node == null) continue;
 
-            // Simulate an extra level of depth for each attached node.
-            // If the effective height at this position is -14, all attached nodes will have an effective height of -13.
-//            node.setPressureHeight(pumpHeight - Math.signum(pumpHeight) * 1);
             node.setPressureHeight((pumpHeight) / 2);
         }
 
-
         try (Transaction transaction = Transaction.openOuter())
         {
-            for (NodeSupplier nodeSupplier : nodes)
+            for (FluidNode node : nodes)
             {
-                if (nodeSupplier == null) continue;
-                FluidNode node = nodeSupplier.get();
                 if (node == null) continue;
 
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-                float f = getNodeFlow(nodeSupplier.getPos(), node);
+                float f = getNodeFlow(node.getNodePos(), node);
 
                 // Calculate the amount with respect to this vertex.
                 long transferAmount = - (long) Math.ceil(f * getCapacity());
@@ -280,10 +274,9 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     {
         pumpHeight += h;
 
-        for (NodeSupplier nodeSupplier : nodes)
+        for (FluidNode node : nodes)
         {
-            if (nodeSupplier == null || !nodeSupplier.exists()) continue;
-            FluidNode node = nodeSupplier.get();
+            if (node == null) continue;
 
             // Simulate an extra level of depth for each attached node.
             // If the effective height at this position is -14, all attached nodes will have an effective height of -13.
@@ -320,9 +313,9 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public boolean keepNetworkValid()
     {
         int count = 0;
-        for (NodeSupplier nodeSupplier : nodes)
+        for (FluidNode node : nodes)
         {
-            if (nodeSupplier != null && nodeSupplier.get() != null) ++count;
+            if (node != null) ++count;
         }
         return count >= 2;
     }
@@ -425,12 +418,10 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             {
                 if (queuedNodes[dir])
                 {
-                    NodeSupplier nodeSupplier = FluidNodeManager.getInstance(parent.getWorld())
-                            .getNodeSupplier(new NodePos(BlockPos.fromLong(pos), Direction.values()[dir]));
-                    FluidNode node = nodeSupplier.get();
+                    FluidNode node = FluidNodeManager.getInstance(parent.getWorld()).get(new NodePos(BlockPos.fromLong(pos), Direction.values()[dir]));
                     if (node != null)
                     {
-                        nodes[dir] = nodeSupplier;
+                        nodes[dir] = node;
                     }
                 }
             }
