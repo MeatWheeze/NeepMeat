@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 1,
   "ingredient": {
     "item": "neepmeat:dirty_red_tiles"
   },
-  "result": "neepmeat:dirty_red_tiles_stairs",
-  "count": 1
+  "result": "neepmeat:dirty_red_tiles_stairs"
 }

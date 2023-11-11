@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:reinforced_glass"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:reinforced_glass_slab",
-    "count": 6
+    "count": 6,
+    "item": "neepmeat:reinforced_glass_slab"
   }
 }

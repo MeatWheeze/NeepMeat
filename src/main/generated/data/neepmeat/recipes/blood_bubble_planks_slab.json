@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:blood_bubble_planks"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:blood_bubble_planks_slab",
-    "count": 6
+    "count": 6,
+    "item": "neepmeat:blood_bubble_planks_slab"
   }
 }

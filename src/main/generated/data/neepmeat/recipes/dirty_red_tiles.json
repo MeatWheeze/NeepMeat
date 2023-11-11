@@ -1,20 +1,20 @@
 {
   "type": "minecraft:crafting_shaped",
+  "key": {
+    "d": {
+      "item": "neepmeat:blood_bucket"
+    },
+    "i": {
+      "item": "minecraft:terracotta"
+    }
+  },
   "pattern": [
     "iii",
     "idi",
     "iii"
   ],
-  "key": {
-    "i": {
-      "item": "minecraft:terracotta"
-    },
-    "d": {
-      "item": "neepmeat:blood_bucket"
-    }
-  },
   "result": {
-    "item": "neepmeat:dirty_red_tiles",
-    "count": 8
+    "count": 8,
+    "item": "neepmeat:dirty_red_tiles"
   }
 }

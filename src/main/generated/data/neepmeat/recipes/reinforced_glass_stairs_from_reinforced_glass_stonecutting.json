@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 1,
   "ingredient": {
     "item": "neepmeat:reinforced_glass"
   },
-  "result": "neepmeat:reinforced_glass_stairs",
-  "count": 1
+  "result": "neepmeat:reinforced_glass_stairs"
 }

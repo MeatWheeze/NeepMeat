@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:reinforced_glass"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:reinforced_glass_stairs",
-    "count": 4
+    "count": 4,
+    "item": "neepmeat:reinforced_glass_stairs"
   }
 }

@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:polished_metal"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:polished_metal_slab",
-    "count": 6
+    "count": 6,
+    "item": "neepmeat:polished_metal_slab"
   }
 }

@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 1,
   "ingredient": {
     "item": "neepmeat:grey_rough_concrete"
   },
-  "result": "neepmeat:grey_rough_concrete_stairs",
-  "count": 1
+  "result": "neepmeat:grey_rough_concrete_stairs"
 }

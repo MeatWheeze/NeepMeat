@@ -1,8 +1,8 @@
 {
   "type": "minecraft:stonecutting",
+  "count": 2,
   "ingredient": {
     "item": "neepmeat:rusty_metal"
   },
-  "result": "neepmeat:rusty_metal_slab",
-  "count": 2
+  "result": "neepmeat:rusty_metal_slab"
 }
