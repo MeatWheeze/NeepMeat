@@ -3,7 +3,7 @@
   "pattern": [
     " w ",
     "sis",
-    " s "
+    "sss"
   ],
   "key": {
     "i": {
@@ -17,7 +17,7 @@
     }
   },
   "result": {
-    "item": "neepmeat:small_sink",
+    "item": "neepmeat:dirty_sink",
     "count": 1
   }
 }

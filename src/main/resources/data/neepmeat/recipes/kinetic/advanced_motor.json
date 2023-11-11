@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "eIe",
+    "ici",
+    "isi"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:copper_ingot"
+    },
+    "i": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "e": {
+      "item": "neepmeat:bioelectric_organ"
+    },
+    "I": {
+      "item": "neepmeat:integration_charge_crude"
+    },
+    "s": {
+      "item": "neepmeat:stator"
+    }
+  },
+  "result": {
+    "item": "neepmeat:motor_unit",
+    "count": 1
+  }
+}
