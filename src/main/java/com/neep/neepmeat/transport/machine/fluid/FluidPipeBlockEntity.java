@@ -77,6 +77,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         {
             linkVertices(pipe);
         }
+        markDirty();
     }
 
     private void jankParticles(PipeVertex vertex)

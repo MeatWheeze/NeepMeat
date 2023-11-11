@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.*;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
@@ -61,14 +62,19 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
 
             // There is no way of distinguishing between unloading and removal of BlockEntities.
             // Dead BEs will stay in the set but will not be saved.
-            if (chunk.getBlockEntityPositions().contains(pipe.getBlockPos()) && network != null)
+//            if (chunk.getBlockEntityPositions().contains(pipe.getBlockPos()) && network != null)
+
+            if (network == null)
             {
-                UUID uuid = network.getUUID();;
-                NbtCompound entry = new NbtCompound();
-                entry.putLong("pos", pipe.getBlockPos().asLong());
-                entry.putUuid("uuid", uuid);
-                list.add(entry);
+                NeepMeat.LOGGER.error("Vascular Conduit at " + pipe.getBlockPos() + "has a null network. This indicates that saving or loading has failed.");
+                continue;
             }
+
+            UUID uuid = network.getUUID();;
+            NbtCompound entry = new NbtCompound();
+            entry.putLong("pos", pipe.getBlockPos().asLong());
+            entry.putUuid("uuid", uuid);
+            list.add(entry);
         }
         nbt.put("pipes", list);
     }
