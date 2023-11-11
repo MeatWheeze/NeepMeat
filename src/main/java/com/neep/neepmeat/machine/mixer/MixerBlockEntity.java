@@ -45,7 +45,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
     protected int cooldownTicks;
 
     public static float INCREMENT_MAX = 2;
-    public static float INCREMENT_MIN = 0.1f;
+    public static float INCREMENT_MIN = 0.05f;
     protected float progressIncrement;
     protected long processStart;
 

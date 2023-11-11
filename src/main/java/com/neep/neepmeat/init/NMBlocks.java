@@ -184,7 +184,7 @@ public class NMBlocks
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
-    public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
+    public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
 
     public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", block(), FabricBlockSettings.copyOf(MIXER)));
     public static TallBlock HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", block(), FabricBlockSettings.copyOf(MIXER)));

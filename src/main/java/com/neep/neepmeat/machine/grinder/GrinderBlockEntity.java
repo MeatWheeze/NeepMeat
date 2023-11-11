@@ -41,7 +41,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
 
     public static final float INCREMENT_MAX = 2;
     public static final float INCREMENT_MIN = 0.2f;
-    public static final float MULTIPLIER_MIN = 0.05f;
+    public static final float MULTIPLIER_MIN = 0.02f;
     protected float progressIncrement;
     protected float progress;
 
