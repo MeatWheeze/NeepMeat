@@ -12,6 +12,7 @@ public interface BloodAcceptor
             BloodAcceptor.class, Direction.class);
 
 
+    // TODO: rename to consumeOutput
     default long getOutput()
     {
         return 0;

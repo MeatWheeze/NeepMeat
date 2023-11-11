@@ -67,7 +67,10 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         @Override
         public long getOutput()
         {
-            return output;
+            // Reset output so that it drops to zero when fluid input stops.
+            long prevOutput = output;
+            output = 0;
+            return prevOutput;
         }
 
         @Override
