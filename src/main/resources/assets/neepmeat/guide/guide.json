@@ -339,10 +339,10 @@
 
     {"id": "assembler", "contents": [
       {"type": "text", "text": "Assembler\n", "bold": true},
-      {"type": "text", "text": "The assembler enforces a particular pattern of items in the inventory below it. This can be used to automatically fill out recipes for crafting or smelting. It requires an energetic fluid to run."},
+      {"type": "text", "text": "The assembler enforces a particular pattern of items in the inventory below it. This can be used to automatically fill out recipes for crafting or smelting. It requires a vascular network to run."},
       {"type": "image", "width": 224, "height": 124, "scale": 0.9, "path": "neepmeat:guide/images/assembler.png"},
-      {"type": "text", "text": "In the GUI, there are four blocks of slots. The first block is a read-only view of the inventory below, the second shows the desired pattern, the third contains recipe resources and the fourth is the output. Placing items into the green slots creates a pattern that the Assembler will try to replicate using items in the blue slots.\n"},
-      {"type": "text", "text": "Clicking any red or green slot with 'Select Output Slots' enabled will cause the Assembler to extract recipe products from it. Assigning an item to the corresponding pattern slot, as shown above, will ensure that only the correct recpie product will be removed."},
+      {"type": "text", "text": "In the GUI, there are four blocks of slots. The first block is a read-only view of the inventory below, the second defines the desired pattern, the third contains recipe resources and the fourth is auxiliary output. Placing items into the green slots creates a pattern that the Assembler will try to replicate using items in the blue slots.\n"},
+      {"type": "text", "text": "Clicking any red or green slot with 'Select Output Slots' enabled will cause the Assembler to extract recipe products from it. Assigning an item to the corresponding pattern slot, as shown above, will ensure that only the correct recipe product will be removed."},
       {"type": "text", "text": "For crafting, the Persistent Crafting Table must be used, as a regular Crafting Table does not retain its items."}
     ]},
     {"id": "heater", "contents": [
