@@ -7,15 +7,16 @@ import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 public class BloodNetworkImpl implements BloodNetwork
@@ -116,7 +117,7 @@ public class BloodNetworkImpl implements BloodNetwork
         // TOOD: more efficient acceptor discovery
         pipes.forEach(p ->
         {
-            conduits.insert(p.getPos().asLong(), p);
+            conduits.insert(p.getBlockPos().asLong(), p);
             p.setNetwork(this);
         });
     }
