@@ -48,10 +48,15 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
         ItemStack stack = player.getStackInHand(hand);
         Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
         SoundEvent fill = buffer.variant.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
+
+        if (world.isClient())
+            return true;
+
         if (storage != null)
         {
             if (player.isCreative())
             {
+
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     StorageView<FluidVariant> view = storage.iterator().next();
@@ -72,6 +77,7 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
                 inner = transaction.openNested();
                 if (StorageUtil.move(storage, buffer, variant -> true, Long.MAX_VALUE, inner) > 0)
                 {
+
                     world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
                     inner.commit();
                     transaction.commit();

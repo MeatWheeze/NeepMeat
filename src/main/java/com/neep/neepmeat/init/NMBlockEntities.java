@@ -92,12 +92,12 @@ public class NMBlockEntities
     public static BlockEntityType<LimiterValveBlockEntity> LIMITER_VALVE;
     public static BlockEntityType<WindowPipeBlockEntity> WINDOW_PIPE;
     public static BlockEntityType<PumpBlockEntity> PUMP;
-    public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
+    public static BlockEntityType<TankBlockEntity> TANK;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
 
     public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<InventoryDetectorBlockEntity> INVENTORY_DETECTOR;
-    public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
+    public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK;
     public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL;
@@ -178,16 +178,19 @@ public class NMBlockEntities
         PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, FluidTransport.PUMP);
         FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
 
-        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, FluidTransport.TANK);
-        FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, NMBlockEntities.TANK_BLOCK_ENTITY);
+        TANK = registerBlockEntity("tank_block_entity", TankBlockEntity::new, FluidTransport.TANK);
+        FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, TANK);
+        TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, TANK);
+
+        GLASS_TANK = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, GLASS_TANK);
+        TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, GLASS_TANK);
 
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
         Heatable.LOOKUP.registerSelf(MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
-        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
-        FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, NMBlockEntities.GLASS_TANK_BLOCK_ENTITY);
         FLUID_PIPE = registerBlockEntity("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
         STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
         CHECK_VALVE = registerBlockEntity("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
