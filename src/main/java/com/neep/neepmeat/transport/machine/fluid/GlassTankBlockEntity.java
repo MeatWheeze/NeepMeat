@@ -9,9 +9,9 @@ public class GlassTankBlockEntity extends TankBlockEntity
 {
 //    private final WritableFluidBuffer buffer;
 
-    public GlassTankBlockEntity(BlockPos pos, BlockState state)
+    public GlassTankBlockEntity(BlockPos pos, BlockState state, long capacity)
     {
-        super(NMBlockEntities.GLASS_TANK, pos, state);
+        super(NMBlockEntities.GLASS_TANK, pos, state, capacity);
 //        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
     }
 

@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.HeatingDisplay;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.FluidTransport;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -34,7 +34,7 @@ public class HeatingCategory implements DisplayCategory<HeatingDisplay>
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMBlocks.MULTI_TANK);
+        return EntryStacks.of(FluidTransport.MULTI_TANK);
     }
 
     @Override

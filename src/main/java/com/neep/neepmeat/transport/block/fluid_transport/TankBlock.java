@@ -2,11 +2,15 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.loot.context.LootContext;
@@ -32,7 +36,7 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new TankBlockEntity(pos, state);
+        return NMBlockEntities.TANK.instantiate(pos, state);
     }
 
     @Override
@@ -81,5 +85,10 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
             return ActionResult.SUCCESS;
         }
         return ActionResult.FAIL;
+    }
+
+    public static <T extends TankBlockEntity> FabricBlockEntityTypeBuilder.Factory<T> makeBlockEntity(BlockEntityType<T> type)
+    {
+        return (pos, state) -> (T) new TankBlockEntity(type, pos, state, 16 * FluidConstants.BUCKET);
     }
 }

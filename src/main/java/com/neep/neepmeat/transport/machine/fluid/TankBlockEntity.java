@@ -31,8 +31,13 @@ import net.minecraft.world.World;
 @SuppressWarnings("UnstableApiUsage")
 public class TankBlockEntity extends SyncableBlockEntity
 {
-    protected final WritableSingleFluidStorage buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync)
+    protected class InternalBuffer extends WritableSingleFluidStorage
     {
+        public InternalBuffer(long capacity, Runnable finalCallback)
+        {
+            super(capacity, finalCallback);
+        }
+
         @Override
         public long extract(FluidVariant extractedVariant, long maxAmount, TransactionContext transaction)
         {
@@ -75,20 +80,18 @@ public class TankBlockEntity extends SyncableBlockEntity
         }
     };
 
+    protected final InternalBuffer buffer;
+
     protected LazySupplier<BlockApiCache<TankBlockEntity, BlockEntityType<?>>> downCache = LazySupplier.of(() ->
             BlockApiCache.create(LOOKUP, (ServerWorld) getWorld(), getPos().down()));
 
     protected LazySupplier<BlockApiCache<TankBlockEntity, BlockEntityType<?>>> upCache = LazySupplier.of(() ->
             BlockApiCache.create(LOOKUP, (ServerWorld) getWorld(), getPos().up()));
 
-    public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
+    public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state, long amount)
     {
         super(type, pos, state);
-    }
-
-    public TankBlockEntity(BlockPos pos, BlockState state)
-    {
-        this(NMBlockEntities.TANK, pos, state);
+        buffer = new InternalBuffer(amount, this::sync);
     }
 
     public WritableSingleFluidStorage getStorage(Direction direction)
