@@ -31,10 +31,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
 public class GrinderBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
+    protected Random jrandom = new Random();
     protected GrinderStorage storage = new GrinderStorage(this);
     protected int cooldownTicks = 2;
     protected int processLength;
@@ -92,6 +94,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
         storage.writeNbt(nbt);
         nbt.putFloat("progress", progress);
         nbt.putInt("process_length", processLength);
+        nbt.putFloat("progress_increment", progressIncrement);
 
         if (currentRecipe != null)
             nbt.putString("current_recipe", currentRecipe.getId().toString());
@@ -105,6 +108,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
         this.progress = nbt.getFloat("progress");
         this.processLength = nbt.getInt("process_length");
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
+        this.progressIncrement = nbt.getFloat("progress_increment");
         readCurrentRecipe();
     }
 
@@ -132,8 +136,8 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
         {
             progress = Math.min(processLength, progress + progressIncrement);
 
-            ((ServerWorld) world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, getCurrentRecipe().getItemOutput().resource().getDefaultStack()),
-                pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 1, 0.1, 0, 0.1, 0.01);
+//            ((ServerWorld) world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, getCurrentRecipe().getItemOutput().resource().getDefaultStack()),
+//                pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 1, 0.2, 0, 0.2, 0.02);
 
             if (progress >= this.processLength || !getCurrentRecipe().matches(storage))
             {
@@ -162,17 +166,8 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
             if (recipe != null && MeatStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
                                                                  recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
-//                try (Transaction transaction = Transaction.openOuter())
-//                {
-//                    if (recipe.takeInputs(storage, transaction))
-//                    {
-//                        transaction.commit();
                 setCurrentRecipe(recipe);
                 this.processLength = recipe.getTime();
-//                    }
-//                    else
-//                        transaction.abort();
-//                }
             }
         }
         sync();
@@ -233,5 +228,30 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
     public float getLoadTorque()
     {
         return 400f;
+    }
+
+    public void clientTick()
+    {
+        float intensity = progressIncrement / INCREMENT_MAX;
+
+        // Particles will be more frequent at higher power. Clamp above 1 to prevent / 0.
+        int tickInterval = (int) Math.max(1, 1 / (intensity * 2));
+
+        if (world.getTime() % tickInterval == 0
+                && currentRecipe != null
+                && !storage.inputStorage.isEmpty()
+                && progressIncrement > 0)
+        {
+            double px = getPos().getX() + 0.5 + (jrandom.nextFloat() - 0.5) * 0.5;
+            double py = getPos().getY() + 0.8 + (jrandom.nextFloat() - 0.5) * 0.5;
+            double pz = getPos().getZ() + 0.5 + (jrandom.nextFloat() - 0.5) * 0.5;
+
+            double vx = (jrandom.nextFloat() - 0.5) * 0.2;
+            double vy = jrandom.nextFloat() * Math.max(0.3, 0.5 * intensity);
+            double vz = (jrandom.nextFloat() - 0.5) * 0.2;
+
+            world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, storage.inputStorage.getAsStack()),
+                px, py, pz, vx, vy, vz);
+        }
     }
 }

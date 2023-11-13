@@ -27,7 +27,7 @@
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
         {"type": "page", "id": "advanced_motor", "icon": "neepmeat:advanced_motor", "text": "Advanced Motor"},
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
-        {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"},
+        {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Crusher"},
         {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"},
         {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
@@ -144,10 +144,10 @@
       {"type": "text", "text": "The Stirling Engine can accept any valid furnace fuel and will rotate as long as the fuel burns. At full speed it will output 80eJ/t of mechanical power."}
     ]},
     {"id": "grinder", "contents": [
-      {"type": "text", "text": "Grinder\n", "bold": true},
-      {"type": "text", "text": "The Grinder rends both flesh and stone into dust, revealing the hidden treasures within."},
+      {"type": "text", "text": "Crusher\n", "bold": true},
+      {"type": "text", "text": "The Crusher rends both flesh and stone into dust, revealing the hidden treasures within."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Processing certain ore blocks with the Grinder gives slightly higher yields. Meat-scraps can be obtained by grinding raw meat. A running motor must be connected for this machine to function."}
+      {"type": "text", "text": "Processing certain ore blocks with the Crusher gives slightly higher yields. Meat-scraps can be obtained by grinding raw meat. A running motor must be connected for this machine to function."}
     ]},
     {"id": "bottler", "contents": [
       {"type": "text", "text": "Bottler\n", "bold": true},

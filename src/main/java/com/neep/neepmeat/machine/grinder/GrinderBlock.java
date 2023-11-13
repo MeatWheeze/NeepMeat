@@ -2,14 +2,18 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -61,6 +65,13 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
         return new GrinderBlockEntity(pos, state);
     }
 
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.GRINDER, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
+    }
+
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
@@ -72,54 +83,6 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
             }
         }
         super.onStateReplaced(state, world, pos, newState, moved);
-    }
-
-    @Override
-    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity)
-    {
-    }
-
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
-    {
-        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && !world.isClient())
-        {
-//            be.update((ServerWorld) world, pos, pos, state);
-        }
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
-    {
-        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && !world.isClient())
-        {
-//            be.update((ServerWorld) world, pos, fromPos, state);
-        }
-    }
-
-    @Override
-    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
-    {
-//        GrindingRecipe recipe;
-//        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && (recipe = be.getCurrentRecipe()) != null)
-//        {
-////            Item output = recipe.getItemOutput().resource();
-//            ItemStack stack1 = be.getStorage().getInputStorage().getResource().toStack(1);
-//            ItemStack stack2 = recipe.getItemOutput().resource().getDefaultStack();
-//
-//            for (int it = 0; it < 5; ++it)
-//            {
-//                double d = (double) pos.getX() + 0.5;
-//                double e = pos.getY() + 0.7;
-//                double f = (double) pos.getZ() + 0.5;
-//
-//                double h = (random.nextDouble() - 0.5) * 0.1;
-//                double i = (random.nextDouble() - 0.5) * 0.1 + 0.2;
-//                double j = (random.nextDouble() - 0.5) * 0.1;
-//
-//                world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, stack1.isEmpty() ? stack2 : stack1), d, e, f, h, i, j);
-//            }
-//        }
     }
 
     @Override
