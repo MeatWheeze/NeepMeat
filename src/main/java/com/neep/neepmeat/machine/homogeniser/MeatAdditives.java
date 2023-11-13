@@ -73,18 +73,16 @@ public class MeatAdditives
         @Override
         public FluidVariant apply(FluidVariant variant)
         {
-            NbtCompound root = MeatFluidHelper.getRoot(variant);
-            if (root != null)
+            NbtCompound newNbt = new NbtCompound();
+            if (MeatFluidHelper.getRoot(variant) != null)
             {
-                NbtCompound newNbt = new NbtCompound();
                 MeatFluidHelper.copyRoot(variant.getNbt(), newNbt);
-
-                MeatFluidHelper.setHunger(newNbt, MeatFluidHelper.getHunger(variant) + hunger);
-
-
-                return FluidVariant.of(variant.getFluid(), newNbt);
             }
-            return variant;
+
+            MeatFluidHelper.setHunger(newNbt, MeatFluidHelper.getHunger(variant) + hunger);
+
+
+            return FluidVariant.of(variant.getFluid(), newNbt);
         }
     }
 
