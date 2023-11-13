@@ -33,6 +33,7 @@ import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlockEntity;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.machine.heater.HeaterBlockEntity;
+import com.neep.neepmeat.machine.homogeniser.HomogeniserBlockEntity;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
@@ -132,6 +133,7 @@ public class NMBlockEntities
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
     public static BlockEntityType<RouterBlockEntity> ROUTER;
 
+
     public static BlockEntityType<MixerBlockEntity> MIXER;
     public static BlockEntityType<GrinderBlockEntity> GRINDER;
     public static BlockEntityType<StirlingEngineBlockEntity> STIRLING_ENGINE;
@@ -156,6 +158,7 @@ public class NMBlockEntities
     public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
     public static BlockEntityType<MincerBlockEnity> MINCER;
+    public static BlockEntityType<HomogeniserBlockEntity> HOMOGENISER;
     public static BlockEntityType<FlameJetBlockEntity> FLAME_JET;
     public static BlockEntityType<ItemMincerBlockEntity> ITEM_MINCER;
     public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
@@ -327,6 +330,9 @@ public class NMBlockEntities
 
         MINCER = registerBlockEntity("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
         FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
+
+        HOMOGENISER = registerBlockEntity("homogeniser", (pos, state) -> new HomogeniserBlockEntity(HOMOGENISER, pos, state), NMBlocks.HOMOGENISER);
+        ItemStorage.SIDED.registerForBlockEntity(HomogeniserBlockEntity::getItemStorage, HOMOGENISER);
 
         FLAME_JET = registerBlockEntity("flame_jet", FlameJetBlockEntity::new, NMBlocks.FLAME_JET);
         FluidStorage.SIDED.registerForBlockEntity(FlameJetBlockEntity::getFluidStorage, FLAME_JET);

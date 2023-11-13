@@ -34,6 +34,7 @@ import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.machine.heater.HeaterBlock;
+import com.neep.neepmeat.machine.homogeniser.HomogeniserBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.integrator.IntegratorBlock;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlock;
@@ -198,6 +199,7 @@ public class NMBlocks
     public static Block SYNTHESISER = BlockRegistry.queue(new SynthesiserBlock("synthesiser", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block MINCER = BlockRegistry.queue(new MincerBlock("mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block SURGERY_CONTROLLER = BlockRegistry.queue(new TableControllerBlock("surgery_controller", block().requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

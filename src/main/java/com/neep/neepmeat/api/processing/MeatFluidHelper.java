@@ -6,10 +6,14 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class MeatFluidHelper
 {
-    protected static final String KEY_ROOT = NeepMeat.NAMESPACE + ":food";
+    public static final String KEY_ROOT = NeepMeat.NAMESPACE + ":food";
     protected static final String KEY_HUNGER = "hunger";
     protected static final String KEY_SATURATION = "saturation";
     public static final int MAX_HUNGER = 10;
@@ -24,26 +28,23 @@ public class MeatFluidHelper
         return 0;
     }
 
-    public static float getHunger(NbtCompound nbt)
+    public static float getHunger(@Nullable NbtCompound nbt)
     {
         if (nbt != null)
         {
-            NbtCompound root = getOrCreateRoot(nbt);
+            NbtCompound root = getRoot(nbt);
             return root.getFloat(KEY_HUNGER);
         }
         return 0;
     }
 
-    public static void setHunger(NbtCompound nbt, float hunger)
+    public static void setHunger(@NotNull NbtCompound nbt, float hunger)
     {
-        if (nbt != null)
-        {
-            NbtCompound root = getOrCreateRoot(nbt);
-            root.putFloat(KEY_HUNGER, hunger);
-        }
+        NbtCompound root = getOrCreateRoot(nbt);
+        root.putFloat(KEY_HUNGER, hunger);
     }
 
-    public static void setSaturation(NbtCompound nbt, float saturation)
+    public static void setSaturation(@Nullable NbtCompound nbt, float saturation)
     {
         if (nbt != null)
         {
@@ -52,7 +53,7 @@ public class MeatFluidHelper
         }
     }
 
-    public static float getSaturation(FluidVariant variant)
+    public static float getSaturation(@Nullable FluidVariant variant)
     {
         NbtCompound root = getRoot(variant);
         if (root != null)
@@ -62,7 +63,7 @@ public class MeatFluidHelper
         return 0;
     }
 
-    public static float getSaturation(NbtCompound nbt)
+    public static float getSaturation(@Nullable NbtCompound nbt)
     {
         if (nbt != null)
         {
@@ -72,15 +73,43 @@ public class MeatFluidHelper
         return 0;
     }
 
-    protected static NbtCompound getRoot(FluidVariant variant)
+
+    @Nullable
+    public static NbtCompound getRoot(final FluidVariant variant)
     {
-        if (variant.hasNbt()) return variant.getNbt().getCompound(KEY_ROOT);
+        if (variant.hasNbt())
+            return variant.getNbt().getCompound(KEY_ROOT);
         return null;
     }
 
+    @Nullable
+    public static NbtCompound getRoot(final NbtCompound nbt)
+    {
+        if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE))
+        {
+            return nbt.getCompound(KEY_ROOT);
+        }
+        return null;
+    }
+
+    @NotNull
+    public static NbtCompound getRootOrNew(@Nullable NbtCompound nbt)
+    {
+        NbtCompound root;
+        if (nbt != null && (root = getRoot(nbt)) != null)
+        {
+            return root;
+        }
+        return new NbtCompound();
+    }
+
+    @Contract(mutates = "param1")
     protected static NbtCompound getOrCreateRoot(NbtCompound nbt)
     {
-        if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE)) return nbt.getCompound(KEY_ROOT);
+        if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE))
+        {
+            return nbt.getCompound(KEY_ROOT);
+        }
         else
         {
             NbtCompound newRoot = new NbtCompound();
@@ -126,5 +155,14 @@ public class MeatFluidHelper
             nbt.put(KEY_ROOT, root);
         }
         return nbt;
+    }
+
+    public static void copyRoot(NbtCompound from, NbtCompound to)
+    {
+        NbtCompound root = getRoot(from);
+        if (root != null)
+        {
+            to.put(KEY_ROOT, root.copy());
+        }
     }
 }

@@ -250,6 +250,7 @@
 
   "block.neepmeat.mincer": "Mincer",
   "block.neepmeat.item_mincer": "Item Mincer",
+  "block.neepmeat.homogeniser": "Homogeniser",
 
   "block.neepmeat.feeding_trough": "Feeding Trough",
   "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.",
