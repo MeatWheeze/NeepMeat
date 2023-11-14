@@ -446,6 +446,10 @@
   "item.minecraft.splash_potion.effect.ash_preparation": "Ash Preparation",
   "item.minecraft.lingering_potion.effect.ash_preparation": "Ash Preparation",
 
+  "item.neepmeat.goggles": "AR Goggles",
+
+  "entity.neepmeat.hound": "Hound",
+
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
   "container.neepmeat.stirling_engine": "Stirling Engine",
