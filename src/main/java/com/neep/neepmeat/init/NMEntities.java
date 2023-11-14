@@ -4,7 +4,7 @@ import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
-import com.neep.neepmeat.entity.TankMinecartEntity;
+import com.neep.neepmeat.entity.hound.HoundEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -15,6 +15,7 @@ import net.minecraft.entity.SpawnGroup;
 
 public class NMEntities
 {
+    public static EntityType<HoundEntity> HOUND;
     public static EntityType<GlomeEntity> GLOME;
     public static EntityType<EggEntity> EGG;
 
@@ -41,5 +42,9 @@ public class NMEntities
         KEEPER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "keeper", FabricEntityTypeBuilder.create(SpawnGroup.MISC, KeeperEntity::new)
                 .dimensions(EntityDimensions.fixed(0.6f, 1.95f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(KEEPER, KeeperEntity.createLivingAttributes());
+
+        HOUND = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "hound", FabricEntityTypeBuilder.create(SpawnGroup.MISC, HoundEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 2f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
+        FabricDefaultAttributeRegistry.register(HOUND, HoundEntity.createLivingAttributes());
     }
 }
