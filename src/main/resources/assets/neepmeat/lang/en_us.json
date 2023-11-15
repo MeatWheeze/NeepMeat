@@ -264,6 +264,8 @@
   "block.neepmeat.fluid_rationer.lore_1": "storage into a pipe network.",
 
   "block.neepmeat.surgery_controller": "Surgery Controller",
+  "block.neepmeat.surgery_platform": "Surgery Platform",
+  "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
 
   "block.neepmeat.duat_stone": "Duat Stone",
   "block.neepmeat.duat_cobblestone": "Duat Cobblestone",
@@ -289,7 +291,8 @@
   "item.neepmeat.internal_components.lore_0": "Arcane mechanisms, sealed in skin never to see the light of day.",
 
   "item.neepmeat.bioelectric_organ": "Bioelectric Organ",
-  "item.neepmeat.bioelectric_organ.lore_0": "Zap!",
+
+  "item.neepmeat.open_eye": "Opened Eye",
 
   "item.neepmeat.copper_coil": "Copper Coil",
 
@@ -458,8 +461,8 @@
   "implant.neepmeat.pineal_eye": "Pineal Eye",
   "implant.neepmeat.pineal_eye.desc_0": "Permanently reveals the unseen.",
 
-  "item.neepmeat.extra_knees": "Extra Knees",
-  "implant.neepmeat.extra_knees": "Extra Knees",
+  "item.neepmeat.extra_knees": "Powered Knees",
+  "implant.neepmeat.extra_knee": "Powered Knees",
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",

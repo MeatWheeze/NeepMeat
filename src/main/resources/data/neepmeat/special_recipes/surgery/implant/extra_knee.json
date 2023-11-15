@@ -2,7 +2,7 @@
   "type": "neepmeat:implant_install",
   "input": {
     "type": "minecraft:item",
-    "resource": "minecraft:bone",
+    "resource": "neepmeat:extra_knees",
     "amount": 1
   },
   "module": {
