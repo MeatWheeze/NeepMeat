@@ -35,6 +35,28 @@ import java.util.List;
 @Environment(value = EnvType.CLIENT)
 public class BERenderUtils
 {
+    public static void renderModelSmooth(Identifier model, MatrixStack matrices, World world, BlockPos pos, BlockState state, VertexConsumerProvider vertexConsumers, Random random)
+    {
+        BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
+        BakedModel handle = BakedModelManagerHelper.getModel(manager, model);
+        BlockModelRenderer renderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
+
+        renderer.renderSmooth(world, handle, state, pos, matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, random, 0, 0);
+//        renderFlat(
+//                renderer,
+//                world,
+//                handle,
+//                state,
+//                pos,
+//                matrices,
+//                vertexConsumers.getBuffer(RenderLayer.getCutout()),
+//                true,
+//                Random.create(),
+//                0,
+//                0
+//        );
+    }
+
     public static void renderModel(Identifier model, MatrixStack matrices, World world, BlockPos pos, BlockState state, VertexConsumerProvider vertexConsumers)
     {
         BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();

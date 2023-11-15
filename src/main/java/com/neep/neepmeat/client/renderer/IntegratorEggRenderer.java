@@ -82,7 +82,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 
     public static void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
     {
-        BERenderUtils.renderModel(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+        BERenderUtils.renderModelSmooth(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers, be.getWorld().getRandom());
     }
 
     public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
