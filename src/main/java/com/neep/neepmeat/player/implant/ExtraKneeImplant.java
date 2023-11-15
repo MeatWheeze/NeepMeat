@@ -1,17 +1,17 @@
-package com.neep.neepmeat.player.upgrade;
+package com.neep.neepmeat.player.implant;
 
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-public class ExtraKneeUpgrade implements PlayerUpgrade
+public class ExtraKneeImplant implements PlayerImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "extra_knee");
 
     protected final PlayerEntity player;
 
-    public ExtraKneeUpgrade(PlayerEntity player)
+    public ExtraKneeImplant(PlayerEntity player)
     {
         this.player = player;
     }

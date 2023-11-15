@@ -1,10 +1,10 @@
-package com.neep.neepmeat.player.upgrade;
+package com.neep.neepmeat.player.implant;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 
-public interface PlayerUpgrade extends NbtSerialisable
+public interface PlayerImplant extends NbtSerialisable
 {
     void tick();
 

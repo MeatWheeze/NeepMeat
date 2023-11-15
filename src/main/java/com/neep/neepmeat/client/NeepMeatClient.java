@@ -41,9 +41,9 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
-import com.neep.neepmeat.network.PlayerUpgradeStatusS2CPacket;
+import com.neep.neepmeat.network.PlayerImplantStatusS2CPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
+import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
@@ -68,7 +68,6 @@ import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
-import software.bernie.geckolib3.util.GeoArmorRendererRegistry;
 
 @Environment(value= EnvType.CLIENT)
 public class NeepMeatClient implements ClientModInitializer
@@ -87,14 +86,14 @@ public class NeepMeatClient implements ClientModInitializer
         NMFluidsClient.registerFluidRenderers();
         HUDOverlays.init();
 
-        PlayerUpgradeManager.Client.init();
+        PlayerImplantManager.Client.init();
 
         TransportClient.init();
 
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
-        PlayerUpgradeStatusS2CPacket.Client.registerReceiver();
+        PlayerImplantStatusS2CPacket.Client.registerReceiver();
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);

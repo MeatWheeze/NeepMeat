@@ -1,5 +1,5 @@
 {
-  "type": "neepmeat:upgrade_install",
+  "type": "neepmeat:implant_install",
   "input": {
     "type": "minecraft:item",
     "resource": "minecraft:bone",
