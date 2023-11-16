@@ -2,6 +2,7 @@ package com.neep.meatlib.recipe;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.google.gson.*;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.network.SyncMeatRecipesS2CPacket;
@@ -23,6 +24,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
     private Map<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> recipes = ImmutableMap.of();
+    private Map<Class<?>, Set<MeatRecipe<?>>> recipesByClass = ImmutableMap.of();
     private Map<Identifier, MeatRecipe<?>> recipesById = ImmutableMap.of();
 
     public MeatRecipeManager()
@@ -58,13 +60,38 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
 
     public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
     {
-        return this.getAllOfType(type).values().stream().flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
+        return getAllOfType(type).values()
+                .stream()
+                .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
     }
 
-    private <C, T extends MeatRecipe<C>> Map<Identifier, MeatRecipe<C>> getAllOfType(MeatRecipeType<T> type)
+//    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(C context, MeatRecipeType<T>... types)
+//    {
+//        return getAllOfType(type).values()
+//                .stream()
+//                .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
+//    }
+
+    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(Class<T> clazz, C context)
+    {
+//        return this.recipesByClass.entrySet().stream().filter(e -> e.getKey().isAssignableFrom(clazz)).filter()
+        return getAllOfType(clazz)
+                .stream()
+                .filter(recipe -> recipe.matches(context)).findFirst();
+    }
+
+    private <C, T extends MeatRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
     {
         // Say goodbye to type safety
-        return (Map<Identifier, MeatRecipe<C>>) (Map<Identifier, ?>) this.recipes.getOrDefault(type, Collections.emptyMap());
+        return (Map<Identifier, T>) this.recipes.getOrDefault(type, Collections.emptyMap());
+    }
+
+    private <C, T extends MeatRecipe<C>> Set<T> getAllOfType(Class<T> type)
+    {
+        // Say goodbye to type safety
+        return (Set<T>) this.recipesByClass.entrySet().stream()
+                .filter(e -> e.getKey().isAssignableFrom(type))
+                .flatMap(e -> e.getValue().stream()).collect(Collectors.toSet());
     }
 
     @Override
@@ -107,22 +134,30 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
 
     public void setRecipes(Iterable<MeatRecipe<?>> recipes)
     {
-        HashMap<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> map = Maps.newHashMap();
+        HashMap<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> typeMap = Maps.newHashMap();
+        HashMap<Class<?>, Set<MeatRecipe<?>>> clazzMap = Maps.newHashMap();
+
         ImmutableMap.Builder<Identifier, MeatRecipe<?>> builder = ImmutableMap.builder();
         recipes.forEach(recipe ->
         {
             if (recipe == null) throw new IllegalStateException("Received recipe is null on the client. Is serialisation correctly implemented?");
 
-            Map<Identifier, MeatRecipe<?>> map2 = map.computeIfAbsent(recipe.getType(), t -> Maps.newHashMap());
+            var typeSubMap = typeMap.computeIfAbsent(recipe.getType(), t -> Maps.newHashMap());
+            var clazzSet = clazzMap.computeIfAbsent(recipe.getClass(), c -> Sets.newHashSet());
+
             Identifier identifier = recipe.getId();
-            MeatRecipe<?> recipe2 = map2.put(identifier, recipe);
+            MeatRecipe<?> recipe2 = typeSubMap.put(identifier, recipe);
+            boolean recipe3 = clazzSet.add(recipe);
+
             builder.put(identifier, recipe);
-            if (recipe2 != null)
+            if (recipe2 != null || !recipe3)
             {
                 throw new IllegalStateException("Duplicate meatlib recipe ignored with ID " + identifier);
             }
         });
-        this.recipes = ImmutableMap.copyOf(map);
+
+        this.recipes = ImmutableMap.copyOf(typeMap);
+        this.recipesByClass = ImmutableMap.copyOf(clazzMap);
         this.recipesById = builder.build();
     }
 
