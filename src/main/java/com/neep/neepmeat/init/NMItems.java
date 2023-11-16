@@ -6,6 +6,8 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
+import com.neep.neepmeat.player.implant.ExtraKneeImplant;
+import com.neep.neepmeat.player.implant.PinealEyeImplant;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterials;
@@ -92,8 +94,8 @@ public class NMItems
 //    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static GogglesItem GOGGLES = new GogglesItem("goggles", ArmorMaterials.IRON, EquipmentSlot.HEAD, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static ImplantItem PINEAL_EYE = new ImplantItem("pineal_eye", 1, new FabricItemSettings().group(NMItemGroups.GENERAL));
-    public static ImplantItem EXTRA_KNEES = new ImplantItem("extra_knees", 1, new FabricItemSettings().group(NMItemGroups.GENERAL));
+    public static ImplantItem PINEAL_EYE = new ImplantItem("pineal_eye", 1, PinealEyeImplant::new, new FabricItemSettings().group(NMItemGroups.GENERAL));
+    public static ImplantItem EXTRA_KNEES = new ImplantItem("extra_knees", 1, ExtraKneeImplant::new, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
     public static Item DEBUG_ITEM = ItemRegistry.queueItem(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
 }

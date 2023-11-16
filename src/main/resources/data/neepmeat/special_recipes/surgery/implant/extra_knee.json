@@ -5,7 +5,7 @@
     "resource": "neepmeat:extra_knees",
     "amount": 1
   },
-  "module": {
+  "implant_installer": {
     "id": "neepmeat:extra_knee"
   }
 }

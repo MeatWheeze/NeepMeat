@@ -10,8 +10,7 @@ import com.neep.meatlib.transfer.EntityVariant;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
-import com.neep.neepmeat.player.implant.PlayerImplantManager;
-import com.neep.neepmeat.player.implant.PlayerImplantRegistry;
+import com.neep.neepmeat.player.implant.ImplantInstaller;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -29,17 +28,17 @@ public class ImplantInstallRecipe extends SurgeryRecipe
 {
     protected final Identifier id;
     protected final RecipeInput<?> resourceInput;
-    protected final Identifier moduleId;
+    protected final ImplantInstaller installer;
 
     // Jank constants
     protected static final int MODULE_SLOT = 7;
     protected static final int MOB_SLOT = 4;
 
-    public ImplantInstallRecipe(Identifier id, RecipeInput<?> resourceInput, Identifier moduleId)
+    public ImplantInstallRecipe(Identifier id, RecipeInput<?> resourceInput, ImplantInstaller installer)
     {
         this.id = id;
         this.resourceInput = resourceInput;
-        this.moduleId = moduleId;
+        this.installer = installer;
     }
 
     @Override
@@ -134,8 +133,9 @@ public class ImplantInstallRecipe extends SurgeryRecipe
         // This is bad, but replacing it with something sensible would complicate everything else.
         if (component instanceof SurgeryPlatformBlockEntity.Component platform && platform.getEntity() instanceof ServerPlayerEntity player)
         {
-            PlayerImplantManager manager = PlayerImplantManager.get(player);
-            manager.installImplant(moduleId);
+//            PlayerImplantManager manager = PlayerImplantManager.get(player);
+//            manager.installImplant(moduleId);
+            installer.install(player);
         }
         return true;
     }
@@ -152,32 +152,33 @@ public class ImplantInstallRecipe extends SurgeryRecipe
             }
             else throw new JsonSyntaxException("Recipe input not found.");
 
-            Identifier moduleId;
-            if (JsonHelper.hasJsonObject(json, "module"))
+            ImplantInstaller installer;
+            if (JsonHelper.hasJsonObject(json, "implant_installer"))
             {
-                moduleId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "module"), "id"));
+                Identifier installerId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "implant_installer"), "id"));
 
-                PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(moduleId);
-                if (constructor == null) throw new JsonSyntaxException("Module " + moduleId + " does not exist.");
+                installer = ImplantInstaller.REGISTRY.get(installerId);
+                if (installer == null) throw new JsonSyntaxException("Implant installer " + installerId + " does not exist.");
             }
-            else throw new JsonSyntaxException("Module not found.");
+            else throw new JsonSyntaxException("Implant installer not found.");
 
-            return new ImplantInstallRecipe(id, input, moduleId);
+            return new ImplantInstallRecipe(id, input, installer);
         }
 
         @Override
         public ImplantInstallRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<?> input = RecipeInput.fromBuffer(buf);
-            Identifier moduleId = buf.readIdentifier();
-            return new ImplantInstallRecipe(id, input, moduleId);
+            Identifier installerId = buf.readIdentifier();
+            ImplantInstaller installer = ImplantInstaller.REGISTRY.get(installerId);
+            return new ImplantInstallRecipe(id, input, installer);
         }
 
         @Override
         public void write(PacketByteBuf buf, ImplantInstallRecipe recipe)
         {
             recipe.resourceInput.write(buf);
-            buf.writeIdentifier(recipe.moduleId);
+            buf.writeIdentifier(ImplantInstaller.REGISTRY.getId(recipe.installer));
         }
     }
 }

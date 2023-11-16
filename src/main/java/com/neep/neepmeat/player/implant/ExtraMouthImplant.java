@@ -11,7 +11,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-public class ExtraMouthImplant implements PlayerImplant
+public class ExtraMouthImplant implements EntityImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "extra_mouth");
     protected static final int MAX_FOOD = 20;
