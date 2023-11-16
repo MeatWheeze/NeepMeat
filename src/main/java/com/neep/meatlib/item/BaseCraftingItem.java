@@ -10,7 +10,7 @@ public class BaseCraftingItem extends BaseItem implements MeatlibItem
     {
         super(registryName, TooltipSupplier.simple(loreLines), settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

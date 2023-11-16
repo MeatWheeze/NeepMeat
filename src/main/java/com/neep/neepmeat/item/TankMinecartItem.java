@@ -122,7 +122,7 @@ public class TankMinecartItem extends MinecartItem implements MeatlibItem
     {
         super(AbstractMinecartEntity.Type.RIDEABLE, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
 //        DispenserBlock.registerBehavior(this, DISPENSER_BEHAVIOR);
     }
 

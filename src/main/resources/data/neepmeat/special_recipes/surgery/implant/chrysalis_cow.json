@@ -1,0 +1,11 @@
+{
+  "type": "neepmeat:implant_install",
+  "input": {
+    "type": "minecraft:item",
+    "resource": "neepmeat:chrysalis",
+    "amount": 1
+  },
+  "implant_installer": {
+    "id": "neepmeat:chrysalis"
+  }
+}

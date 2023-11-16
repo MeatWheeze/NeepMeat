@@ -22,7 +22,7 @@ public class AirtruckItem extends BaseItem
     public AirtruckItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(registryName, tooltipSupplier, settings);
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

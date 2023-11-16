@@ -29,7 +29,7 @@ public class EssentialSaltesItem extends BaseItem
     public EssentialSaltesItem(String registryName, TooltipSupplier tooltip, Settings settings)
     {
         super(registryName, tooltip, settings);
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

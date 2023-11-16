@@ -131,11 +131,11 @@ public class ImplantInstallRecipe extends SurgeryRecipe
         TableComponent<EntityVariant<?>> component = mobSlot.as();
 
         // This is bad, but replacing it with something sensible would complicate everything else.
-        if (component instanceof SurgeryPlatformBlockEntity.Component platform && platform.getEntity() instanceof ServerPlayerEntity player)
+        if (component instanceof SurgeryPlatformBlockEntity.Component platform)
         {
 //            PlayerImplantManager manager = PlayerImplantManager.get(player);
 //            manager.installImplant(moduleId);
-            installer.install(player);
+            installer.install(platform.getEntity());
         }
         return true;
     }

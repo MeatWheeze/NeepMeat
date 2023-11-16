@@ -24,7 +24,7 @@ public class MeatSteelArmourItem extends ArmorItem implements MeatlibItem, IAnim
     {
         super(material, slot, settings);
         this.registryName = name;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

@@ -76,7 +76,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         this.attackDamage = 1;
 
         GeckoLibNetwork.registerSyncable(this);
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

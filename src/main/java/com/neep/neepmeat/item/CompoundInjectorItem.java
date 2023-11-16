@@ -33,7 +33,7 @@ public class CompoundInjectorItem extends BaseItem
     public CompoundInjectorItem(final String registryName, FabricItemSettings settings)
     {
         super(registryName, CompoundInjectorItem::applyTooltip, settings.maxDamage(3).maxDamageIfAbsent(3));
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

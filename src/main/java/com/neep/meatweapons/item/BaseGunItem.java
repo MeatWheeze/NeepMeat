@@ -64,7 +64,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         this.hasLore = hasLore;
         this.cooldown = cooldown;
         GeckoLibNetwork.registerSyncable(this);
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

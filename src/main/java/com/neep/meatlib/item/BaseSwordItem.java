@@ -14,7 +14,7 @@ public class BaseSwordItem extends SwordItem implements MeatlibItem
     {
         super(material, attackDamage, speed, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override
