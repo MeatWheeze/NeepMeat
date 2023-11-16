@@ -41,22 +41,22 @@ public class PlayerImplantStatusS2CPacket
     {
         public static void registerReceiver()
         {
-            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
-            {
-                if (client.player == null) return;
-
-                Status status = Status.values()[buf.readVarInt()];
-                switch (status)
-                {
-                    case INSTALL -> PlayerImplantManager.get(client.player).installImplant(buf.readIdentifier());
-                    case REMOVE -> PlayerImplantManager.get(client.player).removeImplant(buf.readIdentifier());
-                    case LOAD ->
-                    {
-                        NbtCompound fullNbt = buf.readNbt();
-                        PlayerImplantManager.get(client.player).sync(fullNbt);
-                    }
-                }
-            });
+//            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
+//            {
+//                if (client.player == null) return;
+//
+//                Status status = Status.values()[buf.readVarInt()];
+//                switch (status)
+//                {
+//                    case INSTALL -> PlayerImplantManager.get(client.player).installImplant(buf.readIdentifier());
+//                    case REMOVE -> PlayerImplantManager.get(client.player).removeImplant(buf.readIdentifier());
+//                    case LOAD ->
+//                    {
+//                        NbtCompound fullNbt = buf.readNbt();
+//                        PlayerImplantManager.get(client.player).sync(fullNbt);
+//                    }
+//                }
+//            });
         }
     }
 

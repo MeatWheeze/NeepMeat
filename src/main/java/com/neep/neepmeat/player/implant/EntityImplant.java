@@ -8,11 +8,11 @@ public interface EntityImplant extends NbtSerialisable
 {
     void tick();
 
+    default void clientTick() {}
+
     default void onPlayerInit() {}
 
     default void onPlayerRemove() {}
-
-    default void onRespawn(PlayerEntity oldPlayer, PlayerEntity newPlayer) {}
 
     default void onInstall() {}
 

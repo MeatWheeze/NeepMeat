@@ -34,6 +34,9 @@
     "cardinal-components-chunk": [
       "com.neep.neepmeat.transport.TransportComponents"
     ],
+    "cardinal-components-entity": [
+      "com.neep.neepmeat.init.NMComponents"
+    ],
     "rei_server": [
       "com.neep.neepmeat.compat.rei.NMCommonPlugin"
     ],
@@ -67,7 +70,8 @@
       "net/minecraft/item/ItemStack": ["com/neep/meatlib/attachment/itemstack/MeatItemStack"]
     },
     "cardinal-components": [
-      "neepmeat:blood_network_chunk"
+      "neepmeat:blood_network_chunk",
+      "neepmeat:implant_manager"
     ]
   },
   "accessWidener" : "neepmeat.accesswidener"

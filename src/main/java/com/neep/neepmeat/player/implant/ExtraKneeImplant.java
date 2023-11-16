@@ -32,8 +32,25 @@ public class ExtraKneeImplant implements EntityImplant
     @Override
     public void tick()
     {
-//        if (player.world.getTime() % 10 == 0) player.setStepHeight(1f);
-        if (player.world.getTime() % 10 == 0) player.stepHeight = 1f;
+        if (player.world.getTime() % 40 == 0)
+        {
+            if (player.stepHeight < 1.1f)
+            {
+                player.stepHeight = 1.1f;
+            }
+        }
+    }
+
+    @Override
+    public void clientTick()
+    {
+        if (player.world.getTime() % 40 == 0)
+        {
+            if (player.stepHeight < 1.1f)
+            {
+                player.stepHeight = 1.1f;
+            }
+        }
     }
 
     @Override
