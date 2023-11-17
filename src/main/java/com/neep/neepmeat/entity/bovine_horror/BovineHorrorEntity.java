@@ -1,6 +1,8 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
+import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -9,8 +11,14 @@ import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -27,6 +35,9 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     protected static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.horror.wave", ILoopType.EDefaultLoopTypes.LOOP);
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+
+    public float prevVisibility = 0;
+    public float visibility = 0;
 
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
 
@@ -91,6 +102,70 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     }
 
     @Override
+    public void onSpawnPacket(EntitySpawnS2CPacket packet)
+    {
+        super.onSpawnPacket(packet);
+//        ParticleEffect effect = new BlockStateParticleEffect(ParticleTypes.BLOCK, NMFluids.WORK_FLUID.getDefaultState());
+        Vec3d origin = getPos().add(0, 1.5, 0);
+        for (int i = 0; i < 150; ++i)
+        {
+            spawnParticle(world, NMParticles.BODY_COMPOUND_SHOWER, random, origin);
+        }
+    }
+
+    protected void spawnParticle(World world, ParticleEffect effect, Random random, Vec3d origin)
+    {
+        double r = random.nextFloat() * 1.5 + 0.5;
+        double pitch = (random.nextFloat() + 0.5) * 2 * Math.PI / 2;
+        double yaw = (random.nextFloat() + 0.5) * 2 * Math.PI;
+        double px = origin.x + r * Math.sin(yaw);
+        double pz = origin.z + r * Math.cos(yaw);
+        double py = origin.y + Math.sin(pitch);
+
+        double vx = px - origin.x * 1;
+        double vy = py - origin.y * 1;
+        double vz = pz - origin.z * 1;
+
+        world.addParticle(effect, px, py, pz, vx, vy, vz);
+    }
+
+    @Override
+    public boolean isInvisibleTo(PlayerEntity player)
+    {
+        return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && getVisibility(1) == 0);
+    }
+
+    @Override
+    public void tick()
+    {
+        super.tick();
+        if (world.isClient())
+        {
+            prevVisibility = visibility;
+            if (world.getTime() % 60 == 0)
+            {
+                float p = random.nextFloat();
+                if (p > 0.5 && visibility == 0)
+                {
+                    visibility = 0.9f;
+                }
+            }
+
+            if (isAlive())
+            {
+                visibility = Math.max(0, visibility - 0.1f);
+            }
+        }
+    }
+
+    @Override
+    public void onDeath(DamageSource damageSource)
+    {
+        super.onDeath(damageSource);
+        visibility = 1;
+    }
+
+    @Override
     protected void mobTick()
     {
         super.mobTick();
@@ -107,5 +182,10 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     protected SoundEvent getDeathSound()
     {
         return NMSounds.HOUND_DEATH;
+    }
+
+    public float getVisibility(float tickDelta)
+    {
+        return MathHelper.lerp(tickDelta, prevVisibility, visibility);
     }
 }

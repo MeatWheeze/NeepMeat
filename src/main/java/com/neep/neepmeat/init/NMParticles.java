@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.meatlib.registry.ParticleRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.mixin.ParticleManagerMixin;
+import com.neep.neepmeat.particle.FallingParticle;
 import com.neep.neepmeat.particle.SwirlingParticle;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import net.fabricmc.api.EnvType;
@@ -13,6 +14,7 @@ import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
+import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
@@ -26,7 +28,7 @@ public class NMParticles
     public static DefaultParticleType MEAT_FOUNTAIN = FabricParticleTypes.simple();
     public static DefaultParticleType MEAT_BIT = FabricParticleTypes.simple();
     public static DefaultParticleType MILK_SPLASH = FabricParticleTypes.simple();
-//    public static DefaultParticleType MEAT_DROP = FabricParticleTypes.simple();
+    public static DefaultParticleType BODY_COMPOUND_SHOWER = FabricParticleTypes.simple();
 
     public static void init()
     {
@@ -34,6 +36,7 @@ public class NMParticles
         MEAT_FOUNTAIN = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_fountain", MEAT_FOUNTAIN);
         MEAT_BIT = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_bit", MEAT_BIT);
         MILK_SPLASH = ParticleRegistry.register(NeepMeat.NAMESPACE, "milk_splash", MILK_SPLASH);
+        BODY_COMPOUND_SHOWER = ParticleRegistry.register(NeepMeat.NAMESPACE, "body_compound_shower", BODY_COMPOUND_SHOWER);
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -58,6 +61,7 @@ public class NMParticles
             ParticleFactoryRegistry.getInstance().register(MEAT_FOUNTAIN, LavaEmberParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(MEAT_BIT, PortalParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(MILK_SPLASH, WaterSplashParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(BODY_COMPOUND_SHOWER, FallingParticle.Factory::new);
 //            ParticleFactoryRegistry.getInstance().register(MEAT_DROP, FlameParticle.Factory::new);
         }
 
