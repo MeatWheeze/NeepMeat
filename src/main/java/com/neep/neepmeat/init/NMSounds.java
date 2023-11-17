@@ -15,6 +15,8 @@ public class NMSounds
     public static SoundEvent HOUND_HIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "hound_hit");
     public static SoundEvent HOUND_DEATH = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "hound_death");
 
+    public static SoundEvent BH_HIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "bovine_horror_hit");
+
     public static SoundEvent MECHANICAL_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_place");
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
     public static SoundEvent FLESH_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "flesh_machine_place");

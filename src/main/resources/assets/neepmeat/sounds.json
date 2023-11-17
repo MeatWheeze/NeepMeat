@@ -96,5 +96,14 @@
     "sounds": [
       "neepmeat:hound_death"
     ]
+  },
+
+  "bovine_horror_hit": {
+    "subtitle": "subtitles.neepmeat.bovine_horror_hit",
+    "sounds": [
+      "neepmeat:bovine_horror_hit_0",
+      "neepmeat:bovine_horror_hit_1",
+      "neepmeat:bovine_horror_hit_1"
+    ]
   }
 }
