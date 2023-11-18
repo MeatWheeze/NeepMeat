@@ -4,6 +4,7 @@ import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
+import com.neep.neepmeat.entity.bovine_horror.AcidSprayEntity;
 import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.entity.hound.HoundEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
@@ -23,6 +24,7 @@ public class NMEntities
     public static EntityType<WormEntity> WORM;
     public static EntityType<KeeperEntity> KEEPER;
     public static EntityType<BovineHorrorEntity> BOVINE_HORROR;
+    public static EntityType<AcidSprayEntity> ACID_SPRAY;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
 
     public static void initialise()
@@ -50,7 +52,9 @@ public class NMEntities
         FabricDefaultAttributeRegistry.register(HOUND, HoundEntity.createLivingAttributes());
 
         BOVINE_HORROR = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "bovine_horror", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BovineHorrorEntity::new)
-                .dimensions(EntityDimensions.fixed(2.7f, 3.5f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
+                .dimensions(EntityDimensions.fixed(2.7f, 3.5f)).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(BOVINE_HORROR, BovineHorrorEntity.createLivingAttributes());
+        ACID_SPRAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "acid_spray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AcidSprayEntity::new)
+                .dimensions(EntityDimensions.fixed(1f, 1f)).trackedUpdateRate(8).build());
     }
 }
