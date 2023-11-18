@@ -1,34 +1,41 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.goal.MeleeAttackGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.util.Hand;
 
-public class BovineHorrorMeleeAttackGoal extends MeleeAttackGoal
+import java.util.EnumSet;
+
+public class BovineHorrorMeleeAttackGoal extends Goal
 {
-    protected BovineHorrorEntity bovineHorror;
+    protected BovineHorrorEntity mob;
+    protected int cooldown;
+    private int maxCooldown = 20;
 
-    public BovineHorrorMeleeAttackGoal(BovineHorrorEntity mob, double speed, boolean pauseWhenMobIdle)
+    public BovineHorrorMeleeAttackGoal(BovineHorrorEntity mob)
     {
-        super(mob, speed, pauseWhenMobIdle);
-        this.bovineHorror = mob;
+//        this.setControls(EnumSet.of(Control.MOVE));
+        this.mob = mob;
     }
 
     @Override
     public boolean canStart()
     {
-        return super.canStart();
+        return
+                mob.getTarget() != null
+                && mob.canMelee(mob.getTarget());
     }
 
     @Override
-    protected double getSquaredMaxAttackDistance(LivingEntity entity)
+    public boolean shouldContinue()
     {
-        return 8;
+        return canStart();
     }
 
     @Override
     public void start()
     {
-       super.start();
+        super.start();
         this.mob.setAttacking(true);
     }
 
@@ -40,8 +47,34 @@ public class BovineHorrorMeleeAttackGoal extends MeleeAttackGoal
     }
 
     @Override
+    public boolean shouldRunEveryTick()
+    {
+        return true;
+    }
+
+    @Override
     public void tick()
     {
         super.tick();
+        if (mob.getTarget() != null)
+        {
+            attack(mob.getTarget());
+        }
+        cooldown--;
+    }
+
+    protected void attack(LivingEntity target)
+    {
+        if (mob.canMelee(target) && this.cooldown <= 0)
+        {
+            this.resetCooldown();
+            this.mob.swingHand(Hand.MAIN_HAND);
+            this.mob.tryAttack(target);
+        }
+    }
+
+    private void resetCooldown()
+    {
+        cooldown = maxCooldown;
     }
 }

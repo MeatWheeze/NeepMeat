@@ -1,6 +1,7 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
 import com.neep.meatlib.maths.Vec2d;
+import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -135,7 +136,7 @@ public class AcidSprayEntity extends ProjectileEntity
     protected void onBlockHit(BlockHitResult blockHitResult)
     {
         super.onBlockHit(blockHitResult);
-        onHit();
+       onHit();
     }
 
     @Override
@@ -152,7 +153,8 @@ public class AcidSprayEntity extends ProjectileEntity
 
     protected void onHit()
     {
-        world.getOtherEntities(this, getBoundingBox().expand(2), e -> e instanceof LivingEntity).forEach(e ->
+        world.getOtherEntities(this, getBoundingBox().expand(2), e -> e instanceof LivingEntity
+                && !e.getType().equals(NMEntities.BOVINE_HORROR)).forEach(e ->
         {
             float dist = e.distanceTo(this);
             float damage =  6;
@@ -179,7 +181,7 @@ public class AcidSprayEntity extends ProjectileEntity
                 double vy = r * r * 0.1;
                 double vz = (pz - getZ()) * 0.2;
 
-                world.addParticle(effect, px, py, pz, vx, vy, vz);
+               world.addParticle(effect, px, py, pz, vx, vy, vz);
             }
         }
 
