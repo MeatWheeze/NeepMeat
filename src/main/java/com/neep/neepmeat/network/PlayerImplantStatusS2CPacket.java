@@ -1,10 +1,8 @@
 package com.neep.neepmeat.network;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.nbt.NbtCompound;

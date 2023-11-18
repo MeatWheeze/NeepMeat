@@ -11,22 +11,23 @@ public class BHPhaseActionGoal extends AnimatedGoal<BovineHorrorEntity, BHPhaseA
 {
     protected final BovineHorrorEntity mob;
 
-    protected final Sequence<BovineHorrorEntity, BHPhaseActionGoal> orient = (action, counter) ->
+    protected final Sequence<BHPhaseActionGoal> orient = (action, counter) ->
     {
         getMob().setVisibility(1);
+        getMob().setInvulnerable(true);
         if (counter > 20)
         {
             getMob().setVisibility(1);
             PlayerLookup.tracking(getMob()).forEach(p ->
             {
                 MWGraphicsEffects.syncBeamEffect(p, MWGraphicsEffects.BEAM, getMob().getWorld(),
-                        getMob().getPos().add(0, 40, 0), getMob().getPos(), Vec3d.ZERO, 0.8f, 60);
+                        getMob().getPos().add(0, 40, 0), getMob().getPos(), Vec3d.ZERO, 1.8f, 60);
             });
             setSequence(action.particles);
         }
     };
 
-    protected final Sequence<BovineHorrorEntity, BHPhaseActionGoal> particles = (action, counter) ->
+    protected final Sequence<BHPhaseActionGoal> particles = (action, counter) ->
     {
         getMob().setVisibility(1);
         if (counter > 60)
@@ -38,6 +39,8 @@ public class BHPhaseActionGoal extends AnimatedGoal<BovineHorrorEntity, BHPhaseA
             }
             markFinished();
             getMob().clearGoalsAndTasks();
+            getMob().setInvulnerable(false);
+            getMob().updateGoals();
         }
     };
 
