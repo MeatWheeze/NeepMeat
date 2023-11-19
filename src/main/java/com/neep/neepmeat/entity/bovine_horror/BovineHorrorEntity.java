@@ -59,11 +59,7 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
     protected boolean updateGoals = true;
     protected boolean phase2 = false;
 
-    protected GoalSelector newTargetSelector;
-    protected GoalSelector newGoalSelector;
-
-    protected final BovineHorrorMeleeAttackGoal meleeAttackGoal = new BovineHorrorMeleeAttackGoal(this);
-//    protected boolean phase2 = false; // State pattern? Pah!
+    protected final BHMeleeAttackGoal meleeAttackGoal = new BHMeleeAttackGoal(this);
 
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
 
@@ -72,8 +68,6 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
     public BovineHorrorEntity(EntityType<? extends HostileEntity> entityType, World world)
     {
         super(entityType, world);
-        this.newTargetSelector = new GoalSelector(world.getProfilerSupplier());
-        this.newGoalSelector = new GoalSelector(world.getProfilerSupplier());
     }
 
     public static DefaultAttributeContainer.Builder createLivingAttributes()
@@ -104,7 +98,8 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
 
     protected void updateGoals()
     {
-//        goalSelector = new GoalSelector(null);
+        goalSelector = new GoalSelector(world.getProfilerSupplier());
+        targetSelector = new GoalSelector(world.getProfilerSupplier());
 
         if (isPhase2())
         {
@@ -120,19 +115,19 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
 
     protected void initPhase1Goals()
     {
-        newTargetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
 
-        newGoalSelector.add(2, meleeAttackGoal);
-        newGoalSelector.add(2, new HorrorMoveToTargetGoal(this, 1.2, true));
-        newGoalSelector.add(2, new HorrorAcidAttackGoal(this, 3, 2));
+        goalSelector.add(2, meleeAttackGoal);
+        goalSelector.add(2, new BHMoveToTargetGoal(this, 1.2, true));
+        goalSelector.add(2, new BHAcidAttackGoal(this, 3, 2));
     }
 
     protected void initPhase2Goals()
     {
-        newTargetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
 
-        newGoalSelector.add(3, new BHBeamGoal(this));
-        newGoalSelector.add(2, new HorrorTeleportGoal(this, 10, 20, 60));
+        goalSelector.add(3, new BHBeamGoal(this));
+        goalSelector.add(2, new BHTeleportGoal(this, 10, 20, 60));
 
         bossBar.setDarkenSky(true);
     }
@@ -234,12 +229,6 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && visibility == 0);
     }
 
-//    @Override
-//    public boolean isImmuneToExplosion()
-//    {
-//        return true;
-//    }
-
     @Nullable
     @Override
     public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt)
@@ -261,8 +250,8 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             dataTracker.set(PHASE2, true);
             phase2 = true;
 
-            newGoalSelector.clear();
-            newGoalSelector.add(1, new BHPhaseActionGoal(this));
+            goalSelector.clear();
+            goalSelector.add(1, new BHPhaseActionGoal(this));
             navigation.stop();
         }
 
@@ -282,26 +271,6 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             {
                 setVisibility(Math.max(0, getVisibility() - 0.1f));
             }
-        }
-    }
-
-    protected void tickNewNewAi()
-    {
-        int i = this.world.getServer().getTicks() + this.getId();
-        if (i % 2 == 0 || this.age <= 1) {
-            this.world.getProfiler().push("newTargetSelector");
-            this.newTargetSelector.tick();
-            this.world.getProfiler().pop();
-            this.world.getProfiler().push("newGoalSelector");
-            this.newGoalSelector.tick();
-            this.world.getProfiler().pop();
-        } else {
-            this.world.getProfiler().push("newTargetSelector");
-            this.newTargetSelector.tickGoals(false);
-            this.world.getProfiler().pop();
-            this.world.getProfiler().push("newGoalSelector");
-            this.newGoalSelector.tickGoals(false);
-            this.world.getProfiler().pop();
         }
     }
 
@@ -362,41 +331,6 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         return NMSounds.HOUND_DEATH;
     }
 
-    public float getVisibility(float tickDelta)
-    {
-//        return MathHelper.lerp(tickDelta, prevVisibility, getVisibility());
-        return getVisibility();
-    }
-
-//    @Override
-//    public void onAnimationSync(int id, int state)
-//    {
-//        if (state == MELEE_ANIM_ID)
-//        {
-//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, moveIdleController);
-//            if (controller.getAnimationState() == AnimationState.Stopped)
-//            {
-//                controller.markNeedsReload();
-//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.horror.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-//            }
-//        }
-//    }
-
-    public void setEvent(MobEvent event)
-    {
-        dataTracker.set(SYNC_ID, event.ordinal());
-    }
-
-    public MobEvent getEvent()
-    {
-        return MobEvent.values()[dataTracker.get(SYNC_ID)];
-    }
-
-    public void consumeEvent()
-    {
-        dataTracker.set(SYNC_ID, 0);
-    }
-
     public float getVisibility()
     {
         return dataTracker.get(VISIBILITY);
@@ -451,11 +385,5 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             return false;
 
         return super.damage(source, amount);
-    }
-
-    enum MobEvent
-    {
-        NONE,
-        ATTACK
     }
 }

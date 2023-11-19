@@ -8,7 +8,7 @@ import net.minecraft.predicate.entity.EntityPredicates;
 
 import java.util.EnumSet;
 
-public class HorrorMoveToTargetGoal extends Goal
+public class BHMoveToTargetGoal extends Goal
 {
     protected final BovineHorrorEntity mob;
     private final double speed;
@@ -21,7 +21,7 @@ public class HorrorMoveToTargetGoal extends Goal
     private int cooldown;
     private long lastUpdateTime;
 
-    public HorrorMoveToTargetGoal(BovineHorrorEntity mob, double speed, boolean pauseWhenMobIdle)
+    public BHMoveToTargetGoal(BovineHorrorEntity mob, double speed, boolean pauseWhenMobIdle)
     {
         this.mob = mob;
         this.speed = speed;
@@ -103,7 +103,7 @@ public class HorrorMoveToTargetGoal extends Goal
     @Override
     public void tick()
     {
-        LivingEntity livingEntity = this.mob.getTarget();
+       LivingEntity livingEntity = this.mob.getTarget();
         if (livingEntity == null)
         {
             return;

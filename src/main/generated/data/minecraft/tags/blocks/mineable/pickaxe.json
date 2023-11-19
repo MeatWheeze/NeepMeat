@@ -125,6 +125,7 @@
     "neepmeat:mincer_structure",
     "neepmeat:mincer",
     "neepmeat:item_mincer",
+    "neepmeat:homogeniser",
     "neepmeat:surgery_controller",
     "neepmeat:surgery_platform",
     "neepmeat:vat_casing",

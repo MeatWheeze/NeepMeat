@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumSet;
 
-public class HorrorTeleportGoal extends Goal
+public class BHTeleportGoal extends Goal
 {
     private final BovineHorrorEntity mob;
     private int attempts = 0;
@@ -23,7 +23,7 @@ public class HorrorTeleportGoal extends Goal
     private long lastTeleport;
     private final int cooldown;
 
-    public HorrorTeleportGoal(@NotNull BovineHorrorEntity mob, int maxAttempts, double targetRange, int cooldown)
+    public BHTeleportGoal(@NotNull BovineHorrorEntity mob, int maxAttempts, double targetRange, int cooldown)
     {
         this.mob = mob;
         this.maxAttempts = maxAttempts;

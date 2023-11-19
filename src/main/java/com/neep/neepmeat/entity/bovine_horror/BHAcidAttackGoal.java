@@ -11,7 +11,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class HorrorAcidAttackGoal extends Goal
+public class BHAcidAttackGoal extends Goal
 {
     protected BovineHorrorEntity mob;
     protected int ticks = 0;
@@ -19,7 +19,7 @@ public class HorrorAcidAttackGoal extends Goal
     protected int maxSpawned;
     protected int cooldown = 0;
 
-    public HorrorAcidAttackGoal(BovineHorrorEntity mob, float size, int maxSpawned)
+    public BHAcidAttackGoal(BovineHorrorEntity mob, float size, int maxSpawned)
     {
         this.mob = mob;
         this.maxSpawned = maxSpawned;
