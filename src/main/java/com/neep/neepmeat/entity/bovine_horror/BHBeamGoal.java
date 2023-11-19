@@ -4,19 +4,21 @@ import com.neep.meatweapons.Util;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.entity.goal.AnimatedGoal;
-import com.neep.neepmeat.init.NMParticles;
+import com.neep.neepmeat.init.NMSounds;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.function.Predicate;
 
@@ -26,16 +28,26 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
 
     protected final Sequence<BHBeamGoal> orient = (action, counter) ->
     {
-        if (counter == 0)
+        var mob = action.mob;
+
+        if (mob.getTarget() == null)
         {
-            getMob().syncNearby("animation.horror.beam");
+            markFinished();
+            return;
         }
 
-        action.mob.setVisibility(1);
+        if (counter == 0)
+        {
+            mob.syncNearby("animation.horror.beam");
+            mob.playSound(NMSounds.BH_CHARGE, 1, 0.9f);
+            mob.world.playSound(null, mob.getX(), mob.getY(), mob.getZ(), NMSounds.BH_PHASE2, SoundCategory.HOSTILE, 5, 1);
+        }
+
+        mob.setVisibility(1);
 
         if (counter > 10 && counter % 2 == 0)
         {
-            if (action.mob.getWorld() instanceof ServerWorld serverWorld)
+            if (mob.getWorld() instanceof ServerWorld serverWorld)
             {
                 Vec3d origin = getOrigin();
                 serverWorld.spawnParticles(MWParticles.PLASMA_PARTICLE, origin.x, origin.y, origin.z,
@@ -58,9 +70,9 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
             Vec3d toEnd = target.getPos().subtract(origin).multiply(25);
             var random = action.mob.getRandom();
             Vec3d end = origin.add(
-                    toEnd.x + random.nextTriangular(0, 4),
-                    toEnd.y + random.nextTriangular(0, 4) + target.getHeight() / 2,
-                    toEnd.z + random.nextTriangular(0, 4)
+                    toEnd.x + random.nextTriangular(0, 20),
+                    toEnd.y + random.nextTriangular(0, 20) + target.getHeight() / 2,
+                    toEnd.z + random.nextTriangular(0, 20)
             );
             shootBeam(origin, end);
         }
@@ -124,6 +136,7 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
     public BHBeamGoal(BovineHorrorEntity mob)
     {
         this.mob = mob;
+        this.setControls(EnumSet.of(Control.MOVE));
     }
 
     @Override

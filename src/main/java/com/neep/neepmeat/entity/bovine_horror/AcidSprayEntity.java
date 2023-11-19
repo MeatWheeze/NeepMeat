@@ -26,7 +26,6 @@ public class AcidSprayEntity extends ProjectileEntity
 
     public void target(Vec3d origin, Vec3d targetPos, float hSpeed, float divergence)
     {
-
         double dx = targetPos.x - origin.x;
         double dz = targetPos.z - origin.z;
         double dy = targetPos.y - origin.y;
@@ -42,8 +41,8 @@ public class AcidSprayEntity extends ProjectileEntity
         double ux = dx / distance * hSpeed;
         double uz = dz / distance * hSpeed;
 
-        setVelocity(ux, uy, uz);
         setPosition(origin.getX(), origin.getY(), origin.getZ());
+        setVelocity(ux, uy, uz);
         this.setYaw((float) (MathHelper.atan2(ux, uz) * 57.2957763671875));
         this.setPitch((float) (MathHelper.atan2(uy, hSpeed) * 57.2957763671875));
         this.prevYaw = this.getYaw();
@@ -61,7 +60,6 @@ public class AcidSprayEntity extends ProjectileEntity
     {
         super.tick();
 
-        super.tick();
         HitResult hitResult = ProjectileUtil.getCollision(this, this::canHit);
         boolean bl = false;
         if (hitResult.getType() != HitResult.Type.MISS && !bl)
@@ -96,7 +94,7 @@ public class AcidSprayEntity extends ProjectileEntity
 
         if (world.isClient())
         {
-            int count = 10;
+           int count = 10;
 
             for (int i = 0; i < count; ++i)
             {

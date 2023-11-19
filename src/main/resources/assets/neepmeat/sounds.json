@@ -105,5 +105,23 @@
       "neepmeat:bovine_horror_hit_1",
       "neepmeat:bovine_horror_hit_1"
     ]
+  },
+  "bovine_horror_charge": {
+    "subtitle": "subtitles.neepmeat.bovine_horror_charge",
+    "sounds": [
+      "neepmeat:bovine_horror_charge"
+    ]
+  },
+  "bovine_horror_spit": {
+    "subtitle": "subtitles.neepmeat.bovine_horror_spit",
+    "sounds": [
+      "neepmeat:bovine_horror_spit"
+    ]
+  },
+  "bovine_horror_phase2": {
+    "subtitle": "subtitles.neepmeat.bovine_horror_phase_2",
+    "sounds": [
+      "neepmeat:bovine_horror_phase2"
+    ]
   }
 }
