@@ -34,7 +34,7 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 
         BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(be.angle));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(be.angle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MOTOR_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 

@@ -34,7 +34,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.translate(0, 1 - 5f / 16f, 0);
         float progress = 0;
         float nextOutput = 0;
-        if (be.getCurrentRecipe() != null && be.progressIncrement > MixerBlockEntity.INCREMENT_MIN)
+        if (be.getCurrentRecipe() != null && be.progressIncrement() > be.minIncrement())
         {
             progress = (be.progress) / be.processLength;
             nextOutput = progress * be.getCurrentRecipe().fluidOutput.amount();
@@ -71,7 +71,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
 
         be.bladeSpeed = MathHelper.lerp(0.5f, be.bladeSpeed,
-                be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : 50f * be.progressIncrement
+                be.currentRecipe == null || be.progressIncrement() <= be.minIncrement() ? 0 : 50f * be.progressIncrement()
         );
 
         be.bladeAngle = MathHelper.wrapDegrees(be.bladeAngle + be.bladeSpeed * delta);

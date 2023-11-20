@@ -1,9 +1,8 @@
 package com.neep.neepmeat.machine.bottler;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -19,25 +18,22 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 
 @SuppressWarnings("UnstableApiUsage")
-public class BottlerBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class BottlerBlockEntity extends MotorisedMachineBlockEntity
 {
     private final BottlerStorage storage = new BottlerStorage(this);
-    public static final float INCREMENT_MIN = 0.1f;
-    public static final float INCREMENT_MAX = 1f;
-    float increment;
     public static final int MAX_PROGRESS = 20;
     private float progress;
     private int maxProgress = MAX_PROGRESS;
     private long startTime;
 
     private State state = State.IDLE;
+    private float power = 0;
 
     public BottlerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, 0.02f, 0.1f, 1f);
     }
 
     public BottlerBlockEntity(BlockPos pos, BlockState state)
@@ -61,7 +57,6 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements Motorised
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
         nbt.putFloat("progress", progress);
-        nbt.putFloat("increment", increment);
         nbt.putInt("maxProgress", maxProgress);
         nbt.putLong("startTime", startTime);
         nbt.putInt("state", state.ordinal());
@@ -73,7 +68,6 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements Motorised
         super.readNbt(nbt);
         storage.readNbt(nbt);
         this.progress = nbt.getFloat("progress");
-        this.increment = nbt.getFloat("increment");
         this.maxProgress = nbt.getInt("maxProgress");
         this.startTime = nbt.getLong("startTime");
         this.state = State.values()[nbt.getInt("state")];
@@ -107,7 +101,7 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements Motorised
                     if (storage.getItemStorage().isEmpty()) interrupt();
 
                     // Increment progress
-                    this.progress = Math.min(maxProgress, progress + increment);
+                    this.progress = Math.min(maxProgress, progress + progressIncrement);
                     if (progress == maxProgress)
                     {
                         progress = 0;
@@ -170,12 +164,6 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements Motorised
             return StorageUtil.move(inputStorage, outputStorage, v -> true, Long.MAX_VALUE, transaction);
         }
         return 0;
-    }
-
-    @Override
-    public void setInputPower(float power)
-    {
-        this.increment = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 
     public int getMaxProgress()

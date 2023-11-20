@@ -3,6 +3,7 @@ package com.neep.neepmeat;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.datagen.NMRecipes;
@@ -15,6 +16,7 @@ import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.homogeniser.MeatAdditives;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
+import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.player.implant.*;
@@ -93,6 +95,8 @@ public class NeepMeat implements ModInitializer
 
 			// --- Other misc things ---
 			ToolTransformPacket.registerReceiver();
+			MachineDiagnosticsRequest.registerReceiver();
+			MotorisedBlock.DiagnosticsProvider.init();
 
 			NMTrackedData.init();
 

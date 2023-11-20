@@ -17,7 +17,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
@@ -43,7 +42,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         Direction facing = be.getCachedState().get(GrinderBlock.FACING);
         BERenderUtils.rotateFacing(facing, matrices);
 
-        if (be.currentRecipe != null)
+        if (be.currentRecipe != null && be.progressIncrement() > 0)
         {
             var unit = facing.getUnitVector();
             double magnitude = Math.abs(0.05 * sinTime);
@@ -61,6 +60,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
             yOffset += Math.abs(sinTime * 0.02);
         }
 
+        matrices.push();
         matrices.translate(0.5, yOffset, 0.5);
         WritableStackStorage input = be.getStorage().getInputStorage();
         ItemStack stack = input.getAsStack();
@@ -68,7 +68,12 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         int j = stack.isEmpty() ? 187 : Item.getRawId(stack.getItem()) + stack.getDamage();
         this.random.setSeed(j);
 
+        matrices.translate(-0.5, -0.5, -0.5);
+        BERenderUtils.rotateFacing(facing, matrices);
+        matrices.translate(0.5, 0.5, 0.5);
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
         renderItems(stack, matrices, vertexConsumers, itemRenderer, be.getWorld(), random, light);
+        matrices.pop();
     }
 
     public static void renderItems(ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertices, ItemRenderer itemRenderer, World world, Random random, int light)
@@ -83,9 +88,6 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         // Rotate by 1 degree to prevent axis fighting with nearby block models
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(1));
 
-        // 2D items lie on their side
-//        if (!depth)
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
 
         float t;
         float s;

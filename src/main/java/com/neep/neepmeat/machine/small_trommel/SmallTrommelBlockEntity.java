@@ -28,7 +28,7 @@ import net.minecraft.util.math.MathHelper;
 import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
-public class SmallTrommelBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class SmallTrommelBlockEntity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     public static final float INCREMENT_MIN = 0.1f;
     public static final float INCREMENT_MAX = 1;
@@ -43,6 +43,8 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     public float renderProgress;
     private float progressIncrement;
     protected Random random;
+    private float power = 0;
+    private float minPower = 0.02f;
 
     public SmallTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -172,12 +174,26 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     @Override
     public void setInputPower(float power)
     {
-        this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
+        this.power = power;
+        if (power >= minPower)
+        {
+            progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
+        }
+        else
+        {
+            progressIncrement = 0;
+        }
     }
 
     public Storage<ItemVariant> getOutputItemStorage()
     {
         return storage.itemOutput;
+    }
+
+    @Override
+    public Diagnostics get()
+    {
+        return Diagnostics.insufficientPower(power < minPower, power, minPower);
     }
 
     public static class Structure extends BlockEntity

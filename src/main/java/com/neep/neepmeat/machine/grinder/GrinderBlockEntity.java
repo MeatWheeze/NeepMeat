@@ -1,11 +1,10 @@
 package com.neep.neepmeat.machine.grinder;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.util.MeatStorageUtil;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.MotorEntity;
@@ -25,7 +24,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,17 +32,13 @@ import java.util.Optional;
 import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class GrinderBlockEntity extends MotorisedMachineBlockEntity
 {
     protected Random jrandom = new Random();
     protected GrinderStorage storage = new GrinderStorage(this);
     protected int cooldownTicks = 2;
     protected int processLength;
 
-    public static final float INCREMENT_MAX = 2;
-    public static final float INCREMENT_MIN = 0.2f;
-    public static final float MULTIPLIER_MIN = 0.02f;
-    protected float progressIncrement;
     protected float progress;
 
     protected Identifier currentRecipeId;
@@ -53,7 +47,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, 0.02f, 0.02f, 2);
     }
 
     public GrinderBlockEntity(BlockPos pos, BlockState state)
@@ -92,6 +86,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
+        nbt.putFloat("power", power);
         nbt.putFloat("progress", progress);
         nbt.putInt("process_length", processLength);
         nbt.putFloat("progress_increment", progressIncrement);
@@ -105,6 +100,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+        this.power = nbt.getFloat("power");
         this.progress = nbt.getFloat("progress");
         this.processLength = nbt.getInt("process_length");
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
@@ -218,13 +214,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
     }
 
     @Override
-    public void setInputPower(float power)
-    {
-        this.progressIncrement = MathHelper.lerp(power, 0, INCREMENT_MAX);
-        if (power < MULTIPLIER_MIN) progressIncrement = 0;
-    }
-
-    @Override
     public float getLoadTorque()
     {
         return 400f;
@@ -232,7 +221,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements Motorised
 
     public void clientTick()
     {
-        float intensity = progressIncrement / INCREMENT_MAX;
+        float intensity = progressIncrement / maxIncrement;
 
         // Particles will be more frequent at higher power. Clamp above 1 to prevent / 0.
         int tickInterval = (int) Math.max(1, 1 / (intensity * 2));

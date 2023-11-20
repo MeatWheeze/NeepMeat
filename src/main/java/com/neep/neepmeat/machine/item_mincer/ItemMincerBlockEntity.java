@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemMincerBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class ItemMincerBlockEntity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     protected float power;
     protected State state = State.IDLE;
@@ -158,6 +158,12 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
     {
         Direction facing = getCachedState().get(ItemMincerBlock.FACING);
         return facing == direction ? pump : null;
+    }
+
+    @Override
+    public Diagnostics get()
+    {
+        return Diagnostics.insufficientPower(false, power, 0);
     }
 
     public enum State

@@ -79,6 +79,7 @@ public class NeepMeatClient implements ClientModInitializer
         registerScreens();
         NMFluidsClient.registerFluidRenderers();
         HUDOverlays.init();
+        MachineHudOverlay.init();
 
         PlayerImplantManager.Client.init();
 
@@ -90,6 +91,7 @@ public class NeepMeatClient implements ClientModInitializer
         ParticleSpawnPacket.Client.registerReceiver();
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         EntityAnimationS2C.Client.registerReceiver();
+        MachineDiagnosticsRequest.Client.registerReceiver();
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
