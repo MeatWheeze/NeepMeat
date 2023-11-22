@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -29,16 +30,15 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        if (!world.isClient() && world.getBlockEntity(pos) instanceof TableControllerBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
         {
-//            be.assemble();
-//            be.tryRecipe();
+            be.setCounter(0);
         }
 
-        world.getBlockEntity(pos, NMBlockEntities.TABLE_CONTROLLER).ifPresent(be ->
-        {
-            be.showBlocks(player);
-        });
+//        world.getBlockEntity(pos, NMBlockEntities.PLC).ifPresent(be ->
+//        {
+//            be.showBlocks(player);
+//        });
 
         return ActionResult.SUCCESS;
     }
@@ -56,13 +56,13 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.TABLE_CONTROLLER, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.PLC, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.TABLE_CONTROLLER.instantiate(pos, state);
+        return NMBlockEntities.PLC.instantiate(pos, state);
     }
 }

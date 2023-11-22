@@ -14,10 +14,6 @@ public class SurgicalRobot implements NbtSerialisable
     private static final byte STATE_DOCKING = 4;
     private byte movementState;
 
-    private static final byte TYPE_BASE = 0;
-    private static final byte TYPE_ITEM = 1;
-    private static final byte TYPE_FLUID = 2;
-    private static final byte TYPE_ENTITY = 3;
     private byte nextType;  //0: base, 1: item, 2: fluid, 3: entity
 
     public static final double SPEED = 0.05;
