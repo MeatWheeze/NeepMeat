@@ -111,11 +111,7 @@ public class NMMaths
         return manhattanDistance(v1, v2);
     }
 
-    /**Converts a 3D position to pitch and yaw in degrees, neglecting roll.
-     * @param u X component
-     * @param v Y component
-     * @param w Z component
-     * @return A vector containing pitch and yaw.
+    /**Converts a 3D vector to pitch and yaw in degrees, neglecting roll.
      */
     public static Vec2f rectToPol(double u, double v, double w)
     {
@@ -129,5 +125,4 @@ public class NMMaths
     {
         return rectToPol(vec.x, vec.y, vec.z);
     }
-
 }

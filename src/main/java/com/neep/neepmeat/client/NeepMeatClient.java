@@ -11,6 +11,7 @@ import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;
+import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
@@ -36,6 +37,7 @@ import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
+import com.neep.neepmeat.mixin.InGameHudMixin;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -92,11 +94,14 @@ public class NeepMeatClient implements ClientModInitializer
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         EntityAnimationS2C.Client.registerReceiver();
         MachineDiagnosticsRequest.Client.registerReceiver();
+        NMClientNetwork.init();
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
 
         NMDimensionEffects.init();
+
+        PLCHudRenderer.init();
     }
 
     public static void registerRenderers()

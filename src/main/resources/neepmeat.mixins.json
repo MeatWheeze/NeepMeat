@@ -14,9 +14,13 @@
   ],
   "client": [
     "BlockModelRendererAccessor",
+    "CameraAccessor",
+    "CameraMixin",
     "CowEntityRendererMixin",
     "DimensionEffectsAccessor",
+    "GameRendererMixin",
     "HeldItemRendererMixin",
+    "InGameHudMixin",
     "ParticleManagerMixin"
   ],
   "injectors": {

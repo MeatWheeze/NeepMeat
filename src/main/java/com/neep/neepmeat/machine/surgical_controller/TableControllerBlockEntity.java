@@ -33,7 +33,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     protected int recipeProgress = 0;
 
     protected final SurgeryTableContext context = new SurgeryTableContext();
-    protected final SurgicalRobot robot = new SurgicalRobot(getPos());
+//    protected final SurgicalRobot robot = new SurgicalRobot(this);
 
     protected Identifier currentRecipe;
 
@@ -60,9 +60,9 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
         counter = Math.min(counter + 1, 10);
 
-        robot.tick();
-
-        if (robot.isActive() && counter == 10)
+//        robot.tick();
+//
+//        if (robot.isActive() && counter == 10)
         {
             MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(this::nextIngredient);
             counter = 0;
@@ -135,7 +135,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         this.recipeProgress = 0;
         this.currentRecipe = recipe.getId();
         Direction facing = getCachedState().get(TableControllerBlock.FACING);
-        robot.setTarget(pos.add(0, 2, 0).offset(facing.getOpposite(), 2));
+//        robot.setTarget(pos.add(0, 2, 0).offset(facing.getOpposite(), 2));
         nextIngredient(recipe);
     }
 
@@ -143,7 +143,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         this.currentRecipe = null;
         this.recipeProgress = 0;
-        robot.returnToBase();
+//        robot.returnToBase();
     }
 
     private void finishRecipe()
@@ -161,7 +161,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
         this.currentRecipe = null;
         this.recipeProgress = 0;
-        robot.returnToBase();
+//        robot.returnToBase();
     }
 
     private void nextIngredient(SurgeryRecipe recipe)
@@ -176,14 +176,14 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
             if (!recipe.isInputEmpty(recipeProgress))
             {
                 BlockPos itemPos = context.getPos(recipeProgress);
-                if (robot.reachedTarget())
+//                if (robot.reachedTarget())
                 {
                     try (Transaction transaction = Transaction.openOuter())
                     {
                         if (recipe.takeInput(context, recipeProgress, transaction))
                         {
                             transaction.commit();
-                            syncBeamEffect((ServerWorld) world, robot.getPos(), Vec3d.ofCenter(itemPos, 0), Vec3d.ZERO, 20);
+//                            syncBeamEffect((ServerWorld) world, robot.getPos(), Vec3d.ofCenter(itemPos, 0), Vec3d.ZERO, 20);
                         }
                         else
                         {
@@ -214,7 +214,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         nbt.putInt("recipeProgress", recipeProgress);
         nbt.putString("currentRecipe", currentRecipe != null ? currentRecipe.toString() : "null");
         nbt.putBoolean("redstone", redstone);
-        robot.writeNbt(nbt);
+//        robot.writeNbt(nbt);
         context.writeNbt(nbt);
     }
 
@@ -225,7 +225,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         this.recipeProgress = nbt.getInt("recipeProgress");
         this.currentRecipe = new Identifier(nbt.getString("currentRecipe"));
         this.redstone = nbt.getBoolean("redstone");
-        robot.readNbt(nbt);
+//        robot.readNbt(nbt);
         context.readNbt(nbt);
     }
 
