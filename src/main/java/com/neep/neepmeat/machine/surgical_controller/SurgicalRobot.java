@@ -34,10 +34,13 @@ public class SurgicalRobot implements NbtSerialisable
     private double x;
     private double y;
     private double z;
-
     public double clientX;
     public double clientY;
     public double clientZ;
+
+    private double vx;
+    private double vy;
+    private double vz;
 
     private Vec3d targetPos;
 
@@ -314,21 +317,31 @@ public class SurgicalRobot implements NbtSerialisable
 
             if (robot.pressingForward)
             {
-                robot.x += vx;
-//                robot.y += vy;
-                robot.z += vz;
+                robot.vx = vx;
+                robot.vz = vz;
+            }
+            if (robot.pressingBack)
+            {
+                robot.vx = -vx;
+                robot.vz = -vz;
             }
 
-            float vy = 0;
             if (robot.pressingUp)
             {
-                vy += speed;
+                robot.vy = speed;
             }
             if (robot.pressingDown)
             {
-                vy -= speed;
+                robot.vy = -speed;
             }
-            robot.y += vy;
+
+            robot.x += robot.vx;
+            robot.y += robot.vy;
+            robot.z += robot.vz;
+
+            robot.vx *= 0.4;
+            robot.vy *= 0.4;
+            robot.vz *= 0.4;
         }
 
         public void updateKeys()
