@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.plc;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.mixin.CameraAccessor;
@@ -59,7 +58,6 @@ public class PLCHudRenderer
         return true;
     }
 
-
     public static void enter(PLCBlockEntity be)
     {
         INSTANCE = new PLCHudRenderer(be);
@@ -111,8 +109,6 @@ public class PLCHudRenderer
     {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
         {
-            var m = RenderSystem.getModelViewStack().peek().getPositionMatrix();
-//            var mv = RenderSystem.getModelViewMatrix();
             PROJECTION = context.projectionMatrix().copy();
             MODEL_VIEW = context.matrixStack().peek().getPositionMatrix().copy();
         });

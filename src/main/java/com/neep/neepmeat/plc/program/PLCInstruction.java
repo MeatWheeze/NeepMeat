@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.program;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.PLC;
+import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
 
 public interface PLCInstruction extends NbtSerialisable
@@ -11,9 +12,11 @@ public interface PLCInstruction extends NbtSerialisable
 
     void start(PlcProgram program, PLC plc);
 
+    InstructionProvider getProvider();
+
     PLCInstruction EMPTY = new EmptyInstruction();
 
-    static PLCInstruction empty() { return EMPTY; }
+    static PLCInstruction end() { return EMPTY; }
 
     class EmptyInstruction implements PLCInstruction
     {
@@ -39,6 +42,12 @@ public interface PLCInstruction extends NbtSerialisable
         public void start(PlcProgram program, PLC plc)
         {
 
+        }
+
+        @Override
+        public InstructionProvider getProvider()
+        {
+            return null;
         }
     }
 }
