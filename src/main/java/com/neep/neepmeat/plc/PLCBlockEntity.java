@@ -38,13 +38,13 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 //        this.program = program1;
     }
 
+
     @Override
     public RobotAction addRobotAction(RobotAction action, Consumer<PLC> callback)
     {
         robotActions.add(Pair.of(action, callback));
         return action;
     }
-
 
     public SurgicalRobot getRobot()
     {
@@ -53,10 +53,13 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 
     public void enter(PlayerEntity player)
     {
-        robot.setController(player);
-        if (!world.isClient())
+        if (robot.getController() == null)
         {
-            PLCRobotEnterS2C.send(player, this);
+            robot.setController(player);
+            if (!world.isClient())
+            {
+                PLCRobotEnterS2C.send(player, this);
+            }
         }
     }
 
@@ -130,5 +133,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     {
         super.readNbt(nbt);
         robot.readNbt(nbt);
+    }
+
+    public void exit()
+    {
+        getRobot().setController(null);
     }
 }

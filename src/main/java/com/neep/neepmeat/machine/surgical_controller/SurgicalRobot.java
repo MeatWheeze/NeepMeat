@@ -10,7 +10,6 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
@@ -77,9 +76,15 @@ public class SurgicalRobot implements NbtSerialisable
         this.clientZ = z;
     }
 
-    public void setController(PlayerEntity player)
+    public void setController(@Nullable PlayerEntity player)
     {
         this.controller = player;
+    }
+
+    @Nullable
+    public PlayerEntity getController()
+    {
+        return controller;
     }
 
     public void tick()
@@ -261,6 +266,7 @@ public class SurgicalRobot implements NbtSerialisable
         parent.markDirty();
     }
 
+
     @Environment(value = EnvType.CLIENT)
     public static class Client
     {
@@ -295,16 +301,34 @@ public class SurgicalRobot implements NbtSerialisable
             double speed = 0.2;
             float pitch = camera.getPitch();
             float yaw = camera.getYaw();
-            double vx = speed * -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-            double vy = speed * -Math.sin(Math.toRadians(pitch));
-            double vz = speed * Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+            double vx = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+//            double vy = speed * -Math.sin(Math.toRadians(pitch));
+            double vz = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+
+            double l = Math.sqrt(vx * vx + vz * vz);
+            if (l != 0)
+            {
+                vx = vx / l * speed;
+                vz = vz / l * speed;
+            }
 
             if (robot.pressingForward)
             {
                 robot.x += vx;
-                robot.y += vy;
+//                robot.y += vy;
                 robot.z += vz;
             }
+
+            float vy = 0;
+            if (robot.pressingUp)
+            {
+                vy += speed;
+            }
+            if (robot.pressingDown)
+            {
+                vy -= speed;
+            }
+            robot.y += vy;
         }
 
         public void updateKeys()
