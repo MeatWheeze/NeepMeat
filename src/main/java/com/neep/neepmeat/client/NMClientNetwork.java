@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client;
 
-import com.neep.neepmeat.network.PLCRobotEnterS2C;
+import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 
 public class NMClientNetwork
 {

@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
+import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.opcode.InstructionBuilder;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCInstruction;
@@ -18,14 +19,19 @@ import org.lwjgl.glfw.GLFW;
 
 public class PLCProgramScreen extends Screen
 {
-    protected PLCOperationSelector operationSelector;
+    protected PLCOperationSelector operationSelector = new PLCOperationSelector(this);
+    protected PLCProgramOutline outline = new PLCProgramOutline(this);
+
     @Nullable protected InstructionBuilder instructionBuilder;
     @Nullable private InstructionProvider instructionProvider;
 
-    public PLCProgramScreen()
+    protected final PLCBlockEntity plc;
+
+    public PLCProgramScreen(PLCBlockEntity plc)
     {
         super(Text.empty());
         this.passEvents = true;
+        this.plc = plc;
     }
 
     @Override
@@ -38,10 +44,13 @@ public class PLCProgramScreen extends Screen
     protected void init()
     {
         super.init();
-        operationSelector = new PLCOperationSelector(this);
         addDrawableChild(operationSelector);
         operationSelector.init(client, width, height);
         operationSelector.setDimensions(width, height);
+
+        addDrawableChild(outline);
+        outline.init(client, width, height);
+        outline.setDimensions(width, height);
     }
 
     @Override

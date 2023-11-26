@@ -1,15 +1,12 @@
-package com.neep.neepmeat.network;
+package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;

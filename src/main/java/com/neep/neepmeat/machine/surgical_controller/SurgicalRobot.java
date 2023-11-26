@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.network.PLCRobotC2S;
+import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

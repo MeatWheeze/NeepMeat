@@ -3,7 +3,7 @@ package com.neep.neepmeat.plc;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
-import com.neep.neepmeat.network.PLCRobotEnterS2C;
+import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.program.PLCInstruction;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
