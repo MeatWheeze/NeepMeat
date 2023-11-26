@@ -1,30 +1,36 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
-import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
-import com.neep.neepmeat.plc.program.CombineInstruction;
 import com.neep.neepmeat.plc.program.PLCInstruction;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
+import com.neep.neepmeat.plc.program.PlcProgram;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.Tessellator;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.math.Matrix4f;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.glfw.GLFW;
 import software.bernie.geckolib3.core.util.Color;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PLCProgramOutline extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;
-    @Nullable
-    protected InstructionProvider instructionProvider;
+    @Nullable protected InstructionProvider instructionProvider;
 
-    private int selectedInstruction = 0;
+    private int selectionIndex = -1;
 
     public PLCProgramOutline(PLCProgramScreen parent)
     {
@@ -56,18 +62,30 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     protected void addEntries()
     {
-        List<PLCInstruction> instructions = List.of(new CombineInstruction(null, null, null), PLCInstruction.end());
+        PlcProgram program = parent.plc.getEditProgram();
 
-        int entryHeight = 20;
+        int entryHeight = 11;
         int gap = 1;
         int entryStride = entryHeight + gap;
 
         int count = 0;
-        for (int id = 0; id < instructions.size(); ++id)
+        for (int id = 0; id < program.size(); ++id)
         {
-            PLCInstruction instruction = instructions.get(id);
-            addDrawable(new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, false));
+            PLCInstruction instruction = program.get(id);
+            addDrawableChild(new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, selectionIndex == id));
             count++;
+        }
+    }
+
+    protected void onInstructionSelect(InstructionWidget widget)
+    {
+        this.selectionIndex = widget.id;
+        for (var child : children())
+        {
+            if (child instanceof InstructionWidget instructionWidget && instructionWidget !=widget)
+            {
+                instructionWidget.selected = false;
+            }
         }
     }
 
@@ -76,6 +94,22 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 //        this.instructionProvider = instructionProvider;
 //        parent.updateInstruction(instructionProvider);
 //    }
+
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE)
+        {
+            if (selectionIndex != -1)
+            {
+                parent.plc.getEditProgram().remove(selectionIndex);
+                update();
+                return true;
+            }
+        }
+        return super.keyPressed(keyCode, scanCode, modifiers);
+    }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
@@ -99,12 +133,90 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     }
 
-    public static class InstructionWidget implements Drawable
+    public void update()
+    {
+        clearAndInit();
+    }
+
+    private void renderTooltipText(MatrixStack matrices, List<Text> texts, int x, int y, int col)
+    {
+        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), x, y, col);
+    }
+
+    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, int col)
+    {
+        if (components.isEmpty())
+        {
+            return;
+        }
+
+        int maxWidth = 0;
+        int maxHeight = components.size() == 1 ? -2 : 0;
+        for (TooltipComponent tooltipComponent : components)
+        {
+            int componentWidth = tooltipComponent.getWidth(this.textRenderer);
+            if (componentWidth > maxWidth)
+            {
+                maxWidth = componentWidth;
+            }
+            maxHeight += tooltipComponent.getHeight();
+        }
+
+        if (x + maxWidth > this.width)
+        {
+            x -= 28 + maxWidth;
+        }
+
+        if (y + maxHeight + 6 > this.height)
+        {
+            y = this.height - maxHeight - 6;
+        }
+
+        matrices.push();
+        float prevZ = this.itemRenderer.zOffset;
+        this.itemRenderer.zOffset = 400.0f;
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+//        int borderCol = Color.ofRGBA(255, 94, 33, 255).getColor();
+        Screen.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
+        drawHorizontalLine(matrices, x, x + maxWidth + 2, y, col);
+        drawHorizontalLine(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
+        drawVerticalLine(matrices, x + maxWidth + 2, y, y + maxHeight + 2, col);
+
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
+        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        matrices.translate(0.0, 0.0, 400.0);
+
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        int yAdvance = y + 2;
+        for (int index = 0; index < components.size(); ++index)
+        {
+            TooltipComponent tooltipComponent2 = components.get(index);
+            tooltipComponent2.drawText(this.textRenderer, x + 2, yAdvance, matrix4f, immediate);
+            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+        }
+
+        immediate.draw();
+        matrices.pop();
+        yAdvance = y;
+        for (int index = 0; index < components.size(); ++index)
+        {
+            TooltipComponent tooltipComponent2 = components.get(index);
+            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, matrices, this.itemRenderer, 400);
+            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+        }
+        this.itemRenderer.zOffset = prevZ;
+    }
+
+    public class InstructionWidget implements Drawable, Element, Selectable
     {
         protected final InstructionProvider instructionProvider;
         protected final int x, y;
         protected final int width, height;
         protected final int id;
+
+        protected boolean selected;
 
         public InstructionWidget(InstructionProvider instructionProvider, int x, int y, int width, int height, int id, boolean selected)
         {
@@ -114,16 +226,58 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             this.width = width;
             this.height = height;
             this.id = id;
+            this.selected = selected;
+        }
+
+        protected boolean isMouseInside(double mouseX, double mouseY)
+        {
+            return mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button)
+        {
+            boolean valid =  mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
+            if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
+            {
+                selected = true;
+                onInstructionSelect(this);
+                return true;
+            }
+            return false;
         }
 
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             int col = Color.ofRGBA(255, 94, 33, 255).getColor();
-            GUIUtil.renderBorder(matrices, x, y, width, height - 1, col, 0);
+            int borderCol = Color.ofRGBA(255, selected ? 150 : 94, 33, 255).getColor();
 
-            TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-            textRenderer.draw(matrices, instructionProvider.getShortName(), x + 2, (y + height) - textRenderer.fontHeight, col);
+            Text lineNumber = Text.literal(String.valueOf(id));
+
+            textRenderer.draw(matrices, lineNumber, x + 1, y + (height - textRenderer.fontHeight) / 2.0f + 1, borderCol);
+
+            int textWidth = textRenderer.getWidth(lineNumber) + 2;
+            GUIUtil.renderBorder(matrices, x + textWidth, y, width - textWidth, height - 1, borderCol, 0);
+
+            textRenderer.draw(matrices, instructionProvider.getShortName(), x + textWidth + 2, (y + height) - textRenderer.fontHeight, col);
+
+            if (isMouseInside(mouseX, mouseY))
+            {
+                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderColour());
+            }
+        }
+
+        @Override
+        public SelectionType getType()
+        {
+            return selected ? SelectionType.FOCUSED : SelectionType.NONE;
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder)
+        {
+
         }
     }
 }

@@ -4,7 +4,9 @@ import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
+import com.neep.neepmeat.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.program.PLCInstruction;
+import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
 import it.unimi.dsi.fastutil.Pair;
@@ -13,13 +15,16 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
 import java.util.function.Consumer;
 
 public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 {
-    protected PlcProgram program;
+    @Nullable protected MutableProgram editingProgram;
+
+    @Nullable protected PlcProgram program;
     protected PLCInstruction currentInstruction;
     protected int counter;
 
@@ -138,5 +143,15 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     public void exit()
     {
         getRobot().setController(null);
+    }
+
+    public MutableProgram getEditProgram()
+    {
+        if (editingProgram == null)
+        {
+            editingProgram = new PLCProgramImpl(this::getWorld);
+        }
+
+        return editingProgram;
     }
 }

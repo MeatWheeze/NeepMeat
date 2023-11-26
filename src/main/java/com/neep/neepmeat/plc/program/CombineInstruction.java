@@ -35,6 +35,11 @@ public class CombineInstruction implements PLCInstruction
 
     }
 
+    public CombineInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
+    {
+
+    }
+
     @Override
     public boolean canStart(PLC plc)
     {

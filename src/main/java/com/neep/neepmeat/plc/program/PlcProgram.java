@@ -1,6 +1,12 @@
 package com.neep.neepmeat.plc.program;
 
-public interface PlcProgram
+import com.neep.meatlib.util.NbtSerialisable;
+
+public interface PlcProgram extends NbtSerialisable
 {
     PLCInstruction get(int index);
+
+    int size();
+
+
 }

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.opcode;
 
 import com.neep.neepmeat.plc.program.PLCInstruction;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -14,13 +15,15 @@ public class InstructionProvider
 {
     protected final int arguments;
     protected final Constructor constructor;
+    protected final NbtConstructor nbtConstructor;
     protected final Text shortName;
 
-    public InstructionProvider(Constructor constructor, int arguments, Text shortName)
+    public InstructionProvider(Constructor constructor, NbtConstructor nbtConstructor, int arguments, Text shortName)
     {
         this.constructor = constructor;
         this.arguments = arguments;
         this.shortName = shortName;
+        this.nbtConstructor = nbtConstructor;
     }
 
     public InstructionBuilder start(World world, Consumer<PLCInstruction> finished)
@@ -44,9 +47,20 @@ public class InstructionProvider
         PLCInstruction create(Supplier<World> world, List<Argument> arguments);
     }
 
+    @FunctionalInterface
+    public interface NbtConstructor
+    {
+        PLCInstruction create(Supplier<World> world, NbtCompound nbt);
+    }
+
     public PLCInstruction create(World world, List<Argument> arguments)
     {
         return constructor.create(() -> world, arguments);
+    }
+
+    public PLCInstruction createFromNbt(Supplier<World> world, NbtCompound nbt)
+    {
+        return nbtConstructor.create(world, nbt);
     }
 
     public record Argument(BlockPos pos, Direction face) { }
