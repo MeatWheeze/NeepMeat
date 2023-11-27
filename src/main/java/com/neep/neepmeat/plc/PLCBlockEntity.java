@@ -4,8 +4,10 @@ import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
+import com.neep.neepmeat.plc.editor.ImmediateState;
+import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.program.MutableProgram;
-import com.neep.neepmeat.plc.program.PLCInstruction;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
@@ -25,17 +27,23 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     @Nullable protected MutableProgram editingProgram;
 
     @Nullable protected PlcProgram program;
-    protected PLCInstruction currentInstruction;
+    protected Instruction currentInstruction;
     protected int counter;
 
     protected Queue<Pair<RobotAction, Consumer<PLC>>> robotActions = Queues.newArrayDeque();
     protected Pair<RobotAction, Consumer<PLC>> currentAction;
     protected final SurgicalRobot robot = new SurgicalRobot(this);
-    protected final PLCProgramEditor editor = new PLCProgramEditor(this);
+
+    protected final ProgramEditorState editor = new ProgramEditorState(this);
+    protected final ImmediateState immediate = new ImmediateState(this);
+
+    private PLCState state;
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+
+        this.state = immediate;
 
 //        PLCProgramImpl program1 = new PLCProgramImpl();
 //        program1.add(new CombineInstruction(pos.up(3).south(4), pos.up(3).north(5), () -> (ServerWorld) this.getWorld()));
@@ -84,7 +92,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     {
         if (program != null)
         {
-            PLCInstruction instruction = program.get(counter);
+            Instruction instruction = program.get(counter);
             if (instruction != currentInstruction)
             {
                 currentInstruction = instruction;
@@ -156,8 +164,18 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         return editingProgram;
     }
 
-    public PLCProgramEditor getEditor()
+    public ProgramEditorState getEditor()
     {
         return editor;
+    }
+
+    public void runProgram(PlcProgram program)
+    {
+        this.program = program;
+    }
+
+    public PLCState getState()
+    {
+        return state;
     }
 }

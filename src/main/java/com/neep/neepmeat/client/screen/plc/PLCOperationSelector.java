@@ -5,7 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
@@ -56,7 +56,15 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
 
     protected void addEntries()
     {
-        List<InstructionProvider> instructions = List.of(Instructions.COMBINE, Instructions.COMBINE, Instructions.END);
+        List<? extends InstructionProvider> instructions;
+        if (parent.mode == PLCProgramScreen.RecordMode.IMMEDIATE)
+        {
+            instructions = Instructions.IMMEDIATE.stream().toList();
+        }
+        else
+        {
+            instructions = List.of(Instructions.COMBINE, Instructions.COMBINE, Instructions.END);
+        }
 
         int entryHeight = 20;
         int gap = 1;

@@ -1,38 +1,40 @@
-package com.neep.neepmeat.plc;
+package com.neep.neepmeat.plc.editor;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
-import com.neep.neepmeat.plc.opcode.InstructionBuilder;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.PLCState;
+import com.neep.neepmeat.plc.instruction.*;
 import com.neep.neepmeat.plc.program.MutableProgram;
-import com.neep.neepmeat.plc.program.PLCInstruction;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PLCProgramEditor
+public class ProgramEditorState implements PLCState
 {
     private final PLCBlockEntity parent;
     private MutableProgram program;
     @Nullable private InstructionBuilder instructionBuilder;
     private List<Listener> listeners = Lists.newArrayList();
 
-    public PLCProgramEditor(PLCBlockEntity parent)
+    public ProgramEditorState(PLCBlockEntity parent)
     {
         this.parent = parent;
         program = new PLCProgramImpl(parent::getWorld);
     }
 
+    @Override
     public void setInstructionBuilder(InstructionProvider provider)
     {
-        instructionBuilder = provider.start(parent.getWorld(), this::emitInstruction);
+        instructionBuilder = provider.start((ServerWorld) parent.getWorld(), this::emitInstruction);
     }
 
-    private void emitInstruction(PLCInstruction instruction)
+    private void emitInstruction(Instruction instruction)
     {
         if (program != null)
         {
@@ -41,7 +43,8 @@ public class PLCProgramEditor
         }
     }
 
-    public void argument(InstructionProvider.Argument argument)
+    @Override
+    public void argument(Argument argument)
     {
         if (program != null && instructionBuilder != null)
         {

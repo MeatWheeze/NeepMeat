@@ -4,9 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
-import com.neep.neepmeat.plc.PLCProgramEditor;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
-import com.neep.neepmeat.plc.program.PLCInstruction;
+import com.neep.neepmeat.plc.editor.ProgramEditorState;
+import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -29,11 +29,11 @@ import java.util.stream.Collectors;
 public class PLCProgramOutline extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;
-    private final PLCProgramEditor editor;
+    private final ProgramEditorState editor;
 
     private int selectionIndex = -1;
 
-    public PLCProgramOutline(PLCProgramEditor editor, PLCProgramScreen parent)
+    public PLCProgramOutline(ProgramEditorState editor, PLCProgramScreen parent)
     {
         this.editor = editor;
         this.parent = parent;
@@ -75,7 +75,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         int count = 0;
         for (int id = 0; id < program.size(); ++id)
         {
-            PLCInstruction instruction = program.get(id);
+            Instruction instruction = program.get(id);
             addDrawableChild(new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, selectionIndex == id));
             count++;
         }
