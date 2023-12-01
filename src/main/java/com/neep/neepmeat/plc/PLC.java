@@ -12,4 +12,6 @@ public interface PLC
     SurgicalRobot getRobot();
 
     void advanceCounter();
+
+    void raiseError();
 }

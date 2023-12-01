@@ -12,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SurgicalRobot implements NbtSerialisable
@@ -90,17 +91,24 @@ public class SurgicalRobot implements NbtSerialisable
         return controller;
     }
 
-    public void tick()
+    public boolean shouldUpdatePosition(World world)
     {
-        if (controller == null)
+        if (!world.isClient())
         {
-            move();
+            return getController() == null || parent.actionBlocksController();
         }
         else
         {
-
+            return getController() != null;
         }
+    }
 
+    public void tick()
+    {
+        if (shouldUpdatePosition(parent.getWorld()))
+        {
+            move();
+        }
     }
 
     protected void move()
@@ -118,7 +126,10 @@ public class SurgicalRobot implements NbtSerialisable
         }
         else if (movementState == STATE_ACTIVE)
         {
-            moveTo(targetPos);
+            if (targetPos != null)
+            {
+                moveTo(targetPos);
+            }
         }
         else if (movementState == STATE_RETURNING)
         {
@@ -289,7 +300,7 @@ public class SurgicalRobot implements NbtSerialisable
 
             if (be.getWorld().getTime() % 4 == 0)
             {
-                PLCRobotC2S.send(be);
+                PLCRobotC2S.Client.send(be);
             }
         }
 

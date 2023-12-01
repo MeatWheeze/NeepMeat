@@ -2,7 +2,9 @@ package com.neep.neepmeat.plc;
 
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
+import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ImmediateState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
@@ -16,6 +18,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -83,6 +87,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         counter++;
     }
 
+    @Override
+    public void raiseError()
+    {
+        getWorld().getPlayers().forEach(p -> p.sendMessage(Text.of("NOOOOOOOOOOOOO")));
+    }
+
     public void setCounter(int counter)
     {
         this.counter = counter;
@@ -102,6 +112,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
                     instruction.start(program, this);
                 }
             }
+        }
 
             if (currentAction == null || currentAction.first().finished())
             {
@@ -112,6 +123,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
                 if (robotActions.peek() != null)
                 {
                     currentAction = robotActions.poll();
+                    currentAction.first().start();
                 }
                 else
                 {
@@ -122,10 +134,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
             else
             {
                 currentAction.first().tick();
+
+                if (world instanceof ServerWorld serverWorld)
+                {
+                    if (robot.shouldUpdatePosition(serverWorld))
+                    {
+                        PLCRobotC2S.send(this, serverWorld);
+                    }
+                }
             }
 
             robot.tick();
-        }
 
 //        sync();
     }
@@ -177,5 +196,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     public PLCState getState()
     {
         return state;
+    }
+
+    public boolean actionBlocksController()
+    {
+        return currentAction != null && currentAction.first().blocksController();
     }
 }

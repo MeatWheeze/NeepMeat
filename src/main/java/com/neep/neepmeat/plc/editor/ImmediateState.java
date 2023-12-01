@@ -4,6 +4,7 @@ import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.ImmediateInstruction;
+import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +22,7 @@ public class ImmediateState implements PLCState
     @Override
     public void setInstructionBuilder(InstructionProvider provider)
     {
-        if (provider instanceof InstructionProvider.Immediate immediate)
+        if (provider instanceof ImmediateInstructionProvider immediate)
         {
             instruction = immediate.createImmediate(parent::getWorld);
         }
@@ -33,6 +34,25 @@ public class ImmediateState implements PLCState
         if (instruction != null)
         {
             instruction.argument(argument, parent);
+            if (instruction.isFinished())
+            {
+                instruction = null;
+            }
+        }
+    }
+
+    class Client implements PLCState
+    {
+        @Override
+        public void setInstructionBuilder(InstructionProvider provider)
+        {
+
+        }
+
+        @Override
+        public void argument(Argument argument)
+        {
+
         }
     }
 }

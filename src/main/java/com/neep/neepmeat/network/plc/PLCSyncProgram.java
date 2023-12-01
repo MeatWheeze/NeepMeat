@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import net.fabricmc.api.EnvType;
@@ -94,7 +95,7 @@ public class PLCSyncProgram
         InstructionProvider provider = Instructions.IMMEDIATE.get(id);
         if (provider != null)
         {
-            plc.getEditor().setInstructionBuilder(provider);
+            plc.getState().setInstructionBuilder(provider);
         }
     }
 
@@ -103,7 +104,7 @@ public class PLCSyncProgram
         PLCBlockEntity plc = getPlc(buf, world);
 
         Argument argument = Argument.fromBuf(buf);
-        plc.getEditor().argument(argument);
+        plc.getState().argument(argument);
     }
 
     private static void putPlc(PacketByteBuf buf, PLCBlockEntity be)
@@ -168,7 +169,7 @@ public class PLCSyncProgram
             ClientPlayNetworking.send(ID, buf);
         }
 
-        public static void switchOperationImmediate(InstructionProvider.Immediate provider, PLCBlockEntity plc)
+        public static void switchOperationImmediate(ImmediateInstructionProvider provider, PLCBlockEntity plc)
         {
             PacketByteBuf buf = PacketByteBufs.create();
 

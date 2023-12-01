@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -159,7 +160,7 @@ public class PLCProgramScreen extends Screen
     {
         if (mode == RecordMode.IMMEDIATE)
         {
-            PLCSyncProgram.Client.switchOperationImmediate((InstructionProvider.Immediate) provider, plc);
+            PLCSyncProgram.Client.switchOperationImmediate((ImmediateInstructionProvider) provider, plc);
         }
         else
         {
