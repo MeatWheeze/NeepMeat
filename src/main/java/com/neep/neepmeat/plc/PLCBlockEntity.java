@@ -2,14 +2,13 @@ package com.neep.neepmeat.plc;
 
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ImmediateState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
-import com.neep.neepmeat.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
@@ -37,11 +36,13 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     protected Queue<Pair<RobotAction, Consumer<PLC>>> robotActions = Queues.newArrayDeque();
     protected Pair<RobotAction, Consumer<PLC>> currentAction;
     protected final SurgicalRobot robot = new SurgicalRobot(this);
+    protected boolean overrideController;
 
     protected final ProgramEditorState editor = new ProgramEditorState(this);
     protected final ImmediateState immediate = new ImmediateState(this);
 
     private PLCState state;
+    private Error error;
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -88,9 +89,21 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     }
 
     @Override
-    public void raiseError()
+    public void raiseError(Error error)
     {
         getWorld().getPlayers().forEach(p -> p.sendMessage(Text.of("NOOOOOOOOOOOOO")));
+        this.error = error;
+    }
+
+    public void resetError()
+    {
+        error = null;
+        counter = 0;
+    }
+
+    public @Nullable Error getError()
+    {
+        return error;
     }
 
     public void setCounter(int counter)
@@ -100,58 +113,85 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 
     public void tick()
     {
-        if (program != null)
+        if (program != null && error == null)
         {
             Instruction instruction = program.get(counter);
             if (instruction != currentInstruction)
             {
-                currentInstruction = instruction;
-
-                if (instruction.canStart(this))
-                {
-                    instruction.start(program, this);
-                }
+                execute(instruction);
+                sync();
             }
         }
 
-            if (currentAction == null || currentAction.first().finished())
-            {
-                if (currentAction != null)
-                    currentAction.second().accept(this);
+        if (currentAction == null || currentAction.first().finished())
+        {
+            if (currentAction != null)
+                currentAction.second().accept(this);
 
-                currentAction = null;
-                if (robotActions.peek() != null)
-                {
-                    currentAction = robotActions.poll();
-                    currentAction.first().start();
-                }
-                else
-                {
-                    robot.returnToBase();
-                    currentAction = null;
-                }
+            if (robotActions.peek() != null)
+            {
+                currentAction = robotActions.poll();
+                currentAction.first().start();
+                overrideController = currentAction.first().blocksController();
+                sync();
             }
             else
             {
-                currentAction.first().tick();
-
-                if (world instanceof ServerWorld serverWorld)
+                if (currentAction != null)
                 {
-                    if (robot.shouldUpdatePosition(serverWorld))
-                    {
-                        PLCRobotC2S.send(this, serverWorld);
-                    }
+//                    robot.returnToBase();
+                    robot.stay();
+                    currentAction = null;
+                    overrideController = false;
+                    sync();
                 }
             }
+        }
+        else
+        {
+            currentAction.first().tick();
 
-            robot.tick();
+            overrideController = currentAction.first().blocksController();
+        }
+
+        if (world instanceof ServerWorld serverWorld)
+        {
+            if (robot.shouldUpdatePosition(serverWorld))
+            {
+                PLCRobotC2S.send(this, serverWorld);
+            }
+        }
+
+        robot.tick();
 
 //        sync();
     }
 
+    public void execute(Instruction instruction)
+    {
+        robotActions.clear();
+        if (currentAction != null)
+        {
+            currentAction.first().cancel();
+            currentAction = null;
+        }
+
+        currentInstruction = instruction;
+
+        if (instruction.canStart(this))
+        {
+            instruction.start(program, this);
+        }
+    }
+
+    public boolean overrideController()
+    {
+        return overrideController;
+    }
+
     public void clientTick()
     {
-        robot.tick();
+//        robot.tick();
     }
 
     @Override
@@ -159,6 +199,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     {
         super.writeNbt(nbt);
         robot.writeNbt(nbt);
+        nbt.putBoolean("override_controller", overrideController);
     }
 
     @Override
@@ -166,6 +207,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     {
         super.readNbt(nbt);
         robot.readNbt(nbt);
+        this.overrideController = nbt.getBoolean("override_controller");
     }
 
     public void exit()

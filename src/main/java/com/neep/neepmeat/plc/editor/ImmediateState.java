@@ -2,17 +2,16 @@ package com.neep.neepmeat.plc.editor;
 
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
-import com.neep.neepmeat.plc.instruction.Argument;
-import com.neep.neepmeat.plc.instruction.ImmediateInstruction;
-import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.*;
+import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
 public class ImmediateState implements PLCState
 {
     private final PLCBlockEntity parent;
 
-    @Nullable private ImmediateInstruction instruction;
+//    @Nullable private ImmediateInstruction instruction;
+    @Nullable private InstructionBuilder instructionBuilder;
 
     public ImmediateState(PLCBlockEntity plc)
     {
@@ -22,22 +21,32 @@ public class ImmediateState implements PLCState
     @Override
     public void setInstructionBuilder(InstructionProvider provider)
     {
-        if (provider instanceof ImmediateInstructionProvider immediate)
-        {
-            instruction = immediate.createImmediate(parent::getWorld);
-        }
+        instructionBuilder = provider.start((ServerWorld) parent.getWorld(), this::emitInstruction);
+//        if (provider instanceof ImmediateInstructionProvider immediate)
+//        {
+//            instruction = immediate.createImmediate(parent::getWorld);
+//        }
+    }
+
+    private void emitInstruction(Instruction instruction)
+    {
+        parent.execute(instruction);
     }
 
     @Override
     public void argument(Argument argument)
     {
-        if (instruction != null)
+//        if (instruction != null)
+//        {
+//            instruction.argument(argument, parent);
+//            if (instruction.isFinished())
+//            {
+//                instruction = null;
+//            }
+//        }
+        if (instructionBuilder != null)
         {
-            instruction.argument(argument, parent);
-            if (instruction.isFinished())
-            {
-                instruction = null;
-            }
+            instructionBuilder.argument(argument);
         }
     }
 

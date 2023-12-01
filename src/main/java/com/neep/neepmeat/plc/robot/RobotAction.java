@@ -9,4 +9,6 @@ public interface RobotAction
     void tick();
 
     default boolean blocksController() { return true; }
+
+    default void cancel() {};
 }
