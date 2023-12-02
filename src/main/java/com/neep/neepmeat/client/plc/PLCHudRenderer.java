@@ -83,13 +83,17 @@ public class PLCHudRenderer
 
         var robot = be.getRobot();
 
+        be.getRobot().prevX = MathHelper.lerp(0.1d, be.getRobot().prevX, be.getRobot().getX());
+        be.getRobot().prevY = MathHelper.lerp(0.1d, be.getRobot().prevY, be.getRobot().getY());
+        be.getRobot().prevZ = MathHelper.lerp(0.1d, be.getRobot().prevZ, be.getRobot().getZ());
+
 //        ((CameraAccessor) camera).callSetPos(
 //                MathHelper.lerp(tickDelta, robot.prevX, robot.getX()),
 //                MathHelper.lerp(tickDelta, robot.prevY, robot.getY()),
 //                MathHelper.lerp(tickDelta, robot.prevZ, robot.getZ())
 //        );
 
-        ((CameraAccessor) camera).callSetPos(robot.clientX, robot.clientY, robot.clientZ);
+        ((CameraAccessor) camera).callSetPos(robot.prevX, robot.prevY, robot.prevZ);
 
 
         ((CameraAccessor) camera).callSetRotation(controller.lerpYaw, controller.lerpPitch);

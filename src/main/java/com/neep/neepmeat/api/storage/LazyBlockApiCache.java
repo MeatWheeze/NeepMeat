@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.storage;
 
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.instruction.Argument;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
@@ -45,6 +46,11 @@ public class LazyBlockApiCache<A, C>
     public static <A, C> LazyBlockApiCache<A, C> of(BlockApiLookup<A, C> lookup, BlockPos pos, Supplier<ServerWorld> world, Supplier<C> ctxSupplier)
     {
         return new LazyBlockApiCache<>(world, lookup, pos, ctxSupplier);
+    }
+
+    public static <A, C> LazyBlockApiCache<MutateInPlace<A>, C> mutate(BlockApiLookup<MutateInPlace<A>, C> lookup, Argument argument, Supplier<ServerWorld> world)
+    {
+        return new LazyBlockApiCache<>(world, lookup, argument.pos(), () -> null);
     }
 
     public static LazyBlockApiCache<Storage<ItemVariant>, Direction> itemSided(Argument argument, Supplier<ServerWorld> world)

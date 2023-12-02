@@ -6,6 +6,7 @@ import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.recipe.surgery.*;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -90,7 +91,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 mutable.set(mutable, zVec);
 
                 // Check the lower block first. If a structure is found, ignore the upper block.
-                TableComponent<?> component = TableComponent.STRUCTURE_LOOKUP.find(world, mutable, null);
+                TableComponent<?> component = TableComponent.LOOKUP.find(world, mutable, null);
                 if (component != null)
                 {
                     context.add((ServerWorld) world, mutable);
@@ -98,7 +99,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 }
 
                 mutable.set(mutable, Direction.UP);
-                component = TableComponent.STRUCTURE_LOOKUP.find(world, mutable, null);
+                component = TableComponent.LOOKUP.find(world, mutable, null);
 
                 // Add the upper block.
                 context.add((ServerWorld) world, mutable);

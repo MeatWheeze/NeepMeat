@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
+import com.neep.neepmeat.plc.component.TableComponent;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -75,7 +75,7 @@ public class SurgeryTableContext implements NbtSerialisable
     public void add(ServerWorld world, BlockPos pos)
     {
         posList.add(pos.toImmutable());
-        caches.add(BlockApiCache.create(TableComponent.STRUCTURE_LOOKUP, world, pos.toImmutable()));
+        caches.add(BlockApiCache.create(TableComponent.LOOKUP, world, pos.toImmutable()));
     }
 
     public BlockPos getPos(int i)
