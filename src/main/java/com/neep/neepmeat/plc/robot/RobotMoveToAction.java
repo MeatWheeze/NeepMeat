@@ -32,9 +32,5 @@ public class RobotMoveToAction implements RobotAction
     @Override
     public void tick()
     {
-        if (robot.reachedTarget())
-        {
-            System.out.println("Reached target " + target);
-        }
     }
 }

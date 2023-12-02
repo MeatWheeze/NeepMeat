@@ -63,8 +63,8 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
 //        }
 //        else
 //        {
-            instructions = List.of(Instructions.COMBINE, Instructions.COMBINE, Instructions.END);
 //        }
+        instructions = Instructions.REGISTRY.stream().toList();
 
         int entryHeight = 20;
         int gap = 1;

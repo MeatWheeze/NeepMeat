@@ -5,11 +5,14 @@ import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -314,6 +317,11 @@ public class SurgicalRobot implements NbtSerialisable
     {
         this.pitch = pitch;
         this.yaw = yaw;
+    }
+
+    public void spawnItem(ResourceAmount<ItemVariant> stored)
+    {
+        ItemScatterer.spawn(parent.getWorld(), x, y, z, stored.resource().toStack((int) stored.amount()));
     }
 
     @Environment(value = EnvType.CLIENT)

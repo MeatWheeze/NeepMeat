@@ -30,7 +30,10 @@ public class ImmediateState implements PLCState
 
     private void emitInstruction(Instruction instruction)
     {
-        parent.execute(instruction);
+        parent.resetError();
+
+        if (parent.notExecuting())
+            parent.execute(instruction);
     }
 
     @Override

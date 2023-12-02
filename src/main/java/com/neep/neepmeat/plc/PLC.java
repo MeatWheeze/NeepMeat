@@ -14,6 +14,8 @@ public interface PLC
 
     void advanceCounter();
 
+    void advanceCounter(int increment);
+
     void raiseError(Error error);
     
     class Error
