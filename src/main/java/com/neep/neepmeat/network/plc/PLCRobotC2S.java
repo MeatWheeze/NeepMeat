@@ -34,6 +34,9 @@ public class PLCRobotC2S
         buf.writeDouble(be.getRobot().getY());
         buf.writeDouble(be.getRobot().getZ());
 
+        buf.writeFloat(be.getRobot().getPitch());
+        buf.writeFloat(be.getRobot().getYaw());
+
         PlayerLookup.around(world, be.getPos(), 30).forEach(e ->
         {
             ServerPlayNetworking.send(e, ID, buf);
@@ -53,11 +56,15 @@ public class PLCRobotC2S
         double y = buf.readDouble();
         double z = buf.readDouble();
 
+        float pitch = buf.readFloat();
+        float yaw = buf.readFloat();
+
         server.execute(() ->
         {
             if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
             {
                 be.getRobot().setPos(x, y, z);
+                be.getRobot().setPitchYaw(pitch, yaw);
             }
         });
     }
@@ -73,6 +80,9 @@ public class PLCRobotC2S
             buf.writeDouble(be.getRobot().getX());
             buf.writeDouble(be.getRobot().getY());
             buf.writeDouble(be.getRobot().getZ());
+
+            buf.writeFloat(be.getRobot().getPitch());
+            buf.writeFloat(be.getRobot().getYaw());
 
             ClientPlayNetworking.send(ID, buf);
         }
@@ -94,12 +104,15 @@ public class PLCRobotC2S
             double y = buf.readDouble();
             double z = buf.readDouble();
 
+            float pitch = buf.readFloat();
+            float yaw = buf.readFloat();
+
             client.execute(() ->
             {
                 if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
                 {
                     be.getRobot().setPos(x, y, z);
-//                    var robot = be.ger
+                    be.getRobot().setPitchYaw(pitch, yaw);
                 }
             });
         }

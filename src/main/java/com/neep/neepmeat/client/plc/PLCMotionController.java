@@ -15,39 +15,37 @@ public class PLCMotionController
     public float lerpPitch;
     public float lerpYaw;
 
-    private float pitch;
-    private float yaw;
-
     public PLCMotionController(SurgicalRobot robot)
     {
         this.robot = robot;
+        this.lerpPitch = robot.getPitch();
+        this.lerpYaw = robot.getYaw();
     }
 
     public void update()
     {
         if (rotationMode == RotationMode.LOCKED)
         {
-            pitch = 20;
+            robot.setPitchYaw(20, robot.getYaw());
         }
 
-        lerpPitch = MathHelper.lerpAngleDegrees(0.3f, lerpPitch,  pitch);
-        lerpYaw = MathHelper.lerpAngleDegrees(0.3f, lerpYaw,  yaw);
+        lerpPitch = MathHelper.lerpAngleDegrees(0.3f, lerpPitch,  robot.getPitch());
+        lerpYaw = MathHelper.lerpAngleDegrees(0.3f, lerpYaw,  robot.getYaw());
     }
 
     public void setPitchYaw(float pitch, float yaw)
     {
-        this.pitch = MathHelper.wrapDegrees(pitch);
-        this.yaw = MathHelper.wrapDegrees(yaw);
+        robot.setPitchYaw(MathHelper.wrapDegrees(pitch), MathHelper.wrapDegrees(yaw));
     }
 
     public float getPitch()
     {
-        return pitch;
+        return robot.getPitch();
     }
 
     public float getYaw()
     {
-        return yaw;
+        return robot.getYaw();
     }
 
     enum RotationMode

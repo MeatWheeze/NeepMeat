@@ -15,6 +15,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class SurgicalRobot implements NbtSerialisable
 {
     private static final byte STATE_IDLE = 0;
@@ -25,13 +27,9 @@ public class SurgicalRobot implements NbtSerialisable
     private final PLCBlockEntity parent;
     private byte movementState;
 
-    private byte nextType;  //0: base, 1: item, 2: fluid, 3: entity
-
-    public static final double SPEED = 0.05;
-
-    public double prevX;
-    public double prevY;
-    public double prevZ;
+    public double cameraX;
+    public double cameraY;
+    public double cameraZ;
     private double x;
     private double y;
     private double z;
@@ -65,11 +63,13 @@ public class SurgicalRobot implements NbtSerialisable
 
     @Nullable private PlayerEntity controller;
 
+    private float pitch;
+    private float yaw;
+
     public SurgicalRobot(PLCBlockEntity parent)
     {
         this.parent = parent;
         this.basePos = parent.getPos();
-        setTarget(basePos);
         this.dockingPos = Vec3d.ofCenter(basePos, 0.5);
         this.attachPos = Vec3d.ofCenter(basePos, 1.4);
         this.x = dockingPos.x;
@@ -78,11 +78,19 @@ public class SurgicalRobot implements NbtSerialisable
         this.clientX = x;
         this.clientY = y;
         this.clientZ = z;
+
+        this.cameraX = x;
+        this.cameraY = y;
+        this.cameraZ = z;
     }
 
     public void setController(@Nullable PlayerEntity player)
     {
         this.controller = player;
+//        if (controller == null && shouldUpdatePosition(parent.getWorld()))
+//        {
+//            setTarget(new BlockPos(x, y, z));
+//        }
     }
 
     @Nullable
@@ -115,7 +123,7 @@ public class SurgicalRobot implements NbtSerialisable
     {
         if (movementState == STATE_IDLE)
         {
-            if (!target.equals(basePos))
+            if (!Objects.equals(target, basePos))
             {
                 movementState = STATE_LAUNCHING;
             }
@@ -136,7 +144,6 @@ public class SurgicalRobot implements NbtSerialisable
             if (moveTo(attachPos))
             {
                 movementState = STATE_DOCKING;
-//                setTarget(basePos);
             }
         }
         else if (movementState == STATE_DOCKING)
@@ -174,23 +181,23 @@ public class SurgicalRobot implements NbtSerialisable
         else return true;
     }
 
-    public void setTarget(BlockPos target)
+    public void setTarget(@Nullable BlockPos target)
     {
+        if (target == null)
+        {
+            this.target = null;
+            this.targetPos = null;
+            return;
+        }
+
         this.target = target.toImmutable();
         this.targetPos = getTarget(this.target);
-        boolean bl = reachedTarget();
     }
 
     private Vec3d getTarget(BlockPos target)
     {
-//        return switch (nextType)
-//        {
-//            case TYPE_ITEM -> Vec3d.ofCenter(target, 0.9);
-//            case TYPE_FLUID -> Vec3d.ofCenter(target, 2.5);
-//            default -> Vec3d.ofCenter(target, 1.5);
-//        };
         return Vec3d.ofCenter(target);
-}
+    }
 
     public double getSpeed()
     {
@@ -224,10 +231,12 @@ public class SurgicalRobot implements NbtSerialisable
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putByte(NBT_MOVEMENT_STATE, movementState);
-        nbt.putByte(NBT_NEXT_TYPE, nextType);
         nbt.putDouble("rx", x);
         nbt.putDouble("ry", y);
         nbt.putDouble("rz", z);
+
+        nbt.putFloat("pitch", pitch);
+        nbt.putFloat("yaw", yaw);
 
         return nbt;
     }
@@ -236,10 +245,12 @@ public class SurgicalRobot implements NbtSerialisable
     public void readNbt(NbtCompound nbt)
     {
         this.movementState = nbt.getByte(NBT_MOVEMENT_STATE);
-        this.nextType=nbt.getByte(NBT_NEXT_TYPE);
         this.x = nbt.getDouble("rx");
         this.y = nbt.getDouble("ry");
         this.z = nbt.getDouble("rz");
+
+        this.pitch = nbt.getFloat("pitch");
+        this.yaw = nbt.getFloat("yaw");
     }
 
 //    public void writeBuf(PacketByteBuf buf)
@@ -286,7 +297,23 @@ public class SurgicalRobot implements NbtSerialisable
 
     public void stay()
     {
-        this.setTarget(new BlockPos(x, y, z));
+        this.setTarget(null);
+    }
+
+    public float getPitch()
+    {
+        return pitch;
+    }
+
+    public float getYaw()
+    {
+        return yaw;
+    }
+
+    public void setPitchYaw(float pitch, float yaw)
+    {
+        this.pitch = pitch;
+        this.yaw = yaw;
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -367,18 +394,22 @@ public class SurgicalRobot implements NbtSerialisable
 //                    fvy = fvy * speed;
                     fvz = fvz / l * speed;
 
-                    robot.vz = fvx;
-                    robot.vy = fvy;
-                    robot.vx = fvz;
+                    robot.vx = fvx;
+                    robot.vz = fvz;
                 }
 
-                robot.x += fvx;
-                robot.y += fvy;
-                robot.z += fvz;
+                if (fvy != 0)
+                {
+                    robot.vy = fvy;
+                }
 
-                robot.vz *= 0.4;
-                robot.vy *= 0.4;
-                robot.vx *= 0.4;
+                robot.x += robot.vx;
+                robot.y += robot.vy;
+                robot.z += robot.vz;
+
+                robot.vz *= 0.05;
+                robot.vy *= 0.05;
+                robot.vx *= 0.05;
             }
         }
 
