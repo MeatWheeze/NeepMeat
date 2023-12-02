@@ -6,20 +6,29 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.client.util.ParticleUtil;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
-public class ParticleSpawnPacket
+public class ParticleSpawnS2C
 {
     public static final Identifier PARTICLE_SPAWN = new Identifier(NeepMeat.NAMESPACE, "particle_spawn");
+
+    public static void sendNearby(ServerWorld world, BlockPos pos, ParticleType<?> particleType, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
+    {
+        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, 32))
+        {
+            send(player, particleType, origin, velocity, spread, count);
+        }
+    }
 
     public static void send(ServerPlayerEntity player, ParticleType<?> particle, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
     {

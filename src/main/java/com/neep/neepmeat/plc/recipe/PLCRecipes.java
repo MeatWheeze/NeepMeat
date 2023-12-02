@@ -13,18 +13,21 @@ public class PLCRecipes
     {
         ItemTooltipCallback.EVENT.register((stack, context, lines) ->
         {
-            NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
+            if (stack.getSubNbt(NMComponents.WORKPIECE.getId().toString()) != null)
             {
-                var steps = workpiece.getSteps();
-                if (!steps.isEmpty())
+                NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
                 {
-                    lines.add(Text.translatable("message.neepmeat.workpiece.title").formatted(Formatting.GOLD, Formatting.BOLD));
-                    for (var entry : steps)
+                    var steps = workpiece.getSteps();
+                    if (!steps.isEmpty())
                     {
-                        entry.appendText(lines);
+                        lines.add(Text.translatable("message.neepmeat.workpiece.title").formatted(Formatting.GOLD, Formatting.BOLD));
+                        for (var entry : steps)
+                        {
+                            entry.appendText(lines);
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     }
 }

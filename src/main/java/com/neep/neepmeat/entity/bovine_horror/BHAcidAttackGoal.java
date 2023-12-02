@@ -3,7 +3,7 @@ package com.neep.neepmeat.entity.bovine_horror;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.ParticleSpawnPacket;
+import com.neep.neepmeat.network.ParticleSpawnS2C;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
@@ -83,7 +83,7 @@ public class BHAcidAttackGoal extends Goal
 
             for (ServerPlayerEntity player : PlayerLookup.tracking(mob))
             {
-                ParticleSpawnPacket.send(player, NMParticles.BODY_COMPOUND_SHOWER, origin, toTarget, spread, 10);
+                ParticleSpawnS2C.send(player, NMParticles.BODY_COMPOUND_SHOWER, origin, toTarget, spread, 10);
             }
         }
 

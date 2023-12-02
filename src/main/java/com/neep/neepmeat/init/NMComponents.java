@@ -36,5 +36,6 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry)
     {
         registry.register(Items.IRON_BLOCK, WORKPIECE, ItemWorkpiece::new);
+        registry.register(NMItems.OPEN_EYE, WORKPIECE, ItemWorkpiece::new);
     }
 }
