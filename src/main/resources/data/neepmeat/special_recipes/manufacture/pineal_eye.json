@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:open_eye"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:control_unit"
+    }
+  ],
+  "output": {
+    "resource": "neepmeat:pineal_eye"
+  }
+}

@@ -1,5 +1,6 @@
 package com.neep.neepmeat.plc.recipe;
 
+import com.google.gson.JsonObject;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMComponents;
 import net.minecraft.item.Item;
@@ -9,10 +10,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
-import java.util.Objects;
 
 public class CombineStep implements ManufactureStep<ItemStack>
 {
@@ -36,6 +37,13 @@ public class CombineStep implements ManufactureStep<ItemStack>
         }
         else
             item = Items.AIR;
+    }
+
+    public CombineStep(JsonObject jsonObject)
+    {
+        String idString = JsonHelper.getString(jsonObject, "resource");
+        Identifier id = Identifier.tryParse(idString);
+        this.item = Registry.ITEM.get(id);
     }
 
     @Override
