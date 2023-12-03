@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.screen_handler.*;
 import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -22,6 +23,8 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<GuideScreenHandler> GUIDE;
     public static ExtendedScreenHandlerType<FluidRationerScreenHandler> FLUID_RATIONER = new ExtendedScreenHandlerType<>(FluidRationerScreenHandler::new);
 
+    public static ScreenHandlerType<PLCScreenHandler> PLC;
+
     public static void registerScreenHandlers()
     {
         BUFFER_SCREEN_HANDLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "buffer_screen"), BufferScreenHandler::new);
@@ -33,6 +36,8 @@ public class ScreenHandlerInit
         WORKSTATION = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "workstation"), WorkstationScreenHandler::new);
         GUIDE = register(NeepMeat.NAMESPACE, "guide", GuideScreenHandler::new);
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
+
+        PLC = registerExtended(NeepMeat.NAMESPACE, "plc", PLCScreenHandler::new);
 
         TransportScreenHandlers.registerScreenHandlers();
     }

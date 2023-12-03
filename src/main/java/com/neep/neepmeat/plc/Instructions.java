@@ -20,6 +20,7 @@ public class Instructions
 
 
     public static final InstructionProvider END = register("end", new InstructionProviderImpl((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
+    public static final InstructionProvider GOTO_START = register("goto_start", new InstructionProviderImpl((w, a) -> RestartInstruction.INSTANCE, (w, n) -> RestartInstruction.INSTANCE, 0, Text.of("RESTART")));
     public static final InstructionProvider COMBINE = register("combine", new InstructionProviderImpl(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE")));
     public static final InstructionProvider MOVE = register("move", new InstructionProviderImpl(MoveInstruction::new, MoveInstruction::new, 2, Text.of("MOVE")));
 

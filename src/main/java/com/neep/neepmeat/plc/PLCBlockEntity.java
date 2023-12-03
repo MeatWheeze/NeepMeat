@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc;
 
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
@@ -9,15 +10,21 @@ import com.neep.neepmeat.plc.editor.ImmediateState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.program.MutableProgram;
-import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -26,10 +33,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Queue;
 import java.util.function.Consumer;
 
-public class PLCBlockEntity extends SyncableBlockEntity implements PLC
+public class PLCBlockEntity extends SyncableBlockEntity implements PLC, ExtendedScreenHandlerFactory
 {
-    @Nullable protected MutableProgram editingProgram;
-
     @Nullable protected PlcProgram program;
     protected Instruction currentInstruction;
     protected int counter;
@@ -44,6 +49,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 
     private PLCState state;
     private Error error;
+
+    private PLCPropertyDelegate delegate = new PLCPropertyDelegate();
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -80,6 +87,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
             {
                 PLCRobotEnterS2C.send(player, this);
             }
+            player.openHandledScreen(this);
         }
     }
 
@@ -93,6 +101,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     public void advanceCounter(int increment)
     {
         counter += increment;
+    }
+
+    @Override
+    public void setCounter(int counter)
+    {
+        this.counter = counter;
     }
 
     @Override
@@ -128,14 +142,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         return error;
     }
 
-    public void setCounter(int counter)
-    {
-        this.counter = counter;
-    }
-
     public void tick()
     {
-        if (program != null && error == null)
+        if (counter != -1 && program != null && error == null)
         {
             Instruction instruction = program.get(counter);
             if (instruction != currentInstruction)
@@ -227,7 +236,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 
     public void clientTick()
     {
-//        robot.tick();
     }
 
     @Override
@@ -251,16 +259,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         getRobot().setController(null);
     }
 
-    public MutableProgram getEditProgram()
-    {
-        if (editingProgram == null)
-        {
-            editingProgram = new PLCProgramImpl(this::getWorld);
-        }
-
-        return editingProgram;
-    }
-
     public ProgramEditorState getEditor()
     {
         return editor;
@@ -268,6 +266,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
 
     public void runProgram(PlcProgram program)
     {
+        resetError();
+        setCounter(0);
         this.program = program;
     }
 
@@ -279,5 +279,56 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     public boolean actionBlocksController()
     {
         return currentAction != null && currentAction.first().blocksController();
+    }
+
+    public void setMode(RecordMode value)
+    {
+        switch (value)
+        {
+            case IMMEDIATE -> state = immediate;
+            case RECORD -> state = editor;
+        }
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+        return Text.empty();
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
+    {
+        return new PLCScreenHandler(syncId, this, delegate);
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
+    {
+        buf.writeBlockPos(pos);
+    }
+
+    public static class PLCPropertyDelegate implements PropertyDelegate
+    {
+        public static final int SIZE = 1;
+
+        @Override
+        public int get(int index)
+        {
+            return 0;
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+
+        }
+
+        @Override
+        public int size()
+        {
+            return SIZE;
+        }
     }
 }

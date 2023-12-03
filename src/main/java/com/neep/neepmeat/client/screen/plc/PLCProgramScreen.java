@@ -7,15 +7,17 @@ import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
-import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -32,7 +34,7 @@ import software.bernie.geckolib3.core.util.Color;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class PLCProgramScreen extends Screen
+public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>
 {
     protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
@@ -40,15 +42,17 @@ public class PLCProgramScreen extends Screen
     protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
     protected final PLCProgramOutline outline;
 
-    protected final PLCBlockEntity plc;
+    private final PLCScreenHandler handler;
+    private final PLCBlockEntity plc;
 
     public RecordMode mode = RecordMode.IMMEDIATE;
 
-    public PLCProgramScreen(PLCBlockEntity plc)
+    public PLCProgramScreen(PLCScreenHandler handler, PlayerInventory playerInventory, Text unused)
     {
-        super(Text.empty());
+        super(unused);
+        this.handler = handler;
         this.passEvents = true;
-        this.plc = plc;
+        this.plc = handler.getPlc();
         this.outline = new PLCProgramOutline(plc.getEditor(), this);
     }
 
@@ -301,6 +305,12 @@ public class PLCProgramScreen extends Screen
         this.setZOffset((int) prevZ);
     }
 
+    @Override
+    public PLCScreenHandler getScreenHandler()
+    {
+        return handler;
+    }
+
     class SaveButton extends ClickableWidget
     {
         public SaveButton(int x, int y, int width, int height, Text message)
@@ -383,6 +393,7 @@ public class PLCProgramScreen extends Screen
         public void onClick(double mouseX, double mouseY)
         {
             mode = RecordMode.cycle(mode);
+            PLCSyncProgram.Client.sendMode(plc, mode);
         }
 
         @Override
@@ -393,20 +404,6 @@ public class PLCProgramScreen extends Screen
                 case RECORD -> 64;
                 case IMMEDIATE -> 48;
             };
-        }
-    }
-
-    public enum RecordMode
-    {
-        IMMEDIATE,
-        RECORD;
-
-        public static RecordMode cycle(RecordMode mode)
-        {
-            if (mode == IMMEDIATE)
-                return RECORD;
-            else
-                return IMMEDIATE;
         }
     }
 
