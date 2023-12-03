@@ -81,7 +81,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
                 .filter(recipe -> recipe.matches(context)).findFirst();
     }
 
-    private <C, T extends MeatRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
+    public <C, T extends MeatRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
     {
         // Say goodbye to type safety
         return (Map<Identifier, T>) this.recipes.getOrDefault(type, Collections.emptyMap());

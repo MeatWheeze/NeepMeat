@@ -111,20 +111,20 @@ public class CombineInstruction implements Instruction
 
             var step = new CombineStep(stored.resource().toStack((int) stored.amount()));
 
-            NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
+            var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);
+            if (workpiece != null && PLCRecipes.isValidStep(workpiece, step))
             {
                 workpiece.addStep(step);
-            });
 
-            mip.set(stack);
+                mip.set(stack);
 
-            ManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MIXING, mip).orElse(null);
-            if (recipe != null)
-            {
-                recipe.ejectOutputs(mip, null);
+                ManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MIXING, mip).orElse(null);
+                if (recipe != null)
+                {
+                    recipe.ejectOutputs(mip, null);
+                }
+                return;
             }
-
-            return;
         }
 
         if (stored != null)
