@@ -30,6 +30,13 @@ public interface ManufactureStep<T>
 
     NbtCompound toNbt();
 
+    boolean equalsOther(ManufactureStep<?> other);
+
+    static boolean equals(ManufactureStep<?> a, ManufactureStep<?> b)
+    {
+        return (a == b) || (a != null && a.equalsOther(b));
+    }
+
     interface Provider<T>
     {
         @SuppressWarnings("unchecked")

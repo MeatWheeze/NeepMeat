@@ -57,7 +57,7 @@ public class ManufactureRecipe implements MeatRecipe<MutateInPlace<ItemStack>>
             {
                 var step = workSteps.get(i);
 
-                if (!Objects.equals(step, steps.get(i)))
+                if (!ManufactureStep.equals(step, steps.get(i)))
                 {
                     return false;
                 }
