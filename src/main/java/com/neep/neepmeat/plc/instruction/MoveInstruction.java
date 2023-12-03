@@ -1,11 +1,14 @@
 package com.neep.neepmeat.plc.instruction;
 
+import com.neep.neepmeat.api.plc.instruction.Argument;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.PLC;
-import com.neep.neepmeat.plc.program.PlcProgram;
-import com.neep.neepmeat.plc.robot.GroupedRobotAction;
+import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
-import com.neep.neepmeat.plc.robot.SingleAction;
+import com.neep.neepmeat.api.plc.robot.SingleAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;

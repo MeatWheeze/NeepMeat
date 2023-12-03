@@ -3,7 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.plc.recipe.ItemWorkpiece;
-import com.neep.neepmeat.plc.recipe.Workpiece;
+import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import dev.onyxstudios.cca.api.v3.component.ComponentKey;
 import dev.onyxstudios.cca.api.v3.component.ComponentRegistry;
 import dev.onyxstudios.cca.api.v3.entity.EntityComponentFactoryRegistry;

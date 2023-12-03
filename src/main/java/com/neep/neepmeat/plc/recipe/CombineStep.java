@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

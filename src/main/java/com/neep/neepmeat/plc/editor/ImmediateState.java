@@ -1,5 +1,8 @@
 package com.neep.neepmeat.plc.editor;
 
+import com.neep.neepmeat.api.plc.instruction.Argument;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;

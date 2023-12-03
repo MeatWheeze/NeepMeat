@@ -1,4 +1,4 @@
-package com.neep.neepmeat.plc.recipe;
+package com.neep.neepmeat.api.plc.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.neepmeat.NeepMeat;

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.api.storage;
 
 import com.neep.neepmeat.plc.component.MutateInPlace;
-import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.api.plc.instruction.Argument;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;

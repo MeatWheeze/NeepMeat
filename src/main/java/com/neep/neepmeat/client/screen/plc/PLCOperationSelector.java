@@ -5,7 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;

@@ -1,9 +1,10 @@
 package com.neep.neepmeat.plc.program;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.instruction.Instruction;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;

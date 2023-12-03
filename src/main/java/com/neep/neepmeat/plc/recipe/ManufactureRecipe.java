@@ -7,6 +7,7 @@ import com.google.gson.JsonParseException;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
