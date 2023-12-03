@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
@@ -32,6 +33,8 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     private final ProgramEditorState editor;
 
     private int selectionIndex = -1;
+
+    private final List<InstructionWidget> instructions = Lists.newArrayList();
 
     public PLCProgramOutline(ProgramEditorState editor, PLCProgramScreen parent)
     {
@@ -66,6 +69,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     protected void addEntries()
     {
+        instructions.clear();
         PlcProgram program = editor.getProgram();
 
         int entryHeight = 11;
@@ -76,7 +80,9 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         for (int id = 0; id < program.size(); ++id)
         {
             Instruction instruction = program.get(id);
-            addDrawableChild(new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, selectionIndex == id));
+            var widget = new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, selectionIndex == id);
+            addDrawableChild(widget);
+            instructions.add(widget);
             count++;
         }
     }
@@ -120,6 +126,8 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         fill(matrices, x, y, x + elementWidth, y + elementHeight, 0x90000000);
         GUIUtil.renderBorder(matrices, x, y, elementWidth, elementHeight, Color.ofRGBA(255, 94, 33, 255).getColor(), 0);
         GUIUtil.renderBorder(matrices, x + 1, y + 1, elementWidth - 2, elementHeight - 2, Color.ofRGBA(255, 94, 33, 100).getColor(), 0);
+
+        int counter = parent.getScreenHandler().getCounter();
 
         super.render(matrices, mouseX, mouseY, delta);
     }
@@ -187,12 +195,13 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
+            boolean programCounterHere = parent.getScreenHandler().getCounter() == id;
             int col = Color.ofRGBA(255, 94, 33, 255).getColor();
             int borderCol = Color.ofRGBA(255, selected ? 150 : 94, 33, 255).getColor();
 
             Text lineNumber = Text.literal(String.valueOf(id));
 
-            textRenderer.draw(matrices, lineNumber, x + 1, y + (height - textRenderer.fontHeight) / 2.0f + 1, borderCol);
+            textRenderer.draw(matrices, lineNumber, x + (programCounterHere ? 2 : 1), y + (height - textRenderer.fontHeight) / 2.0f + 1, borderCol);
 
             int textWidth = textRenderer.getWidth(lineNumber) + 2;
             GUIUtil.renderBorder(matrices, x + textWidth, y, width - textWidth, height - 1, borderCol, 0);
@@ -202,6 +211,11 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             if (isMouseInside(mouseX, mouseY))
             {
                 renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderColour());
+            }
+
+            if (programCounterHere)
+            {
+                GUIUtil.renderBorder(matrices, x, y, textWidth, height - 1, borderCol, 0);
             }
         }
 

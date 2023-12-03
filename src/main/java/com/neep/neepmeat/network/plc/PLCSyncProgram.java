@@ -59,7 +59,9 @@ public class PLCSyncProgram
                 case OPERATION -> applyInstruction(copy, player.world);
                 case OPERATION_IMMEDIATE -> applyInstructionImmediate(copy, player.world);
                 case DELETE -> applyDelete(copy, player.world);
+                case PAUSE -> applyPause(copy, player.world);
                 case RUN -> applyRun(copy, player.world);
+                case STOP -> applyStop(copy, player.world);
                 case MODE -> applyMode(copy, player.world);
             }
         });
@@ -76,6 +78,18 @@ public class PLCSyncProgram
     {
         PLCBlockEntity plc = getPlc(buf, world);
         plc.runProgram(plc.getEditor().getProgram());
+    }
+
+    private static void applyStop(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+        plc.stop();
+    }
+
+    private static void applyPause(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+        plc.pause();
     }
 
     private static void applyDelete(PacketByteBuf buf, World world)
@@ -136,6 +150,8 @@ public class PLCSyncProgram
         PROGRAM,
         DELETE,
         RUN,
+        PAUSE,
+        STOP,
         MODE
     }
 
@@ -222,6 +238,24 @@ public class PLCSyncProgram
         {
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeInt(Action.RUN.ordinal());
+            putPlc(buf, plc);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendPause(PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.PAUSE.ordinal());
+            putPlc(buf, plc);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendStop(PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.STOP.ordinal());
             putPlc(buf, plc);
 
             ClientPlayNetworking.send(ID, buf);

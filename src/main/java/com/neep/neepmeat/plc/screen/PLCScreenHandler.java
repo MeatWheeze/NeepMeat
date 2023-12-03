@@ -62,4 +62,9 @@ public class PLCScreenHandler extends ScreenHandler
     {
         return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.RUNNING.ordinal()) > 0;
     }
+
+    public int getCounter()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.PROGRAM_COUNTER.ordinal());
+    }
 }

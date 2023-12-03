@@ -51,6 +51,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private Error error;
 
     private PLCPropertyDelegate delegate = new PLCPropertyDelegate();
+    private boolean paused;
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -106,7 +107,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public void setCounter(int counter)
     {
-        this.counter = counter;
+        if (counter == -1)
+            stop();
+        else
+            this.counter = counter;
     }
 
     @Override
@@ -115,7 +119,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         getWorld().getPlayers().forEach(p -> p.sendMessage(Text.of("NOOOOOOOOOOOOO")));
         this.error = error;
 
-        currentInstruction = null;
+        paused = true;
 
         robotActions.clear();
         if (currentAction != null)
@@ -134,7 +138,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void resetError()
     {
         error = null;
-        counter = 0;
     }
 
     public @Nullable Error getError()
@@ -144,7 +147,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public void tick()
     {
-        if (counter != -1 && program != null && error == null)
+        if (!paused && counter != -1 && program != null && error == null)
         {
             Instruction instruction = program.get(counter);
             if (instruction != currentInstruction)
@@ -222,7 +225,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         }
 
         currentInstruction = instruction;
-        counter = 0;
 
         if (instruction.canStart(this))
         {
@@ -265,13 +267,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         return editor;
     }
 
-    public void runProgram(PlcProgram program)
-    {
-        resetError();
-        setCounter(0);
-        this.program = program;
-    }
-
     public PLCState getState()
     {
         return state;
@@ -311,9 +306,24 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         buf.writeBlockPos(pos);
     }
 
-    public void stopRunning()
+    public void runProgram(PlcProgram program)
+    {
+        resetError();
+        currentInstruction = null;
+        paused = false;
+        this.program = program;
+    }
+
+    public void stop()
     {
         program = null;
+        counter = 0;
+        paused = true;
+    }
+
+    public void pause()
+    {
+        paused = true;
     }
 
     public class PLCPropertyDelegate implements PropertyDelegate
@@ -327,7 +337,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter;
                 case EDIT_MODE -> state.getMode().ordinal();
-                case RUNNING -> notExecuting() ? 0 : 1;
+                case RUNNING -> (program != null && !paused) ? 1 : 0;
             };
         }
 

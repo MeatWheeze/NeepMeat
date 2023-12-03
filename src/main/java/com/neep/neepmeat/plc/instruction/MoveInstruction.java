@@ -101,13 +101,12 @@ public class MoveInstruction implements Instruction
                 {
                     transaction.abort();
                     plc.advanceCounter(0);
+
+                    ItemScatterer.spawn(world.get(), plc.getRobot().getX(), plc.getRobot().getY(), plc.getRobot().getZ(),
+                            stored.resource().toStack((int) stored.amount()));
                 }
             }
         }
-
-        ItemScatterer.spawn(world.get(), plc.getRobot().getX(), plc.getRobot().getY(), plc.getRobot().getZ(),
-                stored.resource().toStack((int) stored.amount()));
-
     }
 
     private void finish(PLC plc)
