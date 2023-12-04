@@ -35,6 +35,18 @@ public class MobWorkpiece implements Workpiece
     }
 
     @Override
+    public void clearSteps()
+    {
+        steps.clear();
+    }
+
+    @Override
+    public void removeStep(int i)
+    {
+        steps.remove(i);
+    }
+
+    @Override
     public void readFromNbt(@NotNull NbtCompound tag)
     {
         steps.clear();

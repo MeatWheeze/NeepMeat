@@ -114,6 +114,7 @@ public class ImplantInstruction implements Instruction
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);
+                    workpiece.clearSteps();
                 }
 
                 return;

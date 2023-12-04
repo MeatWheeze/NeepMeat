@@ -36,6 +36,7 @@ public class Instructions
     public static final InstructionProvider COMBINE = register("combine", new InstructionProviderImpl(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE")));
     public static final InstructionProvider MOVE = register("move", new InstructionProviderImpl(MoveInstruction::new, MoveInstruction::new, 2, Text.of("MOVE")));
     public static final InstructionProvider IMPLANT = register("implant", new InstructionProviderImpl(ImplantInstruction::new, ImplantInstruction::new, 2, Text.of("IMPLANT")));
+    public static final InstructionProvider REMOVE = register("remove", new InstructionProviderImpl(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
 
     private static InstructionProvider register(String path, InstructionProvider provider)
     {

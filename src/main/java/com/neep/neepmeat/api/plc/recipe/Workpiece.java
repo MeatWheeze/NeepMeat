@@ -8,4 +8,8 @@ public interface Workpiece extends Component
 {
     void addStep(ManufactureStep<?> step);
     List<ManufactureStep<?>> getSteps();
+
+    void clearSteps();
+
+    void removeStep(int i);
 }

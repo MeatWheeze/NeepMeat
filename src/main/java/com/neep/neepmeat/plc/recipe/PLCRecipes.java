@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.init.NMComponents;
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -82,5 +83,10 @@ public class PLCRecipes
                 });
             }
         });
+
+//        MutateInPlace.ANY.registerFallback((world, pos, state, blockEntity, context) ->
+//        {
+//
+//        });
     }
 }
