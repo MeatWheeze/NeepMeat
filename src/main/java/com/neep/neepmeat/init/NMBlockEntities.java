@@ -221,6 +221,7 @@ public class NMBlockEntities
         MutateInPlace.ITEM.registerForBlockEntity(DisplayPlatformBlockEntity::getMip, ITEM_BUFFER_BLOCK_ENTITY);
         SURGERY_PLATFORM = registerBlockEntity("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
         TableComponent.LOOKUP.registerForBlockEntity(SurgeryPlatformBlockEntity::getTableComponent, SURGERY_PLATFORM);
+        MutateInPlace.ENTITY.registerForBlockEntity(SurgeryPlatformBlockEntity::getMutate, SURGERY_PLATFORM);
 
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);

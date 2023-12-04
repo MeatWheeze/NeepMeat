@@ -26,7 +26,6 @@ public class SyncMeatRecipesS2CPacket
 
         buf.writeCollection(recipes, SyncMeatRecipesS2CPacket::writeRecipe);
 
-
         ServerPlayNetworking.send(player, ID, buf);
     }
 

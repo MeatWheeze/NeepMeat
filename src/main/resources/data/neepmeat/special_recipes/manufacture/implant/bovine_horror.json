@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:entity_manufacture",
+  "base": {
+    "id": "minecraft:cow"
+  },
+  "steps": [
+    {
+      "id": "neepmeat:implant",
+      "resource": "neepmeat:chrysalis"
+    }
+  ],
+  "implant_installer": {
+    "id": "neepmeat:chrysalis"
+  }
+}

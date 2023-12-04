@@ -4,8 +4,8 @@ import com.google.gson.JsonObject;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -16,30 +16,26 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
-public class CombineStep implements ManufactureStep<ItemStack>
+public class ImplantStep implements ManufactureStep<Entity>
 {
-    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "combine");
-
+    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "implant");
     private final Item item;
 
-    public CombineStep(ItemStack stack)
+    public ImplantStep(Item item)
     {
-//        this.item = Registry.ITEM.getId(stack.getItem());
-        this.item = stack.getItem();
+        this.item = item;
     }
 
-    public CombineStep(NbtCompound nbt)
+    public ImplantStep(NbtCompound nbt)
     {
         Identifier id = Identifier.tryParse(nbt.getString("id"));
         if (id != null)
-        {
             item = Registry.ITEM.get(id);
-        }
         else
             item = Items.AIR;
     }
 
-    public CombineStep(JsonObject jsonObject)
+    public ImplantStep(JsonObject jsonObject)
     {
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
@@ -47,12 +43,18 @@ public class CombineStep implements ManufactureStep<ItemStack>
     }
 
     @Override
-    public void mutate(ItemStack stack)
+    public void mutate(Entity entity)
     {
-        NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
+        NMComponents.WORKPIECE.maybeGet(entity).ifPresent(workpiece ->
         {
             workpiece.addStep(this);
         });
+    }
+
+    @Override
+    public Identifier getId()
+    {
+        return ID;
     }
 
     @Override
@@ -62,6 +64,7 @@ public class CombineStep implements ManufactureStep<ItemStack>
         tooltips.add(Text.literal("   ").append(item.getName()));
     }
 
+    @Override
     public NbtCompound toNbt()
     {
         NbtCompound nbt = new NbtCompound();
@@ -72,16 +75,10 @@ public class CombineStep implements ManufactureStep<ItemStack>
     @Override
     public boolean equalsOther(ManufactureStep<?> o)
     {
-        if (o instanceof CombineStep other)
+        if (o instanceof ImplantStep other)
         {
             return other.item == item;
         }
         return false;
-    }
-
-    @Override
-    public Identifier getId()
-    {
-        return ID;
     }
 }
