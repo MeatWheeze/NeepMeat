@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.client.MinecraftClient;
@@ -15,7 +16,10 @@ import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -174,6 +178,12 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         {
             super.onClick(mouseX, mouseY);
             action.accept(provider);
+        }
+
+        @Override
+        public void playDownSound(SoundManager soundManager)
+        {
+            soundManager.play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0f));
         }
 
         @Override
