@@ -3,15 +3,15 @@ package com.neep.neepmeat.plc;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ImmediateState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
-import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -29,16 +29,20 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class PLCBlockEntity extends SyncableBlockEntity implements PLC, ExtendedScreenHandlerFactory
 {
-    @Nullable protected PlcProgram program;
+    @NotNull protected Supplier<PlcProgram> programSupplier;
+
     protected Instruction currentInstruction;
     protected int counter;
+    private boolean paused;
 
     protected Queue<Pair<RobotAction, Consumer<PLC>>> robotActions = Queues.newArrayDeque();
     protected Pair<RobotAction, Consumer<PLC>> currentAction;
@@ -51,14 +55,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     private Error error;
 
-    private PLCPropertyDelegate delegate = new PLCPropertyDelegate();
-    private boolean paused;
+    private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
 
         this.state = immediate;
+        this.programSupplier = () -> null;
     }
 
     @Override
@@ -110,7 +114,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public void raiseError(Error error)
     {
-        getWorld().getPlayers().forEach(p -> p.sendMessage(Text.of("NOOOOOOOOOOOOO")));
+        getWorld().getPlayers().forEach(p -> p.sendMessage(error.what()));
         this.error = error;
 
         paused = true;
@@ -141,6 +145,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public void tick()
     {
+        PlcProgram program = programSupplier.get();
         if (!paused && counter != -1 && program != null && error == null)
         {
             Instruction instruction = program.get(counter);
@@ -154,7 +159,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         if (currentAction == null || currentAction.first().finished(this))
         {
             if (currentAction != null)
+            {
+                // Finish current action
                 currentAction.second().accept(this);
+                currentAction.first().end(this);
+            }
 
             if (robotActions.peek() != null)
             {
@@ -177,6 +186,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             currentAction.first().tick(this);
         }
 
+        // Set override
         boolean prevOverride = overrideController;
         if (currentAction == null || currentAction.first().finished(this))
         {
@@ -222,7 +232,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
         if (instruction.canStart(this))
         {
-            instruction.start(program, this);
+            instruction.start(this);
         }
     }
 
@@ -242,6 +252,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         robot.writeNbt(nbt);
         nbt.putBoolean("override_controller", overrideController);
         nbt.putInt("counter", counter);
+        nbt.putBoolean("paused", paused);
+
+        nbt.put("editor", editor.writeNbt(new NbtCompound()));
+
+        nbt.putBoolean("has_program", programSupplier.get() != null);
     }
 
     @Override
@@ -251,6 +266,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         robot.readNbt(nbt);
         this.overrideController = nbt.getBoolean("override_controller");
         this.counter = nbt.getInt("counter");
+        this.paused = nbt.getBoolean("paused");
+
+        editor.readNbt(nbt.getCompound("editor"));
+
+        if (nbt.getBoolean("has_program"))
+        {
+            programSupplier = editor::getProgram;
+        }
     }
 
     public void exit()
@@ -307,12 +330,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         resetError();
         currentInstruction = null;
         paused = false;
-        this.program = program;
+        this.programSupplier = () -> program;
     }
 
     public void stop()
     {
-        program = null;
+        programSupplier = () -> null;
         counter = 0;
         paused = true;
     }
@@ -333,7 +356,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter;
                 case EDIT_MODE -> state.getMode().ordinal();
-                case RUNNING -> (program != null && !paused) ? 1 : 0;
+                case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
             };
         }
 

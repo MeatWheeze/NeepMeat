@@ -3,14 +3,16 @@ package com.neep.neepmeat.api.plc.instruction;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.nbt.NbtCompound;
+import org.jetbrains.annotations.Nullable;
 
 public interface Instruction extends NbtSerialisable
 {
     boolean canStart(PLC plc);
 
-    void start(PlcProgram program, PLC plc);
+    void start(PLC plc);
 
     InstructionProvider getProvider();
 
@@ -39,7 +41,7 @@ public interface Instruction extends NbtSerialisable
         }
 
         @Override
-        public void start(PlcProgram program, PLC plc)
+        public void start(PLC plc)
         {
             plc.setCounter(-1);
         }
@@ -49,5 +51,27 @@ public interface Instruction extends NbtSerialisable
         {
             return Instructions.END;
         }
+    }
+
+    static NbtCompound writeItem(@Nullable ResourceAmount<ItemVariant> amount)
+    {
+        if (amount != null)
+        {
+            var nbt = amount.resource().toNbt();
+            nbt.putLong("amount", amount.amount());
+            return nbt;
+        }
+        else return new NbtCompound();
+    }
+
+    @Nullable
+    static ResourceAmount<ItemVariant> readItem(NbtCompound nbt)
+    {
+        if (nbt.contains("amount"))
+        {
+            long amount = nbt.getLong("amount");
+            return new ResourceAmount<>(ItemVariant.fromNbt(nbt), amount);
+        }
+        return null;
     }
 }

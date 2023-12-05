@@ -24,7 +24,7 @@ public class ProgramEditorState implements PLCState
     private final PLCBlockEntity parent;
     private MutableProgram program;
     @Nullable private InstructionBuilder instructionBuilder;
-    private List<Listener> listeners = Lists.newArrayList();
+    private final List<Listener> listeners = Lists.newArrayList();
 
     public ProgramEditorState(PLCBlockEntity parent)
     {
@@ -105,6 +105,19 @@ public class ProgramEditorState implements PLCState
         {
             listener.update(program);
         }
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        program.writeNbt(nbt);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        program.readNbt(nbt);
     }
 
     @FunctionalInterface

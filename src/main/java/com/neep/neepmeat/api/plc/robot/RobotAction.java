@@ -10,6 +10,8 @@ public interface RobotAction
 
     void tick(PLC plc);
 
+    void end(PLC plc);
+
     default boolean blocksController() { return true; }
 
     default void cancel(PLC plc) {};

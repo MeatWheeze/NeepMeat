@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.api.plc.robot.DelayAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
@@ -101,7 +100,7 @@ public class ImplantInstruction implements Instruction
 
 
     @Override
-    public void start(PlcProgram program, PLC plc)
+    public void start(PLC plc)
     {
         plc.addRobotAction(group, this::finish);
     }
@@ -188,6 +187,12 @@ public class ImplantInstruction implements Instruction
         @Override
         public void tick(PLC plc)
         {
+        }
+
+        @Override
+        public void end(PLC plc)
+        {
+
         }
     }
 }

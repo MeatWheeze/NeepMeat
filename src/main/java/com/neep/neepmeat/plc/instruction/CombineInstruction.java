@@ -5,15 +5,13 @@ import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
-import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
+import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
-import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
@@ -42,7 +40,7 @@ public class CombineInstruction implements Instruction
     private final Supplier<World> worldSupplier;
     protected Argument from;
     protected Argument to;
-    private ResourceAmount<ItemVariant> stored;
+//    private ResourceAmount<ItemVariant> stored;
     private final GroupedRobotAction group;
 
     public CombineInstruction(Supplier<ServerWorld> worldSupplier, List<Argument> arguments)
@@ -65,6 +63,7 @@ public class CombineInstruction implements Instruction
                 Argument.fromNbt(nbt.getCompound("from")),
                 Argument.fromNbt(nbt.getCompound("to"))
         ));
+        group.readNbt(nbt.getCompound("action"));
     }
 
     @Override
@@ -74,43 +73,21 @@ public class CombineInstruction implements Instruction
     }
 
     @Override
-    public void start(PlcProgram program, PLC plc)
+    public void start(PLC plc)
     {
-        stored = null;
-
         plc.addRobotAction(group, this::finish);
-//        plc.addRobotAction(GroupedRobotAction.of(
-//                new RobotMoveToAction(from.pos()),
-//                SingleAction.of(() -> takeFirst(plc)),
-//                new RobotMoveToAction(to.pos()),
-//                SingleAction.of(() -> complete(plc))
-//        ), this::finish);
-//        );
-    }
-
-    private void thingy(PLC plc)
-    {
-        var fromStructure = TableComponent.LOOKUP.find(worldSupplier.get(), from.pos(), null);
-        var toStructure = TableComponent.LOOKUP.find(worldSupplier.get(), to.pos(), null);
-
-        if (fromStructure != null && toStructure != null)
-        {
-//            fromStructure.getStorage().
-        }
-
-        plc.raiseError(new PLC.Error(Text.of("Invalid structure")));
     }
 
     private void takeFirst(PLC plc)
     {
-//        System.out.println("Take first");
-        this.stored = takeItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));
+        var stored = takeItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));
         if (stored == null)
         {
             plc.raiseError(new PLC.Error(Text.of("Oh noes!")));
         }
         else
         {
+            plc.getRobot().stored = stored;
             if (worldSupplier.get() instanceof ServerWorld serverWorld)
             {
                 ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
@@ -122,6 +99,7 @@ public class CombineInstruction implements Instruction
 
     private void complete(PLC plc)
     {
+        final var stored = plc.getRobot().stored;
         var mip = MutateInPlace.ITEM.find(worldSupplier.get(), to.pos(), null);
         if (mip != null)
         {
@@ -149,13 +127,13 @@ public class CombineInstruction implements Instruction
                             plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
                 }
 
+                plc.getRobot().stored = null;
+
                 return;
             }
         }
 
-        if (stored != null)
-            plc.getRobot().spawnItem(stored);
-
+        plc.getRobot().dumpStored();
     }
 
     private ResourceAmount<ItemVariant> takeItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)
@@ -201,6 +179,7 @@ public class CombineInstruction implements Instruction
     {
         nbt.put("from", from.toNbt());
         nbt.put("to", to.toNbt());
+        nbt.put("action", group.writeNbt(new NbtCompound()));
         return nbt;
     }
 

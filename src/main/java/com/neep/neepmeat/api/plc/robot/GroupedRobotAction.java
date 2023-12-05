@@ -34,16 +34,16 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
     {
         start = true;
 
-        if (!justLoaded)
-        {
-            // The action must be reset to its initial previous state.
-            index = 0;
-        }
-        else
-        {
-            // If the action has been loaded from NBT, use the stored index.
-            justLoaded = false;
-        }
+//        if (!justLoaded)
+//        {
+//            // The action must be reset to its initial previous state.
+//            index = 0;
+//        }
+//        else
+//        {
+//            // If the action has been loaded from NBT, use the stored index.
+//            justLoaded = false;
+//        }
     }
 
     @Override
@@ -64,16 +64,23 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
 
         if (action.finished(plc))
         {
+            action.end(plc);
             index++;
             start = true;
         }
     }
 
     @Override
+    public void end(PLC plc)
+    {
+        index = 0;
+        start = true;
+    }
+
+    @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putInt("index", index);
-//        nbt.putBoolean("start", start);
         return nbt;
     }
 
@@ -81,7 +88,6 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
     public void readNbt(NbtCompound nbt)
     {
         this.index = nbt.getInt("index");
-//        this.start = nbt.getBoolean("start");
         this.justLoaded = true;
     }
 }
