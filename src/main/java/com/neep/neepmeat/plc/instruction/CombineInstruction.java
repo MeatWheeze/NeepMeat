@@ -1,23 +1,23 @@
-package com.neep.neepmeat.plc.program;
+package com.neep.neepmeat.plc.instruction;
 
 import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.instruction.Argument;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
+import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
-import com.neep.neepmeat.api.plc.instruction.Argument;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
-import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
-import com.neep.neepmeat.api.plc.robot.SingleAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -43,17 +43,28 @@ public class CombineInstruction implements Instruction
     protected Argument from;
     protected Argument to;
     private ResourceAmount<ItemVariant> stored;
+    private final GroupedRobotAction group;
 
     public CombineInstruction(Supplier<ServerWorld> worldSupplier, List<Argument> arguments)
     {
         this.worldSupplier = worldSupplier::get;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
+
+        group = GroupedRobotAction.of(
+                new RobotMoveToAction(from.pos()),
+                AtomicAction.of(this::takeFirst),
+                new RobotMoveToAction(to.pos()),
+                AtomicAction.of(this::complete)
+        );
     }
 
-    public CombineInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
+    public CombineInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this.worldSupplier = worldSupplier;
+        this(() -> (ServerWorld) world.get(), List.of(
+                Argument.fromNbt(nbt.getCompound("from")),
+                Argument.fromNbt(nbt.getCompound("to"))
+        ));
     }
 
     @Override
@@ -67,12 +78,14 @@ public class CombineInstruction implements Instruction
     {
         stored = null;
 
-        plc.addRobotAction(GroupedRobotAction.of(
-                new RobotMoveToAction(plc.getRobot(), from.pos()),
-                SingleAction.of(() -> takeFirst(plc)),
-                new RobotMoveToAction(plc.getRobot(), to.pos()),
-                SingleAction.of(() -> complete(plc))
-        ), this::finish);
+        plc.addRobotAction(group, this::finish);
+//        plc.addRobotAction(GroupedRobotAction.of(
+//                new RobotMoveToAction(from.pos()),
+//                SingleAction.of(() -> takeFirst(plc)),
+//                new RobotMoveToAction(to.pos()),
+//                SingleAction.of(() -> complete(plc))
+//        ), this::finish);
+//        );
     }
 
     private void thingy(PLC plc)
@@ -186,6 +199,8 @@ public class CombineInstruction implements Instruction
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        nbt.put("from", from.toNbt());
+        nbt.put("to", to.toNbt());
         return nbt;
     }
 

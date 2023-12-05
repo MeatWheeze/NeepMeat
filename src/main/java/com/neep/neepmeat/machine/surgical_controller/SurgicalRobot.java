@@ -282,7 +282,7 @@ public class SurgicalRobot implements NbtSerialisable
 
     public boolean reachedTarget()
     {
-        return targetPos.squaredDistanceTo(x, y, z) <= 0.1 * 0.1;
+        return targetPos == null || targetPos.squaredDistanceTo(x, y, z) <= 0.1 * 0.1;
     }
 
     public void returnToBase()

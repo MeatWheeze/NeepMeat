@@ -1,14 +1,14 @@
 package com.neep.neepmeat.plc.instruction;
 
+import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
+import com.neep.neepmeat.api.plc.robot.AtomicAction;
+import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
-import com.neep.neepmeat.api.plc.robot.SingleAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
@@ -24,7 +24,9 @@ import java.util.function.Supplier;
 public class MoveInstruction implements Instruction
 {
     private final Supplier<World> world;
-    private Argument from, to;
+    private final GroupedRobotAction group;
+    private final Argument from;
+    private final Argument to;
 
     private ResourceAmount<ItemVariant> stored;
 
@@ -38,11 +40,21 @@ public class MoveInstruction implements Instruction
         this.world = world::get;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
+
+        group = GroupedRobotAction.of(
+                new RobotMoveToAction(from.pos()),
+                AtomicAction.of(this::takeFirst),
+                new RobotMoveToAction(to.pos()),
+                AtomicAction.of(this::complete)
+        );
     }
 
     public MoveInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this.world = world;
+        this(() -> (ServerWorld) world.get(), List.of(
+                Argument.fromNbt(nbt.getCompound("from")),
+                Argument.fromNbt(nbt.getCompound("to"))
+            ));
     }
 
     @Override
@@ -68,12 +80,14 @@ public class MoveInstruction implements Instruction
     {
         stored = null;
 
-        plc.addRobotAction(GroupedRobotAction.of(
-                new RobotMoveToAction(plc.getRobot(), from.pos()),
-                SingleAction.of(() -> takeFirst(plc)),
-                new RobotMoveToAction(plc.getRobot(), to.pos()),
-                SingleAction.of(() -> complete(plc))
-        ), this::finish);
+        plc.addRobotAction(group, this::finish);
+
+//        plc.addRobotAction(GroupedRobotAction.of(
+//                new RobotMoveToAction(from.pos()),
+//                SingleAction.of(() -> takeFirst(plc)),
+//                new RobotMoveToAction(to.pos()),
+//                SingleAction.of(() -> complete(plc))
+//        ), this::finish);
     }
 
     private void takeFirst(PLC plc)

@@ -59,14 +59,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         super(type, pos, state);
 
         this.state = immediate;
-
-//        PLCProgramImpl program1 = new PLCProgramImpl();
-//        program1.add(new CombineInstruction(pos.up(3).south(4), pos.up(3).north(5), () -> (ServerWorld) this.getWorld()));
-//        program1.add(PLCInstruction.EMPTY);
-//
-//        this.program = program1;
     }
-
 
     @Override
     public RobotAction addRobotAction(RobotAction action, Consumer<PLC> callback)
@@ -125,7 +118,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         robotActions.clear();
         if (currentAction != null)
         {
-            currentAction.first().cancel();
+            currentAction.first().cancel(this);
             currentAction = null;
         }
         robot.stay();
@@ -158,7 +151,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             }
         }
 
-        if (currentAction == null || currentAction.first().finished())
+        if (currentAction == null || currentAction.first().finished(this))
         {
             if (currentAction != null)
                 currentAction.second().accept(this);
@@ -166,7 +159,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             if (robotActions.peek() != null)
             {
                 currentAction = robotActions.poll();
-                currentAction.first().start();
+                currentAction.first().start(this);
                 sync();
             }
             else
@@ -181,11 +174,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         }
         else
         {
-            currentAction.first().tick();
+            currentAction.first().tick(this);
         }
 
         boolean prevOverride = overrideController;
-        if (currentAction == null || currentAction.first().finished())
+        if (currentAction == null || currentAction.first().finished(this))
         {
             overrideController = false;
         }
@@ -213,7 +206,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public boolean notExecuting()
     {
-        return currentAction == null || currentAction.first().finished();
+        return currentAction == null || currentAction.first().finished(this);
     }
 
     public void execute(Instruction instruction)
@@ -221,7 +214,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         robotActions.clear();
         if (currentAction != null)
         {
-            currentAction.first().cancel();
+            currentAction.first().cancel(this);
             currentAction = null;
         }
 
@@ -248,6 +241,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         super.writeNbt(nbt);
         robot.writeNbt(nbt);
         nbt.putBoolean("override_controller", overrideController);
+        nbt.putInt("counter", counter);
     }
 
     @Override
@@ -256,6 +250,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         super.readNbt(nbt);
         robot.readNbt(nbt);
         this.overrideController = nbt.getBoolean("override_controller");
+        this.counter = nbt.getInt("counter");
     }
 
     public void exit()

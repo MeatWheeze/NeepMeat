@@ -6,7 +6,7 @@ import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.instruction.InstructionProviderImpl;
 import com.neep.neepmeat.plc.instruction.*;
-import com.neep.neepmeat.plc.program.CombineInstruction;
+import com.neep.neepmeat.plc.instruction.CombineInstruction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
