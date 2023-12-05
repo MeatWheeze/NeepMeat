@@ -1,13 +1,18 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.component.MutateInPlace;
+import com.neep.neepmeat.plc.recipe.ItemWorkpiece;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -15,10 +20,13 @@ import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,6 +36,8 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import software.bernie.geckolib3.core.util.Color;
 
@@ -44,6 +54,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
+
+    // Text relating to the block that the mouse is currently over
+    private final List<Text> tooltipText = Lists.newArrayList();
+    private double mouseX;
+    private double mouseY;
 
     public PLCProgramScreen(PLCScreenHandler handler, PlayerInventory playerInventory, Text unused)
     {
@@ -79,8 +94,18 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     }
 
     @Override
+    public void tick()
+    {
+        super.tick();
+        tickTooltip(mouseX, mouseY);
+    }
+
+    @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+
         float x0 = 0;
         float y0 = 0;
         float x1 = width;
@@ -102,15 +127,58 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
         BufferRenderer.drawWithShader(bufferBuilder.end());
 
+        if (!tooltipText.isEmpty())
+        {
+            renderTooltipText(matrices, tooltipText, mouseX, mouseY, 0);
+        }
+
         super.render(matrices, mouseX, mouseY, delta);
+    }
 
 
+    private void tickTooltip(double mouseX, double mouseY)
+    {
+        tooltipText.clear();
+        var result = raycastClick(mouseX, mouseY);
+        if (result.getType() == HitResult.Type.BLOCK)
+        {
+            var mip1 = MutateInPlace.ITEM.find(client.world, result.getBlockPos(), null);
+            var mip2 = MutateInPlace.ENTITY.find(client.world, result.getBlockPos(), null);
+            if (mip1 != null)
+            {
+                var stack = mip1.get();
+                if (stack == null || stack.isEmpty())
+                    return;
+
+                tooltipText.addAll(mip1.get().getTooltip(client.player, TooltipContext.Default.NORMAL));
+            }
+            else if (mip2 != null)
+            {
+                makeEntityTooltip(mip2.get(), tooltipText);
+            }
+        }
+    }
+
+    private static void makeEntityTooltip(@Nullable Entity entity, List<Text> tooltip)
+    {
+        if (entity == null)
+            return;
+
+        tooltip.add(entity.getDisplayName());
+        Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
+        if (workpiece != null)
+        {
+            for (var step : workpiece.getSteps())
+            {
+                step.appendText(tooltip);
+            }
+        }
     }
 
     @Override
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
     {
-        if (button == GLFW.GLFW_MOUSE_BUTTON_2)
+        if (button == GLFW.GLFW_MOUSE_BUTTON_2 || button == GLFW.GLFW_MOUSE_BUTTON_3)
         {
             PLCHudRenderer renderer = PLCHudRenderer.getInstance();
             if (renderer != null)
@@ -138,7 +206,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     protected boolean handleWorldClick(double mouseX, double mouseY, int button)
     {
-        if (button == GLFW.GLFW_MOUSE_BUTTON_2)
+        if (button == GLFW.GLFW_MOUSE_BUTTON_2 || button == GLFW.GLFW_MOUSE_BUTTON_3)
             return false;
 
         var result = raycastClick(mouseX, mouseY);
@@ -352,7 +420,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
         {
-            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, borderColour());
+            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, borderCol());
         }
 
         @Override
@@ -440,10 +508,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    public static int borderColour()
+    public static int borderCol()
     {
         return Color.ofRGBA(255, 94, 33, 255).getColor();
     }
 
-
+    public static int selectedCol()
+    {
+        return Color.ofRGBA(255, 150, 33, 255).getColor();
+    }
 }

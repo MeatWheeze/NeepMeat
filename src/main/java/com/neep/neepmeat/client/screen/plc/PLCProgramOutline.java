@@ -99,13 +99,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         }
     }
 
-//    protected void onSelect(InstructionProvider instructionProvider)
-//    {
-//        this.instructionProvider = instructionProvider;
-//        parent.updateInstruction(instructionProvider);
-//    }
-
-
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
@@ -156,7 +149,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     public class InstructionWidget implements Drawable, Element, Selectable
     {
-
         protected final InstructionProvider instructionProvider;
 
         protected final int x, y;
@@ -210,7 +202,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
             if (isMouseInside(mouseX, mouseY))
             {
-                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderColour());
+                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderCol());
             }
 
             if (programCounterHere)
