@@ -127,7 +127,7 @@
 
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [
-      "neepmeat:plc_select_block"
+      "neepmeat:plc_select_2"
     ]
   },
   "plc_select": { "subtitle": "subtitles.neepmeat.plc_select",

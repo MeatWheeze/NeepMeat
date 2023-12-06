@@ -180,7 +180,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
             {
                 selected = true;
-                client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0f));
+                client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT_BLOCK, 1.0f));
                 onInstructionSelect(this);
                 return true;
             }
