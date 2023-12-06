@@ -134,6 +134,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             renderTooltipText(matrices, tooltipText, mouseX, mouseY, 0);
         }
 
+        MatrixStack ms = new MatrixStack();
+        ms.multiplyPositionMatrix(PLCHudRenderer.MODEL_VIEW);
+
         super.render(matrices, mouseX, mouseY, delta);
     }
 
@@ -144,6 +147,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         var result = raycastClick(mouseX, mouseY);
         if (result.getType() == HitResult.Type.BLOCK)
         {
+            PLCHudRenderer.HIT_RESULT = result;
+
             var mip1 = MutateInPlace.ITEM.find(client.world, result.getBlockPos(), null);
             var mip2 = MutateInPlace.ENTITY.find(client.world, result.getBlockPos(), null);
             if (mip1 != null)
@@ -158,6 +163,10 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             {
                 makeEntityTooltip(mip2.get(), tooltipText);
             }
+        }
+        else
+        {
+            PLCHudRenderer.HIT_RESULT = null;
         }
     }
 
@@ -222,7 +231,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         for (int i = 0; i < 15; ++i)
         {
-            client.world.addParticle(ParticleTypes.SMOKE, result.getPos().x, result.getPos().y, result.getPos().z, 0, 0, 0);
+//            client.world.addParticle(ParticleTypes.SMOKE, result.getPos().x, result.getPos().y, result.getPos().z, 0, 0, 0);
             client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0f));
         }
 //
