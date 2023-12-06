@@ -313,6 +313,7 @@ public class NMBlockEntities
 
         PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
         ItemStorage.SIDED.registerForBlockEntity(PedestalBlockEntity::getStorage, PEDESTAL);
+        MutateInPlace.ITEM.registerForBlockEntity(PedestalBlockEntity::getMutateInPlace, PEDESTAL);
 
         ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
