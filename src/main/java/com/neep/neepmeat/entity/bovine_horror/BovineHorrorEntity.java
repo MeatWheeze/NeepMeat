@@ -253,6 +253,7 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             goalSelector.clear();
             goalSelector.add(1, new BHPhaseActionGoal(this));
             navigation.stop();
+            bossBar.setDarkenSky(true);
         }
 
         if (!world.isClient())
