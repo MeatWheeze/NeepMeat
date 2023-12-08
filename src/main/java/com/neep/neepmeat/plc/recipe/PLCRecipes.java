@@ -21,6 +21,7 @@ public class PLCRecipes
     public static final MeatRecipeType<EntityManufactureRecipe> ENTITY_MANUFACTURE = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "entity_manufacture");
 
     public static final ManufactureStep.Provider<?> COMBINE = ManufactureStep.register(CombineStep.ID, ManufactureStep.Provider.of(CombineStep::new, CombineStep::new));
+    public static final ManufactureStep.Provider<?> INJECT = ManufactureStep.register(InjectStep.ID, ManufactureStep.Provider.of(InjectStep::new, InjectStep::new));
     public static final ManufactureStep.Provider<?> IMPLANT = ManufactureStep.register(ImplantStep.ID, ManufactureStep.Provider.of(ImplantStep::new, ImplantStep::new));
 
     public static <B, C, T extends ManufactureRecipe<C>> boolean isValidStep(MeatRecipeType<T> type, Workpiece workpiece, ManufactureStep<?> nextStep, B base)

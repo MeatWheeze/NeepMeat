@@ -11,6 +11,10 @@
     {
       "id": "neepmeat:combine",
       "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
     }
   ],
   "output": {

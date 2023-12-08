@@ -140,5 +140,11 @@
     "sounds": [
       "neepmeat:implant_instruction_apply"
     ]
+  },
+  "inject": {
+    "subtitle": "subtitles.neepmeat.inject_instruction_apply",
+    "sounds": [
+      "neepmeat:inject"
+    ]
   }
 }

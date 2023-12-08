@@ -4,6 +4,8 @@ import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -56,6 +58,11 @@ public class LazyBlockApiCache<A, C>
     public static LazyBlockApiCache<Storage<ItemVariant>, Direction> itemSided(Argument argument, Supplier<ServerWorld> world)
     {
         return new LazyBlockApiCache<>(world, ItemStorage.SIDED, argument.pos(), argument::face);
+    }
+
+    public static LazyBlockApiCache<Storage<FluidVariant>, Direction> fluidSided(Argument argument, Supplier<ServerWorld> world)
+    {
+        return new LazyBlockApiCache<>(world, FluidStorage.SIDED, argument.pos(), argument::face);
     }
 
     public BlockPos pos()
