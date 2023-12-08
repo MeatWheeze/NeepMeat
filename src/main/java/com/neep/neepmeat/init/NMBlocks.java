@@ -47,7 +47,6 @@ import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
 import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlock;
-import com.neep.neepmeat.machine.surgical_controller.TableControllerBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
@@ -201,7 +200,6 @@ public class NMBlocks
     public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block SURGERY_CONTROLLER = BlockRegistry.queue(new TableControllerBlock("surgery_controller", block().requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));

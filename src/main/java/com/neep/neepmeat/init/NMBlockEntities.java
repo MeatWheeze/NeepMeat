@@ -55,6 +55,7 @@ import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -169,7 +170,7 @@ public class NMBlockEntities
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
 
-    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
+    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                                  FabricBlockEntityTypeBuilder.create(factory, block).build());
@@ -180,176 +181,176 @@ public class NMBlockEntities
     {
 
         // --- Fluid Transfer ---
-        PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, FluidTransport.PUMP);
+        PUMP = register("pump_block_entity", PumpBlockEntity::new, FluidTransport.PUMP);
         FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
 
-        TANK = registerBlockEntity("tank_block_entity", (pos, state) -> new TankBlockEntity(TANK, pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_TANK);
+        TANK = register("tank_block_entity", (pos, state) -> new TankBlockEntity(TANK, pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_TANK);
         FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, TANK);
         TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, TANK);
 
-        GLASS_TANK = registerBlockEntity("glass_tank_block_entity", (pos, state) -> new GlassTankBlockEntity(pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_GLASS_TANK);
+        GLASS_TANK = register("glass_tank_block_entity", (pos, state) -> new GlassTankBlockEntity(pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_GLASS_TANK);
         FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, GLASS_TANK);
         TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, GLASS_TANK);
 
-        ADVANCED_TANK = registerBlockEntity("advanced_tank", (pos, state) -> new TankBlockEntity(ADVANCED_TANK, pos, state, 16 * FluidConstants.BUCKET), FluidTransport.ADVANCED_TANK);
+        ADVANCED_TANK = register("advanced_tank", (pos, state) -> new TankBlockEntity(ADVANCED_TANK, pos, state, 16 * FluidConstants.BUCKET), FluidTransport.ADVANCED_TANK);
         FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, ADVANCED_TANK);
         TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, ADVANCED_TANK);
 
-        MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, FluidTransport.MULTI_TANK);
+        MULTI_TANK = register("multi_tank", MultiTankBlockEntity::new, FluidTransport.MULTI_TANK);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
         Heatable.LOOKUP.registerSelf(MULTI_TANK);
-        FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, FluidTransport.FLUID_BUFFER);
+        FLUID_BUFFER = register("fluid_buffer", FluidBufferBlockEntity::new, FluidTransport.FLUID_BUFFER);
         TableComponent.LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
-        FLUID_PIPE = registerBlockEntity("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
-        STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
-        CHECK_VALVE = registerBlockEntity("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
-        FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);
-        LIMITER_VALVE = registerBlockEntity("limiter_valve", LimiterValveBlockEntity::new, FluidTransport.LIMITER_VALVE);
-        WINDOW_PIPE = registerBlockEntity("window_pipe", WindowPipeBlockEntity::new, FluidTransport.WINDOW_PIPE);
+        FLUID_PIPE = register("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
+        STOP_VALVE = register("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
+        CHECK_VALVE = register("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
+        FILTER_PIPE = register("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);
+        LIMITER_VALVE = register("limiter_valve", LimiterValveBlockEntity::new, FluidTransport.LIMITER_VALVE);
+        WINDOW_PIPE = register("window_pipe", WindowPipeBlockEntity::new, FluidTransport.WINDOW_PIPE);
 
-        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, FluidTransport.FLUID_DRAIN);
-        FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, FluidTransport.FLUID_INTERFACE);
-        HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
+        FLUID_DRAIN = register("fluid_drain", FluidDrainBlockEntity::new, FluidTransport.FLUID_DRAIN);
+        FLUID_INTERFACE = register("fluid_port", FluidInterfaceBlockEntity::new, FluidTransport.FLUID_INTERFACE);
+        HEATER = register("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
-        VASCULAR_CONDUIT = registerBlockEntity("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
+        VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
 
         // --- Surgery Machine ---
 //        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
-        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        ITEM_BUFFER_BLOCK_ENTITY = register("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
         TableComponent.LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
         MutateInPlace.ITEM.registerForBlockEntity(DisplayPlatformBlockEntity::getMip, ITEM_BUFFER_BLOCK_ENTITY);
-        SURGERY_PLATFORM = registerBlockEntity("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
+        SURGERY_PLATFORM = register("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
         TableComponent.LOOKUP.registerForBlockEntity(SurgeryPlatformBlockEntity::getTableComponent, SURGERY_PLATFORM);
         MutateInPlace.ENTITY.registerForBlockEntity(SurgeryPlatformBlockEntity::getMutate, SURGERY_PLATFORM);
 
         // --- Item Transfer ---
-        ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
-        PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
-        MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
-        BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
-        INVENTORY_DETECTOR = registerBlockEntity("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
-        SOLIDITY_DETECTOR = registerBlockEntity("solidity_detector", SolidityDetectorBlockEntity::new, NMBlocks.SOLIDITY_DETECTOR);
+        ITEM_DUCT_BLOCK_ENTITY = register("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
+        PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
+        MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
+        BUFFER = register("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
+        INVENTORY_DETECTOR = register("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
+        SOLIDITY_DETECTOR = register("solidity_detector", SolidityDetectorBlockEntity::new, NMBlocks.SOLIDITY_DETECTOR);
         ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);
-        EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
-        ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
-        ROUTER = registerBlockEntity("router", RouterBlockEntity::new, NMBlocks.ROUTER);
-        DUMPER = registerBlockEntity("dumper", DumperBlockEntity::new, NMBlocks.DUMPER);
+        EJECTOR = register("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
+        ITEM_PUMP = register("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
+        ROUTER = register("router", RouterBlockEntity::new, NMBlocks.ROUTER);
+        DUMPER = register("dumper", DumperBlockEntity::new, NMBlocks.DUMPER);
         ItemStorage.SIDED.registerForBlockEntity(DumperBlockEntity::getStorage, DUMPER);
 
         // --- Machines ---
-        INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
+        INTEGRATOR = register("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
         ItemStorage.SIDED.registerForBlockEntity(IntegratorBlockEntity::getItemStorage, INTEGRATOR);
-        TROMMEL = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
-        TROMMEL_STRUCTURE = registerBlockEntity("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
-        SMALL_TROMMEL = registerBlockEntity("small_trommel", SmallTrommelBlockEntity::new, NMBlocks.SMALL_TROMMEL);
-        SMALL_TROMMEL_STRUCTURE = registerBlockEntity("small_trommel_structure", SmallTrommelBlockEntity.Structure::new, NMBlocks.SMALL_TROMMEL_STRUCTURE);
+        TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
+        TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
+        SMALL_TROMMEL = register("small_trommel", SmallTrommelBlockEntity::new, NMBlocks.SMALL_TROMMEL);
+        SMALL_TROMMEL_STRUCTURE = register("small_trommel_structure", SmallTrommelBlockEntity.Structure::new, NMBlocks.SMALL_TROMMEL_STRUCTURE);
         FluidStorage.SIDED.registerForBlockEntity(SmallTrommelBlockEntity::getInputStorage, SMALL_TROMMEL);
         FluidStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getFluidStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
         ItemStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getItemStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
 
-        BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
+        BIG_LEVER = register("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
 
-        MOTOR = registerBlockEntity("motor_unit", (pos, state) -> new MotorBlockEntity(MOTOR, pos, state), NMBlocks.MOTOR);
+        MOTOR = register("motor_unit", (pos, state) -> new MotorBlockEntity(MOTOR, pos, state), NMBlocks.MOTOR);
         FluidStorage.SIDED.registerForBlockEntity(LiquidFuelMachine::getTank, MOTOR);
 
-        ADVANCED_MOTOR = registerBlockEntity("advanced_motor", (pos, state) -> new AdvancedMotorBlockEntity(ADVANCED_MOTOR, pos, state), NMBlocks.ADVANCED_MOTOR);
+        ADVANCED_MOTOR = register("advanced_motor", (pos, state) -> new AdvancedMotorBlockEntity(ADVANCED_MOTOR, pos, state), NMBlocks.ADVANCED_MOTOR);
         BloodAcceptor.SIDED.registerForBlockEntity(AdvancedMotorBlockEntity::getBloodAcceptor, ADVANCED_MOTOR);
 
-        STIRLING_ENGINE = registerBlockEntity("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
-        LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
-        DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
-        AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
+        STIRLING_ENGINE = register("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
+        LINEAR_OSCILLATOR = register("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
+        DEPLOYER = register("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
+        AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
-        GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
-        ALLOY_KILN = registerBlockEntity("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
+        GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
+        ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         Heatable.LOOKUP.registerSelf(ALLOY_KILN);
-        CRUCIBLE = registerBlockEntity("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
+        CRUCIBLE = register("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUCIBLE);
-        ALEMBIC = registerBlockEntity("collector", AlembicBlockEntity::new, NMBlocks.COLLECTOR);
+        ALEMBIC = register("collector", AlembicBlockEntity::new, NMBlocks.COLLECTOR);
         FluidStorage.SIDED.registerForBlockEntity(AlembicBlockEntity::getStorage, ALEMBIC);
 
-        CASTING_BASIN = registerBlockEntity("casting_basin", CastingBasinBlockEntity::new, NMBlocks.CASTING_BASIN);
+        CASTING_BASIN = register("casting_basin", CastingBasinBlockEntity::new, NMBlocks.CASTING_BASIN);
         FluidStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().fluid(dir), CASTING_BASIN);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().item(dir), CASTING_BASIN);
 
-        HYDRAULIC_PRESS = registerBlockEntity("hydraulic_press", HydraulicPressBlockEntity::new, NMBlocks.HYDRAULIC_PRESS);
+        HYDRAULIC_PRESS = register("hydraulic_press", HydraulicPressBlockEntity::new, NMBlocks.HYDRAULIC_PRESS);
 //        FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getFluidStorageFromTop, HYDRAULIC_PRESS.);
         FluidStorage.SIDED.registerForBlocks(HydraulicPressBlockEntity::getFluidStorageFromTop, NMBlocks.HYDRAULIC_PRESS.getStructureBlock());
 
-        PYLON = registerBlockEntity("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
+        PYLON = register("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
 
-        SYNTHESISER = registerBlockEntity("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
+        SYNTHESISER = register("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
         FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);
 
-        PLC = registerBlockEntity("plc", (pos, state) -> new PLCBlockEntity(PLC, pos, state), NMBlocks.SURGERY_CONTROLLER);
+        PLC = register("plc", (pos, state) -> new PLCBlockEntity(PLC, pos, state), PLCBlocks.SURGERY_CONTROLLER);
 //        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, PLC);
 //        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, PLC);
 
-        VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
-        VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
-        VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
-        VAT_FLUID_PORT = registerBlockEntity("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
-        VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
+        VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
+        VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
+        VAT_ITEM_PORT = register("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
+        VAT_FLUID_PORT = register("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
+        VAT_CONTROLLER = register("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
-        FLUID_EXCITER = registerBlockEntity("fluid_exciter", (pos, state) -> new FluidExciterBlockEntity(FLUID_EXCITER, pos, state), NMBlocks.FLUID_EXCITER);
+        FLUID_EXCITER = register("fluid_exciter", (pos, state) -> new FluidExciterBlockEntity(FLUID_EXCITER, pos, state), NMBlocks.FLUID_EXCITER);
         FluidStorage.SIDED.registerForBlockEntity(FluidExciterBlockEntity::getInputStorage, FLUID_EXCITER);
 //        FluidStorage.SIDED.registerForBlocks((world, pos, state, be, context) -> world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity fbe ? fbe.getOutputStorage(context) : null, NMBlocks.FLUID_EXCITER.getStructureBlock());
 //        FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
         BloodAcceptor.SIDED.registerForBlocks(FluidExciterBlockEntity::getBloodAcceptorFromTop, NMBlocks.FLUID_EXCITER.getStructureBlock());
 
-        MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
+        MIXER = register("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
 //        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
         FluidStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getFluidStorage, MIXER);
         FluidStorage.SIDED.registerForBlocks(MixerBlockEntity::getFluidStorageFromTop, NMBlocks.MIXER.getStructureBlock());
         ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
         ItemStorage.SIDED.registerForBlocks(MixerBlockEntity::getItemStorageFromTop, NMBlocks.MIXER.getStructureBlock());
 
-        TRANSDUCER = registerBlockEntity("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
+        TRANSDUCER = register("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 //        BloodAcceptor.SIDED.registerForBlockEntity(TransducerBlockEntity::getBloodAcceptor, TRANSDUCER);
 
-        PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
+        PEDESTAL = register("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
         ItemStorage.SIDED.registerForBlockEntity(PedestalBlockEntity::getStorage, PEDESTAL);
         MutateInPlace.ITEM.registerForBlockEntity(PedestalBlockEntity::getMutateInPlace, PEDESTAL);
 
-        ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
+        ASSEMBLER = register("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().getStorage(dir, false), ASSEMBLER);
         BloodAcceptor.SIDED.registerForBlocks(AssemblerBlockEntity::getBloodAcceptorFromTop, NMBlocks.ASSEMBLER.getStructureBlock());
 
-        WORKSTATION = registerBlockEntity("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
+        WORKSTATION = register("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
-        DEATH_BLADES = registerBlockEntity("death_blades", DeathBladesBlockEntity::new, NMBlocks.DEATH_BLADES);
+        DEATH_BLADES = register("death_blades", DeathBladesBlockEntity::new, NMBlocks.DEATH_BLADES);
 
-        BOTTLER = registerBlockEntity("bottler", BottlerBlockEntity::new, NMBlocks.BOTTLER);
+        BOTTLER = register("bottler", BottlerBlockEntity::new, NMBlocks.BOTTLER);
         ItemStorage.SIDED.registerForBlockEntity(BottlerBlockEntity::getItemStorage, BOTTLER);
 //        FluidStorage.SIDED.registerForBlockEntity(BottlerBlockEntity::getStorage, BOTTLER);
 
-        FEEDING_TROUGH = registerBlockEntity("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
+        FEEDING_TROUGH = register("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
         FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
 
-        MINCER = registerBlockEntity("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
+        MINCER = register("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
         FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
 
-        HOMOGENISER = registerBlockEntity("homogeniser", (pos, state) -> new HomogeniserBlockEntity(HOMOGENISER, pos, state), NMBlocks.HOMOGENISER);
+        HOMOGENISER = register("homogeniser", (pos, state) -> new HomogeniserBlockEntity(HOMOGENISER, pos, state), NMBlocks.HOMOGENISER);
         ItemStorage.SIDED.registerForBlockEntity(HomogeniserBlockEntity::getItemStorage, HOMOGENISER);
 
-        FLAME_JET = registerBlockEntity("flame_jet", FlameJetBlockEntity::new, NMBlocks.FLAME_JET);
+        FLAME_JET = register("flame_jet", FlameJetBlockEntity::new, NMBlocks.FLAME_JET);
         FluidStorage.SIDED.registerForBlockEntity(FlameJetBlockEntity::getFluidStorage, FLAME_JET);
 
-        ITEM_MINCER = registerBlockEntity("item_mincer", ItemMincerBlockEntity::new, NMBlocks.ITEM_MINCER);
+        ITEM_MINCER = register("item_mincer", ItemMincerBlockEntity::new, NMBlocks.ITEM_MINCER);
         ItemStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getInputStorage, ITEM_MINCER);
         FluidStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getOutputStorage, ITEM_MINCER);
         FluidPump.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getPump, ITEM_MINCER);
 
-        FLUID_RATIONER = registerBlockEntity("fluid_rationer", FluidRationerBlockEntity::new, NMBlocks.FLUID_RATIONER);
+        FLUID_RATIONER = register("fluid_rationer", FluidRationerBlockEntity::new, NMBlocks.FLUID_RATIONER);
         FluidStorage.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getStorage, FLUID_RATIONER);
         FluidPump.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getPump, FLUID_RATIONER);
 
 
-        HOLDING_TRACK = registerBlockEntity("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
+        HOLDING_TRACK = register("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

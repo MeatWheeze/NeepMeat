@@ -6,7 +6,7 @@ import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.ManufactureDisplay;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ImplantStep;
 import com.neep.neepmeat.plc.recipe.InjectStep;
@@ -86,7 +86,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMBlocks.SURGERY_CONTROLLER);
+        return EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER);
     }
 
     public static int borderCol()
