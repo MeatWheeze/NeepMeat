@@ -26,6 +26,8 @@ public interface ManufactureStep<T>
 
     Identifier getId();
 
+    Text getName();
+
     void appendText(List<Text> tooltips);
 
     NbtCompound toNbt();

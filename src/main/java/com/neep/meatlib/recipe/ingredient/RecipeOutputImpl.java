@@ -35,6 +35,7 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
         this.lootFunction = UniformIntProvider.create(min, max);
         this.random = Random.create();
         this.chance = probability;
+        update();
     }
 
     public RecipeOutputImpl(@NotNull T resource, int min, int max)

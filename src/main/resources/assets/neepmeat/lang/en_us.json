@@ -473,6 +473,8 @@
   "item.neepmeat.chrysalis": "Divine Chrysalis",
 
   "step.neepmeat.combine": "COMBINE",
+  "step.neepmeat.implant": "IMPLANT",
+  "step.neepmeat.inject": "INJECT",
   "message.neepmeat.workpiece.title": "Workpiece",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
@@ -507,6 +509,7 @@
   "category.neepmeat.heart_extraction": "Heart Extraction",
   "category.neepmeat.enlightening": "Enlightening",
   "category.neepmeat.enlightening.data": "Data: %d",
+  "category.neepmeat.manufacture": "Manufacture",
   "category.neepmeat.surgery": "Machine Surgery",
   "category.neepmeat.transforming_tool": "Transforming Tool Manufacture",
   "category.neepmeat.trommel": "Trommel",
