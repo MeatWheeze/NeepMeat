@@ -48,6 +48,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
         registry.register(NMBlocks.MEAT_STEEL_BLOCK.asItem(), WORKPIECE, ItemWorkpiece::new);
         registry.register(NMItems.MEAT_STEEL, WORKPIECE, ItemWorkpiece::new);
         registry.register(NMItems.MEAT_STEEL_COMPONENT, WORKPIECE, ItemWorkpiece::new);
+        registry.register(NMItems.TRANSFORMING_TOOL_BASE, WORKPIECE, ItemWorkpiece::new);
         registry.register(Items.MINECART.asItem(), WORKPIECE, ItemWorkpiece::new);
     }
 }
