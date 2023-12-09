@@ -478,6 +478,14 @@
   "step.neepmeat.inject": "INJECT",
   "message.neepmeat.workpiece.title": "Workpiece",
 
+  "instruction.neepmeat.end.desc": "Stops the program.",
+  "instruction.neepmeat.restart.desc": "Jumps to instruction 0.",
+  "instruction.neepmeat.remove.desc": "Removes the last manufacture step from the item in workbench ARG1.",
+  "instruction.neepmeat.combine.desc": "Removes an item from storage ARG1 and combines it with the item in workbench ARG2.",
+  "instruction.neepmeat.move.desc": "Tries to move a stack of items from storage ARG1 into storage ARG2.",
+  "instruction.neepmeat.implant.desc": "Removes an item from storage ARG1 and surgically implants it into entity ARG2.",
+  "instruction.neepmeat.inject.desc": "Draws fluid from storage ARG1 and injects it into the item in workbench ARG2.",
+
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
   "container.neepmeat.stirling_engine": "Stirling Engine",

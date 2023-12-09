@@ -27,6 +27,7 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -128,7 +129,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         if (!tooltipText.isEmpty())
         {
-            renderTooltipText(matrices, tooltipText, mouseX, mouseY, 0);
+            renderTooltipText(matrices, tooltipText, true, mouseX, mouseY, 0);
         }
 
         MatrixStack ms = new MatrixStack();
@@ -295,21 +296,28 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         PLCHudRenderer.leave();
     }
 
-    private void renderTooltipText(MatrixStack matrices, List<Text> texts, int x, int y, int col)
+    public void renderTooltipText(MatrixStack matrices, List<Text> texts, boolean offset, int x, int y, int col)
     {
-        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), x, y, col);
+        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
     }
 
-    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, int col)
+    public void renderTooltipOrderedText(MatrixStack matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
     {
-        x += 12;
-        y -= 12;
+        renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
+    }
+
+    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
+    {
+        if (offset)
+        {
+            x += 12;
+            y -= 12;
+        }
         if (components.isEmpty())
         {
             return;
         }
 
-        int maxWidth = 0;
         int maxHeight = components.size() == 1 ? -2 : 0;
         for (TooltipComponent tooltipComponent : components)
         {
@@ -338,7 +346,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.setZOffset(400);
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
-//        int borderCol = Color.ofRGBA(255, 94, 33, 255).getColor();
         Screen.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
         drawHorizontalLine(matrices, x, x + maxWidth + 2, y, col);
         drawHorizontalLine(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
@@ -352,11 +359,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         int yAdvance = y + 2;
-        for (int index = 0; index < components.size(); ++index)
+
+        for (TooltipComponent tooltipComponent2 : components)
         {
-            TooltipComponent tooltipComponent2 = components.get(index);
             tooltipComponent2.drawText(this.textRenderer, x + 2, yAdvance, matrix4f, immediate);
-            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+            yAdvance += tooltipComponent2.getHeight();
         }
 
         immediate.draw();
@@ -419,7 +426,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
         {
-            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, PLCCols.BORDER.col);
+            renderTooltipText(matrices, List.of(getMessage()), true, mouseX, mouseY, PLCCols.BORDER.col);
         }
 
         @Override
