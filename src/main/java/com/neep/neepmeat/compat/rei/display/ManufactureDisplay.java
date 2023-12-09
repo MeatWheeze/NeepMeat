@@ -43,7 +43,7 @@ public class ManufactureDisplay implements Display
     @Override
     public List<EntryIngredient> getInputEntries()
     {
-        return List.of();
+        return List.of(EntryIngredients.of(base));
     }
 
     @Override

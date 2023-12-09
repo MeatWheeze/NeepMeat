@@ -96,7 +96,7 @@ public class Instructions
                 ResourceAmount<FluidVariant> found = StorageUtil.findExtractableContent(storage, transaction);
                 if (found != null)
                 {
-                    long extracted = storage.extract(found.resource(), Math.min(found.amount(), 64), transaction);
+                    long extracted = storage.extract(found.resource(), Math.min(found.amount(), amount), transaction);
                     if (extracted > 0)
                     {
                         var res = new ResourceAmount<>(found.resource(), extracted);

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.recipe;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
@@ -38,6 +39,8 @@ public class InjectStep implements ManufactureStep<ItemStack>
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
         this.fluid = FluidVariant.of(Registry.FLUID.get(id));
+        if (this.fluid.isBlank())
+            throw new JsonParseException("Unknown fluid " + id);
     }
 
     @Override

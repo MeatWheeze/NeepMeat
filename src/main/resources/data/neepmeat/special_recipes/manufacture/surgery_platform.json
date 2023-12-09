@@ -1,0 +1,28 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "minecraft:iron_block"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:control_unit"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:meat_steel_component"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:meat_steel_ingot"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:surgery_platform",
+    "amount": 1
+  }
+}

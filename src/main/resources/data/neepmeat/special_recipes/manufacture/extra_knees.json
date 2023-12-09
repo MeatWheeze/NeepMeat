@@ -6,19 +6,19 @@
   "steps":[
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:fluid_buffer"
+      "resource": "minecraft:bone"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "neepmeat:meat_steel_ingot"
+      "resource": "minecraft:bone"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "minecraft:iron_ingot"
+      "resource": "minecraft:bone"
     }
   ],
   "result": {
-    "resource": "meatweapons:assault_drill",
+    "resource": "neepmeat:extra_knees",
     "amount": 1
   }
 }

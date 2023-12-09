@@ -1,0 +1,32 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:motor_unit"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:control_unit"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:item_pipe"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:meat_steel_component"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:pipe_driver",
+    "amount": 1
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "minecraft:minecart"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:iron_block"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:glass"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "meatweapons:engine"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "meatweapons:engine"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "meatweapons:engine"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "meatweapons:engine"
+    }
+  ],
+  "result": {
+    "resource": "meatweapons:airtruck",
+    "amount": 1
+  }
+}
