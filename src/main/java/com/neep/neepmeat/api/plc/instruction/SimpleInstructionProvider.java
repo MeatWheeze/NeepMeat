@@ -1,6 +1,7 @@
 package com.neep.neepmeat.api.plc.instruction;
 
-import com.neep.neepmeat.plc.instruction.InstructionBuilder;
+import com.neep.neepmeat.plc.instruction.InstructionBuilderFactory;
+import com.neep.neepmeat.plc.instruction.SimpleInstructionBuilder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -10,14 +11,15 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class InstructionProviderImpl implements InstructionProvider
+public class SimpleInstructionProvider implements InstructionProvider
 {
     protected final int arguments;
     protected final Constructor constructor;
     protected final NbtConstructor nbtConstructor;
     protected final Text shortName;
+    protected InstructionBuilderFactory factory = SimpleInstructionBuilder::new;
 
-    public InstructionProviderImpl(Constructor constructor, NbtConstructor nbtConstructor, int arguments, Text shortName)
+    public SimpleInstructionProvider(Constructor constructor, NbtConstructor nbtConstructor, int arguments, Text shortName)
     {
         this.constructor = constructor;
         this.nbtConstructor = nbtConstructor;
@@ -25,9 +27,15 @@ public class InstructionProviderImpl implements InstructionProvider
         this.shortName = shortName;
     }
 
+    public SimpleInstructionProvider factory(InstructionBuilderFactory factory)
+    {
+        this.factory = factory;
+        return this;
+    }
+
     public InstructionBuilder start(ServerWorld world, Consumer<Instruction> finished)
     {
-        return new InstructionBuilder(this, world, finished);
+        return factory.create(this, world, finished);
     }
 
     public int argumentCount()
@@ -44,7 +52,7 @@ public class InstructionProviderImpl implements InstructionProvider
     @FunctionalInterface
     public interface Constructor
     {
-        Instruction create(Supplier<ServerWorld> world, List<Argument> arguments);
+        Instruction create(Supplier<World> world, List<Argument> arguments);
     }
 
     @FunctionalInterface
@@ -53,7 +61,7 @@ public class InstructionProviderImpl implements InstructionProvider
         Instruction create(Supplier<World> world, NbtCompound nbt);
     }
 
-    public Instruction create(ServerWorld world, List<Argument> arguments)
+    public Instruction create(World world, List<Argument> arguments)
     {
         return constructor.create(() -> world, arguments);
     }

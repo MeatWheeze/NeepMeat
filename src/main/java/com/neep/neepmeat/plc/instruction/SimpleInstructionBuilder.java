@@ -3,20 +3,21 @@ package com.neep.neepmeat.plc.instruction;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
-import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class InstructionBuilder
+public class SimpleInstructionBuilder implements InstructionBuilder
 {
     private final InstructionProvider provider;
     private final List<Argument> arguments = Lists.newArrayList();
-    private final ServerWorld world;
+    private final World world;
     private final Consumer<Instruction> finished;
 
-    public InstructionBuilder(InstructionProvider provider, ServerWorld world, Consumer<Instruction> finished)
+    public SimpleInstructionBuilder(InstructionProvider provider, World world, Consumer<Instruction> finished)
     {
         this.provider = provider;
         this.world = world;

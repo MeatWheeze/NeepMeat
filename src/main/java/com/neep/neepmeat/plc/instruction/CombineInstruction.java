@@ -43,9 +43,9 @@ public class CombineInstruction implements Instruction
 //    private ResourceAmount<ItemVariant> stored;
     private final GroupedRobotAction group;
 
-    public CombineInstruction(Supplier<ServerWorld> worldSupplier, List<Argument> arguments)
+    public CombineInstruction(Supplier<World> worldSupplier, List<Argument> arguments)
     {
-        this.worldSupplier = worldSupplier::get;
+        this.worldSupplier = worldSupplier;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
 

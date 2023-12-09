@@ -1,13 +1,12 @@
 package com.neep.neepmeat.plc.editor;
 
-import com.neep.neepmeat.api.plc.instruction.Argument;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.*;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
+import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
-import com.neep.neepmeat.plc.instruction.*;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +14,6 @@ public class ImmediateState implements PLCState
 {
     private final PLCBlockEntity parent;
 
-//    @Nullable private ImmediateInstruction instruction;
     @Nullable private InstructionBuilder instructionBuilder;
 
     public ImmediateState(PLCBlockEntity plc)
@@ -48,17 +46,16 @@ public class ImmediateState implements PLCState
     @Override
     public void argument(Argument argument)
     {
-//        if (instruction != null)
-//        {
-//            instruction.argument(argument, parent);
-//            if (instruction.isFinished())
-//            {
-//                instruction = null;
-//            }
-//        }
         if (instructionBuilder != null)
         {
-            instructionBuilder.argument(argument);
+            try
+            {
+                instructionBuilder.argument(argument);
+            }
+            catch (InstructionException e)
+            {
+                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getRobot().getController(), e.getMessage());
+            }
         }
     }
 

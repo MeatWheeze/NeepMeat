@@ -24,7 +24,7 @@ public class RemoveInstruction implements Instruction
     private final Supplier<World> world;
     private final Argument from;
 
-    public RemoveInstruction(Supplier<ServerWorld> world, List<Argument> arguments)
+    public RemoveInstruction(Supplier<World> world, List<Argument> arguments)
     {
         this.world = world::get;
         this.from = arguments.get(0);
