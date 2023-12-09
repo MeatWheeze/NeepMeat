@@ -3,6 +3,9 @@ package com.neep.neepmeat.client.screen.plc;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
@@ -10,10 +13,7 @@ import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
-import com.neep.neepmeat.api.plc.instruction.Argument;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.component.MutateInPlace;
-import com.neep.neepmeat.plc.recipe.ItemWorkpiece;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -27,8 +27,6 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
@@ -38,10 +36,8 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
-import software.bernie.geckolib3.core.util.Color;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -93,6 +89,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
         addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
         addDrawableChild(new ImmediateRecordButton(width - 4 * 17, 2, 16, 16, Text.of("")));
+
     }
 
     @Override
@@ -231,24 +228,14 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         for (int i = 0; i < 15; ++i)
         {
-//            client.world.addParticle(ParticleTypes.SMOKE, result.getPos().x, result.getPos().y, result.getPos().z, 0, 0, 0);
             client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0f));
         }
-//
-//        client.player.sendMessage(Text.of(String.valueOf(client.world.getBlockState(result.getBlockPos()))));
 
         return true;
     }
 
     public void updateInstruction(InstructionProvider provider)
     {
-//        if (mode == RecordMode.IMMEDIATE)
-//        {
-//            PLCSyncProgram.Client.switchOperationImmediate((ImmediateInstructionProvider) provider, plc);
-//        }
-//        else
-//        {
-//        }
         PLCSyncProgram.Client.switchOperation(provider, plc);
     }
 
@@ -432,7 +419,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
         {
-            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, borderCol());
+            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, PLCCols.BORDER.col);
         }
 
         @Override
@@ -520,13 +507,4 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    public static int borderCol()
-    {
-        return Color.ofRGBA(255, 94, 33, 255).getColor();
-    }
-
-    public static int selectedCol()
-    {
-        return Color.ofRGBA(255, 150, 33, 255).getColor();
-    }
 }

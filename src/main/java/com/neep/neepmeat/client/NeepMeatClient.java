@@ -11,6 +11,7 @@ import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;
+import com.neep.neepmeat.client.plc.PLCClient;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.*;
@@ -104,6 +105,7 @@ public class NeepMeatClient implements ClientModInitializer
         NMDimensionEffects.init();
 
         PLCHudRenderer.init();
+        PLCClient.init();
     }
 
     public static void registerRenderers()

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.api.plc.program;
 
-import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.Instruction;
 
 public interface MutableProgram extends PlcProgram
 {

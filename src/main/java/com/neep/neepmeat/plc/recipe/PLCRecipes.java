@@ -66,24 +66,6 @@ public class PLCRecipes
 
     public static void init()
     {
-        ItemTooltipCallback.EVENT.register((stack, context, lines) ->
-        {
-            if (ItemWorkpiece.has(stack))
-            {
-                NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
-                {
-                    var steps = workpiece.getSteps();
-                    if (!steps.isEmpty())
-                    {
-                        lines.add(Text.translatable("message.neepmeat.workpiece.title").formatted(Formatting.GOLD, Formatting.BOLD));
-                        for (var entry : steps)
-                        {
-                            entry.appendText(lines);
-                        }
-                    }
-                });
-            }
-        });
 
 //        MutateInPlace.ANY.registerFallback((world, pos, state, blockEntity, context) ->
 //        {

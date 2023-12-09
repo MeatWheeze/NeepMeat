@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.plc.instruction;
 
+import com.neep.neepmeat.plc.instruction.Argument;
 import net.minecraft.world.World;
 
 @FunctionalInterface

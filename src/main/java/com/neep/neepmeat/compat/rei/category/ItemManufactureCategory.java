@@ -1,8 +1,8 @@
 package com.neep.neepmeat.compat.rei.category;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
-import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.ManufactureDisplay;
@@ -26,7 +26,6 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import software.bernie.geckolib3.core.util.Color;
 
 import java.util.Collections;
 import java.util.List;
@@ -91,12 +90,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
 
     public static int borderCol()
     {
-        return PLCProgramScreen.borderCol();
-    }
-
-    public static int transparentCol()
-    {
-        return Color.ofRGBA(255, 94, 33, 100).getColor();
+        return PLCCols.BORDER.col;
     }
 
     static class LabelledSlot extends Widget
@@ -133,7 +127,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
             textRenderer.drawWithShadow(matrices, name, origin.x, origin.y, borderCol());
             slot.render(matrices, mouseX, mouseY, delta);
             GUIUtil.renderBorder(matrices, slotOrigin.x - 1, slotOrigin.y - 1, 17, 17, borderCol(), 0);
-            GUIUtil.renderBorder(matrices, slotOrigin.x, slotOrigin.y, 15, 15, transparentCol(), 0);
+            GUIUtil.renderBorder(matrices, slotOrigin.x, slotOrigin.y, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }
 
         @Override
@@ -229,7 +223,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
         {
             DrawableHelper.fill(matrices, bounds.x, bounds.y, bounds.x + bounds.width, bounds.y + bounds.height, 0xFF000000);
             GUIUtil.renderBorder(matrices, bounds.x, bounds.y, bounds.width, bounds.height, borderCol(), 0);
-            GUIUtil.renderBorder(matrices, bounds.x + 1, bounds.y + 1, bounds.width - 2, bounds.height - 2, transparentCol(), 0);
+            GUIUtil.renderBorder(matrices, bounds.x + 1, bounds.y + 1, bounds.width - 2, bounds.height - 2, PLCCols.TRANSPARENT.col, 0);
         }
 
         @Override

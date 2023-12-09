@@ -1,7 +1,10 @@
 package com.neep.neepmeat.api.plc.instruction;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionBuilderFactory;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -41,13 +44,19 @@ public class PredicatedInstructionBuilder implements InstructionBuilder
     @Override
     public boolean isComplete()
     {
-        return arguments.size() == provider.argumentCount();
+        return arguments.size() == provider.maxArguments();
     }
 
     @Override
     public Instruction build()
     {
         return provider.create(world, arguments);
+    }
+
+    @Override
+    public int argumentCount()
+    {
+        return arguments.size();
     }
 
     public static Builder create()
@@ -69,7 +78,7 @@ public class PredicatedInstructionBuilder implements InstructionBuilder
         @Override
         public InstructionBuilder create(InstructionProvider provider, World world, Consumer<Instruction> finished)
         {
-            if (provider.argumentCount() != predicates.size())
+            if (provider.maxArguments() != predicates.size())
                 throw new IllegalStateException(provider.getShortName() + ": Argument and predicate count do not match. Fix your code!");
 
             return new PredicatedInstructionBuilder(provider, world, finished, predicates);

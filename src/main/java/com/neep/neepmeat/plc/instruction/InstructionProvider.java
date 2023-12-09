@@ -1,5 +1,6 @@
-package com.neep.neepmeat.api.plc.instruction;
+package com.neep.neepmeat.plc.instruction;
 
+import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -13,7 +14,7 @@ public interface InstructionProvider
 {
     InstructionBuilder start(ServerWorld world, Consumer<Instruction> finished);
 
-    int argumentCount();
+    int maxArguments();
 
     Text getShortName();
 

@@ -3,7 +3,7 @@ package com.neep.neepmeat.plc;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
@@ -357,6 +357,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
                 case PROGRAM_COUNTER -> counter;
                 case EDIT_MODE -> state.getMode().ordinal();
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
+                case ARGUMENT -> state.getArgumentCount();
+                case MAX_ARGUMENTS -> state.getMaxArguments();
             };
         }
 
@@ -367,7 +369,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter = value;
                 case EDIT_MODE -> setMode(RecordMode.values()[MathHelper.clamp(value, 0, RecordMode.values().length)]);
-                case RUNNING -> {}
             }
         }
 
@@ -382,6 +383,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             PROGRAM_COUNTER,
             EDIT_MODE,
             RUNNING,
+            ARGUMENT,
+            MAX_ARGUMENTS,
         }
     }
 }
