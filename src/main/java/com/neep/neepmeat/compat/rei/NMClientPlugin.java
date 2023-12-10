@@ -94,7 +94,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new PressingCategory()
         );
 
-        registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
+        registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.PLC.asItem()));
 //        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
 //        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));

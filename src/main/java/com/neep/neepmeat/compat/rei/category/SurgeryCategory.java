@@ -37,7 +37,7 @@ public class SurgeryCategory implements DisplayCategory<SurgeryDisplay>
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER);
+        return EntryStacks.of(PLCBlocks.PLC);
     }
 
     @Override

@@ -4,8 +4,8 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.recipe.surgery.*;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -47,7 +47,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public TableControllerBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.PLC, pos, state);
+        this(PLCBlocks.PLC_ENTITY, pos, state);
     }
 
     int counter = 0;
@@ -135,7 +135,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         this.recipeProgress = 0;
         this.currentRecipe = recipe.getId();
-        Direction facing = getCachedState().get(TableControllerBlock.FACING);
+        Direction facing = getCachedState().get(PLCBlock.FACING);
 //        robot.setTarget(pos.add(0, 2, 0).offset(facing.getOpposite(), 2));
         nextIngredient(recipe);
     }
@@ -151,7 +151,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(recipe ->
         {
-            Direction facing = getCachedState().get(TableControllerBlock.FACING);
+            Direction facing = getCachedState().get(PLCBlock.FACING);
             try (Transaction transaction = Transaction.openOuter())
             {
                 recipe.ejectOutputs(context, transaction);
@@ -232,7 +232,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public Storage<ItemVariant> getStorage(Direction direction)
     {
-        Direction facing = getCachedState().get(TableControllerBlock.FACING);
+        Direction facing = getCachedState().get(PLCBlock.FACING);
         return direction == facing || direction == Direction.DOWN ? context.storage : null;
     }
 

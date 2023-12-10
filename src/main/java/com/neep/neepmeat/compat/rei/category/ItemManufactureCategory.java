@@ -85,7 +85,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER);
+        return EntryStacks.of(PLCBlocks.PLC);
     }
 
     public static int borderCol()

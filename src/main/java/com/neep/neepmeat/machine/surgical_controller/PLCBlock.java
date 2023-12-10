@@ -2,9 +2,8 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.client.plc.PLCHudRenderer;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -21,9 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TableControllerBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable
+public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider, DataCable
 {
-    public TableControllerBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public PLCBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
     }
@@ -63,13 +62,13 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PLC, (world1, pos, state1, blockEntity) -> blockEntity.tick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
+        return MiscUtils.checkType(type, PLCBlocks.PLC_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.PLC.instantiate(pos, state);
+        return PLCBlocks.PLC_ENTITY.instantiate(pos, state);
     }
 }

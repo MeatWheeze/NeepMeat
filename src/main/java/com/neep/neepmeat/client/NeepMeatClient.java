@@ -17,7 +17,6 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
-import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorRenderer;
@@ -42,7 +41,6 @@ import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.plc.PLCBlocks;
-import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
@@ -195,7 +193,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
-        BlockEntityRendererFactories.register(NMBlockEntities.PLC, PLCRenderer::new);
+        BlockEntityRendererFactories.register(PLCBlocks.PLC_ENTITY, PLCRenderer::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
 

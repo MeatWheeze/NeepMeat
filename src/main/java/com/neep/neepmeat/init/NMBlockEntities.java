@@ -155,7 +155,6 @@ public class NMBlockEntities
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
     public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
     public static BlockEntityType<PylonBlockEntity> PYLON;
-    public static BlockEntityType<PLCBlockEntity> PLC;
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
     public static BlockEntityType<MincerBlockEnity> MINCER;
     public static BlockEntityType<HomogeniserBlockEntity> HOMOGENISER;
@@ -284,7 +283,6 @@ public class NMBlockEntities
         SYNTHESISER = register("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
         FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);
 
-        PLC = register("plc", (pos, state) -> new PLCBlockEntity(PLC, pos, state), PLCBlocks.SURGERY_CONTROLLER);
 //        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, PLC);
 //        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, PLC);
 
