@@ -3,7 +3,6 @@ package com.neep.neepmeat.compat.rei.category;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.TransformingToolDisplay;
@@ -20,15 +19,14 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 import java.util.List;
 
@@ -108,7 +106,7 @@ public class TransformingToolCategory implements DisplayCategory<TransformingToo
 
         public ToolWidget(Point origin, int width, Identifier texture)
         {
-            var step = new CombineStep(ItemStack.EMPTY);
+            var step = new CombineStep(ItemVariant.blank());
             this.origin = origin;
             this.name = step.getName();
             this.width = width;

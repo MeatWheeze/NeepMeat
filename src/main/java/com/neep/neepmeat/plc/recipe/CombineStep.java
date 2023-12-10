@@ -17,24 +17,27 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
 import java.util.List;
+import java.util.WeakHashMap;
 
 public class CombineStep implements ManufactureStep<ItemStack>
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "combine");
 
-    private final ItemVariant item;
+    // Instance cache to save memory
+    private static final WeakHashMap<ItemVariant, CombineStep> CACHE = new WeakHashMap<>();
 
-    public CombineStep(ItemStack stack)
+    synchronized public static CombineStep get(ItemStack stack)
     {
-        this.item = ItemVariant.of(stack);
+        return CACHE.computeIfAbsent(ItemVariant.of(stack), CombineStep::new);
     }
 
-    public CombineStep(NbtCompound nbt)
+    synchronized public static CombineStep get(NbtCompound nbt)
     {
-        this.item = ItemVariant.fromNbt(nbt.getCompound("variant"));
+        ItemVariant item = ItemVariant.fromNbt(nbt.getCompound("variant"));
+        return CACHE.computeIfAbsent(item, CombineStep::new);
     }
 
-    public CombineStep(JsonObject jsonObject)
+    synchronized public static CombineStep get(JsonObject jsonObject)
     {
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
@@ -43,7 +46,14 @@ public class CombineStep implements ManufactureStep<ItemStack>
         if (item == Items.AIR)
             throw new JsonParseException("Unknown item " + id);
 
-        this.item = ItemVariant.of(item);
+        return CACHE.computeIfAbsent(ItemVariant.of(item), CombineStep::new);
+    }
+
+    private final ItemVariant item;
+
+    public CombineStep(ItemVariant variant)
+    {
+        this.item = variant;
     }
 
     @Override
