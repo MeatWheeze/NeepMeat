@@ -31,6 +31,7 @@ public class InstructionAttributes
         register(Instructions.MOVE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".move.desc")));
         register(Instructions.IMPLANT, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".implant.desc")));
         register(Instructions.INJECT, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".inject.desc")));
+        register(Instructions.WAIT_REDSTONE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".wait_redstone.desc")));
     }
 
     public record InstructionTooltip(Text description)

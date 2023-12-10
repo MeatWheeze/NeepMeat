@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "neepmeat:block/redstone_interface_top",
+    "side": "neepmeat:block/redstone_interface"
+  }
+}
