@@ -21,15 +21,13 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_ACTIVE;
+import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_DOCKING;
+
 public class SurgicalRobot implements NbtSerialisable
 {
-    private static final byte STATE_IDLE = 0;
-    private static final byte STATE_LAUNCHING = 1;
-    private static final byte STATE_ACTIVE = 2;
-    private static final byte STATE_RETURNING = 3;
-    private static final byte STATE_DOCKING = 4;
     private final PLCBlockEntity parent;
-    private byte movementState;
+    private MovementState movementState;
 
     public double cameraX;
     public double cameraY;
@@ -40,10 +38,15 @@ public class SurgicalRobot implements NbtSerialisable
     public double clientX;
     public double clientY;
     public double clientZ;
+    public float clientYaw;
 
     private double vx;
     private double vy;
     private double vz;
+
+    public double prevX;
+    public double prevY;
+    public double prevZ;
 
     @Nullable private Vec3d targetPos;
     @Nullable private BlockPos target;
@@ -129,14 +132,14 @@ public class SurgicalRobot implements NbtSerialisable
 
     protected void move()
     {
-        if (movementState == STATE_IDLE)
+        if (movementState == MovementState.STATE_IDLE)
         {
             if (!Objects.equals(target, basePos))
             {
-                movementState = STATE_LAUNCHING;
+                movementState = MovementState.STATE_LAUNCHING;
             }
         }
-        else if (movementState == STATE_LAUNCHING)
+        else if (movementState == MovementState.STATE_LAUNCHING)
         {
             if (moveTo(attachPos)) movementState = STATE_ACTIVE;
         }
@@ -147,7 +150,7 @@ public class SurgicalRobot implements NbtSerialisable
                 moveTo(targetPos);
             }
         }
-        else if (movementState == STATE_RETURNING)
+        else if (movementState == MovementState.STATE_RETURNING)
         {
             if (moveTo(attachPos))
             {
@@ -156,7 +159,7 @@ public class SurgicalRobot implements NbtSerialisable
         }
         else if (movementState == STATE_DOCKING)
         {
-            if (moveTo(dockingPos)) movementState = STATE_IDLE;
+            if (moveTo(dockingPos)) movementState = MovementState.STATE_IDLE;
         }
     }
 
@@ -167,6 +170,7 @@ public class SurgicalRobot implements NbtSerialisable
             double dx = (toPos.x - x);
             double dy = (toPos.y - y);
             double dz = (toPos.z - z);
+            this.yaw = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90;
             double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
             double vx = dx;
             double vy = dy;
@@ -244,7 +248,7 @@ public class SurgicalRobot implements NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.putByte(NBT_MOVEMENT_STATE, movementState);
+        nbt.putInt(NBT_MOVEMENT_STATE, movementState.ordinal());
         nbt.putDouble("rx", x);
         nbt.putDouble("ry", y);
         nbt.putDouble("rz", z);
@@ -266,13 +270,14 @@ public class SurgicalRobot implements NbtSerialisable
     @Override
     public void readNbt(NbtCompound nbt)
     {
-        this.movementState = nbt.getByte(NBT_MOVEMENT_STATE);
+        this.movementState = MovementState.values()[nbt.getInt(NBT_MOVEMENT_STATE)];
         this.x = nbt.getDouble("rx");
         this.y = nbt.getDouble("ry");
         this.z = nbt.getDouble("rz");
 
         this.pitch = nbt.getFloat("pitch");
         this.yaw = nbt.getFloat("yaw");
+        this.clientYaw = yaw;
 
         if (nbt.contains("stored"))
         {
@@ -283,20 +288,6 @@ public class SurgicalRobot implements NbtSerialisable
             );
         }
     }
-
-//    public void writeBuf(PacketByteBuf buf)
-//    {
-//        buf.writeDouble(x);
-//        buf.writeDouble(y);
-//        buf.writeDouble(z);
-//    }
-//
-//    public void readBuf(PacketByteBuf buf)
-//    {
-//        this.x = buf.readDouble();
-//        this.y = buf.readDouble();
-//        this.z = buf.readDouble();
-//    }
 
     public boolean isActive()
     {
@@ -310,7 +301,7 @@ public class SurgicalRobot implements NbtSerialisable
 
     public void returnToBase()
     {
-        movementState = STATE_RETURNING;
+        movementState = MovementState.STATE_RETURNING;
         setTarget(basePos);
     }
 
@@ -370,6 +361,15 @@ public class SurgicalRobot implements NbtSerialisable
 
         PLCRobotC2S.send(parent, serverWorld);
         moved = false;
+    }
+
+    public enum MovementState
+    {
+        STATE_IDLE,
+        STATE_LAUNCHING,
+        STATE_ACTIVE,
+        STATE_RETURNING,
+        STATE_DOCKING
     }
 
     @Environment(value = EnvType.CLIENT)
