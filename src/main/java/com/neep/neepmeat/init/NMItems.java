@@ -35,7 +35,7 @@ public class NMItems
     public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel_ingot", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.BLOOD_BUBBLE));
     public static Item MEAT_STEEL_COMPONENT = new BaseCraftingItem("meat_steel_component", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // MEAT
     public static Item MEAT_SCRAP = new BaseCraftingItem("meat_scrap", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_SCRAP));
@@ -47,10 +47,10 @@ public class NMItems
     // Organism Parts
 //    public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 //    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 //    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ENLIGHTENED_BRAIN = new BaseCraftingItem("enlightened_brain", 2, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.ENLIGHTENED_BRAIN));
 
 //    public static Item DIVINE_ORGAN = new BaseCraftingItem("divine_organ", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
