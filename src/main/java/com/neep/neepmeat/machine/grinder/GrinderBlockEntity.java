@@ -24,6 +24,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
@@ -224,9 +225,9 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         float intensity = progressIncrement / maxIncrement;
 
         // Particles will be more frequent at higher power. Clamp above 1 to prevent / 0.
-        int tickInterval = (int) Math.max(1, 1 / (intensity * 2));
+        int tickInterval = (int) MathHelper.clamp(1, 1 / (intensity * 2), 100);
 
-        if (world.getTime() % tickInterval == 0
+        if ((world.getTime() % tickInterval) == 0
                 && currentRecipe != null
                 && !storage.inputStorage.isEmpty()
                 && progressIncrement > 0)

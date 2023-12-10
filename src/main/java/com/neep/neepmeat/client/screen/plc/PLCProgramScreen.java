@@ -336,6 +336,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public void removed()
     {
         super.removed();
+        if (client.player != null)
+            handler.close(client.player);
+
         PLCHudRenderer.leave();
     }
 

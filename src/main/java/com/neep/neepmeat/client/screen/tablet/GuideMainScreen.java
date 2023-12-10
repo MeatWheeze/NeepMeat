@@ -14,7 +14,6 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -29,9 +28,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public class GuideMainScreen extends Screen implements ScreenHandlerProvider<GuideScreenHandler>, GuideScreen
+public class GuideMainScreen extends Screen implements GuideScreen
 {
     public static final Identifier LOGO_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/neep.png");
+
+    private int x;
+    private int y;
 
     protected int contentWidth = 340;
     protected int contentHeight = 280;
@@ -42,19 +44,16 @@ public class GuideMainScreen extends Screen implements ScreenHandlerProvider<Gui
     protected ContentPane leftPane;
     protected ContentPane rightPane;
 
-    private final GuideScreenHandler handler;
+//    private final GuideScreenHandler handler;
 
     // Current location within the entry tree
     protected final Deque<GuideNode> path = new LinkedList<>();
-    private int x;
-    private int y;
-    private int backgroundWidth;
-    private int backgroundHeight;
 
-    public GuideMainScreen(GuideScreenHandler handler, PlayerInventory inventory, Text title)
+
+    public GuideMainScreen()
     {
-        super(title);
-        this.handler = handler;
+        super(Text.empty());
+//        this.handler = handler;
         this.leftPane = new GuideListPane(this);
         this.rightPane = new GuideArticlePane(this, Article.EMPTY);
         this.start = true;
@@ -171,8 +170,8 @@ public class GuideMainScreen extends Screen implements ScreenHandlerProvider<Gui
         contentHeight = (int) (1080 * 0.2);
         this.x = (this.width - contentWidth) / 2;
         this.y = (this.height - contentHeight) / 2;
-        this.backgroundWidth = contentWidth;
-        this.backgroundHeight = contentHeight;
+        int backgroundWidth = contentWidth;
+        int backgroundHeight = contentHeight;
 
         float ratio = 0.4f;
         int leftWidth = (int) (ratio * contentWidth);
@@ -309,16 +308,30 @@ public class GuideMainScreen extends Screen implements ScreenHandlerProvider<Gui
         this.itemRenderer.zOffset = f;
     }
 
+//    @Override
+//    public GuideScreenHandler getScreenHandler()
+//    {
+//        return handler;
+//    }
+
     @Override
-    public GuideScreenHandler getScreenHandler()
+    public boolean shouldPause()
     {
-        return handler;
+        return false;
+    }
+
+    @Override
+    public void removed()
+    {
+//        if (client.player == null)
+//            return;
+
+//        handler.close(this.client.player);
     }
 
     @Override
     public void close()
     {
-        client.player.closeHandledScreen();
         super.close();
     }
 }

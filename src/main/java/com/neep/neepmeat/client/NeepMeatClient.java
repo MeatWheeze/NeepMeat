@@ -220,7 +220,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.ALLOY_KILN, AlloyKilnScreen::new);
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
-        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideMainScreen::new);
+//        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideMainScreen::new);
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
 //        HandledScreens.Provider<PLCScreenHandler, PLCProgramScreen> p =
         HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
