@@ -13,14 +13,14 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
-public class ImmediateState implements PLCState
+public class ShellState implements PLCState
 {
     private final PLCBlockEntity parent;
 
     @Nullable private InstructionBuilder instructionBuilder;
     @Nullable private InstructionProvider provider;
 
-    public ImmediateState(PLCBlockEntity plc)
+    public ShellState(PLCBlockEntity plc)
     {
         this.parent = plc;
     }
@@ -30,10 +30,6 @@ public class ImmediateState implements PLCState
     {
         instructionBuilder = provider.start((ServerWorld) parent.getWorld(), this::emitInstruction);
         this.provider = provider;
-//        if (provider instanceof ImmediateInstructionProvider immediate)
-//        {
-//            instruction = immediate.createImmediate(parent::getWorld);
-//        }
     }
 
     private void emitInstruction(Instruction instruction)

@@ -8,9 +8,8 @@ import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
-import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
-import com.neep.neepmeat.plc.editor.ImmediateState;
+import com.neep.neepmeat.plc.editor.ShellState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
@@ -50,7 +49,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     protected boolean overrideController;
 
     protected final ProgramEditorState editor = new ProgramEditorState(this);
-    protected final ImmediateState immediate = new ImmediateState(this);
+    protected final ShellState shell = new ShellState(this);
     private PLCState state;
 
     private Error error;
@@ -61,7 +60,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     {
         super(type, pos, state);
 
-        this.state = immediate;
+        this.state = shell;
         this.programSupplier = () -> null;
     }
 
@@ -300,7 +299,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     {
         switch (value)
         {
-            case IMMEDIATE -> state = immediate;
+            case IMMEDIATE -> state = shell;
             case RECORD -> state = editor;
         }
         markDirty();
