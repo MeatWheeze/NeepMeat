@@ -38,6 +38,7 @@ public class WaitRedstoneInstruction implements Instruction
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        nbt.put("target", target.toNbt());
         return nbt;
     }
 
