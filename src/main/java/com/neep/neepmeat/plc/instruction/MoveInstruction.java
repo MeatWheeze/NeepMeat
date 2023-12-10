@@ -82,12 +82,20 @@ public class MoveInstruction implements Instruction
         plc.addRobotAction(group, this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+        plc.getRobot().spawnItem(stored);
+        group.end(plc);
+        stored = null;
+    }
+
     private void takeFirst(PLC plc)
     {
         stored = Instructions.takeItem(from, world, 64);
         if (stored == null)
         {
-            plc.raiseError(new PLC.Error("No extractable resource found at "));
+            plc.raiseError(new PLC.Error("No extractable resource found at " + from.pos() + ", " + from.face()));
         }
     }
 
@@ -118,7 +126,7 @@ public class MoveInstruction implements Instruction
 
     private void finish(PLC plc)
     {
-        plc.advanceCounter(1);
+        plc.advanceCounter();
     }
 
     @Override

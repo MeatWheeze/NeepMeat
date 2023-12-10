@@ -76,6 +76,13 @@ public class CombineInstruction implements Instruction
         plc.addRobotAction(group, this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+        plc.getRobot().dumpStored();
+        group.end(plc);
+    }
+
     private void takeFirst(PLC plc)
     {
         var stored = takeItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));

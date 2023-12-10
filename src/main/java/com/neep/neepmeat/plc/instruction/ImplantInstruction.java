@@ -102,6 +102,14 @@ public class ImplantInstruction implements Instruction
         plc.addRobotAction(group, this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+        plc.getRobot().spawnItem(stored);
+        group.end(plc);
+        stored = null;
+    }
+
     private void takeFrom(PLC plc)
     {
         var takenAmount = Instructions.takeItem(from, world, 1);

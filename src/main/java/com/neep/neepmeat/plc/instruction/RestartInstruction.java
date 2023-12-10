@@ -33,6 +33,12 @@ public class RestartInstruction implements Instruction
     }
 
     @Override
+    public void cancel(PLC plc)
+    {
+
+    }
+
+    @Override
     public InstructionProvider getProvider()
     {
         return Instructions.GOTO_START;

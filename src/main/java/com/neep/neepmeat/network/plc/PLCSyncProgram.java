@@ -79,7 +79,7 @@ public class PLCSyncProgram
     private static void applyStop(PacketByteBuf buf, World world)
     {
         PLCBlockEntity plc = getPlc(buf, world);
-        plc.stop();
+        plc.hardStop();
     }
 
     private static void applyPause(PacketByteBuf buf, World world)

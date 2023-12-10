@@ -14,6 +14,8 @@ public interface Instruction extends NbtSerialisable
 
     void start(PLC plc);
 
+    void cancel(PLC plc);
+
     InstructionProvider getProvider();
 
     Instruction EMPTY = new EmptyInstruction();
@@ -44,6 +46,12 @@ public interface Instruction extends NbtSerialisable
         public void start(PLC plc)
         {
             plc.setCounter(-1);
+        }
+
+        @Override
+        public void cancel(PLC plc)
+        {
+
         }
 
         @Override
