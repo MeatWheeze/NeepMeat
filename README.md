@@ -2,10 +2,6 @@
 
 NeepMeat is a Minecraft mod that adds various forms of darkly aesthetic automation.
 
-For anyone who wants to look at my ~spaghetti~ codebase:
-
-Lasciate ogne speranza, voi ch'intrate!
-
 ## Features
 
 - **Fluid pipes**: Complete with tanks, valves and pumps.
@@ -24,9 +20,11 @@ Lasciate ogne speranza, voi ch'intrate!
 
 ## Potential Future Features
 
-- Automatic farming
-- Multiblock tank
-- In-game guide tablet
-- Advanced item and fluid logistics
-- Programmable automation controller
+- [done] In-game guide tablet
+- [sort of] Advanced item and fluid logistics
+- [done] Programmable automation controller
 - More eldritchness
+
+For more details see the Modrinth page: https://modrinth.com/mod/neepmeat
+
+For anyone who wants to look at my ~spaghetti~ codebase: Lasciate ogne speranza, voi ch'intrate! If you're getting into modding and want examples, please regard everything I've done with extreme suspicion.

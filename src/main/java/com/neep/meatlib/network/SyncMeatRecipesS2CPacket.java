@@ -54,10 +54,10 @@ public class SyncMeatRecipesS2CPacket
                 Collection<MeatRecipe<?>> recipes = buf.readList(SyncMeatRecipesS2CPacket::readRecipe);
 
                 // We do not need to set the recipes on an integrated server
-                if (client.getServer() != null)
-                {
-                    return;
-                }
+//                if (client.getServer() != null)
+//                {
+//                    return;
+//                }
 
                 MeatRecipeManager.getInstance().setRecipes(recipes);
             });

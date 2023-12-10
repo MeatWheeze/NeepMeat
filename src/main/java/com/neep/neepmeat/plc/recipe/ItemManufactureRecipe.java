@@ -14,13 +14,12 @@ import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 
-import java.util.Collections;
 import java.util.List;
 
 public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<ItemStack>>
@@ -144,6 +143,30 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
             return steps;
         }
 
+        public static void writeSteps(List<ManufactureStep<?>> steps, PacketByteBuf buf)
+        {
+            buf.writeInt(steps.size());
+            for (var step : steps)
+            {
+                buf.writeNbt(step.toNbt());
+                buf.writeRegistryValue(ManufactureStep.REGISTRY, ManufactureStep.REGISTRY.get(step.getId()));
+            }
+        }
+
+        public static List<ManufactureStep<?>> readSteps(PacketByteBuf buf)
+        {
+            int size = buf.readInt();
+            List<ManufactureStep<?>> steps = Lists.newArrayList();
+            for (int i = 0; i < size; ++i)
+            {
+                NbtCompound data = buf.readNbt();
+
+                var step = buf.readRegistryValue(ManufactureStep.REGISTRY).create(data);
+                steps.add(step);
+            }
+            return steps;
+        }
+
         @Override
         public ItemManufactureRecipe read(Identifier id, JsonObject json)
         {
@@ -166,14 +189,22 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
         @Override
         public ItemManufactureRecipe read(Identifier id, PacketByteBuf buf)
         {
-            // TODO: Implement
+            Item base = buf.readRegistryValue(Registry.ITEM);
+
+            List<ManufactureStep<?>> steps = readSteps(buf);
+
             RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
-            return new ItemManufactureRecipe(id, Items.DIRT, output, Collections.emptyList());
+
+            return new ItemManufactureRecipe(id, base, output, steps);
         }
 
         @Override
         public void write(PacketByteBuf buf, ItemManufactureRecipe recipe)
         {
+            buf.writeRegistryValue(Registry.ITEM, recipe.base);
+
+            writeSteps(recipe.getSteps(), buf);
+
             recipe.output.write(Registry.ITEM, buf);
         }
     }
