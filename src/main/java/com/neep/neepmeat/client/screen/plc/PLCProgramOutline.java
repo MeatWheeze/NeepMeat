@@ -3,6 +3,7 @@ package com.neep.neepmeat.client.screen.plc;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
@@ -10,7 +11,6 @@ import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -34,8 +34,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 {
     private final PLCProgramScreen parent;
     private final ProgramEditorState editor;
-
-    private int selectionIndex = -1;
 
     private final List<InstructionWidget> instructions = Lists.newArrayList();
 
@@ -83,7 +81,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         for (int id = 0; id < program.size(); ++id)
         {
             Instruction instruction = program.get(id);
-            var widget = new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id, selectionIndex == id);
+            var widget = new InstructionWidget(instruction.getProvider(), x + 2, y + 2 + count * entryStride, elementWidth - 4, entryHeight, id);
             addDrawableChild(widget);
             instructions.add(widget);
             count++;
@@ -92,14 +90,12 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     protected void onInstructionSelect(InstructionWidget widget)
     {
-        this.selectionIndex = widget.id;
-        for (var child : children())
-        {
-            if (child instanceof InstructionWidget instructionWidget && instructionWidget !=widget)
-            {
-                instructionWidget.selected = false;
-            }
-        }
+        parent.getScreenHandler().setSelectedInstruction(widget.id);
+    }
+
+    private int getSelected()
+    {
+        return parent.getScreenHandler().getSelectedInstruction();
     }
 
     @Override
@@ -107,9 +103,9 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     {
         if (keyCode == GLFW.GLFW_KEY_BACKSPACE || keyCode == GLFW.GLFW_KEY_DELETE)
         {
-            if (selectionIndex != -1)
+            if (getSelected() != -1)
             {
-                PLCSyncProgram.Client.sendDelete(selectionIndex, parent.getScreenHandler().getPlc());
+                PLCSyncProgram.Client.sendDelete(getSelected(), parent.getScreenHandler().getPlc());
                 return true;
             }
         }
@@ -157,8 +153,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         protected final int x, y;
         protected final int width, height;
         protected final int id;
-        protected boolean selected;
-        public InstructionWidget(InstructionProvider instructionProvider, int x, int y, int width, int height, int id, boolean selected)
+        public InstructionWidget(InstructionProvider instructionProvider, int x, int y, int width, int height, int id)
         {
             this.instructionProvider = instructionProvider;
             this.x = x;
@@ -166,7 +161,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             this.width = width;
             this.height = height;
             this.id = id;
-            this.selected = selected;
         }
 
         protected boolean isMouseInside(double mouseX, double mouseY)
@@ -180,7 +174,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             boolean valid =  mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
             if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
             {
-                selected = true;
                 client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT_BLOCK, 1.0f));
                 onInstructionSelect(this);
                 return true;
@@ -188,12 +181,18 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             return false;
         }
 
+        private boolean selected()
+        {
+            return id == getSelected();
+        }
+
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             boolean programCounterHere = parent.getScreenHandler().getCounter() == id;
             int col = Color.ofRGBA(255, 94, 33, 255).getColor();
-            int borderCol = Color.ofRGBA(255, selected ? 150 : 94, 33, 255).getColor();
+//            int borderCol = Color.ofRGBA(255, selected() ? 150 : 94, 33, 255).getColor();
+            int borderCol = !selected() ? PLCCols.BORDER.col :PLCCols.SELECTED.col;
 
             Text lineNumber = Text.literal(String.valueOf(id));
 
@@ -218,7 +217,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         @Override
         public SelectionType getType()
         {
-            return selected ? SelectionType.FOCUSED : SelectionType.NONE;
+            return selected() ? SelectionType.FOCUSED : SelectionType.NONE;
         }
 
         @Override

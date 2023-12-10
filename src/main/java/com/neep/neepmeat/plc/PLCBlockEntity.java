@@ -373,6 +373,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
                 case ARGUMENT -> state.getArgumentCount();
                 case MAX_ARGUMENTS -> state.getMaxArguments();
+                case SELECTED_INSTRUCTION -> editor.getSelected();
             };
         }
 
@@ -383,6 +384,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter = value;
                 case EDIT_MODE -> setMode(RecordMode.values()[MathHelper.clamp(value, 0, RecordMode.values().length)]);
+                case SELECTED_INSTRUCTION -> editor.setSelected(value);
             }
         }
 
@@ -399,6 +401,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             RUNNING,
             ARGUMENT,
             MAX_ARGUMENTS,
+            SELECTED_INSTRUCTION,
         }
     }
 }
