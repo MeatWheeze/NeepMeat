@@ -7,6 +7,7 @@ import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.player.implant.ImplantInstaller;
+import com.neep.neepmeat.player.implant.ImplantRegistry;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.Entity;
@@ -141,13 +142,23 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
         @Override
         public EntityManufactureRecipe read(Identifier id, PacketByteBuf buf)
         {
-            return new EntityManufactureRecipe(id, EntityType.COW, List.of(), entity -> { });
+            EntityType<?> base = buf.readRegistryValue(Registry.ENTITY_TYPE);
+
+            List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(buf);
+
+            ImplantInstaller implant = buf.readRegistryValue(ImplantInstaller.REGISTRY);
+
+            return new EntityManufactureRecipe(id, base, steps, implant);
         }
 
         @Override
         public void write(PacketByteBuf buf, EntityManufactureRecipe recipe)
         {
+            buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.base);
 
+            ItemManufactureRecipe.Serialiser.writeSteps(recipe.getSteps(), buf);
+
+            buf.writeRegistryValue(ImplantInstaller.REGISTRY, recipe.implant);
         }
     }
 }
