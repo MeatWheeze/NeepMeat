@@ -21,6 +21,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/agitator_blades");
     public static Identifier MIXER_AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/mixer/agitator");
     public static Identifier INTEGRATOR_BASE = new Identifier(NeepMeat.NAMESPACE, "block/integrator/base");
+    public static Identifier ADVANCED_INTEGRATOR_MEAT = new Identifier(NeepMeat.NAMESPACE, "block/advanced_integrator/meat");
     public static Identifier STIRLING_ENGINE_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/stirling_engine/rotor");
     public static Identifier TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/trommel/mesh");
     public static Identifier SMALL_TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/small_trommel/mesh");
@@ -37,6 +38,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier ROBOTIC_ARM_SEGMENT_1 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_1");
     public static Identifier ROBOTIC_ARM_SEGMENT_2 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_2");
 
+
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
     {
@@ -50,6 +52,7 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(AGITATOR_BLADES);
         out.accept(MIXER_AGITATOR_BLADES);
         out.accept(INTEGRATOR_BASE);
+        out.accept(ADVANCED_INTEGRATOR_MEAT);
         out.accept(STIRLING_ENGINE_ROTOR);
         out.accept(TROMMEL_MESH);
         out.accept(SMALL_TROMMEL_MESH);

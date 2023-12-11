@@ -1,13 +1,11 @@
 package com.neep.neepmeat.api.big_block;
 
-import blue.endless.jankson.annotation.Nullable;
 import com.neep.meatlib.block.MeatlibBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3i;
@@ -16,25 +14,29 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 import net.minecraft.world.WorldView;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class BigBlock extends Block implements MeatlibBlock
 {
     private final String registryName;
     private final Structure structureBlock;
-    private final BlockEntityType<? extends BigBlockStructureBlockEntity> structureEntity;
 
     public BigBlock(String registryName, Settings settings)
     {
         super(settings);
         this.registryName = registryName;
-        Pair<Structure, BlockEntityType<? extends BigBlockStructureBlockEntity>> pair = createStructure();
-        this.structureBlock = pair.getLeft();
-        this.structureEntity = pair.getRight();
+        this.structureBlock = createStructure();
     }
 
-    protected abstract Pair<Structure, BlockEntityType<? extends BigBlockStructureBlockEntity>> createStructure();
-
+    protected abstract Structure createStructure();
     protected abstract BlockVolume getVolume();
+
+    public Structure getStructure()
+    {
+        return structureBlock;
+    }
+
+    protected abstract BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType();
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
@@ -143,11 +145,11 @@ public abstract class BigBlock extends Block implements MeatlibBlock
             return 1;
         }
 
-        @org.jetbrains.annotations.Nullable
+        @Nullable
         @Override
         public BigBlockStructureBlockEntity createBlockEntity(BlockPos pos, BlockState state)
         {
-            return new BigBlockStructureBlockEntity(structureEntity, pos, state);
+            return getBlockEntityType().instantiate(pos, state);
         }
     }
 }

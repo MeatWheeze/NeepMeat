@@ -1,8 +1,8 @@
-package com.neep.neepmeat.machine.centrifuge;
+package com.neep.neepmeat.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
-import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
@@ -11,20 +11,22 @@ import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import org.jetbrains.annotations.Nullable;
 
-public class CentrifugeBlock extends BigBlock
+public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProvider
 {
     public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 0);
     public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
 
-    public CentrifugeBlock(String registryName, Settings settings)
+    public AdvancedIntegratorBlock(String registryName, Settings settings)
     {
         super(registryName, settings);
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
@@ -33,16 +35,13 @@ public class CentrifugeBlock extends BigBlock
     @Override
     protected Structure createStructure()
     {
-//        Structure structure = BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
-//        BlockEntityType<BigBlockStructureBlockEntity> type = NMBlockEntities.register(getRegistryName(), structure::createBlockEntity, structure);
-//        return new Pair<>(structure, type);
-        return null;
+        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    protected BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType()
     {
-        return SHAPE;
+        return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE;
     }
 
     @Override
@@ -52,8 +51,15 @@ public class CentrifugeBlock extends BigBlock
     }
 
     @Override
-    protected BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType()
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return null;
+        return SHAPE;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return NMBlockEntities.ADVANCED_INTEGRATOR.instantiate(pos, state);
     }
 }
