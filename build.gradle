@@ -53,6 +53,7 @@ dependencies {
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:${project.cca_version}")
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-entity:${project.cca_version}")
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}")
+	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}")
 
 	// REI
 	modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"

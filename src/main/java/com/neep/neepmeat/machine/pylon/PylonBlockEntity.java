@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.pylon;
 
+import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.client.hud.HUDOverlays;
@@ -19,13 +20,13 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 
+import java.util.Map;
 import java.util.Random;
 
 public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     public static final float RUNNING_SPEED = 16;
 
-    private boolean hasSoundInstance = false;
     protected final int radius = 7;
     public float angle;
     private float speed;
@@ -42,25 +43,8 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
         this(NMBlockEntities.PYLON, pos, state);
     }
 
-    @Override
-    public void setWorld(World world)
-    {
-        super.setWorld(world);
-        if (world.isClient() && !hasSoundInstance)
-        {
-            // This somehow works on servers.
-            Client.spawnSound(this, pos);
-            this.hasSoundInstance = true;
-        }
-    }
-
     public static void serverTick(World world, BlockPos pos, BlockState state, PylonBlockEntity be)
     {
-//        if (!be.hasSoundInstance)
-//        {
-//            BlockSoundPacket.send((ServerWorld) world, pos);
-//            be.hasSoundInstance = true;
-//        }
     }
 
     public boolean isRunning()
@@ -80,6 +64,9 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
                 Client.causeVignette();
             });
         }
+
+        Client client = Client.MAP.computeIfAbsent(this, pylon -> new Client(this, pos));
+        client.tick();
     }
 
     @Override
@@ -148,14 +135,41 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     @Environment(value=EnvType.CLIENT)
     private static class Client
     {
-        protected static void spawnSound(PylonBlockEntity be, BlockPos pos)
+        static Map<PylonBlockEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
+
+        private final PylonBlockEntity be;
+        private final BlockPos pos;
+        private final MinecraftClient client = MinecraftClient.getInstance();
+        private PylonSoundInstance mainSound;
+        private PylonSoundInstance runningSound;
+
+        Client(PylonBlockEntity be, BlockPos pos)
         {
-            MinecraftClient.getInstance().getSoundManager().play(new PylonSoundInstance(be, pos, NMSounds.PYLON_START, NMSounds.AIRTRUCK_RUNNING, SoundCategory.BLOCKS));
+            this.be = be;
+            this.pos = pos;
+            this.mainSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_START, SoundCategory.BLOCKS);
+            this.runningSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_ACTIVE, SoundCategory.BLOCKS);
         }
 
         protected static void causeVignette()
         {
             HUDOverlays.startPylonVignette();
+        }
+
+        public void tick()
+        {
+            if (!client.getSoundManager().isPlaying(mainSound))
+            {
+                client.getSoundManager().play(mainSound);
+            }
+            if (be.isRunning() && !client.getSoundManager().isPlaying(runningSound))
+            {
+                client.getSoundManager().play(runningSound);
+            }
+            if (!be.isRunning() && client.getSoundManager().isPlaying(runningSound))
+            {
+                client.getSoundManager().stop(runningSound);
+            }
         }
     }
 }
