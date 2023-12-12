@@ -3,18 +3,15 @@ package com.neep.neepmeat.machine.centrifuge;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
+import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
-import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
@@ -31,7 +28,7 @@ public class CentrifugeBlock extends BigBlock
     }
 
     @Override
-    protected Structure createStructure()
+    protected BigBlockStructure createStructure()
     {
 //        Structure structure = BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
 //        BlockEntityType<BigBlockStructureBlockEntity> type = NMBlockEntities.register(getRegistryName(), structure::createBlockEntity, structure);

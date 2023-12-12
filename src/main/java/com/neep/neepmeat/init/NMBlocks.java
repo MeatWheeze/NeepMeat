@@ -7,6 +7,7 @@ import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
+import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.entity.CandleCronenCakeBlock;
 import com.neep.neepmeat.block.entity.CronenCakeBlock;
@@ -22,7 +23,6 @@ import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.bottler.BottlerBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
-import com.neep.neepmeat.machine.centrifuge.CentrifugeBlock;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorBlock;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlock;
@@ -153,6 +153,8 @@ public class NMBlocks
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
     public static BigBlock ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = ADVANCED_INTEGRATOR.getStructure();
+//    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = BlockRegistry.queue(new BigBlockStructure(ADVANCED_INTEGRATOR, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
 
     // --- Machines
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

@@ -6,13 +6,17 @@ import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
+import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -33,9 +37,10 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     }
 
     @Override
-    protected Structure createStructure()
+    protected BigBlockStructure createStructure()
     {
-        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
+//        return NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE;
+        return BlockRegistry.queue(new BigBlockStructure(this, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
     }
 
     @Override

@@ -6,10 +6,7 @@ import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.HoldingTrackBlock;
-import com.neep.neepmeat.block.entity.AdvancedIntegratorBlockEntity;
-import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
-import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
-import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
+import com.neep.neepmeat.block.entity.*;
 import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
@@ -245,7 +242,7 @@ public class NMBlockEntities
 
         ADVANCED_INTEGRATOR = register("advanced_integrator", (pos, state) -> new AdvancedIntegratorBlockEntity(ADVANCED_INTEGRATOR, pos, state), NMBlocks.ADVANCED_INTEGRATOR);
         ADVANCED_INTEGRATOR_STRUCTURE = register("advanced_integrator_structure",
-                (pos, state) -> new BigBlockStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR.getStructure());
+                (pos, state) -> new AdvancedIntegratorStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE);
 
         TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
