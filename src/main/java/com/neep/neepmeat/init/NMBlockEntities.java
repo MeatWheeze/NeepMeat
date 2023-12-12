@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.multiblock.MultiBlock;
@@ -120,7 +121,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<AdvancedIntegratorBlockEntity> ADVANCED_INTEGRATOR;
-    public static BlockEntityType<? extends BigBlockStructureBlockEntity> ADVANCED_INTEGRATOR_STRUCTURE;
+    public static BlockEntityType<AdvancedIntegratorStructureBlockEntity> ADVANCED_INTEGRATOR_STRUCTURE;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
 
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
@@ -243,6 +244,7 @@ public class NMBlockEntities
         ADVANCED_INTEGRATOR = register("advanced_integrator", (pos, state) -> new AdvancedIntegratorBlockEntity(ADVANCED_INTEGRATOR, pos, state), NMBlocks.ADVANCED_INTEGRATOR);
         ADVANCED_INTEGRATOR_STRUCTURE = register("advanced_integrator_structure",
                 (pos, state) -> new AdvancedIntegratorStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE);
+        DataPort.DATA_PORT.registerForBlockEntity(AdvancedIntegratorStructureBlockEntity::getPort, ADVANCED_INTEGRATOR_STRUCTURE);
 
         TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
@@ -283,6 +285,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlocks(HydraulicPressBlockEntity::getFluidStorageFromTop, NMBlocks.HYDRAULIC_PRESS.getStructureBlock());
 
         PYLON = register("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
+        DataPort.DATA_PORT.registerForBlockEntity(PylonBlockEntity::getPort, PYLON);
 
         SYNTHESISER = register("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
         FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);

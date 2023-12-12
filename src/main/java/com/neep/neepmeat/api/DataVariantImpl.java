@@ -2,6 +2,7 @@ package com.neep.neepmeat.api;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.util.Identifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
@@ -42,24 +43,21 @@ public class DataVariantImpl implements DataVariant
     public NbtCompound toNbt()
     {
         NbtCompound result = new NbtCompound();
-        result.putBoolean("empty", isBlank());
+
+        result.putString("id", DataType.REGISTRY.getId(data).toString());
 
         return result;
     }
 
-    public static DataVariant fromNbt(NbtCompound tag)
+    public static DataVariant fromNbt(NbtCompound nbt)
     {
         try
         {
-            if (tag.getBoolean("blank"))
-            {
-                return DataVariant.NORMAL;
-            }
-            return DataVariant.BLANK;
+            return DataVariant.of(DataType.REGISTRY.get(Identifier.tryParse(nbt.getString("id"))));
         }
         catch (RuntimeException runtimeException)
         {
-            LOGGER.debug("Tried to load an invalid ItemVariant from NBT: {}", tag, runtimeException);
+            LOGGER.debug("Tried to load an invalid DataVariant from NBT: {}", nbt, runtimeException);
             return DataVariant.BLANK;
         }
     }

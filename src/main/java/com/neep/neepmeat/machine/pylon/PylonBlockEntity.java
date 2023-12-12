@@ -2,15 +2,20 @@ package com.neep.neepmeat.machine.pylon;
 
 import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.DataPort;
+import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.MinecraftClient;
@@ -30,6 +35,8 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     protected final int radius = 7;
     public float angle;
     private float speed;
+
+    private SimpleDataPort port = new SimpleDataPort(this);
 
     protected final Random random = new Random(0);
 
@@ -81,6 +88,12 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
             spawnGlomes();
         }
 
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            port.send(DataVariant.NORMAL, 16, transaction);
+            transaction.commit();
+        }
+
         return false;
     }
 
@@ -123,6 +136,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     {
         super.writeNbt(nbt);
         nbt.putFloat("speed", speed);
+        port.writeNbt(nbt);
     }
 
     @Override
@@ -130,6 +144,12 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     {
         super.readNbt(nbt);
         this.speed = nbt.getFloat("speed");
+        port.readNbt(nbt);
+    }
+
+    public DataPort getPort(Void unused)
+    {
+        return port;
     }
 
     @Environment(value=EnvType.CLIENT)

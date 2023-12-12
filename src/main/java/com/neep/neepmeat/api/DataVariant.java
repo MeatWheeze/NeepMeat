@@ -7,6 +7,7 @@ public interface DataVariant extends TransferVariant<DataType>
 {
     DataVariant BLANK = of(DataType.BLANK);
     DataVariant NORMAL = of(DataType.NORMAL);
+    DataVariant DIVINE = of(DataType.DIVINE);
 
     static DataVariant fromNbt(NbtCompound nbt)
     {

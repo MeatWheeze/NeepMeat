@@ -92,5 +92,7 @@ public class NMItems
 
     public static Item TRANSFORMING_TOOL_BASE = ItemRegistry.queue(new BaseCraftingItem("transforming_tool_base", 1, new FabricItemSettings().group(NMItemGroups.GENERAL)));
 
+    public static Item NETWORKING_TOOL = new NetworkingToolItem("networking_tool", TooltipSupplier.hidden(3), new FabricItemSettings().group(NMItemGroups.GENERAL));
+
     public static Item DEBUG_ITEM = ItemRegistry.queue(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
 }
