@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BigBlockStructure extends Block implements MeatlibBlock, BlockEntityProvider
 {
-    private final BigBlock parent;
+    protected final BigBlock parent;
     private final String registryName;
 
     public BigBlockStructure(BigBlock parent, String registryName, Settings settings)

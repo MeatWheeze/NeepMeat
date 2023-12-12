@@ -27,7 +27,7 @@ public abstract class BigBlock extends Block implements MeatlibBlock
     protected abstract BigBlockStructure createStructure();
     protected abstract BlockVolume getVolume();
 
-    public BigBlockStructure getStructure()
+    public final BigBlockStructure getStructure()
     {
         return structureBlock;
     }
