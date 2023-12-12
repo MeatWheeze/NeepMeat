@@ -40,7 +40,7 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
 
     public AdvancedIntegratorBlock(String registryName, Settings settings)
     {
-        super(registryName, settings);
+        super(registryName, settings.nonOpaque());
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
     }
 
