@@ -556,6 +556,14 @@
   "category.neepmeat.trommel": "Trommel",
   "category.neepmeat.heating": "Heating",
 
+  "tag.c.concrete": "Concrete",
+  "tag.c.grains": "Grains",
+  "tag.c.metal_scaffolding": "Metal Scaffolding",
+  "tag.c.milks": "Milk",
+  "tag.c.raw_meat": "Raw Meat",
+  "tag.neepmeat.blood_bubble_logs": "Blood Bubble Logs",
+  "tag.neepmeat.charnel_substrate": "Charnel Substrate",
+
   "advancements.neepmeat.main.root.title": "NEEPMeat",
   "advancements.neepmeat.main.root.description": "Rusty machinery, cosmic horror and meat.",
 
