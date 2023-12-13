@@ -12,16 +12,17 @@ import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
 import com.neep.neepmeat.block.entity.AdvancedIntegratorBlockEntity;
-import com.neep.neepmeat.entity.goal.Action;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorStructure;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -59,10 +60,13 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        AdvancedIntegratorBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.ADVANCED_INTEGRATOR).orElse(null);
-        if (be != null)
+        if (player.getStackInHand(hand).isEmpty())
         {
-            be.onUse(player);
+            AdvancedIntegratorBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.ADVANCED_INTEGRATOR).orElse(null);
+            if (be != null && !world.isClient())
+            {
+                be.onUse(player);
+            }
             return ActionResult.SUCCESS;
         }
 
@@ -79,7 +83,6 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return super.getOutlineShape(state, world, pos, context);
-//        return SHAPE;
     }
 
     @Nullable
@@ -87,5 +90,12 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NMBlockEntities.ADVANCED_INTEGRATOR.instantiate(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_INTEGRATOR, (w, pos, state1, be) -> be.serverTick(), null, world);
     }
 }

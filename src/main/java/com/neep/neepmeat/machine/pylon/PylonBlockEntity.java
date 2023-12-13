@@ -86,12 +86,13 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
         if (isRunning())
         {
             spawnGlomes();
-        }
 
-        try (Transaction transaction = Transaction.openOuter())
-        {
-            port.send(DataVariant.NORMAL, 16, transaction);
-            transaction.commit();
+            try (Transaction transaction = Transaction.openOuter())
+            {
+//                long sendAmount =
+                port.send(DataVariant.NORMAL, 1, transaction);
+                transaction.commit();
+            }
         }
 
         return false;
