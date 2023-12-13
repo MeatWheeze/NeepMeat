@@ -21,6 +21,8 @@ public class NMSounds
     public static SoundEvent BH_PHASE2 = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "bovine_horror_phase2");
     public static SoundEvent BH_SPIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "bovine_horror_spit");
 
+    public static SoundEvent ADVANCED_INTEGRATOR_CHARGE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "advanced_integrator_charge");
+
     public static SoundEvent MECHANICAL_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_place");
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
     public static SoundEvent FLESH_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "flesh_machine_place");

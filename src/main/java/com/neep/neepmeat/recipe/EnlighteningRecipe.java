@@ -5,8 +5,11 @@ import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
+import com.neep.neepmeat.api.DataType;
+import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -42,7 +45,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
     {
         return itemInput.test(inventory.getStorage())
                 && inventory.getIntegrator() != null
-                && inventory.getIntegrator().getData() >= data;
+                && inventory.getIntegrator().getData(DataVariant.NORMAL) >= data;
     }
 
     public RecipeInput<Item> getItemInput()
@@ -77,16 +80,15 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
 //            // Ensure that storage contents still match the recipe
             long amount = stackStorage.getAmount();
             Item input = itemInput.getFirstMatching(stackStorage).orElse(null);
-            IntegratorBlockEntity integrator = storage.getIntegrator();
-            float storedData = integrator.getData();
+            Integrator integrator = storage.getIntegrator();
+            float storedData = integrator.getData(DataVariant.NORMAL);
             if (input == null || storedData < data)
             {
                 return null;
             }
 
             long ext = stackStorage.extract(stackStorage.getResource(), amount * itemInput.amount(), inner);
-            float dataExt = integrator.extractEnlightenment(amount * data, transaction);
-
+            float dataExt = integrator.extract(DataVariant.NORMAL, amount * data, transaction);
 
             if (ext != amount * itemInput.amount() || dataExt != amount * data)
             {

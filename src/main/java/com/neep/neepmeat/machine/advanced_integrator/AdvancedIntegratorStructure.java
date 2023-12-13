@@ -40,7 +40,11 @@ public class AdvancedIntegratorStructure extends BigBlockStructure implements Da
 
         if (!world.isClient() && world.getBlockEntity(pos) instanceof AdvancedIntegratorStructureBlockEntity be)
         {
-            be.getParent().onUse(player);
+            var parent = be.getParent();
+            if (parent != null)
+            {
+                parent.onUse(player);
+            }
         }
         return ActionResult.SUCCESS;
     }

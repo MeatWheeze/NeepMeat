@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.charnel_compactor;
 
 import com.google.common.collect.MapMaker;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -155,8 +156,8 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
             // Check amount.
             if (maxAmount < 1) return 0;
             // Check Integrator presence.
-            IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(location.world(), location.pos(), 10);
-            if (increaseProbability != DO_NOTHING || integrator == null || !integrator.isMature()) return 0;
+            Integrator integrator = Integrator.findIntegrator(location.world(), location.pos(), 10);
+            if (increaseProbability != DO_NOTHING || integrator == null || !integrator.canEnlighten()) return 0;
             // Check that the composter can accept items.
             if (location.getBlockState().get(CharnelCompactorBlock.LEVEL) >= 7) return 0;
             // Check that the item is compostable.

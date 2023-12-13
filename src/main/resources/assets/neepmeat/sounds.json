@@ -134,6 +134,11 @@
       "neepmeat:bovine_horror_phase2"
     ]
   },
+  "advanced_integrator_charge": { "subtitle": "subtitles.neepmeat.advanced_integrator_charge",
+    "sounds": [
+      "neepmeat:advanced_integrator_charge"
+    ]
+  },
 
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [
