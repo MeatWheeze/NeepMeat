@@ -1,19 +1,29 @@
-package com.neep.neepmeat.block.entity;
+package com.neep.neepmeat.machine.advanced_integrator;
 
+import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.data.DataUtil;
+import com.neep.neepmeat.client.sound.BlockSoundInstance;
+import com.neep.neepmeat.init.NMSounds;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
+
+import java.util.Map;
 
 public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 {
@@ -61,6 +71,11 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
                 transaction.commit();
             }
         }
+    }
+
+    public void clientTick()
+    {
+        Client.get(this).tick();
     }
 
     public static class DataStorage extends SingleVariantStorage<DataVariant>
@@ -125,6 +140,35 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         {
             super.onFinalCommit();
             finalCallback.run();
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    private static class Client
+    {
+        private static final Map<AdvancedIntegratorBlockEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
+
+        private final AdvancedIntegratorBlockEntity be;
+        private final MinecraftClient client = MinecraftClient.getInstance();
+        private final BlockSoundInstance sound;
+
+        public Client(AdvancedIntegratorBlockEntity be)
+        {
+            this.be = be;
+            this.sound = new BlockSoundInstance(NMSounds.ADVANCED_INTEGRATOR_AMBIENT, SoundCategory.BLOCKS, be.getPos().up(3));
+        }
+
+        public static Client get(AdvancedIntegratorBlockEntity be)
+        {
+            return MAP.computeIfAbsent(be, Client::new);
+        }
+
+        public void tick()
+        {
+            if (!client.getSoundManager().isPlaying(sound))
+            {
+                client.getSoundManager().play(sound);
+            }
         }
     }
 }

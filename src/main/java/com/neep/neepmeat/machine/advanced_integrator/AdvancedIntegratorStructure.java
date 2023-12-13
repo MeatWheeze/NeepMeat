@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.advanced_integrator;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
-import com.neep.neepmeat.block.entity.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.block.entity.AdvancedIntegratorStructureBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;

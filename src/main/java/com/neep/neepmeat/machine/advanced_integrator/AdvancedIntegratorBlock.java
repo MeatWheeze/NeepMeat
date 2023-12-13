@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.machine.advanced_integrator;
 
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
@@ -11,9 +11,7 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
-import com.neep.neepmeat.block.entity.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorStructure;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -96,6 +94,9 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_INTEGRATOR, (w, pos, state1, be) -> be.serverTick(), null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_INTEGRATOR,
+                (w, pos, state1, be) -> be.serverTick(),
+                (w, pos, state1, be) -> be.clientTick(),
+                world);
     }
 }
