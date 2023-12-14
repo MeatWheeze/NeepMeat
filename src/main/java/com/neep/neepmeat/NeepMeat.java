@@ -1,7 +1,6 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
@@ -26,7 +25,6 @@ import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
-import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.util.Bezier;
 import com.neep.neepmeat.world.NMFeatures;
@@ -118,7 +116,6 @@ public class NeepMeat implements ModInitializer
 
 			// Fluid transfer things
 			FluidNodeManager.registerEvents();
-			PipeNetworkSerialiser.init();
 
 			// Meat additives
 			MeatAdditives.init();
