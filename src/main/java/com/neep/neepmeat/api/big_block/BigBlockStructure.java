@@ -6,6 +6,7 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -66,6 +67,12 @@ public class BigBlockStructure extends Block implements MeatlibBlock, BlockEntit
     protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
     {
         world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(parent.getDefaultState()));
+    }
+
+    @Override
+    public ItemConvertible dropsLike()
+    {
+        return parent;
     }
 
     @Override
