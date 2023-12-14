@@ -24,12 +24,16 @@ public class NMSounds
     public static SoundEvent ADVANCED_INTEGRATOR_CHARGE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "advanced_integrator_charge");
     public static SoundEvent ADVANCED_INTEGRATOR_AMBIENT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "advanced_integrator_ambient");
 
+    public static SoundEvent METAL_BARREL_OPEN = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_open");
+    public static SoundEvent METAL_BARREL_CLOSE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_close");
+
     public static SoundEvent MECHANICAL_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_place");
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
     public static SoundEvent FLESH_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "flesh_machine_place");
 
     public static SoundEvent PLC_SELECT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select");
     public static SoundEvent PLC_SELECT_BLOCK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select_block");
+    public static SoundEvent COMBINE_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "combine_instruction_apply");
     public static SoundEvent IMPLANT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "implant_instruction_apply");
     public static SoundEvent INJECT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "inject");
 
