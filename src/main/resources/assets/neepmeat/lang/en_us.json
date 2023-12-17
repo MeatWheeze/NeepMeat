@@ -282,6 +282,7 @@
   "block.neepmeat.surgery_platform": "Surgery Platform",
   "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
   "block.neepmeat.redstone_interface": "PLC Redstone Interface",
+  "block.neepmeat.upgrade_manager": "Upgrade Manager",
 
   "block.neepmeat.duat_stone": "Duat Stone",
   "block.neepmeat.duat_cobblestone": "Duat Cobblestone",

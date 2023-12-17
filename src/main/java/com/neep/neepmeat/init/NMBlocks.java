@@ -53,6 +53,7 @@ import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
+import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
@@ -205,6 +206,7 @@ public class NMBlocks
     public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block UPGRADE_MANAGER = BlockRegistry.queue(new UpgradeManagerBlock("upgrade_manager", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", block(), VAT_SETTINGS));

@@ -18,14 +18,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class HeldItemRendererMixin
 {
     @Inject(method = "renderFirstPersonItem", at = @At(value = "TAIL"))
-    public void renderItemHead(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
+    public void renderItemHead(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack stack, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
     {
-        if (item.getItem() instanceof AnimatedSword)
+        if (stack.getItem() instanceof AnimatedSword sword)
         {
             if (player.handSwinging)
             {
-//                ((AnimatedSword) item.getItem()).onAnimationSync(GeckoLibUtil.getIDFromStack(item), AnimatedSword.ANIM_SWING);
-                player.handSwinging = false;
+                player.handSwinging = sword.onSwing(stack, player);
             }
         }
     }
