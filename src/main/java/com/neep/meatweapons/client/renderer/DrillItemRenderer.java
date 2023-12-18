@@ -13,6 +13,8 @@ import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
+import javax.swing.*;
+
 public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 {
     public DrillItemRenderer(DrillItemModel model)
@@ -32,12 +34,7 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
         MinecraftClient client = MinecraftClient.getInstance();
         float timeDegrees = client.world.getTime() % 360 + client.getTickDelta();
 
-        boolean using = nbt.getBoolean("using");
-
-        if (b && !using)
-        {
-//            System.out.println("End");
-        }
+        boolean using = nbt.getBoolean("using") || nbt.getBoolean("attacking");
 
         b = using;
 

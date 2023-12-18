@@ -1,12 +1,14 @@
 package com.neep.meatweapons.item;
 
 import com.google.common.collect.Iterators;
+import com.neep.meatlib.api.event.InputEvents;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -17,7 +19,10 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -27,10 +32,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -57,9 +65,10 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
-public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable
+public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable, OverrideSwingItem
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     protected String registryName;
@@ -67,6 +76,8 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     protected float attackDamage;
 
     public final String controllerName = "controller";
+    private final TagKey<Block> effectiveBlocks;
+    private final float miningSpeed;
 
     public AssaultDrillItem(String registryName, int maxDamage, FabricItemSettings settings)
     {
@@ -74,6 +85,8 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         this.registryName = registryName;
 
         this.attackDamage = 1;
+        this.effectiveBlocks = BlockTags.PICKAXE_MINEABLE;
+        this.miningSpeed = ToolMaterials.DIAMOND.getMiningSpeedMultiplier();
 
         GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queue(this);
@@ -114,24 +127,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     {
         return this.factory;
     }
-
-    // Trying to get to tVjjjjjhe bottom of how enchantments are selected. I copied a method here since breakpoints don't work in remapped code.
-//    public static List<EnchantmentLevelEntry> getPossibleEntries(int power, ItemStack stack, boolean treasureAllowed) {
-//        ArrayList<EnchantmentLevelEntry> list = Lists.newArrayList();
-//        Item item = stack.getItem();
-//        boolean bl = stack.isOf(Items.BOOK);
-//        block0: for (Enchantment enchantment : Registry.ENCHANTMENT) {
-//            if (enchantment.isTreasure() && !treasureAllowed || !enchantment.isAvailableForRandomSelection() || !enchantment.type.isAcceptableItem(item) && !bl) continue;
-//            for (int i = enchantment.getMaxLevel(); i > enchantment.getMinLevel() - 1; --i) {
-//                int minp = enchantment.getMinPower(i);
-//                int maxp = enchantment.getMaxPower(i);
-//                if (power < enchantment.getMinPower(i) || power > enchantment.getMaxPower(i)) continue;
-//                list.add(new EnchantmentLevelEntry(enchantment, i));
-//                continue block0;
-//            }
-//        }
-//        return list;
-//    }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
@@ -204,10 +199,25 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         super.usageTick(world, user, stack, remainingUseTicks);
     }
 
+//    @Override
+//    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker)
+//    {
+//        System.out.println("aaaaaaaaaaaaaaaaafter");
+//        return true;
+//    }
+
+    @Override
+    public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner)
+    {
+//        System.out.println("aaaaaaaaaaaaaaaaafter");
+        return true;
+    }
+
     public int getMaxDamage(ItemStack stack)
     {
         return stack.getMaxDamage();
     }
+
 
     @Override
     public Optional<TooltipData> getTooltipData(ItemStack stack)
@@ -217,7 +227,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
 
     public static boolean using(ItemStack stack)
     {
-
         if (stack.getItem() instanceof AssaultDrillItem)
         {
             return stack.getOrCreateNbt().getBoolean("using");
@@ -239,6 +248,38 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return attackDamage + damage;
     }
 
+    @Override
+    public float getMiningSpeedMultiplier(ItemStack stack, BlockState state)
+    {
+        return state.isIn(this.effectiveBlocks) ? this.miningSpeed * 4 : 1.0f;
+    }
+
+    static
+    {
+        InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
+        {
+            MinecraftClient client = MinecraftClient.getInstance();
+            if (client.player != null && client.options != null)
+            {
+                ItemStack mainStack = client.player.getMainHandStack();
+
+                if (mainStack.getItem() instanceof AssaultDrillItem drill &&
+                        (client.options.attackKey.matchesKey(key, scancode)
+                     || client.options.attackKey.matchesMouse(key))
+                )
+                {
+                    if (client.options.attackKey.isPressed())
+                    {
+                        drill.onAttackBlock(mainStack, client.player);
+                    }
+                    else
+                    {
+                        drill.onFinishAttackBlock(mainStack, client.player);
+                    }
+                }
+            }
+        });
+    }
 
     @Override
     public int getItemBarStep(ItemStack stack)
@@ -282,14 +323,34 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         if (state == 0)
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.assault_drill.spin"));
+            if (controller.getCurrentAnimation() == null || !Objects.equals(controller.getCurrentAnimation().animationName, "animation.assault_drill.spin"))
+            {
+                controller.markNeedsReload();
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.assault_drill.spin"));
+            }
         }
+    }
+
+    public void onAttackBlock(ItemStack stack, PlayerEntity player)
+    {
+        stack.getOrCreateNbt().putBoolean("attacking", true);
+    }
+
+    public void onFinishAttackBlock(ItemStack stack, PlayerEntity player)
+    {
+        stack.getOrCreateNbt().putBoolean("attacking", false);
     }
 
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public boolean onSwing(ItemStack stack, PlayerEntity player)
+    {
+        player.handSwingProgress = 0;
+        return false;
     }
 
     public static Storage<FluidVariant> getStorage(ItemStack stack, ContainerItemContext containerItemContext)
@@ -378,5 +439,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         {
             return 0;
         }
+
     }
 }
