@@ -254,6 +254,12 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return state.isIn(this.effectiveBlocks) ? this.miningSpeed * 4 : 1.0f;
     }
 
+    @Override
+    public boolean isSuitableFor(BlockState state)
+    {
+        return state.isIn(this.effectiveBlocks);
+    }
+
     static
     {
         InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
