@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.integrator;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -11,13 +12,21 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.condition.LootConditionTypes;
+import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameter;
+import net.minecraft.loot.context.LootContextType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, DataCable
 {
@@ -55,6 +64,9 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, D
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (player.getStackInHand(hand).isOf(NMItems.SACRIFICIAL_DAGGER))
+            return ActionResult.PASS;
+
         if (!world.isClient)
         {
             if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
@@ -66,7 +78,19 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, D
         return ActionResult.SUCCESS;
     }
 
-//    @Override
+    @Override
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player)
+    {
+        super.onBreak(world, pos, state, player);
+    }
+
+    @Override
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
+    {
+        return super.getDroppedStacks(state, builder);
+    }
+
+    //    @Override
 //    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
 //    {
 //        super.randomDisplayTick(state, world, pos, random);

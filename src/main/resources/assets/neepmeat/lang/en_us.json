@@ -493,6 +493,8 @@
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
 
   "item.neepmeat.chrysalis": "Divine Chrysalis",
+  "item.neepmeat.chrysalis.lore_0": "Something tells you that surgically implanting",
+  "item.neepmeat.chrysalis.lore_1": "this into a cow would be a really good idea.",
 
   "step.neepmeat.combine": "COMBINE",
   "step.neepmeat.implant": "IMPLANT",

@@ -88,7 +88,7 @@ public class NMItems
     public static PlayerImplantItem PINEAL_EYE = new PlayerImplantItem("pineal_eye", 1, PinealEyeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static PlayerImplantItem EXTRA_KNEES = new PlayerImplantItem("extra_knees", 1, ExtraKneeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static ChrysalisItem CHRYSALIS = ItemRegistry.queue(new ChrysalisItem("chrysalis",TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.GENERAL)));
+    public static ChrysalisItem CHRYSALIS = ItemRegistry.queue(new ChrysalisItem("chrysalis",TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.GENERAL)));
 
     public static Item TRANSFORMING_TOOL_BASE = ItemRegistry.queue(new BaseCraftingItem("transforming_tool_base", 1, new FabricItemSettings().group(NMItemGroups.GENERAL)));
 

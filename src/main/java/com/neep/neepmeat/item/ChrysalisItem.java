@@ -7,13 +7,14 @@ import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.player.implant.ImplantInstaller;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CowEntity;
+import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 
 public class ChrysalisItem extends BaseItem implements ImplantInstaller
 {
     public ChrysalisItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
-        super(registryName, tooltipSupplier, settings);
+        super(registryName, tooltipSupplier, settings.rarity(Rarity.RARE));
     }
 
     @Override
