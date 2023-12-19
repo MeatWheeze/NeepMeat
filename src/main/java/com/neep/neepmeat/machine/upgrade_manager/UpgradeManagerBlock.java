@@ -34,6 +34,7 @@ public class UpgradeManagerBlock extends BaseHorFacingBlock implements BlockEnti
         if (world.getBlockEntity(pos) instanceof UpgradeManagerBlockEntity be)
         {
             player.openHandledScreen(be);
+            return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }

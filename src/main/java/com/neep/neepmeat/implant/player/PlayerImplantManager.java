@@ -75,22 +75,20 @@ public class PlayerImplantManager implements ImplantManager, Component, ServerTi
     @Override
     public void removeImplant(Identifier id)
     {
-        ImplantRegistry.Constructor constructor = ImplantRegistry.REGISTRY.get(id);
-        if (constructor != null)
-        {
-            if (!player.getWorld().isClient())
-            {
-                PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.REMOVE);
-            }
+        if (id == null)
+            return;
 
-            EntityImplant upgrade = implants.get(id);
+        if (!player.getWorld().isClient())
+        {
+            PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.REMOVE);
+        }
+
+        EntityImplant upgrade = implants.get(id);
+        if (upgrade != null)
+        {
             upgrade.onUninstall();
             implants.remove(id);
             sync();
-        }
-        else
-        {
-            throw new IllegalArgumentException("Tried to remove an unregistered implant in player " + player.getEntityName());
         }
     }
 
