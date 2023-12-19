@@ -1,4 +1,4 @@
-package com.neep.neepmeat.player.implant;
+package com.neep.neepmeat.implant.player;
 
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.NeepMeat;
@@ -8,8 +8,6 @@ import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,8 +21,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.Set;
 
-public class PlayerImplantManager implements Component, ServerTickingComponent, AutoSyncedComponent, ClientTickingComponent
+public class PlayerImplantManager implements ImplantManager, Component, ServerTickingComponent, AutoSyncedComponent, ClientTickingComponent
 {
     public static final String ID = "neepmeat:upgrades";
     public static final String TRANSLATION_PREFIX = "implant";
@@ -42,13 +41,13 @@ public class PlayerImplantManager implements Component, ServerTickingComponent, 
         return Text.translatable(id.toTranslationKey(TRANSLATION_PREFIX));
     }
 
+    @Override
     public void installImplant(Identifier id)
     {
         if (ImplantRegistry.REGISTRY.containsId(id))
         {
             if (!player.getWorld().isClient())
             {
-//                PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.INSTALL);
                 player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".implant.install", getImplantName(id)), true);
             }
 
@@ -73,6 +72,7 @@ public class PlayerImplantManager implements Component, ServerTickingComponent, 
         return implant;
     }
 
+    @Override
     public void removeImplant(Identifier id)
     {
         ImplantRegistry.Constructor constructor = ImplantRegistry.REGISTRY.get(id);
@@ -94,6 +94,12 @@ public class PlayerImplantManager implements Component, ServerTickingComponent, 
         }
     }
 
+    @Override
+    public Set<Identifier> getInstalled()
+    {
+        return implants.keySet();
+    }
+
     public float getProtectionAmount(DamageSource source, float amount)
     {
         return (float) implants.values().stream().mapToDouble(u -> u.getProtectionAmount(source, amount)).sum();
@@ -101,7 +107,7 @@ public class PlayerImplantManager implements Component, ServerTickingComponent, 
 
     public static PlayerImplantManager get(PlayerEntity player)
     {
-        return player.getComponent(NMComponents.IMPLANT_MANAGER);
+        return (PlayerImplantManager) player.getComponent(NMComponents.IMPLANT_MANAGER);
     }
 
     @Nullable
@@ -167,64 +173,5 @@ public class PlayerImplantManager implements Component, ServerTickingComponent, 
             manager.implants.values().forEach(EntityImplant::onPlayerRemove);
         });
 
-//        ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
-//        {
-//            PlayerImplantManager oldManager = get(oldPlayer);
-//            PlayerImplantManager newManager = get(newPlayer);
-//
-//            // Sync old upgrades to new manager
-//            newManager.addAll(oldManager);
-//            newManager.implants.values().forEach(u -> u.onRespawn(oldPlayer, newPlayer));
-//        });
-
-
-//        EntityNbtEvents.WRITE.register((entity, nbt) ->
-//        {
-//            if (entity instanceof PlayerEntity player1)
-//            {
-//                NbtCompound nbtCompound = new NbtCompound();
-//                get(player1).writeNbt(nbtCompound);
-//
-//                // Insert upgrade manager NBT
-//                nbt.put(KEY_ROOT, nbtCompound);
-//            }
-//        });
-
-//        EntityNbtEvents.READ.register((entity, nbt) ->
-//        {
-//            if (entity instanceof PlayerEntity player1 && player1.getWorld() instanceof ServerWorld serverWorld)
-//            {
-//                NbtCompound nbtCompound = nbt.getCompound(KEY_ROOT);
-//
-//                // Unsure whether this state is possible
-//                if (nbtCompound == null) return;
-//
-//                PlayerImplantManager manager = get(player1);
-//                manager.readNbt(nbtCompound);
-
-//                InitialTicks.getInstance(serverWorld).queue(w -> manager.deferredLoad(nbtCompound));
-//            }
-//        });
-    }
-
-
-
-    @Environment(value= EnvType.CLIENT)
-    public static class Client
-    {
-        public static void init()
-        {
-//            ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
-//            {
-//                if (client.player != null)
-//                    get(client.player).implants.values().forEach(EntityImplant::onPlayerRemove);
-//            });
-//
-//            ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
-//            {
-//                if (client.player != null)
-//                    get(client.player).implants.values().forEach(EntityImplant::onPlayerInit);
-//            });
-        }
     }
 }

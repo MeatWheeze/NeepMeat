@@ -1,7 +1,10 @@
 package com.neep.neepmeat.init;
 
+import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.player.implant.PlayerImplantManager;
+import com.neep.neepmeat.implant.item.ItemImplantManager;
+import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.implant.player.PlayerImplantManager;
 import com.neep.neepmeat.plc.recipe.ItemWorkpiece;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.plc.recipe.MobWorkpiece;
@@ -20,10 +23,10 @@ import net.minecraft.util.Identifier;
 
 public class NMComponents implements EntityComponentInitializer, ItemComponentInitializer
 {
-    public static final ComponentKey<PlayerImplantManager> IMPLANT_MANAGER =
+    public static final ComponentKey<ImplantManager> IMPLANT_MANAGER =
             ComponentRegistry.getOrCreate(
                     new Identifier(NeepMeat.NAMESPACE, "implant_manager"),
-                    PlayerImplantManager.class);
+                    ImplantManager.class);
 
     public static final ComponentKey<Workpiece> WORKPIECE =
             ComponentRegistry.getOrCreate(
@@ -50,5 +53,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
         registry.register(NMItems.MEAT_STEEL_COMPONENT, WORKPIECE, ItemWorkpiece::new);
         registry.register(NMItems.TRANSFORMING_TOOL_BASE, WORKPIECE, ItemWorkpiece::new);
         registry.register(Items.MINECART.asItem(), WORKPIECE, ItemWorkpiece::new);
+
+        registry.register(MWItems.ASSAULT_DRILL, IMPLANT_MANAGER, ItemImplantManager::new);
     }
 }

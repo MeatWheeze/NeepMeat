@@ -4,21 +4,21 @@ import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.implant.item.ItemImplantInstaller;
 import com.neep.neepmeat.init.NMComponents;
-import com.neep.neepmeat.implant.player.EntityImplantInstaller;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-public class PlayerImplantItem extends BaseItem implements EntityImplantInstaller
+public class ItemImplantItem extends BaseItem implements ItemImplantInstaller
 {
     protected final Identifier implantId;
 
-    public PlayerImplantItem(String registryName, int lines, Identifier implantId, Settings settings)
+    public ItemImplantItem(String registryName, int lines, Identifier implantId, Settings settings)
     {
         super(registryName, new ImplantTooltipSupplier(registryName, lines), settings);
         this.implantId = implantId;
@@ -26,9 +26,9 @@ public class PlayerImplantItem extends BaseItem implements EntityImplantInstalle
     }
 
     @Override
-    public void install(Entity entity)
+    public void install(ItemStack stack)
     {
-        NMComponents.IMPLANT_MANAGER.maybeGet(entity).ifPresent(manager ->
+        NMComponents.IMPLANT_MANAGER.maybeGet(stack).ifPresent(manager ->
         {
             manager.installImplant(implantId);
         });

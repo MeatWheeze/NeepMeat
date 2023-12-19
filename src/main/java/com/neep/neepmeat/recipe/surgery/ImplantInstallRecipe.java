@@ -10,7 +10,7 @@ import com.neep.meatlib.transfer.EntityVariant;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
-import com.neep.neepmeat.player.implant.ImplantInstaller;
+import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.plc.component.TableComponent;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
@@ -28,13 +28,13 @@ public class ImplantInstallRecipe extends SurgeryRecipe
 {
     protected final Identifier id;
     protected final RecipeInput<?> resourceInput;
-    protected final ImplantInstaller installer;
+    protected final EntityImplantInstaller installer;
 
     // Jank constants
     protected static final int MODULE_SLOT = 7;
     protected static final int MOB_SLOT = 4;
 
-    public ImplantInstallRecipe(Identifier id, RecipeInput<?> resourceInput, ImplantInstaller installer)
+    public ImplantInstallRecipe(Identifier id, RecipeInput<?> resourceInput, EntityImplantInstaller installer)
     {
         this.id = id;
         this.resourceInput = resourceInput;
@@ -152,12 +152,12 @@ public class ImplantInstallRecipe extends SurgeryRecipe
             }
             else throw new JsonSyntaxException("Recipe input not found.");
 
-            ImplantInstaller installer;
+            EntityImplantInstaller installer;
             if (JsonHelper.hasJsonObject(json, "implant_installer"))
             {
                 Identifier installerId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "implant_installer"), "id"));
 
-                installer = ImplantInstaller.REGISTRY.get(installerId);
+                installer = EntityImplantInstaller.REGISTRY.get(installerId);
                 if (installer == null) throw new JsonSyntaxException("Implant installer " + installerId + " does not exist.");
             }
             else throw new JsonSyntaxException("Implant installer not found.");
@@ -170,7 +170,7 @@ public class ImplantInstallRecipe extends SurgeryRecipe
         {
             RecipeInput<?> input = RecipeInput.fromBuffer(buf);
             Identifier installerId = buf.readIdentifier();
-            ImplantInstaller installer = ImplantInstaller.REGISTRY.get(installerId);
+            EntityImplantInstaller installer = EntityImplantInstaller.REGISTRY.get(installerId);
             return new ImplantInstallRecipe(id, input, installer);
         }
 
@@ -178,7 +178,7 @@ public class ImplantInstallRecipe extends SurgeryRecipe
         public void write(PacketByteBuf buf, ImplantInstallRecipe recipe)
         {
             recipe.resourceInput.write(buf);
-            buf.writeIdentifier(ImplantInstaller.REGISTRY.getId(recipe.installer));
+            buf.writeIdentifier(EntityImplantInstaller.REGISTRY.getId(recipe.installer));
         }
     }
 }

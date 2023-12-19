@@ -130,7 +130,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
                 // Play a beep every second to indicate charge.
                 if (charge != 0 && charge % 20 == 0)
-                    world.playSoundFromEntity(null, player, NMSounds.BEEP, SoundCategory.PLAYERS, 1f, 1f + (float) charge / EXPLOSION_TIME);
+                    world.playSoundFromEntity(null, player, NMSounds.MARATHON_BEEP, SoundCategory.PLAYERS, 1f, 1f + (float) charge / EXPLOSION_TIME);
 
                 // Damage the player if they hold for too long.
                 if (charge > EXPLOSION_TIME)

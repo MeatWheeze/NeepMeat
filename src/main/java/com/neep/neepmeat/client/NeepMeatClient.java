@@ -40,7 +40,6 @@ import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
-import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
@@ -84,8 +83,6 @@ public class NeepMeatClient implements ClientModInitializer
         NMFluidsClient.registerFluidRenderers();
         HUDOverlays.init();
         MachineHudOverlay.init();
-
-        PlayerImplantManager.Client.init();
 
         TransportClient.init();
 

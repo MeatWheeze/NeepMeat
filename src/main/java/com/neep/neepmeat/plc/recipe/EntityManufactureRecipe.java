@@ -6,8 +6,7 @@ import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
-import com.neep.neepmeat.player.implant.ImplantInstaller;
-import com.neep.neepmeat.player.implant.ImplantRegistry;
+import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.Entity;
@@ -23,10 +22,10 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
 {
     protected final EntityType<?> base;
     private final List<ManufactureStep<?>> steps;
-    private final ImplantInstaller implant;
+    private final EntityImplantInstaller implant;
     private final Identifier id;
 
-    public EntityManufactureRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, ImplantInstaller implant)
+    public EntityManufactureRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, EntityImplantInstaller implant)
     {
         this.id = id;
         this.base = base;
@@ -126,12 +125,12 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(json);
 
-            ImplantInstaller installer;
+            EntityImplantInstaller installer;
             if (JsonHelper.hasJsonObject(json, "implant_installer"))
             {
                 Identifier installerId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "implant_installer"), "id"));
 
-                installer = ImplantInstaller.REGISTRY.get(installerId);
+                installer = EntityImplantInstaller.REGISTRY.get(installerId);
                 if (installer == null) throw new JsonSyntaxException("Implant installer " + installerId + " does not exist.");
             }
             else throw new JsonSyntaxException("Implant installer not found.");
@@ -146,7 +145,7 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(buf);
 
-            ImplantInstaller implant = buf.readRegistryValue(ImplantInstaller.REGISTRY);
+            EntityImplantInstaller implant = buf.readRegistryValue(EntityImplantInstaller.REGISTRY);
 
             return new EntityManufactureRecipe(id, base, steps, implant);
         }
@@ -158,7 +157,7 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
 
             ItemManufactureRecipe.Serialiser.writeSteps(recipe.getSteps(), buf);
 
-            buf.writeRegistryValue(ImplantInstaller.REGISTRY, recipe.implant);
+            buf.writeRegistryValue(EntityImplantInstaller.REGISTRY, recipe.implant);
         }
     }
 }

@@ -205,7 +205,7 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         public void playDownSound(SoundManager soundManager)
         {
 //            soundManager.play(PositionedSoundInstance.master(NMSounds.PLC_SELECT_BLOCK, 1.0f, 1));
-            client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT_BLOCK, 1.0f));
+            client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0f));
         }
 
         @Override
