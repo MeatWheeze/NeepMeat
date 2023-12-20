@@ -3,11 +3,13 @@ package com.neep.meatlib.item;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
+import java.util.Optional;
 
 @FunctionalInterface
 public interface TooltipSupplier
@@ -31,6 +33,10 @@ public interface TooltipSupplier
             {
                 var txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
 //                Text txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
+//                txt.visit(asString ->
+//                {
+//                    return Optional.empty();
+//                });
                 list.add(txt);
             }
         };
