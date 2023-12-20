@@ -482,6 +482,7 @@
   "entity.neepmeat.bovine_horror": "The Bovine Horror",
 
   "message.neepmeat.implant.title": "Implant",
+  "message.neepmeat.item_implant.title": "Item Implant",
   "message.neepmeat.implant.install": "Implant installed: %s",
 
   "item.neepmeat.pineal_eye": "Pineal Eye",
@@ -491,6 +492,10 @@
   "item.neepmeat.extra_knees": "Powered Knees",
   "implant.neepmeat.extra_knee": "Powered Knees",
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
+
+  "item.neepmeat.shield": "Shield Attachment",
+  "implant.neepmeat.shield": "Shield Attachment",
+  "implant.neepmeat.shield.desc_0": "Shields some damage when the item is in use.",
 
   "item.neepmeat.chrysalis": "Divine Chrysalis",
   "item.neepmeat.chrysalis.lore_0": "Something tells you that surgically implanting",

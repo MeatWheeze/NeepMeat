@@ -13,7 +13,7 @@ public class GUIUtil
         drawVerticalLine1(matrices, x + dx + offset, y - offset, y + dy + offset, col);
     }
 
-    protected static void drawHorizontalLine1(MatrixStack matrices, int x1, int x2, int y, int color)
+    public static void drawHorizontalLine1(MatrixStack matrices, int x1, int x2, int y, int color)
     {
         if (x2 < x1)
         {
@@ -24,7 +24,7 @@ public class GUIUtil
         DrawableHelper.fill(matrices, x1, y, x2 + 1, y + 1, color);
     }
 
-    protected static void drawVerticalLine1(MatrixStack matrices, int x, int y1, int y2, int color)
+    public static void drawVerticalLine1(MatrixStack matrices, int x, int y1, int y2, int color)
     {
         if (y2 < y1)
         {

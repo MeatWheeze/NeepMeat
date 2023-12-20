@@ -17,6 +17,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,13 +31,13 @@ public class UpgradeManagerBlockEntity extends SyncableBlockEntity implements Ex
     @Nullable
     public ImplantManager getImplantManager()
     {
-        MutateInPlace<Entity> itemMip = MutateInPlace.ENTITY.find(world, pos.offset(getCachedState().get(UpgradeManagerBlock.FACING)), null);
-        if (itemMip != null)
+        MutateInPlace<?> mip = getMip();
+        if (mip != null)
         {
-            Entity entity = itemMip.get();
-            if (entity != null)
+            Object object = mip.get();
+            if (object != null)
             {
-                return NMComponents.IMPLANT_MANAGER.getNullable(entity);
+                return NMComponents.IMPLANT_MANAGER.getNullable(object);
             }
         }
         return null;
@@ -63,6 +64,29 @@ public class UpgradeManagerBlockEntity extends SyncableBlockEntity implements Ex
 
     public MutateInPlace<?> getMip()
     {
-        return MutateInPlace.ENTITY.find(world, pos.offset(getCachedState().get(UpgradeManagerBlock.FACING)), null);
+        MutateInPlace<?> mip = MutateInPlace.ITEM.find(world, pos.offset(getCachedState().get(UpgradeManagerBlock.FACING)), null);
+        if (mip == null)
+        {
+            mip = MutateInPlace.ENTITY.find(world, pos.offset(getCachedState().get(UpgradeManagerBlock.FACING)), null);
+        }
+        return mip;
+    }
+
+    public void removeUpgrade(Identifier identifier)
+    {
+        MutateInPlace<Object> mip = (MutateInPlace<Object>) getMip();
+        if (mip != null)
+        {
+            Object object = mip.get();
+            if (object != null)
+            {
+                ImplantManager manager = NMComponents.IMPLANT_MANAGER.getNullable(object);
+                if (manager != null)
+                {
+                    manager.removeImplant(identifier);
+                    mip.set(object);
+                }
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.screen;
 
+import com.neep.neepmeat.api.implant.ImplantAttributes;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.implant.player.ImplantManager;
@@ -7,6 +8,8 @@ import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.screen_handler.UpgradeManagerScreenHandler;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -17,6 +20,7 @@ import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +30,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
     @Nullable private Identifier selected;
     @Nullable private ImplantManager implantManager;
     @Nullable private MutateInPlace<?> mip;
+    private int entryWidth = 120;
 
     public UpgradeManagerScreen(UpgradeManagerScreenHandler handler, PlayerInventory inventory, Text title)
     {
@@ -42,7 +47,6 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
 
         int listX = x + 2;
         int listY = y + 2;
-        int entryWidth = 100;
         int entryHeight = 18;
 
         ImplantManager manager = handler.getImplantManager();
@@ -52,7 +56,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
             for (var entry : handler.getImplantManager().getInstalled())
             {
                 addDrawableChild(new InstalledWidget(entry, listX, listY, entryWidth, entryHeight));
-                listY += entryHeight;
+                listY += entryHeight + 2;
             }
         }
 
@@ -66,6 +70,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
     {
         super.renderBackground(matrices);
         GUIUtil.renderBorder(matrices, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
+        GUIUtil.drawVerticalLine1(matrices, x + entryWidth + 2, y, y + backgroundHeight, PLCCols.BORDER.col);
     }
 
     @Override
@@ -97,22 +102,22 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         if (client.world.getTime() % 4 == 0)
         {
             this.mip = handler.getMip();
-        }
 
-        ImplantManager newManager = null;
-        if (this.mip != null)
-        {
-            Object object = mip.get();
-            if (object != null)
+            ImplantManager newManager = null;
+            if (this.mip != null)
             {
-                newManager = NMComponents.IMPLANT_MANAGER.getNullable(object);
+                Object object = mip.get();
+                if (object != null)
+                {
+                    newManager = NMComponents.IMPLANT_MANAGER.getNullable(object);
+                }
             }
-        }
 
-        if (newManager != this.implantManager)
-        {
-            this.implantManager = newManager;
-            clearAndInit();
+            if (newManager != this.implantManager)
+            {
+                this.implantManager = newManager;
+                clearAndInit();
+            }
         }
     }
 
@@ -121,6 +126,10 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         ImplantManager manager = handler.getImplantManager();
         if (manager != null && selected != null)
         {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeIdentifier(selected);
+            ClientPlayNetworking.send(UpgradeManagerScreenHandler.HANDLER_ID, buf);
+
             manager.removeImplant(selected);
             clearAndInit();
         }
@@ -198,7 +207,8 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
             int textCol = id.equals(selected) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
             GUIUtil.renderBorder(matrices, x, y, width, height, textCol, 0);
 
-            textRenderer.draw(matrices, id.toString(), x + 2, y + 1, textCol);
+            Text name = ImplantAttributes.getName(id);
+            textRenderer.draw(matrices, name, x + 2, y + 1, textCol);
         }
 
         @Override
