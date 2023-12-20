@@ -20,6 +20,7 @@ import net.minecraft.text.Text;
 
 import java.util.List;
 
+@Deprecated
 public class SurgeryCategory implements DisplayCategory<SurgeryDisplay>
 {
     @Override

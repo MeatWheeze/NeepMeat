@@ -26,7 +26,7 @@ package com.neep.neepmeat.compat.rei.category;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.compat.rei.display.HeartExtractionDisplay;
+import com.neep.neepmeat.compat.rei.display.VivisectionDisplay;
 import com.neep.neepmeat.init.NMItems;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -43,38 +43,47 @@ import net.minecraft.text.Text;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class HeartExtractionCategory implements DisplayCategory<HeartExtractionDisplay>
+public class VivisectionCategory implements DisplayCategory<VivisectionDisplay>
 {
     @Override
-    public CategoryIdentifier<? extends HeartExtractionDisplay> getCategoryIdentifier()
+    public CategoryIdentifier<? extends VivisectionDisplay> getCategoryIdentifier()
     {
-        return NMREIPlugin.HEART_EXTRACTION;
+        return NMREIPlugin.VIVISECTION;
     }
     
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMItems.SACRIFICIAL_DAGGER);
+        return EntryStacks.of(NMItems.SACRIFICIAL_SCALPEL);
     }
     
     @Override
     public Text getTitle()
     {
-        return Text.translatable("category." + NeepMeat.NAMESPACE + ".heart_extraction");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".vivisection");
     }
 
     @Override
-    public List<Widget> setupDisplay(HeartExtractionDisplay display, Rectangle bounds)
+    public List<Widget> setupDisplay(VivisectionDisplay display, Rectangle bounds)
     {
         Point startPoint = new Point(bounds.getCenterX() - 41, bounds.y + 10);
         List<Widget> widgets = Lists.newArrayList();
         widgets.add(Widgets.createRecipeBase(bounds));
 
-        widgets.add(Widgets.createLabel(new Point(bounds.x + 35, bounds.y + 5), display.getEntities().get(0)));
+        if (!display.getEntities().isEmpty())
+        {
+            widgets.add(Widgets.createLabel(new Point(bounds.x + 35, bounds.y + 5), display.getEntities().get(0)));
+        }
+        else if (!display.getInputEntries().isEmpty())
+        {
+            widgets.add(Widgets.createSlot(new Point(startPoint.x, startPoint.y + 9)).markInput().backgroundEnabled(true)
+                    .entries(display.getInputEntries().get(0)));
+        }
 
         widgets.add(Widgets.createArrow(new Point(startPoint.x + 25, startPoint.y + 9)));
         widgets.add(Widgets.createResultSlotBackground(new Point(startPoint.x + 61, startPoint.y + 9)));
-        widgets.add(Widgets.createSlot(new Point(startPoint.x + 61, startPoint.y + 9)).entries(display.getOutputEntries().get(0)).markOutput().disableBackground());
+        widgets.add(Widgets.createSlot(new Point(startPoint.x + 61, startPoint.y + 9))
+                .entries(display.getOutputEntries().get(0)).markOutput().disableBackground());
         return widgets;
     }
 

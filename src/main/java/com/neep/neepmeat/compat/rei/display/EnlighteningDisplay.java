@@ -46,7 +46,7 @@ public class EnlighteningDisplay extends BasicDisplay
         return NMREIPlugin.ENLIGHTENING;
     }
 
-    public float getData()
+    public long getData()
     {
         return recipe.getData();
     }

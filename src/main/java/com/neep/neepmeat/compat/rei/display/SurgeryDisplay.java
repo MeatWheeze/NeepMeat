@@ -26,6 +26,7 @@ import net.minecraft.util.collection.DefaultedList;
 import java.util.*;
 import java.util.function.Function;
 
+@Deprecated
 public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDisplay
 {
     private GeneralSurgeryRecipe recipe;

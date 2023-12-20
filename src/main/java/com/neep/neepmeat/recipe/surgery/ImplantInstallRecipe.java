@@ -23,6 +23,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 
 import java.util.Optional;
 
+@Deprecated
 @SuppressWarnings("UnstableApiUsage")
 public class ImplantInstallRecipe extends SurgeryRecipe
 {

@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
+@Deprecated
 @SuppressWarnings("UnstableApiUsage")
 public class GeneralSurgeryRecipe extends SurgeryRecipe
 {
