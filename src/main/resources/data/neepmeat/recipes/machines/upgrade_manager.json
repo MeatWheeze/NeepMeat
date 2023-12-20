@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " o ",
+    "obo",
+    "coc"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:sacrificial_dagger"
+    },
+    "c": {
+      "item": "neepmeat:rusty_metal"
+    },
+    "o": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:upgrade_manager",
+    "count": 1
+  }
+}
