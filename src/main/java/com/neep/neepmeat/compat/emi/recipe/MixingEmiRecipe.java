@@ -75,7 +75,7 @@ public class MixingEmiRecipe implements EmiRecipe {
         DecimalFormat df = new DecimalFormat("###.##");
 
         widgets.addText(Text.translatable("category." + NeepMeat.NAMESPACE + ".mixing.time", df.format(processTime / 20d)), getDisplayWidth() - 5, 5, 0xFF404040, false).horizontalAlign(TextWidget.Alignment.END);
-        widgets.addFillingArrow(startX + 24, startY + 8, processTime * 20);
+        widgets.addFillingArrow(startX + 24, startY + 8, processTime * 1000 / 20);
 
         // Input slots
         if (!input.get(1).isEmpty()) {

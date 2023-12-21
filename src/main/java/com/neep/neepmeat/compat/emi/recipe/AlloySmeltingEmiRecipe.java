@@ -72,7 +72,7 @@ public class AlloySmeltingEmiRecipe implements EmiRecipe {
         DecimalFormat df = new DecimalFormat("###.##");
 
         widgets.addText(Text.translatable("category." + NeepMeat.NAMESPACE + ".alloy_smelting.time", df.format(processTime / 20d)), getDisplayWidth() - 5, 5, 0xFF404040, false).horizontalAlign(TextWidget.Alignment.END);
-        widgets.addFillingArrow(startX + 24, startY + 8, processTime * 20);
+        widgets.addFillingArrow(startX + 24, startY + 8, processTime * 1000 / 20);
 
         // Input slots
         widgets.addSlot(input.get(0), startX + 1, startY - 1);

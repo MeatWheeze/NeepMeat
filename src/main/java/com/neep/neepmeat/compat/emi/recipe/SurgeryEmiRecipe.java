@@ -14,6 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+@Deprecated
 public class SurgeryEmiRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> input;

@@ -31,7 +31,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack COMPACTING_WORKSTATION = EmiStack.of(NMBlocks.CHARNEL_COMPACTOR);
     public static final EmiStack ENLIGHTENING_WORKSTATION = EmiStack.of(NMBlocks.PEDESTAL);
     public static final EmiStack GRINDING_WORKSTATION = EmiStack.of(NMBlocks.GRINDER);
-    public static final EmiStack HEART_EXTRACTION_WORKSTATION = EmiStack.of(NMItems.SACRIFICIAL_DAGGER);
+    public static final EmiStack VIVISECTION_WORKSTATION = EmiStack.of(NMItems.SACRIFICIAL_SCALPEL);
     public static final EmiStack HEATING_WORKSTATION = EmiStack.of(FluidTransport.MULTI_TANK);
     public static final EmiStack MANUFACTURE_WORKSTATION = EmiStack.of(PLCBlocks.PLC);
     public static final EmiStack MIXING_WORKSTATION = EmiStack.of(NMBlocks.MIXER);
@@ -44,7 +44,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory COMPACTING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/compacting"), COMPACTING_WORKSTATION);
     public static final EmiRecipeCategory ENLIGHTENING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/enlightening"), ENLIGHTENING_WORKSTATION);
     public static final EmiRecipeCategory GRINDING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/grinding"), GRINDING_WORKSTATION);
-    public static final EmiRecipeCategory HEART_EXTRACTION = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/heart_extraction"), HEART_EXTRACTION_WORKSTATION);
+    public static final EmiRecipeCategory VIVISECTION = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/vivisection"), VIVISECTION_WORKSTATION);
     public static final EmiRecipeCategory HEATING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/heating"), HEATING_WORKSTATION);
     public static final EmiRecipeCategory MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/manufacture"), MANUFACTURE_WORKSTATION);
     public static final EmiRecipeCategory MIXING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/mixing"), MIXING_WORKSTATION);
@@ -59,7 +59,7 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addCategory(COMPACTING);
         registry.addCategory(ENLIGHTENING);
         registry.addCategory(GRINDING);
-        registry.addCategory(HEART_EXTRACTION);
+        registry.addCategory(VIVISECTION);
         registry.addCategory(HEATING);
         registry.addCategory(MANUFACTURE);
         registry.addCategory(MIXING);
@@ -72,13 +72,13 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(COMPACTING, COMPACTING_WORKSTATION);
         registry.addWorkstation(ENLIGHTENING, ENLIGHTENING_WORKSTATION);
         registry.addWorkstation(GRINDING, GRINDING_WORKSTATION);
-        registry.addWorkstation(HEART_EXTRACTION, HEART_EXTRACTION_WORKSTATION);
+        registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(MANUFACTURE, MANUFACTURE_WORKSTATION);
         registry.addWorkstation(MIXING, MIXING_WORKSTATION);
         registry.addWorkstation(PRESSING, PRESSING_WORKSTATION);
-        //registry.addWorkstation(SURGERY, SURGERY_WORKSTATION);
-        //registry.addWorkstation(TRANSFORMING_TOOL, TRANSFORMING_TOOL_WORKSTATION);
+        registry.addWorkstation(SURGERY, SURGERY_WORKSTATION);
+        registry.addWorkstation(TRANSFORMING_TOOL, TRANSFORMING_TOOL_WORKSTATION);
         registry.addWorkstation(TROMMEL, TROMMEL_WORKSTATION);
 
         RecipeManager manager = registry.getRecipeManager();
@@ -139,6 +139,7 @@ public class NMEmiPlugin implements EmiPlugin {
         }
 
         // Heart extraction
-        registry.addRecipe(new HeartExtractionEmiRecipe(EntityType.ZOMBIE, NMItems.ANIMAL_HEART));
+        registry.addRecipe(new VivisectionEmiRecipe(List.of(EntityType.ZOMBIE), NMItems.ANIMAL_HEART));
+        registry.addRecipe(new VivisectionEmiRecipe(NMBlocks.INTEGRATOR_EGG.asItem(), NMItems.CHRYSALIS));
     }
 }

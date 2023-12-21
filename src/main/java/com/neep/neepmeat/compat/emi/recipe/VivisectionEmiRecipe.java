@@ -10,31 +10,41 @@ import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Locale;
 
-public class HeartExtractionEmiRecipe implements EmiRecipe {
+public class VivisectionEmiRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> input;
     private final List<EmiStack> output;
 
-    private final Text entity;
+    private final List<Text> entities;
 
-    public HeartExtractionEmiRecipe(EntityType<?> input, Item output) {
-        this.entity = Text.translatable(input.getTranslationKey());
+    public VivisectionEmiRecipe(List<EntityType<?>> input, Item output) {
+        this.entities = input.stream().map(e -> (Text) Text.translatable(e.getTranslationKey())).toList();
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "heart_extraction_"+input.getUntranslatedName().toLowerCase(Locale.ROOT)); // TODO: ???
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection_"+String.join("_", input.stream().map(e -> e.getUntranslatedName().toLowerCase(Locale.ROOT)).toList())); // TODO: ?????????
         this.input = List.of();
+        this.output = List.of(EmiStack.of(output));
+    }
+
+    public VivisectionEmiRecipe(Item input, Item output) {
+        this.entities = List.of();
+
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection_"+Registry.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT)); // TODO: ???
+        this.input = List.of(EmiIngredient.of(Ingredient.ofItems(input)));
         this.output = List.of(EmiStack.of(output));
     }
 
     @Override
     public EmiRecipeCategory getCategory() {
-        return NMEmiPlugin.HEART_EXTRACTION;
+        return NMEmiPlugin.VIVISECTION;
     }
 
     @Override
@@ -67,7 +77,11 @@ public class HeartExtractionEmiRecipe implements EmiRecipe {
         int startX = getDisplayWidth() / 2 - 41;
         int startY = 10;
 
-        widgets.addText(entity, 20, 25, 0xFFFFFF, true);
+        if (!entities.isEmpty()) {
+            widgets.addText(entities.get(0), 35, 5, 0xFFFFFF, true);
+        } else if (!input.isEmpty()) {
+            widgets.addSlot(input.get(0), startX, startY + 9);
+        }
 
         widgets.addTexture(EmiTexture.EMPTY_ARROW, startX + 25, startY + 9);
 

@@ -6,6 +6,7 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.widget.WidgetHolder;
 
+@Deprecated
 public class TransformingToolEmiRecipe extends SurgeryEmiRecipe {
     public TransformingToolEmiRecipe(TransformingToolRecipe recipe) {
         super(recipe);
