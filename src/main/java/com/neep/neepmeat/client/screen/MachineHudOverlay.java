@@ -2,6 +2,8 @@ package com.neep.neepmeat.client.screen;
 
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -13,8 +15,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.awt.*;
 
-import static com.neep.neepmeat.api.processing.PowerUtils.*;
-
+@Environment(EnvType.CLIENT)
 public class MachineHudOverlay
 {
     static MachineHudOverlay INSTANCE = new MachineHudOverlay();

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    " i ",
+    " c "
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:control_unit"
+    },
+    "i": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "neepmeat:networking_tool",
+    "count": 1
+  }
+}
