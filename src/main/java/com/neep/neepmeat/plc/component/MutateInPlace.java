@@ -18,11 +18,23 @@ public interface MutateInPlace<T>
             asClass(), Void.class
     );
 
+//    BlockApiLookup<MutateInPlace<?>, Void> ANY = BlockApiLookup.get(
+//            new Identifier(NeepMeat.NAMESPACE, "mutate_in_place_any"),
+//            asClass1(), Void.class
+//    );
+
     @SuppressWarnings("unchecked")
     static <T> Class<MutateInPlace<T>> asClass()
     {
         return (Class<MutateInPlace<T>>) (Object) TableComponent.class;
     }
+
+    @SuppressWarnings("unchecked")
+    static Class<MutateInPlace<?>> asClass1()
+    {
+        return (Class<MutateInPlace<?>>) (Object) TableComponent.class;
+    }
+
 
     T get();
 

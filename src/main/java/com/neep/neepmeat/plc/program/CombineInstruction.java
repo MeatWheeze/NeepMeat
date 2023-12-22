@@ -127,6 +127,7 @@ public class CombineInstruction implements Instruction
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);
+                    workpiece.clearSteps();
                 }
 
                 if (worldSupplier.get() instanceof ServerWorld serverWorld)

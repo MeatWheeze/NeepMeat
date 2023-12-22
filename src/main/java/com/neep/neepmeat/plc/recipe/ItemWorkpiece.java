@@ -75,7 +75,6 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece, ItemTagIn
 
         var list = getList(nbt);
 
-        // TODO: cache
         List<ManufactureStep<?>> steps = new ArrayList<>();
         for (int i = 0; i < list.size(); ++i)
         {
@@ -91,6 +90,43 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece, ItemTagIn
 
         stepsCache = steps;
         return steps;
+    }
+
+    @Override
+    public void clearSteps()
+    {
+        stepsCache = null;
+        var nbt = getSubNbt(KEY);
+        if (nbt == null)
+            return;
+
+        var list = getList(nbt);
+        list.clear();
+
+        // Not sure if the above steps were necessary
+        remove(KEY);
+    }
+
+    @Override
+    public void removeStep(int i)
+    {
+        stepsCache = null;
+        var nbt = getSubNbt(KEY);
+        if (nbt == null)
+            return;
+
+        var list = getList(nbt);
+        list.remove(i);
+        nbt.put("steps", list);
+
+        if (list.isEmpty())
+        {
+            remove(KEY);
+        }
+        else
+        {
+            putCompound(KEY, nbt);
+        }
     }
 
     private NbtCompound getSubNbt(String key)
