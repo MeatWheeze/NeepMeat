@@ -26,5 +26,7 @@ public interface IMotorBlockEntity
 
     float getRotorAngle();
 
+    float getSpeed();
+
     BlockApiCache<Void, Void> getConnectedBlock();
 }

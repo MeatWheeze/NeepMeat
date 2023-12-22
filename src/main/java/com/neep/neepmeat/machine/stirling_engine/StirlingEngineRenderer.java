@@ -31,7 +31,7 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
 
         // Temporal discretisation!
         float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
-        be.angle = MathHelper.wrapDegrees(be.angle + StirlingEngineBlockEntity.energyToSpeed(be.energyStored) * delta);
+        be.angle = MathHelper.wrapDegrees(be.angle + be.getSpeed() * delta);
 
 //        float angle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * be.speed);
         matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(be.angle));

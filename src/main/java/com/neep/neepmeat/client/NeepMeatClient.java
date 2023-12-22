@@ -27,6 +27,7 @@ import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
+import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.api.ClientModInitializer;
@@ -86,6 +87,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
+        BlockSoundPacket.Client.registerReceiver();
     }
 
     public static void registerRenderers()
