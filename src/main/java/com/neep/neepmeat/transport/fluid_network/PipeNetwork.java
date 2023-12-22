@@ -261,100 +261,95 @@ public class PipeNetwork
             nodeArray = connectedNodes.toArray(new NodeSupplier[0]);
         }
 
-        for (int i = 0; i < nodeArray.length; i++)
+        try (Transaction outer = Transaction.openOuter())
         {
-            Supplier<FluidNode> fromSupplier = nodeArray[i];
-            FluidNode node = fromSupplier.get();
-            if (node == null || node.getStorage(world) == null
-                    || !fromSupplier.get().isStorage
-                    || !node.getMode().canFlow()
+            for (int i = 0; i < nodeArray.length; i++)
+            {
+                Supplier<FluidNode> fromSupplier = nodeArray[i];
+                FluidNode node = fromSupplier.get();
+                if (node == null || node.getStorage(world) == null
+                        || !fromSupplier.get().isStorage
+                        || !node.getMode().canFlow()
 //                    || !fromSupplier.get().getMode(world).isDriving()
-            )
-            {
-                continue;
-            }
-
-            // Adjust base flow if this node is in a capillary pipe
-            // TODO: Somehow avoid the mutable.toimuutable.aargh() thin
-            long baseTransfer = networkPipes.get(node.getPos().mutableCopy().toImmutable()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
-
-            // Prevent unpredictable distribution
-            Transaction transaction = Transaction.openOuter();
-            long amount = node.firstAmount(world, transaction);
-            long capacity = node.firstCapacity(world, transaction);
-            long outBaseFlow = Math.min(baseTransfer, amount);
-            long inBaseFlow = Math.min(baseTransfer, capacity);
-            transaction.abort();
-
-            // Split network nodes into groups
-            // 0: safe for insertion
-            // 1: safe for extraction
-            // 2: gravity or something
-            // 3: ???
-            Map<Integer, List<Integer>> groups = IntStream.range(0, this.connectedNodes.size())
-                    .filter(n -> validPair(world, node, nodeArray[n]))
-                    .boxed()
-                    .collect(Collectors.groupingBy(n -> sortNodes(world, node, nodeArray[n].get())));
-
-            float f = node.getFlow();
-            List<Integer> safeIndices;
-            if (node.getFlow() > 0 && groups.containsKey(0)) safeIndices = groups.get(0);
-            else if (node.getFlow() < 0 && groups.containsKey(1)) safeIndices = groups.get(1);
-            else if (node.getFlow() == 0 && groups.containsKey(2)) safeIndices = groups.get(2);
-            else safeIndices = groups.get(3);
-
-            if (safeIndices == null)
-                safeIndices = Collections.emptyList();
-
-            double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / FluidNode.exactDistance(nodeArray[idx].get(), node)).sum();
-
-            for (int j : safeIndices)
-            {
-                Supplier<FluidNode> targetSupplier = nodeArray[j];
-                FluidNode targetNode = targetSupplier.get();
-
-                Transaction transaction1 = Transaction.openOuter();
-                long tAmount = node.firstAmount(world, transaction);
-                long tCapacity = node.firstCapacity(world, transaction);
-                long tOutBaseFlow = Math.min(baseTransfer, tAmount);
-                long tInBaseFlow = Math.min(baseTransfer, tCapacity);
-                transaction1.abort();
-
-                float h = node.getTargetY() - targetNode.getTargetY();
-                double gravityFlowIn = h < -0 ? 0 : 0.1 * h;
-                float flow = node.getFlow() - targetNode.getFlow();
-
-                double L = FluidNode.exactDistance(node, targetNode);
-
-                double v1 = (1f / L) / (sumDist);
-//                if (flow + gravityFlowIn > 0)
-                if (flow > 0 || gravityFlowIn > 0 && flow == 0)
+                )
                 {
-                    double q = flow > 0 ? flow : gravityFlowIn;
-                    final int finalI = i;
-                    long Q = (long) Math.ceil(Math.min(outBaseFlow, tInBaseFlow) * (q) * v1);
-                    StagedTransactions.queue(t ->
-                    {
-                        return StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t);
-                    });
-//                    StagedTransactions.TRANSACTIONS.poll().move(null);
-
-//                     StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, null);
+                    continue;
                 }
-                else if (flow < 0 || gravityFlowIn < 0 && flow == 0)
-                {
-                    double q = flow < 0 ? flow : gravityFlowIn;
-                    final int finalI = i;
-                    long Q = (long) Math.ceil(Math.min(inBaseFlow, tOutBaseFlow) * (q) * v1);
-                    StagedTransactions.queue(t ->
-                    {
-                        return StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, -Q) > 0, -Q, t);
-                    });
-//                    StagedTransactions.TRANSACTIONS.poll().move(null);
 
-//                    StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, null);
+                // Adjust base flow if this node is in a capillary pipe
+                // TODO: Somehow avoid the mutable.toimuutable.aargh() thin
+                long baseTransfer = networkPipes.get(node.getPos().mutableCopy().toImmutable()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
+
+                // Prevent unpredictable distribution
+                Transaction inner1 = outer.openNested();
+                long amount = node.firstAmount(world, inner1);
+                long capacity = node.firstCapacity(world, inner1);
+                long outBaseFlow = Math.min(baseTransfer, amount);
+                long inBaseFlow = Math.min(baseTransfer, capacity);
+                inner1.abort();
+
+                // Split network nodes into groups
+                // 0: safe for insertion
+                // 1: safe for extraction
+                // 2: gravity or something
+                // 3: ???
+                Map<Integer, List<Integer>> groups = IntStream.range(0, this.connectedNodes.size())
+                        .filter(n -> validPair(world, node, nodeArray[n]))
+                        .boxed()
+                        .collect(Collectors.groupingBy(n -> sortNodes(world, node, nodeArray[n].get())));
+
+                float f = node.getFlow();
+                List<Integer> safeIndices;
+                if (node.getFlow() > 0 && groups.containsKey(0)) safeIndices = groups.get(0);
+                else if (node.getFlow() < 0 && groups.containsKey(1)) safeIndices = groups.get(1);
+                else if (node.getFlow() == 0 && groups.containsKey(2)) safeIndices = groups.get(2);
+                else safeIndices = groups.get(3);
+
+                if (safeIndices == null)
+                    safeIndices = Collections.emptyList();
+
+                double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / FluidNode.exactDistance(nodeArray[idx].get(), node)).sum();
+
+                for (int j : safeIndices)
+                {
+                    Supplier<FluidNode> targetSupplier = nodeArray[j];
+                    FluidNode targetNode = targetSupplier.get();
+
+                    long tAmount = node.firstAmount(world, outer);
+                    long tCapacity = node.firstCapacity(world, outer);
+                    long tOutBaseFlow = Math.min(baseTransfer, tAmount);
+                    long tInBaseFlow = Math.min(baseTransfer, tCapacity);
+
+                    float h = node.getTargetY() - targetNode.getTargetY();
+                    double gravityFlowIn = h < -0 ? 0 : 0.1 * h;
+                    float flow = node.getFlow() - targetNode.getFlow();
+
+                    double L = FluidNode.exactDistance(node, targetNode);
+
+                    double v1 = (1f / L) / (sumDist);
+                    if (flow > 0 || gravityFlowIn > 0 && flow == 0)
+                    {
+                        double q = flow > 0 ? flow : gravityFlowIn;
+                        final int finalI = i;
+                        long Q = (long) Math.ceil(Math.min(outBaseFlow, tInBaseFlow) * (q) * v1);
+//                    StagedTransactions.queue(t ->
+//                    {
+                        StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, outer);
+//                    });
+                    }
+                    else if (flow < 0 || gravityFlowIn < 0 && flow == 0)
+                    {
+                        double q = flow < 0 ? flow : gravityFlowIn;
+                        final int finalI = i;
+                        long Q = (long) Math.ceil(Math.min(inBaseFlow, tOutBaseFlow) * (q) * v1);
+//                    StagedTransactions.queue(t ->
+//                    {
+                        StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, -Q) > 0, -Q, outer);
+//                    });
+                    }
                 }
             }
+            outer.commit();
         }
         long endTime = System.nanoTime();
         long totalTime = (endTime - startTim) / 1000000;
