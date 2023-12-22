@@ -7,13 +7,13 @@ import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.item.ItemImplantItem;
 import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
-import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -114,7 +114,16 @@ public class CombineInstruction implements Instruction
 
             var step = CombineStep.get(stored.resource().toStack((int) stored.amount()));
 
+            // TODO: This is a teMpORaRy measure because I can't be bothered to add ANOTHER recipe type
+            if (stored.resource().getObject() instanceof ItemImplantItem item)
+            {
+                item.install(stack);
+                plc.getRobot().stored = null;
+                mip.set(stack);
+            }
+
             var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);
+
             if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.MANUFACTURE, workpiece, step, stack.getItem()))
             {
                 workpiece.addStep(step);
@@ -126,16 +135,6 @@ public class CombineInstruction implements Instruction
                 {
                     recipe.ejectOutputs(mip, null);
                     workpiece.clearSteps();
-                }
-                else
-                {
-                    // Special handling for transforming tools.
-//                    TransformingToolRecipe transformingToolRecipe = TransformingToolRecipe.getInstance();
-//                    if (transformingToolRecipe.matches(mip))
-//                    {
-//                        transformingToolRecipe.ejectOutputs(mip, null);
-//                        workpiece.clearSteps();
-//                    }
                 }
 
                 if (worldSupplier.get() instanceof ServerWorld serverWorld)

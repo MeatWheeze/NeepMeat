@@ -12,7 +12,7 @@ import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
-import com.neep.neepmeat.plc.recipe.EntityManufactureRecipe;
+import com.neep.neepmeat.plc.recipe.EntityImplantRecipe;
 import com.neep.neepmeat.plc.recipe.ImplantStep;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
@@ -132,7 +132,7 @@ public class ImplantInstruction implements Instruction
             {
                 step.mutate(entity);
 
-                EntityManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.ENTITY_MANUFACTURE, mip).orElse(null);
+                EntityImplantRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.ENTITY_MANUFACTURE, mip).orElse(null);
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);

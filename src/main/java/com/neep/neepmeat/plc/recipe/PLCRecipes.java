@@ -4,12 +4,7 @@ import com.neep.meatlib.recipe.*;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
-import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMItems;
-import com.neep.neepmeat.plc.component.MutateInPlace;
-import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
 import java.util.List;
 import java.util.Objects;
@@ -18,8 +13,8 @@ public class PLCRecipes
 {
     public static final MeatRecipeSerialiser<ItemManufactureRecipe> MANUFACTURE_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "manufacture", new ItemManufactureRecipe.Serialiser());
     public static final MeatRecipeType<ItemManufactureRecipe> MANUFACTURE = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "manufacture");
-    public static final MeatRecipeSerialiser<EntityManufactureRecipe> ENTITY_MANUFACTURE_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "entity_manufacture", new EntityManufactureRecipe.Serialiser());
-    public static final MeatRecipeType<EntityManufactureRecipe> ENTITY_MANUFACTURE = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "entity_manufacture");
+    public static final MeatRecipeSerialiser<EntityImplantRecipe> ENTITY_MANUFACTURE_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "entity_manufacture", new EntityImplantRecipe.Serialiser());
+    public static final MeatRecipeType<EntityImplantRecipe> ENTITY_MANUFACTURE = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "entity_manufacture");
 
     public static final ManufactureStep.Provider<?> COMBINE = ManufactureStep.register(CombineStep.ID, ManufactureStep.Provider.of(CombineStep::get, CombineStep::get));
     public static final ManufactureStep.Provider<?> INJECT = ManufactureStep.register(InjectStep.ID, ManufactureStep.Provider.of(InjectStep::new, InjectStep::new));

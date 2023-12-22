@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class InstructionAttributes
 {
-    private static Map<InstructionProvider, InstructionTooltip> TOOLTIPS = Maps.newHashMap();
+    private static final Map<InstructionProvider, InstructionTooltip> TOOLTIPS = Maps.newHashMap();
 
     public static void register(InstructionProvider provider, InstructionTooltip tooltip)
     {

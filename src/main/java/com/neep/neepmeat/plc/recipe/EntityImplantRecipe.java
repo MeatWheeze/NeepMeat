@@ -18,14 +18,14 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 
-public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<Entity>>
+public class EntityImplantRecipe implements ManufactureRecipe<MutateInPlace<Entity>>
 {
     protected final EntityType<?> base;
     private final List<ManufactureStep<?>> steps;
     private final EntityImplantInstaller implant;
     private final Identifier id;
 
-    public EntityManufactureRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, EntityImplantInstaller implant)
+    public EntityImplantRecipe(Identifier id, EntityType<?> base, List<ManufactureStep<?>> steps, EntityImplantInstaller implant)
     {
         this.id = id;
         this.base = base;
@@ -111,10 +111,10 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
         return id;
     }
 
-    public static class Serialiser implements MeatRecipeSerialiser<EntityManufactureRecipe>
+    public static class Serialiser implements MeatRecipeSerialiser<EntityImplantRecipe>
     {
         @Override
-        public EntityManufactureRecipe read(Identifier id, JsonObject json)
+        public EntityImplantRecipe read(Identifier id, JsonObject json)
         {
 //            Identifier baseId = Identifier.tryParse(JsonHelper.getString(json , "base"));
 //            EntityType<?> base = Registry.ENTITY_TYPE.get(baseId);
@@ -135,11 +135,11 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
             }
             else throw new JsonSyntaxException("Implant installer not found.");
 
-            return new EntityManufactureRecipe(id, base, steps, installer);
+            return new EntityImplantRecipe(id, base, steps, installer);
         }
 
         @Override
-        public EntityManufactureRecipe read(Identifier id, PacketByteBuf buf)
+        public EntityImplantRecipe read(Identifier id, PacketByteBuf buf)
         {
             EntityType<?> base = buf.readRegistryValue(Registry.ENTITY_TYPE);
 
@@ -147,11 +147,11 @@ public class EntityManufactureRecipe implements ManufactureRecipe<MutateInPlace<
 
             EntityImplantInstaller implant = buf.readRegistryValue(EntityImplantInstaller.REGISTRY);
 
-            return new EntityManufactureRecipe(id, base, steps, implant);
+            return new EntityImplantRecipe(id, base, steps, implant);
         }
 
         @Override
-        public void write(PacketByteBuf buf, EntityManufactureRecipe recipe)
+        public void write(PacketByteBuf buf, EntityImplantRecipe recipe)
         {
             buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.base);
 
