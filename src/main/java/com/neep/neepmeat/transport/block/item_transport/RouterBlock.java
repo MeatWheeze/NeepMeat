@@ -18,6 +18,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Predicate;
+
 public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItemPipe
 {
     public RouterBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -54,11 +58,17 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
             Direction output = be.getOutputDirection(item);
             if (direction != output && output != null)
             {
-                long transferred = TubeUtils.tryTransfer(item, pos, state, output, world, null, false);
+                long transferred = TubeUtils.pipeToAny(item, pos, state, output, world, null, false);
                 return transferred;
             }
         }
         return 0;
+    }
+
+    @Override
+    public List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    {
+        return Arrays.stream(Direction.values()).toList();
     }
 
     @Nullable

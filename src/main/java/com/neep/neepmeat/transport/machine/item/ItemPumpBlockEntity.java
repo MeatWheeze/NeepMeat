@@ -99,9 +99,9 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
                 return false;
             }
 
-            long transferred = storage.extract(extractable.resource(), 16, transaction);
-            long forwarded = forwardItem(new ResourceAmount<>(extractable.resource(), transferred), transaction);
-            if (forwarded != -1)
+            long forwarded = forwardItem(new ResourceAmount<>(extractable.resource(), Math.min(16, extractable.amount())), transaction);
+            long transferred = storage.extract(extractable.resource(), forwarded, transaction);
+            if (transferred < 1)
             {
                 transaction.abort();
                 return false;
@@ -206,7 +206,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         BlockPos newPos = pos.offset(facing);
-        BlockState state = world.getBlockState(newPos);
 
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
@@ -216,7 +215,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             nested.commit();
             return transferred;
         }
-        return TubeUtils.tryTransfer(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld(), transaction, true);
+        return TubeUtils.pipeToAny(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld(), transaction, true);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));

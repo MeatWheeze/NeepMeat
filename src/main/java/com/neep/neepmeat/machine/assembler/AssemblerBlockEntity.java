@@ -158,7 +158,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                 ItemStack filterStack = storage.getInventory().getStack(i);
                 if (!(filterStack.isEmpty() || filterStack.isItemEqual(stack))) return false;
 
-                int ejected = TubeUtils.ejectStack((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), target.getStack(i).copy());
+                int ejected = TubeUtils.stackToAny((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), target.getStack(i).copy());
                 if (ejected > 0)
                 {
                     target.removeStack(i, ejected);
