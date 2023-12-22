@@ -49,8 +49,10 @@ public class HUDOverlays
         }
 
         float f = client.getLastFrameDuration();
+
         if (vignetteState == 1)
         {
+            // Fade vignette in quickly
             opacity = (float) MathHelper.lerp(0.8F * f, opacity, 1.00F);
             renderOverlay(INJECTOR_VIGNETTE, opacity, 1.1f);
             if (opacity > 0.99)
@@ -58,7 +60,8 @@ public class HUDOverlays
         }
         if (vignetteState == 2)
         {
-            opacity = (float) MathHelper.lerp(0.1F * f, opacity, 0.0F);
+            // Fade vignette out slowly
+            opacity = MathHelper.lerp(0.1F * f, opacity, 0.0F);
             renderOverlay(INJECTOR_VIGNETTE, opacity, 1.1f);
             if (opacity < 0.001)
             {
