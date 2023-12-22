@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
@@ -24,6 +25,7 @@ public class BigBlockStructureBlockEntity extends BlockEntity
     {
         controllerPos = controller.toImmutable();
         relativePos = pos.subtract(controller);
+        markDirty();
     }
 
     public BlockPos getControllerPos()
@@ -45,14 +47,16 @@ public class BigBlockStructureBlockEntity extends BlockEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        toVector(nbt.getCompound("relativePos"));
+        relativePos = toVector(nbt.getCompound("relative_pos"));
+        controllerPos = NbtHelper.toBlockPos(nbt.getCompound("controller_pos"));
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.put("relativePos", fromVector(relativePos));
+        nbt.put("relative_pos", fromVector(relativePos));
+        nbt.put("controller_pos", NbtHelper.fromBlockPos(controllerPos));
     }
 
     public static Vec3i toVector(NbtCompound nbt)

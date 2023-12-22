@@ -14,6 +14,7 @@ import com.neep.neepmeat.client.model.entity.HoundEntityModel;
 import com.neep.neepmeat.client.plc.PLCClient;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.renderer.*;
+import com.neep.neepmeat.client.renderer.block.AdvancedIntegratorRenderer;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
@@ -157,6 +158,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_INTEGRATOR, AdvancedIntegratorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.PNEUMATIC_PIPE, ItemPipeRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
