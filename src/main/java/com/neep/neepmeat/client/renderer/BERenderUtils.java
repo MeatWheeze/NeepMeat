@@ -29,77 +29,6 @@ import java.util.Random;
 
 public class BERenderUtils
 {
-    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float offset, float endY, float scaleY)
-    {
-        Sprite sprite = FluidVariantRendering.getSprite(fluid);
-        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
-        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
-
-        int col = FluidVariantRendering.getColor(fluid);
-
-        float r = ((col >> 16) & 0xFF) / 256f;
-        float g = ((col >> 8) & 0xFF) / 256f;
-        float b = (col & 255) / 255f;
-
-        if (fluid.isBlank() || scaleY == 0)
-        {
-            return;
-        }
-
-        float startY = offset;
-        float dist = startY + (endY - startY) * scaleY;
-        if (FluidVariantAttributes.isLighterThanAir(fluid))
-        {
-            matrices.translate(1, 1, 0);
-            matrices.scale(-1, -1, 1);
-        }
-
-        float depth = 0.3f;
-
-        QuadEmitter emitter = renderer.meshBuilder().getEmitter();
-
-        for (Direction direction : Direction.values())
-        {
-            if (direction == Direction.UP)
-            {
-                emitter.square(Direction.UP, depth, depth, 1 - depth, 1 - depth, 1 - dist);
-            }
-            else if (direction != Direction.DOWN)
-            {
-                emitter.square(direction, depth, startY, 1 - depth, dist, depth);
-            }
-
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-        }
-
-//        emitter.square(Direction.NORTH, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
-//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//        emitter.spriteColor(0, -1, -1, -1, -1);
-//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-//
-//        emitter.square(Direction.SOUTH, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
-//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//        emitter.spriteColor(0, -1, -1, -1, -1);
-//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-//
-//        emitter.square(Direction.EAST, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
-//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//        emitter.spriteColor(0, -1, -1, -1, -1);
-//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-//
-//        emitter.square(Direction.WEST, 0.3f, 0.1f, 1 - 0.3f, dist, 0.3f);
-//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//        emitter.spriteColor(0, -1, -1, -1, -1);
-//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-//
-//        emitter.square(Direction.UP, 0.3f, 0.3f, 0.3f, 0.3f, 1 - dist);
-//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-//        emitter.spriteColor(0, -1, -1, -1, -1);
-//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
-    }
-
     public static void renderModel(Identifier model, MatrixStack matrices, World world, BlockPos pos, BlockState state, VertexConsumerProvider vertexConsumers)
     {
         BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
@@ -254,5 +183,49 @@ public class BERenderUtils
             }
         }
         matrices.translate(-0.5, -0.5, -0.5);
+    }
+
+    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startY, float endY, float depth, float scaleY, int light)
+    {
+        Sprite sprite = FluidVariantRendering.getSprite(fluid);
+        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
+        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
+
+        int col = FluidVariantRendering.getColor(fluid);
+
+        float r = ((col >> 16) & 255) / 256f;
+        float g = ((col >> 8) & 255) / 256f;
+        float b = (col & 255) / 256f;
+
+        if (fluid.isBlank() || scaleY == 0)
+        {
+            return;
+        }
+
+        float dist = startY + (endY - startY) * scaleY;
+        if (FluidVariantAttributes.isLighterThanAir(fluid))
+        {
+            matrices.translate(1, 1, 0);
+            matrices.scale(-1, -1, 1);
+        }
+
+        QuadEmitter emitter = renderer.meshBuilder().getEmitter();
+
+        for (Direction direction : Direction.values())
+        {
+            if (direction.getAxis().isVertical())
+            {
+//                emitter.square(Direction.UP, depth, depth, 1 - depth, 1 - depth, 1 - dist);
+                emitter.square(direction, depth, depth, 1 - depth, 1 - depth, direction == Direction.UP ? 1 - dist : startY);
+            }
+            else if (direction != Direction.DOWN)
+            {
+                emitter.square(direction, depth, startY, 1 - depth, dist, depth);
+            }
+
+            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+            emitter.spriteColor(0, -1, -1, -1, -1);
+            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, light, OverlayTexture.DEFAULT_UV);
+        }
     }
 }
