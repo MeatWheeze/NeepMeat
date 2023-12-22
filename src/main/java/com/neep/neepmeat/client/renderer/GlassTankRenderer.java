@@ -61,7 +61,7 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
         float g = ((col >> 8) & 255) / 256f;
         float b = (col & 255) / 256f;
 
-        if (fluid.isBlank())
+        if (fluid.isBlank() || scaleY == 0)
         {
             return;
         }

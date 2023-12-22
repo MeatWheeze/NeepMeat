@@ -40,11 +40,11 @@ public class GlassTankBlock extends BaseColumnBlock implements BlockEntityProvid
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.isClient)
+        if (!world.isClient)
         {
             if (world.getBlockEntity(pos) instanceof GlassTankBlockEntity be)
             {
-                player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount() / FluidConstants.BUCKET)), true);
+                player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount()/ FluidConstants.BUCKET)), true);
             }
         }
         return ActionResult.SUCCESS;
