@@ -36,10 +36,9 @@ public class NodeContainerBlockEntity extends BlockEntity
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt = FluidNetwork.getInstance(getWorld()).writeNodes(getPos(), nbt);
-        return nbt;
     }
 }

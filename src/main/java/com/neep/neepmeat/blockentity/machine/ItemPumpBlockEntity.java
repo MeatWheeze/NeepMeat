@@ -1,14 +1,13 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
+import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements BlockEntityClientSerializable
+public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 {
     public static final String NBT_ACTIVE = "active";
     public static final String NBT_COOLDOWN = "cooldown";
@@ -268,12 +267,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         tag.putBoolean(NBT_ACTIVE, active);
         tag.putInt(NBT_COOLDOWN, cooldown);
-        return tag;
     }
 
     @Override

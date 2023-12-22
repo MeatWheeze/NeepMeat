@@ -1,13 +1,12 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
-import io.netty.handler.codec.bytes.ByteArrayEncoder;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
@@ -22,7 +21,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.packet.s2c.play.SetTradeOffersS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
@@ -66,17 +64,18 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        fromClientTag(nbt);
         storage.readNbt(nbt);
         powered = nbt.getBoolean("powered");
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        toClientTag(nbt);
         storage.writeNbt(nbt);
         nbt.putBoolean("powered", powered);
-        return nbt;
     }
 
     // Oh, Gawd this looks awful. There must be a way of cleaning this up!
@@ -214,7 +213,6 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     @Override
     public void fromClientTag(NbtCompound tag)
     {
-//       System.out.println("reading client");
         storage.readNbt(tag);
 
         if (tag.getBoolean("shuttle"))
@@ -226,7 +224,6 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
     @Override
     public NbtCompound toClientTag(NbtCompound tag)
     {
-//        System.out.println("writing server");
         storage.writeNbt(tag);
         tag.putBoolean("shuttle", shuttle);
         this.shuttle = false;

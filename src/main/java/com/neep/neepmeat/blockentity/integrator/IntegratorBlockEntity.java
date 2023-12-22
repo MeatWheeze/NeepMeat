@@ -76,13 +76,12 @@ public class IntegratorBlockEntity extends BlockEntity implements
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         tag.putInt("growth_remaining", growthTimeRemaining);
         tag.putBoolean("fully_grown", isFullyGrown);
         tag = buffer.writeNbt(tag);
-        return tag;
     }
 
     @Override
@@ -94,24 +93,24 @@ public class IntegratorBlockEntity extends BlockEntity implements
         buffer.readNbt(tag);
     }
 
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        if (!isFullyGrown)
-        {
-            readNbt(tag);
-            if (isFullyGrown)
-                this.hatching = true;
-        }
-        else
-            readNbt(tag);
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        return writeNbt(tag);
-    }
+//    @Override
+//    public void fromClientTag(NbtCompound tag)
+//    {
+//        if (!isFullyGrown)
+//        {
+//            readNbt(tag);
+//            if (isFullyGrown)
+//                this.hatching = true;
+//        }
+//        else
+//            readNbt(tag);
+//    }
+//
+//    @Override
+//    public NbtCompound toClientTag(NbtCompound tag)
+//    {
+//        return writeNbt(tag);
+//    }
 
     public static void serverTick(World world, BlockPos blockPos, BlockState blockState, IntegratorBlockEntity be)
     {

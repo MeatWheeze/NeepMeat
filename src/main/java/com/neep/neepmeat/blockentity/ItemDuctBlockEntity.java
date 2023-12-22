@@ -62,11 +62,10 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         storage.writeNbt(tag);
-        return tag;
     }
 
     @Override

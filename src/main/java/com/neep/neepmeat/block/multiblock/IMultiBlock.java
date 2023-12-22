@@ -34,14 +34,13 @@ public interface IMultiBlock
             }
         }
 
-        public NbtCompound writeNbt(NbtCompound nbt)
+        public void writeNbt(NbtCompound nbt)
         {
             super.writeNbt(nbt);
             if (hasController())
             {
                 nbt.put("controller", NbtHelper.fromBlockPos(controllerPos));
             }
-            return nbt;
         }
 
         public BlockPos getControllerPos()

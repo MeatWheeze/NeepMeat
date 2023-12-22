@@ -70,11 +70,11 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
 
         if (state.get(WATERLOGGED))
         {
-            world.getFluidTickScheduler().schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         if (!world.isClient())
         {
-            world.getBlockTickScheduler().schedule(pos, this, 1);
+            world.createAndScheduleBlockTick(pos, this, 1);
         }
         return state;
     }

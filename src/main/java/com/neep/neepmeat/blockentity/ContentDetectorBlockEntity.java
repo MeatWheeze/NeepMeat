@@ -99,7 +99,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         filterInventory.writeNbt(tag);
@@ -107,7 +107,6 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
         tag.putInt(NBT_MODE, mode);
         tag.putInt(NBT_COUNT_MODE, countMode);
         tag.putInt(NBT_BEHAVIOUR_MODE, behaviourMode);
-        return tag;
     }
 
     @Override

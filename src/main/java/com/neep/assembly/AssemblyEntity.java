@@ -1,5 +1,6 @@
 package com.neep.assembly;
 
+import com.mojang.serialization.Codec;
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.block.IRail;
 import com.neep.assembly.storage.AssemblyContainer;
@@ -29,23 +30,28 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
+import net.minecraft.world.chunk.PalettedContainer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AssemblyEntity extends Entity
 {
-    private static final Palette<BlockState> FALLBACK_PALETTE = new IdListPalette<>(Block.STATE_IDS, Blocks.AIR.getDefaultState());
+//    private static final Palette<BlockState> FALLBACK_PALETTE = new IdListPalette<>(Block.STATE_IDS, Blocks.AIR.getDefaultState());
+    private static final Palette<BlockState> FALLBACK_PALETTE = new IdListPalette<>(Block.STATE_IDS);
     private static final TrackedData<Optional<BlockState>> BLOCK = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.OPTIONAL_BLOCK_STATE);
     private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.NBT_COMPOUND);
+    private static final Codec<PalettedContainer<BlockState>> CODEC = PalettedContainer.createCodec(Block.STATE_IDS, BlockState.CODEC, PalettedContainer.PaletteProvider.BLOCK_STATE, Blocks.AIR.getDefaultState());
 
-    public AssemblyContainer blocks = new AssemblyContainer(FALLBACK_PALETTE,
-        Block.STATE_IDS,
-        NbtHelper::toBlockState,
-        NbtHelper::fromBlockState,
-        Blocks.AIR.getDefaultState());
+//    public AssemblyContainer blocks = new AssemblyContainer(FALLBACK_PALETTE,
+//        Block.STATE_IDS,
+//        NbtHelper::toBlockState,
+//        NbtHelper::fromBlockState,
+//        Blocks.AIR.getDefaultState());
+    public AssemblyContainer blocks = new AssemblyContainer(Block.STATE_IDS, Blocks.AIR.getDefaultState());
     protected boolean needsBoxUpdate;
 
     protected List<BlockPos> anchorPositions = new ArrayList<>();
@@ -102,7 +108,9 @@ public class AssemblyEntity extends Entity
     {
         super.writeNbt(nbt);
 //        writePalette(nbt);
-        blocks.write(nbt, "Palette", "BlockStates");
+//        blocks.write(nbt, "Palette", "BlockStates");
+//        CODEC.encode(blocks,
+
         return nbt;
     }
 
@@ -113,14 +121,14 @@ public class AssemblyEntity extends Entity
 //        readPalette(nbt);
         if (nbt.contains("Palette", 9) && nbt.contains("BlockStates", 12))
         {
-            blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
+//            blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
         updateAnchorPositions();
    }
 
     public NbtCompound writePalette(NbtCompound nbt)
     {
-        blocks.write(nbt, "Palette", "BlockStates");
+//        blocks.write(nbt, "Palette", "BlockStates");
         return nbt;
     }
 
@@ -131,7 +139,7 @@ public class AssemblyEntity extends Entity
         }
         if (nbt.contains("Palette", 9) && nbt.contains("BlockStates", 12))
         {
-            blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
+//            blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
     }
 
@@ -462,9 +470,8 @@ public class AssemblyEntity extends Entity
         Stream<VoxelShape> stream = VoxelShapes.matchesAnywhere(voxelShape, VoxelShapes.cuboid(box.contract(1.0E-7)), BooleanBiFunction.AND) ? Stream.empty() : Stream.of(voxelShape);
 //        Stream<VoxelShape> stream2 = this.world.getEntityCollisions(this, box.stretch(movement), entity -> true);
 //        ReusableStream<VoxelShape> reusableStream = new ReusableStream<>(Stream.concat(stream2, stream));
-        ReusableStream<VoxelShape> reusableStream = new ReusableStream<>(stream);
 
-        Vec3d vec3d = movement.lengthSquared() == 0.0 ? movement : Entity.adjustMovementForCollisions(this, movement, box, this.world, shapeContext, reusableStream);
+        Vec3d vec3d = movement.lengthSquared() == 0.0 ? movement : Entity.adjustMovementForCollisions(this, movement, box, this.world, stream.collect(Collectors.toList()));
 
         return vec3d;
     }
@@ -599,10 +606,8 @@ public class AssemblyEntity extends Entity
 
     public void initPalette()
     {
-        this.blocks = new AssemblyContainer(FALLBACK_PALETTE,
+        this.blocks = new AssemblyContainer(
                 Block.STATE_IDS,
-                NbtHelper::toBlockState,
-                NbtHelper::fromBlockState,
                 Blocks.AIR.getDefaultState());
     }
 

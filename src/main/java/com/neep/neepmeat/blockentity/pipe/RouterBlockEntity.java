@@ -51,11 +51,10 @@ public class RouterBlockEntity extends BlockEntity implements NamedScreenHandler
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         inventory.writeNbt(nbt);
-        return nbt;
     }
 
     @Override

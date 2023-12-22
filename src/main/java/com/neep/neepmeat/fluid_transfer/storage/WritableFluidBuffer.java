@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_transfer.storage;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -100,11 +101,11 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
         if (parent != null)
         {
             parent.markDirty();
-            parent.getWorld().updateListeners(parent.getPos(), parent.getCachedState(), parent.getCachedState(), Block.NOTIFY_LISTENERS);
         }
-//        if (parent instanceof BlockEntityClientSerializable serializable)
-//        {
-//            serializable.sync();
-//        }
+
+        if (parent instanceof SyncableBlockEntity serializable)
+        {
+            serializable.sync();
+        }
     }
 }

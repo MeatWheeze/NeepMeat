@@ -126,13 +126,12 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         buffer.writeNbt(tag);
         tag.putInt(FRONT_MODE, frontMode.getId());
         tag.putInt(BACK_MODE, backMode.getId());
-        return tag;
     }
 
     @Override

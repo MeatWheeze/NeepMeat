@@ -1,10 +1,11 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
@@ -23,10 +24,8 @@ import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TrommelBlockEntity extends BlockEntity implements
-        BlockEntityClientSerializable,
-//        Storage<ItemVariant>,
-        InventoryStorage,
+public class TrommelBlockEntity extends SyncableBlockEntity implements
+        Storage<ItemVariant>,
         SingleSlotStorage<ItemVariant>
 {
     private ItemVariant resource = ItemVariant.blank();
@@ -42,12 +41,11 @@ public class TrommelBlockEntity extends BlockEntity implements
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound tag)
+    public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
         tag.putLong("amount", getAmount());
         tag.put("resource", getResource().toNbt());
-        return tag;
     }
 
     @Override
@@ -166,23 +164,5 @@ public class TrommelBlockEntity extends BlockEntity implements
     public long getCapacity()
     {
         return capacity;
-    }
-
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-        readNbt(tag);
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        return writeNbt(tag);
-    }
-
-    @Override
-    public List<SingleSlotStorage<ItemVariant>> getSlots()
-    {
-        return List.of(this);
     }
 }

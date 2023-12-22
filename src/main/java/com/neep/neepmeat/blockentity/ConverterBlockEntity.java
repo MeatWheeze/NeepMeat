@@ -1,9 +1,9 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.mixin.FurnaceAccessor;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -24,7 +24,8 @@ import net.minecraft.world.World;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
-public class ConverterBlockEntity extends BlockEntity implements BlockEntityClientSerializable
+@SuppressWarnings("UnstableApiUsage")
+public class ConverterBlockEntity extends SyncableBlockEntity
 {
 
     protected int cooldown;
@@ -129,22 +130,14 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
         super.readNbt(nbt);
 
         this.cooldown = nbt.getInt("cooldown");
-//        this.stage = nbt.getShort("stage");
-//        this.inAmount = nbt.getLong("in_amount");
-//        this.outAmount = nbt.getLong("out_amount");
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
 
         nbt.putInt("cooldown", cooldown);
-//        nbt.putShort("stage", stage);
-//        nbt.putLong("in_amount", inAmount);
-//        nbt.putLong("out_amount", outAmount);
-
-        return nbt;
     }
 
     public long convert(long amount, Transaction transaction)
