@@ -1,5 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
+import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -14,6 +15,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -78,14 +80,15 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         else /*if (!world.isClient)*/
         {
-            player.sendMessage(Text.of(Long.toString(getBuffer(null).getAmount())), true);
+//            player.sendMessage(Text.of(Long.toString(getBuffer(null).getAmount())), true);
+            showContents(player, buffer);
             return true;
         }
         return false;
     }
 
-//    public NbtCompound getStackNbt()
-//    {
-//
-//    }
+    public static void showContents(PlayerEntity player, FluidBuffer buffer)
+    {
+//        player.sendMessage(buffer.getResource().getFluid().
+    }
 }
