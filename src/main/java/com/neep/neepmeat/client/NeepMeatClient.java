@@ -134,14 +134,14 @@ public class NeepMeatClient implements ClientModInitializer
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_WORK_FLUID, NMFluids.FLOWING_WORK_FLUID, new SimpleFluidRenderHandler(
-                CHARGED_WORK_FLUID,
-                CHARGED_WORK_FLUID,
+                WORK_FLUID,
+                WORK_FLUID_FLOWING,
                 0x999999
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CHARGED_WORK_FLUID, NMFluids.FLOWING_CHARGED_WORK_FLUID, new SimpleFluidRenderHandler(
                 CHARGED_WORK_FLUID,
-                CHARGED_WORK_FLUID,
+                CHARGED_WORK_FLUID_FLOWING,
                 0xFFFFFF
         ));
 
@@ -168,6 +168,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
+            registry.register(WORK_FLUID);
+            registry.register(WORK_FLUID_FLOWING);
             registry.register(CHARGED_WORK_FLUID);
             registry.register(CHARGED_WORK_FLUID_FLOWING);
             registry.register(ETHEREAL_FUEL);

@@ -89,10 +89,9 @@ public class DumperBlockEntity extends SyncableBlockEntity
     public void tick()
     {
 
-        if (active)
-            counter = Math.min(interval, counter + 1);
+        counter = Math.min(interval, counter + 1);
 
-        if (counter >= interval)
+        if (counter >= interval && active)
         {
             counter = 0;
 
