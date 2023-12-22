@@ -14,6 +14,19 @@ public class FallingParticle extends SpriteBillboardParticle
     {
         super(clientWorld, d, e, f, g, h, i);
         this.gravityStrength = 1.0f;
+//        this.velocityMultiplier = 10;
+
+//        this.velocityX = velocityX + (Math.random() * 2.0 - 1.0) * (double)0.4f;
+//        this.velocityY = velocityY + (Math.random() * 2.0 - 1.0) * (double)0.4f;
+//        this.velocityZ = velocityZ + (Math.random() * 2.0 - 1.0) * (double)0.4f;
+//        double j = (Math.random() + Math.random() + 1.0) * (double)0.15f;
+//        double k = Math.sqrt(this.velocityX * this.velocityX + this.velocityY * this.velocityY + this.velocityZ * this.velocityZ);
+//        this.velocityX = this.velocityX / k * j * (double)0.4f;
+//        this.velocityY = this.velocityY / k * j * (double)0.4f + (double)0.1f;
+//        this.velocityZ = this.velocityZ / k * j * (double)0.4f;
+        this.velocityX = g;
+        this.velocityY = h;
+        this.velocityZ = i;
     }
 
     @Override

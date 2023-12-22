@@ -12,10 +12,7 @@ import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;
 import com.neep.neepmeat.client.renderer.*;
-import com.neep.neepmeat.client.renderer.entity.GogglesArmourRenderer;
-import com.neep.neepmeat.client.renderer.entity.HoundEntityRenderer;
-import com.neep.neepmeat.client.renderer.entity.KeeperEntityRenderer;
-import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
+import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
@@ -93,6 +90,7 @@ public class NeepMeatClient implements ClientModInitializer
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
+        ParticleSpawnPacket.Client.registerReceiver();
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         NMKeys.registerKeybindings();
 
@@ -121,6 +119,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityRendererRegistry.register(NMEntities.KEEPER, KeeperEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.HOUND, HoundEntityRenderer::new);
         EntityRendererRegistry.register(NMEntities.BOVINE_HORROR, BovineHorrorRenderer::new);
+        EntityRendererRegistry.register(NMEntities.ACID_SPRAY, DummyEntityRenderer::new);
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 

@@ -5,7 +5,10 @@ import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.entity.ai.goal.Goal;
+import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
@@ -35,6 +38,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
+
+import java.util.EnumSet;
 
 public class BovineHorrorEntity extends HostileEntity implements Monster, IAnimatable
 {
@@ -88,7 +93,9 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
 
 //        goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
+        goalSelector.add(2, new FaceTowardTargetGoal(this));
         goalSelector.add(2, new BovineHorrorMeleeAttackGoal(this, 1.0, false));
+        goalSelector.add(2, new HorrorAcidAttackGoal(this));
     }
 
     @Override
@@ -286,5 +293,66 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     {
         NONE,
         ATTACK
+    }
+
+    static class FaceTowardTargetGoal extends Goal
+    {
+        private final BovineHorrorEntity mob;
+        private int ticksLeft;
+
+        public FaceTowardTargetGoal(BovineHorrorEntity mob) {
+            this.mob = mob;
+            this.setControls(EnumSet.of(Goal.Control.LOOK));
+        }
+
+        @Override
+        public boolean canStart()
+        {
+            LivingEntity livingEntity = this.mob.getTarget();
+            if (livingEntity == null)
+            {
+                return false;
+            }
+            return this.mob.canTarget(livingEntity);
+        }
+
+        @Override
+        public void start()
+        {
+            this.ticksLeft = FaceTowardTargetGoal.toGoalTicks(300);
+            super.start();
+        }
+
+        @Override
+        public boolean shouldContinue()
+        {
+            LivingEntity livingEntity = this.mob.getTarget();
+            if (livingEntity == null)
+            {
+                return false;
+            }
+            if (!this.mob.canTarget(livingEntity))
+            {
+                return false;
+            }
+            return --this.ticksLeft > 0;
+        }
+
+        @Override
+        public boolean shouldRunEveryTick()
+        {
+            return true;
+        }
+
+        @Override
+        public void tick()
+        {
+            LivingEntity livingEntity = this.mob.getTarget();
+            if (livingEntity != null)
+            {
+//                this.mob.lookAtEntity(livingEntity, 10.0f, 10.0f);
+                this.mob.getLookControl().lookAt(livingEntity);
+            }
+        }
     }
 }

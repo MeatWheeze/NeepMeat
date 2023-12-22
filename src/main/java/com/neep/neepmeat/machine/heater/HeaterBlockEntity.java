@@ -140,7 +140,7 @@ public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAccep
             double dy = random.nextDouble() * 1.1;
             double dz = random.nextDouble() * 1.1;
 //            ParticleSpawnPacket.send(player, particle, new Vec3d(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz), new Vec3d(0, 0, 0), amount);
-            ParticleSpawnPacket.send(player, particle, pos, amount);
+//            ParticleSpawnPacket.send(player, particle, pos, amount);
         }
     }
 

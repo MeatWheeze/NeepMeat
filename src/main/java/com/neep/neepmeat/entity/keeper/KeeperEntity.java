@@ -190,7 +190,8 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     @Override
     public void equipStack(EquipmentSlot slot, ItemStack stack)
     {
-        if (slot == EquipmentSlot.MAINHAND) equipped = stack;
+        if (slot == EquipmentSlot.MAINHAND)
+            equipped = stack;
         if (!world.isClient()) updateAttackType();
     }
 

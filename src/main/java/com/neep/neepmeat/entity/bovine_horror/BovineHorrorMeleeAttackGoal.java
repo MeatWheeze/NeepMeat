@@ -1,5 +1,6 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 
 public class BovineHorrorMeleeAttackGoal extends MeleeAttackGoal
@@ -10,6 +11,18 @@ public class BovineHorrorMeleeAttackGoal extends MeleeAttackGoal
     {
         super(mob, speed, pauseWhenMobIdle);
         this.bovineHorror = mob;
+    }
+
+    @Override
+    public boolean canStart()
+    {
+        return super.canStart();
+    }
+
+    @Override
+    protected double getSquaredMaxAttackDistance(LivingEntity entity)
+    {
+        return 8;
     }
 
     @Override
