@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 public class PipeBranches extends HashMap<Long, PipeState>
 {
-    // TODO: Move pipes into an ArrayList and map each BlockPos to an index
     public static void test(ServerWorld world, HashSet<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         if (nodes.size() > 1)
@@ -42,11 +41,34 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static Function<Long, Long>[][] getMatrix(List<Supplier<FluidNode>> nodes)
+    public static void testMatrix(Function<Long, Long>[][] matrix)
+    {
+        long[][] out = new long[matrix.length][matrix[0].length];
+        for (int i = 0; i < matrix.length; ++i)
+        {
+            for (int j = 0; j < matrix[0].length; ++j)
+            {
+                out[i][j] = matrix[i][j].apply(PipeNetwork.BASE_TRANSFER);
+            }
+        }
+        System.out.println(Arrays.deepToString(out));
+    }
+
+    public static Function<Long, Long>[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         int size = nodes.size();
 
         Function<Long, Long>[][] matrix = (Function<Long, Long>[][]) Array.newInstance(Function.class, size, size);
+        for (int i = 0; i < size; ++i)
+        {
+            for (int j = 0; j < size; ++j)
+            {
+                if (i == j)
+                    matrix[i][j] = PipeState::zero;
+                else
+                    matrix[i][j] = Function.identity();
+            }
+        }
 
         for (int i = 0; i < size; ++i)
         {
@@ -60,7 +82,11 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 if (toNode.get() == null || toNode.equals(fromNode))
                     continue;
 
-
+                NodePos start = fromNode.get().getNodePos();
+                NodePos end = toNode.get().getNodePos();
+                Map<BlockPos, Integer> distances = shortestPath(start, end, pipes);
+                Function<Long, Long> function = followPath(world, start, end, distances, pipes);
+                matrix[i][j] = function;
             }
         }
         return matrix;
