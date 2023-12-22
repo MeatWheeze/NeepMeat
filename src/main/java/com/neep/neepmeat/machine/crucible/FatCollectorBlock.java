@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -14,15 +15,15 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
-public class AlembicBlock extends BaseHorFacingBlock implements BlockEntityProvider
+public class FatCollectorBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
     public static final VoxelShape SHAPE = VoxelShapes.union(
                 Block.createCuboidShape(2.0D, 0.0D, 2.0D, 14.0D, 17.0D, 14.0D),
                 Block.createCuboidShape(1, 0, 1, 15, 1, 15));
 
-    public AlembicBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FatCollectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

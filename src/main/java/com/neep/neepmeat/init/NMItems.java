@@ -9,10 +9,7 @@ import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterials;
-import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
-
-import java.nio.channels.Pipe;
 
 @SuppressWarnings("unused")
 public class NMItems
@@ -65,14 +62,14 @@ public class NMItems
 
     public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
-    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", TooltipSupplier.empty(), new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", TooltipSupplier.hidden(3), new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
 
     public static Item CAN = new BaseCraftingItem("can", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item CARTON = new BaseCraftingItem("carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item MILK_CARTON = new BaseCraftingItem("milk_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MILK_BOTTLE));
-    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", TooltipSupplier.empty(), new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
+    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
 
     // Mob cloning
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());

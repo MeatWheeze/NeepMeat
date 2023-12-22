@@ -23,7 +23,7 @@ public class BaseItem extends Item implements IMeatItem
     {
         super(settings);
         this.registryName = registryName;
-        this.tooltipSupplier = TooltipSupplier.empty();
+        this.tooltipSupplier = TooltipSupplier.blank();
     }
 
     @Override

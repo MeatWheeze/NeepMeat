@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.charnel_compactor;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
@@ -38,9 +40,9 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
 {
     public static final IntProperty LEVEL = Properties.LEVEL_8;
 
-    public CharnelCompactorBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CharnelCompactorBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
         this.setDefaultState((this.stateManager.getDefaultState()).with(LEVEL, 0));
     }
 

@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
@@ -35,9 +37,9 @@ import org.jetbrains.annotations.Nullable;
 public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
 
-    public ItemPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public ItemPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Override

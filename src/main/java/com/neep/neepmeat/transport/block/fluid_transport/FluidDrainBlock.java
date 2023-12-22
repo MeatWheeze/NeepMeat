@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -20,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
 {
-    public FluidDrainBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidDrainBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

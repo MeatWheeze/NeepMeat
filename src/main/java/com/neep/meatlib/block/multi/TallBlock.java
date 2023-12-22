@@ -2,6 +2,9 @@ package com.neep.meatlib.block.multi;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseDummyBlock;
+import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -29,19 +32,15 @@ public abstract class TallBlock extends BaseBlock
 
     public TallBlock(String registryName, Settings settings)
     {
-        super(registryName, settings);
-        this.structureBlock = getStructure();
+        this(registryName, ItemSettings.block(), settings);
+//        super(registryName, settings);
+//        this.structureBlock = getStructure();
     }
 
-    public TallBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
-        this.structureBlock = getStructure();
-    }
-
-    public TallBlock(String registryName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
-    {
-        super(registryName, itemMaxStack, hasLore, factory, settings);
+        super(registryName, itemSettings, settings);
+//        super(registryName, itemMaxStack, tooltipSupplier, settings);
         this.structureBlock = getStructure();
     }
 

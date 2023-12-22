@@ -1,6 +1,8 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.datagen.MeatRecipeProvider;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.AbstractBlock;
@@ -51,7 +53,7 @@ public class BasePaintedBlock
         {
             super(settings);
             this.registryName = registryName;
-            this.blockItem = new BaseBlockItem(this, registryName, 64, false);
+            this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block());
             this.col = col;
             BlockRegistry.queue(this);
         }

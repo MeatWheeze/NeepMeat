@@ -1,6 +1,6 @@
 package com.neep.meatlib.block;
 
-import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
@@ -11,21 +11,13 @@ import net.minecraft.util.math.Direction;
 
 public class BaseFacingBlock extends FacingBlock implements IMeatBlock
 {
-    BlockItem blockItem;
+    private final BlockItem blockItem;
     private final String registryName;
 
-    public BaseFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseFacingBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
-        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
-        this.registryName = itemName;
-    }
-
-    public BaseFacingBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
-    {
-        super(settings);
-        this.blockItem = factory.get(this, itemName, itemMaxStack, hasLore);
+        this.blockItem = itemSettings.getFactory().create(this, itemName, itemSettings);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.registryName = itemName;
     }

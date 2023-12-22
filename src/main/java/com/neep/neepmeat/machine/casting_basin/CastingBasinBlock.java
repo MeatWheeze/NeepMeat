@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.casting_basin;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.BlockEntityProvider;
@@ -16,9 +18,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
 {
-    public CastingBasinBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CastingBasinBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
     @Override

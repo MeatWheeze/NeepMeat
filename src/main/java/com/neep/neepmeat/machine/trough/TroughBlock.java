@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.trough;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -36,9 +37,9 @@ import java.util.Random;
 @SuppressWarnings("UnstableApiUsage")
 public class TroughBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public TroughBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public TroughBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().ticksRandomly());
+        super(itemName, itemSettings, settings.nonOpaque().ticksRandomly());
     }
 
     @Override

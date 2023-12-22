@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.item_mincer;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
@@ -22,9 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class ItemMincerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public ItemMincerBlock(String itemName, int loreLines, Settings settings)
+    public ItemMincerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, 64, false, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Override

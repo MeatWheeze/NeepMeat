@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,9 +27,9 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32, 16);
 
-    public MixerBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public MixerBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Override

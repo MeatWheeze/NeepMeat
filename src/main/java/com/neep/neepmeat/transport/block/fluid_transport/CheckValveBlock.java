@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
@@ -20,9 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, PipeState.ISpecialPipe
 {
-    public CheckValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CheckValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

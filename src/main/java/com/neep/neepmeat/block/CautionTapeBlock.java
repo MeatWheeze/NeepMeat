@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -31,9 +32,9 @@ public class CautionTapeBlock extends BaseBlock
     public static final Map<Direction, EnumProperty<WireConnection>> DIRECTION_TO_WIRE_CONNECTION_PROPERTY = Maps.newEnumMap(ImmutableMap.of(Direction.NORTH, CONNECTION_NORTH, Direction.EAST, CONNECTION_EAST, Direction.SOUTH, CONNECTION_SOUTH, Direction.WEST, CONNECTION_WEST));
     public BlockState dotState;
 
-    public CautionTapeBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CautionTapeBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
         this.setDefaultState(this.stateManager.getDefaultState().with(CONNECTION_NORTH, WireConnection.NONE).with(CONNECTION_EAST, WireConnection.NONE).with(CONNECTION_SOUTH, WireConnection.NONE).with(CONNECTION_WEST, WireConnection.NONE));
         this.dotState = this.getDefaultState().with(CONNECTION_NORTH, WireConnection.SIDE).with(CONNECTION_EAST, WireConnection.SIDE).with(CONNECTION_SOUTH, WireConnection.SIDE).with(CONNECTION_WEST, WireConnection.SIDE);
     }

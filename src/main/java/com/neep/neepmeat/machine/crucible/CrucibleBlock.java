@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
@@ -20,9 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
 {
-    public CrucibleBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CrucibleBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Override

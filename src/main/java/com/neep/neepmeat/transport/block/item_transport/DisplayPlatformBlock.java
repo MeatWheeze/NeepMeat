@@ -1,14 +1,11 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
+import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -18,13 +15,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -36,9 +31,9 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
     protected static final VoxelShape DEFAULT_SHAPE = Block.createCuboidShape(0.0, 0.0, 0.0, 16.0, 1.0, 16.0);
 
 
-    public DisplayPlatformBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public DisplayPlatformBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Override

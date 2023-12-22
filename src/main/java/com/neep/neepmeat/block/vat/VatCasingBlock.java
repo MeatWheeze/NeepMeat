@@ -1,6 +1,8 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -12,9 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class VatCasingBlock extends BaseBlock implements IVatComponent, BlockEntityProvider
 {
-    public VatCasingBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public VatCasingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings);
+        super(registryName, itemSettings, settings);
     }
 
 //    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)

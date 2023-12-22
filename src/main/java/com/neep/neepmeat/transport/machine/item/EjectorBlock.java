@@ -1,9 +1,10 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -31,9 +32,9 @@ import java.util.stream.Collectors;
 
 public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider, IItemPipe
 {
-    public EjectorBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
+    public EjectorBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(registryName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
     }
 
     @Nullable

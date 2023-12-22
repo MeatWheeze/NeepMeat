@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.block.BaseDummyBlock;
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -24,9 +25,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public SmallTrommelBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public SmallTrommelBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Nullable

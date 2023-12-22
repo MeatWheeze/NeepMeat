@@ -1,9 +1,11 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeState;
-import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -26,9 +28,9 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public StopValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public StopValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState()
                 .with(OPEN, true)
                 .with(POWERED, false));

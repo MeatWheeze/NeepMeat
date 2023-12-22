@@ -7,17 +7,18 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 
-import javax.tools.Tool;
 import java.util.List;
 
 @FunctionalInterface
 public interface TooltipSupplier
 {
+    static TooltipSupplier BLANK = (i, t) -> {};
+
     void apply(Item item, List<Text> tooltip);
 
-    static TooltipSupplier empty()
+    static TooltipSupplier blank()
     {
-        return (i, t) -> {};
+        return BLANK;
     }
 
     static TooltipSupplier simple(int lines)

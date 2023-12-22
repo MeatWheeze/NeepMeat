@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.sifter;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -9,9 +10,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class SifterBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public SifterBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public SifterBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Nullable

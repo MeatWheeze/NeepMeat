@@ -1,6 +1,8 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
@@ -14,20 +16,12 @@ import net.minecraft.world.WorldView;
 public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBlock
 {
     BlockItem blockItem;
-    private String registryName;
+    private final String registryName;
 
-    public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public BaseHorFacingBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
-        this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
-        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
-        this.registryName = itemName;
-    }
-
-    public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
-    {
-        super(settings);
-        this.blockItem = factory.get(this, itemName, itemMaxStack, hasLore);
+        this.blockItem = itemSettings.create(this, itemName, itemSettings);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.registryName = itemName;
     }

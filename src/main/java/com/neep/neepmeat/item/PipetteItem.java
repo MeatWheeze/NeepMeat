@@ -89,15 +89,6 @@ public class PipetteItem extends BaseItem
     }
 
     @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
-    {
-        for (int i = 0; i < 3; ++i)
-        {
-            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.YELLOW));
-        }
-    }
-
-    @Override
     public String getTranslationKey(ItemStack stack)
     {
         return super.getTranslationKey(stack);

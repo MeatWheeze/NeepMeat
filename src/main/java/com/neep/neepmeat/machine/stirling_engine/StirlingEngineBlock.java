@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -25,9 +26,9 @@ public class StirlingEngineBlock extends BaseFacingBlock implements BlockEntityP
 {
     public static final BooleanProperty LIT = Properties.LIT;
 
-    public StirlingEngineBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public StirlingEngineBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState().with(LIT, false));
     }
 

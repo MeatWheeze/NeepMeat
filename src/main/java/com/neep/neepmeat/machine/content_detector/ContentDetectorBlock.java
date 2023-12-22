@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.content_detector;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -31,9 +32,9 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
 {
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public ContentDetectorBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public ContentDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
         this.setDefaultState(getDefaultState().with(POWERED, false));
     }
 

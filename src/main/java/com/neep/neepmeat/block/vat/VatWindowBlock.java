@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block.vat;
 
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -15,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class VatWindowBlock extends VatCasingBlock implements IVatComponent
 {
-    public VatWindowBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public VatWindowBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(VatWindowBlock::never));
+        super(registryName, itemSettings, settings.nonOpaque().solidBlock(VatWindowBlock::never));
     }
 
     @Override

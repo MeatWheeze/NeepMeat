@@ -3,6 +3,8 @@ package com.neep.neepmeat.transport.api.pipe;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeProperties;
 import com.neep.neepmeat.util.NMMaths;
@@ -55,9 +57,9 @@ public abstract class AbstractPipeBlock extends BaseBlock
             .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 12))
     ).build();
 
-    public AbstractPipeBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    public AbstractPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, factory, settings);
+        super(itemName, itemSettings, settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(NORTH_CONNECTION, PipeConnectionType.NONE)
                 .with(EAST_CONNECTION, PipeConnectionType.NONE)

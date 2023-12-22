@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.redstone;
 
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
@@ -40,7 +41,7 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
     {
         super(settings);
         this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, 64, true);
+        this.blockItem = new BaseBlockItem(this, registryName, ItemSettings.block());
 
     }
 

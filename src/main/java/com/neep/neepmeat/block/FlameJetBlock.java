@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -29,9 +30,9 @@ public class FlameJetBlock extends BaseFacingBlock implements BlockEntityProvide
 {
     public static final BooleanProperty RUNNING = BooleanProperty.of("running");
 
-    public FlameJetBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FlameJetBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings);
+        super(itemName, itemSettings, settings);
         setDefaultState(getStateManager().getDefaultState().with(RUNNING, false));
     }
 

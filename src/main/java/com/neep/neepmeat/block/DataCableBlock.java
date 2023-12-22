@@ -1,5 +1,7 @@
 package com.neep.neepmeat.block;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.transport.api.pipe.IDataCable;
@@ -13,9 +15,9 @@ import net.minecraft.world.WorldAccess;
 
 public class DataCableBlock extends AbstractPipeBlock implements IDataCable
 {
-    public DataCableBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public DataCableBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Override

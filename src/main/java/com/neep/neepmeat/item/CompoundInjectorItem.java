@@ -111,8 +111,12 @@ public class CompoundInjectorItem extends BaseItem
 
     protected static void applyTooltip(Item item, List<Text> tooltip)
     {
-        tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
-        tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
+        if (Screen.hasShiftDown())
+        {
+            tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
+            tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
+        }
+        else TooltipSupplier.applyMessage(tooltip);
     }
 
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)

@@ -8,8 +8,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -17,39 +15,29 @@ import java.util.List;
 public class BaseBlockItem extends BlockItem implements IMeatItem
 {
     private final String name;
-    private final int loreLines;
+    private final TooltipSupplier tooltipSupplier;
 
-    public BaseBlockItem(Block block, String registryName, int itemMaxStack, boolean hasLore)
+    public BaseBlockItem(Block block, String registryName, ItemSettings itemSettings)
     {
-        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
-        this.name = registryName;
-        this.loreLines = hasLore ? 1 : 0;
-        ItemRegistry.queueItem(this);
+        this(block, registryName, itemSettings, new FabricItemSettings().maxCount(itemSettings.maxCount).group(NMItemGroups.GENERAL));
     }
 
-    public BaseBlockItem(Block block, String registryName, int itemMaxStack, int loreLines)
-    {
-        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
-        this.name = registryName;
-        this.loreLines = loreLines;
-        ItemRegistry.queueItem(this);
-    }
-
-    public BaseBlockItem(Block block, String registryName, int itemMaxStack, int loreLines, Settings settings)
+    public BaseBlockItem(Block block, String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(block, settings);
         this.name = registryName;
-        this.loreLines = loreLines;
+        this.tooltipSupplier = itemSettings.tooltipSupplier;
         ItemRegistry.queueItem(this);
     }
 
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        for (int i = 0; i < loreLines; ++i)
-        {
-            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
-        }
+        tooltipSupplier.apply(this, tooltip);
+//        for (int i = 0; i < loreLines; ++i)
+//        {
+//            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
+//        }
     }
 
     public String getRegistryName()

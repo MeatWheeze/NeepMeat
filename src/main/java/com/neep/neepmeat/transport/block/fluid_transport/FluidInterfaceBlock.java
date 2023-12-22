@@ -2,6 +2,8 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.machine.fluid.FluidInterfaceBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import net.minecraft.block.Block;
@@ -22,15 +24,9 @@ public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityP
 {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
-//    private static final Map<Direction, VoxelShape> BOUNDING_SHAPES = Maps.newEnumMap(ImmutableMap.of(
-//            Direction.NORTH, Block.createCuboidShape(3, 0, 0, 13, 15.75, 1),
-//            Direction.SOUTH, Block.createCuboidShape(3, 0, 15, 13, 15.75, 16),
-//            Direction.WEST, Block.createCuboidShape(0, 0, 3, 1, 15.75, 13),
-//            Direction.EAST, Block.createCuboidShape(15, 0, 3, 16, 15.75, 13)));
-
-    public FluidInterfaceBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    public FluidInterfaceBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, factory, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override

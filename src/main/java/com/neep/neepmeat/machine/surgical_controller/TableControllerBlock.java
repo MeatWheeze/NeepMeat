@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -19,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class TableControllerBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public TableControllerBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public TableControllerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemSettings, settings);
     }
 
     @Override

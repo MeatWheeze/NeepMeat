@@ -1,15 +1,15 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeState;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandler;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -18,15 +18,12 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -40,9 +37,9 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
 {
-    public FilterPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState());
     }
 

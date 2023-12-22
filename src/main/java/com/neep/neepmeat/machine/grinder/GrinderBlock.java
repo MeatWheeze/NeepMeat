@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.util.ItemUtils;
@@ -29,9 +30,9 @@ import java.util.Random;
 
 public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
-    public GrinderBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public GrinderBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
     }
 
     @Override
