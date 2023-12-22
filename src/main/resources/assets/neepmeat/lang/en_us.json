@@ -181,6 +181,10 @@
   "block.neepmeat.feeding_trough": "Feeding Trough",
   "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.",
 
+  "block.neepmeat.synthesiser": "Synthesiser",
+
+  "block.neepmeat.surgery_controller": "Surgery Controller",
+
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
   "item.neepmeat.animal_heart.lore_0": "Crude; it lacks any logical design sensibilities.",
