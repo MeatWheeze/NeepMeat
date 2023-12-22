@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
@@ -101,7 +102,7 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
         // Janky scaffolding rendering.
         for (Direction direction : Direction.values())
         {
-            if (!blockView.getBlockState(pos.offset(direction)).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
+            if (blockView.getBlockState(pos.offset(direction)).isOf(Blocks.AIR))
             {
                 context.meshConsumer().accept(SIDES[direction.getId()]);
                 context.meshConsumer().accept(SIDES_INV[direction.getId()]);
