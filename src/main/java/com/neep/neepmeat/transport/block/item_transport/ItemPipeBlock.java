@@ -183,7 +183,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
     {
         if (world.getBlockEntity(pos) instanceof ItemPipeBlockEntity be)
         {
-            long transferred = be.insert(item, world, state, pos, direction);
+            long transferred = be.insert(item, world, state, pos, direction, transaction);
             return transferred;
         }
         return 0;

@@ -6,6 +6,7 @@ import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
@@ -97,11 +98,16 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
         be.sync();
     }
 
-    public long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
+    public long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in, TransactionContext transaction)
     {
-        Direction out = ((IItemPipe) getCachedState().getBlock()).getOutputDirection(item, state, world, in);
-        item.reset(in, out, world.getTime());
-        this.items.add(item);
+        transaction.addOuterCloseCallback(r ->
+        {
+            if (!r.wasCommitted()) return;
+
+            Direction out = ((IItemPipe) getCachedState().getBlock()).getOutputDirection(item, state, world, in);
+            item.reset(in, out, world.getTime());
+            this.items.add(item);
+        });
         return item.getItemStack().getCount();
     }
 

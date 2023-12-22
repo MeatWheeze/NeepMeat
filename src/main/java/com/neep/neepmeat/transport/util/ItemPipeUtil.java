@@ -117,6 +117,8 @@ public class ItemPipeUtil
     {
         transaction.addOuterCloseCallback(r ->
         {
+            if (!r.wasCommitted()) return;
+
             ItemEntity itemEntity = new ItemEntity(world,
                     toPos.getX() + 0.5 - offset * out.getOffsetX(),
                     toPos.getY() + 0.2 - offset * out.getOffsetY(),
@@ -134,6 +136,7 @@ public class ItemPipeUtil
     {
         long amountInserted = 0;
 //        if (IItemPipe.isConnectedIn(world, pos, state, out))
+
         if (pipe.canItemEnter(item.toResourceAmount(), world, toPos, toState, out.getOpposite()))
         {
             if (simpleCheck)
@@ -142,7 +145,9 @@ public class ItemPipeUtil
                 item.setAmount((int) simpleAmount);
             }
             if (item.amount() != 0)
+            {
                 amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item, transaction);
+            }
         }
         return amountInserted;
     }
