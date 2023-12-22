@@ -9,6 +9,7 @@ import com.neep.meatweapons.entity.PlasmaProjectileEntity;
 import com.neep.meatweapons.item.FusionCannonItem;
 import com.neep.meatweapons.item.HandCannonItem;
 import com.neep.meatweapons.item.MachinePistolItem;
+import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -52,5 +53,6 @@ public class MeatWeapons implements ModInitializer
         System.out.println(ItemRegistry.ITEMS);
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();
+//        MWParticles.register();
     }
 }
