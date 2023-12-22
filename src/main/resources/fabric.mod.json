@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "realistic_fluid",
+  "id": "neepmeat",
   "version": "${version}",
 
-  "name": "Realistic Fluids",
+  "name": "NeepMeat",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
     "NeepMeat"
@@ -14,16 +14,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/realistic_fluid/icon.png",
+  "icon": "assets/neepmeat/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.neepmeat.realistic_fluid.RealisticFluid"
+      "com.neep.neepmeat.NeepMeat"
     ]
   },
   "mixins": [
-    "realistic_fluid.mixins.json"
+    "neepmeat.mixins.json"
   ],
 
   "depends": {

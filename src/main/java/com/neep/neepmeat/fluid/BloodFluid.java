@@ -1,8 +1,7 @@
-package com.neepmeat.realistic_fluid.fluid;
+package com.neep.neepmeat.fluid;
 
-import com.neepmeat.realistic_fluid.block.BlockInitialiser;
+import com.neep.neepmeat.block.BlockInitialiser;
 import net.minecraft.block.*;
-import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -18,7 +17,7 @@ import net.minecraft.world.WorldView;
 
 import java.util.*;
 
-public class TestFluid extends RealisticFluid
+public class BloodFluid extends RealisticFluid
 {
     @Override
     public Fluid getStill()
@@ -238,7 +237,7 @@ public class TestFluid extends RealisticFluid
         }
     }
 
-    public static class Flowing extends TestFluid
+    public static class Flowing extends BloodFluid
     {
         @Override
         protected void appendProperties(StateManager.Builder<Fluid, FluidState> builder)
@@ -260,7 +259,7 @@ public class TestFluid extends RealisticFluid
         }
     }
 
-    public static class Still extends TestFluid
+    public static class Still extends BloodFluid
     {
         @Override
         public int getLevel(FluidState fluidState)

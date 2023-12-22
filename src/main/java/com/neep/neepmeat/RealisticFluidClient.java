@@ -1,6 +1,6 @@
-package com.neepmeat.realistic_fluid;
+package com.neep.neepmeat;
 
-import com.neepmeat.realistic_fluid.block.BlockInitialiser;
+import com.neep.neepmeat.block.BlockInitialiser;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;

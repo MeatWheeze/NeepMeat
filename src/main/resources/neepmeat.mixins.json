@@ -1,7 +1,7 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.neepmeat.realistic_fluid.mixin",
+  "package": "com.neep.neepmeat.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
   ],

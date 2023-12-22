@@ -1,4 +1,4 @@
-package com.neepmeat.realistic_fluid.mixin;
+package com.neep.neepmeat.mixin;
 
 import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
