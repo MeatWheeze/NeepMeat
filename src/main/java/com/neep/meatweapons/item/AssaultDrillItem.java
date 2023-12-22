@@ -164,11 +164,13 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     @Override
     public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot)
     {
-        var manager = NMComponents.IMPLANT_MANAGER.get(stack);
-        if (manager.getInstalled().contains(ShieldUpgrade.ID) && stack.getOrCreateNbt().getBoolean("using"))
-        {
-            return ImmutableMultimap.of(EntityAttributes.GENERIC_ARMOR, eam);
-        }
+        // Causes 'loader dev.onyxstudios.cca.internal.base.asm.CcaClassLoader @3e7b9df8 attempted duplicate class definition for ...'
+        // on world startup unpredictably
+//        var manager = NMComponents.IMPLANT_MANAGER.get(stack);
+//        if (manager.getInstalled().contains(ShieldUpgrade.ID) && stack.getOrCreateNbt().getBoolean("using"))
+//        {
+//            return ImmutableMultimap.of(EntityAttributes.GENERIC_ARMOR, eam);
+//        }
         return super.getAttributeModifiers(stack, slot);
     }
 
