@@ -242,8 +242,7 @@ public class PipeNetwork
                 gravityFlowIn > 0 && !activePulling && !activePushing ? 2 : 3;
     }
 
-    // This abomination is responsible for transferring the fluid from node to node. I know it smells, it smells so badly
-    // that I don't want to think about it.
+    // This abomination is responsible for transferring the fluid from node to node
     public void tick()
     {
         if (!isBuilt())

@@ -4,8 +4,7 @@
 
 - Katherine Ursula Hydroxonium McSpree, Director of NEEP, 1922
 
-Welcome to the world of NeepMeat, a mod concerning automation, logistics and cosmic horror (WIP). 
-
+NEEPMeat is a mod about automation, logistics and cosmic horror.
 
 ## Features
 
@@ -32,32 +31,33 @@ Integrator Eggs can be found in dungeon loot. To hatch one, you must obtain bloo
 Body compound is a common crafting item in NeepMeat. To produce it, connect a Charnel Compactor to a fully-grown Integrator with Data Cables. The Charnel Compactor fuunctions much like a Composter, except it requires flesh.
 
 **Energy Transfer**\
-Machines require energy which is comes in the form of special fluids: Ethereal Fuel and Work Fluid. Ethereal fuel is produced directly by a Transducer that is above a heating block, such as lava or a lit furnace. The speed of a machine depends on both the type of fluid and the rate at which the fluid is inserted. 
+Machines require energy which is comes in the form of special fluids: Ethereal Fuel and Work Fluid. Ethereal fuel is produced directly by a Transducer that is above a heating block, such as lava or a lit furnace. The speed of a machine depends on both the type of fluid and the rate at which the fluid is inserted.
 
 **Motors**\
 Some machines, such as the Grinder, the Mixer and the Death Blades, require an external source of rotation to function.
-The Motor or its cheaper alternative, the Stirling Engine, can be used for this. 
+The Motor or its cheaper alternative, the Stirling Engine, can be used for this.
 
 **Crops**\
-NeepMeat provides two major crops. Gland Potatoes can be processed into Eldritch Enzymes in a mixer. Whisper Wheat can be ground into Whisper Flour which can be fed to an Integrator to increase its Enlightenment.
+NeepMeat provides two major crops. Gland Potatoes can be processed into Eldritch Enzymes in a Mixer. Whisper Wheat can be ground into Whisper Flour which can be fed to an Integrator to increase its Enlightenment.
 
 **Enlightening**\
 This is a recipe type where items are transmuted to special forms. To enlighten an item, connect a Pedestal that containing the item to a mature Integrator via Data Cables. Converting an item takes quantity of Enlightenment from the Integrator.
 
 **Meat Steel**\
-Meat steel is required for mid-tier machinery. It is made by combining an Iron Ingot and a Raw Meat Brick in an alloy furnace. 
+Meat steel is required for mid-tier machinery. It is made by combining an Iron Ingot and a Raw Meat Brick in an alloy furnace.
 
 ## Potential Future Features
 
+- In-game guide tablet (priority)
 - Automatic farming
-- Multiblock tank
-- In-game guide tablet
-- Advanced item and fluid logistics
+- Multiblock tanks
+- Advanced item and fluid routing
 - Programmable automation controller
+- More food items
 - More eldritchness
-
 
 ## Notes
 
+- Various animated guns are currently present in the mod. They are uncraftable due to being unbalanced, but please do try them out.
 - Since this is an alpha version, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
 - Please report any problems you encounter on the Github issue tracker.

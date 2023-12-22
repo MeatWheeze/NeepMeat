@@ -3,17 +3,17 @@
   "id": "neepmeat",
   "version": "${version}",
 
-  "name": "NeepMeat",
-  "description": "",
+  "name": "NEEPMeat",
+  "description": "A mod about rusty machinery, cosmic horror and meat.",
   "authors": [
     "MeatWheeze"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://modrinth.com/mod/neepmeat",
+    "sources": "https://github.com/MeatWheeze/NeepMeat"
   },
 
-  "license": "MIT",
+  "license": "LGPL-3.0",
   "icon": "assets/neepmeat/icon.png",
 
   "environment": "*",
@@ -43,13 +43,13 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.11.3",
+    "fabricloader": ">=0.14.9",
     "fabric": "*",
     "minecraft": "1.18.x",
     "java": ">=17"
   },
   "suggests": {
-    "another-mod": "*"
+    "another-mod": "REI"
   },
   "custom": {
     "loom:injected_interfaces": {

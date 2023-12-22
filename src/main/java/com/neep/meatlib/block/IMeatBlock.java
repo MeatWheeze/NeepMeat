@@ -1,6 +1,7 @@
 package com.neep.meatlib.block;
 
-import com.neep.meatlib.datagen.BlockTagProvider;
+import com.neep.neepmeat.datagen.tag.BlockTagProvider;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
