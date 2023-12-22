@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
@@ -12,9 +12,9 @@ import javax.annotation.Nullable;
 
 public interface IMotorisedBlock
 {
-    void setConnectedMotor(@Nullable MotorBlockEntity motor);
+    void setConnectedMotor(@Nullable IMotorBlockEntity motor);
 
-    MotorBlockEntity getConnectedMotor();
+    IMotorBlockEntity getConnectedMotor();
 
     default boolean hasMotor()
     {
@@ -33,7 +33,7 @@ public interface IMotorisedBlock
     {
         Direction facing = state.get(LinearOscillatorBlock.FACING);
         BlockPos backPos = pos.offset(facing.getOpposite());
-        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be
+        if (world.getBlockEntity(backPos) instanceof IMotorBlockEntity be
                 && world.getBlockState(backPos).get(BaseFacingBlock.FACING) == facing)
         {
             setConnectedMotor(be);

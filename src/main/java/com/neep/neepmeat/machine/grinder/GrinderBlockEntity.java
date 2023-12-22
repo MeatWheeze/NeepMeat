@@ -1,9 +1,11 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import com.neep.neepmeat.util.ItemInPipe;
@@ -33,7 +35,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderBlockEntity extends SyncableBlockEntity
+public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     protected GrinderStorage storage = new GrinderStorage(this);
     protected int progress;
@@ -41,6 +43,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity
     protected int processLength;
     protected Identifier currentRecipeId;
     protected GrindingRecipe currentRecipe;
+    protected IMotorBlockEntity connectedMotor;
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -238,5 +241,17 @@ public class GrinderBlockEntity extends SyncableBlockEntity
     public static void serverTick(World world, BlockPos pos,BlockState state, GrinderBlockEntity be)
     {
         be.tick();
+    }
+
+    @Override
+    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
+    {
+        this.connectedMotor = motor;
+    }
+
+    @Override
+    public IMotorBlockEntity getConnectedMotor()
+    {
+        return connectedMotor;
     }
 }

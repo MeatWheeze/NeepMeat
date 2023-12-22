@@ -3,6 +3,7 @@ package com.neep.neepmeat.blockentity;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -34,7 +35,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
 {
     protected final WritableStackStorage storage;
 
-    protected MotorBlockEntity motor;
+    protected IMotorBlockEntity motor;
 
     public float shuttleOffset;
     public int shuttleTicks;
@@ -229,13 +230,13 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public void setConnectedMotor(@Nullable MotorBlockEntity motor)
+    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
     {
         this.motor = motor;
     }
 
     @Override
-    public MotorBlockEntity getConnectedMotor()
+    public IMotorBlockEntity getConnectedMotor()
     {
         return motor;
     }

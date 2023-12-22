@@ -2,7 +2,7 @@ package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
 {
-    protected MotorBlockEntity motor;
+    protected IMotorBlockEntity motor;
 
     public AgitatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -24,13 +24,13 @@ public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
     }
 
     @Override
-    public void setConnectedMotor(@Nullable MotorBlockEntity motor)
+    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
     {
         this.motor = motor;
     }
 
     @Override
-    public MotorBlockEntity getConnectedMotor()
+    public IMotorBlockEntity getConnectedMotor()
     {
         return motor;
     }

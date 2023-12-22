@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -38,7 +39,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     public float extension = 0f;
     public boolean extended = false;
 
-    protected MotorBlockEntity connectedMotor = null;
+    protected IMotorBlockEntity connectedMotor = null;
 
     // Rendering only
     public long extensionTime = 0;
@@ -174,13 +175,13 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public void setConnectedMotor(@Nullable MotorBlockEntity motor)
+    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
     {
         this.connectedMotor = motor;
     }
 
     @Override
-    public MotorBlockEntity getConnectedMotor()
+    public IMotorBlockEntity getConnectedMotor()
     {
         return connectedMotor;
     }
