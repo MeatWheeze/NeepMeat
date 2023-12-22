@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "bwb",
+    "iii"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "w": {
+      "item": "neepmeat:work_fluid_bucket"
+    }
+  },
+  "result": {
+    "item": "neepmeat:vascular_conduit",
+    "count": 8
+  }
+}

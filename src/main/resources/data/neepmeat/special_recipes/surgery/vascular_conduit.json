@@ -1,0 +1,29 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    "iii",
+    "bwb",
+    "iii"
+  ],
+  "key": {
+    "w": {
+      "type": "minecraft:fluid",
+      "resource": "neepmeat:work_fluid",
+      "amount": 81000
+    },
+    "i": {
+      "type": "minecraft:item",
+      "resource": "minecraft:iron_nugget",
+      "amount": 1
+    },
+    "b": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:internal_components",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "neepmeat:vascular_conduit",
+    "amount": 12
+  }
+}
