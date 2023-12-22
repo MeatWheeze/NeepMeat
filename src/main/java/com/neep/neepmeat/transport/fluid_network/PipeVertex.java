@@ -34,7 +34,7 @@ public interface PipeVertex extends PipeFlowComponent
     default boolean keepNetworkValid() {return false;}
 
     float getTotalHead();
-    void setElevationHead(float value);
+    void setHeight(float value);
 
     void addHead(int h);
 }
