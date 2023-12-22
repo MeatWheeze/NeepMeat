@@ -3,7 +3,11 @@ package com.neep.neepmeat.machine.synthesiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.item.SpawnEggItem;
+import net.minecraft.tag.EntityTypeTags;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
@@ -37,7 +41,14 @@ public class MobSynthesisRegistry
 
     public static void initDefaults()
     {
-        register(EntityType.PIG, FluidConstants.BUCKET, 60);
-        register(EntityType.COW, FluidConstants.BUCKET, 60);
+//        register(EntityType.PIG, FluidConstants.BUCKET, 60);
+//        register(EntityType.COW, FluidConstants.BUCKET, 60);
+
+        // Generate entries for all spawn eggs based on bounding box size
+        SpawnEggItem.getAll().forEach(eggItem ->
+        {
+            EntityType<?> type = eggItem.getEntityType(null);
+            register(type, (long) Math.floor(type.getHeight() * type.getWidth() * type.getWidth() * FluidConstants.BUCKET), 60);
+        });
     }
 }

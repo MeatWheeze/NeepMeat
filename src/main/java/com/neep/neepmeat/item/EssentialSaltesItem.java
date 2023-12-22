@@ -3,6 +3,7 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import dev.architectury.event.events.common.EntityEvent;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.client.item.TooltipContext;
@@ -86,6 +87,11 @@ public class EssentialSaltesItem extends BaseItem
 
     public static void onEntityDeath(LivingEntity livingEntity)
     {
+        if (MobSynthesisRegistry.get(livingEntity.getType()) == null)
+        {
+            return;
+        }
+
         World world = livingEntity.getWorld();
         Vec3d pos = livingEntity.getPos();
         ItemStack stack = NMItems.ESSENTIAL_SALTES.getDefaultStack();
