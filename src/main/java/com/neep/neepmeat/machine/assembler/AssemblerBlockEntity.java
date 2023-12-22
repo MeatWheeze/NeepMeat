@@ -46,6 +46,11 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     protected float increment = 1;
     protected boolean slotSelectMode;
 
+    // Time for rotor to spin in client
+    protected int spinTicks = 0;
+    public float currentSpeed = 0;
+    public float angle = 0;
+
     BlockApiCache<Storage<ItemVariant>, Direction> cache;
 
     protected AssemblerStorage storage;
@@ -175,6 +180,12 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     {
         progress = Math.min(MAX_PROGRESS, progress + increment);
 
+        // Sync when spinTicks reaches zero
+        int prevSpinTicks = spinTicks;
+        spinTicks = Math.max(0, spinTicks - 1);
+        if (prevSpinTicks == 1 && spinTicks == 0) sync();
+
+        // Generate cache if needed
         BlockPos down = pos.down();
         if (cache == null)
         {
@@ -187,6 +198,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
             if (removeOutputs(target))
             {
+                syncAnimation();
                 return;
             }
 
@@ -207,6 +219,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                     {
                         target.setStack(i, patternStack.copy());
                         target.markDirty();
+                        syncAnimation();
                         break;
                     }
                 }
@@ -219,11 +232,18 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         be.tick((ServerWorld) world);
     }
 
+    public void syncAnimation()
+    {
+        this.spinTicks = 10;
+        sync();
+    }
+
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
+        nbt.putInt("spinTicks", spinTicks);
     }
 
     @Override
@@ -231,6 +251,13 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+        this.spinTicks = nbt.getInt("spinTicks");
+    }
+
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
     }
 
     public AssemblerStorage getStorage()

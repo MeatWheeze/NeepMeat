@@ -2,12 +2,12 @@ package com.neep.neepmeat.machine.assembler;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.inventory.GeneralInventory;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -20,7 +20,7 @@ public class AssemblerStorage implements NbtSerialisable
     public static final int BUFFER_END = 24;
     public static final int INV_END = 28;
 
-    protected SimpleInventory inventory = new SimpleInventory(28)
+    protected GeneralInventory inventory = new GeneralInventory(28)
     {
         @Override
         public void markDirty()
@@ -28,42 +28,6 @@ public class AssemblerStorage implements NbtSerialisable
             super.markDirty();
             parent.markDirty();
         }
-
-        @Override
-        public void readNbtList(NbtList nbtList)
-        {
-            int i;
-            for (i = 0; i < this.size(); ++i)
-            {
-                this.setStack(i, ItemStack.EMPTY);
-            }
-            for (i = 0; i < nbtList.size(); ++i)
-            {
-                NbtCompound nbtCompound = nbtList.getCompound(i);
-                int j = nbtCompound.getByte("Slot") & 0xFF;
-                if (j < 0 || j >= this.size()) continue;
-                this.setStack(j, ItemStack.fromNbt(nbtCompound));
-            }
-        }
-
-        @Override
-        public NbtList toNbtList()
-        {
-            NbtList nbtList = new NbtList();
-            for (int i = 0; i < this.size(); ++i)
-            {
-                ItemStack itemStack = this.getStack(i);
-                if (itemStack.isEmpty()) continue;
-                NbtCompound nbtCompound = new NbtCompound();
-                nbtCompound.putByte("Slot", (byte)i);
-                itemStack.writeNbt(nbtCompound);
-                nbtList.add(nbtCompound);
-            }
-            return nbtList;
-        }
-
-
-
     };
 
     protected InventoryStorage inventoryStorage = InventoryStorage.of(inventory, null);
