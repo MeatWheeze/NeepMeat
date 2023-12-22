@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "neepmeat:block/linear_oscillator/armature"
+	},
+	"elements": [
+		{
+			"from": [4, 4, 0],
+			"to": [12, 12, 15],
+			"faces": {
+				"north": {"uv": [0, 8, 4, 12], "texture": "#1"},
+				"east": {"uv": [0, 0, 7.5, 4], "texture": "#1"},
+				"south": {"uv": [11.5, 0, 15.5, 4], "texture": "#1"},
+				"west": {"uv": [0, 4, 7.5, 8], "texture": "#1"},
+				"up": {"uv": [11.5, 7.5, 7.5, 0], "texture": "#1"},
+				"down": {"uv": [11.5, 7.5, 7.5, 15], "texture": "#1"}
+			}
+		}
+	]
+}

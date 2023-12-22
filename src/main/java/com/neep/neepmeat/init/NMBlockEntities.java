@@ -7,6 +7,7 @@ import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
+import com.neep.neepmeat.blockentity.machine.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
@@ -32,6 +33,7 @@ public class NMBlockEntities
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
+    public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
@@ -58,6 +60,7 @@ public class NMBlockEntities
 
     public static void initialise()
     {
+        // --- Fluid Transfer ---
         PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
@@ -65,6 +68,12 @@ public class NMBlockEntities
         NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
         STOP_VALVE = registerBlockEntity("stop_valve", StopValveBlockEntity::new, NMBlocks.STOP_VALVE);
 
+        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
+        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, NMBlocks.FLUID_PORT);
+        HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
+        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
+
+        // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, NMBlocks.ITEM_BUFFER);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
@@ -73,14 +82,11 @@ public class NMBlockEntities
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
 
-        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
-        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, NMBlocks.FLUID_PORT);
-        HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
-        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
-
+        // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
         TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
+        LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
