@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " b ",
+    "pep"
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:item_pipe"
+    },
+    "e": {
+      "item": "neepmeat:ejector"
+    },
+    "b": {
+      "item": "neepmeat:enlightened_brain"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_requester",
+    "count": 1
+  }
+}

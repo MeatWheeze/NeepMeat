@@ -282,26 +282,4 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     {
         return PlayState.CONTINUE;
     }
-
-    static
-    {
-        RenderItemGuiCallback.EVENT.register((textRenderer, stack, x, y, countLabel) ->
-        {
-            if (stack.getItem() instanceof BaseGunItem baseGunItem && baseGunItem.getShots(stack, 1) >= 0)
-            {
-                RenderSystem.disableDepthTest();
-                RenderSystem.disableTexture();
-                RenderSystem.disableBlend();
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder bufferBuilder = tessellator.getBuffer();
-                int i = stack.getItemBarStep();
-                int j = stack.getItemBarColor();
-                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
-                RenderItemGuiCallback.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
-                RenderSystem.enableBlend();
-                RenderSystem.enableTexture();
-                RenderSystem.enableDepthTest();
-            }
-        });
-    }
 }

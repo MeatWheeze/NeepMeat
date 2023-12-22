@@ -157,6 +157,9 @@
     "neepmeat:integrator_egg",
     "neepmeat:statue",
     "neepmeat:cronencake",
-    "neepmeat:candle_cronencake"
+    "neepmeat:candle_cronencake",
+    "neepmeat:pipe_driver",
+    "neepmeat:storage_bus",
+    "neepmeat:item_requester"
   ]
 }
