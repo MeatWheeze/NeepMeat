@@ -7,6 +7,7 @@ import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
+import com.neep.neepmeat.machine.dumper.DumperBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.block.item_transport.*;
@@ -128,6 +129,7 @@ public class NMBlocks
     public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", 64, true, MACHINE_SETTINGS));
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", 64, true, FabricBlockSettings.copy(Blocks.CHEST)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new ContentDetectorBlock("content_detector", 64, true, FabricBlockSettings.copy(Blocks.OBSERVER)));
+    public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", 64, true, FabricBlockSettings.copy(Blocks.OAK_WOOD)));
 
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", 64, true, FLUID_PIPE_SETTINGS));

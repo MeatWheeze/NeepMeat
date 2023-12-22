@@ -91,7 +91,8 @@
   "block.neepmeat.check_valve": "Check Valve",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
-  "block.neepmeat.merge_item_pipe": "Pneumatic Pipe",
+  "block.neepmeat.merge_item_pipe": "Merge Pneumatic Pipe",
+  "block.neepmeat.dumper": "Smart Dumper",
 
   "block.neepmeat.data_cable": "Data Cable",
 
