@@ -81,22 +81,22 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
         }
 
         if (id == MWAttackC2SPacket.TRIGGER_PRIMARY
-            && !manager.isCoolingDown(stack)
+            && !manager.isCoolingDown(stack, 0)
             && stack.getDamage() < stack.getMaxDamage()
         )
         {
             fire(world, player, stack, pitch, yaw);
-            manager.set(stack, 2);
+            manager.set(stack, 0, 2);
             if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
         }
         if (id == MWAttackC2SPacket.TRIGGER_SECONDARY
-                && !manager.isCoolingDown(stack)
+                && !manager.isCoolingDown(stack, 1)
                 && stack.getDamage() < stack.getMaxDamage()
         )
         {
             player.getItemCooldownManager().set(this, 3);
-            fireShell(world, player, stack, 1, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, false, x, y, z, vx, vy, vz)));
-            manager.set(stack, 15);
+            fireShell(world, player, stack, 3, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, false, x, y, z, vx, vy, vz)));
+            manager.set(stack, 1, 15);
             if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
         }
     }

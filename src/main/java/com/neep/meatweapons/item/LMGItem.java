@@ -92,6 +92,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
                 if (!world.isClient)
                 {
                     fireBeam(world, player, stack);
+                    if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
                 }
             }
             else // Weapon is out of ammunition.
