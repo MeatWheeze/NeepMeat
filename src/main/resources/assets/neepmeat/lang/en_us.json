@@ -434,5 +434,8 @@
   "advancements.neepmeat.main.obtain_item_pipe.description": "Craft some Item Pipes.",
 
   "advancements.neepmeat.main.place_ejector.title": "Vaguely Familiar",
-  "advancements.neepmeat.main.place_ejector.description": "Use an Ejector to insert items into pipes."
+  "advancements.neepmeat.main.place_ejector.description": "Use an Ejector to insert items into pipes.",
+
+  "advancements.neepmeat.main.obtain_meat_bucket.title": "Very Original",
+  "advancements.neepmeat.main.obtain_meat_bucket.description": "Fill a bucket with meat."
 }
