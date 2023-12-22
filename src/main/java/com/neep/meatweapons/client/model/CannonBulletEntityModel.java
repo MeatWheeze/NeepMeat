@@ -38,7 +38,7 @@ public class CannonBulletEntityModel extends EntityModel<CannonBulletEntity>
 	{
 		ModelData modelData = new ModelData();
 		ModelPartData modelPartData = modelData.getRoot();
-		modelPartData.addChild(EntityModelPartNames.CUBE, ModelPartBuilder.create().uv(0, 0).cuboid(-6F, 12F, -6F, 12F, 12F, 12F), ModelTransform.pivot(0F, 0F, 0F));
+		modelPartData.addChild(EntityModelPartNames.CUBE, ModelPartBuilder.create().uv(0, 0).cuboid(-2F, -2F, -2F, 2F, 2F, 2F), ModelTransform.pivot(0F, 0F, 0F));
 		return TexturedModelData.of(modelData, 64, 32);
 	}
 }

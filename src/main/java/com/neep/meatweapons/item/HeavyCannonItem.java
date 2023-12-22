@@ -1,20 +1,18 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.entity.CannonBulletEntity;
+import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -33,7 +31,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
     public HeavyCannonItem()
     {
-        super("heavy_cannon", MeatWeapons.BALLISTIC_CARTRIDGE, 1, 30,false, new FabricItemSettings());
+        super("heavy_cannon", MeatWeapons.BALLISTIC_CARTRIDGE, 1, 15,false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
     }
@@ -89,7 +87,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
                     double yaw = Math.toRadians(player.getHeadYaw());
                     double pitch = Math.toRadians(player.getPitch(0.1f));
 
-                    double mult = 5; // Multiplier for bullet speed.
+                    double mult = 1.5; // Multiplier for bullet speed.
                     double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
                     double vy = mult * -Math.sin(pitch) + player.getVelocity().getY();
                     double vz = mult * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
@@ -101,9 +99,9 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
                         pos = pos.add(transform);
                     }
 
-                    CannonBulletEntity bullet = new CannonBulletEntity(world, pos.x, pos.y, pos.z, vx, vy, vz);
-                    bullet.setOwner(player);
-                    world.spawnEntity(bullet);
+                    ExplodingShellEntity shell = new ExplodingShellEntity(world, 4, pos.x, pos.y, pos.z, vx, vy, vz);
+                    shell.setOwner(player);
+                    world.spawnEntity(shell);
 
                     playSound(world, player, GunSounds.FIRE_PRIMARY);
 
@@ -116,13 +114,10 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
                         GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_FIRE);
                     }
                 }
-            } else // Weapon is out of ammunition.
+            }
+            else // Weapon is out of ammunition.
             {
-                if (world.isClient)
-                {
-                    // Play empty sound.
-                }
-                else
+                if (!world.isClient)
                 {
                     this.reload(player, stack);
                 }

@@ -5,6 +5,7 @@ import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.BulletEntity;
 import com.neep.meatweapons.entity.CannonBulletEntity;
+import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.meatweapons.entity.PlasmaProjectileEntity;
 import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.particle.MWParticles;
@@ -27,6 +28,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
+    public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
 
     public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", true, new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item FUSION_CANNON = new FusionCannonItem();
@@ -49,8 +51,8 @@ public class MeatWeapons implements ModInitializer
     {
         BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
         CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
+        EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
 
-        System.out.println(ItemRegistry.ITEMS);
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();
         MWParticles.init();
