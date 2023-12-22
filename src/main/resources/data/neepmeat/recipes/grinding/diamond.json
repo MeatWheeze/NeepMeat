@@ -6,7 +6,8 @@
   },
   "output": {
     "resource": "minecraft:diamond",
-    "amount": 2
+    "min": 1,
+    "max": 2
   },
   "experience": 5,
   "processtime": 10
