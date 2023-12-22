@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "neepmeat:block/mixer/mixer"
+      "model": "neepmeat:block/mixer/mixer-2"
     }
   }
 }

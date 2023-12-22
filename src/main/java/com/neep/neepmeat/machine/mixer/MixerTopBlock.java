@@ -2,10 +2,7 @@ package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.init.NMBlocks;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
+import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -50,5 +47,11 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
     public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
     {
         return NMBlocks.MIXER.getPickStack(world, pos, state);
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state)
+    {
+        return BlockRenderType.INVISIBLE;
     }
 }
