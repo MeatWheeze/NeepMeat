@@ -1,5 +1,6 @@
 package com.neep.neepmeat.mixin;
 
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -23,7 +24,7 @@ public class MixinCowEntityRenderer
     {
         BlockPos pos = entity.getBlockPos().up();
         World world = entity.getWorld();
-        if (entity instanceof CowEntity && world.getBlockEntity(pos) instanceof HydraulicPressBlockEntity be)
+        if (entity instanceof CowEntity && world.getBlockState(pos).isOf(NMBlocks.HYDRAULIC_PRESS) && world.getBlockEntity(pos) instanceof HydraulicPressBlockEntity be)
         {
             float height = entity.getHeight();
             float scale = (height - be.renderExtension * HydraulicPressRenderer.MAX_DISPLACEMENT) / height;
