@@ -2,12 +2,10 @@ package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseFacingBlock;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
-import com.neep.neepmeat.fluid_util.node.NodePos;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.blockentity.PumpBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;

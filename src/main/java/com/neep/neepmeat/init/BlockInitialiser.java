@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.base.*;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
+import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
@@ -59,6 +60,7 @@ public class BlockInitialiser
     public static Block IRON_PIPE;
     public static Block PUMP;
     public static Block TROMMEL;
+    public static Block HEATER;
     public static Block TROMMEL_CENTRE;
     public static Block FLUID_DRAIN;
 
@@ -98,6 +100,7 @@ public class BlockInitialiser
         IRON_PIPE = registerBlock(new PipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         TROMMEL = registerBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
         TROMMEL_CENTRE = registerBlock(new BaseDummyBlock("trommel_centre", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+        HEATER = registerBlock(new HeaterBlock("heater", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
         // --- Fluid Transfer ---
         PUMP = registerBlock(new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));

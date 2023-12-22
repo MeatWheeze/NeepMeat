@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.block.base.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.FluidPortBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.FluidPortBlockEntity;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -12,7 +12,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;

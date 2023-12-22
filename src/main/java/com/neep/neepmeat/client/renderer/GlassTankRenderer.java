@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.client.NeepMeatClient;
-import com.neep.neepmeat.blockentity.GlassTankBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;

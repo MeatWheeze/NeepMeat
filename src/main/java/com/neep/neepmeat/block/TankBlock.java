@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseColumnBlock;
-import com.neep.neepmeat.blockentity.TankBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
