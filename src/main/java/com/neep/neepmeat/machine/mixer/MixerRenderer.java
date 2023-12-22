@@ -5,6 +5,7 @@ import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
+import com.neep.neepmeat.machine.motor.MotorRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -23,16 +24,9 @@ import net.minecraft.util.math.Vec3f;
 @SuppressWarnings("UnstableApiUsage")
 public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 {
-    protected float lastFrame;
-    protected float currentFrame;
 
     public MixerRenderer(BlockEntityRendererFactory.Context ctx)
     {
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
-        {
-            this.lastFrame = this.currentFrame;
-            return true;
-        }));
     }
 
     @Override
@@ -77,8 +71,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         matrices.push();
         matrices.translate(0.5, 1.5, 0.5);
 
-        this.currentFrame = be.getWorld().getTime() + tickDelta;
-        float delta = (currentFrame - lastFrame);
+        float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
 
         be.bladeSpeed = MathHelper.lerp(0.5f, be.bladeSpeed,
                 be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : 20f * be.progressIncrement
