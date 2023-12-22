@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.block.FlameJetBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.block.fluid_transport.TankBlock;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -14,24 +13,37 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.lwjgl.system.CallbackI;
 
+import java.util.List;
 import java.util.Random;
 
+@SuppressWarnings("UnstableApiUsage")
 public class FlameJetBlockEntity extends SyncableBlockEntity
 {
     public static final long BURN_AMOUNT = 81;
 
-    WritableSingleFluidStorage storage = new WritableSingleFluidStorage(4 * FluidConstants.BUCKET, this::sync);
+    WritableSingleFluidStorage storage = new WritableSingleFluidStorage(4 * FluidConstants.BUCKET, this::sync)
+    {
+        @Override
+        protected boolean canInsert(FluidVariant variant)
+        {
+            return variant.isOf(Fluids.LAVA);
+        }
+    };
+
     protected boolean powered;
 
     public FlameJetBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -90,10 +102,20 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
         }
         if (be.canBurn())
         {
+            Direction facing = be.getCachedState().get(FlameJetBlock.FACING);
             try (Transaction transaction = Transaction.openOuter())
             {
                 be.storage.extract(be.storage.getResource(), BURN_AMOUNT, transaction);
                 transaction.commit();
+                Box box = new Box(pos).expand(facing.getOffsetX() * 6, facing.getOffsetY() * 6, facing.getOffsetZ() * 6);
+                List<LivingEntity> entityList = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true);
+                entityList.forEach(entity ->
+                {
+                    if (entity.damage(DamageSource.LAVA, 1.5f))
+                    {
+                        entity.setFireTicks(10);
+                    }
+                });
             }
         }
     }

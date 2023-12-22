@@ -37,6 +37,11 @@ public interface IMeatBlock extends ItemConvertible
         return BlockTags.PICKAXE_MINEABLE;
     }
 
+    default boolean autoGenDrop()
+    {
+        return true;
+    }
+
     default ItemConvertible dropsLike()
     {
         validate(this);
