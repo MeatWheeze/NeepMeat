@@ -40,6 +40,7 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final BooleanProperty BOTTOM = Properties.BOTTOM;
     public final NMBlock stairs;
+    public final NMBlock slab;
 
     public MetalScaffoldingBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -48,7 +49,7 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
         stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
         BlockInitialiser.BLOCKS.put(stairs.getRegistryName(), stairs);
 
-        BaseSlabBlock slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
+        slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
         BlockInitialiser.BLOCKS.put(slab.getRegistryName(), slab);
 
         this.registryName = registryName;

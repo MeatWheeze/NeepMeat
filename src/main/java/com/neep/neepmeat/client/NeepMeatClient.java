@@ -63,10 +63,12 @@ public class NeepMeatClient
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.RUSTED_BARS);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.SCAFFOLD_PLATFORM);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), BlockInitialiser.SCAFFOLD_PLATFORM);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) BlockInitialiser.SCAFFOLD_PLATFORM.stairs);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) BlockInitialiser.SCAFFOLD_PLATFORM.slab);
+
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.BLUE_SCAFFOLD);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) BlockInitialiser.BLUE_SCAFFOLD.stairs);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) BlockInitialiser.BLUE_SCAFFOLD.slab);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.SCAFFOLD_TRAPDOOR);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), BlockInitialiser.SCAFFOLD_TRAPDOOR);
