@@ -93,7 +93,7 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
             try (Transaction transaction = Transaction.openOuter())
             {
                 tryStart(transaction);
-                transaction.abort();
+                transaction.commit();
             }
         }
 
@@ -125,13 +125,22 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
 
     protected void tryStart(TransactionContext transaction)
     {
-        long tr;
-        if ((tr = moveToItem(transaction)) > 0)
+        Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
+        try (Transaction inner = transaction.openNested())
         {
-            state = State.FILLING;
-            maxProgress = MAX_PROGRESS;
-            startTime = world.getTime();
-            sync();
+            if (moveToItem(inner) > 0)
+            {
+                state = State.FILLING;
+                maxProgress = MAX_PROGRESS;
+                startTime = world.getTime();
+                sync();
+                inner.abort();
+            }
+            else
+            {
+                ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, inner);
+                inner.commit();
+            }
         }
     }
 
@@ -140,6 +149,8 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
         Direction facing = getCachedState().get(BaseHorFacingBlock.FACING);
         moveToItem(transaction);
         ItemPipeUtil.storageToAny((ServerWorld) world, storage.getItemStorage(), pos, facing, transaction);
+        state = State.IDLE;
+        sync();
     }
 
     private long moveToItem(TransactionContext transaction)
