@@ -3,6 +3,7 @@ package com.neep.neepmeat.blockentity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -16,6 +17,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -37,43 +40,32 @@ import net.minecraft.world.World;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
-        Storage<ItemVariant>,
-        SingleSlotStorage<ItemVariant>
+public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVariant>
 {
 
     private DefaultedList<ItemStack> inventory = DefaultedList.ofSize(1, ItemStack.EMPTY);
     private int transferCooldown = -1;
-    private long lastTickTime;
     private BlockApiCache<Storage<ItemVariant>, Direction> cache;
+
+    protected WritableStackStorage storage;
+    private long lastTickTime;
+
+    public ItemDuctBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state);
+        this.storage = new WritableStackStorage(this);
+    }
 
     public ItemDuctBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.ITEM_DUCT_BLOCK_ENTITY, pos, state);
-
+        this(NMBlockEntities.ITEM_DUCT_BLOCK_ENTITY, pos, state);
     }
-
-    public SnapshotParticipant<ResourceAmount<ItemVariant>> participant = new SnapshotParticipant<ResourceAmount<ItemVariant>>()
-    {
-
-        @Override
-        protected ResourceAmount<ItemVariant> createSnapshot()
-        {
-            return new ResourceAmount<>(getResource(), getAmount());
-        }
-
-        @Override
-        protected void readSnapshot(ResourceAmount<ItemVariant> snapshot)
-        {
-            setResource(snapshot.resource());
-            setAmount(snapshot.amount());
-        }
-    };
 
     @Override
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
+        storage.writeNbt(tag);
         return tag;
     }
 
@@ -81,36 +73,7 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-    }
-
-    @Override
-    public int size()
-    {
-        return this.inventory.size();
-    }
-
-    @Override
-    public ItemStack removeStack(int slot, int amount)
-    {
-        this.checkLootInteraction(null);
-        return Inventories.splitStack(this.getInvStackList(), slot, amount);
-    }
-
-    @Override
-    public void setStack(int slot, ItemStack stack)
-    {
-        this.checkLootInteraction(null);
-        this.getInvStackList().set(slot, stack);
-        if (stack.getCount() > this.getMaxCountPerStack())
-        {
-            stack.setCount(this.getMaxCountPerStack());
-        }
-    }
-
-    @Override
-    protected Text getContainerName()
-    {
-        return new TranslatableText(NeepMeat.NAMESPACE + ":container.item_duct");
+        storage.readNbt(tag);
     }
 
     public void updateApiCache(BlockPos pos, BlockState state)
@@ -180,34 +143,6 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
         return transferAmount > 0;
     }
 
-    @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list)
-    {
-        this.inventory = list;
-    }
-
-    @Override
-    protected DefaultedList<ItemStack> getInvStackList()
-    {
-        return this.inventory;
-    }
-
-    @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory)
-    {
-        // TODO: fix
-        return new HopperScreenHandler(syncId, playerInventory, this);
-    }
-
-    private boolean isFull() {
-        for (ItemStack itemStack : this.inventory)
-        {
-            if (!itemStack.isEmpty() && itemStack.getCount() == itemStack.getMaxCount()) continue;
-            return false;
-        }
-        return true;
-    }
-
     private void setCooldown(int cooldown)
     {
         this.transferCooldown = cooldown;
@@ -221,101 +156,28 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
     @Override
     public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-
-        Item item = resource.toStack().getItem();
-        ItemStack presentStack = inventory.get(0);
-
-        if ((getResource().equals(resource)))
-        {
-            participant.updateSnapshots(transaction);
-            int space = presentStack.getMaxCount() - presentStack.getCount();
-            int transferred = (int) Math.min(presentStack.getMaxCount(), Math.min(space, maxAmount));
-            presentStack.increment(transferred);
-            return transferred;
-        }
-        else if (presentStack.isEmpty())
-        {
-            participant.updateSnapshots(transaction);
-            int transferred = (int) Math.min(item.getMaxCount(), maxAmount);
-            inventory.set(0, resource.toStack(transferred));
-            return transferred;
-        }
-        return 0;
+        return storage.insert(resource, maxAmount, transaction);
     }
-
-//    @Override
-//    public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
-//    {
-//        Item item = resource.toStack().getItem();
-//        ItemStack presentStack = inventory.get(0);
-//
-//        if (getResource() == null || getResource().isBlank() || getAmount() <= 0)
-//        {
-//            this.setAmount(0);
-//        }
-//
-//        long inserted = Math.min(maxAmount, getCapacity() - getAmount());
-//
-//        if (getResource().equals(resource) && inserted > 0)
-//        {
-//            this.updateSnapshots(transaction);
-//            amount += inserted;
-//            return inserted;
-//        }
-//        return 0;
-//    }
 
     @Override
     public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-        if (getResource().equals(resource))
-        {
-            participant.updateSnapshots(transaction);
-            int transferred = (int) Math.min(inventory.get(0).getCount(), maxAmount);
-            inventory.get(0).decrement(transferred);
-//            System.out.println("pos: " + getPos() + ", extracted: " + transferred);
-            return transferred;
-        }
-        return 0;
-    }
-
-    @Override
-    public boolean isResourceBlank()
-    {
-        return inventory.get(0).isEmpty();
+        return storage.extract(resource, maxAmount, transaction);
     }
 
     @Override
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
-//        return inventory.stream().map(stack -> ItemVariant.of(stack)).collect(Collectors.toList());
-        return SingleViewIterator.create(this, transaction);
+        return storage.iterator(transaction);
     }
 
-    @Override
     public ItemVariant getResource()
     {
-        return ItemVariant.of(inventory.get(0));
-    }
-
-    @Override
-    public long getCapacity()
-    {
-        return 64;
-    }
-
-    public void setAmount(long amount)
-    {
-        inventory.get(0).setCount((int) amount);
-    }
-
-    private void setResource(ItemVariant resource)
-    {
-        inventory.set(0, resource.toStack());
+        return storage.getResource();
     }
 
     public long getAmount()
     {
-        return inventory.get(0).getCount();
+        return storage.getAmount();
     }
 }
