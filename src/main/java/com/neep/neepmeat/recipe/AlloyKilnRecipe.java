@@ -208,8 +208,8 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         @Override
         public AlloyKilnRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
-            RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(buf);
+            RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
             int time = buf.readVarInt();

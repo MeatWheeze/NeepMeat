@@ -130,7 +130,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         @Override
         public PressingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
             return this.factory.create(id, fluidInput, itemOutput);

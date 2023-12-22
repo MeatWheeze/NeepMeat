@@ -170,7 +170,7 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
         @Override
         public GrindingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
             RecipeOutput<Item> extraOutput = null;

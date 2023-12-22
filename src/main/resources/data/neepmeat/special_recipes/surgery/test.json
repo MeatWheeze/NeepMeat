@@ -1,0 +1,17 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "type": "minecraft:item",
+      "tag": "c:metal_scaffolding",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "neepmeat:blue_metal_scaffold",
+    "amount": 8
+  }
+}
