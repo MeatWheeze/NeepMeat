@@ -5,7 +5,6 @@ import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -24,11 +23,11 @@ public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity>
     public TypedFluidBuffer outputBuffer;
     protected MultiTypedFluidBuffer buffer;
 
-    public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long inCapacity, long outCapacity)
     {
         super(type, pos, state);
-        inputBuffer = new TypedFluidBuffer(this, 4 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.equals(NMFluids.CHARGED), TypedFluidBuffer.Mode.INSERT_ONLY);
-        outputBuffer = new TypedFluidBuffer(this, 4 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.equals(NMFluids.UNCHARGED), TypedFluidBuffer.Mode.EXTRACT_ONLY);
+        inputBuffer = new TypedFluidBuffer(this, inCapacity, fluidVariant -> fluidVariant.equals(NMFluids.CHARGED), TypedFluidBuffer.Mode.INSERT_ONLY);
+        outputBuffer = new TypedFluidBuffer(this, outCapacity, fluidVariant -> fluidVariant.equals(NMFluids.UNCHARGED), TypedFluidBuffer.Mode.EXTRACT_ONLY);
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 

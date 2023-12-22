@@ -49,8 +49,6 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
     {
-//        BlockPos basePos = pos.offset(state.get(FACING).getOpposite());
-//        return world.getBlockState(basePos).isAir();
         return super.canPlaceAt(state, world, pos);
     }
 
@@ -58,37 +56,18 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
         super.onPlaced(world, pos, state, placer, itemStack);
-//        Direction facing = state.get(FACING).getOpposite();
-//        BlockPos basePos = pos.offset(facing);
-//        if (world.getBlockState(basePos).isAir())
-//        {
-//            world.setBlockState(basePos, NMBlocks.CONVERTER_BASE.getDefaultState()
-//                    .with(Base.FACING, facing));
-//        }
     }
 
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-//        Direction look = context.getPlayerLookDirection();
-//        return look.getAxis().isVertical() ? getDefaultState() : getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
         return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
-//        System.out.println("place");
-//        return  this.getDefaultState();
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
         super.onStateReplaced(state, world, pos, newState, moved);
-//        if (!newState.isOf(this))
-//        {
-//            BlockPos basePos = pos.offset(state.get(FACING).getOpposite());
-//            if (world.getBlockState(basePos).isOf(NMBlocks.CONVERTER_BASE))
-//            {
-//                world.setBlockState(basePos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-//            }
-//        }
     }
 
     @Override
@@ -107,7 +86,6 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         super.appendProperties(builder);
-//        builder.add(TYPE);
     }
 
     @Override
@@ -157,14 +135,6 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
         public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
         {
             super.onStateReplaced(state, world, pos, newState, moved);
-//            if (!newState.isOf(this))
-//            {
-//                BlockPos mainPos = pos.offset(state.get(FACING).getOpposite());
-//                if (world.getBlockState(mainPos).isOf(NMBlocks.CONVERTER))
-//                {
-//                    world.setBlockState(mainPos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
-//                }
-//            }
         }
 
         @Override
