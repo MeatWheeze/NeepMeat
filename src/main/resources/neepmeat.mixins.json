@@ -6,10 +6,11 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "BrewingRecipeRegistryAccessor",
-    "WorldChunkMixin",
+    "CowEntityMixin",
     "FurnaceAccessor",
     "LivingEntityMixin",
-    "ServerWorldMixin"
+    "ServerWorldMixin",
+    "WorldChunkMixin"
   ],
   "client": [
     "BlockModelRendererAccessor",
