@@ -23,6 +23,7 @@ import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.motor.MotorRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pedestal.PedestalRenderer;
+import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
@@ -131,6 +132,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.FEEDING_TROUGH, TroughRenderer::new);
 
         BlockEntityRendererRegistry.register(NMBlockEntities.BOTTLER, BottlerRenderer::new);
+
+        BlockEntityRendererRegistry.register(NMBlockEntities.PYLON, PylonRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

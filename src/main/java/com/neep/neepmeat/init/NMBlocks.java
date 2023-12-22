@@ -21,6 +21,7 @@ import com.neep.neepmeat.machine.heater.HeaterBlock;
 import com.neep.neepmeat.machine.integrator.IntegratorBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
+import com.neep.neepmeat.machine.pylon.PylonBlock;
 import com.neep.neepmeat.machine.sifter.SifterBlock;
 import com.neep.neepmeat.machine.sifter.SifterHopperBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
@@ -141,6 +142,8 @@ public class NMBlocks
 
     public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SIFTER_HOPPER = BlockRegistry.queue(new SifterHopperBlock("hopper", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
+    public static Block PYLON = BlockRegistry.queue(new PylonBlock("pylon", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));
