@@ -3,6 +3,7 @@ package com.neep.neepmeat.blockentity.fluid;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
+import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
@@ -43,20 +44,6 @@ public class PumpBlockEntity extends SyncableBlockEntity
         super(NMBlockEntities.PUMP, pos, state);
 
         buffer = new WritableSingleFluidStorage(FluidConstants.BLOCK, this::sync);
-
-        // Create fluid interfaces in connection directions
-        if (state.getBlock() instanceof IFluidNodeProvider nodeProvider)
-        {
-            for (Direction direction : Direction.values())
-            {
-                if (nodeProvider.connectInDirection(world, pos, state, direction))
-                {
-//                    AcceptorModes mode = nodeProvider.getDirectionMode(world, pos, state, direction);
-//                    sideModes.put(direction, mode);
-//                    setActive(false);
-                }
-            }
-        }
     }
 
     @Override
@@ -87,38 +74,14 @@ public class PumpBlockEntity extends SyncableBlockEntity
 
         if (!active)
         {
-//            sideModes.replace(facing, AcceptorModes.NONE);
-//            sideModes.replace(facing.getOpposite(), AcceptorModes.NONE);
-
             frontMode = AcceptorModes.NONE;
             backMode = AcceptorModes.NONE;
 
-//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
-//            {
-//                node.get().setMode(AcceptorModes.NONE);
-//            }
-//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
-//            {
-//                node.get().setMode(AcceptorModes.NONE);
-//            }
         }
         else
         {
-//            sideModes.replace(facing, AcceptorModes.PUSH);
-//            sideModes.replace(facing.getOpposite(), AcceptorModes.PULL);
-
             frontMode = AcceptorModes.PUSH;
             backMode = AcceptorModes.PULL;
-
-//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(front)).exists())
-//            {
-//                node.get().setMode(AcceptorModes.PUSH);
-//            }
-//            if ((node = FluidNetwork.getInstance(world).getNodeSupplier(back)).exists())
-//            {
-//                node.get().setMode(AcceptorModes.PULL);
-//            }
-
         }
 
         this.isActive = active;

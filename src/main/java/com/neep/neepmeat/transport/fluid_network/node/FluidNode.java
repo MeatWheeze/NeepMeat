@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
+import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
@@ -11,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -30,7 +32,6 @@ public class FluidNode
     private final Direction face;
     private final BlockPos pos;
     private final NodePos nodePos;
-    public float flowMultiplier;
     private PipeNetwork network = null;
     public long networkId;
     public Map<FluidNode, Integer> distances = new HashMap<>();
@@ -40,29 +41,27 @@ public class FluidNode
 
     public boolean needsDeferredLoading;
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, float flowMultiplier, boolean isStorage)
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, boolean isStorage)
     {
-        this(nodePos, storage, flowMultiplier);
+        this(nodePos, storage);
         this.isStorage = isStorage;
     }
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, float flowMultiplier)
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage)
     {
         this.pos = nodePos.pos;
         this.face = nodePos.face;
         this.nodePos = nodePos;
         this.storage = storage;
-        this.flowMultiplier = flowMultiplier;
         this.isStorage = true;
     }
 
     // For deferred loading only.
-    protected FluidNode(NodePos pos, float flowMultiplier, long networkId, ServerWorld world, boolean isStorage)
+    protected FluidNode(NodePos pos, long networkId, ServerWorld world, boolean isStorage)
     {
         this.face = pos.face;
         this.pos = pos.pos;
         this.nodePos = pos;
-        this.flowMultiplier = flowMultiplier;
         this.networkId = networkId;
         this.storage = null;
         this.isStorage = isStorage;
@@ -84,17 +83,15 @@ public class FluidNode
         NodePos pos = NodePos.fromNbt(posNbt);
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
         long networkId = nbt.getLong("network_id");
-        float flowMultiplier = nbt.getFloat("multiplier");
         boolean isStorage = nbt.getBoolean("is_storage");
 
-        return new FluidNode(pos, flowMultiplier, networkId, world, isStorage);
+        return new FluidNode(pos, networkId, world, isStorage);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put("pos", nodePos.toNbt(new NbtCompound()));
         nbt.putLong("network_id", networkId);
-        nbt.putFloat("multiplier", flowMultiplier);
         nbt.putBoolean("is_storage", isStorage);
         return nbt;
     }
@@ -217,9 +214,9 @@ public class FluidNode
         BlockState state = world.getBlockState(getTargetPos());
         if (state.getBlock() instanceof IVariableFlowBlock variableFlow)
         {
-            return variableFlow.getFlow(world, getTargetPos(), state);
+            return variableFlow.getFlow(world, getTargetPos(), state, face.getOpposite());
         }
-        return getMode(world).getFlow() * this.flowMultiplier;
+        return getMode(world).getFlow();
     }
 
     public Storage<FluidVariant> getStorage(ServerWorld world)

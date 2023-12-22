@@ -244,7 +244,7 @@ public class FluidNetwork
         if ((node = nodes.get(pos)) == null)
         {
             // Create new node with params
-            node = new FluidNode(pos, storage, 1, isStorage);
+            node = new FluidNode(pos, storage, isStorage);
             nodes.put(pos, node);
             newNode = true;
         }
