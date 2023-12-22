@@ -22,6 +22,15 @@ public interface IMotorBlockEntity
         }
     }
 
+    default void onRemoved()
+    {
+        if (getConnectedBlock() != null && getConnectedBlock().getBlockEntity() instanceof IMotorisedBlock motorised)
+        {
+            motorised.setWorkMultiplier(0);
+            motorised.onMotorRemoved();
+        }
+    }
+
     void setConnectedBlock(BlockApiCache<Void, Void> motorised);
 
     float getRotorAngle();

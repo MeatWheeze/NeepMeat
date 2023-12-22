@@ -65,6 +65,16 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()) && world.getBlockEntity(pos) instanceof MotorBlockEntity be)
+        {
+            be.onRemoved();
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())

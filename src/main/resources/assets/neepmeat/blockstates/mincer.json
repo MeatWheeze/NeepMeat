@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "running=false": {
       "model": "neepmeat:block/mincer/main"
+    },
+    "running=true": {
+      "model": "neepmeat:block/mincer/main_running"
     }
   }
 }

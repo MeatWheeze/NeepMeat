@@ -251,6 +251,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
 
         MINCER = registerBlockEntity("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
+        FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
