@@ -18,7 +18,7 @@ public class CameraMixin
         var renderer = PLCHudRenderer.getInstance();
         if (renderer != null)
         {
-            renderer.onCameraUpdate((Camera) (Object) this, tickDelta);
+            renderer.onCameraUpdate(tickDelta);
         }
     }
 }
