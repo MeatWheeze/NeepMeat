@@ -18,6 +18,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -88,12 +89,23 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
             {
                 if (stack.getDamage() != this.maxShots)
                 {
-//                    player.getItemCooldownManager().set(this, 1);
+                    player.getItemCooldownManager().set(this, 1);
 
                     if (!world.isClient)
                     {
+                        double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
+                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
+                        if (!player.isSneaking())
+                        {
+                            Vec3d transform = new Vec3d(
+                                    player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                                    player.isSneaking() ? -0.15 : 0.1,
+                                    0).rotateY((float) -yaw);
+                            pos = pos.add(transform);
+                        }
 
-                        Optional<LivingEntity> target = this.hitScan(player, 100,0.5f);
+                        Vec3d end = pos.add(player.getRotationVec(1).multiply(20));
+                        Optional<LivingEntity> target = this.hitScan(player, pos, end, 100);
                         if (target.isPresent())
                         {
 //                            target.get().maxHurtTime = 1;

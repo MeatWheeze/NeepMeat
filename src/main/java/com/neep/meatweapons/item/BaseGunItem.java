@@ -169,17 +169,13 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         return list;
     }
 
-    public Optional<LivingEntity> hitScan(PlayerEntity caster, double distance, float tickDelta)
+    public Optional<LivingEntity> hitScan(PlayerEntity caster, Vec3d start, Vec3d end, double distance)
     {
         World world = caster.world;
         if (!world.isClient)
         {
-            Vec3d pos = caster.getCameraPosVec(tickDelta);
-            Vec3d look = caster.getRotationVec(tickDelta);
-            Vec3d end = pos.add(look.multiply(distance));
-
             // Find where the ray hits a block
-            RaycastContext ctx = new RaycastContext(pos, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
+            RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
             BlockHitResult blockResult = world.raycast(ctx);
 
             Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
@@ -187,19 +183,18 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             double minDistance = distance;
             Entity entity = null;
             EntityHitResult entityResult = null;
-            for (EntityHitResult result : getRayTargets(caster, pos, blockResult.getPos(), entityFilter, 0.1))
+            for (EntityHitResult result : getRayTargets(caster, start, blockResult.getPos(), entityFilter, 0.1))
             {
-                if (result.getPos().distanceTo(pos) < minDistance)
+                if (result.getPos().distanceTo(start) < minDistance)
                 {
-                    minDistance = result.getPos().distanceTo(pos);
+                    minDistance = result.getPos().distanceTo(start);
                     entity = result.getEntity();
                     entityResult = result;
                 }
             }
 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-            // Send packet here
-            syncBeamEffect((ServerWorld) world, pos, hitPos, 100);
+            syncBeamEffect((ServerWorld) world, start, hitPos, 100);
 
             return Optional.ofNullable((LivingEntity) entity);
         }
@@ -210,7 +205,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, radius))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, new Vec3d(0, 0, 0), 10, MWNetwork.EFFECT_ID);
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, new Vec3d(0, 0, 0), 9, MWNetwork.EFFECT_ID);
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
