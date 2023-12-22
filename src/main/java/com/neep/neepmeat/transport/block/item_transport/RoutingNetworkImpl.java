@@ -20,10 +20,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -101,7 +100,15 @@ public class RoutingNetworkImpl implements RoutingNetwork
                 .flatMap(p -> p.getAvailable(transaction))
                 .filter(v -> !v.isResourceBlank())
                 .map(RoutingNetworkImpl::viewToAmount)
-                .collect(Collectors.toList());
+                .collect(Collectors.collectingAndThen(
+                        Collectors.toMap(ResourceAmount::resource, Function.identity(),
+                                RoutingNetworkImpl::combine),
+                        m -> new ArrayList<>(m.values())));
+    }
+
+    protected static <T> ResourceAmount<T> combine(ResourceAmount<T> am1, ResourceAmount<T> am2)
+    {
+        return new ResourceAmount<>(am1.resource(), am1.amount() + am2.amount());
     }
 
     public void request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
