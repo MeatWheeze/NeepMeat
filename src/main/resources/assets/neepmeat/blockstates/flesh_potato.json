@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "age=0": {
+      "model": "neepmeat:block/flesh_potato/stage0"
+    },
+    "age=1": {
+      "model": "neepmeat:block/flesh_potato/stage0"
+    },
+    "age=2": {
+      "model": "neepmeat:block/flesh_potato/stage1"
+    },
+    "age=3": {
+      "model": "neepmeat:block/flesh_potato/stage1"
+    },
+    "age=4": {
+      "model": "neepmeat:block/flesh_potato/stage2"
+    },
+    "age=5": {
+      "model": "neepmeat:block/flesh_potato/stage2"
+    },
+    "age=6": {
+      "model": "neepmeat:block/flesh_potato/stage2"
+    },
+    "age=7": {
+      "model": "neepmeat:block/flesh_potato/stage3"
+    }
+  }
+}
