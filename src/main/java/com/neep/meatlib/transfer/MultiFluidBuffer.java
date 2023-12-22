@@ -57,7 +57,7 @@ public class MultiFluidBuffer extends SnapshotParticipant<Map<FluidVariant, Long
         if (insertedAmount > 0)
         {
             updateSnapshots(transaction);
-            return map.compute(resource, (r, a) -> a != null ? a + insertedAmount : insertedAmount);
+            map.compute(resource, (r, a) -> a != null ? a + insertedAmount : insertedAmount);
         }
         return insertedAmount;
     }
@@ -98,7 +98,7 @@ public class MultiFluidBuffer extends SnapshotParticipant<Map<FluidVariant, Long
             @Override
             protected long getCapacity(FluidVariant variant)
             {
-                return getCapacity();
+                return MultiFluidBuffer.this.getCapacity();
             }
 
             @Override

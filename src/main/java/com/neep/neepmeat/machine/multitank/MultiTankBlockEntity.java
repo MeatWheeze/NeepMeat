@@ -13,6 +13,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -54,7 +56,8 @@ public class MultiTankBlockEntity extends SyncableBlockEntity
     public static void showContents(ServerPlayerEntity player, World world, BlockPos pos, MultiFluidBuffer buffer)
     {
         world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
-        TankMessagePacket.send(player, pos, buffer.getTotalAmount(), NMFluids.UNCHARGED);
+        long mb = Math.floorDiv(buffer.getTotalAmount(), FluidConstants.BUCKET / 1000);
+        player.sendMessage(Text.of("Fluid" + ": " + mb + "mb"), true);
     }
 
     @Override
