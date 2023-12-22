@@ -3,6 +3,7 @@ package com.neep.neepmeat.entity.keeper;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.FusionCannonItem;
+import com.neep.neepmeat.init.NMItems;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
@@ -18,7 +19,6 @@ import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Arm;
@@ -39,7 +39,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
 
     protected final KeeperRangedAttackGoal<KeeperEntity> rangedAttackGoal = new KeeperRangedAttackGoal<>(this, 1.0, 20, 15.0f, MWItems.FUSION_CANNON);
-    protected final KeeperMeleeGoal meleeAttackGoal = new KeeperMeleeGoal(this, 1.2, false){
+    protected final KeeperMeleeGoal meleeAttackGoal = new KeeperMeleeGoal(this, 2.2, false){
 
     };
     protected ItemStack equipped = new ItemStack(MWItems.FUSION_CANNON);
@@ -86,7 +86,14 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
 
         goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
         goalSelector.add(4, new KeeperCritGoal(this, 8f));
-        goalSelector.add(4, new KeeperDodgeGoal(this, 8f));
+        goalSelector.add(3, new KeeperDodgeGoal(this, 8f));
+        goalSelector.add(3, new KeeperRetreatGoal(this, 8f, 16));
+        goalSelector.add(2, new KeeperHealGoal(this, 8f, 16));
+    }
+
+    public boolean shouldHeal()
+    {
+        return getHealth() < 0.75 * getMaxHealth();
     }
 
     public void updateAttackType()
@@ -208,7 +215,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
         switch (type)
         {
             case NONE -> equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
-            case MELEE -> equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.BONE));
+            case MELEE -> equipStack(EquipmentSlot.MAINHAND, new ItemStack(NMItems.SLASHER));
             case RANGED -> equipStack(EquipmentSlot.MAINHAND, new ItemStack(MWItems.FUSION_CANNON));
         }
     }
