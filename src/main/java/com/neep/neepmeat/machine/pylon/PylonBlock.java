@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.pylon;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -18,7 +19,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PylonBlock extends TallBlock implements BlockEntityProvider
+public class PylonBlock extends TallBlock implements BlockEntityProvider, DataCable
 {
     public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32 + 16, 16);
 
@@ -36,7 +37,7 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider
     @Override
     protected Structure createStructure()
     {
-        return (Structure) BlockRegistry.queue(new PylonStructure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
+        return BlockRegistry.queue(new PylonStructure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
     }
 
     @Nullable

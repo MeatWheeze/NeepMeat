@@ -15,6 +15,8 @@
   "message.neepmeat.insufficient_power_2": "%s < %s",
   "message.neepmeat.running": "Running",
 
+  "message.neepmeat.integrator.data": "Data: %s / %s",
+
   "block.neepmeat.polished_metal_bricks": "Polished Metal Bricks",
   "block.neepmeat.polished_metal_bricks_slab": "Polished Metal Bricks Slab",
   "block.neepmeat.polished_metal_bricks_stairs": "Polished Metal Bricks Stairs",
@@ -222,6 +224,8 @@
   "block.neepmeat.trommel": "Blasphemous Trommel",
   "block.neepmeat.integrator_egg": "Integrator Egg",
   "block.neepmeat.integrator_egg.lore_0": "It pulsates, inexplicably communicating a desire for blood.",
+  "block.neepmeat.advanced_integrator": "Advanced Integrator",
+  "block.neepmeat.advanced_integrator_structure": "Advanced Integrator Structure",
 
   "block.neepmeat.deployer": "Deployer",
   "block.neepmeat.mixer": "Mixer",
@@ -353,6 +357,13 @@
   "item.neepmeat.pipette.lore_2": "Shift-click to dump contents.",
 
   "item.neepmeat.refractory_brick": "Refractory Brick",
+
+  "item.neepmeat.networking_tool": "Networking Tool",
+  "item.neepmeat.networking_tool.from": "Selected: %s %s %s",
+  "item.neepmeat.networking_tool.connected": "Connected %s %s %s to %s %s %s",
+  "item.neepmeat.networking_tool.lore_0": "Connects data ports together.",
+  "item.neepmeat.networking_tool.lore_1": "Right-click the sender block and then the",
+  "item.neepmeat.networking_tool.lore_2": "receiver block to set a connection.",
 
   "item.neepmeat.flywheel": "Flywheel",
   "item.neepmeat.stator": "Copper Stator",

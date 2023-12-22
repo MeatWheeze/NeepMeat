@@ -78,13 +78,6 @@ public class MachineHudOverlay
                 boolean problem = diagnostics.problem();
                 if (problem)
                 {
-//                    Text t = Text.translatable("message.neepmeat.insufficient_power");
-//                    Text t1 = Text.translatable("message.neepmeat.insufficient_power_2",
-//                            Text.literal(POWER_FORMAT.format(perUnitToAbsolute(diagnostics.power()))).append(POWER_UNIT),
-//                            Text.literal(POWER_FORMAT.format(perUnitToAbsolute(diagnostics.minPower()))).append(POWER_UNIT)
-//                    );
-//
-
                     Text t = diagnostics.title();
                     Text m = diagnostics.message();
 

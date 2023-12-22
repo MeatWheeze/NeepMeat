@@ -1,0 +1,46 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "neepmeat:block/advanced_integrator/danglies_1",
+		"particle": "neepmeat:block/advanced_integrator/danglies_1"
+	},
+	"elements": [
+		{
+			"from": [-16, -16, 2],
+			"to": [13, 32, 2],
+			"rotation": {"angle": -22.5, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [7.25, 0, 0, 12], "texture": "#0"},
+				"south": {"uv": [0, 0, 7.25, 12], "texture": "#0"}
+			}
+		},
+		{
+			"from": [3, -16, 11],
+			"to": [32, 32, 11],
+			"rotation": {"angle": 45, "axis": "y", "origin": [0, 0, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 7.25, 12], "texture": "#0"},
+				"south": {"uv": [7.25, 0, 0, 12], "texture": "#0"}
+			}
+		},
+		{
+			"from": [-16, -16, 32],
+			"to": [13, 32, 32],
+			"rotation": {"angle": 45, "axis": "y", "origin": [-19, 0, 21]},
+			"faces": {
+				"north": {"uv": [7.25, 0, 14.5, 12], "texture": "#0"},
+				"south": {"uv": [7.25, 0, 14.5, 12], "texture": "#0"}
+			}
+		},
+		{
+			"from": [3, -16, 21.78858],
+			"to": [32, 32, 21.78858],
+			"rotation": {"angle": -45, "axis": "y", "origin": [18.73833, 8, 21.78858]},
+			"faces": {
+				"north": {"uv": [14.5, 0, 7.25, 12], "texture": "#0"},
+				"south": {"uv": [7.25, 0, 14.5, 12], "texture": "#0"}
+			}
+		}
+	]
+}

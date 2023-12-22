@@ -11,6 +11,8 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
+import com.neep.neepmeat.block.entity.AdvancedIntegratorBlockEntity;
+import com.neep.neepmeat.entity.goal.Action;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorStructure;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -21,9 +23,14 @@ import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProvider, DataCable
@@ -47,6 +54,19 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     protected BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType()
     {
         return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE;
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        AdvancedIntegratorBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.ADVANCED_INTEGRATOR).orElse(null);
+        if (be != null)
+        {
+            be.onUse(player);
+            return ActionResult.SUCCESS;
+        }
+
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Override
