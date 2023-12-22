@@ -1,11 +1,6 @@
-# Core Feature Set
-
-- Fluid Pipes
-- 
-
 # To Do
 
-## Primary
+## 0.0.1 Release
 - [2022-07-11 done] Add Integrator Egg to dungeon loot table
 - [2022-07-09 done] Add charnel compactor
 - [2022-07-11 done] Add recipe for Charnel Compactor
@@ -40,13 +35,11 @@
 - [done] Add Rendering Basin
 - [done] Add Ethereal Alembic
 - [done] Fix Fluid Buffer connections
-- Add simple uses for Whisper Wheat (food item, etc.)
 - Balance Transducer and Stirling Engine
 - [done] Add minimum fuel influx for heater activation
 - [done] Remove 'realistic fluids'
 - [done] Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
-- Add coloured fluid pipes
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
 - [done] Add recipe for biomechanical components
@@ -54,17 +47,30 @@
 - [done] Add Enlightening recipe type
 - Add REI support for Enlightening
 - [done] Give Integrator a Data resource bufer
+- [done] Add Blood Bubble Tree
+- Remove stupid items (spigot, etc.)
+- [done] Shave down the number of failed networks by storing whether a node has a network
+- Move machine blocks and entities together
+- Make SoundRegistry general
+- Separate modules
+
+## Later
+
+- Add simple uses for Whisper Wheat (food item, etc.)
+- Add coloured fluid pipes
 - Add flywheel linkage
 - Add BIG FAN
-- Add Blood Bubble Tree
-- Remove stupid items (spigot, etc.)
+- Make small multi tank usable
+- Sort out the Process Tank
 
-- [done] Shave down the number of failed networks by storing whether a node has a network
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
 
+## Much Later
+
 - Add Feeding Trough
 - [part] Add Caution Tape (looks similar to redstone)
+- Pipe Tree? 
 - Add MultiTank
 - Think of an auto-crafting solution
 - Item pipe routing
