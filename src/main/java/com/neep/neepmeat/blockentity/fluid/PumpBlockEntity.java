@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.block.IFluidNodeProvider;
-import com.neep.neepmeat.block.PumpBlock;
+import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
+import com.neep.neepmeat.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;

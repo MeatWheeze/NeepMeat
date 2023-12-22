@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer.node;
 
-import com.neep.neepmeat.block.IDirectionalFluidAcceptor;
+import com.neep.neepmeat.block.fluid_transport.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;

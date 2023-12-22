@@ -1,6 +1,6 @@
 package com.neep.neepmeat.util;
 
-import com.neep.neepmeat.block.IItemPipe;
+import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;

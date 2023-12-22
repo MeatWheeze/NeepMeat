@@ -1,6 +1,7 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;

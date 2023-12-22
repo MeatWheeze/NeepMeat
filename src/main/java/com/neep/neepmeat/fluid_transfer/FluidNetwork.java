@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.IFluidNodeProvider;
+import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;

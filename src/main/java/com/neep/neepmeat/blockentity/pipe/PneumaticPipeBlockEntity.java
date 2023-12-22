@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.pipe;
 
-import com.neep.neepmeat.block.IItemPipe;
+import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;

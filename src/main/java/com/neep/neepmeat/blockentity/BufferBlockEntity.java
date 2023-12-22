@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.block.BufferBlock;
+import com.neep.neepmeat.block.item_transport.BufferBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.BufferInventory;
 import com.neep.neepmeat.inventory.ImplementedInventory;

@@ -1,5 +1,6 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.pipe;
 
+import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;

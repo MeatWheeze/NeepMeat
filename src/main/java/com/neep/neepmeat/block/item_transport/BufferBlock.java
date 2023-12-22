@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.BufferBlockEntity;

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.block.BufferBlock;
+import com.neep.neepmeat.block.item_transport.BufferBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.init.NMBlockEntities;

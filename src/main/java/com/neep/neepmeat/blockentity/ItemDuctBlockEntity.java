@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.block.ItemDuctBlock;
+import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;

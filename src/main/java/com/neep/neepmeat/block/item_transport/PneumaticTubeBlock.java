@@ -1,20 +1,26 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.item_transport;
 
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
+import com.neep.neepmeat.block.AbstractPipeBlock;
+import com.neep.neepmeat.block.pipe.IItemPipe;
+import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.util.MiscUitls;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -24,11 +30,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
-public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
+public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
-    public FluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public PneumaticTubeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings);
     }
@@ -38,7 +42,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.getInstance((ServerWorld) world).removeNode(world, nodePos);
         }
     }
 
@@ -47,7 +50,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         if (!state.isOf(newState.getBlock()))
         {
-            removeStorageNodes(world, pos);
+            if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+            {
+                be.dropItems();
+            }
+//            removeStorageNodes(world, pos);
             world.removeBlockEntity(pos);
         }
     }
@@ -55,12 +62,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        BlockState state2 = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
+//        BlockState state2 = enforceApiConnections(world, pos, state);
+//        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
-        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        if (!(world.getBlockState(fromPos).getBlock() instanceof PneumaticTubeBlock))
         {
-            createStorageNodes(world, pos, state2);
+//            createStorageNodes(world, pos, state2);
         }
 
     }
@@ -70,36 +77,41 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-        createStorageNodes(world, pos, updatedState);
+//        createStorageNodes(world, pos, updatedState);
     }
 
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
+        PipeConnectionType type = state.get(DIR_TO_CONNECTION.get(direction));
+        boolean forced = type == PipeConnectionType.FORCED;
+
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient())
+        if (!world.isClient() && !(neighborState.getBlock() instanceof PneumaticTubeBlock))
         {
-            connection = connection || canConnectApi((World) world, pos, state, direction);
+            connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
 
         // Check if neighbour is forced
-        boolean neighbourForced = false;
-        if (neighborState.getBlock() instanceof FluidPipeBlock)
+        if (neighborState.getBlock() instanceof PneumaticTubeBlock)
         {
-            neighbourForced = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
+            forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
         }
 
-        PipeConnectionType connection1 = neighbourForced
+        PipeConnectionType connection1 = forced
                 ? PipeConnectionType.FORCED
                 : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
         // I don't know what this bit was for.
-
         return state.with(DIR_TO_CONNECTION.get(direction), connection1);
     }
 
+
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+//        if (player.isSneaking())
+//        {
+//        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
@@ -113,18 +125,23 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return null;
+        return new PneumaticPipeBlockEntity(pos, state);
     }
 
-    // Only takes into account other pipes, connections to storages are enforced later.
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFluidPipe)
+        if (state.getBlock() instanceof IItemPipe pipe)
         {
-            return ((IFluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return pipe.connectInDirection(world, pos, state, direction);
         }
         return false;
+    }
+
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUitls.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeBlockEntity::serverTick, world);
     }
 
     // Creates blockstate connections to fluid containers after placing
@@ -153,21 +170,31 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             {
                 if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 {
-                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
                 }
                 else
                 {
-                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
                 }
             }
             // TODO: avoid creating instances that will fail immediately
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
         }
     }
 
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
-        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+        Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+//        return false;
         return storage != null;
+    }
+
+    @Override
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    {
+        if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+        {
+            ItemInPipe item = new ItemInPipe(Direction.UP, Direction.UP, amount.resource().toStack((int) amount.amount()), world.getTime());
+            long transferred = PneumaticPipeBlockEntity.insert(item, world, state, pos, direction);
+            return transferred;
+        }
+        return 0;
     }
 }
