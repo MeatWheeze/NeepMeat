@@ -5,6 +5,7 @@ import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -54,6 +55,26 @@ public class TubeUtils
         }
 
         return amountInserted;
+    }
+
+    public static void storageToAny(ServerWorld world, Storage<ItemVariant> storage, BlockPos pos, Direction facing, TransactionContext transaction)
+    {
+        for (StorageView<ItemVariant> view : storage.iterable(transaction))
+        {
+            try (Transaction inner = transaction.openNested())
+            {
+                if (view.isResourceBlank())
+                {
+                    inner.abort();
+                    continue;
+                }
+
+                long ejected = stackToAny(world, pos, facing, view.getResource(), view.getAmount(), inner);
+                long extracted = view.extract(view.getResource(), ejected, inner);
+                if (ejected == extracted) inner.commit();
+                else inner.abort();
+            }
+        }
     }
 
     /**
@@ -131,32 +152,32 @@ public class TubeUtils
 
     /** Handles ejection of an ItemStack into the world, taking into account pipes and storage implementations.
      */
-    public static int stackToAny(ServerWorld world, BlockPos pos, Direction facing, ItemStack stack)
+    public static int stackToAny(ServerWorld world, BlockPos pos, Direction facing, ItemVariant variant, long amount, TransactionContext transaction)
     {
-        if (stack.isEmpty()) return 0;
+        if (variant.isBlank() || amount == 0) return 0;
 
         BlockPos offset = pos.offset(facing);
         BlockState facingState = world.getBlockState(offset);
         Storage<ItemVariant> storage;
         long transferred = 0;
-        try (Transaction transaction = Transaction.openOuter())
+        try (Transaction nested = transaction.openNested())
         {
             if (facingState.isAir())
             {
-                transferred = itemToWorld(stack, 0.5, 0.05f, world, offset, facing, transaction);
-                transaction.commit();
+                transferred = itemToWorld(variant.toStack((int) amount), 0.5, 0.05f, world, offset, facing, nested);
+                nested.commit();
             }
             else if (facingState.getBlock() instanceof IItemPipe itemPipe)
             {
-                transferred = itemToPipe(new ItemInPipe(stack, world.getTime()), itemPipe, world, offset, facingState, facing, true, transaction);
-                transaction.commit();
+                transferred = itemToPipe(new ItemInPipe(new ResourceAmount<>(variant, amount), world.getTime()), itemPipe, world, offset, facingState, facing, true, nested);
+                nested.commit();
             }
             else if ((storage = ItemStorage.SIDED.find(world, offset, facing)) != null)
             {
-                long amount = stack.getCount();
-                transferred = storage.insert(ItemVariant.of(stack), amount, transaction);
-                transaction.commit();
+                transferred = storage.insert(variant, amount, nested);
+                nested.commit();
             }
+            else nested.abort();
         }
         return (int) transferred;
     }
