@@ -9,7 +9,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.CrossbowPosing;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.util.Arm;
 
 @Environment(value=EnvType.CLIENT)
 public class KeeperEntityModel
@@ -24,7 +26,15 @@ extends BipedEntityModel<com.neep.neepmeat.entity.keeper.KeeperEntity>
     public void setAngles(KeeperEntity hostileEntity, float f, float g, float h, float i, float j)
     {
         super.setAngles(hostileEntity, f, g, h, i, j);
-        CrossbowPosing.meleeAttack(this.leftArm, this.rightArm, this.isAttacking(hostileEntity), this.handSwingProgress, h);
+//        this.leftArm.
+        this.leftArm.pitch = -90;
+//        CrossbowPosing.meleeAttack(this.leftArm, this.rightArm, this.isAttacking(hostileEntity), this.handSwingProgress, h);
+    }
+
+    @Override
+    public void setArmAngle(Arm arm, MatrixStack matrices)
+    {
+        super.setArmAngle(arm, matrices);
     }
 
     public boolean isAttacking(KeeperEntity entity)

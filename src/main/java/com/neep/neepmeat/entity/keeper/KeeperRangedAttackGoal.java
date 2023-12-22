@@ -124,7 +124,7 @@ public class KeeperRangedAttackGoal<T extends HostileEntity & RangedAttackMob> e
         {
             if (actor.getRandom().nextFloat() < 0.3)
             {
-                boolean bl4 = movingToLeft = !movingToLeft;
+                movingToLeft = !movingToLeft;
             }
             if (actor.getRandom().nextFloat() < 0.3)
             {

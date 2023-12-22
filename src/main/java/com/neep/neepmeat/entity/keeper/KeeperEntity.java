@@ -1,11 +1,12 @@
 package com.neep.neepmeat.entity.keeper;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.FusionCannonItem;
-import com.neep.neepmeat.util.NMMaths;
 import net.minecraft.entity.*;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
@@ -13,27 +14,32 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
 import net.minecraft.entity.boss.ServerBossBar;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vec2f;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Optional;
 
 public class KeeperEntity extends HostileEntity implements RangedAttackMob
 {
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
 
-    private final KeeperRangedAttackGoal<KeeperEntity> rangedAttackGoal = new KeeperRangedAttackGoal<>(this, 1.0, 20, 15.0f, MWItems.FUSION_CANNON);
-    private final MeleeAttackGoal meleeAttackGoal = new MeleeAttackGoal(this, 1.2, false){
+    protected final KeeperRangedAttackGoal<KeeperEntity> rangedAttackGoal = new KeeperRangedAttackGoal<>(this, 1.0, 20, 15.0f, MWItems.FUSION_CANNON);
+    protected final KeeperMeleeGoal meleeAttackGoal = new KeeperMeleeGoal(this, 1.2, false){
 
     };
     protected ItemStack equipped = new ItemStack(MWItems.FUSION_CANNON);
@@ -61,7 +67,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     @Override
     public float getMovementSpeed()
     {
-        return 0.1f;
+        return 0.2f;
     }
 
     @Nullable
@@ -76,9 +82,11 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     protected void initGoals()
     {
         targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+        targetSelector.add(1, new SwitchWeaponGoal(this, 7));
 
         goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-//        goalSelector.add(2, new KeeperCritGoal(this, 1, 10));
+        goalSelector.add(4, new KeeperCritGoal(this, 8f));
+        goalSelector.add(4, new KeeperDodgeGoal(this, 8f));
     }
 
     public void updateAttackType()
@@ -101,11 +109,30 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
         }
     }
 
+
     @Override
     protected void mobTick()
     {
         super.mobTick();
         this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+    }
+
+    boolean isPlayerStaring(LivingEntity entity)
+    {
+        HitResult result = entity.raycast(10, 0.5f, false);
+        Optional<Vec3d> entityHit = getBoundingBox().raycast(entity.getCameraPosVec(0.5f), result.getPos());
+
+        return entityHit.isPresent();
+
+//        Vec3d vec3d = entity.getRotationVec(1.0f).normalize();
+//        Vec3d vec3d2 = new Vec3d(this.getX() - entity.getX(), this.getEyeY() - entity.getEyeY(), this.getZ() - entity.getZ());
+//        double distance = vec3d2.length();
+//        double e = vec3d.dotProduct(vec3d2.normalize());
+//        if (e > 1.0 - 0.025 / distance)
+//        {
+//            return entity.canSee(this);
+//        }
+//        return false;
     }
 
     @Override
@@ -172,10 +199,91 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
         ItemStack itemStack = getStackInHand(Hand.MAIN_HAND);
         if (!world.isClient() && itemStack.isOf(MWItems.FUSION_CANNON))
         {
-            Vec2f pitchYaw = NMMaths.rectToPol(target.getPos().add(0, target.getHeight() / 2, 0).subtract(getPos().add(0, 1.4, 0)));
             ((FusionCannonItem) itemStack.getItem()).fireBeam(world, this, target, itemStack);
         }
     }
 
+    protected void switchWeapon(WeaponType type)
+    {
+        switch (type)
+        {
+            case NONE -> equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
+            case MELEE -> equipStack(EquipmentSlot.MAINHAND, new ItemStack(Items.BONE));
+            case RANGED -> equipStack(EquipmentSlot.MAINHAND, new ItemStack(MWItems.FUSION_CANNON));
+        }
+    }
 
+    protected enum WeaponType
+    {
+        NONE, MELEE, RANGED;
+    }
+
+    public static class SwitchWeaponGoal extends Goal
+    {
+        protected final KeeperEntity entity;
+        protected float meleeRange;
+
+        public SwitchWeaponGoal(KeeperEntity entity, float meleeRange)
+        {
+            this.entity = entity;
+            this.meleeRange = meleeRange;
+            this.setControls(EnumSet.of(Control.LOOK));
+        }
+
+        @Override
+        public boolean canStart()
+        {
+            boolean hasTarget = entity.getTarget() != null;
+            boolean holdingRanged = entity.isHolding(s -> s.getItem() instanceof BaseGunItem);
+            boolean inMeleeRange = hasTarget && entity.isInRange(entity.getTarget(), meleeRange);
+
+            return hasTarget && holdingRanged == inMeleeRange;
+        }
+
+        @Override
+        public void tick()
+        {
+            boolean hasTarget = entity.getTarget() != null;
+            boolean holdingRanged = entity.isHolding(s -> s.getItem() instanceof BaseGunItem);
+            boolean inMeleeRange = hasTarget && entity.isInRange(entity.getTarget(), meleeRange);
+
+            if (!hasTarget)
+            {
+                entity.switchWeapon(WeaponType.NONE);
+            }
+            else if (inMeleeRange && holdingRanged)
+            {
+                entity.switchWeapon(WeaponType.MELEE);
+            }
+            else if (!inMeleeRange && !holdingRanged)
+            {
+                entity.switchWeapon(WeaponType.RANGED);
+            }
+        }
+
+        @Override
+        public boolean shouldContinue()
+        {
+            return false;
+        }
+    }
+
+    public static class KeeperMeleeGoal extends MeleeAttackGoal
+    {
+        public KeeperMeleeGoal(PathAwareEntity mob, double speed, boolean pauseWhenMobIdle)
+        {
+            super(mob, speed, pauseWhenMobIdle);
+        }
+
+        @Override
+        public double getSquaredMaxAttackDistance(LivingEntity entity)
+        {
+            return super.getSquaredMaxAttackDistance(entity);
+        }
+
+        //        public double getAttackRange()
+//        {
+//            return Math.sqrt(getSquaredMaxAttackDistance(mob.getTarget()));
+//        }
+    }
 }
