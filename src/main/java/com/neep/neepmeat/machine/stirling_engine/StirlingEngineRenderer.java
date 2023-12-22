@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.stirling_engine;
 import com.eliotlash.mclib.utils.MathHelper;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -13,16 +14,11 @@ import net.minecraft.util.math.Vec3f;
 
 public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngineBlockEntity>
 {
-    public double lastFrame;
-    public double currentFrame;
+    public static double LAST_FRAME;
+    public static double CURRENT_FRAME;
 
     public StirlingEngineRenderer(BlockEntityRendererFactory.Context ctx)
     {
-        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
-        {
-            this.lastFrame = this.currentFrame;
-            return true;
-        }));
     }
 
     @Override
@@ -34,8 +30,8 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
 
         matrices.translate(0.5, 0.5, 0.5);
 
-        this.currentFrame = be.getWorld().getTime() + tickDelta;
-        float delta = (float) (currentFrame - lastFrame);
+        CURRENT_FRAME = be.getWorld().getTime() + tickDelta;
+        float delta = (float) (CURRENT_FRAME - LAST_FRAME);
 //        this.lastFrame = currentFrame;
 
         // Temporal discretisation!
@@ -46,5 +42,13 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.STIRLING_ENGINE_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
         matrices.pop();
+    }
+
+    static
+    {
+        WorldRenderEvents.START.register(((context) ->
+        {
+            LAST_FRAME = CURRENT_FRAME;
+        }));
     }
 }

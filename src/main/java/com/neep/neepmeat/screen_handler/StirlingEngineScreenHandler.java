@@ -51,7 +51,7 @@ public class StirlingEngineScreenHandler extends ScreenHandler
 
     protected void createSlots()
     {
-        this.addSlot(new Slot(inventory, 0, 80, 57));
+        this.addSlot(new Slot(inventory, 0, 80, 54));
     }
 
     public void createPlayerSlots(PlayerInventory playerInventory)
