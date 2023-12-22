@@ -69,7 +69,7 @@ public class TabletArticlePane extends ContentPane implements Drawable, Element,
     @Override
     public boolean isMouseOver(double mouseX, double mouseY)
     {
-        return true;
+        return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
     }
 
     @Override

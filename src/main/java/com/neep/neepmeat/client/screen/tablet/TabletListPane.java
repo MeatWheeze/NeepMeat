@@ -4,7 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +27,6 @@ import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -33,9 +34,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
 public class TabletListPane extends ContentPane implements Drawable, Element, Selectable
@@ -49,8 +49,12 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     private int highlighted;
     private int selected;
     protected int entryHeight = 11;
+    protected int contentHeight;
 
     private int animationTicks;
+
+    private boolean searchMode;
+    private final StringBuilder searchString = new StringBuilder();
 
     public TabletListPane(ITabletScreen parent)
     {
@@ -74,9 +78,24 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (keyCode != GLFW.GLFW_KEY_ESCAPE)
+        if (searchMode)
         {
-            return false;
+            if (keyCode == GLFW.GLFW_KEY_ESCAPE)
+            {
+                searchString.setLength(0);
+                searchMode = false;
+                init();
+                return true;
+            }
+            else if (keyCode == GLFW.GLFW_KEY_TAB)
+            {
+                setSelected(getSelected() + (modifiers == GLFW.GLFW_MOD_SHIFT ? -1 : 1));
+//                setSelected(getSelected() + 1);
+            }
+            else if (keyCode == GLFW.GLFW_KEY_BACKSPACE)
+            {
+                erase(-1);
+            }
         }
         super.keyPressed(keyCode, scanCode, modifiers);
         return true;
@@ -87,6 +106,17 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     {
         if (!(chr == GLFW.GLFW_KEY_ESCAPE))
         {
+            if (searchMode)
+            {
+                write(chr, modifiers);
+                return true;
+            }
+
+            if (chr == GLFW.GLFW_KEY_SLASH)
+            {
+                searchMode = true;
+                init();
+            }
             if (chr == GLFW.GLFW_KEY_J)
             {
                 setSelected(getSelected() + 1);
@@ -100,6 +130,19 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         return true;
     }
 
+    protected void write(char chr, int modifiers)
+    {
+        searchString.append(Character.toLowerCase(chr));
+        init();
+    }
+
+    protected void erase(int dist)
+    {
+        if (searchString.length() == 0) return;
+        searchString.delete(searchString.length() - 1, searchString.length());
+        init();
+    }
+
     @Override
     public void tick()
     {
@@ -107,14 +150,18 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         super.tick();
     }
 
-
     @Override
     public void init()
     {
         super.init();
 
+        // Subtract the y offset and the height of the search widget
+        this.contentHeight = height - screenOffsetY - entryHeight;
+
         clearChildren();
-        generateMenu();
+        if (!searchMode) generateMenu();
+        else updateSearch();
+        addDrawableChild(new SearchWidget(x, y + height - entryHeight, width, entryHeight, Text.of("")));
 
         if (lastNode != parent.getPath().peek())
         {
@@ -122,6 +169,30 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
             selected = -1;
             lastNode = parent.getPath().peek();
         }
+    }
+
+    protected void updateSearch()
+    {
+        entries.clear();
+        Set<GuideNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().filter(
+                a -> a.getText().asString().toLowerCase().contains(searchString))
+                .collect(Collectors.toSet());
+
+        Iterator<GuideNode> it = filtered.iterator();
+        for (int i = 0; i < filtered.size() && it.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)
+        {
+            GuideNode node = it.next();
+            ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
+            entries.add(new EntryWidget(i,
+                    screenOffsetX + this.x,
+                    screenOffsetY + this.y + (i) * entryHeight,
+                    width - 2 * screenOffsetX,
+                    entryHeight,
+                    icon,
+                    node.getText(),
+                    node));
+        }
+        entries.forEach(this::addDrawableChild);
     }
 
     private int entryAnimationStart;
@@ -151,14 +222,15 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         entries.forEach(this::addDrawableChild);
     }
 
-    protected int getPageEntries()
-    {
-        return (int) Math.floor(height / (float) entryHeight);
-    }
+//    protected int getPageEntries()
+//    {
+//        return (int) Math.floor(height / (float) entryHeight);
+//    }
 
     public void setSelected(int sel)
     {
-        this.selected = MathHelper.clamp(sel, 0, entries.size());
+        this.selected = NMMaths.wrap(sel, 0, entries.size() - 1);
+        entries.get(this.selected).onPress();
     }
 
     public int getSelected()
@@ -181,7 +253,36 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     @Override
     public boolean isMouseOver(double mouseX, double mouseY)
     {
-        return false;
+        return mouseX > x && mouseX < x + width && mouseY > y && mouseY < y + height;
+    }
+
+    public class SearchWidget extends ClickableWidget
+    {
+        private Text searchMessage = Text.of("Type '/' to search");
+
+        public SearchWidget(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder)
+        {
+
+        }
+
+        @Override
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        {
+            if (!searchMode)
+            {
+                textRenderer.draw(matrices, searchMessage, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
+            }
+            else
+            {
+                textRenderer.draw(matrices, "/" + searchString, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
+            }
+        }
     }
 
     public class EntryWidget extends ClickableWidget
@@ -212,7 +313,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
 
         protected void onPress()
         {
-            setSelected(index);
+            selected = index;
             node.visitScreen(parent);
         }
 

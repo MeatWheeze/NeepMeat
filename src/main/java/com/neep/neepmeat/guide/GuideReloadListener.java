@@ -15,10 +15,7 @@ import net.minecraft.util.JsonHelper;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GuideReloadListener implements SimpleSynchronousResourceReloadListener
 {
@@ -26,6 +23,7 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
 
     private GuideNode root;
     private final Map<String, Article> articles = new HashMap<>();
+    private final Collection<GuideNode> articleNodes = new ArrayList<>();
 
     public static GuideReloadListener getInstance()
     {
@@ -84,7 +82,9 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
             // Using recursion because I can't be bothered to traverse it properly
             return new GuideNode.MenuNode(id, new Identifier(icon), Text.of(text), nodes);
         }
-        return new GuideNode.ArticleNode(id, new Identifier(icon), Text.of(text));
+        GuideNode node = new GuideNode.ArticleNode(id, new Identifier(icon), Text.of(text));
+        articleNodes.add(node);
+        return node;
     }
 
     public GuideNode getRootNode()
@@ -95,5 +95,15 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
     public Article getArticle(String id)
     {
         return articles.get(id);
+    }
+
+    public Collection<Article> getArticles()
+    {
+        return articles.values();
+    }
+
+    public Collection<GuideNode> getArticleNodes()
+    {
+        return articleNodes;
     }
 }
