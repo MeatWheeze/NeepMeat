@@ -7,9 +7,7 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -28,43 +26,18 @@ import java.util.List;
 import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<ItemVariant>, BlockEntityClientSerializable
+public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
-//    protected List<Pair<PipeOffset, ItemStack>> items = new ArrayList<>();
     protected List<ItemInPipe> items = new ArrayList<>();
 
     public PneumaticPipeBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.PNEUMATIC_PIPE, pos, state);
-//        items.add(new Pair<>(new PipeOffset(Direction.NORTH, Direction.UP), new ItemStack(Items.COBBLED_DEEPSLATE)));
     }
 
     public PneumaticPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-    }
-
-    @Override
-    public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
-    {
-//        items.add(new Pair<>(new PipeOffset(Direction.UP, Direction.EAST), resource.toStack(1)));
-//        items.add(new ItemInPipe(Direction.UP, Direction.EAST, resource.toStack(1)));
-        this.insert(new ItemInPipe(Direction.NORTH, Direction.NORTH, resource.toStack(), world.getTime()), getWorld(), getCachedState(), getPos(), Direction.UP);
-        System.out.println(items);
-        sync();
-        return 1;
-    }
-
-    @Override
-    public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
-    {
-        return 0;
-    }
-
-    @Override
-    public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
-    {
-        return null;
     }
 
     public List<ItemInPipe> getItems()
@@ -148,7 +121,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
         be.sync();
     }
 
-    public static boolean insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
+    public static long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
     {
         Storage<ItemVariant> storage;
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
@@ -168,17 +141,28 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
 
             item.reset(in, out, world.getTime());
             be.items.add(item);
-            return true;
+            return 1;
         }
-        // TODO: get rid of this bit
-        else if ((storage = ItemStorage.SIDED.find(world, pos, in)) != null)
+        return 0;
+    }
+
+    public static void reset(ItemInPipe item, World world, BlockState state)
+    {
+        Direction out;
+        Direction in = item.out;
+        List<Direction> connections = IItemPipe.getConnections(state, direction -> direction != in);
+
+        Random rand = world.getRandom();
+        if (!connections.isEmpty())
         {
-            Transaction t = Transaction.openOuter();
-            long transferred = storage.insert(ItemVariant.of(item.getItemStack()), 1, t);
-            t.commit();
-            return transferred > 0;
+            out = connections.get(rand.nextInt(connections.size()));
         }
-        return false;
+        else
+        {
+            out = in;
+        }
+
+        item.reset(in, out, world.getTime());
     }
 
     public void transfer(Iterator<ItemInPipe> it, ItemInPipe item, BlockPos pos, BlockState state, World world)
@@ -193,7 +177,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
         {
             if (IItemPipe.isConnectedIn(world, pos, state, item.out))
             {
-                if (insert(item, world, state1, pos1, item.out.getOpposite()))
+                if (insert(item, world, state1, pos1, item.out.getOpposite()) > 0)
                 {
                     it.remove();
                     success = true;
@@ -221,7 +205,9 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
         }
         if (!success)
         {
-            item.reset(item.out, item.in, world.getTime());
+            reset(item, world, state);
+//            insert(item, world, state, pos, item.out);
+//            item.reset(item.out, item.in, world.getTime());
         }
     }
 

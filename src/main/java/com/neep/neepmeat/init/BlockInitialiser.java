@@ -6,6 +6,7 @@ import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
+import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -74,6 +75,7 @@ public class BlockInitialiser
     // --- Item Transfer ---
     public static Block ITEM_DUCT = queueBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
     public static Block PNEUMATIC_TUBE = queueBlock(new PneumaticTubeBlock("pneumatic_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
+    public static Block ITEM_PUMP = queueBlock(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
     // --- Assembly ---
     public static Block LINEAR_RAIL = queueBlock(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

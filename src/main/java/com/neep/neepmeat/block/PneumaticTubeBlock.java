@@ -1,13 +1,16 @@
 package com.neep.neepmeat.block;
 
+import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.util.GeneralUtils;
+import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -104,7 +107,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         if (player.isSneaking())
         {
-//            System.out.println(world.getTime());
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }
@@ -177,5 +179,18 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;
+    }
+
+    @Override
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    {
+        if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
+        {
+            System.out.println("oooo");
+            ItemInPipe item = new ItemInPipe(Direction.UP, Direction.UP, amount.resource().toStack((int) amount.amount()), world.getTime());
+            long transferred = PneumaticPipeBlockEntity.insert(item, world, state, pos, direction);
+            return transferred;
+        }
+        return 0;
     }
 }

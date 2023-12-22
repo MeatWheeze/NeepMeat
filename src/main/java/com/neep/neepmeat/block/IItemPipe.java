@@ -1,6 +1,8 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -31,6 +33,8 @@ public interface IItemPipe
         // Streams are good, aren't they?
         return Arrays.stream(Direction.values()).filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).filter(forbidden).collect(Collectors.toList());
     }
+
+    long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount);
 
     default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
     {
