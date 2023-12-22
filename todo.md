@@ -210,3 +210,12 @@ Heart Machine
 ## Work Fluid
 
 - *I'm not like the other mods*
+
+
+# Mod Page Text
+
+Welcome to the world of NeepMeat, a 
+
+tldr: cosmic-horror-cyber-gore-punk cheerful spooky meat RedPower ripoff
+
+Since this is version 0.1, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.

@@ -5,6 +5,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.recipe.OreFatRenderingRecipe;
 import com.neep.neepmeat.recipe.RenderingRecipe;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -131,9 +132,9 @@ public class CrucibleBlockEntity extends SyncableBlockEntity
 
         try (Transaction inner = transaction.openNested())
         {
-            RenderingRecipe recipe = getWorld().getRecipeManager().getFirstMatch(NMrecipeTypes.RENDERING, storage, getWorld()).orElse(null);
+            OreFatRenderingRecipe recipe = getWorld().getRecipeManager().getFirstMatch(NMrecipeTypes.ORE_FAT_RENDERING, storage, getWorld()).orElse(null);
             Item processItem;
-            if (recipe != null && (processItem = recipe.takeInputs(storage, (int) maxAmount, inner)) != null && recipe.ejectOutput(storage, (int) maxAmount, inner))
+            if (recipe != null && (processItem = recipe.takeInputs(storage, (int) maxAmount, inner)) != null && recipe.ejectOutput(storage, (int) maxAmount, processItem, inner))
             {
                 inner.commit();
                 spawnParticles((ServerWorld) world, pos, processItem, 20);
