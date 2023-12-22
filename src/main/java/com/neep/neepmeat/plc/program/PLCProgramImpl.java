@@ -65,6 +65,19 @@ public class PLCProgramImpl implements MutableProgram
     }
 
     @Override
+    public void add(int selected, Instruction instruction)
+    {
+        if (selected >= instructions.size())
+        {
+            instructions.add(instruction);
+        }
+        else
+        {
+            instructions.add(selected + 1, instruction);
+        }
+    }
+
+    @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtList list = new NbtList();

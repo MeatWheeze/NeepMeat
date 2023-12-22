@@ -1,6 +1,7 @@
 package com.neep.neepmeat.network;
 
 import com.neep.neepmeat.NeepMeat;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -14,6 +15,12 @@ public class ScreenPropertyC2SPacket
 {
 
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "screen_int_update");
+
+    public static void send(int id, int value)
+    {
+        ClientPlayNetworking.send(ID, create(id, value));
+    }
+
     public static PacketByteBuf create(int id, int value)
     {
         PacketByteBuf buf = PacketByteBufs.create();
@@ -32,6 +39,10 @@ public class ScreenPropertyC2SPacket
     {
         int id = buf.readVarInt();
         int value = buf.readVarInt();
-        player.currentScreenHandler.setProperty(id, value);
+        var handler = player.currentScreenHandler;
+        if (handler != null)
+        {
+            handler.setProperty(id, value);
+        }
     }
 }

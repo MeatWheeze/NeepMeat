@@ -9,4 +9,6 @@ public interface MutableProgram extends PlcProgram
     void insert(int index, Instruction instruction);
 
     void remove(int index);
+
+    void add(int selected, Instruction instruction);
 }

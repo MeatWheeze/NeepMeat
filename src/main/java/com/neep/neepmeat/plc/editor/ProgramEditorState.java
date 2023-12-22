@@ -27,6 +27,7 @@ public class ProgramEditorState implements PLCState
     @Nullable private InstructionBuilder instructionBuilder;
     @Nullable private InstructionProvider provider;
     private final List<Listener> listeners = Lists.newArrayList();
+    private int selected;
 
     public ProgramEditorState(PLCBlockEntity parent)
     {
@@ -45,7 +46,9 @@ public class ProgramEditorState implements PLCState
     {
         if (program != null)
         {
-            program.addBack(instruction);
+            program.add(selected, instruction);
+//            program.addBack(instruction);
+            selected = Math.min(program.size() - 1, selected + 1);
             sendProgram();
         }
     }
@@ -95,6 +98,10 @@ public class ProgramEditorState implements PLCState
         if (program != null)
         {
             program.remove(index);
+            if (selected >= program.size())
+            {
+                selected = program.size() - 1;
+            }
             sendProgram();
         }
     }
@@ -146,6 +153,16 @@ public class ProgramEditorState implements PLCState
     public void readNbt(NbtCompound nbt)
     {
         program.readNbt(nbt);
+    }
+
+    public int getSelected()
+    {
+        return selected;
+    }
+
+    public void setSelected(int selected)
+    {
+        this.selected = selected;
     }
 
     @FunctionalInterface

@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.screen;
 
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.init.ScreenHandlerInit;
+import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -76,5 +77,15 @@ public class PLCScreenHandler extends ScreenHandler
     public int getArguments()
     {
         return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.ARGUMENT.ordinal());
+    }
+
+    public void setSelectedInstruction(int index)
+    {
+        ScreenPropertyC2SPacket.send(PLCBlockEntity.PLCPropertyDelegate.Names.SELECTED_INSTRUCTION.ordinal(), index);
+    }
+
+    public int getSelectedInstruction()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.SELECTED_INSTRUCTION.ordinal());
     }
 }
