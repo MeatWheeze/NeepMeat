@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Represents a required quantity of an ingredient, supplied either by a tag or a specific resource.
@@ -34,7 +36,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     protected long amount;
     @Nullable protected T[] matchingStacks;
 
-    public RecipeInput(Entry<T> entry, long amount)
+    protected RecipeInput(Entry<T> entry, long amount)
     {
         this.entry = entry;
         this.amount = amount;
@@ -121,16 +123,27 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return Arrays.stream(matchingStacks).anyMatch(o -> storageView.getResource().getObject().equals(o));
     }
 
+    public boolean test(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
+    {
+        cacheMatching();
+        Stream<?> entries = Arrays.stream(matchingStacks);
+        for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
+        {
+            if (entries.anyMatch(o -> view.getResource().getObject().equals(o))) return true;
+        }
+        return false;
+    }
+
     public Optional<T> getFirstMatching(StorageView<? extends TransferVariant<T>> view)
     {
         cacheMatching();
         return Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
     }
 
-    public Optional<T> getFirstMatching(Storage<? extends TransferVariant<T>> storage, TransactionContext transaction)
+    public Optional<T> getFirstMatching(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
     {
         cacheMatching();
-        for (StorageView<? extends TransferVariant<T>> view : storage.iterable(transaction))
+        for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
         {
             Optional<T> optional = Arrays.stream(matchingStacks).filter(t -> view.getResource().getObject().equals(t)).findFirst();
             if (optional.isPresent())

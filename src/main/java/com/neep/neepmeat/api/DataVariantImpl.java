@@ -13,7 +13,7 @@ public class DataVariantImpl implements DataVariant
 {
     private final DataType data;
 
-    private static final Logger LOGGER = LogManager.getLogger("fabric-transfer-api-v1/item");
+    private static final Logger LOGGER = LogManager.getLogger("neepmeat/data");
 
     private DataVariantImpl(DataType data)
     {
