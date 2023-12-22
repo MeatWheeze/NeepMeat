@@ -56,9 +56,9 @@
 - Add Maceration Blades (whirly blades of death)
 - Add MEAT fluid
 - [done] Add Meat Steel recipe
-- Add Raw Meat Brick recipe
+- [done] Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
-- Make Charnel Compactor accept c:raw_meat
+- [done] Make Charnel Compactor accept c:raw_meat
 
 ## Later
 

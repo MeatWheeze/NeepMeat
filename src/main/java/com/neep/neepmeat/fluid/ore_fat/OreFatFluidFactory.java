@@ -33,11 +33,10 @@ public class OreFatFluidFactory
     protected Item bucketItem;
 
     protected final boolean isInfinite;
-    protected final int flowSpeed;
     protected final int tickRate;
     protected final int levelDecrease;
 
-    public OreFatFluidFactory(String namespace, String baseName, boolean isInfinite, int flowSpeed, int tickRate, int levelDecrease)
+    public OreFatFluidFactory(String namespace, String baseName, boolean isInfinite, int tickRate, int levelDecrease)
     {
         this.namespace = namespace;
         this.baseName = baseName;
@@ -46,7 +45,6 @@ public class OreFatFluidFactory
         this.bucketName = baseName + "_bucket";
 
         this.isInfinite = isInfinite;
-        this.flowSpeed = flowSpeed;
         this.tickRate = tickRate;
         this.levelDecrease = levelDecrease;
     }
@@ -105,12 +103,6 @@ public class OreFatFluidFactory
         protected BlockState toBlockState(FluidState state)
         {
             return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(state));
-        }
-
-        @Override
-        protected int getFlowSpeed(WorldView world)
-        {
-            return flowSpeed;
         }
 
         @Override

@@ -16,7 +16,7 @@ public class NMFluids
     public static FlowableFluid STILL_BLOOD;
     public static Item BLOOD_BUCKET;
     public static Block BLOOD;
-    public static FluidFactory BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "blood", false, 10, 5, 2);
+    public static FluidFactory BLOOD_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "blood", false, 5, 1);
 
 //    public static FlowableFluid FLOWING_ENRICHED_BLOOD;
 //    public static FlowableFluid STILL_ENRICHED_BLOOD;
@@ -28,41 +28,41 @@ public class NMFluids
     public static FlowableFluid STILL_WORK_FLUID;
     public static Item WORK_FLUID_BUCKET;
     public static Block WORK_FLUID;
-    public static FluidFactory WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "work_fluid", false, 10, 6, 1);
+    public static FluidFactory WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "work_fluid", false, 6, 1);
 
     public static FlowableFluid FLOWING_CHARGED_WORK_FLUID;
     public static FlowableFluid STILL_CHARGED_WORK_FLUID;
     public static Item CHARGED_WORK_FLUID_BUCKET;
     public static Block CHARGED_WORK_FLUID;
-    public static FluidFactory CHARGED_WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "charged_work_fluid", false, 10, 6, 1);
+    public static FluidFactory CHARGED_WORK_FLUID_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "charged_work_fluid", false, 6, 1);
 
     public static FlowableFluid FLOWING_PATINA_TREATMENT;
     public static FlowableFluid STILL_PATINA_TREATMENT;
     public static Item PATINA_TREATMENT_BUCKET;
     public static Block PATINA_TREATMENT;
-    public static FluidFactory PATINA = new FluidFactory(NeepMeat.NAMESPACE, "patina_treatment", false, 10, 5, 2);
+    public static FluidFactory PATINA = new FluidFactory(NeepMeat.NAMESPACE, "patina_treatment", false, 5, 2);
 
     public static FlowableFluid FLOWING_ETHEREAL_FUEL;
     public static FlowableFluid STILL_ETHEREAL_FUEL;
     public static Item ETHEREAL_FUEL_BUCKET;
     public static Block ETHEREAL_FUEL;
-    public static FluidFactory ETHEREAL_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ethereal_fuel", false, 10, 5, 2);
+    public static FluidFactory ETHEREAL_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ethereal_fuel", false, 5, 2);
 
     public static FlowableFluid FLOWING_ELDRITCH_ENZYMES;
     public static FlowableFluid STILL_ELDRITCH_ENZYMES;
     public static Item ELDRITCH_ENZYMES_BUCKET;
     public static Block ELDRITCH_ENZYMES;
-    public static FluidFactory ENZYMES_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "eldritch_enzymes", false, 10, 5, 2);
+    public static FluidFactory ENZYMES_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "eldritch_enzymes", false, 5, 2);
 
     public static FlowableFluid FLOWING_DIRTY_ORE_FAT;
     public static FlowableFluid STILL_DIRTY_ORE_FAT;
     public static Block DIRTY_ORE_FAT;
-    public static OreFatFluidFactory DIRTY_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
+    public static OreFatFluidFactory DIRTY_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 5, 2);
 
     public static FlowableFluid FLOWING_CLEAN_ORE_FAT;
     public static FlowableFluid STILL_CLEAN_ORE_FAT;
     public static Block CLEAN_ORE_FAT;
-    public static OreFatFluidFactory CLEAN_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "clean_ore_fat", false, 10, 5, 2);
+    public static OreFatFluidFactory CLEAN_ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "clean_ore_fat", false, 5, 2);
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
