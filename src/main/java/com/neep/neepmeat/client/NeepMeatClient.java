@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.meatlib.block.BasePaintedBlock;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
@@ -33,7 +33,6 @@ public class NeepMeatClient
 
     public static void registerRenderers()
     {
-
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
         ModelLoadingRegistry.INSTANCE.registerModelProvider(NMExtraModels.EXTRA_MODELS);

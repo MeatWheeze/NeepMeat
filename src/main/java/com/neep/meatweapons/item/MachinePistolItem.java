@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.BeamRenderer;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -95,30 +96,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                             System.out.println(target.get().hurtTime);
                         }
 
-//                        double yaw = Math.toRadians(player.getHeadYaw());
-//                        double pitch = Math.toRadians(player.getPitch(0.1f));
-//
-//                        double mult = 5; // Multiplier for bullet speed.
-//                        double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
-//                        double vy = mult * -Math.sin(pitch) + player.getVelocity().getY();
-//                        double vz = mult * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
-//
-//                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-//                        if (!player.isSneaking())
-//                        {
-//                            Vec3d transform = new Vec3d(
-//                                    player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-//                                    player.isSneaking() ? -0.15 : 0.1,
-//                                    0).rotateY((float) -yaw);
-//                            pos = pos.add(transform);
-//                        }
-//
-//                        CannonBulletEntity bullet = new CannonBulletEntity(world, pos.x, pos.y, pos.z, vx, vy, vz);
-//                        bullet.setOwner(player);
-//                        world.spawnEntity(bullet);
-
                         playSound(world, player, GunSounds.FIRE_PRIMARY);
-
                         stack.setDamage(stack.getDamage() + 1);
 
                         final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
@@ -128,7 +106,8 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                             GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_FIRE);
                         }
                     }
-                } else // Weapon is out of ammunition.
+                }
+                else // Weapon is out of ammunition.
                 {
                     if (world.isClient)
                     {

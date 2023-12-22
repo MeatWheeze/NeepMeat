@@ -169,7 +169,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             Vec3d look = caster.getRotationVec(tickDelta);
             Vec3d end = pos.add(look.multiply(distance));
 
-            Box box = caster.getBoundingBox().stretch(look.multiply(distance)).expand(1.0, 1.0, 1.0);
+//            Box box = caster.getBoundingBox().stretch(look.multiply(distance)).expand(1.0, 1.0, 1.0);
             Predicate<Entity> predicate = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
 
 //            EntityHitResult entityHitResult = ProjectileUtil.raycast(caster, caster.getClientCameraPosVec(tickDelta),end , box, entity -> !entity.isSpectator() && entity.collides() && entity instanceof  LivingEntity, distance);

@@ -75,9 +75,6 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
             matrices.scale(-1, -1, 1);
         }
 
-
-
-//        fill = yEnd * fill < xyzStart ?
         for (Direction direction : Direction.values())
         {
             QuadEmitter emitter = renderer.meshBuilder().getEmitter();

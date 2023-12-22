@@ -74,7 +74,6 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
             emitter.spriteBake(0, SPRITES[0], MutableQuadView.BAKE_LOCK_UV);
             emitter.spriteColor(0, -1, -1, -1, -1);
             emitter.emit();
-
         }
 
         outerMesh = builder.build();
