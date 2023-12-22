@@ -1,0 +1,11 @@
+{
+  "type": "neepmeat:enlightening",
+  "item_input": {
+    "resource": "minecraft:potato",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:flesh_potato",
+    "amount": 1
+  }
+}
