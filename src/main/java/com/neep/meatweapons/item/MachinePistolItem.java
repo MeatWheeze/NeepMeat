@@ -112,7 +112,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                         double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
                         double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (rand.nextFloat() - 0.5);
 
-                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.5, player.getZ());
+                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
                         Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
                         pos = pos.add(transform);
 
@@ -156,7 +156,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BULLET_TRAIL, pos, end, velocity, 0.2f, 1, MWNetwork.EFFECT_ID);
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BULLET_TRAIL, pos, end, velocity, 0.1f, 1, MWNetwork.EFFECT_ID);
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }

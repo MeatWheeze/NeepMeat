@@ -1,9 +1,11 @@
 package com.neep.meatweapons.particle;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.Camera;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.Identifier;
@@ -26,7 +28,7 @@ public class BulletTrailEffect extends BeamEffect
         VertexConsumer consumer = consumers.getBuffer(TRAIL_LAYER);
         float x = (maxTime - time + 2 - tickDelta) / (float) maxTime;
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
-                start, end, 128, 128, 128,
+                start, end, 214, 175, 32,
                255, scale);
         matrices.pop();
     }
