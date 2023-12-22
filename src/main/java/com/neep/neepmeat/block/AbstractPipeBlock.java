@@ -3,7 +3,6 @@ package com.neep.neepmeat.block;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.PipeProperties;
 import com.neep.neepmeat.util.NMMaths;
@@ -187,33 +186,12 @@ public abstract class AbstractPipeBlock extends BaseBlock
             Direction direction = hit.getSide();
             if (player.isSneaking())
             {
-//                System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
-//                System.out.println("block entity: " + world.getBlockEntity(pos));
                 direction = direction.getOpposite();
             }
 
             Vec3d hitPos = hit.getPos();
-            NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
 
-            Direction changeDirection = direction;
-            if (!relative.isWithin(0.5f, 0.5f, 0.25f))
-            {
-                // X axis case
-                if (relative.getY() > 0.75)
-                    changeDirection = Direction.SOUTH;
-                if (relative.getY() < 0.25)
-                    changeDirection = Direction.NORTH;
-                if (relative.getX() < 0.25)
-                    changeDirection = Direction.DOWN;
-                if (relative.getX() > 0.75)
-                    changeDirection = Direction.UP;
-
-                switch (direction.getAxis())
-                {
-                    case Y -> changeDirection = changeDirection.rotateClockwise(Direction.Axis.Z);
-                    case Z -> changeDirection = NMMaths.swapDirections(changeDirection.rotateClockwise(Direction.Axis.Y));
-                }
-            }
+            Direction changeDirection = getUseDirection(direction, pos, hitPos);
             boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnectionType.SIDE;
             BlockState newState = state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnectionType.FORCED : PipeConnectionType.SIDE);
             world.setBlockState(pos, newState);
@@ -222,6 +200,33 @@ public abstract class AbstractPipeBlock extends BaseBlock
             return ActionResult.SUCCESS;
         }
         return ActionResult.SUCCESS;
+    }
+
+    public static Direction getUseDirection(Direction direction, BlockPos pos, Vec3d hitPos)
+    {
+        NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
+
+        Direction changeDirection = direction;
+        if (!relative.isWithin(0.5f, 0.5f, 0.25f))
+        {
+            // X axis case
+            if (relative.getY() > 0.75)
+                changeDirection = Direction.SOUTH;
+            if (relative.getY() < 0.25)
+                changeDirection = Direction.NORTH;
+            if (relative.getX() < 0.25)
+                changeDirection = Direction.DOWN;
+            if (relative.getX() > 0.75)
+                changeDirection = Direction.UP;
+
+            switch (direction.getAxis())
+            {
+                case Y -> changeDirection = changeDirection.rotateClockwise(Direction.Axis.Z);
+                case Z -> changeDirection = NMMaths.swapDirections(changeDirection.rotateClockwise(Direction.Axis.Y));
+            }
+        }
+
+        return changeDirection;
     }
 
     @Override

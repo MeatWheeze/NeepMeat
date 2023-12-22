@@ -7,16 +7,20 @@ import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -103,6 +107,19 @@ public class MergePipeBlock extends PneumaticTubeBlock
 
         // I don't know what this bit was for.
         return state.with(DIR_TO_CONNECTION.get(direction), connection1);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        Vec3d hitPos = hit.getPos();
+        Direction side = hit.getSide();
+        Direction useDirection = getUseDirection(side, pos, hitPos);
+        if (useDirection == state.get(FACING).getOpposite())
+        {
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.PASS;
     }
 
     @Override
