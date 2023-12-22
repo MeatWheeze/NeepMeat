@@ -87,7 +87,7 @@ public class ItemUtils
         transaction.commit();
     }
 
-    public static void singleVariantInteract(PlayerEntity player, Hand hand, SingleVariantStorage<ItemVariant> storage)
+    public static boolean singleVariantInteract(PlayerEntity player, Hand hand, SingleVariantStorage<ItemVariant> storage)
     {
         ItemStack stack = player.getStackInHand(hand);
         try (Transaction transaction = Transaction.openOuter())
@@ -97,6 +97,7 @@ public class ItemUtils
                 long inserted = storage.insert(ItemVariant.of(stack), stack.getCount(), transaction);
                 stack.decrement((int) inserted);
                 transaction.commit();
+                return true;
             }
             else if ((stack.isEmpty() || !storage.getResource().matches(stack)) && !storage.isResourceBlank())
             {
@@ -104,9 +105,11 @@ public class ItemUtils
                 player.giveItemStack(giveStack);
                 storage.extract(storage.getResource(), storage.getAmount(), transaction);
                 transaction.commit();
+                return true;
             }
             else transaction.abort();
         }
+        return false;
     }
 
     public static ItemStack mutateView(StorageView<ItemVariant> view)
