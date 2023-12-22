@@ -4,7 +4,9 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.block.fluid_transport.ICapillaryPipe;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +62,15 @@ public class PipeState
         return false;
     }
 
+    public boolean canFluidFlow(Direction bias, BlockState state)
+    {
+        if (!isSpecial())
+        {
+            return true;
+        }
+        return special.canTransferFluid(bias, state);
+    }
+
     public boolean isCapillary()
     {
         return capillary;
@@ -93,6 +104,8 @@ public class PipeState
 //        {
 //            return (bias, state, flow) -> next.apply(
 //        }
+        boolean canTransferFluid(Direction bias, BlockState state);
+
     }
 
     public static long zero(long l)

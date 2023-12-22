@@ -121,4 +121,11 @@ public class CheckValveBlock extends BaseFacingBlock implements IFluidPipe, IVar
         else
             return flow -> 0L;
     }
+
+    @Override
+    public boolean canTransferFluid(Direction bias, BlockState state)
+    {
+        return bias == state.get(FACING);
+//        return true;
+    }
 }
