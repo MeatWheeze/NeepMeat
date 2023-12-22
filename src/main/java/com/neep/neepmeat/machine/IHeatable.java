@@ -8,10 +8,6 @@ public interface IHeatable
 {
     void setBurning();
 
-    int getFuelTime();
-
-    int getCurrentBurnTime();
-
     int getCookTimeTotal();
 
     int getCookTime();
