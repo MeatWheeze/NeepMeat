@@ -1,0 +1,44 @@
+{
+  "variants": {
+    "open=false,facing=east": {
+      "model": "neepmeat:block/toilet_closed",
+      "y": 90,
+      "x": 0
+    },
+    "open=false,facing=north": {
+      "model": "neepmeat:block/toilet_closed",
+      "y": 0,
+      "x": 0
+    },
+    "open=false,facing=south": {
+      "model": "neepmeat:block/toilet_closed",
+      "y": 180,
+      "x": 0
+    },
+    "open=false,facing=west": {
+      "model": "neepmeat:block/toilet_closed",
+      "y": -90,
+      "x": 0
+    },
+    "open=true,facing=east": {
+      "model": "neepmeat:block/toilet_open",
+      "y": 90,
+      "x": 0
+    },
+    "open=true,facing=north": {
+      "model": "neepmeat:block/toilet_open",
+      "y": 0,
+      "x": 0
+    },
+    "open=true,facing=south": {
+      "model": "neepmeat:block/toilet_open",
+      "y": 180,
+      "x": 0
+    },
+    "open=true,facing=west": {
+      "model": "neepmeat:block/toilet_open",
+      "y": -90,
+      "x": 0
+    }
+  }
+}

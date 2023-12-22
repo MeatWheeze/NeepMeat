@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "i  ",
+    "idd",
+    "irr"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "d": {
+      "item": "minecraft:polished_diorite"
+    },
+    "r": {
+      "item": "neepmeat:rusty_metal"
+    }
+  },
+  "result": {
+    "item": "neepmeat:dirty_toilet",
+    "count": 1
+  }
+}
