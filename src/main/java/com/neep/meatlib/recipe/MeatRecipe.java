@@ -1,6 +1,7 @@
 package com.neep.meatlib.recipe;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.util.Identifier;
 
 @SuppressWarnings("UnstableApiUsage")
 public interface MeatRecipe<C>
@@ -13,5 +14,7 @@ public interface MeatRecipe<C>
 
     MeatRecipeType<?> getType();
 
-    MeatRecipeSerialiser<?> getSerialiser();
+    <T extends MeatRecipe<?>> MeatRecipeSerialiser<T> getSerialiser();
+
+    Identifier getId();
 }

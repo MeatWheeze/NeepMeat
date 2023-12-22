@@ -28,7 +28,8 @@
     ],
     "client": [
       "com.neep.neepmeat.client.NeepMeatClient",
-      "com.neep.meatweapons.client.MWClient"
+      "com.neep.meatweapons.client.MWClient",
+      "com.neep.meatlib.client.MeatLibClient"
     ],
     "rei_server": [
       "com.neep.neepmeat.compat.rei.NMCommonPlugin"
