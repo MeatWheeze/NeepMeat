@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dbd",
+    "dod",
+    "tit"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "d": {
+      "item": "minecraft:polished_deepslate"
+    },
+    "o": {
+      "item": "neepmeat:bioelectric_organ"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "t": {
+      "item": "minecraft:iron_trapdoor"
+    }
+  },
+  "result": {
+    "item": "neepmeat:transducer",
+    "count": 1
+  }
+}
