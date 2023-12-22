@@ -1,5 +1,7 @@
 package com.neep.neepmeat.blockentity.machine;
 
+import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -7,6 +9,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 public class MotorBlockEntity extends BloodMachineBlockEntity
 {
@@ -58,4 +62,12 @@ public class MotorBlockEntity extends BloodMachineBlockEntity
         readNbt(nbt);
     }
 
+    public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
+    {
+        Direction facing = state.get(BaseFacingBlock.FACING);
+        if (!(world.getBlockEntity(pos.offset(facing)) instanceof IMotorisedBlock))
+        {
+            setRunning(false);
+        }
+    }
 }
