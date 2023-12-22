@@ -1,6 +1,7 @@
 package com.neep.meatlib.recipe.ingredient;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.fluid.Fluid;
@@ -13,18 +14,16 @@ import org.apache.commons.lang3.NotImplementedException;
 
 public class RecipeInputs
 {
+    public static final Identifier EMPTY_ID = new Identifier(MeatLib.NAMESPACE, "empty");
     public static final Registry<RecipeInput.Serialiser<?>> SERIALISERS = FabricRegistryBuilder.createDefaulted(
             (Class<RecipeInput.Serialiser<?>>) (Object) RecipeInput.Serialiser.class,
-            new Identifier(NeepMeat.NAMESPACE, "recipe_input"),
-            new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
+            new Identifier(MeatLib.NAMESPACE, "recipe_input"),
+            EMPTY_ID).buildAndRegister();
 
     public static final Identifier FLUID_ID = Registry.FLUID.getKey().getValue();
     public static final Identifier ITEM_ID = Registry.ITEM.getKey().getValue();
 
-    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
-    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
-
-    public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, new RecipeInput.Serialiser<>()
+    public static final RecipeInput.Serialiser<Object> EMPTY_SERIALISER = Registry.register(SERIALISERS, EMPTY_ID, new RecipeInput.Serialiser<>()
     {
         @Override
         public RecipeInput<Object> fromJson(JsonObject json)
@@ -41,7 +40,7 @@ public class RecipeInputs
         @Override
         public void write(PacketByteBuf buf, RecipeInput<Object> input)
         {
-
+            buf.writeString(input.getType().toString());
         }
 
         @Override
@@ -55,5 +54,10 @@ public class RecipeInputs
         {
             throw new NotImplementedException();
         }
-    }, new Identifier("neepmeat:empty"));
+    });
+
+    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
+    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
+
+    public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, EMPTY_SERIALISER, EMPTY_ID);
 }
