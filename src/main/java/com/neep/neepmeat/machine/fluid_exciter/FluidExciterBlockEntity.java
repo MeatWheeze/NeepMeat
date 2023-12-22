@@ -111,7 +111,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         return inputStorage;
     }
 
-    public static final FluidPump TOP_PUMP = FluidPump.of(1, true);
+    public static final FluidPump TOP_PUMP = FluidPump.of(-1, true);
 
     public static FluidPump getPump(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction)
     {
