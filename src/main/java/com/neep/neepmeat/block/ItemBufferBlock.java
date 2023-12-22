@@ -16,6 +16,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -105,6 +106,21 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         }
     }
 
+    @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        ItemBufferBlockEntity be = (ItemBufferBlockEntity) world.getBlockEntity(pos);
+        int maxCount = be.getResource().toStack().getMaxCount();
+        return maxCount > 0 ? (int) Math.ceil((float) be.getAmount() / (float) maxCount * 16) : 0;
+    }
+
+    // Add dropped items to inventory
     public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, ItemBufferBlockEntity be)
     {
         if (!world.isClient && entity instanceof ItemEntity item)
