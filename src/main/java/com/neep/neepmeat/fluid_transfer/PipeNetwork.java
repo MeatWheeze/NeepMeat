@@ -140,7 +140,7 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
-//            PipeBranches.test(connectedNodes, networkPipes);
+            PipeBranches.test(connectedNodes, networkPipes);
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
             {
@@ -298,7 +298,6 @@ public class PipeNetwork
                     if (IFluidPipe.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
                     {
                         visited.add(next);
-//                        System.out.println(next);
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof IFluidPipe
                                 && !(state2.getBlock() instanceof IFluidNodeProvider))
@@ -336,8 +335,6 @@ public class PipeNetwork
             }
             pipeQueue.addAll(nextSet);
         }
-//        validate();
-//        System.out.println("targets: " + connectedNodes);
     }
 
     public void removeNode(NodePos pos)

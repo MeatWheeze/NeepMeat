@@ -74,4 +74,10 @@ public class PipeState
     {
         this.distance = distance;
     }
+
+    @FunctionalInterface
+    public interface ISpecialPipe
+    {
+        long apply(boolean bias, long flow);
+    }
 }
