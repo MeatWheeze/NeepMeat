@@ -44,6 +44,12 @@ public class NMFluids
     public static Block PATINA_TREATMENT;
     public static FluidFactory PATINA = new FluidFactory(NeepMeat.NAMESPACE, "patina_treatment", false, 10, 5, 2);
 
+    public static FlowableFluid FLOWING_ETHEREAL_FUEL;
+    public static FlowableFluid STILL_ETHEREAL_FUEL;
+    public static Item ETHEREAL_FUEL_BUCKET;
+    public static Block ETHEREAL_FUEL;
+    public static FluidFactory ETHEREAL_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ethereal_fuel", false, 10, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -78,6 +84,11 @@ public class NMFluids
         FLOWING_PATINA_TREATMENT = PATINA.registerFlowing();
         PATINA_TREATMENT_BUCKET = PATINA.registerItem();
         PATINA_TREATMENT = PATINA.registerBlock();
+
+        STILL_ETHEREAL_FUEL = ETHEREAL_FACTORY.registerStill();
+        FLOWING_ETHEREAL_FUEL = ETHEREAL_FACTORY.registerFlowing();
+        ETHEREAL_FUEL_BUCKET = ETHEREAL_FACTORY.registerItem();
+        ETHEREAL_FUEL = ETHEREAL_FACTORY.registerBlock();
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);

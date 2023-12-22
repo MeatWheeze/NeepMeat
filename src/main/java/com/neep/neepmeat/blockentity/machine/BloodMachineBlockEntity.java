@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.api.storage.TypedFluidBuffer;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -39,7 +40,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
         public boolean canInsert(FluidVariant variant)
         {
-            return variant.isOf(Fluids.WATER);
+            return variant.isOf(Fluids.WATER) || variant.isOf(NMFluids.STILL_ENRICHED_BLOOD);
         }
 
         @Override

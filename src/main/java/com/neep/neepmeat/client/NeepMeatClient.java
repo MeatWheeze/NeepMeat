@@ -42,6 +42,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier CHARGED_WORK_FLUID= new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_still");
     public static final Identifier WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_flowing");
     public static final Identifier WORK_FLUID = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_still");
+    public static final Identifier ETHEREAL_FUEL_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/ethereal_fuel_flowing");
+    public static final Identifier ETHEREAL_FUEL = new Identifier(NeepMeat.NAMESPACE, "block/ethereal_fuel_still");
 
     @Override
     public void onInitializeClient()
@@ -132,10 +134,18 @@ public class NeepMeatClient implements ClientModInitializer
                 0xFFFFFF
         ));
 
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_ETHEREAL_FUEL, NMFluids.FLOWING_ETHEREAL_FUEL, new SimpleFluidRenderHandler(
+                ETHEREAL_FUEL,
+                ETHEREAL_FUEL_FLOWING,
+                0xFFFFFF
+        ));
+
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
             registry.register(CHARGED_WORK_FLUID);
             registry.register(CHARGED_WORK_FLUID_FLOWING);
+            registry.register(ETHEREAL_FUEL);
+            registry.register(ETHEREAL_FUEL_FLOWING);
         });
 
         // Coloured blocks

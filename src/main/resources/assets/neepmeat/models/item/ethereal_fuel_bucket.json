@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neepmeat:item/ethereal_fuel_bucket"
+  }
+}
