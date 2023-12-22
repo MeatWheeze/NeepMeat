@@ -83,32 +83,36 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
+        if (!player.getItemCooldownManager().isCoolingDown(this))
         {
-            if (!player.getItemCooldownManager().isCoolingDown(this))
+            if (stack.getDamage() != this.maxShots)
             {
-                if (stack.getDamage() != this.maxShots)
-                {
-                    player.getItemCooldownManager().set(this, 2);
+                player.getItemCooldownManager().set(this, 2);
 
-                    if (!world.isClient)
-                    {
-                        fireBeam(world, player, stack);
-                    }
-                }
-                else // Weapon is out of ammunition.
+                if (!world.isClient)
                 {
-                    if (world.isClient)
-                    {
-                        // Play empty sound.
-                    }
-                    else
-                    {
-                        // Try to reload
-                        this.reload(player, stack, null);
-                    }
+                    fireBeam(world, player, stack);
+                }
+            }
+            else // Weapon is out of ammunition.
+            {
+                if (world.isClient)
+                {
+                    // Play empty sound.
+                }
+                else
+                {
+                    // Try to reload
+                    this.reload(player, stack, null);
                 }
             }
         }
+    }
+
+    @Override
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        trigger(world, player, stack, id, pitch, yaw, handType);
     }
 
     @Override
