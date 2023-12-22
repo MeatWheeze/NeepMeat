@@ -19,6 +19,7 @@ public class NMEntities
     public static EntityType<EggEntity> EGG;
 
     public static EntityType<WormEntity> WORM;
+    public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
     public static EntityType<MobPlatformRidingEntity> MOB_PLATFORM;
 
     public static void initialise()
@@ -36,6 +37,9 @@ public class NMEntities
         WORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "god_worm", FabricEntityTypeBuilder.<WormEntity>create(SpawnGroup.MISC, WormEntity::new)
                 .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(WORM, WormEntity.createLivingAttributes());
+//        WORM_SEGMENT = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "god_worm_segment", FabricEntityTypeBuilder.<WormEntity>create(SpawnGroup.MISC, WormEntity.WormSegment::new)
+//                .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
+//        FabricDefaultAttributeRegistry.register(WORM, WormEntity.createLivingAttributes());
 
         MOB_PLATFORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "mob_platform", FabricEntityTypeBuilder.create(SpawnGroup.MISC, MobPlatformRidingEntity::new)
                 .dimensions(EntityDimensions.fixed(0.1f, 0.1f)).trackedUpdateRate(1).build());

@@ -1,17 +1,23 @@
 package com.neep.neepmeat.entity.worm;
 
-import net.minecraft.entity.*;
+import com.neep.meatlib.api.entity.MultiPartEntity;
+import com.neep.neepmeat.util.Bezier;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.Monster;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.Arm;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -22,23 +28,33 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class WormEntity extends LivingEntity implements Monster, IAnimatable
+public class WormEntity extends AbstractWormPart implements MultiPartEntity<WormEntity.WormSegment>, IAnimatable
 {
     protected static final TrackedData<String> CURRENT_ACTION = DataTracker.registerData(WormEntity.class, TrackedDataHandlerRegistry.STRING);
 
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-
     private WormAction currentAction;
-
-    protected List<WormSegment> segments = new ArrayList<>(16);
+    protected List<WormSegment> segments = new ArrayList<>(17);
+    protected List<WormSegment> tail = new ArrayList<>(16);
+    protected final WormSegment head;
 
     public WormEntity(EntityType<? extends WormEntity> type, World world)
     {
         super(type, world);
+        int length = 16;
+        for (int i = 0; i < length; ++i)
+        {
+            WormSegment segment = new WormSegment(this, 26 / 16f, 16);
+            tail.add(segment);
+        }
+        head = new WormSegment(this, 26 / 16f, 16);
+        segments.addAll(tail);
+        segments.add(head);
+
+//        segments.forEach(world::spawnEntity);
     }
 
     @Override
@@ -80,16 +96,63 @@ public class WormEntity extends LivingEntity implements Monster, IAnimatable
     public void tick()
     {
         super.tick();
+        setPitch(-90);
 
-        if (currentAction != null)
+        double segmentHeight = 15 / 16f;
+        double y = getY();
+        double x = getX();
+        double z = getZ();
+        float pitch = getPitch();
+        float yaw = getYaw();
+        head.setPos(x + 5, y + 16, z);
+        head.setPitch(0);
+        head.setBodyYaw(90);
+
+        Vec3d headLook = head.getPos().add(Vec3d.fromPolar(head.getPitch(), head.getYaw()).multiply(-8));
+
+        for (int i = 0; i < tail.size(); ++i)
         {
-            currentAction.tick();
-            dataTracker.set(CURRENT_ACTION, currentAction.getId().toString());
-            if (currentAction.isFinished())
-            {
-                currentAction = chooseAction().create(this);
-            }
+            WormSegment segment = tail.get(i);
+            float delta = ((float) i) / tail.size();
+
+            double x1 = Bezier.bezier3(delta, x, x, headLook.x, head.getX());
+            double y1 = Bezier.bezier3(delta, y, y + 5, headLook.y, head.getY());
+            double z1 = Bezier.bezier3(delta, z, z, headLook.z, head.getZ());
+
+//            double x1 = MathHelper.lerp(delta, x, head.getX());
+//            double y1 = MathHelper.lerp(delta, y, head.getY());
+//            double z1 = MathHelper.lerp(delta, z, head.getZ());
+
+            float pitch1 = MathHelper.lerp(delta, pitch, head.getPitch());
+            float yaw1 = MathHelper.lerp(delta, yaw, head.getYaw());
+
+            segment.setPos(x1, y1, z1);
+            segment.setPitch(pitch1);
+            segment.setYaw(yaw1);
+//            segment.refreshPositionAndAngles(x1, y1, z1, yaw1, pitch1);
+//            segment.updateTrackedPosition(x1, y1, z1);
+//            segment.updateTrackedPositionAndAngles();
         }
+
+
+
+//        if (currentAction != null)
+//        {
+//            currentAction.tick();
+//            dataTracker.set(CURRENT_ACTION, currentAction.getId().toString());
+//            if (currentAction.isFinished())
+//            {
+//                currentAction = chooseAction().create(this);
+//            }
+//        }
+    }
+
+
+    @Override
+    public void remove(RemovalReason reason)
+    {
+        segments.forEach(s -> s.remove(reason));
+        super.remove(reason);
     }
 
     @Override
@@ -128,22 +191,11 @@ public class WormEntity extends LivingEntity implements Monster, IAnimatable
         return factory;
     }
 
-    @Override
-    public Iterable<ItemStack> getArmorItems()
-    {
-        return Collections.<ItemStack>emptyList();
-    }
 
     @Override
-    public ItemStack getEquippedStack(EquipmentSlot slot)
+    public Iterable<WormSegment> getParts()
     {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void equipStack(EquipmentSlot slot, ItemStack stack)
-    {
-
+        return tail;
     }
 
     public static class WormSegment extends Entity
@@ -159,14 +211,31 @@ public class WormEntity extends LivingEntity implements Monster, IAnimatable
             calculateDimensions();
         }
 
-        @Override
-        protected void initDataTracker() {}
+//        public WormSegment(EntityType<? extends WormSegment> type, World world)
+//        {
+//
+//        }
 
         @Override
-        protected void readCustomDataFromNbt(NbtCompound nbt) {}
+        protected void initDataTracker()
+        {
+        }
 
         @Override
-        protected void writeCustomDataToNbt(NbtCompound nbt) {}
+        protected void readCustomDataFromNbt(NbtCompound nbt)
+        {
+        }
+
+        @Override
+        protected void writeCustomDataToNbt(NbtCompound nbt)
+        {
+        }
+
+        @Override
+        public void setPitch(float pitch)
+        {
+            super.setPitch(pitch);
+        }
 
         @Override
         public boolean isPartOf(Entity entity)
@@ -178,6 +247,13 @@ public class WormEntity extends LivingEntity implements Monster, IAnimatable
         public Packet<?> createSpawnPacket()
         {
             throw new UnsupportedOperationException();
+//            return new EntitySpawnS2CPacket(this);
+        }
+
+        @Override
+        public void onSpawnPacket(EntitySpawnS2CPacket packet)
+        {
+            super.onSpawnPacket(packet);
         }
 
         @Override
@@ -187,9 +263,21 @@ public class WormEntity extends LivingEntity implements Monster, IAnimatable
         }
 
         @Override
+        public boolean damage(DamageSource source, float amount)
+        {
+            return parent.damage(source, amount);
+        }
+
+        @Override
         public boolean shouldSave()
         {
             return false;
         }
+    }
+
+    public enum Type
+    {
+        HEAD,
+        TAIL
     }
 }
