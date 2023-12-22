@@ -11,12 +11,10 @@ import net.minecraft.block.HopperBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.HopperBlockEntity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.stat.Stats;
+import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
@@ -107,12 +105,34 @@ public class ItemDuctBlock extends PipeBlock implements BlockEntityProvider
         if (state.getBlock() != newState.getBlock())
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
+
+            // Scatter contents in world
             if (blockEntity instanceof ItemDuctBlockEntity be)
             {
                 ItemScatterer.spawn(world, pos, be);
                 world.updateComparators(pos,this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
+        }
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        if (world.getBlockEntity(pos) instanceof ItemDuctBlockEntity be)
+        {
+            be.updateApiCache(pos, state);
+        }
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        if (world.getBlockEntity(pos) instanceof ItemDuctBlockEntity be)
+        {
+            be.updateApiCache(pos, state);
         }
     }
 

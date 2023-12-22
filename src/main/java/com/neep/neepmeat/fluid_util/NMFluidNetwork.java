@@ -149,9 +149,6 @@ public class NMFluidNetwork
 
     public void tick()
     {
-//        if (loading)
-//            return;
-
         buildPressures();
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
