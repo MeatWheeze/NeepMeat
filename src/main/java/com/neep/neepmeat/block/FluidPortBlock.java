@@ -1,15 +1,11 @@
 package com.neep.neepmeat.block;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import net.minecraft.block.Block;
+import com.neep.neepmeat.block.base.BaseFacingBlock;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
 
 import java.util.Map;
 
