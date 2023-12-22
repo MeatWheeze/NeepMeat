@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -189,6 +190,10 @@ public interface IFluidPipe
 
     default PipeVertex getPipeVertex(ServerWorld world, BlockPos pos, BlockState state)
     {
-        return new SimplePipeVertex();
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
+        {
+            return be.getPipeVertex();
+        }
+        return null;
     }
 }

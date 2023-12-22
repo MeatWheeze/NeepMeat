@@ -1,10 +1,12 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.fluid_network.*;
-import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -26,6 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
 {
     public FluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
@@ -55,7 +58,8 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
         world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
 
-        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+//        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
+        if (IFluidPipe.findFluidPipe(world, fromPos, world.getBlockState(fromPos)).isEmpty())
         {
             if (createStorageNodes(world, pos, nextState))
                 updateNetwork((ServerWorld) world, pos, nextState, PipeNetwork.UpdateReason.NODE_CHANGED);
@@ -128,7 +132,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new FluidPipeBlockEntity(pos, state);
+        return NMBlockEntities.FLUID_PIPE.instantiate(pos, state);
     }
 
     // Only takes into account other pipes, connections to storages are enforced later.
@@ -164,16 +168,5 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;
-    }
-
-    @Override
-    public PipeVertex getPipeVertex(ServerWorld world, BlockPos pos, BlockState state)
-    {
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
-        {
-            be.getPipeVertex().updateNodes(world, pos.toImmutable(), state);
-            return be.getPipeVertex();
-        }
-        return IFluidPipe.super.getPipeVertex(world, pos, state);
     }
 }

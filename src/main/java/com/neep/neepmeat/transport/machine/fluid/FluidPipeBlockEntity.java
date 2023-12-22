@@ -1,7 +1,9 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.*;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,16 +16,19 @@ public class FluidPipeBlockEntity extends BlockEntity
 {
     public NbtCompound queuedNbt;
     protected PipeNetwork network;
-    protected  BlockPipeVertex vertex = new BlockPipeVertex(this);
+    protected final PipeVertex vertex;
+    protected final PipeConstructor constructor;
 
-    public FluidPipeBlockEntity(BlockPos pos, BlockState state)
+    public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor constructor)
     {
-        this(NMBlockEntities.NODE_BLOCK_ENTITY, pos, state);
+        this(NMBlockEntities.FLUID_PIPE, pos, state, constructor);
     }
 
-    public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor constructor)
     {
         super(type, pos, state);
+        this.vertex = constructor.create(this);
+        this.constructor = constructor;
     }
 
     @Override
@@ -81,8 +86,16 @@ public class FluidPipeBlockEntity extends BlockEntity
         return false;
     }
 
-    public BlockPipeVertex getPipeVertex()
+    public PipeVertex getPipeVertex()
     {
+        // TODO: remove this cast
+        ((BlockPipeVertex) vertex).updateNodes((ServerWorld) world, pos.toImmutable(), getCachedState());
         return vertex;
+    }
+
+    @FunctionalInterface
+    public interface PipeConstructor
+    {
+        PipeVertex create(FluidPipeBlockEntity parent);
     }
 }

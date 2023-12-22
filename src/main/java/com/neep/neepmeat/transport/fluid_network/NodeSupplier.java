@@ -86,4 +86,10 @@ public class NodeSupplier implements Supplier<FluidNode>, PipeFlowComponent
         }
         return 0;
     }
+
+    @Override
+    public int getConnectionDir(PipeVertex from)
+    {
+        return pos.face().getOpposite().ordinal();
+    }
 }

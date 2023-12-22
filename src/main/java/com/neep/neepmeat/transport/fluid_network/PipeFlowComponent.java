@@ -8,4 +8,6 @@ public interface PipeFlowComponent
 {
     // TODO: The only reason why a ServerWorld is required is to call FluidNode::load. Adding a method for registering first-tick listeners should remove this.
     long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant variant, TransactionContext transaction);
+
+    int getConnectionDir(PipeVertex from);
 }
