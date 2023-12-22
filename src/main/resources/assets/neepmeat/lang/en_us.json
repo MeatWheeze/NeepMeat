@@ -1,0 +1,100 @@
+{
+  "itemGroup.neepmeat.general": "NeepMeat General",
+  "itemGroup.neepmeat.ingredients": "NeepMeat Crafting",
+
+  "block.neepmeat.polished_metal_bricks": "Polished Metal Bricks",
+  "block.neepmeat.polished_metal_bricks_slab": "Polished Metal Bricks Slab",
+  "block.neepmeat.polished_metal_bricks_stairs": "Polished Metal Bricks Stairs",
+  "block.neepmeat.polished_metal_bricks_wall": "Polished Metal Bricks Wall",
+
+  "block.neepmeat.polished_metal": "Polished Metal",
+  "block.neepmeat.polished_metal_slab": "Polished Metal Slab",
+  "block.neepmeat.polished_metal_stairs": "Polished Metal Stairs",
+  "block.neepmeat.polished_metal_wall": "Polished Metal Wall",
+
+  "block.neepmeat.blue_polished_metal": "Blue Polished Metal",
+  "block.neepmeat.blue_polished_metal_slab": "Blue Polished Metal Slab",
+  "block.neepmeat.blue_polished_metal_stairs": "Blue Polished Metal Stairs",
+  "block.neepmeat.blue_polished_metal_wall": "Blue Polished Metal Wall",
+
+  "block.neepmeat.rusty_metal": "Rusty Metal",
+  "block.neepmeat.rusty_metal_slab": "Rusty Metal Slab",
+  "block.neepmeat.rusty_metal_stairs": "Rusty Metal Stairs",
+
+  "block.neepmeat.grey_rough_concrete": "Grey Rough Concrete",
+  "block.neepmeat.grey_rough_concrete_stairs": "Grey Rough Concrete Stairs",
+  "block.neepmeat.grey_rough_concrete_slab": "Grey Rough Concrete Slab",
+
+  "block.neepmeat.yellow_rough_concrete": "Yellow Rough Concrete",
+  "block.neepmeat.yellow_rough_concrete_stairs": "Yellow Rough Concrete Stairs",
+  "block.neepmeat.yellow_rough_concrete_slab": "Yellow Rough Concrete Slab",
+
+  "block.neepmeat.yellow_tiles": "Yellow Tiles",
+  "block.neepmeat.yellow_tiles_stairs": "Yellow Tiles Stairs",
+  "block.neepmeat.yellow_tiles_slab": "Yellow Tiles Slab",
+
+  "block.neepmeat.rusted_metal_scaffold": "Rusted Metal Scaffold",
+  "block.neepmeat.rusted_metal_scaffold_stairs": "Rusted Metal Scaffold Stairs",
+  "block.neepmeat.rusted_metal_scaffold_slab": "Rusted Metal Scaffold Slab",
+  "block.neepmeat.rusted_metal_scaffold_trapdoor": "Rusted Metal Scaffold Trapdoor",
+
+  "block.neepmeat.blue_metal_scaffold": "Blue Metal Scaffold",
+  "block.neepmeat.blue_metal_scaffold_stairs": "Blue Metal Scaffold Stairs",
+  "block.neepmeat.blue_metal_scaffold_slab": "Blue Metal Scaffold Slab",
+
+  "block.neepmeat.yellow_metal_scaffold": "Yellow Metal Scaffold",
+  "block.neepmeat.yellow_metal_scaffold_stairs": "Yellow Metal Scaffold Stairs",
+  "block.neepmeat.yellow_metal_scaffold_slab": "Yellow Metal Scaffold Slab",
+
+  "block.neepmeat.rusty_vent": "Rusty Vent",
+
+  "block.neepmeat.mesh_panel": "Mesh Pane",
+
+  "block.neepmeat.rusted_bars": "Rusted Metal Bars",
+
+  "block.neepmeat.caution_block": "Caution Stripes",
+
+  "block.neepmeat.pipe": "Fluid Pipe",
+
+  "block.neepmeat.pump": "Redstone Pump",
+
+  "block.neepmeat.basic_tank": "Basic Tank",
+  "block.neepmeat.glass_tank": "Glass Tank",
+
+  "block.neepmeat.item_buffer": "Item Platform",
+
+  "block.neepmeat.fluid_port": "Fluid Port",
+
+  "block.neepmeat.fluid_drain": "Fluid Drain",
+
+  "block.neepmeat.item_duct": "Hopper Extension",
+
+  "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
+  "item.neepmeat.animal_heart": "Rough Heart",
+  "item.neepmeat.animal_heart.lore": "Crude; it lacks any logical design sensibilities.",
+
+  "item.neepmeat.reanimated_heart": "Reanimated Heart",
+  "item.neepmeat.reanimated_heart.lore": "It is said by some that the reanimated exude health.",
+
+  "item.neepmeat.machine_fluid": "Machine Fluid",
+  "item.neepmeat.machine_fluid.lore": "What secrets could it have gleaned from those inhuman minds?",
+
+  "item.neepmeat.digestive_system": "Digestive System",
+  "item.neepmeat.digestive_system.lore": "A tube lined with specialised tissues.",
+
+  "item.neepmeat.interface_array": "Interface Array",
+  "item.neepmeat.interface_array.lore": "So that meat and machine may think as one.",
+
+  "item.neepmeat.internal_components": "Biomechanical Components",
+  "item.neepmeat.internal_components.lore": "Arcane mechanisms, sealed in skin never to see the light of day.",
+
+  "item.neepmeat.brain_rough": "Rough Brain",
+  "item.neepmeat.brain_rough.lore": "It will never see thoughts again, but it may still be of use.",
+  "item.neepmeat.brain_pristine": "Pristine Brain",
+  "item.neepmeat.brain_pristine.lore": "",
+
+  "item.neepmeat.integration_charge_crude": "Crude Integration Charge",
+  "item.neepmeat.integration_charge_crude.lore": "Brings life, but in what state?",
+  "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
+  "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive."
+}
