@@ -23,7 +23,7 @@ public class BeamEffect extends GraphicsEffect
     protected Vec3d endPos;
     public long maxTime;
 
-    public BeamEffect(ClientWorld world, Vec3d start, Vec3d end, int maxTime)
+    public BeamEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, int maxTime)
     {
         super(world);
         this.maxTime = maxTime;
@@ -36,7 +36,7 @@ public class BeamEffect extends GraphicsEffect
     {
         super.tick();
 
-        if (time > maxTime)
+        if (maxTime > 0 && time > maxTime)
         {
             this.remove();
         }
@@ -47,7 +47,9 @@ public class BeamEffect extends GraphicsEffect
     {
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(LAYER_TEST);
-        BeamRenderer.renderBeam(matrices, consumer, camera.getPos(), startPos, endPos, 255, 255, 255, (int) (255f * (maxTime - time) / maxTime), 0.5f);
+        BeamRenderer.renderBeam(matrices, consumer, camera.getPos(), startPos, endPos, 255, 255, 255,
+//                maxTime > 0 ? (int) (255f * (maxTime - time) / maxTime) : 255, 0.5f);
+                maxTime > 0 ? (int) (255f * (maxTime - time + 1) / maxTime) : 255, 0.5f);
         matrices.pop();
     }
 
@@ -55,4 +57,5 @@ public class BeamEffect extends GraphicsEffect
     {
         this.alive = false;
     }
+
 }

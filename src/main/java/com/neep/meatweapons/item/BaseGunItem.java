@@ -4,8 +4,15 @@ import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
+import com.neep.meatweapons.init.GraphicsEffects;
+import com.neep.meatweapons.network.BeamPacket;
+import com.neep.meatweapons.network.MWNetwork;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -13,18 +20,20 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayNetworkHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
-import net.minecraft.util.ClickType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
-import net.minecraft.util.UseAction;
+import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
@@ -188,16 +197,25 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
                 }
             }
 
-            Vec3d hitPos;
-            hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
+            Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
             // Send packet here
+            syncBeamEffect((ServerWorld) world, pos, hitPos, 100);
 
             return Optional.ofNullable((LivingEntity) entity);
         }
         return Optional.empty();
     }
 
-    // Remove ammunition from inventory. Returns null if none present.
+    public static void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, double radius)
+    {
+        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, radius))
+        {
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, new Vec3d(0, 0, 0), 10, MWNetwork.EFFECT_ID);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+        }
+    }
+
+    // Removes ammunition from inventory. Returns null if none present.
     public ItemStack getStack(Item type, PlayerEntity player)
     {
         for (int i = 0; i < player.getInventory().size(); ++i)
@@ -215,7 +233,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     {
         if (sounds.containsKey(sound))
         {
-//            System.out.println(sound);
             world.playSound(
                     null,
                     player.getBlockPos(),
