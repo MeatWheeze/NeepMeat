@@ -59,7 +59,6 @@
 - Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
 - Make Charnel Compactor accept c:raw_meat
-- Add temperature requirements for alloy smelting
 
 ## Later
 
@@ -72,6 +71,8 @@
 - Sort out the Process Tank
 - Improve Big Lever texture
 - Add Compound Injector
+- Add temperature requirements for alloy smelting
+- Canned meat! (works like IC2 cans)
 
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
