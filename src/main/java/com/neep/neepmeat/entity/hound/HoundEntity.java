@@ -1,5 +1,6 @@
 package com.neep.neepmeat.entity.hound;
 
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
@@ -29,6 +30,12 @@ public class HoundEntity extends HostileEntity implements Monster
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2.5)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 2.0);
+    }
+
+    @Override
+    public boolean isInvisibleTo(PlayerEntity player)
+    {
+        return super.isInvisibleTo(player) || !player.getInventory().getArmorStack(3).isOf(NMItems.GOGGLES);
     }
 
     @Override
