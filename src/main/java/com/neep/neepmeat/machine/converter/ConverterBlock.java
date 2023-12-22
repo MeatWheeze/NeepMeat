@@ -33,16 +33,8 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-    }
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-        if (player.isSneaking())
-        {
-            return ActionResult.SUCCESS;
-        }
-        return ActionResult.FAIL;
+        world.getBlockEntity(pos, NMBlockEntities.CONVERTER).ifPresent(ConverterBlockEntity::update);
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
     }
 
     @Override

@@ -60,11 +60,17 @@ public class PowerUtils
         return (long) Math.floor(energy / entry.baseEnergy());
     }
 
+    public static long amountToAbsEnergy(long amount, Fluid fluid)
+    {
+        FluidEnegyRegistry.Entry entry = FluidEnegyRegistry.getInstance().getOrEmpty(fluid);
+        return (long) (entry.baseEnergy() * amount);
+    }
+
     /**
      * @param fluidVariant Fluid variant to query
      * @param amountTransferred Fluid amount in droplets
      * @param dt Time over which the energy is dissipated in ticks
-     * @return The power supplied by the moving fluid
+     * @return The average power supplied by the moving fluid
      */
     public static long fluidPower(@Nullable FluidVariant fluidVariant, long amountTransferred, int dt)
     {

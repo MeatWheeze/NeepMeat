@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.meatlib.block.*;
+import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -29,6 +30,7 @@ import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.machine.heater.HeaterBlock;
@@ -139,6 +141,7 @@ public class NMBlocks
     public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
     public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", block(), FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
+    public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block(), FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), FLUID_PIPE_SETTINGS));
 
