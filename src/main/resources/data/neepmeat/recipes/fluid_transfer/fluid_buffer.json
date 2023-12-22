@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " p ",
+    "c c",
+    " c "
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:pipe"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:fluid_buffer",
+    "count": 1
+  }
+}

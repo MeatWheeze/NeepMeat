@@ -61,7 +61,7 @@ public class NMBlocks
     public static Block TROMMEL = BlockRegistry.queueBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
     public static Block TROMMEL_CENTRE = BlockRegistry.queueBlock(new BaseDummyBlock("trommel_centre", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
     public static Block HEATER = BlockRegistry.queueBlock(new HeaterBlock("heater", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
-    public static Block LINEAR_OSCILLATOR = BlockRegistry.queueBlock(new LinearOscillatorBlock("linear_oscillator", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+    public static Block LINEAR_OSCILLATOR = BlockRegistry.queueBlock(new LinearOscillatorBlock("breaker", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
     public static Block MOTOR = BlockRegistry.queueBlock(new MotorBlock("motor_unit", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
     public static Block DEPLOYER = BlockRegistry.queueBlock(new DeployerBlock("deployer", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 

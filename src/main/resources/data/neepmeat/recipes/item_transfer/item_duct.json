@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " h ",
+    " h ",
+    "   "
+  ],
+  "key": {
+    "h": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_duct",
+    "count": 1
+  }
+}

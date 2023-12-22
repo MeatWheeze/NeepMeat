@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "cpc",
+    "cgc",
+    "ccc"
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:pipe"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    },
+    "g": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "neepmeat:basic_glass_tank",
+    "count": 1
+  }
+}

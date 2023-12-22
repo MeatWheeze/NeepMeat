@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iIi",
+    "ici",
+    "isi"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:redstone_block"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "I": {
+      "item": "neepmeat:pipe"
+    },
+    "s": {
+      "item": "minecraft:piston"
+    }
+  },
+  "result": {
+    "item": "neepmeat:pump",
+    "count": 1
+  }
+}

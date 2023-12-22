@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sss",
+    "rbe",
+    "sss"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:smooth_stone"
+    },
+    "e": {
+      "item": "minecraft:ender_pearl"
+    },
+    "b": {
+      "item": "neepmeat:brain_rough"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "result": {
+    "item": "neepmeat:content_detector",
+    "count": 2
+  }
+}

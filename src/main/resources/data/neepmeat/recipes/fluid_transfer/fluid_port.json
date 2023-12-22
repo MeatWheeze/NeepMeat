@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " pi",
+    "pci",
+    " pi"
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:pipe"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:fluid_port",
+    "count": 1
+  }
+}

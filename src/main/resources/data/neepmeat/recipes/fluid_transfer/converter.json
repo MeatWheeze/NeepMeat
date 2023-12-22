@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "eee",
+    "ibi",
+    "ccc"
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:copper_coil"
+    },
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "e": {
+      "item": "neepmeat:bioelectric_organ"
+    }
+  },
+  "result": {
+    "item": "neepmeat:converter",
+    "count": 1
+  }
+}

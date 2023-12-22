@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "iBi",
+    "ipi"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "B": {
+      "item": "minecraft:diamond_pickaxe"
+    },
+    "I": {
+      "item": "minecraft:iron_block"
+    }
+  },
+  "result": {
+    "item": "neepmeat:breaker",
+    "count": 1
+  }
+}

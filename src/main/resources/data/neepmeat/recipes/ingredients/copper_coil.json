@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ccc",
+    "c c",
+    "ccc"
+  ],
+  "key": {
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:copper_coil",
+    "count": 8
+  }
+}
