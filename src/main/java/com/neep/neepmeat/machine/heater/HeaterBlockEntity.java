@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.machine.IHeatable;
+import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -25,7 +25,7 @@ public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAccep
 {
     private float influx;
 
-    protected IHeatable heatable;
+    protected Heatable heatable;
     protected int copperTime;
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
@@ -45,14 +45,9 @@ public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAccep
 
     public void refreshCache(World world, BlockPos pos, BlockState state)
     {
-        if (world.getBlockEntity(pos.offset(state.get(HeaterBlock.FACING))) instanceof IHeatable furnace)
-        {
-            heatable = furnace;
-        }
-        else
-        {
-            heatable = null;
-        }
+//        if (world.getBlockEntity(pos.offset(state.get(HeaterBlock.FACING))) instanceof Heatable furnace)
+        BlockPos offsetPos = pos.offset(state.get(HeaterBlock.FACING));
+        heatable = Heatable.LOOKUP.find(world, offsetPos, null);
     }
 
     public void tick()

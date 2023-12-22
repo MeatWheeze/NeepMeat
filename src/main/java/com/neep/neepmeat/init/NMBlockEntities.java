@@ -13,6 +13,8 @@ import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
+import com.neep.neepmeat.machine.HeatableFurnace;
+import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
@@ -75,6 +77,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -177,6 +180,8 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, NMBlockEntities.TANK_BLOCK_ENTITY);
 
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
+        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
+        Heatable.LOOKUP.registerSelf(MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
@@ -239,6 +244,7 @@ public class NMBlockEntities
 
         GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
         ALLOY_KILN = registerBlockEntity("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
+        Heatable.LOOKUP.registerSelf(ALLOY_KILN);
         CRUCIBLE = registerBlockEntity("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), CRUCIBLE);
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUCIBLE);
@@ -340,8 +346,22 @@ public class NMBlockEntities
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getFuelStorage(direction), STIRLING_ENGINE);
 
-        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
+        // --- Furnaces ---
 
+//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.FURNACE);
+//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.BLAST_FURNACE);
+//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.SMOKER);
+        Heatable.LOOKUP.registerFallback((world, pos, state, blockEntity, context) ->
+        {
+            if (blockEntity instanceof AbstractFurnaceBlockEntity furnace)
+            {
+                return HeatableFurnace.of(furnace);
+            }
+            return null;
+        });
+
+
+        // TODO: Remove
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
             if (be instanceof FluidBuffer.FluidBufferProvider provider)

@@ -1,26 +1,27 @@
 package com.neep.neepmeat.machine;
 
+import com.neep.neepmeat.NeepMeat;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.block.BlockState;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public interface IHeatable
+public interface Heatable
 {
     void setBurning();
-
-    default int getCookTimeTotal() {return 0;}
-
-    default int getCookTime() {return 0;}
-
-    default void setCookTime(int time) {}
 
     default void updateState(World world, BlockPos pos, BlockState oldState) {};
 
     void setHeat(float heat);
-    float getHeat();
 
     static int getFurnaceTickIncrement(float heat)
     {
         return (int) Math.floor(heat * 3) + 1;
     }
+
+    BlockApiLookup<Heatable, Void> LOOKUP = BlockApiLookup.get(
+            new Identifier(NeepMeat.NAMESPACE, "heatable"),
+            Heatable.class, Void.class
+    );
 }

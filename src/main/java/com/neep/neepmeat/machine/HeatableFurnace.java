@@ -1,39 +1,65 @@
 package com.neep.neepmeat.machine;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-// An extension of IHeatable that implements default methods for use with interface injection.
 // Only to be used for MixinAbstractFurnaceBlockEntity.
-public interface HeatableFurnace extends IHeatable
+public interface HeatableFurnace
 {
-    @Override
-    default void setBurning()
+    static Heatable of(AbstractFurnaceBlockEntity furnace)
+    {
+        return new Wrapper(furnace);
+    }
+
+    default void neepMeat$setBurning()
     {
 
     }
 
-    @Override
-    default void updateState(World world, BlockPos pos, BlockState oldState)
+    default void neepMeat$updateState(World world, BlockPos pos, BlockState oldState)
     {
 
     }
 
-    @Override
-    default int getCookTimeTotal() { return 0; }
+    default int neepMeat$getCookTimeTotal() { return 0; }
 
-    @Override
-    default int getCookTime() { return 0; }
+    default int neepMeat$getCookTime() { return 0; }
 
-    @Override
-    default void setCookTime(int time) {}
+    default void neepMeat$setCookTime(int time) {}
 
-    @Override
-    default void setHeat(float heat) {}
+    default void neepMeat$setHeat(float heat) {}
 
-    @Override
-    default float getHeat() { return 0; }
+    default float neepMeat$getHeat() { return 0; }
 
-    default boolean isCooking() { return false; }
+    default boolean neepMeat$isCooking() { return false; }
+
+    class Wrapper implements Heatable
+    {
+        private final HeatableFurnace furnace;
+
+        protected Wrapper(HeatableFurnace furnace)
+        {
+            this.furnace = furnace;
+        }
+
+        @Override
+        public void setBurning()
+        {
+            furnace.neepMeat$setBurning();
+        }
+
+        @Override
+        public void updateState(World world, BlockPos pos, BlockState oldState)
+        {
+            furnace.neepMeat$updateState(world, pos, oldState);
+        }
+
+        @Override
+        public void setHeat(float heat)
+        {
+            furnace.neepMeat$setHeat(heat);
+        }
+    }
 }

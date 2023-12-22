@@ -5,7 +5,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.IHeatable;
+import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatable, NamedScreenHandlerFactory
+public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatable, NamedScreenHandlerFactory
 {
     protected int fuelTime;
     protected int burnTime;
@@ -118,7 +118,7 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         {
             if (isCooking())
             {
-                int tickIncrement = IHeatable.getFurnaceTickIncrement(heatMultiplier);
+                int tickIncrement = Heatable.getFurnaceTickIncrement(heatMultiplier);
                 this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + tickIncrement);
             }
             else
@@ -272,29 +272,29 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         this.heatMultiplier = heat;
     }
 
-    @Override
-    public float getHeat()
-    {
-        return heatMultiplier;
-    }
-
-    @Override
-    public int getCookTimeTotal()
-    {
-        return cookTimeTotal;
-    }
-
-    @Override
-    public int getCookTime()
-    {
-        return cookTime;
-    }
-
-    @Override
-    public void setCookTime(int cookTime)
-    {
-        this.cookTime = cookTime;
-    }
+//    @Override
+//    public float getHeat()
+//    {
+//        return heatMultiplier;
+//    }
+//
+//    @Override
+//    public int getCookTimeTotal()
+//    {
+//        return cookTimeTotal;
+//    }
+//
+//    @Override
+//    public int getCookTime()
+//    {
+//        return cookTime;
+//    }
+//
+//    @Override
+//    public void setCookTime(int cookTime)
+//    {
+//        this.cookTime = cookTime;
+//    }
 
     @Override
     public Text getDisplayName()
