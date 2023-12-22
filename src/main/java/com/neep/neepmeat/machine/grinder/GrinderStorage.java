@@ -1,7 +1,5 @@
 package com.neep.neepmeat.machine.grinder;
 
-import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -13,8 +11,6 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class GrinderStorage extends SimpleInventory
@@ -88,7 +84,17 @@ public class GrinderStorage extends SimpleInventory
 
     public void writeNbt(NbtCompound nbt)
     {
-        inputStorage.writeNbt(nbt);
+        NbtCompound inputNbt = new NbtCompound();
+        inputStorage.writeNbt(inputNbt);
+        nbt.put("input", inputNbt);
+
+        NbtCompound outputNbt = new NbtCompound();
+        outputStorage.writeNbt(outputNbt);
+        nbt.put("output", outputNbt);
+
+        NbtCompound extraNbt = new NbtCompound();
+        extraStorage.writeNbt(extraNbt);
+        nbt.put("extra", extraNbt);
 
         NbtCompound xpNbt = new NbtCompound();
         xpStorage.writeNbt(xpNbt);
@@ -97,7 +103,14 @@ public class GrinderStorage extends SimpleInventory
 
     public void readNbt(NbtCompound nbt)
     {
-        inputStorage.readNbt(nbt);
+        NbtCompound inputNbt = nbt.getCompound("input");
+        inputStorage.readNbt(inputNbt);
+
+        NbtCompound outputNbt = nbt.getCompound("output");
+        outputStorage.readNbt(outputNbt);
+
+        NbtCompound extraNbt = nbt.getCompound("extra");
+        extraStorage.readNbt(extraNbt);
 
         NbtCompound xpNbt = nbt.getCompound("xp");
         xpStorage.readNbt(xpNbt);

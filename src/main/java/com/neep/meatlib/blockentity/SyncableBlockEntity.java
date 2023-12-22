@@ -46,6 +46,7 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
     @Override
     public void sync()
     {
+        this.markDirty();
         world.updateListeners(pos, getCachedState(), getCachedState(), Block.NOTIFY_LISTENERS);
     }
 
