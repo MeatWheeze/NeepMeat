@@ -53,6 +53,7 @@
 - Add MultiTank
 
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
+- Fix ConcurrentModificationException when ticking world networks
 - Secure blood machine fluid input detection by transferring irreversible things to a transaction callback
 
 ## Ore Processing

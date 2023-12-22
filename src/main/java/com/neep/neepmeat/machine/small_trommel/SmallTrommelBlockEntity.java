@@ -83,13 +83,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
 
     public void convert()
     {
-        FluidVariant inputVariant = storage.getInputStorage().getResource();
+        FluidVariant inputVariant = storage.input().getResource();
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
             long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
-            long outputAmount = random.nextInt(101) > 10 ? extractable : extractable + extractable;
+            long outputAmount = random.nextInt(101) > 30 ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)
                 return;
