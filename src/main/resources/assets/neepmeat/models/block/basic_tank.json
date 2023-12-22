@@ -266,6 +266,34 @@
 			}
 		}
 	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [-161.2, 49.36, 175.22],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [-30, 0, 43],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [-165, 63, 169],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-165, 63, 169],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"scale": [0.28516, 0.28516, 0.28516]
+		},
+		"gui": {
+			"rotation": [-147, -46, 180],
+			"scale": [0.64, 0.64, 0.64]
+		},
+		"fixed": {
+			"scale": [0.53907, 0.53907, 0.53907]
+		}
+	},
 	"groups": [
 		0,
 		1,
