@@ -14,5 +14,6 @@ public class NMCommonPlugin implements REIServerPlugin, NMREIPlugin
         registry.register(MIXING, MixingDisplay.serializer());
         registry.register(ALLOY_SMELTING, AlloySmeltingDisplay.serializer());
         registry.register(HEART_EXTRACTION, HeartExtractionDisplay.serializer());
+        registry.register(ENLIGHTENING, EnlighteningDisplay.serializer());
     }
 }
