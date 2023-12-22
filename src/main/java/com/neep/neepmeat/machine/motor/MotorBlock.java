@@ -14,6 +14,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -68,7 +69,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     {
         if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
         {
-            be.update(world, pos, fromPos, state);
+            be.update((ServerWorld) world, pos, fromPos, state);
         }
     }
 

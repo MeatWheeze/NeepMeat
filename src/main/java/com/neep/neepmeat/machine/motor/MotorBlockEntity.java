@@ -1,13 +1,14 @@
 package com.neep.neepmeat.machine.motor;
 
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorBlockEntity
@@ -17,7 +18,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     public float currentSpeed = 0;
     public float angle;
 
-    protected IMotorisedBlock cache = null;
+    protected BlockApiCache<Void, Void> cache = null;
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
@@ -37,19 +38,19 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
 
         if (cache == null)
         {
-            update(world, pos, pos, getCachedState());
+            update((ServerWorld) world, pos, pos, getCachedState());
         }
 
-        if (cache != null)
+        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
             float mult = getRunningRate();
-            cache.setWorkMultiplier(mult);
-            cache.tick(this);
+            motorised.setWorkMultiplier(mult);
+            motorised.tick(this);
         }
     }
 
     @Override
-    public void setConnectedBlock(IMotorisedBlock motorised)
+    public void setConnectedBlock(BlockApiCache<Void, Void> motorised)
     {
         this.cache = motorised;
     }
@@ -61,14 +62,14 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     }
 
     @Override
-    public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
+    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         IMotorBlockEntity.super.update(world, pos, fromPos, state);
         enabled = (!world.isReceivingRedstonePower(pos));
     }
 
     @Override
-    public IMotorisedBlock getConnectedBlock()
+    public BlockApiCache<Void, Void> getConnectedBlock()
     {
         return cache;
     }
