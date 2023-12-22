@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.editor;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
@@ -50,6 +51,12 @@ public class ProgramEditorState implements PLCState
         {
             instructionBuilder.argument(argument);
         }
+    }
+
+    @Override
+    public RecordMode getMode()
+    {
+        return RecordMode.RECORD;
     }
 
     public void delete(int index)

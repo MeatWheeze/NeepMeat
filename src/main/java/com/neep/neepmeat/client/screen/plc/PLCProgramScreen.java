@@ -45,8 +45,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
 
-    public RecordMode mode = RecordMode.IMMEDIATE;
-
     public PLCProgramScreen(PLCScreenHandler handler, PlayerInventory playerInventory, Text unused)
     {
         super(unused);
@@ -372,7 +370,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         protected int getU()
         {
-            return 16;
+            return handler.isRunning() ? 32 : 16;
         }
 
         @Override
@@ -392,14 +390,14 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void onClick(double mouseX, double mouseY)
         {
-            mode = RecordMode.cycle(mode);
-            PLCSyncProgram.Client.sendMode(plc, mode);
+            RecordMode newMode = RecordMode.cycle(handler.getMode());
+            PLCSyncProgram.Client.sendMode(plc, newMode);
         }
 
         @Override
         protected int getU()
         {
-            return switch(mode)
+            return switch(handler.getMode())
             {
                 case RECORD -> 64;
                 case IMMEDIATE -> 48;

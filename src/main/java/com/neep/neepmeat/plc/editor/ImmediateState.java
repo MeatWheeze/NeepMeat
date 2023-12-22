@@ -1,5 +1,6 @@
 package com.neep.neepmeat.plc.editor;
 
+import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.instruction.*;
@@ -31,6 +32,7 @@ public class ImmediateState implements PLCState
     private void emitInstruction(Instruction instruction)
     {
         parent.resetError();
+        parent.stopRunning();
 
         if (parent.notExecuting())
             parent.execute(instruction);
@@ -53,18 +55,9 @@ public class ImmediateState implements PLCState
         }
     }
 
-    class Client implements PLCState
+    @Override
+    public RecordMode getMode()
     {
-        @Override
-        public void setInstructionBuilder(InstructionProvider provider)
-        {
-
-        }
-
-        @Override
-        public void argument(Argument argument)
-        {
-
-        }
+        return RecordMode.IMMEDIATE;
     }
 }

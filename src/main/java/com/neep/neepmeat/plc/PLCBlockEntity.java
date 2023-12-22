@@ -9,7 +9,6 @@ import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ImmediateState;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
-import com.neep.neepmeat.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import com.neep.neepmeat.plc.robot.RobotAction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
@@ -28,6 +27,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Queue;
@@ -46,8 +46,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     protected final ProgramEditorState editor = new ProgramEditorState(this);
     protected final ImmediateState immediate = new ImmediateState(this);
-
     private PLCState state;
+
     private Error error;
 
     private PLCPropertyDelegate delegate = new PLCPropertyDelegate();
@@ -222,6 +222,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         }
 
         currentInstruction = instruction;
+        counter = 0;
 
         if (instruction.canStart(this))
         {
@@ -288,6 +289,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             case IMMEDIATE -> state = immediate;
             case RECORD -> state = editor;
         }
+        markDirty();
     }
 
     @Override
@@ -309,26 +311,48 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         buf.writeBlockPos(pos);
     }
 
-    public static class PLCPropertyDelegate implements PropertyDelegate
+    public void stopRunning()
     {
-        public static final int SIZE = 1;
+        program = null;
+    }
+
+    public class PLCPropertyDelegate implements PropertyDelegate
+    {
+        public static final int SIZE = Names.values().length;
 
         @Override
         public int get(int index)
         {
-            return 0;
+            return switch (Names.values()[index])
+            {
+                case PROGRAM_COUNTER -> counter;
+                case EDIT_MODE -> state.getMode().ordinal();
+                case RUNNING -> notExecuting() ? 0 : 1;
+            };
         }
 
         @Override
         public void set(int index, int value)
         {
-
+            switch (Names.values()[index])
+            {
+                case PROGRAM_COUNTER -> counter = value;
+                case EDIT_MODE -> setMode(RecordMode.values()[MathHelper.clamp(value, 0, RecordMode.values().length)]);
+                case RUNNING -> {}
+            }
         }
 
         @Override
         public int size()
         {
             return SIZE;
+        }
+
+        public enum Names
+        {
+            PROGRAM_COUNTER,
+            EDIT_MODE,
+            RUNNING,
         }
     }
 }
