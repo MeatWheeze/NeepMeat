@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "vertical_direction=up": {
+      "model": "neepmeat:block/agitator/body"
+    },
+    "vertical_direction=down": {
+      "model": "neepmeat:block/agitator/body",
+      "x": 180
+    }
+  }
+}

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseVertFacingBlock;
 import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.Block;
@@ -39,12 +40,17 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
         BlockPos pos = context.getBlockPos().offset(context.getSide().getOpposite());
         if (world.getBlockEntity(pos) instanceof IMotorisedBlock)
         {
-            return getDefaultState().with(FACING, world.getBlockState(pos).get(BaseFacingBlock.FACING));
+            BlockState state = world.getBlockState(pos);
+            if(state.getBlock() instanceof BaseFacingBlock)
+            {
+                return getDefaultState().with(FACING, state.get(BaseFacingBlock.FACING));
+            }
+            else if (state.getBlock() instanceof BaseVertFacingBlock)
+            {
+                return getDefaultState().with(FACING, state.get(BaseVertFacingBlock.FACING));
+            }
         }
-        else
-        {
-            return super.getPlacementState(context);
-        }
+        return super.getPlacementState(context);
     }
 
     @Override
