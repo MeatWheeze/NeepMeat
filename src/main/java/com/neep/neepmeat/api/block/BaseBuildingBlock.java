@@ -14,20 +14,20 @@ public class BaseBuildingBlock extends Block implements NMBlock
         super(settings);
 
         BaseStairsBlock stairs = new BaseStairsBlock(this.getDefaultState(),blockName + "_stairs", itemMaxStack, settings);
-        BlockInitialiser.BLOCKS.put(stairs.getRegistryName(), stairs);
+        BlockInitialiser.queueBlock(stairs);
 
         BaseSlabBlock slab = new BaseSlabBlock(this.getDefaultState(),blockName + "_slab", itemMaxStack, settings);
-        BlockInitialiser.BLOCKS.put(slab.getRegistryName(), slab);
+        BlockInitialiser.queueBlock(slab);
 
         if (makeWall)
         {
             BaseWallBlock wall = new BaseWallBlock(blockName + "_wall", itemMaxStack, settings);
-            BlockInitialiser.BLOCKS.put(wall.getRegistryName(), wall);
+            BlockInitialiser.queueBlock(wall);
         }
 
         this.registryName = blockName;
         this.blockItem = new BaseBlockItem(this, blockName, itemMaxStack, false);
-        BlockInitialiser.BLOCKS.put(getRegistryName(), this);
+        BlockInitialiser.queueBlock(this);
 
     }
 

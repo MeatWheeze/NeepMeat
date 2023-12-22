@@ -32,14 +32,14 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
         super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
 
         stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
-        BlockInitialiser.BLOCKS.put(stairs.getRegistryName(), stairs);
+        BlockInitialiser.queueBlock(stairs);
 
         slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
-        BlockInitialiser.BLOCKS.put(slab.getRegistryName(), slab);
+        BlockInitialiser.queueBlock(slab);
 
         this.registryName = registryName;
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
-        BlockInitialiser.BLOCKS.put(getRegistryName(), this);
+        BlockInitialiser.queueBlock(this);
     }
 
     public BlockItem getBlockItem()
