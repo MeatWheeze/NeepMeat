@@ -59,7 +59,8 @@ public class FluidNetwork
     public static void tickNetwork(ServerWorld world)
     {
         List<FluidNode> removal = new ArrayList<>();
-        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.iterator(); it.hasNext();)
+        List<FluidNode> ooer = new ArrayList<>(WORLD_NETWORKS.get(world).queuedNodes);
+        for (Iterator<FluidNode> it = ooer.iterator(); it.hasNext();)
         {
             FluidNode node = it.next();
             node.loadDeferred(world);
