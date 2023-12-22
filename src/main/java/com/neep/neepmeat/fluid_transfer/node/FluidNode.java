@@ -38,8 +38,15 @@ public class FluidNode
 
     private boolean canInsert;
     private boolean canExtract;
+    public boolean isStorage;
 
     public boolean needsDeferredLoading;
+
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier, boolean isStorage)
+    {
+        this(nodePos, storage, mode, flowMultiplier);
+        this.isStorage = isStorage;
+    }
 
     public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
@@ -49,10 +56,11 @@ public class FluidNode
         this.storage = storage;
         this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
+        this.isStorage = true;
     }
 
     // For deferred loading only.
-    protected FluidNode(NodePos pos, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world)
+    protected FluidNode(NodePos pos, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world, boolean isStorage)
     {
         this.face = pos.face;
         this.pos = pos.pos;
@@ -61,6 +69,7 @@ public class FluidNode
         this.flow = mode.getFlow() * flowMultiplier;
         this.networkId = networkId;
         this.storage = null;
+        this.isStorage = isStorage;
         this.needsDeferredLoading = true;
 
         FluidNetwork.getInstance(world).queueNode(this);
@@ -80,8 +89,9 @@ public class FluidNode
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
         long networkId = nbt.getLong("network_id");
         float flowMultiplier = nbt.getFloat("multiplier");
+        boolean isStorage = nbt.getBoolean("is_storage");
 
-        return new FluidNode(pos, mode, flowMultiplier, networkId, world);
+        return new FluidNode(pos, mode, flowMultiplier, networkId, world, isStorage);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
@@ -89,6 +99,7 @@ public class FluidNode
         nbt.put("pos", nodePos.toNbt(new NbtCompound()));
         nbt.putLong("network_id", networkId);
         nbt.putFloat("multiplier", flowMultiplier);
+        nbt.putBoolean("is_storage", isStorage);
         return nbt;
     }
 
@@ -205,7 +216,7 @@ public class FluidNode
 
     public Storage<FluidVariant> getStorage(ServerWorld world)
     {
-        if (!world.getServer().isOnThread())
+        if (!world.getServer().isOnThread() || !isStorage)
         {
             return null;
         }
@@ -233,6 +244,8 @@ public class FluidNode
         if (distances.get(node) == null
                 || node.getMode(world) == AcceptorModes.NONE
                 || this.getMode(world) == AcceptorModes.NONE
+                || !node.isStorage
+                || !this.isStorage
                 )
         {
             return;
@@ -258,6 +271,11 @@ public class FluidNode
         // Calculate sum(r^4 / L_i), discounting full containers.
         for (FluidNode distanceNode : distances.keySet())
         {
+            if (distanceNode.getStorage(world) == null)
+            {
+                continue;
+            }
+
             Transaction transaction = Transaction.openOuter();
 
             boolean notFull = false;

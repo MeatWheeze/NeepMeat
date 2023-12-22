@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/pressure_gauge",
+      "y": -90,
+      "x": 90
+    },
+    "facing=north": {
+      "model": "neepmeat:block/pressure_gauge",
+      "y": 180,
+      "x": 90
+    },
+    "facing=south": {
+      "model": "neepmeat:block/pressure_gauge",
+      "y": 0,
+      "x": 90
+    },
+    "facing=west": {
+      "model": "neepmeat:block/pressure_gauge",
+      "y": 90,
+      "x": 90
+    },
+    "facing=up": {
+      "model": "neepmeat:block/pressure_gauge",
+      "x": 180
+    },
+    "facing=down": {
+      "model": "neepmeat:block/pressure_gauge",
+      "x": 0
+    }
+  }
+}

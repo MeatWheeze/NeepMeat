@@ -29,7 +29,7 @@ public class NMFluidNetwork
 
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
 
-    private final Map<BlockPos, PipeState> networkPipes = new HashMap<>();
+    public final Map<BlockPos, PipeState> networkPipes = new HashMap<>();
     private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
@@ -186,11 +186,13 @@ public class NMFluidNetwork
             for (Supplier<FluidNode> targetSupplier : sorted)
             {
                 FluidNode targetNode;
-                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null || supplier.get().getStorage((ServerWorld) world) == null)
+                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null
+                        || supplier.get().getStorage(world) == null || targetSupplier.get().getStorage(world) == null
+                        || !supplier.get().isStorage || !targetSupplier.get().isStorage)
                 {
                     continue;
                 }
-                node.transmitFluid((ServerWorld) world, targetNode);
+                node.transmitFluid(world, targetNode);
             }
         }
     }
@@ -287,6 +289,14 @@ public class NMFluidNetwork
                                 {
                                     connectedNodes.add(node);
                                 }
+                            }
+                        }
+                        else if (state2.getBlock() instanceof FluidNodeProvider)
+                        {
+                            Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
+                            if (node.get() != null)
+                            {
+                                connectedNodes.add(node);
                             }
                         }
                     }

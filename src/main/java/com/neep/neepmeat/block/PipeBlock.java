@@ -220,8 +220,8 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             {
                 System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
                 System.out.println("block entity: " + world.getBlockEntity(pos));
-//                return ActionResult.SUCCESS;
-                direction = direction.getOpposite();
+                return ActionResult.SUCCESS;
+//                direction = direction.getOpposite();
             }
 
             Vec3d hitPos = hit.getPos();
