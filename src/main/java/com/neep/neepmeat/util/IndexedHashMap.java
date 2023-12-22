@@ -7,7 +7,7 @@ import java.util.List;
 public class IndexedHashMap<K, V> implements Cloneable
 {
     // Tests indicated that subscript iteration through an ArrayList can be 1/3000 times faster than iterating through a Map's entry set.
-    // This was an attempt to have a Map-like thing that provided subscript iteration. There is probably a better solution,
+    // This was an attempt to have a Map-like thing that provided subscript iteration. There is probably a better solution
     // that I am unaware of.
 
     protected HashMap<K, V> map;

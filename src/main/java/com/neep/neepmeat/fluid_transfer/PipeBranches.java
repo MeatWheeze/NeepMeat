@@ -3,7 +3,10 @@ package com.neep.neepmeat.fluid_transfer;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -13,6 +16,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnstableApiUsage")
 public class PipeBranches extends HashMap<Long, PipeState>
 {
     public static void test(ServerWorld world, HashSet<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
@@ -24,7 +28,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
             NodePos start = list.get(0).get().getNodePos();
             NodePos end = list.get(1).get().getNodePos();
-            Map<BlockPos, Integer> distances = shortestPath(world, start, end, pipes);
+            PipeState.FilterFunction distances = shortestPath(world, start, end, pipes);
             System.out.println(distances);
         }
         else
@@ -33,25 +37,25 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static void displayMatrix(Function<Long, Long>[][] matrix)
+    public static void displayMatrix(PipeState.FilterFunction[][] matrix)
     {
         for (int i = 0; i < matrix.length; ++i)
         {
             for (int j = 0; j < matrix[0].length; ++j)
             {
-                long out = matrix[i][j].apply(PipeNetwork.BASE_TRANSFER);
+                long out = matrix[i][j].applyVariant(FluidVariant.of(Fluids.WATER), PipeNetwork.BASE_TRANSFER);
                 System.out.print(out + " ");
             }
             System.out.println();
         }
     }
 
-    public static Function<Long, Long>[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         int size = nodes.size();
 
         // Initialise matrix
-        Function<Long, Long>[][] matrix = (Function<Long, Long>[][]) Array.newInstance(Function.class, size, size);
+        PipeState.FilterFunction[][] matrix = (PipeState.FilterFunction[][]) Array.newInstance(PipeState.FilterFunction.class, size, size);
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
@@ -59,7 +63,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 if (i == j)
                     matrix[i][j] = PipeState::zero;
                 else
-                    matrix[i][j] = Function.identity();
+                    matrix[i][j] = PipeState::identity;
             }
         }
 
@@ -77,12 +81,12 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
                 NodePos start = fromNode.get().getNodePos();
                 NodePos end = toNode.get().getNodePos();
-                Map<BlockPos, Integer> distances;
-                if ((distances = shortestPath(world, start, end, pipes)) != null)
+                PipeState.FilterFunction filterFunction;
+                if ((filterFunction = shortestPath(world, start, end, pipes)) != null)
                 {
 //                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
-//                    matrix[i][j] = function;
-                    matrix[i][j] = Function.identity();
+                    matrix[i][j] = filterFunction;
+//                    matrix[i][j] = PipeState::identity;
                 }
                 else
                 {
@@ -92,6 +96,15 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
         return matrix;
     }
+
+//    public static BiFunction<FluidVariant, Long, Long> collectFunctions(World world, List<Pair<PipeState.ISpecialPipe, Direction>> functions)
+//    {
+//        BiFunction<FluidVariant, Long, Long> flow = PipeState::identity;
+//        for (Pair<PipeState.ISpecialPipe, Direction> pair : functions)
+//        {
+//            flow = flow.andThen(pair.getLeft().getFlowFunction(world, pair.getRight(), pos, world.getBlockState(pos)));
+//        }
+//    }
 
     public static IndexedHashMap<BlockPos, PipeState> removeDeadEnds(ServerWorld world, IndexedHashMap<BlockPos, PipeState> pipes)
     {
@@ -175,10 +188,14 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    // It's rather inefficient and janky
-    public static Map<BlockPos, Integer> shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
+    /** It's rather inefficient and janky.
+     * @return Resulting flow-limiting function of all special pipes in the shortest route. Null if there is no route between two nodes,
+     */
+    public static PipeState.FilterFunction shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         Map<BlockPos, Integer> distances = new LinkedHashMap<>();
+        List<Pair<PipeState.ISpecialPipe, Direction>> specials = new ArrayList<>();
+        PipeState.FilterFunction flowFunc = PipeState::identity;
         Queue<BlockPos> queue = new LinkedList<>();
         List<BlockPos> visited = new ArrayList<>();
         Direction reverse = end.face.getOpposite();
@@ -194,19 +211,18 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
         while (!queue.isEmpty())
         {
-            BlockPos pos = queue.peek();
+            BlockPos pos = queue.poll();
             int dist = distances.get(pos);
 
             if (pos.equals(start.pos))
             {
-                return distances;
+                return flowFunc;
             }
 
             visited.add(pos);
-            queue.remove();
+//            queue.remove();
 
             PipeState pipe = pipes.get(pos);
-
 
             for (Direction connection : pipe.connections)
             {
@@ -214,9 +230,16 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 if (!visited.contains(offset) && pipes.get(offset) != null)
                 {
                     // Check if pipe can transfer fluid in the opposite direction
-                    if (!pipes.get(offset).canFluidFlow(connection.getOpposite(), world.getBlockState(offset)))
+                    PipeState offsetPipe = pipes.get(offset);
+                    if (!offsetPipe.canFluidFlow(connection.getOpposite(), world.getBlockState(offset)))
                     {
                         continue;
+                    }
+
+                    if (offsetPipe.isSpecial())
+                    {
+//                        specials.add(new Pair<>(offsetPipe.getSpecial(), connection.getOpposite()));
+                        flowFunc = flowFunc.andThen(offsetPipe.getSpecial().getFlowFunction(world, connection.getOpposite(), offset, world.getBlockState(offset)));
                     }
 
                     distances.put(offset, dist + 1);
@@ -244,7 +267,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
             PipeState.ISpecialPipe special;
             if ((special = pipe.getSpecial()) != null)
             {
-                flow = flow.andThen(special.getFlowFunction(fromDir, world.getBlockState(pos)));
+//                flow = flow.andThen(special.getFlowFunction(fromDir, world.getBlockState(pos)));
             }
 
             for (Direction direction : pipe.connections)

@@ -20,7 +20,6 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -39,7 +38,7 @@ public class PipeNetwork
     public List<Supplier<FluidNode>> connectedNodes = new ArrayList<>();
 
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
-    protected Function<Long, Long>[][] nodeMatrix = null;
+    protected PipeState.FilterFunction[][] nodeMatrix = null;
 
 
     // My pet memory leak.
@@ -219,7 +218,6 @@ public class PipeNetwork
             List<Supplier<FluidNode>> safeNodes;
             try (Transaction t2 = Transaction.openOuter())
             {
-                // TODO: Is this faster than a stream?
                 Predicate<Supplier<FluidNode>> predicate = ((Predicate<Supplier<FluidNode>>)
                         (supplier -> validForInsertion(world, node, supplier)))
                         .and(supplier -> supplier.get().canInsert(world, t2));
@@ -281,7 +279,9 @@ public class PipeNetwork
                 }
 
                 // Apply corresponding thingy
-                Q = nodeMatrix[i][j].apply(Q);
+
+//                Q = nodeMatrix[i][j].applyVariant(Q);
+
 //                System.out.println(nodeMatrix[0][1].apply(100L));
 //                System.out.println("i: " + i + ", j: " + j + ", Q: " + Q);
 
@@ -289,7 +289,8 @@ public class PipeNetwork
                 if (Q >= 0)
                 {
                     Transaction t3 = Transaction.openOuter();
-                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, Q, t3);
+                    int finalI = i;
+                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t3);
                     t3.commit();
                 }
             }
