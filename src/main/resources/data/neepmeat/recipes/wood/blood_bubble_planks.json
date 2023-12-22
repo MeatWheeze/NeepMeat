@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "planks",
+  "ingredients": [
+    {
+      "tag": "neepmeat:blood_bubble_logs"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:blood_bubble_planks",
+    "count": 4
+  }
+}

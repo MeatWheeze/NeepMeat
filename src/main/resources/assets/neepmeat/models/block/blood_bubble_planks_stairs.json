@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "neepmeat:block/blood_bubble_planks",
+    "top": "neepmeat:block/blood_bubble_planks",
+    "side": "neepmeat:block/blood_bubble_planks"
+  }
+}

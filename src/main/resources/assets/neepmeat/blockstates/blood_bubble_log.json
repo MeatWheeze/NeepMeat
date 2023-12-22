@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "neepmeat:block/blood_bubble/log",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "neepmeat:block/blood_bubble/log"
+    },
+    "axis=z": {
+      "model": "neepmeat:block/blood_bubble/log",
+      "x": 90
+    }
+  }
+}

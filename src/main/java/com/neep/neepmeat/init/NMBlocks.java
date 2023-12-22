@@ -6,6 +6,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
@@ -154,7 +155,14 @@ public class NMBlocks
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
     public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
-    public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new OakSaplingGenerator(), 0, FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
+    public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new BloodBubbleTreeGenerator(), 0, FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
+
+    public static final FabricBlockSettings BB_SETTINGS = FabricBlockSettings.of(Material.WOOD).strength(1.1f).sounds(BlockSoundGroup.METAL);
+    public static Block BLOOD_BUBBLE_LOG = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_log", false));
+    public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_wood", false));
+    public static Block BLOOD_BUBBLE_LEAVES= BlockRegistry.queue(BlockRegistry.createLeavesBlock("blood_bubble_leaves", BlockSoundGroup.AZALEA_LEAVES));
+    public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = BlockRegistry.queue(BlockRegistry.createLeavesBlock("blood_bubble_leaves_flowering", BlockSoundGroup.SLIME));
+    public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock("blood_bubble_planks", 64, true, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD));
 
     // --- Assembly ---
     public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
@@ -165,3 +173,4 @@ public class NMBlocks
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
 
 }
+
