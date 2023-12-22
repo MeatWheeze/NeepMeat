@@ -121,7 +121,9 @@
   "block.neepmeat.content_detector.lore_0": "Detects certain items in the inventory it faces.",
 
   "block.neepmeat.basic_tank": "Basic Tank",
+  "block.neepmeat.basic_tank.filled": "Basic Tank (%s)",
   "block.neepmeat.basic_glass_tank": "Glass Tank",
+  "block.neepmeat.basic_glass_tank.filled": "Glass Tank (%s)",
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
   "block.neepmeat.fluid_buffer.lore_0": "Holds 1/3 of a bucket.",
   "block.neepmeat.fluid_drain": "Fluid Drain",
