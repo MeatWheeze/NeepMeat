@@ -54,17 +54,20 @@ public class ItemBufferBlockEntity extends SyncableBlockEntity
     public void extractFromItem(ItemEntity itemEntity)
     {
         ItemStack itemStack = itemEntity.getStack();
+        if (itemStack.isEmpty())
+            return;
 
-        Transaction transaction = Transaction.openOuter();
-
-        int transferred = (int) storage.insert(ItemVariant.of(itemStack), itemStack.getCount(), transaction);
-        itemStack.decrement(transferred);
-        if (itemStack.getCount() <= 0)
+        try (Transaction transaction = Transaction.openOuter())
         {
-            itemEntity.discard();
-        }
+            int transferred = (int) storage.insert(ItemVariant.of(itemStack), itemStack.getCount(), transaction);
+            itemStack.decrement(transferred);
+            if (itemStack.getCount() <= 0)
+            {
+                itemEntity.discard();
+            }
 
-        transaction.commit();
+            transaction.commit();
+        }
 
     }
 }
