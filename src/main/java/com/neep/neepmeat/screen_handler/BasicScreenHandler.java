@@ -14,7 +14,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
 {
     protected Inventory inventory;
     protected PlayerInventory playerInventory;
-    @Nullable protected final PropertyDelegate propertyDelegate;
+    @Nullable protected PropertyDelegate propertyDelegate;
 
     protected BasicScreenHandler(@Nullable ScreenHandlerType<?> type, PlayerInventory playerInventory, @Nullable Inventory inventory, int syncId, @Nullable PropertyDelegate delegate)
     {
@@ -32,7 +32,7 @@ public abstract class BasicScreenHandler extends ScreenHandler
     public int getProperty(int i)
     {
         if (propertyDelegate != null) return propertyDelegate.get(i);
-        return -1;
+        return 0;
     }
 
     public void setProperty(int i, int value)

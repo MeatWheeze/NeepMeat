@@ -159,6 +159,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
         HandledScreens.register(ScreenHandlerInit.GUIDE, GuideScreen::new);
+        HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
     }
 
     public static void registerLayers()

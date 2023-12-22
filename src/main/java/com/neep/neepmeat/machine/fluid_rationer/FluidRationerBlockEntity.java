@@ -5,8 +5,11 @@ import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.screen_handler.FluidRationerScreenHandler;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -15,16 +18,24 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidRationerBlockEntity extends SyncableBlockEntity
+public class FluidRationerBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
-    protected final WritableSingleFluidStorage outputStorage;
+    protected final FluidRationerStorage outputStorage;
     protected final FluidPump outPump = FluidPump.of(0.1f, this::getOutMode, true);
 
     protected AcceptorModes inMode = AcceptorModes.PULL;
@@ -34,12 +45,41 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity
 
     protected BlockApiCache<Storage<FluidVariant>, Direction> cache;
 
-    protected long targetAmount = 81000;
+    protected int targetAmount = 81000;
+
+    protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
+    {
+        @Override
+        public int get(int index)
+        {
+            return switch (index)
+                    {
+                        case 0 -> targetAmount;
+                        default -> 0;
+                    };
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+            switch (index)
+            {
+                case 0 -> targetAmount = value;
+            }
+            markDirty();
+        }
+
+        @Override
+        public int size()
+        {
+            return FluidRationerScreenHandler.PROPERTIES;
+        }
+    };
 
     public FluidRationerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.outputStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 4, this::markDirty);
+        this.outputStorage = new FluidRationerStorage(FluidConstants.BUCKET * 4, this::markDirty);
         this.state = State.IDLE;
     }
 
@@ -70,7 +110,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity
                 FluidVariant variant = MeatStorageUtil.findExtractableResource(storage, (t, v, a) -> a >= targetAmount, transaction);
                 if (variant != null)
                 {
-                    if (StorageUtil.move(storage, outputStorage, v -> true, targetAmount, transaction) == targetAmount)
+                    if (StorageUtil.move(storage, outputStorage, this.outputStorage::matchesFilter, targetAmount, transaction) == targetAmount)
                     {
                         state = State.PUSHING;
                         inMode = AcceptorModes.NONE;
@@ -130,7 +170,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity
         nbt.putInt("state", state.ordinal());
         nbt.putInt("inMode", inMode.ordinal());
         nbt.putInt("outMode", outMode.ordinal());
-        nbt.putLong("targetAmount", targetAmount);
+        nbt.putInt("targetAmount", targetAmount);
     }
 
     @Override
@@ -141,7 +181,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity
         this.state = State.values()[nbt.getInt("state")];
         this.inMode = AcceptorModes.values()[nbt.getInt("inMode")];
         this.outMode = AcceptorModes.values()[nbt.getInt("outMode")];
-        this.targetAmount = nbt.getLong("targetAmount");
+        this.targetAmount = nbt.getInt("targetAmount");
     }
 
     public void updateCache()
@@ -151,6 +191,26 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity
             BlockPos behind = pos.offset(getCachedState().get(FluidRationerBlock.FACING).getOpposite());
             cache = BlockApiCache.create(FluidStorage.SIDED, serverWorld, behind);
         }
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+//        return new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer");
+        return NMBlocks.FLUID_RATIONER.getName();
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
+    {
+        return new FluidRationerScreenHandler(syncId, inv, outputStorage.inventory, propertyDelegate);
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
+    {
+        buf.writeVarInt(targetAmount);
     }
 
     public enum State
