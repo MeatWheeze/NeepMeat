@@ -1,14 +1,16 @@
 package com.neep.neepmeat.init;
 
-import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.fluid.*;
+import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.item.BaseBucketItem;
 import com.neep.neepmeat.machine.FluidFuelRegistry;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
@@ -63,7 +65,7 @@ public class NMFluids
     public static FlowableFluid STILL_ORE_FAT;
     public static Item ORE_FAT_BUCKET;
     public static Block ORE_FAT;
-    public static FluidFactory ORE_FAT_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
+    public static OreFatFluidFactory ORE_FAT_FACTORY = new OreFatFluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;

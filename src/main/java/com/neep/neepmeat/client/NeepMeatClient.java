@@ -2,6 +2,7 @@ package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
@@ -29,6 +30,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
@@ -167,6 +169,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         FluidVariantRendering.register(NMFluids.STILL_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantRendering.register(NMFluids.FLOWING_ORE_FAT, new OreFatFluidVariantRenderHandler());
+        FluidVariantAttributes.register(NMFluids.STILL_ORE_FAT, new OreFatAttributeHandler());
+        FluidVariantAttributes.register(NMFluids.FLOWING_ORE_FAT, new OreFatAttributeHandler());
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {

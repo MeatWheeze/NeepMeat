@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 @SuppressWarnings("UnstableApiUsage")
 public class TransducerBlockEntity extends SyncableBlockEntity
 {
-    protected short baseAmount = (short) (FluidConstants.BUCKET / 300 / 2);
+    protected int baseAmount = (short) (FluidConstants.BUCKET / 150);
 
     protected WritableSingleFluidStorage storage = new WritableSingleFluidStorage(FluidConstants.BUCKET, this::markDirty)
     {

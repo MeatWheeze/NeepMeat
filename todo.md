@@ -48,7 +48,8 @@
 - Improve world loading speed by serialising fluid networks
 - Add torque shaft
 - Add coloured fluid pipes
-- Create REI plugin
+- [done] Create REI plugin
+- Add Caution Tape (looks similar to redstone)
 
 ## Ore Processing
 

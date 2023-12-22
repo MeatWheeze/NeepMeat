@@ -6,7 +6,7 @@
   },
   "fluid1": {
     "resource": "minecraft:water",
-    "amount": 81000
+    "amount": 27000
   },
   "fluid2":{
     "resource": "minecraft:empty",
@@ -14,7 +14,7 @@
   },
   "output":{
     "resource": "neepmeat:eldritch_enzymes",
-    "amount": 81000
+    "amount": 27000
   },
-  "processtime": 60
+  "processtime": 20
 }

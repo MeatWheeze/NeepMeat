@@ -33,7 +33,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     protected InputStorage inputStorage = new InputStorage();
 
     protected boolean enabled = true;
-    public long maxRunningRate = FluidConstants.BUCKET;
+    public long maxRunningRate = FluidConstants.BUCKET / 2;
     public long exhaustBufferSize = FluidConstants.BUCKET * 2;
 
     protected long runningRate;

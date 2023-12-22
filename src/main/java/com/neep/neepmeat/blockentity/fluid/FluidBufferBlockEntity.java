@@ -23,7 +23,7 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
     public FluidBufferBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new WritableSingleFluidStorage((FluidConstants.BUCKET / 9 * 2), this::sync);
+        this.buffer = new WritableSingleFluidStorage((FluidConstants.BUCKET / 3), this::sync);
     }
 
     public FluidBufferBlockEntity(BlockPos pos, BlockState state)

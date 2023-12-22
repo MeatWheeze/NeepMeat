@@ -1,14 +1,19 @@
 package com.neep.neepmeat.machine.small_trommel;
 
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.Objects;
 
-public class TrommelStorage implements NbtSerialisable
+public class TrommelStorage implements NbtSerialisable, ImplementedRecipe.DummyInventory
 {
     protected WritableSingleFluidStorage fluidInput;
     protected WritableSingleFluidStorage fluidOutput;
@@ -46,5 +51,10 @@ public class TrommelStorage implements NbtSerialisable
         this.fluidInput.readNbt((NbtCompound) Objects.requireNonNull(nbt.get("fluidInput")));
         this.fluidOutput.readNbt((NbtCompound) Objects.requireNonNull(nbt.get("fluidOutput")));
         this.itemOutput.readNbt((NbtCompound) Objects.requireNonNull(nbt.get("itemOutput")));
+    }
+
+    public StorageView<FluidVariant> getInputStorage()
+    {
+        return fluidInput;
     }
 }
