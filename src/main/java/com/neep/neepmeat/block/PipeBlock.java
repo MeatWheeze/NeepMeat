@@ -10,6 +10,7 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -20,6 +21,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class PipeBlock extends BaseBlock implements FluidAcceptor
@@ -188,7 +191,9 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
-        boolean connection = this.connectInDirection(world, pos, direction);
+        BlockState targetState = world.getBlockState(pos.offset(direction));
+        boolean connection = canConnectTo(targetState, direction.getOpposite());
+
         if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
         {
             return state.with(DIR_TO_CONNECTION.get(direction), connection);
@@ -228,11 +233,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 ;
     }
 
-    public static boolean isConnectedIn(BlockState state, Direction direction)
-    {
-        return state.get(DIR_TO_CONNECTION.get(direction));
-    }
-
     private BlockState getConnections(BlockView world, BlockState state, BlockPos pos)
     {
         for (Direction direction : Direction.values())
@@ -244,12 +244,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
             state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite()));
         }
         return state;
-    }
-
-    private boolean connectInDirection(WorldAccess world, BlockPos pos, Direction direction)
-    {
-        BlockState targetState = world.getBlockState(pos.offset(direction));
-        return canConnectTo(targetState, direction.getOpposite());
     }
 
     @Override
@@ -280,6 +274,49 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 //        }
         }
         return ActionResult.PASS;
+    }
+
+    public static Pair<List<BlockPos>, List<BlockPos>> findNodes(BlockPos pos, Direction fromDirection, List<BlockPos> visited, World world, int level)
+    {
+        System.out.println(pos.toString());
+        List<BlockPos> list = new ArrayList<>();
+        visited.add(pos);
+        if (level > 0)
+        {
+            for (Direction direction : Direction.values())
+            {
+                BlockPos pos2 = pos.offset(direction);
+                BlockState state = world.getBlockState(pos);
+                BlockState state2 = world.getBlockState(pos2);
+
+                if (FluidAcceptor.isConnectedIn(state, direction))
+                {
+                    if (state2.getBlock() instanceof FluidAcceptor
+                            && !(state2.getBlock() instanceof FluidNodeProvider)
+                            && !visited.contains(pos2)
+                            && direction != fromDirection)
+                    {
+                        // Next block is connected in opposite direction
+                        if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
+                        {
+                            // Continue searching and add nodes.
+                            Pair<List<BlockPos>, List<BlockPos>> pair = findNodes(pos2, direction.getOpposite(), visited, world, level - 1);
+                            list.addAll(pair.getLeft());
+                            visited.addAll(pair.getRight());
+                        }
+                    }
+                    else if (state2.getBlock() instanceof FluidNodeProvider && direction != fromDirection)
+                    {
+                        if (((FluidNodeProvider) state2.getBlock()).connectInDirection(state2, direction.getOpposite()))
+                        {
+//                            System.out.println(pos2.toString());
+                            list.add(pos2);
+                        }
+                    }
+                }
+            }
+        }
+        return new Pair<>(list, visited);
     }
 
     @Override
