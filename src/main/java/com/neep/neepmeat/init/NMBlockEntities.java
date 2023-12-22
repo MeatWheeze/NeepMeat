@@ -3,7 +3,6 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
@@ -47,7 +46,7 @@ public class NMBlockEntities
     public static BlockEntityType<ConverterBlockEntity> LARGE_CONVERTER;
 
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
-    public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
+    public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
     public static BlockEntityType<SpigotBlockEntity> SPIGOT;
@@ -76,7 +75,7 @@ public class NMBlockEntities
         STOP_VALVE = registerBlockEntity("stop_valve", StopValveBlockEntity::new, NMBlocks.STOP_VALVE);
 
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
-        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, NMBlocks.FLUID_PORT);
+        FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
 
@@ -111,7 +110,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
-        FluidStorage.SIDED.registerSelf(FLUID_PORT);
+        FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
 
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
         ItemStorage.SIDED.registerSelf(DEPLOYER);
