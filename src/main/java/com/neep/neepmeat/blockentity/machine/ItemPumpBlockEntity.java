@@ -102,6 +102,7 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
             }
             else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
             {
+//                System.out.println(be.retrievalCache);
                 for (RetrievalTarget<ItemVariant> target : be.retrievalCache)
                 {
                     Storage<ItemVariant> targetStorage = target.find();
