@@ -2,11 +2,20 @@ package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
@@ -23,8 +32,7 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
     public TankBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.TANK_BLOCK_ENTITY, pos, state);
-        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
+        this(NMBlockEntities.TANK_BLOCK_ENTITY, pos, state);
     }
 
     @Override
@@ -42,7 +50,6 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         buffer.readNBT(tag);
     }
 
-
     @Override
     @Nullable
     public WritableFluidBuffer getBuffer(Direction direction)
@@ -55,4 +62,30 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     {
 
     }
+
+    public boolean onUse(PlayerEntity player, Hand hand)
+    {
+        ItemStack stack = player.getStackInHand(hand);
+        Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
+        if (storage != null)
+        {
+            if (StorageUtil.move(storage, getBuffer(null), variant -> true, Long.MAX_VALUE, null) > 0)
+                return true;
+
+            if (StorageUtil.move(getBuffer(null), storage, variant -> true, Long.MAX_VALUE, null) > 0)
+                return true;
+        }
+
+        else /*if (!world.isClient)*/
+        {
+            player.sendMessage(Text.of(Float.toString(getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+            return true;
+        }
+        return false;
+    }
+
+//    public NbtCompound getStackNbt()
+//    {
+//
+//    }
 }

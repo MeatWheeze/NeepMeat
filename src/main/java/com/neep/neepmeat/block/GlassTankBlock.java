@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class GlassTankBlock extends BaseColumnBlock implements BlockEntityProvider
+public class GlassTankBlock extends TankBlock implements BlockEntityProvider
 {
     public GlassTankBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -40,13 +40,6 @@ public class GlassTankBlock extends BaseColumnBlock implements BlockEntityProvid
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (!world.isClient)
-        {
-            if (world.getBlockEntity(pos) instanceof GlassTankBlockEntity be)
-            {
-                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
-            }
-        }
-        return ActionResult.SUCCESS;
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 }
