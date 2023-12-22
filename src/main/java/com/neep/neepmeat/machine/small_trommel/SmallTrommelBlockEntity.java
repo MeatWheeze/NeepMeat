@@ -43,7 +43,6 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     protected float progress;
     public float renderProgress;
     private float progressIncrement;
-    private float workMultiplier;
     protected Random random;
 
     public SmallTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -72,9 +71,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+
+        storage.writeNbt(nbt);
+
         nbt.putFloat("progress", progress);
         nbt.putFloat("progressIncrement", progressIncrement);
         nbt.putInt("totalProgress", totalProgress);
+
         if (currentFluid != null)
             nbt.put("currentFluid", currentFluid.toNbt());
     }
@@ -83,6 +86,9 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+
+        storage.readNbt(nbt);
+
         this.progress = nbt.getFloat("progress");
         this.progressIncrement = nbt.getFloat("progressIncrement");
         this.totalProgress = nbt.getInt("totalProgress");
@@ -166,7 +172,6 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     @Override
     public void setInputPower(float power)
     {
-        this.workMultiplier = power;
         this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 
