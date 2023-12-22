@@ -1,23 +1,20 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.ItemIngredient;
-import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.util.ItemInPipe;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.entry.ItemEntry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
@@ -101,6 +98,14 @@ public class GrinderBlockEntity extends SyncableBlockEntity
     public void tick()
     {
         readCurrentRecipe();
+        if (!storage.getOutputStorage().isEmpty())
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                ejectOutput(transaction);
+            }
+        }
+
         if (currentRecipe != null)
         {
             ++progress;
@@ -172,9 +177,14 @@ public class GrinderBlockEntity extends SyncableBlockEntity
 
         BlockPos offsetPos = pos.offset(facing);
         BlockState offsetState = world.getBlockState(offsetPos);
+        Storage<ItemVariant> ejectStorage;
         if (offsetState.getBlock() instanceof IItemPipe pipe && pipe.getConnections(offsetState, d -> true).contains(facing.getOpposite()))
         {
             pipe.insert(world, offsetPos, offsetState, facing.getOpposite(), new ItemInPipe(stack, world.getTime()));
+        }
+        else if ((ejectStorage = ItemStorage.SIDED.find(world, offsetPos, Direction.UP)) != null)
+        {
+            ejectStorage.insert(storage.outputStorage.getResource(), 1, transaction);
         }
         else
         {

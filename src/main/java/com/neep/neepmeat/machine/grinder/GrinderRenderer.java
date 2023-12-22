@@ -43,6 +43,11 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         float sX = bakedModel.getTransformation().ground.scale.getX();
         float sY = bakedModel.getTransformation().ground.scale.getY();
         float sZ = bakedModel.getTransformation().ground.scale.getZ();
+
+        // Rotate by 1 degree to prevent axis fighting with nearby block models
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(1));
+
+        // 2D items lie on their side
         if (!depth)
             matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
 

@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.grinder;
 
+import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -9,6 +11,9 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("UnstableApiUsage")
 public class GrinderStorage extends SimpleInventory
@@ -20,8 +25,28 @@ public class GrinderStorage extends SimpleInventory
     public GrinderStorage(GrinderBlockEntity parent)
     {
         this.parent = parent;
-        this.inputStorage = new WritableStackStorage(parent);
-        this.outputStorage = new WritableStackStorage(parent, 1);
+        this.inputStorage = new WritableStackStorage(parent)
+        {
+            @Override
+            public boolean canInsert(ItemVariant resource)
+            {
+                World world = parent.getWorld();
+                if (world == null)
+                    return true;
+
+                List<?> list = world.getRecipeManager().listAllOfType(NMrecipeTypes.GRINDING);
+                return list.stream().anyMatch(r -> r instanceof GrindingRecipe recipe && recipe.getItemInput().resource().equals(resource));
+            }
+        };
+
+        this.outputStorage = new WritableStackStorage(parent, 1)
+        {
+            @Override
+            public boolean supportsInsertion()
+            {
+                return false;
+            }
+        };
     }
 
     public Storage<ItemVariant> getItemStorage(Direction direction)
@@ -30,7 +55,7 @@ public class GrinderStorage extends SimpleInventory
         {
             return inputStorage;
         }
-        else if (direction == parent.getCachedState().get(GrinderBlock.FACING))
+        else if (direction == parent.getCachedState().get(GrinderBlock.FACING) || direction == Direction.DOWN)
         {
             return outputStorage;
         }
@@ -52,7 +77,7 @@ public class GrinderStorage extends SimpleInventory
         inputStorage.readNbt(nbt);
     }
 
-    public Storage<ItemVariant> getOutputStorage()
+    public WritableStackStorage getOutputStorage()
     {
         return outputStorage;
     }
