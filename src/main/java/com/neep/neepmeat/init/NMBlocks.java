@@ -174,8 +174,8 @@ public class NMBlocks
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", block(), FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
-    public static Block ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block(), MACHINE_SETTINGS));
-    public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
+    public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block(), MACHINE_SETTINGS));
+//    public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
 //    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));

@@ -1,14 +1,13 @@
 package com.neep.neepmeat.machine.assembler;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -38,10 +37,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AssemblerBlockEntity extends BloodMachineBlockEntity implements NamedScreenHandlerFactory
+public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
 {
     public static final int PATTERN_SLOTS = 12;
-    public static final int MAX_PROGRESS = 20;
+    public static final int MAX_PROGRESS = 10;
     public static final float MAX_INCREMENT = 1f;
     public static final float MIN_INCREMENT = 0.3f;
     protected float progress;
@@ -52,6 +51,8 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     protected int spinTicks = 0;
     public float currentSpeed = 0;
     public float angle = 0;
+
+    private float powerInput = 0;
 
     BlockApiCache<Storage<ItemVariant>, Direction> cache;
 
@@ -64,6 +65,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         @Override
         public void updateInflux(float influx)
         {
+            powerInput = influx;
         }
 
         @Override
@@ -199,8 +201,6 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
     public void tick(ServerWorld world)
     {
-        super.tick();
-
         // Sync when spinTicks reaches zero
         int prevSpinTicks = spinTicks;
         spinTicks = Math.max(0, spinTicks - 1);
@@ -254,6 +254,11 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         }
     }
 
+    private double getPUPower()
+    {
+        return powerInput;
+    }
+
     public static void serverTick(World world, BlockPos pos, BlockState state, AssemblerBlockEntity be)
     {
         be.tick((ServerWorld) world);
@@ -292,21 +297,6 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         return storage;
     }
 
-    public Storage<FluidVariant> getFluidStorage(Direction dir)
-    {
-        Direction facing = getCachedState().get(AssemblerBlock.FACING);
-        if (dir == facing.rotateYClockwise() || dir == facing.rotateYCounterclockwise())
-            return inputStorage;
-
-        return null;
-    }
-
-    @Override
-    public Storage<FluidVariant> getBuffer(Direction direction)
-    {
-        return null;
-    }
-
     public static void spawnSmoke(ServerWorld world, BlockPos pos, Direction facing, ItemStack item)
     {
         world.spawnParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 10, 0.04, 0, 0.04, 0.01);
@@ -315,5 +305,14 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                 pos.getY() + 0.5,
                 pos.getZ() + facing.getOffsetZ() * 0.5 + 0.5,
                 20, 0.06, 0.06, 0.06, 0.01);
+    }
+
+    public static BloodAcceptor getBloodAcceptorFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, Direction direction)
+    {
+        if (world.getBlockEntity(pos.down()) instanceof AssemblerBlockEntity be)
+        {
+            return be.bloodAcceptor;
+        }
+        return null;
     }
 }
