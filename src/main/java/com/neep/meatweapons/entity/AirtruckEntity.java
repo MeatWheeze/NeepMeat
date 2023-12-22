@@ -5,6 +5,10 @@ import com.neep.meatweapons.item.AirtruckItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -44,5 +48,17 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     {
         event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.airtruck.fly", true));
         return PlayState.CONTINUE;
+    }
+
+    @Override
+    public ItemStack asStack()
+    {
+        return MeatWeapons.AIRTRUCK_ITEM.getDefaultStack();
+    }
+
+    @Override
+    public SoundEvent getDamageSount()
+    {
+        return SoundEvents.ENTITY_IRON_GOLEM_DAMAGE;
     }
 }
