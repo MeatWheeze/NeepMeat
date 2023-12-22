@@ -52,6 +52,12 @@ public class NMFluids
     public static Block ETHEREAL_FUEL;
     public static FluidFactory ETHEREAL_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ethereal_fuel", false, 10, 5, 2);
 
+    public static FlowableFluid FLOWING_ELDRITCH_ENZYMES;
+    public static FlowableFluid STILL_ELDRITCH_ENZYMES;
+    public static Item ELDRITCH_ENZYMES_BUCKET;
+    public static Block ELDRITCH_ENZYMES;
+    public static FluidFactory ENZYMES_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "eldritch_enzymes", false, 10, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -91,6 +97,11 @@ public class NMFluids
         FLOWING_ETHEREAL_FUEL = ETHEREAL_FACTORY.registerFlowing();
         ETHEREAL_FUEL_BUCKET = ETHEREAL_FACTORY.registerItem();
         ETHEREAL_FUEL = ETHEREAL_FACTORY.registerBlock();
+
+        STILL_ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerStill();
+        FLOWING_ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerFlowing();
+        ELDRITCH_ENZYMES_BUCKET = ENZYMES_FACTORY.registerItem();
+        ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);

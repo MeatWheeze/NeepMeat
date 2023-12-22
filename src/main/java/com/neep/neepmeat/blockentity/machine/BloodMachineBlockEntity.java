@@ -174,7 +174,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
             this.runningRate = this.inputStorage.lastInput / PipeNetwork.TICK_RATE;
 
             // Determine power multiplier from the inserted fluid
-            if (inputStorage.lastInput != 0)
+            if (inputStorage.lastInput != 0 && inputStorage.lastFluid != null)
             {
                 this.fluidMultiplier = FluidFuelRegistry.getInstance().get(inputStorage.lastFluid.getFluid()).multiplier();
             }

@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:mixing",
+  "item": {
+    "resource": "neepmeat:flesh_potato",
+    "amount": 1
+  },
+  "fluid1": {
+    "resource": "minecraft:water",
+    "amount": 81000
+  },
+  "fluid2":{
+    "resource": "minecraft:empty",
+    "amount": 0
+  },
+  "output":{
+    "resource": "neepmeat:eldritch_enzymes",
+    "amount": 81000
+  },
+  "processtime": 60
+}

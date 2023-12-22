@@ -6,9 +6,14 @@ import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
@@ -18,6 +23,8 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
+import java.util.Optional;
+
 @SuppressWarnings("UnstableApiUsage")
 public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 {
@@ -25,24 +32,20 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
     protected RecipeInput<Item> itemInput;
     protected RecipeInput<Fluid> fluidInput;
     protected RecipeOutput<Fluid> fluidOutput;
-    protected float experience;
-//    protected int processTime;
 
     public RenderingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput)
     {
         this.itemInput = itemInput;
         this.fluidInput = fluidInput;
         this.fluidOutput = fluidOutput;
-        this.experience = experience;
-//        this.processTime = processTime;
         this.id = id;
     }
 
     @Override
     public boolean matches(CrucibleStorage inventory, World world)
     {
-//        return itemInput.test(inventory.getInputStorage());
-        return false;
+        return itemInput.test(inventory.getItemStorage(null))
+                && fluidInput.test(inventory.getStorage(null));
     }
 
     @Override
@@ -84,45 +87,50 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         return NMrecipeTypes.RENDERING;
     }
 
-    public boolean takeInputs(CrucibleStorage storage, TransactionContext transaction)
+    public Item takeInputs(CrucibleStorage storage, int amount, TransactionContext transaction)
     {
-//        try (Transaction inner = transaction.openNested())
-//        {
-//            Optional<Item> item = itemInput.getFirstMatching(storage.getInputStorage());
-//            if (item.isEmpty())
-//            {
-//                throw new IllegalStateException("Storage contents must conform to recipe");
-//            }
-//
-//            long extracted = storage.getInputStorage().extract(ItemVariant.of(item.get()), itemInput.amount(), transaction);
-//            if (extracted == itemInput.amount())
-//            {
-//                inner.commit();
-//                return true;
-//            }
-//            inner.abort();
-//        }
-        return false;
+        try (Transaction inner = transaction.openNested())
+        {
+            Storage<ItemVariant> itemStorage = storage.getItemStorage(null);
+            Storage<FluidVariant> fluidStorage = storage.getStorage(null);
+            Optional<Item> item = itemInput.getFirstMatching(itemStorage, inner);
+            Optional<Fluid> fluid = fluidInput.getFirstMatching(fluidStorage, inner);
+            if (item.isEmpty() || fluid.isEmpty())
+            {
+                throw new IllegalStateException("Storage contents do not conform to recipe");
+            }
+
+            long ex1 = itemStorage.extract(ItemVariant.of(item.get()), itemInput.amount() * amount, inner);
+            long ex2 = fluidStorage.extract(FluidVariant.of(fluid.get()), fluidInput.amount() * amount, inner);
+            if (ex1 == itemInput.amount() * amount && ex2 == fluidInput.amount() * amount)
+            {
+                inner.commit();
+                return item.get();
+            }
+            inner.abort();
+        }
+        return null;
     }
 
-    public boolean ejectOutput(CrucibleStorage storage, TransactionContext transaction)
+    public boolean ejectOutput(CrucibleStorage storage, int amount, TransactionContext transaction)
     {
-//        try (Transaction inner = transaction.openNested())
-//        {
-//            itemOutput.update();
-////            long inserted = storage.getOutputStorage().insert(ItemVariant.of(itemOutput.resource()), itemOutput.amount(), transaction);
-//
-//            boolean bl1 = itemOutput.insertInto(storage.getOutputStorage(), ItemVariant::of, inner);
-//            boolean bl2 = extraOutput == null || extraOutput.insertInto(storage.getExtraStorage(), ItemVariant::of, inner);
-//            boolean bl3 = storage.getXpStorage().insert(experience, transaction) == experience;
-//
-//            if (bl1 && bl2 && bl3)
-//            {
-//                inner.commit();
-//                return true;
-//            }
-//            inner.abort();
-//        }
+        try (Transaction inner = transaction.openNested())
+        {
+            fluidOutput.update();
+
+            boolean bl1 = true;
+            for (int i = 0; i < amount; ++i)
+            {
+                bl1 = bl1 && fluidOutput.insertInto(storage.getFluidOutput(), FluidVariant::of, inner);
+            }
+
+            if (bl1)
+            {
+                inner.commit();
+                return true;
+            }
+            inner.abort();
+        }
         return false;
     }
 

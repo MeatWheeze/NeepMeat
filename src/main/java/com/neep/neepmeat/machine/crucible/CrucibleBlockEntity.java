@@ -3,6 +3,9 @@ package com.neep.neepmeat.machine.crucible;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.recipe.RenderingRecipe;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -11,17 +14,28 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.MinecraftVersion;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.fluid.WaterFluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
 public class CrucibleBlockEntity extends SyncableBlockEntity
@@ -86,34 +100,70 @@ public class CrucibleBlockEntity extends SyncableBlockEntity
         ItemVariant variant = ItemVariant.of(stack);
         try (Transaction transaction = Transaction.openOuter())
         {
-            long decrement = processItem(variant, stack.getCount(), transaction);
+            long decrement = storage.itemStorage.insert(variant, stack.getCount(), transaction);
             stack.decrement((int) decrement);
             transaction.commit();
         }
     }
 
-    public long processItem(ItemVariant fuelVariant, long fuelAmount, TransactionContext transaction)
+    public long processItem(ItemVariant fuelVariant, long maxAmount, TransactionContext transaction)
     {
-        Integer time;
-        Item fuelItem = fuelVariant.getItem();
-        if ((time = FuelRegistry.INSTANCE.get(fuelItem)) != null)
+//        Integer time;
+//        Item fuelItem = fuelVariant.getItem();
+//        if ((time = FuelRegistry.INSTANCE.get(fuelItem)) != null)
+//        {
+//            time = timeToFluid(time);
+//            try (Transaction inner = transaction.openNested())
+//            {
+//                Storage<FluidVariant> alembic = getOutput();
+//                long maxAmount = (long) time * fuelAmount;
+//                FluidVariant variant = FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL);
+//
+//                // Find maximum number of items that can be inserted
+//                long maxInserted = alembic.simulateInsert(variant, maxAmount, inner);
+//                int maxCount = (int) Math.floorDiv(maxInserted, time);
+//
+//                long fluidInserted = alembic.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), (long) maxCount * time, inner);
+//                inner.commit();
+//                return maxCount;
+//            }
+//        }
+
+        try (Transaction inner = transaction.openNested())
         {
-            time = timeToFluid(time);
-            try (Transaction inner = transaction.openNested())
+            RenderingRecipe recipe = getWorld().getRecipeManager().getFirstMatch(NMrecipeTypes.RENDERING, storage, getWorld()).orElse(null);
+            Item processItem;
+            if (recipe != null && (processItem = recipe.takeInputs(storage, (int) maxAmount, inner)) != null && recipe.ejectOutput(storage, (int) maxAmount, inner))
             {
-                Storage<FluidVariant> alembic = getOutput();
-                long maxAmount = (long) time * fuelAmount;
-                FluidVariant variant = FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL);
-
-                // Find maximum number of items that can be inserted
-                long maxInserted = alembic.simulateInsert(variant, maxAmount, inner);
-                int maxCount = (int) Math.floorDiv(maxInserted, time);
-
-                long fluidInserted = alembic.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), (long) maxCount * time, inner);
                 inner.commit();
-                return maxCount;
+                spawnParticles((ServerWorld) world, pos, processItem, 20);
+                return maxAmount;
             }
+            inner.abort();
         }
+
         return 0;
+    }
+
+    public static void spawnParticles(ServerWorld world, BlockPos pos, Item item, int amount)
+    {
+        ItemStack stack = new ItemStack(item);
+        Random random = new Random();
+        for (int p = 0; p < amount; ++p)
+        {
+            double i = random.nextGaussian(0.5, 0.2);
+            double j = random.nextFloat();
+            double k = random.nextGaussian(0.5, 0.2);
+            world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, stack), pos.getX() + i, pos.getY() + 1, pos.getZ() + k, 1, 0, 0.2, 0, 0.02);
+        }
+        for (int p = 0; p < amount; ++p)
+        {
+            double i = random.nextGaussian(0.5, 0.2);
+            double j = random.nextFloat();
+            double k = random.nextGaussian(0.5, 0.2);
+            world.spawnParticles(ParticleTypes.SPLASH, pos.getX() + i, pos.getY() + 1, pos.getZ() + k, 1, 0, 0.2, 0, 0.02);
+        }
+
+        world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.HOSTILE, 1f, 0.8f);
     }
 }
