@@ -12,7 +12,8 @@ import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorStructure;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -25,10 +26,10 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProvider
+public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProvider, DataCable
 {
     public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 0);
-    public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
+//    public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
 
     public AdvancedIntegratorBlock(String registryName, Settings settings)
     {
@@ -39,8 +40,7 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     @Override
     protected BigBlockStructure createStructure()
     {
-//        return NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE;
-        return BlockRegistry.queue(new BigBlockStructure(this, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
     }
 
     @Override
@@ -58,7 +58,8 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return SHAPE;
+        return super.getOutlineShape(state, world, pos, context);
+//        return SHAPE;
     }
 
     @Nullable
