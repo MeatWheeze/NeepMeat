@@ -44,13 +44,13 @@ public class ImplantInstruction implements Instruction
 
     private final GroupedRobotAction group;
 
-    public ImplantInstruction(Supplier<ServerWorld> world, List<Argument> arguments)
+    public ImplantInstruction(Supplier<World> world, List<Argument> arguments)
     {
-        this.world = world::get;
+        this.world = world;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
-        this.fromCache = LazyBlockApiCache.itemSided(from, world);
-        this.toCache = LazyBlockApiCache.of(MutateInPlace.ENTITY, to.pos(), world, () -> null);
+        this.fromCache = LazyBlockApiCache.itemSided(from, () -> (ServerWorld) world.get());
+        this.toCache = LazyBlockApiCache.of(MutateInPlace.ENTITY, to.pos(), () -> (ServerWorld) world.get(), () -> null);
 
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),

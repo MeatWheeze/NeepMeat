@@ -10,6 +10,7 @@ public class NMSounds
     public static SoundEvent BIG_LEVER_ON = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "big_lever_on");
     public static SoundEvent BIG_LEVER_OFF = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "big_lever_off");
     public static SoundEvent CLICK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "click");
+    public static SoundEvent ERROR = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "error");
 
     public static SoundEvent GLOME_HIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "glome_hit");
     public static SoundEvent HOUND_HIT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "hound_hit");

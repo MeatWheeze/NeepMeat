@@ -1,14 +1,12 @@
 package com.neep.neepmeat.plc.editor;
 
 import com.google.common.collect.Lists;
-import com.neep.neepmeat.api.plc.instruction.Argument;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.*;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
+import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
-import com.neep.neepmeat.plc.instruction.*;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
@@ -52,7 +50,14 @@ public class ProgramEditorState implements PLCState
     {
         if (program != null && instructionBuilder != null)
         {
-            instructionBuilder.argument(argument);
+            try
+            {
+                instructionBuilder.argument(argument);
+            }
+            catch (InstructionException e)
+            {
+                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getRobot().getController(), e.getMessage());
+            }
         }
     }
 

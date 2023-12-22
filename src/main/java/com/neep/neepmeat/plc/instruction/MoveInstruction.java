@@ -28,14 +28,14 @@ public class MoveInstruction implements Instruction
 
     private ResourceAmount<ItemVariant> stored;
 
-    public MoveInstruction(Supplier<ServerWorld> world, List<Argument> arguments)
+    public MoveInstruction(Supplier<World> world, List<Argument> arguments)
     {
         if (arguments.size() != 2)
         {
             throw new IllegalStateException();
         }
 
-        this.world = world::get;
+        this.world = world;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
 
@@ -105,12 +105,12 @@ public class MoveInstruction implements Instruction
                 if (inserted == stored.amount())
                 {
                     transaction.commit();
+                    stored = null;
                     return;
                 }
                 else
                 {
                     transaction.abort();
-                    plc.getRobot().spawnItem(stored);
                 }
             }
         }

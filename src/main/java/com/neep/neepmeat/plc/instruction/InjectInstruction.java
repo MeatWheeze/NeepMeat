@@ -41,9 +41,9 @@ public class InjectInstruction implements Instruction
 
     private final GroupedRobotAction group;
 
-    public InjectInstruction(Supplier<ServerWorld> world, List<Argument> arguments)
+    public InjectInstruction(Supplier<World> world, List<Argument> arguments)
     {
-        this.world = world::get;
+        this.world = world;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
 

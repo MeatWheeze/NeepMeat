@@ -17,6 +17,12 @@
       "neepmeat:click"
     ]
   },
+  "error": {
+    "subtitle": "subtitles.neepmeat.error",
+    "sounds": [
+      "neepmeat:error"
+    ]
+  },
   "fusion_fire": {
     "subtitle": "subtitles.neepmeat.fusion_fire",
     "sounds": [
