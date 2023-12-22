@@ -11,6 +11,9 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -26,7 +29,7 @@ import java.util.stream.IntStream;
 public class PipeNetwork
 {
     private ServerWorld world;
-    public final long uid; // Unique identifier for every network
+    public final UUID uuid;
     private final BlockPos origin;
     private final Direction originFace;
     public static int UPDATE_DISTANCE = 50;
@@ -45,26 +48,20 @@ public class PipeNetwork
     // TODO: Find a way to remove unloaded networks from this
     public static List<PipeNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    private PipeNetwork(ServerWorld world, BlockPos origin, Direction direction)
+    private PipeNetwork(ServerWorld world, UUID uuid, BlockPos origin, Direction direction)
     {
         this.world = world;
+        this.uuid = uuid;
         this.origin = origin;
         this.originFace = direction;
-        this.uid = nextUid();
         this.isBuilt = false;
-    }
-
-    private static long currentUid = 0;
-
-    public static long nextUid()
-    {
-        return ++currentUid;
     }
 
     public static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
     {
         System.out.println("trying fluid network at " + pos);
-        PipeNetwork network = new PipeNetwork(world, pos, direction);
+        UUID uuid = UUID.randomUUID();
+        PipeNetwork network = new PipeNetwork(world, uuid, pos, direction);
         network.rebuild(pos, direction);
         if (network.isValid())
         {
@@ -91,17 +88,33 @@ public class PipeNetwork
         return network.connectedNodes.equals(connectedNodes)
                 && network.origin.equals(origin)
                 && network.originFace.equals(originFace)
-                && network.uid == uid;
+                && network.uuid.equals(uuid);
     }
 
     @Override
     public int hashCode()
     {
         return new HashCodeBuilder()
-                .append(uid)
+                .append(uuid)
                 .append(originFace.getId())
                 .append(origin.hashCode())
                 .build();
+    }
+
+    public NbtCompound toNbt()
+    {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putUuid("uuid", uuid);
+
+        NbtList list = new NbtList();
+        for (int i = 0; i < networkPipes.size(); ++i)
+        {
+            NbtCompound pipeNbt = new NbtCompound();
+            pipeNbt.put("pos", NbtHelper.fromBlockPos(networkPipes.getKey(i)));
+            list.add(pipeNbt);
+        }
+
+        return nbt;
     }
 
     public static void validateAll()
@@ -114,17 +127,17 @@ public class PipeNetwork
         if (connectedNodes.size() < 2)
             return false;
 
-        int count = 0;
-        for (Iterator<Supplier<FluidNode>> iterator = connectedNodes.iterator(); iterator.hasNext(); )
-        {
-            Supplier<FluidNode> supplier = iterator.next();
-            if (supplier.get() == null)
-            {
-                iterator.remove();
-                ++count;
-            }
-        }
-        return connectedNodes.size() - count >= 2;
+//        int count = 0;
+//        for (Iterator<Supplier<FluidNode>> iterator = connectedNodes.iterator(); iterator.hasNext();)
+//        {
+//            Supplier<FluidNode> supplier = iterator.next();
+//            if (supplier.get() == null)
+//            {
+//                iterator.remove();
+//                ++count;
+//            }
+//        }
+        return true;
     }
 
     // Removes network and connected nodes if not valid.
@@ -146,15 +159,15 @@ public class PipeNetwork
             discoverNodes(startPos, face);
             Runnable runnable = () ->
             {
-                long t1 = System.nanoTime();
                 this.isBuilt = false;
 
-                connectedNodes.forEach((node) -> node.get().setNetwork(world, this));
+//                connectedNodes.forEach((node) -> node.get().setNetwork(this));
                 if (!validate())
                 {
                     return;
                 }
 
+                long t1 = System.nanoTime();
                 try
                 {
                     this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
@@ -163,13 +176,14 @@ public class PipeNetwork
                 {
                     e.printStackTrace();
                 }
+                long t2 = System.nanoTime();
 //                PipeBranches.displayMatrix(nodeMatrix);
                 this.isBuilt = true;
-                long t2 = System.nanoTime();
 //                System.out.println("Rebuilt network in " + (t2 - t1) / 1000000 + "ms");
             };
 //            NetworkRebuilding.getExecutor().execute(runnable);
             runnable.run();
+//            StagedTransactions.getExecutor().execute(runnable);
         }
     }
 
@@ -384,7 +398,6 @@ public class PipeNetwork
 
     public void removeNode(NodePos pos)
     {
-        Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(pos);
         connectedNodes.remove(FluidNetwork.getInstance(world).getNodeSupplier(pos));
         validate();
     }

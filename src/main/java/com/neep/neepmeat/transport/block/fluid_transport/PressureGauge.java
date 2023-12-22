@@ -80,7 +80,7 @@ public class PressureGauge extends BaseFacingBlock implements IFluidNodeProvider
         FluidNode node;
         if ((node = supplier.get()) != null)
         {
-            return node.getNetwork().networkPipes.get(pipe).getPressure();
+//            return node.getNetwork().networkPipes.get(pipe).getPressure();
         }
         return 1.33333f;
     }
