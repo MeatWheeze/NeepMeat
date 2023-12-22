@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.*;
+import com.neep.neepmeat.client.screen.tablet.GuideScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
@@ -247,6 +248,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.ALLOY_KILN, AlloyKilnScreen::new);
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
+        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideScreen::new);
     }
 
     public static void registerLayers()

@@ -2,9 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.screen.tablet.GuideScreen;
-import com.neep.neepmeat.screen_handler.TerminalScreenHandler;
-import net.minecraft.client.MinecraftClient;
+import com.neep.neepmeat.screen_handler.GuideScreenHandler;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -31,18 +29,9 @@ public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-        if (world.isClient)
+        if (!world.isClient())
         {
-            ScreenHandler handler = new TerminalScreenHandler();
-            user.currentScreenHandler = handler;
-            try
-            {
-                MinecraftClient.getInstance().setScreen(new GuideScreen(user, handler));
-            }
-            catch (Exception e)
-            {
-                e.printStackTrace();
-            }
+            user.openHandledScreen(this);
         }
         return TypedActionResult.success(user.getStackInHand(hand));
     }
@@ -64,6 +53,6 @@ public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return null;
+        return new GuideScreenHandler(syncId, inv);
     }
 }

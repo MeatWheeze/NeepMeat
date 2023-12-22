@@ -3,8 +3,10 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.screen_handler.*;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class ScreenHandlerInit
 {
@@ -15,6 +17,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<AlloyKilnScreenHandler> ALLOY_KILN;
     public static ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER;
     public static ScreenHandlerType<WorkstationScreenHandler> WORKSTATION;
+    public static ScreenHandlerType<GuideScreenHandler> GUIDE;
 
     public static void registerScreenHandlers()
     {
@@ -25,5 +28,11 @@ public class ScreenHandlerInit
         ALLOY_KILN = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "alloy_kiln"), AlloyKilnScreenHandler::new);
         ASSEMBLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "assembler"), AssemblerScreenHandler::new);
         WORKSTATION = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "workstation"), WorkstationScreenHandler::new);
+        GUIDE = register(NeepMeat.NAMESPACE, "guide", GuideScreenHandler::new);
+    }
+
+    private static <T extends ScreenHandler> ScreenHandlerType<T> register(String namespace, String id, ScreenHandlerType.Factory<T> factory)
+    {
+        return Registry.register(Registry.SCREEN_HANDLER, new Identifier(namespace, id), new ScreenHandlerType<>(factory));
     }
 }
