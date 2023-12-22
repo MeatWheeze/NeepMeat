@@ -71,7 +71,7 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
     private static final float EXTRACT_OUTPUT = -1f;
 
     private final WorldLocation location;
-    // -1 if bonemeal was extracted, otherwise the composter increase probability of the (pending) inserted item.
+    // -1 if output was extracted, otherwise the composter increase probability of the (pending) inserted item.
     private Float increaseProbability = DO_NOTHING;
     private final TopStorage upStorage = new TopStorage();
     private final BottomStorage downStorage = new BottomStorage();

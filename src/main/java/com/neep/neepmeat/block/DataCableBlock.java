@@ -1,16 +1,16 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
-import com.neep.neepmeat.block.item_transport.PneumaticTubeBlock;
-import com.neep.neepmeat.block.pipe.IItemPipe;
+import com.neep.neepmeat.block.pipe.IDataCable;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class DataCableBlock extends AbstractPipeBlock
+public class DataCableBlock extends AbstractPipeBlock implements IDataCable
 {
     public DataCableBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -20,7 +20,17 @@ public class DataCableBlock extends AbstractPipeBlock
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        return state.isOf(this);
+        if (state.getBlock() instanceof IDataCable cable)
+        {
+            return cable.connectInDirection(world, pos, state, direction);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return state.get(DIR_TO_CONNECTION.get(direction)).canBeChanged();
     }
 
     @Override
@@ -37,7 +47,7 @@ public class DataCableBlock extends AbstractPipeBlock
 //        }
 
         // Check if neighbour is forced
-        if (neighborState.getBlock() instanceof PneumaticTubeBlock)
+        if (neighborState.getBlock() instanceof DataCableBlock)
         {
             forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
             otherConnected = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.SIDE;

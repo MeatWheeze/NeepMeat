@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.block.pipe.IDataCable;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -19,9 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
+public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, IDataCable
 {
-    public IntegratorEggBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public IntegratorBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
     }

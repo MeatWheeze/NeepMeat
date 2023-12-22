@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.block.pipe.IDataCable;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +23,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class CharnelCompactorBlock extends BaseBlock
+public class CharnelCompactorBlock extends BaseBlock implements IDataCable
 {
     public static final IntProperty LEVEL = Properties.LEVEL_8;
 
