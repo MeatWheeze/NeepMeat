@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.item.Item;
 import net.minecraft.util.registry.Registry;
 
 public class BlockEntityInitialiser
@@ -14,6 +15,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
+    public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
 
 
     public static void initialiseBlockEntities()
@@ -36,6 +38,11 @@ public class BlockEntityInitialiser
         NODE_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
                 NeepMeat.NAMESPACE + "test_block_entity",
                 FabricBlockEntityTypeBuilder.create(NodeContainerBlockEntity::new, BlockInitialiser.PIPE)
+                        .build());
+
+        ITEM_DUCT_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                NeepMeat.NAMESPACE + "item_duct_block_entity",
+                FabricBlockEntityTypeBuilder.create(ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT)
                         .build());
 
 //        FluidStorage.SIDED.registerSelf(PUMP_BLOCK_ENTITY);
