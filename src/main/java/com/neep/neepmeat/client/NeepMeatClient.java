@@ -34,6 +34,7 @@ import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
+import com.neep.neepmeat.transport.client.TransportClient;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -67,6 +68,8 @@ public class NeepMeatClient implements ClientModInitializer
         registerScreens();
         NMFluidsClient.registerFluidRenderers();
         HUDOverlays.init();
+
+        TransportClient.init();
 
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();

@@ -24,6 +24,8 @@ public interface RoutingNetwork
 
     void update();
 
+    long getVersion();
+
     enum RequestType
     {
         ANY_AMOUNT(false),
