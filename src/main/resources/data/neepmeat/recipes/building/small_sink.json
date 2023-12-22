@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " w ",
+    "sis",
+    "sss"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "s": {
+      "item": "minecraft:stone"
+    },
+    "w": {
+      "item": "minecraft:white_dye"
+    }
+  },
+  "result": {
+    "item": "neepmeat:small_sink",
+    "count": 1
+  }
+}
