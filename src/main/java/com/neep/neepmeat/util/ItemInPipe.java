@@ -56,6 +56,11 @@ public class ItemInPipe
         return itemStack;
     }
 
+    public int getCount()
+    {
+        return itemStack.getCount();
+    }
+
     public void set(Vec3d vec)
     {
         this.x = vec.x;

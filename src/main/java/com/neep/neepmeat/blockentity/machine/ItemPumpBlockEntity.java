@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
@@ -215,11 +216,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements Bloc
             nested.commit();
             return transferred;
         }
-        if (state.getBlock() instanceof IItemPipe pipe)
-        {
-            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
-        }
-        return 0;
+        return TubeUtils.tryTransfer(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld());
+//        if (state.getBlock() instanceof IItemPipe pipe)
+//        {
+//            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
+//        }
     }
 
     public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target)
