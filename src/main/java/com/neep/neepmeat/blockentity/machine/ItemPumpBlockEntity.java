@@ -30,6 +30,8 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
+    public static final String NBT_ACTIVE = "active";
+
     public int shuttle;
     public boolean needsRefresh;
     public boolean active;
@@ -219,6 +221,21 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
     {
         tag.putInt("shuttle_ticks", shuttle);
         return tag;
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound tag)
+    {
+        super.writeNbt(tag);
+        tag.putBoolean(NBT_ACTIVE, active);
+        return tag;
+    }
+
+    @Override
+    public void readNbt(NbtCompound tag)
+    {
+        super.readNbt(tag);
+        this.active = tag.getBoolean(NBT_ACTIVE);
     }
 
 }

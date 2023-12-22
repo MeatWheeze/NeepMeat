@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.BufferScreen;
+import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -129,6 +130,7 @@ public class NeepMeatClient
 
         // Screens
         ScreenRegistry.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
+        ScreenRegistry.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
 
     }
 }

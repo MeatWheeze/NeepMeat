@@ -1,9 +1,7 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.content_detector;
 
-import com.neep.neepmeat.api.block.BaseBlock;
 import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.ContentDetectorBlockEntity;
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
@@ -36,7 +34,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
 
     public ContentDetectorBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(itemName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
         this.setDefaultState(getDefaultState().with(POWERED, false));
     }
 
@@ -87,11 +85,11 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        System.out.println("ooooooooooooo");
         if (!world.isClient && state.get(POWERED) && world.getBlockTickScheduler().isScheduled(pos, this))
         {
             this.updateNeighbors(world, pos, state.with(POWERED, false));
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     protected void updateNeighbors(World world, BlockPos pos, BlockState state)
@@ -147,5 +145,16 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUitls.checkType(type, BlockEntityInitialiser.CONTENT_DETECTOR, ContentDetectorBlockEntity::serverTick, world);
+    }
+
+    @Override
+    public String getRegistryName()
+    {
+        return super.getRegistryName();
+    }
+
+    public static boolean never(BlockState state, BlockView world, BlockPos pos)
+    {
+        return false;
     }
 }

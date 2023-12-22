@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.IItemPipe;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
@@ -31,7 +32,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
 {
     public ItemPumpBlock(String registryName, int itemMaxStack, boolean hasLore, FabricBlockSettings settings)
     {
-        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
+        super(registryName, itemMaxStack, hasLore, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
     }
 
     @Nullable
