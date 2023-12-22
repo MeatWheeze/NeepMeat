@@ -27,7 +27,7 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
 
     public MixerTopBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(settings.nonOpaque().solidBlock(ContentDetectorBlock::never).dropsLike(NMBlocks.MIXER));
         this.registryName = registryName;
     }
 
@@ -49,6 +49,10 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
     {
         if (!newState.isOf(this) && world.getBlockState(pos.down()).isOf(NMBlocks.MIXER))
         {
+            if (world.getBlockEntity(pos.down()) instanceof MixerBlockEntity be)
+            {
+                be.dropItems();
+            }
             world.setBlockState(pos.down(), Blocks.AIR.getDefaultState());
         }
         super.onStateReplaced(state, world, pos, newState, moved);

@@ -142,9 +142,11 @@ public class NMBlockEntities
 
         FluidStorage.SIDED.registerForBlockEntity(PumpBlockEntity::getBuffer, PUMP);
 
-        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getOutputStorage(), MIXER);
-        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getFluidStorage, MIXER);
+        ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
         FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
+
+        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {

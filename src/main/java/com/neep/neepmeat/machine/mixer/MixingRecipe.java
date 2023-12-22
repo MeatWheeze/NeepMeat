@@ -3,10 +3,12 @@ package com.neep.neepmeat.machine.mixer;
 import com.google.gson.JsonObject;
 import com.ibm.icu.impl.TextTrieMap;
 import com.neep.meatlib.recipe.FluidIngredient;
+import com.neep.meatlib.recipe.GenericIngredient;
 import com.neep.meatlib.recipe.ItemIngredient;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import jdk.jfr.FlightRecorder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
@@ -25,10 +27,7 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
 import org.lwjgl.system.CallbackI;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MixingRecipe implements Recipe<MixerStorage>
@@ -54,22 +53,25 @@ public class MixingRecipe implements Recipe<MixerStorage>
     public boolean matches(MixerStorage inventory, World world)
     {
         Transaction transaction = Transaction.openOuter();
-        short success = 0;
-        Queue<FluidIngredient> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
+        List<GenericIngredient<?, ?>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2, itemInput));
 
-        while (!queue.isEmpty())
+        boolean success = true;
+
+        ListIterator<GenericIngredient<?, ?>> it = queue.listIterator();
+        while (it.hasNext())
         {
-            FluidIngredient ingredient = queue.poll();
-            for (StorageView<FluidVariant> view : inventory.getFluidInputs(transaction))
+            GenericIngredient<?, ?> ingredient = it.next();
+            for (StorageView<?> view : inventory.getInputStorages(transaction))
             {
                 if (ingredient.test(view))
                 {
-                    ++success;
+                    it.remove();
+                    break;
                 }
             }
         }
         transaction.abort();
-        return success == 2;
+        return queue.size() == 0;
     }
 
     public boolean takeInputs(MixerStorage inventory, TransactionContext transactionContext)
@@ -77,15 +79,19 @@ public class MixingRecipe implements Recipe<MixerStorage>
         try (Transaction inner = transactionContext.openNested())
         {
             List<Storage<FluidVariant>> inputList = inventory.parent.getAdjacentStorages();
-            CombinedStorage<FluidVariant, Storage<FluidVariant>> input = new CombinedStorage<>(inputList);
-//            CombinedStorage<FluidVariant, Storage<FluidVariant>> internal = new CombinedStorage<>(List.of(inventory.fluidInput1, inventory.fluidInput2));
+            CombinedStorage<FluidVariant, Storage<FluidVariant>> fluidStorage = new CombinedStorage<>(inputList);
+            Storage<ItemVariant> itemStorage = inventory.parent.getItemStorage(null);
+
             if (!inputList.isEmpty())
             {
-                long ext1 = input.extract((FluidVariant) fluidInput1.resource(), fluidInput1.amount(), transactionContext);
-                long ext2 = input.extract((FluidVariant) fluidInput2.resource(), fluidInput2.amount(), transactionContext);
-//                long ins1 = internal.insert((FluidVariant) fluidInput1.resource(), fluidInput1.amount(), transactionContext);
-//                long ins2 = internal.insert((FluidVariant) fluidInput2.resource(), fluidInput2.amount(), transactionContext);
-                if (ext1 == fluidInput1.amount() && ext2 == fluidInput2.amount())
+//                long ext1 = fluidStorage.extract((FluidVariant) fluidInput1.resource(), fluidInput1.amount(), transactionContext);
+                long ext1 = fluidInput1.take(fluidStorage, transactionContext);
+                long ext2 = fluidInput2.take(fluidStorage, transactionContext);
+                long ext3 = itemInput.take(itemStorage, transactionContext);
+//                long ext2 = fluidStorage.extract((FluidVariant) fluidInput2.resource(), fluidInput2.amount(), transactionContext);
+//                long ext3 = itemStorage.extract((ItemVariant) itemInput.resource(), itemInput.amount(), transactionContext);
+
+                if (ext1 == fluidInput1.amount() && ext2 == fluidInput2.amount() && ext3 == itemInput.amount())
                 {
                     inner.commit();
                     return true;

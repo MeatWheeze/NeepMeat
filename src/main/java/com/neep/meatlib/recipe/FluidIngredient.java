@@ -14,7 +14,7 @@ import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidIngredient extends GenericIngredient<Fluid>
+public class FluidIngredient extends GenericIngredient<Fluid, FluidVariant>
 {
     public static final FluidIngredient EMPTY = new FluidIngredient(FluidVariant.blank(), 0);
 
@@ -29,7 +29,13 @@ public class FluidIngredient extends GenericIngredient<Fluid>
     }
 
     @Override
-    public GenericIngredient<Fluid> blank()
+    public String toString()
+    {
+        return "FluidIngredient{" + resource().getObject() + "}";
+    }
+
+    @Override
+    public GenericIngredient<Fluid, FluidVariant> blank()
     {
         return EMPTY;
     }
