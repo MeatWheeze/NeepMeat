@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "neepmeat:basic_tank"
+          "name": "neepmeat:meat_steel_block_stairs"
         }
       ],
       "conditions": [

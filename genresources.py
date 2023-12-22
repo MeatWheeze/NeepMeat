@@ -13,7 +13,8 @@ blocks = [
 'polished_metal_small_bricks',
 'dirty_red_tiles',
 'sandy_bricks',
-'blood_bubble_planks'
+'blood_bubble_planks',
+'meat_steel_block'
 ]
 
 for name in blocks:

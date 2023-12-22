@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "neepmeat:meat_steel_block"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:meat_steel_ingot",
+    "count": 9
+  }
+}
