@@ -36,6 +36,9 @@ public class FluidNode
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private Storage<FluidVariant> storage;
 
+    private boolean canInsert;
+    private boolean canExtract;
+
     public boolean needsDeferredLoading;
 
     public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
@@ -180,6 +183,11 @@ public class FluidNode
         return face;
     }
 
+    public int getTargetY()
+    {
+        return pos.offset(face).getY();
+    }
+
     public BlockPos getPos()
     {
         return pos;
@@ -216,9 +224,9 @@ public class FluidNode
     {
         if (distances.get(node) == null
                 || node.mode == AcceptorModes.NONE
-                || this.mode == AcceptorModes.NONE)
+                || this.mode == AcceptorModes.NONE
+                )
         {
-//            System.out.println("transmit null");
             return;
         }
 
@@ -227,39 +235,40 @@ public class FluidNode
 
         // Geometrical solution for velocity in branched pipes:
         // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
-        // Useful equation:
 
         float r = 0.5f;
 
-        // This is supposed to calculate sum(r^4 / L)
-        AtomicReference<Float> sum = new AtomicReference<>((float) 0);
-        distances.values().forEach((distance) -> sum.updateAndGet(v -> (v + ((float) Math.pow(r, 4) / (float) distance))));
-//
+        float sumIn = 0;
+        float sumOut = 0;
+
+        for (int dist : distances.values())
+        {
+//            if (node.storage.simulateInsert(getStorage(world).))
+                sumIn += Math.pow(r, 4) / (float) dist;
+                sumOut += Math.pow(r, 4) / (float) dist;
+        }
 
         // Hazen-Williams approximation for gravity-driven flow of water
-        float S = getPos().getY() - node.getPos().getY();
-        double Q = 100 * Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852);
+        float S = getTargetY() - node.getTargetY();
+//        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
+        double gravityFlowIn = 50 * Math.pow((Math.abs(S) * Math.pow(130f, 1.852) * Math.pow(100e-3, 4.8704)) / 10.67f, 1 / 1.852f);
+        gravityFlowIn = 0;
+//        System.out.println(gravityFlowIn);
+        // Causes NaNs. Why???
 
-        float branchFlow = (float) (500 * (flow + Q) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get()));
-//        System.out.println(branchFlow);
+        float insertBranchFlow = (float) (500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
+        float extractBranchFlow = (float) (500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
-//        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
-//        float flow = - 4050 * pressureGradient / distances.values().size();
-
-//        long transferAmount = (branchFlow) > 0 ? (long) branchFlow : 0;
-//        long transferAmount = (flow) > 0 ? (long) flow : 0;
         long amountMoved = 0;
-        if (branchFlow >= 0)
+        if (insertBranchFlow >= 0)
         {
-            amountMoved = StorageUtil.move(getStorage(world), node.getStorage(world), variant -> true, (long) branchFlow, null);
-//            System.out.println(amountMoved);
+            amountMoved = StorageUtil.move(getStorage(world), node.getStorage(world), variant -> true, (long) insertBranchFlow, null);
         }
         else
         {
-            amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - branchFlow, null);
+            amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - extractBranchFlow, null);
 
         }
-//        System.out.print(node + ", " + node.getPressure() + ", amount: " + amountMoved);
     }
 
     public static void flow(Storage<FluidVariant> from, Storage<FluidVariant> to)
@@ -274,4 +283,23 @@ public class FluidNode
         // If we hadn't committed the outerTransaction, all changes (A), (B) and (C) would have been reverted.
     }
 
+    public boolean canInsert()
+    {
+        return canInsert;
+    }
+
+    public void setCanInsert(boolean canInsert)
+    {
+        this.canInsert = canInsert;
+    }
+
+    public boolean canExtract()
+    {
+        return canExtract;
+    }
+
+    public void setCanExtract(boolean canExtract)
+    {
+        this.canExtract = canExtract;
+    }
 }

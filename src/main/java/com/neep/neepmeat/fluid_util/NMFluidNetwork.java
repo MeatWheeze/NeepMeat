@@ -189,17 +189,14 @@ public class NMFluidNetwork
 
             for (int i = 0; i < UPDATE_DISTANCE; ++i)
             {
-//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
                 for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
                 {
                     BlockPos current = iterator.next();
                     networkPipes.get(current).setDistance(i + 1);
                     networkPipes.get(current).setVisited(true);
-//                        System.out.println(networkPipes.get(current).getDistance() + ", " + networkPipes.get(current).connections);
                     for (Direction direction : networkPipes.get(current).connections)
                     {
                         if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
-//                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
                         {
                             nextSet.add(current.offset(direction));
                         }
@@ -221,7 +218,8 @@ public class NMFluidNetwork
                     continue;
                 }
                 int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
-//                    System.out.print(node + ",\n " + distanceToNode + "\n");
+
+                // Update node distances
                 node.distances.put(targetNode, distanceToNode);
                 targetNode.distances.put(node, distanceToNode);
             }
