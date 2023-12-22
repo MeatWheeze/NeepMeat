@@ -9,16 +9,17 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class BulletTrailEffect extends BeamGraphicsEffect
+public class ZapBeamEffect extends BeamGraphicsEffect
 {
-    public static final Identifier TRAIL_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/bullet_trail.png");
+    public static final Identifier TRAIL_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/zap_trail.png");
     public static final RenderLayer TRAIL_LAYER = RenderLayer.getEntityTranslucent(TRAIL_TEXTURE);
 
-    public BulletTrailEffect(World world, UUID uuid, PacketByteBuf buf)
+    public ZapBeamEffect(World world, UUID uuid, PacketByteBuf buf)
     {
         super(world, uuid, buf);
     }
@@ -35,8 +36,13 @@ public class BulletTrailEffect extends BeamGraphicsEffect
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(TRAIL_LAYER);
         float x = (maxTime - time + 2 - tickDelta) / (float) maxTime;
+        float length = 0.5f;
+        float distance = (float) end.distanceTo(start);
+        Vec3d beam = end.subtract(start).normalize();
+        Vec3d newStart = start.add(beam.multiply(distance * x));
+        Vec3d newEnd = start.add(beam.multiply((distance * x) + length));
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
-                start, end, 214, 175, 32,
+                newStart, newEnd, 255, 255, 255,
                255, scale, 255);
         matrices.pop();
     }

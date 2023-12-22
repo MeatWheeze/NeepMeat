@@ -31,6 +31,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
+    public static EntityType<ZapProjectileEntity> ZAP;
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
 
@@ -53,6 +54,7 @@ public class MeatWeapons implements ModInitializer
     {
         BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
         CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
+        ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
         EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
 
         AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
