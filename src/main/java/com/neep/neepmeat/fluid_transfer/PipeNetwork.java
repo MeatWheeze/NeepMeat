@@ -21,6 +21,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -153,7 +154,6 @@ public class PipeNetwork
 
             this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
             PipeBranches.testMatrix(nodeMatrix);
-
         }
     }
 
@@ -187,22 +187,20 @@ public class PipeNetwork
         return !(targetNode = targetSupplier.get()).equals(node)
                 && targetSupplier.get() != null
                 && targetSupplier.get().getStorage(world) != null
-//                || targetNode.getMode(world) == AcceptorModes.NONE
-//                || targetNode.getMode(world) == AcceptorModes.PUSH
                 && targetNode.getMode(world).canInsert()
                 && node.getMode(world).canExtract();
-//                && node.getMode(world) != AcceptorModes.NONE;
     }
 
     // This is responsible for transferring the fluid from node to node
     public void tick()
     {
-        for (Supplier<FluidNode> supplier : connectedNodes)
+        for (int i = 0; i < connectedNodes.size(); i++)
         {
+            Supplier<FluidNode> fromSupplier = connectedNodes.get(i);
             Transaction transaction = Transaction.openOuter();
             FluidNode node;
-            if ((node = supplier.get()) == null || supplier.get().getStorage(world) == null
-                    || !supplier.get().isStorage || !node.canExtract(world, transaction))
+            if ((node = fromSupplier.get()) == null || fromSupplier.get().getStorage(world) == null
+                    || !fromSupplier.get().isStorage || !node.canExtract(world, transaction))
             {
                 transaction.abort();
                 continue;
@@ -217,12 +215,28 @@ public class PipeNetwork
             transaction.abort();
 
             // Filter out nodes that will cause crashes, or are unnecessary for the calculation
-            Transaction t2 = Transaction.openOuter();
-            List<Supplier<FluidNode>> safeNodes = connectedNodes.stream()
-                    .filter(targetNode -> validForInsertion(world, node, targetNode))
-                    .filter(supplier1 -> supplier1.get().canInsert(world, t2))
-                    .collect(Collectors.toList());
-            t2.abort();
+
+            List<Integer> safeIndices;
+            List<Supplier<FluidNode>> safeNodes;
+            try (Transaction t2 = Transaction.openOuter())
+            {
+                // TODO: Is this faster than a stream?
+                Predicate<Supplier<FluidNode>> predicate = ((Predicate<Supplier<FluidNode>>)
+                        (supplier -> validForInsertion(world, node, supplier)))
+                        .and(supplier -> supplier.get().canInsert(world, t2));
+                safeIndices = new ArrayList<>();
+                for (int j = 0; j < connectedNodes.size(); j++)
+                {
+                    if (predicate.test(connectedNodes.get(j)))
+                        safeIndices.add(j);
+                }
+
+                // TODO: Get rid of this
+                safeNodes = connectedNodes.stream()
+                        .filter(predicate)
+                        .collect(Collectors.toList());
+                t2.abort();
+            }
 
             double r = 0.5d;
 
@@ -232,10 +246,11 @@ public class PipeNetwork
             // Calculate sum_i(r^2 / L_i^2)
             double sumDist = safeNodes.stream()
                     .map(supplier1 -> supplier1.get().getTargetPos().getManhattanDistance(node.getTargetPos()))
-                    .mapToDouble(i -> Math.pow(r, 2) / i).sum();
+                    .mapToDouble(integer -> Math.pow(r, 2) / integer).sum();
 
-            for (Supplier<FluidNode> targetSupplier : safeNodes)
+            for (int j : safeIndices)
             {
+                Supplier<FluidNode> targetSupplier = connectedNodes.get(j);
                 FluidNode targetNode = targetSupplier.get();
 
                 float h = node.getTargetY() - targetNode.getTargetY();
@@ -254,7 +269,7 @@ public class PipeNetwork
                             Math.min(outBaseFlow, BASE_TRANSFER / 4) : outBaseFlow;
 
                     // Ignore distance, distribute fluid evenly
-                    Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) / safeNodes.size());
+                    Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) / safeIndices.size());
                 }
                 else
                 {
@@ -265,8 +280,10 @@ public class PipeNetwork
                     );
                 }
 
-                // Apply corresponding convolution
-
+                // Apply corresponding thingy
+                Q = nodeMatrix[i][j].apply(Q);
+//                System.out.println(nodeMatrix[0][1].apply(100L));
+//                System.out.println("i: " + i + ", j: " + j + ", Q: " + Q);
 
                 long amountMoved;
                 if (Q >= 0)
