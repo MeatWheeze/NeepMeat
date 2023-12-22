@@ -46,7 +46,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public TableControllerBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.TABLE_CONTROLLER, pos, state);
+        this(NMBlockEntities.PLC, pos, state);
     }
 
     int counter = 0;

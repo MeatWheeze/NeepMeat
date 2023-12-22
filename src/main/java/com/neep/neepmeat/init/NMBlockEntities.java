@@ -2,7 +2,6 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.HoldingTrackBlock;
@@ -49,18 +48,17 @@ import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlockEntity;
-import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserStorage;
 import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
+import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
-import com.neep.neepmeat.transport.block.fluid_transport.AdvancedTankBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
@@ -155,7 +153,7 @@ public class NMBlockEntities
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
     public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
     public static BlockEntityType<PylonBlockEntity> PYLON;
-    public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
+    public static BlockEntityType<PLCBlockEntity> PLC;
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
     public static BlockEntityType<MincerBlockEnity> MINCER;
     public static BlockEntityType<HomogeniserBlockEntity> HOMOGENISER;
@@ -282,9 +280,9 @@ public class NMBlockEntities
         SYNTHESISER = registerBlockEntity("synthesiser", SynthesiserBlockEntity::new , NMBlocks.SYNTHESISER);
         FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);
 
-        TABLE_CONTROLLER = registerBlockEntity("surgery_controller", TableControllerBlockEntity::new, NMBlocks.SURGERY_CONTROLLER);
-        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, TABLE_CONTROLLER);
-        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, TABLE_CONTROLLER);
+        PLC = registerBlockEntity("plc", (pos, state) -> new PLCBlockEntity(PLC, pos, state), NMBlocks.SURGERY_CONTROLLER);
+//        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, PLC);
+//        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, PLC);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);

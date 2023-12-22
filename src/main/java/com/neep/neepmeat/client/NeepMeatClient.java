@@ -33,7 +33,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
-import com.neep.neepmeat.machine.surgical_controller.TableControllerRenderer;
+import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
@@ -186,7 +186,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
-        BlockEntityRendererFactories.register(NMBlockEntities.TABLE_CONTROLLER, TableControllerRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.PLC, PLCRenderer::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
 
