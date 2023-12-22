@@ -35,7 +35,7 @@ public interface Instruction extends NbtSerialisable
         @Override
         public boolean canStart(PLC plc)
         {
-            return false;
+            return true;
         }
 
         @Override

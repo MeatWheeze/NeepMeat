@@ -73,8 +73,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         outline.setDimensions(width, height);
 
         addDrawableChild(new SaveButton(width - 17, 2, 16, 16, Text.of("Save")));
-        addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
-        addDrawableChild(new ImmediateRecordButton(width - 3 * 17, 2, 16, 16, Text.of("")));
+        addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
+        addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
+        addDrawableChild(new ImmediateRecordButton(width - 4 * 17, 2, 16, 16, Text.of("")));
     }
 
     @Override
@@ -223,6 +224,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public void close()
     {
         super.close();
+        this.client.player.closeHandledScreen();
         PLCHudRenderer.leave();
     }
 
@@ -376,7 +378,30 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void onClick(double mouseX, double mouseY)
         {
-            PLCSyncProgram.Client.sendRun(plc);
+            if (handler.isRunning())
+                PLCSyncProgram.Client.sendPause(plc);
+            else
+                PLCSyncProgram.Client.sendRun(plc);
+        }
+    }
+
+    class StopButton extends SaveButton
+    {
+        public StopButton(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        @Override
+        protected int getU()
+        {
+            return 80;
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            PLCSyncProgram.Client.sendStop(plc);
         }
     }
 
@@ -395,6 +420,16 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
 
         @Override
+        public Text getMessage()
+        {
+            return switch (handler.getMode())
+            {
+                case RECORD -> Text.of("Mode: Record");
+                case IMMEDIATE -> Text.of("Mode: Immediate");
+            };
+        }
+
+        @Override
         protected int getU()
         {
             return switch(handler.getMode())
@@ -409,4 +444,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         return Color.ofRGBA(255, 94, 33, 255).getColor();
     }
+
+
 }
