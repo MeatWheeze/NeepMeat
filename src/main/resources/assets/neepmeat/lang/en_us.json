@@ -124,7 +124,7 @@
   "block.neepmeat.copper_pipe": "Copper Pipe",
   "block.neepmeat.stop_valve": "Stop Valve",
   "block.neepmeat.stop_valve.lore_0": "Prevents flow when closed. Responds to redstone.",
-  "block.neepmeat.check_valve": "Check Valve",
+  "block.neepmeat.check_valve": "Check Valve [CURRENTLY BROKEN]",
   "block.neepmeat.check_valve.lore_0": "Only allows flow in one direction.",
   "block.neepmeat.filter_pipe": "Filter Pipe",
   "block.neepmeat.filter_pipe.lore_0": "Only allows a specific fluid type through.",

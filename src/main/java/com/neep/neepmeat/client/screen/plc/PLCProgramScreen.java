@@ -141,7 +141,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     private void tickTooltip(double mouseX, double mouseY)
     {
         tooltipText.clear();
-        var result = raycastClick(mouseX, mouseY);
+        var result = raycastClick(mouseX, mouseY, 15);
         if (result.getType() == HitResult.Type.BLOCK)
         {
             PLCHudRenderer.HIT_RESULT = result;
@@ -217,7 +217,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         if (button == GLFW.GLFW_MOUSE_BUTTON_2 || button == GLFW.GLFW_MOUSE_BUTTON_3)
             return false;
 
-        var result = raycastClick(mouseX, mouseY);
+        var result = raycastClick(mouseX, mouseY, 15);
 
         if (result.getType() == HitResult.Type.MISS)
         {
@@ -244,17 +244,21 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         PLCSyncProgram.Client.sendArgument(new Argument(result.getBlockPos(), result.getSide()), plc);
     }
 
-    protected BlockHitResult raycastClick(double mouseX, double mouseY)
+    protected BlockHitResult raycastClick(double mouseX, double mouseY, double range)
     {
         Vec3d camPos = client.gameRenderer.getCamera().getPos();
-        Vec3d farPos = screenToWorld(mouseX, mouseY, 1.0f);
+        Vec3d farPos = screenToWorld(mouseX, mouseY, 0.4f);
         Vec3d nearPos = screenToWorld(mouseX, mouseY, 0.0f);
 
+        Vec3d newFar = nearPos.add(farPos.subtract(nearPos).normalize().multiply(range));
+
         RaycastContext raycastContext = new RaycastContext(
-                new Vec3d(nearPos.getX(), nearPos.getY(), nearPos.getZ()).add(camPos),
-                new Vec3d(farPos.getX(), farPos.getY(), farPos.getZ()).add(camPos),
+                nearPos.add(camPos),
+                newFar.add(camPos),
                 RaycastContext.ShapeType.VISUAL, RaycastContext.FluidHandling.NONE, client.player);
-        return client.world.raycast(raycastContext);
+        var result =  client.world.raycast(raycastContext);
+
+        return result;
     }
 
     public Vec3d screenToWorld(double mouseX, double mouseY, double z)
