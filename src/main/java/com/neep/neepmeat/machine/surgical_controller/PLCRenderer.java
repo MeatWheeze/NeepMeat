@@ -10,7 +10,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
@@ -24,11 +23,22 @@ public class PLCRenderer implements BlockEntityRenderer<PLCBlockEntity>
     @Override
     public void render(PLCBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        // Smooth the robot's motion
         var robot = be.getRobot();
-        robot.clientX = MathHelper.lerp(0.1d, be.getRobot().clientX, be.getRobot().getX());
-        robot.clientY = MathHelper.lerp(0.1d, be.getRobot().clientY, be.getRobot().getY());
-        robot.clientZ = MathHelper.lerp(0.1d, be.getRobot().clientZ, be.getRobot().getZ());
+        robot.prevX = robot.clientX;
+        robot.prevY = robot.clientY;
+        robot.prevZ = robot.clientZ;
+
+        // Smooth the robot's position
+        robot.clientX = MathHelper.lerp(0.1d, robot.clientX, robot.getX());
+        robot.clientY = MathHelper.lerp(0.1d, robot.clientY, robot.getY());
+        robot.clientZ = MathHelper.lerp(0.1d, robot.clientZ, robot.getZ());
+        robot.clientYaw = MathHelper.lerpAngleDegrees(0.1f, robot.clientYaw, robot.getYaw());
+
+        double vx = robot.clientX - robot.prevX;
+        double vy = robot.clientY - robot.prevY;
+        double vz = robot.clientZ - robot.prevZ;
+
+        double speed = (float) Math.sqrt(vx * vx + vz * vz);
 
         // Only render the robot in 3rd person
         PLCHudRenderer plcHudRenderer = PLCHudRenderer.getInstance();
@@ -43,7 +53,9 @@ public class PLCRenderer implements BlockEntityRenderer<PLCBlockEntity>
             matrices.translate(0, 0.5 + (robot.isActive() ? 0.05 * Math.sin((be.getWorld().getTime() + tickDelta) / 10f) : 0), 0);
 
             matrices.translate(0.5, 0.5, 0.5);
-            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(robot.getYaw() + 180));
+//            matrices.multiply(normal.getDegreesQuaternion((float) (100000 * speed)));
+            matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(robot.clientYaw + 180));
+            matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion((float) (100 * speed)));
             matrices.translate(-0.5, -0.5, -0.5);
 
 //            BERenderUtils.rotateFacing(facing, matrices);

@@ -112,12 +112,14 @@ public class InjectInstruction implements Instruction
         {
             this.stored = takenAmount;
         }
+        else
+            plc.raiseError(new PLC.Error("No extractable resource at " + from.pos()));
     }
 
     private void insert(PLC plc)
     {
         var mip = MutateInPlace.ITEM.find(world.get(), to.pos(), null);
-        if (mip != null)
+        if (mip != null && stored != null)
         {
             ItemStack stack = mip.get();
 
