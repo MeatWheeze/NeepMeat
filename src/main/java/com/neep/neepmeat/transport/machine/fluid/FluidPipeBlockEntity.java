@@ -114,8 +114,8 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         vertex1.first().setAdjVertex(vertex1.second().getId(), vertex2.first());
         vertex2.first().setAdjVertex(vertex2.second().getId(), vertex1.first());
 
-        jankParticles(vertex1.first());
-        jankParticles(vertex2.first());
+//        jankParticles(vertex1.first());
+//        jankParticles(vertex2.first());
     }
 
     // For use if this pipe is a vertex. Performs a BFS at each connection to find the closest vertices.
@@ -160,7 +160,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
 
             if (connections > 2 || !vertex.canSimplify())
             {
-                jankParticles(vertex);
+//                jankParticles(vertex);
                 return Pair.of(vertex, current.second().getOpposite());
             }
 

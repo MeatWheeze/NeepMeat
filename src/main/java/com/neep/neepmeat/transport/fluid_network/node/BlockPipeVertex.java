@@ -2,14 +2,16 @@ package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
-import com.neep.neepmeat.transport.fluid_network.*;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.fluid_network.PipeFlowComponent;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.SimplePipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -172,7 +174,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         return nodeFlow != 0 ? nodeFlow : heightFlow;
     }
 
-    protected void stepHead()
+    protected void stepHeight()
     {
         float total = 0;
         int found = 1;
@@ -205,21 +207,21 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             float f = total / found;
             pumpHeight = Math.abs(f) <= 0.01 ? 0 : f;
         }
-    }
 
-    @Override
-    public void preTick()
-    {
-        deferredLoad();
-
-        stepHead();
-
+        // Update height in nodes
         for (FluidNode node : nodes)
         {
             if (node == null) continue;
 
             node.setPressureHeight((pumpHeight) / 2);
         }
+    }
+
+    @Override
+    public void preTick()
+    {
+        deferredLoad();
+        stepHeight();
 
         try (Transaction transaction = Transaction.openOuter())
         {
@@ -266,12 +268,6 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public float getPumpHeight()
     {
         return pumpHeight;
-    }
-
-    @Override
-    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
-    {
-        return super.insert(fromDir, toDir, maxAmount, world, insertVariant, transaction);
     }
 
     @Override

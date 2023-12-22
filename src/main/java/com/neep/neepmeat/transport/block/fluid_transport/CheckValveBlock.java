@@ -65,6 +65,7 @@ public class CheckValveBlock extends AbstractAxialFluidPipe implements BlockEnti
         @Override
         public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
         {
+            // TODO: make this actually work
             long superAmount = super.canInsert(world, inDir, variant, maxAmount);
             return  inDir == parent.getCachedState().get(FACING).ordinal() ? superAmount : 0;
         }
