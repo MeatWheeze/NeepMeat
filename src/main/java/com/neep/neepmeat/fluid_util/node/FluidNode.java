@@ -1,7 +1,9 @@
 package com.neep.neepmeat.fluid_util.node;
 
 import com.neep.neepmeat.fluid_util.AcceptorModes;
+import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import com.sun.jna.platform.win32.WinUser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -30,6 +32,7 @@ public class FluidNode
     public float flowMultiplier;
     public AcceptorModes mode;
     private NMFluidNetwork network = null;
+    public long networkId;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private Storage<FluidVariant> storage;
 
@@ -46,7 +49,8 @@ public class FluidNode
         this.flow = mode.getFlow() * flowMultiplier;
     }
 
-    public FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier)
+    // From NBT
+    public FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier, long networkId)
     {
         this.face = face;
         this.pos = pos;
@@ -54,8 +58,12 @@ public class FluidNode
         this.mode = mode;
         this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
+        this.networkId = networkId;
         this.storage = null;
         this.needsDeferredLoading = true;
+
+        FluidNetwork.QUEUED_NODES.add(this);
+
     }
 
     @Override
@@ -69,9 +77,10 @@ public class FluidNode
         BlockPos pos = BlockPos.fromLong(nbt.getLong("position"));
         Direction face = Direction.byId(nbt.getInt("direction"));
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
+        long networkId = nbt.getLong("network_id");
         float flowMultiplier = nbt.getFloat("multiplier");
 
-       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier);
+       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier, networkId);
 //       node.loadDeferred(world);
        return node;
     }
@@ -81,21 +90,36 @@ public class FluidNode
         nbt.putInt("direction", face.getId());
         nbt.putLong("position", pos.asLong());
         nbt.putInt("mode", mode.getId());
+        nbt.putLong("network_id", networkId);
         nbt.putFloat("multiplier", flowMultiplier);
         return nbt;
     }
 
     public void loadDeferred(ServerWorld world)
     {
-        if (!world.getServer().isOnThread())
+        if (!(needsDeferredLoading && storage == null) || !world.getServer().isOnThread())
         {
             return;
         }
+        load(world);
+        Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+    }
+
+    private void load(ServerWorld world)
+    {
+        if (!(needsDeferredLoading && storage == null) || !world.getServer().isOnThread())
+        {
+            return;
+        }
+        findStorage(world);
+    }
+
+    public void findStorage(ServerWorld world)
+    {
         Storage<FluidVariant> storage;
         if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
         {
             this.storage = storage;
-            Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
             this.needsDeferredLoading = false;
         }
     }
@@ -109,6 +133,8 @@ public class FluidNode
     public void setNetwork(NMFluidNetwork network)
     {
 //        System.out.println("called set network to replace " + this.network);
+        load((ServerWorld) network.getWorld());
+
         if (!(this.network == null) && !this.network.equals(network))
         {
             this.network.removeNode(new NodePos(pos, face));
@@ -144,15 +170,6 @@ public class FluidNode
 //        {
 //            network.tick();
 //        }
-    }
-
-    public void rebuildNetwork(World world)
-    {
-//        if (network == null)
-        {
-//            network = new NMFluidNetwork(world, pos, face);
-        }
-//        network.rebuild(pos, face);
     }
 
     public Direction getFace()

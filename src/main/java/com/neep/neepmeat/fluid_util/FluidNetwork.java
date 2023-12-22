@@ -3,6 +3,7 @@ package com.neep.neepmeat.fluid_util;
 import com.neep.neepmeat.blockentity.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -14,19 +15,29 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.logging.log4j.core.jmx.Server;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class FluidNetwork
 {
     public static final FluidNetwork INSTANCE = new FluidNetwork();
 
+    public static List<FluidNode> QUEUED_NODES = new ArrayList<>();
+
     public Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
+
+    public static void tickNetwork(ServerWorld world)
+    {
+        for (Iterator<FluidNode> it = QUEUED_NODES.listIterator(); it.hasNext();)
+        {
+            FluidNode node = it.next();
+            node.loadDeferred(world);
+            it.remove();
+        }
+
+        NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+    }
 
     public Map<NodePos, FluidNode> getOrCreateMap(ChunkPos pos)
     {
@@ -163,17 +174,14 @@ public class FluidNetwork
         List<FluidNode> nodes = new ArrayList<>();
         for (Direction direction : Direction.values())
         {
-            System.out.println(direction);
             NbtElement nodeNbt = nbt.get(direction.toString());
             if (nodeNbt == null)
             {
                 continue;
             }
             nodes.add(FluidNode.fromNbt((NbtCompound) nodeNbt));
-            System.out.println("adding node");
         }
         putNodes(nodes, pos);
-        System.out.println("put node");
     }
 
     public Supplier<FluidNode> getNodeSupplier(NodePos pos)
@@ -219,5 +227,10 @@ public class FluidNetwork
         {
             return INSTANCE.getOrCreateMap(pos.toChunkPos()).get(pos);
         }
+    }
+
+    static
+    {
+        ServerTickEvents.END_WORLD_TICK.register(FluidNetwork::tickNetwork);
     }
 }
