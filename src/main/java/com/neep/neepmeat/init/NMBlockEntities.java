@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
@@ -130,6 +131,7 @@ public class NMBlockEntities
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
     public static BlockEntityType<MincerBlockEnity> MINCER;
     public static BlockEntityType<FlameJetBlockEntity> FLAME_JET;
+    public static BlockEntityType<ItemMincerBlockEntity> ITEM_MINCER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -255,6 +257,11 @@ public class NMBlockEntities
 
         FLAME_JET = registerBlockEntity("flame_jet", FlameJetBlockEntity::new, NMBlocks.FLAME_JET);
         FluidStorage.SIDED.registerForBlockEntity(FlameJetBlockEntity::getFluidStorage, FLAME_JET);
+
+        ITEM_MINCER = registerBlockEntity("item_mincer", ItemMincerBlockEntity::new, NMBlocks.ITEM_MINCER);
+        ItemStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getInputStorage, ITEM_MINCER);
+        FluidStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getOutputStorage, ITEM_MINCER);
+        FluidPump.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getPump, ITEM_MINCER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
