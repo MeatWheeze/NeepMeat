@@ -11,7 +11,7 @@ import java.util.Set;
 public abstract class BFSGroupFinder<T>
 {
     private final Queue<BlockPos> posQueue = new LinkedList<>();
-    private final Set<BlockPos> visited = new ObjectOpenHashSet<>();
+    protected final Set<Long> visited = new ObjectOpenHashSet<>();
     private Long2ObjectArrayMap<T> result = new Long2ObjectArrayMap<>();
 
     public BFSGroupFinder()
@@ -37,12 +37,20 @@ public abstract class BFSGroupFinder<T>
 
     public void queueBlock(BlockPos pos)
     {
-        if (!visited.contains(pos)) posQueue.add(pos.toImmutable());
+        if (!visited.contains(pos.asLong()))
+        {
+            posQueue.add(pos.toImmutable());
+            visited.add(pos.asLong());
+        }
     }
 
     public void loop(int maxDepth)
     {
-        while (propagate(maxDepth));
+        int depth = 0;
+        while (propagate(maxDepth) && depth < maxDepth)
+        {
+            ++depth;
+        }
     }
 
     public boolean propagate(int maxDepth)
@@ -50,7 +58,6 @@ public abstract class BFSGroupFinder<T>
         if (!posQueue.isEmpty())
         {
             BlockPos current = posQueue.poll();
-            visited.add(current);
             State state = processPos(current);
             return state == State.CONTINUE;
         }
@@ -62,6 +69,7 @@ public abstract class BFSGroupFinder<T>
     protected enum State
     {
         CONTINUE,
-        SUCCESS;
+        SUCCESS,
+        FAIL;
     }
 }

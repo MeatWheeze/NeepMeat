@@ -49,7 +49,7 @@ public class ItemRequesterScreenHandler extends BasicScreenHandler
         {
             for (int i = 0; i < W_GRID; ++i)
             {
-                this.addSlot(new Slot(inventory, i + j * W_GRID, 8 + i * w_slot, 8 + h_slot + j * w_slot));
+                this.addSlot(new Slot(inventory, i + j * W_GRID, 8 + i * w_slot, 8 + j * h_slot));
             }
         }
     }

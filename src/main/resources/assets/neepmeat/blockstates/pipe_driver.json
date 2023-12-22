@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "neepmeat:block/caution_block"
+      "model": "neepmeat:block/pipe_driver"
     }
   }
 }

@@ -56,6 +56,6 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
+//        this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
     }
 }
