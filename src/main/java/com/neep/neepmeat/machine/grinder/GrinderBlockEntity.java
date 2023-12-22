@@ -20,7 +20,6 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -119,7 +118,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         }
 
         // Eject outputs
-        if (!storage.getOutputStorage().isEmpty())
+        if (!storage.getOutputStorage().isEmpty() || !storage.extraStorage.isEmpty())
         {
             try (Transaction transaction = Transaction.openOuter())
             {
@@ -137,7 +136,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
             if (progress >= this.processLength || !getCurrentRecipe().matches(storage))
             {
-                endDutyCycle();
+                endRecipe();
                 this.progress = 0;
             }
         }
@@ -147,13 +146,13 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
             if (progress >= this.cooldownTicks)
             {
-                startDutyCycle();
+                startRecipe();
                 this.progress = 0;
             }
         }
     }
 
-    private void startDutyCycle()
+    private void startRecipe()
     {
         if (currentRecipe == null && storage.outputStorage.isEmpty() && !storage.inputStorage.isEmpty())
         {
@@ -178,7 +177,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         sync();
     }
 
-    private void endDutyCycle()
+    private void endRecipe()
     {
         if (currentRecipe != null)
         {
@@ -201,10 +200,18 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         Direction facing = getCachedState().get(GrinderBlock.FACING);
         CombinedStorage<ItemVariant, WritableStackStorage> combined = new CombinedStorage<>(List.of(storage.outputStorage, storage.extraStorage));
         ItemPipeUtil.storageToAny((ServerWorld) getWorld(), combined, pos, facing, transaction);
+    }
 
-        Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
-        ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
-        storage.xpStorage.extract(Float.MAX_VALUE, transaction);
+    protected void ejectXP()
+    {
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            Direction facing = getCachedState().get(GrinderBlock.FACING);
+            Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
+            ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
+            storage.xpStorage.extract(Float.MAX_VALUE, transaction);
+            transaction.commit();
+        }
     }
 
     @Override

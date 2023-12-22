@@ -70,7 +70,8 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     public void update()
     {
         amount = lootFunction.get(random);
-        willOutput = random.nextFloat() < chance;
+        float next = random.nextFloat();
+        willOutput = next < chance;
     }
 
 //    public <V extends TransferVariant<T>> boolean insertInto(Storage<V> storage, Function<T, V> of, TransactionContext transaction)
