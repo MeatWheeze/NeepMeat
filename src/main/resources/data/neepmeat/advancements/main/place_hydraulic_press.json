@@ -1,0 +1,27 @@
+{
+  "parent": "neepmeat:main/place_grinder",
+  "display": {
+    "icon": {
+      "item": "neepmeat:hydraulic_press"
+    },
+    "title": {
+      "translate": "advancements.neepmeat.main.place_hydraulic_press.title"
+    },
+    "description": {
+      "translate": "advancements.neepmeat.main.place_hydraulic_press.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "place_pedestal": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "player": [],
+        "block": "neepmeat:hydraulic_press"
+      }
+    }
+  }
+}

@@ -412,12 +412,24 @@
   "advancements.neepmeat.main.place_grinder.title": "Scrunch Scrunch",
   "advancements.neepmeat.main.place_grinder.description": "Place a Grinder.",
 
-  "advancements.neepmeat.main.enlightenment.title": "Enlightenment",
+  "advancements.neepmeat.main.enlightenment.title": "How Enlightening",
   "advancements.neepmeat.main.enlightenment.description": "Use a Pedestal connected to an Integrator to produce strange new forms.",
 
   "advancements.neepmeat.main.obtain_enlightened_brain.title": "Grant Us Eyes!",
   "advancements.neepmeat.main.obtain_enlightened_brain.description": "Advance a brain to its Enlightened form.",
 
   "advancements.neepmeat.main.obtain_whisper_flour.title": "The Yeast of Thoughts and Minds",
-  "advancements.neepmeat.main.obtain_whisper_flour.description": "Crush some Whisper Wheat into Whisper Flour."
+  "advancements.neepmeat.main.obtain_whisper_flour.description": "Crush some Whisper Wheat into Whisper Flour.",
+
+  "advancements.neepmeat.main.place_hydraulic_press.title": "Hydraulic Press Channel",
+  "advancements.neepmeat.main.place_hydraulic_press.description": "Obtain a Hydraulic Press.",
+
+  "advancements.neepmeat.main.obtain_whisper_brass.title": "Wh- Where's The Zinc?",
+  "advancements.neepmeat.main.obtain_whisper_brass.description": "Smelt some Whisper Brass.",
+
+  "advancements.neepmeat.main.obtain_item_pipe.title": "Marginal Efficiency Gain",
+  "advancements.neepmeat.main.obtain_item_pipe.description": "Craft some Item Pipes.",
+
+  "advancements.neepmeat.main.place_ejector.title": "Vaguely Familiar",
+  "advancements.neepmeat.main.place_ejector.description": "Use an Ejector to insert items into pipes."
 }
