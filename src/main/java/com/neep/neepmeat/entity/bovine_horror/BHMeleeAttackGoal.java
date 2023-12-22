@@ -4,15 +4,13 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.Hand;
 
-import java.util.EnumSet;
-
-public class BovineHorrorMeleeAttackGoal extends Goal
+public class BHMeleeAttackGoal extends Goal
 {
     protected BovineHorrorEntity mob;
     protected int cooldown;
     private int maxCooldown = 20;
 
-    public BovineHorrorMeleeAttackGoal(BovineHorrorEntity mob)
+    public BHMeleeAttackGoal(BovineHorrorEntity mob)
     {
 //        this.setControls(EnumSet.of(Control.MOVE));
         this.mob = mob;
