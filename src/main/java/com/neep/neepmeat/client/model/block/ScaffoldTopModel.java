@@ -107,7 +107,8 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
         // Create inner faces
         for(Direction direction : Direction.values())
         {
-            int spriteIdx = direction == Direction.UP || direction == Direction.DOWN ? 1 : 0;
+//            int spriteIdx = direction == Direction.UP || direction == Direction.DOWN ? 1 : 0;
+            int spriteIdx = direction == Direction.UP ? 1 : 0;
 
             emitter.square(direction.getOpposite(), 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
             emitter.nominalFace(direction);
