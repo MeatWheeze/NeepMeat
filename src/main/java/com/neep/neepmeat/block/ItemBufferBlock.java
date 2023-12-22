@@ -40,7 +40,6 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
     {
-//        return VoxelShapes.cuboid(0f, 0f, 0f, 1f, 1.0f, 1f);
         return DEFAULT_SHAPE;
     }
 
@@ -54,7 +53,6 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        System.out.println(world.getBlockEntity(pos));
         if (world.getBlockEntity(pos) instanceof ItemBufferBlockEntity be && !world.isClient)
         {
             ItemStack stack = player.getStackInHand(hand);
@@ -98,12 +96,9 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
 
-            // Scatter contents in world
             if (blockEntity instanceof ItemBufferBlockEntity be)
             {
-                SimpleInventory inv = new SimpleInventory();
-                inv.addStack(be.getResource().toStack((int) be.getAmount()));
-                ItemScatterer.spawn(world, pos, inv);
+                ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), be.getResource().toStack((int) be.getAmount()));
                 world.updateComparators(pos,this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
