@@ -280,11 +280,11 @@ public class NMBlockEntities
         VAT_FLUID_PORT = registerBlockEntity("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
-//        CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
-        FLUID_EXCITER = registerBlockEntity("fluid_exciter", FluidExciterBlockEntity::new, NMBlocks.FLUID_EXCITER);
+        FLUID_EXCITER = registerBlockEntity("fluid_exciter", (pos, state) -> new FluidExciterBlockEntity(FLUID_EXCITER, pos, state), NMBlocks.FLUID_EXCITER);
         FluidStorage.SIDED.registerForBlockEntity(FluidExciterBlockEntity::getInputStorage, FLUID_EXCITER);
-        FluidStorage.SIDED.registerForBlocks((world, pos, state, be, context) -> world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity fbe ? fbe.getOutputStorage(context) : null, NMBlocks.FLUID_EXCITER.getStructureBlock());
-        FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
+//        FluidStorage.SIDED.registerForBlocks((world, pos, state, be, context) -> world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity fbe ? fbe.getOutputStorage(context) : null, NMBlocks.FLUID_EXCITER.getStructureBlock());
+//        FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
+        BloodAcceptor.SIDED.registerForBlocks(FluidExciterBlockEntity::getBloodAcceptorFromTop, NMBlocks.FLUID_EXCITER.getStructureBlock());
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
 //        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);

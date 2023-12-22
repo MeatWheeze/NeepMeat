@@ -4,8 +4,9 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -26,7 +27,6 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidExciterBlockEntity extends SyncableBlockEntity
 {
-    protected boolean needsUpdate = true;
     BlockApiCache<Storage<FluidVariant>, Direction> downCache;
 
     protected WritableSingleFluidStorage outputStorage = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::markDirty);
@@ -88,14 +88,24 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         }
     };
 
+    BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    {
+        @Override
+        public float getRate()
+        {
+            return 0.1f;
+        }
+
+        @Override
+        public Mode getMode()
+        {
+            return Mode.OUT;
+        }
+    };
+
     public FluidExciterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-    }
-
-    public FluidExciterBlockEntity(BlockPos pos, BlockState state)
-    {
-        super(NMBlockEntities.FLUID_EXCITER, pos, state);
     }
 
     protected void updateCache()
@@ -113,10 +123,20 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         return inputStorage;
     }
 
+    public static BloodAcceptor getBloodAcceptorFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, Direction direction)
+    {
+        if (world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity be)
+        {
+            return be.bloodAcceptor;
+        }
+        return null;
+    }
+
     public static final FluidPump TOP_PUMP = FluidPump.of(-1, true);
 
     public static FluidPump getPump(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, Direction direction)
     {
         return TOP_PUMP;
     }
+
 }
