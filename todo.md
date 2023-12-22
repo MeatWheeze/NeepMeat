@@ -37,8 +37,9 @@
 - [done] Make Mixer require a motor
 - Make Deployer run with a motor
 - [done] Fix pumps extracting from multiple tanks
-- Add Rendering Basin
-- Add Ethereal Alembic
+- [done] Add Rendering Basin
+- [done] Add Ethereal Alembic
+- Fix Fluid Buffer connections
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Remove 'realistic fluids'
 - Add cutting recipes for building blocks

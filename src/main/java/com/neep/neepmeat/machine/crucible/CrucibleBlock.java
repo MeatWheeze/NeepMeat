@@ -4,9 +4,13 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -29,7 +33,7 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
         {
             WritableFluidBuffer.handleInteract(be.getStorage().fluidStorage, world, player, hand);
         }
-        return ActionResult.SUCCESS;
+        return FluidStorage.ITEM.find(player.getStackInHand(hand), ContainerItemContext.ofPlayerHand(player, hand)) != null ? ActionResult.SUCCESS : ActionResult.PASS;
     }
 
     @Nullable
@@ -37,5 +41,14 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NMBlockEntities.CRUCIBLE.instantiate(pos, state);
+    }
+
+    @Override
+    public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity)
+    {
+        if (entity instanceof ItemEntity && world.getBlockEntity(pos) instanceof CrucibleBlockEntity be && !world.isClient())
+        {
+            be.receiveItem((ItemEntity) entity);
+        }
     }
 }
