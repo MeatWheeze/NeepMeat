@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_util;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -40,7 +41,7 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
 
     public void readNBT(NbtCompound compound)
     {
-        System.out.println(amount);
+        this.amount = compound.getLong("amount");
     }
 
     @Override

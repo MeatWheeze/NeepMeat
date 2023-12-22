@@ -23,7 +23,6 @@ import java.util.Map;
 public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 {
 
-    // Creates positive pressure at front, negative pressure at rear.
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
     private final Map<Direction, AcceptorModes > sideModes = new HashMap<>();

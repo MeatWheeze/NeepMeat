@@ -6,10 +6,13 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
 public class RealisticFluidClient implements ModInitializer
 {
+    public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
+
     public void onInitializeClient() {
 
 //        this.registerItemModel(Items.REDSTONE);
@@ -22,6 +25,8 @@ public class RealisticFluidClient implements ModInitializer
         ));
 
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD);
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.GLASS_TANK);
 
         //if you want to use custom textures they needs to be registered.
         //In this example this is unnecessary because the vanilla water textures are already registered.
