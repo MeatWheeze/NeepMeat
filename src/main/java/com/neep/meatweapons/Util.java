@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -29,5 +30,14 @@ public class Util
         });
 
         return list;
+    }
+
+    public static Vec3d getRotationVector(float pitch, float yaw)
+    {
+        float h = MathHelper.cos(-yaw);
+        float i = MathHelper.sin(-yaw);
+        float j = MathHelper.cos(pitch);
+        float k = MathHelper.sin(pitch);
+        return new Vec3d(i * j, -k, h * j);
     }
 }
