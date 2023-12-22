@@ -36,7 +36,7 @@ public class SoundInitialiser
         return event;
     }
 
-    public static void registerSounds()
+    public static void initialise()
     {
         for (Map.Entry<Identifier, SoundEvent> entry : SOUNDS.entrySet())
         {

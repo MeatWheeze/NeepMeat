@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
+import com.neep.meatweapons.client.model.PlasmaEntityModel;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
@@ -17,11 +18,13 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
@@ -32,6 +35,7 @@ import java.util.List;
 public class NeepMeatClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
+    public static final EntityModelLayer TANK_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "tank_minecart"), "main");
 
     public static List<BasePaintedBlock.PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
 
@@ -66,6 +70,9 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
+
+        EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
+        EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 
         GeoItemRenderer.registerItemRenderer(NMItems.SLASHER, new SwordRenderer<>(new SwordModel<>(
                 NeepMeat.NAMESPACE,
