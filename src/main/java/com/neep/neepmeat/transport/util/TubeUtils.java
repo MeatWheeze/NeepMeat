@@ -48,7 +48,7 @@ public class TubeUtils
         }
 
         // TODO: is this condition necessary?
-        if (amountInserted != item.getCount())
+        if (amountInserted != item.getAmount())
         {
         item.decrement((int) amountInserted);
         }
@@ -65,7 +65,7 @@ public class TubeUtils
     {
         try (Transaction nested = transaction.openNested())
         {
-            long transferred = storage.insert(item.getResourceAmount().resource(), item.getCount(), nested);
+            long transferred = storage.insert(item.toResourceAmount().resource(), item.getAmount(), nested);
             if (transferred > 0)
             {
                 nested.commit();
@@ -96,11 +96,11 @@ public class TubeUtils
     {
         long amountInserted = 0;
 //        if (IItemPipe.isConnectedIn(world, pos, state, out))
-        if (pipe.canItemEnter(item.getResourceAmount(), world, toPos, toState, out.getOpposite()))
+        if (pipe.canItemEnter(item.toResourceAmount(), world, toPos, toState, out.getOpposite()))
         {
             if (simpleCheck)
             {
-                long simpleAmount = canEjectSimple(item.getResourceAmount(), world, toPos, out, transaction);
+                long simpleAmount = canEjectSimple(item.toResourceAmount(), world, toPos, out, transaction);
                 ItemInPipe newItem = item.copyWith((int) simpleAmount);
                 amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), newItem, transaction);
             }
