@@ -45,6 +45,15 @@ public class FluidNetwork
         return WORLD_NETWORKS.get(world);
     }
 
+    public static void removeStorageNodes(World world, BlockPos pos)
+    {
+        for (Direction direction : Direction.values())
+        {
+            NodePos nodePos = new NodePos(pos, direction);
+            getInstance((ServerWorld) world).removeNode(world, nodePos);
+        }
+    }
+
     public void queueNode(FluidNode node)
     {
         if (world.getServer().isOnThread())
@@ -188,11 +197,11 @@ public class FluidNetwork
         }
     }
 
-    public void updatePosition(World world, NodePos pos)
+    public boolean updatePosition(World world, NodePos pos)
     {
         if (!(world instanceof ServerWorld serverWorld))
         {
-            return;
+            return false;
         }
 
         // Get connected storage, remove node if there isn't one
@@ -200,8 +209,15 @@ public class FluidNetwork
         if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face.getOpposite())) == null
                 && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof IFluidNodeProvider))
         {
-            removeNode(world, pos);
-            return;
+            if (getNodeSupplier(pos).exists())
+            {
+                removeNode(world, pos);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Get acceptor mode if present
@@ -215,12 +231,14 @@ public class FluidNetwork
         }
 
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
+        boolean newNode = false;
         FluidNode node;
         if ((node = nodes.get(pos)) == null)
         {
             // Create new node with params
             node = new FluidNode(pos, storage, 1, isStorage);
             nodes.put(pos, node);
+            newNode = true;
         }
 
         node.setMode(mode);
@@ -228,6 +246,7 @@ public class FluidNetwork
         validatePos(serverWorld, pos.pos);
 
         System.out.println("Node updated: " + nodes.get(pos));
+        return newNode;
     }
 
     public void replaceNode(World world, NodePos pos, FluidNode node)

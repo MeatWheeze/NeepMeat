@@ -7,7 +7,9 @@ import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -15,10 +17,11 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class CheckValveBlock extends AbstractAxialPipe implements IVariableFlowBlock, PipeState.ISpecialPipe
+public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider, IVariableFlowBlock, PipeState.ISpecialPipe
 {
     public CheckValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -28,10 +31,11 @@ public class CheckValveBlock extends AbstractAxialPipe implements IVariableFlowB
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        System.out.println("be: " + world.getBlockEntity(pos));
         if (!world.isClient())
         {
             Direction facing = state.get(FACING);
-            System.out.println(FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(pos.offset(facing), facing.getOpposite())).get());
+            System.out.println(FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(pos, facing)).get());
         }
         return ActionResult.SUCCESS;
     }
@@ -74,5 +78,12 @@ public class CheckValveBlock extends AbstractAxialPipe implements IVariableFlowB
     public boolean canTransferFluid(Direction bias, BlockState state)
     {
         return bias == state.get(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return null;
     }
 }

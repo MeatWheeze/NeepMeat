@@ -364,7 +364,7 @@ public class PipeNetwork
             pipeQueue.addAll(nextSet);
         }
 //        System.out.println("special: " + special + "state: " + state);
-        System.out.println(networkPipes);
+//        System.out.println(networkPipes);
     }
 
     public void removeNode(NodePos pos)
@@ -372,6 +372,15 @@ public class PipeNetwork
         Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(pos);
         connectedNodes.remove(FluidNetwork.getInstance(world).getNodeSupplier(pos));
         validate();
+    }
+
+    public enum UpdateReason
+    {
+        PIPE_BROKEN,
+        PIPE_ADDED,
+        CONNECTION_CHANGED,
+        NODE_CHANGED,
+        VALVE_CHANGED;
     }
 
     static

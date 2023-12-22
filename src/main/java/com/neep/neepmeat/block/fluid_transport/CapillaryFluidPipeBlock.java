@@ -147,25 +147,25 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
         return state;
     }
 
-    public void createStorageNodes(World world, BlockPos pos, BlockState state)
-    {
-        if (!world.isClient)
-        {
-            for (Direction direction : Direction.values())
-            {
-                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
-                {
-                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
-                }
-                else
-                {
-                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
-                }
-            }
-            // TODO: avoid creating instances that will fail immediately
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
-        }
-    }
+//    public void createStorageNodes(World world, BlockPos pos, BlockState state)
+//    {
+//        if (!world.isClient)
+//        {
+//            for (Direction direction : Direction.values())
+//            {
+//                if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
+//                {
+//                    FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction));
+//                }
+//                else
+//                {
+//                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
+//                }
+//            }
+//            // TODO: avoid creating instances that will fail immediately
+//            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork((ServerWorld) world, pos, Direction.NORTH);
+//        }
+//    }
 
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
