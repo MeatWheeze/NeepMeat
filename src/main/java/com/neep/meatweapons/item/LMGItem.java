@@ -71,11 +71,11 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
     {
-        boolean sneak = player.isSneaking();
+        boolean sneak = entity.isSneaking();
         return new Vec3d(
-                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? 0 : entity.getMainHandStack().equals(stack) ? -0.2 : 0.2,
                 sneak ? -0.25 : 0.1,
                 .2);
     }

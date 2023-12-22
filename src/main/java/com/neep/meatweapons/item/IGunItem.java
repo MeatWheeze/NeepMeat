@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.network.MWAttackC2SPacket;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,18 +21,18 @@ public interface IGunItem
         return stack.getItem() instanceof IGunItem gun ? gun : null;
     }
 
-    Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
+    Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack);
 
     default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
 
     default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
     default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
 
-    void playSound(World world, PlayerEntity player, GunSounds sound);
+    void playSound(World world, LivingEntity entity, GunSounds sound);
 
    default void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius) {}
 
-   void syncAnimation(World world, PlayerEntity player, ItemStack stack, int animation, boolean broadcast);
+   void syncAnimation(World world, LivingEntity player, ItemStack stack, int animation, boolean broadcast);
 
     Random getRandom();
 

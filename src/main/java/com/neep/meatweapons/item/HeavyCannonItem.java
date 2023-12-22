@@ -6,6 +6,7 @@ import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -50,10 +51,10 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    public Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack)
     {
-        return new Vec3d(player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-                player.isSneaking() ? -0.15 : 0.1,
+        return new Vec3d(entity.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                entity.isSneaking() ? -0.15 : 0.1,
                 0);
     }
 

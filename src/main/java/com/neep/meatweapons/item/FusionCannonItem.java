@@ -195,7 +195,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
-    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    public Vec3d getMuzzleOffset(LivingEntity player, ItemStack stack)
     {
         boolean sneak = player.isSneaking();
         return new Vec3d(
@@ -204,22 +204,41 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                 .5);
     }
 
-    protected void fireBeam(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)
+    public void fireBeam(World world, LivingEntity entity, ItemStack stack, double pitch, double yaw)
     {
         // Get projectile starting position and direction.
-        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
+        Vec3d pos = new Vec3d(entity.getX(), entity.getY() + 1.4, entity.getZ());
+        Vec3d transform = getMuzzleOffset(entity, stack).rotateX((float) -pitch).rotateY((float) -yaw);
         pos = pos.add(transform);
 
         Vec3d end = pos.add(Util.getRotationVector((float) pitch, (float) yaw).multiply(20));
-        Optional<Entity> target = hitScan(player, pos, end, 20, this);
-        target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
+        Optional<Entity> target = hitScan(entity, pos, end, 20, this);
+        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        target.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
 
         // Play fire sound
-        playSound(world, player, GunSounds.FIRE_PRIMARY);
+        playSound(world, entity, GunSounds.FIRE_PRIMARY);
 
 
-        syncAnimation(world, player, stack, ANIM_FIRE, true);
+        syncAnimation(world, entity, stack, ANIM_FIRE, true);
+    }
+
+    public void fireBeam(World world, LivingEntity entity, Entity target, ItemStack stack)
+    {
+        // Get projectile starting position and direction.
+        Vec3d pos = entity.getEyePos();
+        Vec3d end = target.getPos().add(0, target.getHeight() / 2, 0);
+
+        Optional<Entity> foundTarget = hitScan(entity, pos, end, 20, this);
+        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        foundTarget.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
+
+        // Play fire sound
+        playSound(world, entity, GunSounds.FIRE_PRIMARY);
+
+
+        syncAnimation(world, entity, stack, ANIM_FIRE, true);
+
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.inventory.StackReference;
@@ -212,7 +213,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
 
-    public static Optional<Entity> hitScan(@NotNull PlayerEntity caster, Vec3d start, Vec3d end, double distance, IGunItem gunItem)
+    public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, IGunItem gunItem)
     {
         World world = caster.world;
         if (!world.isClient)
@@ -244,12 +245,15 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         return Optional.empty();
     }
 
-    public void syncAnimation(World world, PlayerEntity player, ItemStack stack, int animation, boolean broadcast)
+    @Override
+    public void syncAnimation(World world, LivingEntity player, ItemStack stack, int animation, boolean broadcast)
     {
         final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+
+        if (player instanceof PlayerEntity playerEntity) GeckoLibNetwork.syncAnimation(playerEntity, this, id, animation);
+
         if (broadcast)
         {
-            GeckoLibNetwork.syncAnimation(player, this, id, animation);
             for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
             {
                 GeckoLibNetwork.syncAnimation(otherPlayer, this, id, animation);
@@ -257,13 +261,14 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         }
     }
 
-    public void playSound(World world, PlayerEntity player, GunSounds sound)
+    @Override
+    public void playSound(World world, LivingEntity entity, GunSounds sound)
     {
         if (sounds.containsKey(sound))
         {
             world.playSound(
                     null,
-                    player.getBlockPos(),
+                    entity.getBlockPos(),
                     sounds.get(sound),
                     SoundCategory.PLAYERS,
                     1f,

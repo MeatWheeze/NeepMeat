@@ -6,6 +6,7 @@ import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.entity.MobPlatformRidingEntity;
 import com.neep.neepmeat.entity.TankMinecartEntity;
+import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -19,6 +20,7 @@ public class NMEntities
     public static EntityType<EggEntity> EGG;
 
     public static EntityType<WormEntity> WORM;
+    public static EntityType<KeeperEntity> KEEPER;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
     public static EntityType<MobPlatformRidingEntity> MOB_PLATFORM;
 
@@ -37,9 +39,10 @@ public class NMEntities
         WORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "god_worm", FabricEntityTypeBuilder.<WormEntity>create(SpawnGroup.MISC, WormEntity::new)
                 .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(WORM, WormEntity.createLivingAttributes());
-//        WORM_SEGMENT = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "god_worm_segment", FabricEntityTypeBuilder.<WormEntity>create(SpawnGroup.MISC, WormEntity.WormSegment::new)
-//                .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
-//        FabricDefaultAttributeRegistry.register(WORM, WormEntity.createLivingAttributes());
+
+        KEEPER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "keeper", FabricEntityTypeBuilder.create(SpawnGroup.MISC, KeeperEntity::new)
+                .dimensions(EntityDimensions.fixed(0.6f, 1.95f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
+        FabricDefaultAttributeRegistry.register(KEEPER, KeeperEntity.createLivingAttributes());
 
         MOB_PLATFORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "mob_platform", FabricEntityTypeBuilder.create(SpawnGroup.MISC, MobPlatformRidingEntity::new)
                 .dimensions(EntityDimensions.fixed(0.1f, 0.1f)).trackedUpdateRate(1).build());

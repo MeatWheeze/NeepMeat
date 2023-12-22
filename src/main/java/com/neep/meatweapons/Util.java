@@ -1,6 +1,7 @@
 package com.neep.meatweapons;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
@@ -15,7 +16,7 @@ import java.util.function.Predicate;
 
 public class Util
 {
-    public static List<EntityHitResult> getRayTargets(PlayerEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
+    public static List<EntityHitResult> getRayTargets(LivingEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
     {
         World world = caster.world;
 
