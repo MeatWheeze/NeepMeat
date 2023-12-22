@@ -1,11 +1,12 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.MiscUitls;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class MixerBlock extends BaseBlock implements BlockEntityProvider
 {
     public MixerBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -62,12 +64,11 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (!world.isClient() && world.getBlockEntity(pos) instanceof MixerBlockEntity be)
-        {
-            be.startDutyCycle();
-//            System.out.println(((WritableSingleFluidStorage) be.getOutputStorage()).getAmount());
-        }
-        return ActionResult.SUCCESS;
+//        if (!world.isClient() && world.getBlockEntity(pos) instanceof MixerBlockEntity be)
+//        {
+//            be.startDutyCycle();
+//        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Nullable
@@ -81,10 +82,10 @@ public class MixerBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        if (world.getBlockEntity(pos) instanceof MixerBlockEntity be)
-        {
-            be.endDutyCycle();
-        }
+//        if (world.getBlockEntity(pos) instanceof MixerBlockEntity be)
+//        {
+//            be.endDutyCycle();
+//        }
     }
 
     @Override

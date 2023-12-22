@@ -21,6 +21,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier MOTOR_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor");
     public static Identifier DEPLOYER_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/deployer/shuttle");
     public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/agitator_blades");
+    public static Identifier MIXER_AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/mixer/agitator");
     public static Identifier INTEGRATOR_BASE = new Identifier(NeepMeat.NAMESPACE, "block/integrator/base");
 
     @Override
@@ -34,6 +35,7 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(MOTOR_ROTOR);
         out.accept(DEPLOYER_SHUTTLE);
         out.accept(AGITATOR_BLADES);
+        out.accept(MIXER_AGITATOR_BLADES);
         out.accept(INTEGRATOR_BASE);
     }
 }
