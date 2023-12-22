@@ -61,4 +61,9 @@ public abstract class ContentPane extends Screen implements Drawable, Selectable
     {
         super.init();
     }
+
+    public void tick()
+    {
+
+    }
 }

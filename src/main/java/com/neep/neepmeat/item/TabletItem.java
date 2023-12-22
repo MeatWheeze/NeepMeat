@@ -31,7 +31,14 @@ public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
         {
             ScreenHandler handler = new TerminalScreenHandler();
             user.currentScreenHandler = handler;
-            MinecraftClient.getInstance().setScreen(new TabletScreen(user, handler));
+            try
+            {
+                MinecraftClient.getInstance().setScreen(new TabletScreen(user, handler));
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
         }
         return TypedActionResult.success(user.getStackInHand(hand));
     }

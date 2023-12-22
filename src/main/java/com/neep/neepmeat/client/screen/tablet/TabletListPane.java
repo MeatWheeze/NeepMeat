@@ -49,6 +49,8 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     private int selected;
     protected int entryHeight = 11;
 
+    private int animationTicks;
+
     public TabletListPane(ITabletScreen parent)
     {
         super(Text.of("eeeee"), parent);
@@ -58,6 +60,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
+        if (parent.getAnimationTicks() < 12) return;
         super.render(matrices, mouseX, mouseY, delta);
         GUIUtil.renderBorder(matrices, x, y, width, height, 0xFF888800, 0);
 
@@ -97,6 +100,14 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     }
 
     @Override
+    public void tick()
+    {
+        ++animationTicks;
+        super.tick();
+    }
+
+
+    @Override
     public void init()
     {
         super.init();
@@ -106,10 +117,13 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
 
         if (lastNode != parent.getPath().peek())
         {
+            entryAnimationStart = parent.getAnimationTicks();
             selected = -1;
             lastNode = parent.getPath().peek();
         }
     }
+
+    private int entryAnimationStart;
 
     protected void generateMenu()
     {
@@ -119,7 +133,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         entries.add(new EntryWidget(0, screenOffsetX + this.x, screenOffsetY + this.y, width - 2 * screenOffsetX, entryHeight, ItemStack.EMPTY, Text.of("\u2190"), GuideNode.BACK));
 
         List<GuideNode> nodes = parent.getPath().peek().getChildren();
-        // TODO: pages
+
         for (int i = 0; i < nodes.size(); ++i)
         {
             GuideNode node = nodes.get(i);
@@ -210,6 +224,9 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
+            // Delay animation by 16 ticks if the screen has been opened for fewer than 32 ticks.
+            if (parent.getAnimationTicks() < (animationTicks <= 32 ? 16 : 0) + entryAnimationStart + index) return;
+
             VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
             this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
 //            int borderCol = getSelected() == index ? 0xFF00CC00 : 0xFF008800;
