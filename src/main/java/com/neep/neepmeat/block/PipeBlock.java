@@ -215,13 +215,14 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         }
         if (!world.isClient)
         {
+            Direction direction = hit.getSide();
             if (player.isSneaking())
             {
                 System.out.println(FluidNetwork.getInstance(world).getNodes(pos));
                 System.out.println("block entity: " + world.getBlockEntity(pos));
-                return ActionResult.SUCCESS;
+//                return ActionResult.SUCCESS;
+                direction = direction.getOpposite();
             }
-            Direction direction = hit.getSide();
 
             Vec3d hitPos = hit.getPos();
             NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
