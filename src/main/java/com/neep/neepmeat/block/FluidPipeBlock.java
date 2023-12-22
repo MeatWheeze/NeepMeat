@@ -50,7 +50,6 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
     }
 
     @Override
-    // TODO: enforce api connections
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
@@ -59,12 +58,20 @@ public class FluidPipeBlock extends PipeBlock implements BlockEntityProvider
             connection = connection || canConnectApi((World) world, pos, state, direction);
         }
 
-        if (connection == (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE) && !isFullyConnected(state))
+        // Check if neighbour is forced
+        boolean neighbourForced = false;
+        if (neighborState.getBlock() instanceof FluidPipeBlock)
         {
-            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.SIDE);
+            neighbourForced = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnection.FORCED;
         }
 
-        return state.with(DIR_TO_CONNECTION.get(direction), connection ? PipeConnection.SIDE : PipeConnection.NONE);
+        PipeConnection connection1 = neighbourForced
+                ? PipeConnection.FORCED
+                : connection ? PipeConnection.SIDE : PipeConnection.NONE;
+
+        // I don't know what this bit was for.
+
+        return state.with(DIR_TO_CONNECTION.get(direction), connection1);
     }
 
     @Nullable
