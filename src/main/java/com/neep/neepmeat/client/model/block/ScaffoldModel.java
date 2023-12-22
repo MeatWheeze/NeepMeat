@@ -33,8 +33,8 @@ public class ScaffoldModel implements UnbakedModel, BakedModel, FabricBakedModel
 
     private static final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[]
             {
-            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE + ":block/scaffolding_test")),
-            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE + ":block/scaffolding_test")),
+            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/panel")),
+            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/panel")),
     };
 
     private final Sprite[] SPRITES = new Sprite[2];
