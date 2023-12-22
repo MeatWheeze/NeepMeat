@@ -85,7 +85,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
         boolean forced = type == PipeConnectionType.FORCED;
 
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
-        if (!world.isClient())
+        if (!world.isClient() && !(neighborState.getBlock() instanceof PneumaticTubeBlock))
         {
             connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
@@ -107,9 +107,9 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.isSneaking())
-        {
-        }
+//        if (player.isSneaking())
+//        {
+//        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
