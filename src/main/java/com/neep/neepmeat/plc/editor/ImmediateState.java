@@ -5,6 +5,9 @@ import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -15,6 +18,7 @@ public class ImmediateState implements PLCState
     private final PLCBlockEntity parent;
 
     @Nullable private InstructionBuilder instructionBuilder;
+    @Nullable private InstructionProvider provider;
 
     public ImmediateState(PLCBlockEntity plc)
     {
@@ -25,6 +29,7 @@ public class ImmediateState implements PLCState
     public void setInstructionBuilder(InstructionProvider provider)
     {
         instructionBuilder = provider.start((ServerWorld) parent.getWorld(), this::emitInstruction);
+        this.provider = provider;
 //        if (provider instanceof ImmediateInstructionProvider immediate)
 //        {
 //            instruction = immediate.createImmediate(parent::getWorld);
@@ -63,6 +68,23 @@ public class ImmediateState implements PLCState
     public RecordMode getMode()
     {
         return RecordMode.IMMEDIATE;
+    }
+
+    @Override
+    public int getArgumentCount()
+    {
+        if (instructionBuilder == null)
+            return 0;
+
+        return instructionBuilder.argumentCount();
+    }
+
+    @Override
+    public int getMaxArguments()
+    {
+        if (provider == null)
+            return 0;
+        return provider.maxArguments();
     }
 
     @Override

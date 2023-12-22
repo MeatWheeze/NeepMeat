@@ -2,11 +2,12 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
@@ -19,7 +20,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -58,6 +58,7 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         this.x = screenWidth - elementWidth - 2;
         this.y = screenHeight - elementHeight - 2;
 
+        addDrawable(new CurrentArgumentWidget(x, y - textRenderer.fontHeight - 2, parent.getScreenHandler()));
         addEntries();
     }
 
@@ -190,7 +191,7 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         @Override
         public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            int col = PLCOperationSelector.this.instructionProvider == provider ? PLCProgramScreen.selectedCol() : PLCProgramScreen.borderCol();
+            int col = PLCOperationSelector.this.instructionProvider == provider ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
             GUIUtil.renderBorder(matrices, x, y, width, height - 1, col, 0);
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;

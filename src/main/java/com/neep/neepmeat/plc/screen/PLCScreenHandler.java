@@ -67,4 +67,14 @@ public class PLCScreenHandler extends ScreenHandler
     {
         return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.PROGRAM_COUNTER.ordinal());
     }
+
+    public int getMaxArguments()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.MAX_ARGUMENTS.ordinal());
+    }
+
+    public int getArguments()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.ARGUMENT.ordinal());
+    }
 }

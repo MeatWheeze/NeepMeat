@@ -1,7 +1,6 @@
 package com.neep.neepmeat.api.plc.instruction;
 
-import com.neep.neepmeat.plc.instruction.InstructionBuilderFactory;
-import com.neep.neepmeat.plc.instruction.SimpleInstructionBuilder;
+import com.neep.neepmeat.plc.instruction.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -38,7 +37,7 @@ public class SimpleInstructionProvider implements InstructionProvider
         return factory.create(this, world, finished);
     }
 
-    public int argumentCount()
+    public int maxArguments()
     {
         return arguments;
     }
@@ -61,11 +60,13 @@ public class SimpleInstructionProvider implements InstructionProvider
         Instruction create(Supplier<World> world, NbtCompound nbt);
     }
 
+    @Override
     public Instruction create(World world, List<Argument> arguments)
     {
         return constructor.create(() -> world, arguments);
     }
 
+    @Override
     public Instruction createFromNbt(Supplier<World> world, NbtCompound nbt)
     {
         return nbtConstructor.create(world, nbt);

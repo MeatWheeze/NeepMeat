@@ -1,10 +1,7 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.google.common.collect.Lists;
-import com.neep.neepmeat.api.plc.instruction.Argument;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -42,11 +39,17 @@ public class SimpleInstructionBuilder implements InstructionBuilder
 
     public boolean isComplete()
     {
-        return arguments.size() >= provider.argumentCount();
+        return arguments.size() >= provider.maxArguments();
     }
 
     public Instruction build()
     {
         return provider.create(world, arguments);
+    }
+
+    @Override
+    public int argumentCount()
+    {
+        return arguments.size();
     }
 }

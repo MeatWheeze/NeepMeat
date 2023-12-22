@@ -1,7 +1,5 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
 import net.minecraft.nbt.NbtCompound;

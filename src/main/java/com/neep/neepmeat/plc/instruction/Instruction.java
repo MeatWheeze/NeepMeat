@@ -1,4 +1,4 @@
-package com.neep.neepmeat.api.plc.instruction;
+package com.neep.neepmeat.plc.instruction;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.Instructions;

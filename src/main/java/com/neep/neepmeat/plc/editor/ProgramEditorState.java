@@ -8,6 +8,9 @@ import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
@@ -22,6 +25,7 @@ public class ProgramEditorState implements PLCState
     private final PLCBlockEntity parent;
     private MutableProgram program;
     @Nullable private InstructionBuilder instructionBuilder;
+    @Nullable private InstructionProvider provider;
     private final List<Listener> listeners = Lists.newArrayList();
 
     public ProgramEditorState(PLCBlockEntity parent)
@@ -33,6 +37,7 @@ public class ProgramEditorState implements PLCState
     @Override
     public void setInstructionBuilder(InstructionProvider provider)
     {
+        this.provider = provider;
         instructionBuilder = provider.start((ServerWorld) parent.getWorld(), this::emitInstruction);
     }
 
@@ -65,6 +70,24 @@ public class ProgramEditorState implements PLCState
     public RecordMode getMode()
     {
         return RecordMode.RECORD;
+    }
+
+    @Override
+    public int getArgumentCount()
+    {
+        if (instructionBuilder == null)
+            return 0;
+
+        return instructionBuilder.argumentCount();
+    }
+
+    @Override
+    public int getMaxArguments()
+    {
+        if (provider == null)
+            return 0;
+
+        return provider.maxArguments();
     }
 
     public void delete(int index)

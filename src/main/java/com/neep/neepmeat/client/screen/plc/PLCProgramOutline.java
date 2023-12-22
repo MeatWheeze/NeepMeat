@@ -2,13 +2,14 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
-import com.neep.neepmeat.api.plc.instruction.Instruction;
-import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -205,7 +206,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
             if (isMouseInside(mouseX, mouseY))
             {
-                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderCol());
+                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCCols.BORDER.col);
             }
 
             if (programCounterHere)
