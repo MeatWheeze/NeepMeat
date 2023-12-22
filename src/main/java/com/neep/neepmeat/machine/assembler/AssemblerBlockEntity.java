@@ -2,11 +2,13 @@ package com.neep.neepmeat.machine.assembler;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -33,7 +35,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
+public class AssemblerBlockEntity extends BloodMachineBlockEntity implements NamedScreenHandlerFactory
 {
     public static final int PATTERN_SLOTS = 12;
     public static final int MAX_PROGRESS = 20;
@@ -209,5 +211,25 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+    }
+
+    public AssemblerStorage getStorage()
+    {
+        return storage;
+    }
+
+    public Storage<FluidVariant> getFluidStorage(Direction dir)
+    {
+        Direction facing = getCachedState().get(AssemblerBlock.FACING);
+        if (dir == facing.rotateYClockwise() || dir == facing.rotateYCounterclockwise())
+            return inputStorage;
+
+        return null;
+    }
+
+    @Override
+    public Storage<FluidVariant> getBuffer(Direction direction)
+    {
+        return null;
     }
 }
