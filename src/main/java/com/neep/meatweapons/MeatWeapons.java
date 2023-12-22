@@ -3,10 +3,7 @@ package com.neep.meatweapons;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.meatweapons.entity.BulletEntity;
-import com.neep.meatweapons.entity.CannonBulletEntity;
-import com.neep.meatweapons.entity.ExplodingShellEntity;
-import com.neep.meatweapons.entity.PlasmaProjectileEntity;
+import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NMItemGroups;
@@ -29,6 +26,7 @@ public class MeatWeapons implements ModInitializer
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
+    public static EntityType<AirtruckEntity> AIRTRUCK;
 
     public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", true, new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item FUSION_CANNON = new FusionCannonItem();
@@ -41,7 +39,7 @@ public class MeatWeapons implements ModInitializer
     {
         return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                 builder
-                        .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
+                        .dimensions(EntityDimensions.fixed(3F, 2F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
                         .build());
     }
@@ -52,6 +50,7 @@ public class MeatWeapons implements ModInitializer
         BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
         CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
         EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
+        AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new));
 
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();

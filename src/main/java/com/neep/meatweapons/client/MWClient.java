@@ -6,6 +6,8 @@ import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
+import com.neep.neepmeat.client.renderer.MotorRenderer;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -13,6 +15,7 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
+import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 @Environment(value= EnvType.CLIENT)
@@ -47,6 +50,9 @@ public class MWClient implements ClientModInitializer
         GeoItemRenderer.registerItemRenderer(MeatWeapons.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
         GeoItemRenderer.registerItemRenderer(MeatWeapons.LMG, new BaseGunRenderer<>(new LMGItemModel()));
         GeoItemRenderer.registerItemRenderer(MeatWeapons.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
+
+        net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(MeatWeapons.AIRTRUCK, AirtruckEntityRenderer::new);
+
     }
 
     @Override
