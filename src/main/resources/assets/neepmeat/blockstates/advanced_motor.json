@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "neepmeat:block/advanced_motor/body",
+      "x": 90
+    }
+  }
+}

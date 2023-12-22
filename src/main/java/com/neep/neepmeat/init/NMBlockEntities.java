@@ -13,8 +13,10 @@ import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.machine.HeatableFurnace;
 import com.neep.neepmeat.machine.Heatable;
+import com.neep.neepmeat.machine.HeatableFurnace;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlockEntity;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
@@ -101,6 +103,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL;
     public static BlockEntityType<MotorBlockEntity> MOTOR;
+    public static BlockEntityType<AdvancedMotorBlockEntity> ADVANCED_MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
@@ -233,9 +236,12 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getItemStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
 
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
-        MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
+        MOTOR = registerBlockEntity("motor_unit", (pos, state) -> new MotorBlockEntity(MOTOR, pos, state), NMBlocks.MOTOR);
         FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
-        BloodAcceptor.SIDED.registerForBlockEntity(MotorBlockEntity::getBloodAcceptor, MOTOR);
+//        BloodAcceptor.SIDED.registerForBlockEntity(MotorBlockEntity::getBloodAcceptor, MOTOR);
+
+        ADVANCED_MOTOR = registerBlockEntity("advanced_motor", (pos, state) -> new AdvancedMotorBlockEntity(ADVANCED_MOTOR, pos, state), NMBlocks.ADVANCED_MOTOR);
+        BloodAcceptor.SIDED.registerForBlockEntity(AdvancedMotorBlockEntity::getBloodAcceptor, ADVANCED_MOTOR);
 
         STIRLING_ENGINE = registerBlockEntity("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
