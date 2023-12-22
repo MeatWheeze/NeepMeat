@@ -6,7 +6,7 @@ import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -30,7 +30,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
-import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
 public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe

@@ -1,4 +1,4 @@
-package com.neep.neepmeat.util;
+package com.neep.neepmeat.transport.item_network;
 
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

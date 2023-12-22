@@ -4,7 +4,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.ImplementedInventory;
 import com.neep.neepmeat.transport.machine.item.RouterInventory;
 import com.neep.neepmeat.screen_handler.RouterScreenHandler;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

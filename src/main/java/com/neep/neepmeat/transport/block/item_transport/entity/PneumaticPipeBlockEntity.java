@@ -3,8 +3,8 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.transport.util.TubeUtils;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -82,13 +82,13 @@ public class PneumaticPipeBlockEntity extends SyncableBlockEntity
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    long transferred = TubeUtils.pipeToAny(item, blockPos, item.out, world, transaction, false);
+                    long transferred = ItemPipeUtil.pipeToAny(item, blockPos, item.out, world, transaction, false);
                     if (transferred == item.getAmount() || item.getItemStack().isEmpty())
                     {
                         it.remove();
                     } else
                     {
-                        TubeUtils.bounce(item, world, blockState);
+                        ItemPipeUtil.bounce(item, world, blockState);
                     }
                     transaction.commit();
                 }

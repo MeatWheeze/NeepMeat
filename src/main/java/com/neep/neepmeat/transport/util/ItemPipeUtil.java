@@ -1,7 +1,10 @@
 package com.neep.neepmeat.transport.util;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.RetrievalTarget;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -14,17 +17,19 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TubeUtils
+public class ItemPipeUtil
 {
-    /** Handles the movement of an item from a pipe to an adjacent block.
+    /** Handles the movement of an {@link ItemInPipe} to an adjacent block.
      */
     // TODO: Cutoff depth
     public static long pipeToAny(ItemInPipe item, BlockPos pos, Direction out, World world, TransactionContext transaction, boolean simpleCheck)
@@ -57,6 +62,8 @@ public class TubeUtils
         return amountInserted;
     }
 
+    /** Ejects the entire contents of the given storage into a pipe network of the world.
+     */
     public static void storageToAny(ServerWorld world, Storage<ItemVariant> storage, BlockPos pos, Direction facing, TransactionContext transaction)
     {
         for (StorageView<ItemVariant> view : storage.iterable(transaction))
@@ -98,6 +105,8 @@ public class TubeUtils
         return 0;
     }
 
+    /** Spawns an item entity in the world with a given speed.
+     */
     public static long itemToWorld(ItemStack item, double offset, float speed, World world, BlockPos toPos, Direction out, TransactionContext transaction)
     {
         transaction.addOuterCloseCallback(r ->
@@ -113,6 +122,8 @@ public class TubeUtils
         return item.getCount();
     }
 
+    /** Handles transfer of an {@link ItemInPipe} into a {@link IItemPipe}
+     */
     public static long itemToPipe(ItemInPipe item, IItemPipe pipe, World world, BlockPos toPos, BlockState toState, Direction out, boolean simpleCheck, TransactionContext transaction)
     {
         long amountInserted = 0;
@@ -150,7 +161,7 @@ public class TubeUtils
         item.reset(in, out, world.getTime());
     }
 
-    /** Handles ejection of an ItemStack into the world, taking into account pipes and storage implementations.
+    /** Handles ejection of items into the world, taking into account pipes and storage implementations.
      */
     public static int stackToAny(ServerWorld world, BlockPos pos, Direction facing, ItemVariant variant, long amount, TransactionContext transaction)
     {
@@ -231,5 +242,56 @@ public class TubeUtils
             }
         }
         return 0;
+    }
+
+    // TODO: Fix
+    public static List<RetrievalTarget<ItemVariant>> floodSearch(BlockPos startPos, Direction face, World world, Predicate<Pair<BlockPos, Direction>> predicate, int depth)
+    {
+        List<BlockPos> pipeQueue = new ArrayList<>();
+        List<BlockPos> nextSet = new ArrayList<>();
+        List<BlockPos> visited = new ArrayList<>();
+        List<RetrievalTarget<ItemVariant>> output = new ArrayList<>();
+
+        pipeQueue.add(startPos.offset(face));
+        visited.add(startPos.offset(face));
+
+        for (int i = 0; i < depth; ++i)
+        {
+            nextSet.clear();
+            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
+            {
+                BlockPos current = iterator.next();
+
+                for (Direction direction : Direction.values())
+                {
+                    BlockPos next = current.offset(direction);
+                    BlockState currentState = world.getBlockState(current);
+                    BlockState nextState = world.getBlockState(next);
+
+                    if (IItemPipe.isConnectedIn(world, current, currentState, direction) && !visited.contains(next))
+                    {
+                        visited.add(next);
+
+                        // Check that target is a pipe and not a fluid block entity
+                        if (nextState.getBlock() instanceof IItemPipe && !(nextState.getBlock() instanceof ItemPumpBlock))
+                        {
+                            // Next block is connected in opposite direction
+                            if (IItemPipe.isConnectedIn(world, next, nextState, direction.getOpposite()))
+                            {
+                                nextSet.add(next);
+                            }
+                        }
+                        if (predicate.test(new Pair<>(next, direction)))
+                        {
+                            BlockApiCache<Storage<ItemVariant>, Direction> cache = BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) world, next);
+                            output.add(new RetrievalTarget(cache, direction.getOpposite()));
+                        }
+                    }
+                }
+                iterator.remove();
+            }
+            pipeQueue.addAll(nextSet);
+        }
+        return output;
     }
 }

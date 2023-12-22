@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;

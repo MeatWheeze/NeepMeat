@@ -1,6 +1,6 @@
 package com.neep.neepmeat.mixin;
 
-import com.neep.neepmeat.transport.api.pipe.item_network.ItemNetwork;
+import com.neep.neepmeat.transport.item_network.ItemNetwork;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;

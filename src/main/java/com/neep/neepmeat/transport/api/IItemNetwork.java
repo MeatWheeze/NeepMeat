@@ -1,4 +1,4 @@
-package com.neep.neepmeat.transport.api.pipe.item_network;
+package com.neep.neepmeat.transport.api;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;

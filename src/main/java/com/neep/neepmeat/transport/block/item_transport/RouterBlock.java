@@ -3,8 +3,8 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
-import com.neep.neepmeat.transport.util.TubeUtils;
-import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -22,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Predicate;
 
 public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItemPipe
@@ -69,7 +68,7 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
             Direction output = be.getOutputDirection(item);
             if (direction != output && output != null)
             {
-                long transferred = TubeUtils.pipeToAny(item, pos, output, world, transaction, false);
+                long transferred = ItemPipeUtil.pipeToAny(item, pos, output, world, transaction, false);
                 return transferred;
             }
         }
