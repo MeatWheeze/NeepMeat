@@ -60,6 +60,12 @@ public class WaitRedstoneInstruction implements Instruction
         plc.addRobotAction(action, this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+
+    }
+
     private void finish(PLC plc)
     {
         plc.advanceCounter();

@@ -98,6 +98,13 @@ public class InjectInstruction implements Instruction
         plc.addRobotAction(group, this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+        group.end(plc);
+        // Can't really drop a fluid.
+    }
+
     private void takeFrom(PLC plc)
     {
         var takenAmount = Instructions.takeFluid(from, world, FluidConstants.BUCKET);

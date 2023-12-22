@@ -332,6 +332,21 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         this.programSupplier = () -> program;
     }
 
+    public void hardStop()
+    {
+        if (currentInstruction != null)
+        {
+            currentInstruction.cancel(this);
+            currentInstruction = null;
+        }
+        if (currentAction != null)
+        {
+            currentAction = null;
+            robotActions.clear();
+        }
+        stop();
+    }
+
     public void stop()
     {
         programSupplier = () -> null;

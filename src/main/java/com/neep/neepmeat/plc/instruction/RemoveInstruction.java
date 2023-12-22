@@ -58,6 +58,12 @@ public class RemoveInstruction implements Instruction
         ), this::finish);
     }
 
+    @Override
+    public void cancel(PLC plc)
+    {
+
+    }
+
     private void finish(PLC plc)
     {
         MutateInPlace<?> mip = MutateInPlace.ITEM.find(world.get(), from.pos(), null);
