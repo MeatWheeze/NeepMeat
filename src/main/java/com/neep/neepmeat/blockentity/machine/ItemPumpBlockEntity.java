@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.item_transfer.TubeUtils;
+import com.neep.neepmeat.transport.item_transfer.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
