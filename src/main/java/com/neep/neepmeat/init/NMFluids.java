@@ -9,6 +9,7 @@ import com.neep.neepmeat.fluid.WorkFluid;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
@@ -39,6 +40,9 @@ public class NMFluids
     public static Item CHARGED_WORK_FLUID_BUCKET;
     public static Block CHARGED_WORK_FLUID;
 
+    public static FluidVariant CHARGED;
+    public static FluidVariant UNCHARGED;
+
     public static void initialiseFluids()
     {
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
@@ -60,5 +64,8 @@ public class NMFluids
         FLOWING_CHARGED_WORK_FLUID = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_charged_work_fluid"), new ChargedWorkFluid.Flowing());
         CHARGED_WORK_FLUID_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "charged_work_fluid_bucket", STILL_CHARGED_WORK_FLUID, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
         CHARGED_WORK_FLUID = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "charged_work_fluid"), new FluidBlock(NMFluids.STILL_CHARGED_WORK_FLUID, FabricBlockSettings.copy(Blocks.WATER)){});
+
+        CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
+        UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);
     }
 }
