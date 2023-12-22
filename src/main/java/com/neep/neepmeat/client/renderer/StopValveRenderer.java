@@ -26,7 +26,7 @@ public class StopValveRenderer<T extends StopValveBlockEntity> implements BlockE
         boolean open = be.getCachedState().get(StopValveBlock.OPEN);
 
         matrices.push();
-        BERenderUtils.rotateFacing(facing, matrices);
+        BERenderUtils.rotateFacingSouth(facing, matrices);
 
 
         be.openDelta = (float) MathHelper.lerp(0.1, be.openDelta, open ? 0 : 1);

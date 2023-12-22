@@ -9,11 +9,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.CallbackI;
 
 public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
@@ -23,8 +23,20 @@ public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvide
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be)
+        {
+            ItemScatterer.spawn(world, pos.getX(), pos.getY(), pos.getZ(), be.getResource().toStack((int) be.getAmount()));
+            world.updateComparators(pos,this);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
         if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
         {
             be.update(fromPos);

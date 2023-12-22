@@ -47,6 +47,44 @@ public class BERenderUtils
         matrices.translate(0.5, 0.5, 0.5);
         switch (facing)
         {
+            case SOUTH:
+            {
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
+                break;
+            }
+            case WEST:
+            {
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+                break;
+            }
+            case NORTH:
+            {
+                break;
+            }
+            case EAST:
+            {
+                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90));
+                break;
+            }
+            case DOWN:
+            {
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
+                break;
+            }
+            case UP:
+            {
+                matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90));
+                break;
+            }
+        }
+        matrices.translate(-0.5, -0.5, -0.5);
+    }
+
+    public static void rotateFacingSouth(Direction facing, MatrixStack matrices)
+    {
+        matrices.translate(0.5, 0.5, 0.5);
+        switch (facing)
+        {
             case NORTH:
             {
                 matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180));
