@@ -7,16 +7,14 @@ import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FurnaceBlock;
 import net.minecraft.block.HorizontalFacingBlock;
-import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.FurnaceBlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
@@ -34,6 +32,8 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
     public boolean stage;
     public boolean running;
     protected long conversionTime;
+    protected short baseAmount = (short) (FluidConstants.BUCKET / 300 / 2);
+    protected float multiplier = 1;
 
     // Rendering only
     public float renderIn;
@@ -65,7 +65,8 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
     {
         Direction facing = getCachedState().get(HorizontalFacingBlock.FACING).getOpposite();
         BlockPos burnerPos = pos.offset(facing);
-        if (world.getBlockState(burnerPos).isOf(Blocks.FURNACE))
+        BlockState burnerState = world.getBlockState(burnerPos);
+        if (burnerState.isOf(Blocks.FURNACE))
         {
             FurnaceAccessor furnace = (FurnaceAccessor) world.getBlockEntity(burnerPos);
             if (furnace.getBurnTime() == 0)
@@ -75,13 +76,30 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
                 furnace.setFuelTime(time);
                 furnace.setBurnTime(time);
                 itemStack.decrement(1);
+                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, false));
+            }
+            else
+            {
+                world.setBlockState(burnerPos, burnerState.with(FurnaceBlock.LIT, true));
             }
             furnace.setCookTime(0);
             this.conversionTime = furnace.getBurnTime();
+            this.multiplier = 2;
+        }
+        else if (burnerState.isOf(Blocks.FIRE))
+        {
+            this.conversionTime = 1;
+            this.multiplier = 1;
+        }
+        else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
+        {
+            this.conversionTime = 1;
+            this.multiplier = 1.5f;
         }
         else
         {
             this.conversionTime = 0;
+            this.multiplier = 1;
         }
     }
 
@@ -97,7 +115,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
         if (conversionTime > 0)
         {
             Transaction transaction = Transaction.openOuter();
-            long convertAmount = FluidConstants.BUCKET / 300;
+            long convertAmount = (long) (baseAmount * multiplier);
             this.running = convert(convertAmount, transaction) == convertAmount;
             transaction.commit();
         }
