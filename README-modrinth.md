@@ -4,7 +4,7 @@
 
 - Katherine Ursula Hydroxonium McSpree, Director of NEEP, 1922
 
-Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logistics and cosmic horror (WIP). 
+Welcome to the world of NeepMeat, a mod concerning automation, logistics and cosmic horror (WIP). 
 
 
 ## Features
@@ -16,15 +16,12 @@ Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logisti
 - **Building blocks**: Plenty of rusty, dungy and... bloody? textures are provided. Perfect for decorating hospitals, abattoirs, cathedrals and more!
 - M̵̛̦̽̊̀͆̿̕̕͝Ë̷͇́͐̓̉̿͌̃̈͋̀͝Ą̶̪̗̻͕͈̱͎̦̟͚̄̄͛̌̚̕͜T̴̜̖̝̖͈͙̺̦́̍̎̕͜͝
 
-## Installation
-
-
-
 ### Dependencies
 
-- Fabric API ??? (Required)
-- Geckolib ??? (Required)
-- REI ??? (Highly recommended for recipe viewing)
+- Fabric Loader (Required)
+- Fabric API (Required)
+- Geckolib  (Required)
+- REI (Highly recommended for recipe viewing)
 
 ## Getting Started
 
@@ -32,10 +29,14 @@ Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logisti
 Integrator Eggs can be found in dungeon loot. To hatch one, you must obtain blood by slaughtering a mob over a Drain with the Sacrificial Dagger. This blood can then be pumped into the egg using fluid pipes. A fully-grown Integrator has an internal buffer of 'Enlightenment' that is used by workstations that are connected by Data Cables. This buffer fills up slowly over time and can be boosted by inserting Whisper Wheat.
 
 **Obtaining Body Compound**\
-Body compound is a common crafting item in NeepMeat. To produce it, connect a Charnel Compactor to a fully-grown Integrator with Data Cables. The Charnel Compactor fuunctions much like a Composter, except it requires flesh. We hope that you have a burgeoning meat industrial complex.
+Body compound is a common crafting item in NeepMeat. To produce it, connect a Charnel Compactor to a fully-grown Integrator with Data Cables. The Charnel Compactor fuunctions much like a Composter, except it requires flesh.
 
 **Energy Transfer**\
-Machines require energy which is transferred through various fluids.
+Machines require energy which is comes in the form of special fluids: Ethereal Fuel and Work Fluid. Ethereal fuel is produced directly by a Transducer that is above a heating block, such as lava or a lit furnace. The speed of a machine depends on both the type of fluid and the rate at which the fluid is inserted. 
+
+**Motors**\
+Some machines, such as the Grinder, the Mixer and the Death Blades, require an external source of rotation to function.
+The Motor or its cheaper alternative, the Stirling Engine, can be used for this. 
 
 **Crops**\
 NeepMeat provides two major crops. Gland Potatoes can be processed into Eldritch Enzymes in a mixer. Whisper Wheat can be ground into Whisper Flour which can be fed to an Integrator to increase its Enlightenment.
@@ -58,4 +59,5 @@ Meat steel is required for mid-tier machinery. It is made by combining an Iron I
 
 ## Notes
 
-- Since this is version 0.1, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
+- Since this is an alpha version, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
+- Please report any problems you encounter on the Github issue tracker.

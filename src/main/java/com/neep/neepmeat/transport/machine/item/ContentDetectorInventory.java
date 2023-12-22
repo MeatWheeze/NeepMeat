@@ -1,10 +1,10 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 
-public class ContentDetectorInventory implements ImplementedInventory
+public class ContentDetectorInventory implements InventoryImpl
 {
     protected DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
 
@@ -19,7 +19,7 @@ public class ContentDetectorInventory implements ImplementedInventory
     {
 //        if (!world.getBlockState(getPos()).get(BufferBlock.POWERED))
 //        {
-        return ImplementedInventory.super.removeStack(slot, count);
+        return InventoryImpl.super.removeStack(slot, count);
 //        }
 //        return ItemStack.EMPTY;
     }

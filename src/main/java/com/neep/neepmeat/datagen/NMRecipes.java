@@ -1,6 +1,8 @@
 package com.neep.neepmeat.datagen;
 
 import com.neep.meatlib.datagen.MeatRecipeProvider;
+import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.block.MetalScaffoldingBlock;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMFluids;
@@ -30,6 +32,9 @@ public class NMRecipes
 //        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.BLUE_SCAFFOLD, Items.BLUE_DYE, NMTags.METAL_SCAFFOLDING);
 //        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.YELLOW_SCAFFOLD, Items.YELLOW_DYE, NMTags.METAL_SCAFFOLDING);
 
+        BlockRegistry.BLOCKS.values().stream()
+                .filter(block -> block instanceof MetalScaffoldingBlock)
+                .forEach(block -> ((MetalScaffoldingBlock) block).generateRecipe(exporter));
 
 //
 //        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_YELLOW_TILES, NMFluids.BLOOD_BUCKET, NMBlocks.YELLOW_TILES);

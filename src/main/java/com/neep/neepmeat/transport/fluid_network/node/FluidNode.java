@@ -155,7 +155,7 @@ public class FluidNode
         boolean bl2 = findPump(world);
     }
 
-    public boolean findPump(ServerWorld world)
+    protected boolean findPump(ServerWorld world)
     {
         FluidPump pump;
         if ((pump = FluidPump.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
@@ -166,7 +166,7 @@ public class FluidNode
         return false;
     }
 
-    public boolean findStorage(ServerWorld world)
+    protected boolean findStorage(ServerWorld world)
     {
         Storage<FluidVariant> storage;
        if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
@@ -178,16 +178,6 @@ public class FluidNode
         return false;
             // Remove nodes with no connected storage that are not queued for deferred loading
 //            FluidNetwork.getInstance(world).removeNode(world, nodePos);
-    }
-
-    public void setStorage(Storage<FluidVariant> storage)
-    {
-        this.storage = storage;
-    }
-
-    public boolean isDriven()
-    {
-        return getFlow() != 0;
     }
 
     // Removes node from and revalidates the network

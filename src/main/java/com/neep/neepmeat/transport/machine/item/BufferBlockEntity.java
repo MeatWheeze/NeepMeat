@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.InventoryImpl;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -29,7 +29,7 @@ public class BufferBlockEntity extends BlockEntity implements
         Storage<ItemVariant>,
         NamedScreenHandlerFactory
 {
-    public ImplementedInventory inventory = new BufferInventory();
+    public InventoryImpl inventory = new BufferInventory();
 
     public BufferBlockEntity(BlockPos pos, BlockState state)
     {
