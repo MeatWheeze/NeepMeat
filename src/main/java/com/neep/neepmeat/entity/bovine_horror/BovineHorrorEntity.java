@@ -1,10 +1,13 @@
 package com.neep.neepmeat.entity.bovine_horror;
 
+import com.neep.neepmeat.entity.AnimationSyncable;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityData;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -22,10 +25,12 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.LocalDifficulty;
+import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -37,10 +42,11 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class BovineHorrorEntity extends HostileEntity implements Monster, IAnimatable
+public class BovineHorrorEntity extends HostileEntity implements IAnimatable, AnimationSyncable
 {
     protected static final TrackedData<Integer> SYNC_ID = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Float> VISIBILITY = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.FLOAT);
+    protected static final TrackedData<Boolean> PHASE2 = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     protected static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.horror.wave", ILoopType.EDefaultLoopTypes.LOOP);
 
@@ -50,15 +56,19 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
 
     public float prevVisibility = 0;
 
+    protected boolean updateGoals = true;
+
     protected final BovineHorrorMeleeAttackGoal meleeAttackGoal = new BovineHorrorMeleeAttackGoal(this);
-    protected boolean phase2 = false; // State pattern? Pah!
+//    protected boolean phase2 = false; // State pattern? Pah!
 
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
+
+    protected final AnimationSyncable.AnimationQueue animationQueue = new AnimationSyncable.AnimationQueue();
 
     public BovineHorrorEntity(EntityType<? extends HostileEntity> entityType, World world)
     {
         super(entityType, world);
-        initCustomGoals();
+//        updateGoals();
     }
 
     public static DefaultAttributeContainer.Builder createLivingAttributes()
@@ -78,6 +88,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         super.initDataTracker();
         dataTracker.startTracking(SYNC_ID, 0);
         dataTracker.startTracking(VISIBILITY, 0.0f);
+        dataTracker.startTracking(PHASE2, false);
     }
 
     public int getSyncId()
@@ -85,22 +96,37 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         return dataTracker.get(SYNC_ID);
     }
 
-    @Override
-    protected void initGoals()
-    {
-        super.initGoals();
-        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
 
-//        goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-//        goalSelector.add(3, new FaceTowardTargetGoal(this));
-//        goalSelector.add(2, new BovineHorrorMeleeAttackGoal(this, 1.0, false));
+    protected void updateGoals()
+    {
+        if (isPhase2())
+        {
+            initPhase2Goals();
+        }
+        else
+        {
+            initPhase1Goals();
+        }
+
+        updateGoals = false;
     }
 
-    protected void initCustomGoals()
+    protected void initPhase1Goals()
     {
+        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+
         goalSelector.add(2, meleeAttackGoal);
         goalSelector.add(2, new HorrorMoveToTargetGoal(this, 1.2, true));
         goalSelector.add(2, new HorrorAcidAttackGoal(this, 3, 2));
+    }
+
+    protected void initPhase2Goals()
+    {
+        targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
+
+        goalSelector.add(2, new BHBeamGoal(this));
+
+        bossBar.setDarkenSky(true);
     }
 
     @Override
@@ -113,25 +139,30 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     @Override
     public boolean tryAttack(Entity target)
     {
-        setEvent(MobEvent.ATTACK);
+        syncNearby("animation.horror.melee");
         return super.tryAttack(target);
     }
 
     private <T extends IAnimatable> PlayState attackControl(final AnimationEvent<T> event)
     {
-        if (handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped))
+        if (!animationQueue.isEmpty() && event.getController().getAnimationState().equals(AnimationState.Stopped))
         {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.horror.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-            handSwinging = false;
+            event.getController().setAnimation(new AnimationBuilder().addAnimation(animationQueue.poll()));
         }
+//        if (handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped))
+//        {
+//            event.getController().markNeedsReload();
+//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.horror.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
+//            handSwinging = false;
+//        }
 
         return PlayState.CONTINUE;
     }
 
     protected <E extends BovineHorrorEntity> PlayState moveController(final AnimationEvent<E> event)
     {
-        event.getController().setAnimation(IDLE_ANIM);
+//        event.getController().setAnimation(IDLE_ANIM);
 
         return PlayState.CONTINUE;
     }
@@ -195,14 +226,25 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && visibility == 0);
     }
 
+    @Nullable
+    @Override
+    public EntityData initialize(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, @Nullable EntityData entityData, @Nullable NbtCompound entityNbt)
+    {
+        updateGoals();
+        return super.initialize(world, difficulty, spawnReason, entityData, entityNbt);
+    }
+
     @Override
     public void tick()
     {
         super.tick();
 
-        if (getHealth() < getMaxHealth() / 2 && !phase2)
+        if (updateGoals)
+            updateGoals();
+
+        if (getHealth() < getMaxHealth() / 2 && !dataTracker.get(PHASE2))
         {
-            phase2 = true;
+            dataTracker.set(PHASE2, true);
             this.bossBar.setDarkenSky(true);
 
             goalSelector.clear();
@@ -262,6 +304,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        boolean phase2 = dataTracker.get(PHASE2);
         nbt.putBoolean("phase2", phase2);
         return nbt;
     }
@@ -270,7 +313,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.phase2 = nbt.getBoolean("phase2");
+        this.dataTracker.set(PHASE2, nbt.getBoolean("phase2"));
     }
 
     @Override
@@ -348,6 +391,17 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     public boolean isInMoveRange(Entity entity)
     {
         return distanceTo(entity) <= 20;
+    }
+
+    public boolean isPhase2()
+    {
+        return dataTracker.get(PHASE2);
+    }
+
+    @Override
+    public AnimationQueue getQueue()
+    {
+        return animationQueue;
     }
 
     enum MobEvent

@@ -18,7 +18,7 @@ public interface Action<E> extends NbtSerialisable
     default void readNbt(NbtCompound nbt) {};
 
     @FunctionalInterface
-    interface Sequence<E, T extends Action<E>>
+    interface Sequence<T>
     {
         void tick(T parent, int counter);
     }

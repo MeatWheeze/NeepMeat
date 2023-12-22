@@ -10,9 +10,9 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.EntityPose;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
@@ -34,7 +34,21 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     public void render(BovineHorrorEntity animatable, float entityYaw, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight)
     {
         animatable.prevVisibility = (float) MathHelper.lerp(0.1, animatable.prevVisibility, animatable.getVisibility());
+
+        poseStack.push();
+//        if (animatable.isPhase2())
+//        {
+//            Vec3d vel = animatable.getVelocity();
+//            double hlen = vel.horizontalLength();
+//
+//            Vec3f hor = new Vec3f((float) vel.x, 0, (float) vel.z);
+//            hor.normalize();
+//            hor.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+//            poseStack.multiply(hor.getDegreesQuaternion((float) (hlen * 40)));
+//        }
+
         super.render(animatable, entityYaw, partialTick, poseStack, bufferSource, packedLight);
+        poseStack.pop();
     }
 
     @Override

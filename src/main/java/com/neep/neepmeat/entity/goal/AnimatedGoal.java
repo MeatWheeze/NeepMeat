@@ -6,7 +6,7 @@ public abstract class AnimatedGoal<E, T extends Action<E>> extends Goal implemen
 {
     protected final Class<T> clazz;
     protected boolean finished;
-    protected Sequence<E, T> sequence;
+    protected Sequence<T> sequence;
     protected int counter;
 
     public AnimatedGoal()
@@ -40,7 +40,7 @@ public abstract class AnimatedGoal<E, T extends Action<E>> extends Goal implemen
         return !finished;
     }
 
-    public void setSequence(Sequence<E, T> sequence)
+    public void setSequence(Sequence<T> sequence)
     {
         // Reset the tick counter and replace the current sequence
         this.sequence = sequence;

@@ -36,10 +36,7 @@ import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
-import com.neep.neepmeat.network.BlockSoundPacket;
-import com.neep.neepmeat.network.ParticleSpawnPacket;
-import com.neep.neepmeat.network.PlayerImplantStatusS2CPacket;
-import com.neep.neepmeat.network.TankMessagePacket;
+import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
@@ -92,6 +89,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockSoundPacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
+        EntityAnimationS2C.Client.registerReceiver();
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
