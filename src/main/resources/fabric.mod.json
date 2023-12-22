@@ -31,6 +31,9 @@
       "com.neep.meatweapons.client.MWClient",
       "com.neep.meatlib.client.MeatLibClient"
     ],
+    "cardinal-components-chunk": [
+      "com.neep.neepmeat.transport.TransportComponents"
+    ],
     "rei_server": [
       "com.neep.neepmeat.compat.rei.NMCommonPlugin"
     ],
@@ -62,7 +65,10 @@
       "net/minecraft/entity/LivingEntity": ["com/neep/neepmeat/interfaces/ILivingEntity"],
       "net/minecraft/entity/player/PlayerEntity": ["com/neep/meatlib/attachment/player/MeatPlayerEntity", "com/neep/meatweapons/interfaces/MWPlayerEntity"],
       "net/minecraft/item/ItemStack": ["com/neep/meatlib/attachment/itemstack/MeatItemStack"]
-    }
+    },
+    "cardinal-components": [
+      "neepmeat:blood_network_chunk"
+    ]
   },
   "accessWidener" : "neepmeat.accesswidener"
 }
