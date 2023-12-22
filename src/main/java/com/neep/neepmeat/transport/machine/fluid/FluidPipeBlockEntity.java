@@ -23,6 +23,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
 
@@ -31,6 +32,8 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     public NbtCompound queuedNbt;
     protected final T vertex;
     protected final PipeConstructor<T> constructor;
+
+
 
     public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
@@ -44,30 +47,39 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         this.constructor = constructor;
     }
 
+    public static Optional<FluidPipeBlockEntity<?>> find(World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+        {
+            return Optional.of(be);
+        }
+        return Optional.empty();
+    }
+
     public void setNetwork(PipeNetwork network)
     {
     }
 
-    public void updateAdjacent(Direction fromDirection)
+    public void updateAdjacent(BlockState newState, Direction fromDirection)
     {
 //        FluidPipe pipe = (FluidPipe) getCachedState().getBlock();
-        updateAdjacent();
+        updateAdjacent(newState);
     }
 
-    public void updateAdjacent()
+    public void updateAdjacent(BlockState newState)
     {
-        FluidPipe pipe = (FluidPipe) getCachedState().getBlock();
+        FluidPipe pipe = (FluidPipe) newState.getBlock();
 
         vertex.reset();
-        vertex.updateNodes((ServerWorld) world, pos, getCachedState());
+        vertex.updateNodes((ServerWorld) world, pos, newState);
 
-        int connections = pipe.countConnections(getCachedState());
+        int connections = pipe.countConnections(newState);
 
         if (connections > 2 || !vertex.canSimplify())
         {
             findAdjacent(pipe);
         }
-        if (connections == 2)
+        else if (connections == 2)
         {
             linkVertices(pipe);
         }

@@ -46,11 +46,12 @@ public interface FluidPipe
     // Call this first
     static void onStateReplaced(World world, BlockPos pos, BlockState state, BlockState newState)
     {
-        if (!newState.isOf(state.getBlock())
-                && world instanceof ServerWorld serverWorld
-                && serverWorld.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
         {
-            be.markReplaced();
+            if (!newState.isOf(state.getBlock()) && world instanceof ServerWorld serverWorld)
+            {
+                be.markReplaced();
+            }
         }
     }
 

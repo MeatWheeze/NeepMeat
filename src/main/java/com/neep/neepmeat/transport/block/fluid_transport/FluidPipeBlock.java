@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
@@ -53,7 +52,14 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         {
             removePipe((ServerWorld) world, state, pos);
         }
+        else
+        {
+//            FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(newState));
+        }
+
     }
+
+
 
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
@@ -77,10 +83,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             createStorageNodes(world, pos, nextState);
         }
 
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
-        {
-            be.updateAdjacent(Direction.fromVector(fromPos.subtract(pos)));
-        }
+        FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(nextState));
     }
 
     @Override
@@ -93,11 +96,19 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             createStorageNodes(world, pos, updatedState);
             updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
 
-            if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
-            {
-                be.updateAdjacent();
-            }
+            FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(updatedState));
         }
+    }
+
+    @Override
+    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
+    {
+        if (world.isClient())
+            return;
+
+        createStorageNodes(world, pos, newState);
+        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
+        FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(newState));
     }
 
     @Override
@@ -150,15 +161,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
-    @Override
-    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
-    {
-        if (world.isClient())
-            return;
-
-        createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
-    }
 
     @Nullable
     @Override
