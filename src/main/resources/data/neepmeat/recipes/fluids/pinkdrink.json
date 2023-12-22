@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:mixing",
+  "item": {
+    "resource": "minecraft:sugar",
+    "amount": 1
+  },
+  "fluid1": {
+    "resource": "neepmeat:milk",
+    "amount": 13500
+  },
+  "fluid2":{
+    "resource": "neepmeat:meat",
+    "amount": 13500
+  },
+  "output":{
+    "resource": "neepmeat:pinkdrink",
+    "amount": 27000
+  },
+  "processtime": 30
+}

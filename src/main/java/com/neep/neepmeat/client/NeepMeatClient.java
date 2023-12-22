@@ -82,6 +82,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier MILK_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/milk_flowing");
     public static final Identifier FEED = new Identifier(NeepMeat.NAMESPACE, "block/animal_feed_still");
     public static final Identifier FEED_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/animal_feed_flowing");
+    public static final Identifier PINKDRINK = new Identifier(NeepMeat.NAMESPACE, "block/pinkdrink_still");
+    public static final Identifier PINKDRINK_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/pinkdrink_flowing");
 
     @Override
     public void onInitializeClient()
@@ -220,6 +222,12 @@ public class NeepMeatClient implements ClientModInitializer
                 0x3657a2
         ));
 
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(
+                PINKDRINK,
+                PINKDRINK_FLOWING,
+                0xd28dab
+        ));
+
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_DIRTY_ORE_FAT, NMFluids.FLOWING_DIRTY_ORE_FAT, new SimpleFluidRenderHandler(DIRTY_ORE_FAT, DIRTY_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CLEAN_ORE_FAT, NMFluids.FLOWING_CLEAN_ORE_FAT, new SimpleFluidRenderHandler(CLEAN_ORE_FAT, CLEAN_ORE_FAT_FLOWING, 0x3657a2));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MEAT, NMFluids.FLOWING_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
@@ -258,6 +266,8 @@ public class NeepMeatClient implements ClientModInitializer
             registry.register(MILK_FLOWING);
             registry.register(FEED);
             registry.register(FEED_FLOWING);
+            registry.register(PINKDRINK);
+            registry.register(PINKDRINK_FLOWING);
         });
 
 
