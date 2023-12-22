@@ -43,6 +43,26 @@ public class MixingRecipe implements Recipe<MixerStorage>
         this.id = id;
     }
 
+    public List<ItemIngredient> getItemIngredient()
+    {
+        return List.of(itemInput);
+    }
+
+    public List<FluidIngredient> getFluidInputs()
+    {
+        return List.of(fluidInput1, fluidInput2);
+    }
+
+    public FluidIngredient getFluidOutput()
+    {
+        return fluidOutput;
+    }
+
+    public int getProcessTime()
+    {
+        return processTime;
+    }
+
     @Override
     public boolean matches(MixerStorage inventory, World world)
     {

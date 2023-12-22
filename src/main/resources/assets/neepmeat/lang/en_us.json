@@ -211,5 +211,8 @@
   "container.neepmeat.router": "Item Router",
   "container.neepmeat.alloy_kiln": "Alloy Kiln",
 
-  "category.neepmeat.grinding": "Crushing"
+  "category.neepmeat.grinding": "Crushing",
+  "category.neepmeat.compacting": "Charnel Compacting",
+  "category.neepmeat.mixing": "Mixing",
+  "category.neepmeat.mixing.time": "Time: %ds"
 }
