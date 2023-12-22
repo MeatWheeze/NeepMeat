@@ -35,4 +35,6 @@ public interface PipeVertex extends PipeFlowComponent
 
     float getTotalHead();
     void setElevationHead(float value);
+
+    void addHead(int h);
 }

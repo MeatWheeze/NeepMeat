@@ -35,8 +35,8 @@ public class PumpBlockEntity extends SyncableBlockEntity
 
     public AcceptorModes frontMode = AcceptorModes.NONE;
     public AcceptorModes backMode = AcceptorModes.NONE;
-    protected FluidPump frontPump = FluidPump.of(0.5f, () -> frontMode, true);
-    protected FluidPump backPump = FluidPump.of(-0.5f, () -> backMode, true);
+    protected FluidPump frontPump = FluidPump.of(-0.5f, () -> frontMode, true);
+    protected FluidPump backPump = FluidPump.of(0.5f, () -> backMode, true);
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {

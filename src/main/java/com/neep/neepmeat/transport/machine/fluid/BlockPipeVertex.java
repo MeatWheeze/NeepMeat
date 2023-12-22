@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
-import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -60,7 +59,7 @@ public class BlockPipeVertex extends SimplePipeVertex
     public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)
     {
         Arrays.fill(nodes, null);
-        FluidTransport.findFluidPipe(world, pos, state).ifPresent(p ->
+        IFluidPipe.findFluidPipe(world, pos, state).ifPresent(p ->
         {
             for (Direction direction : p.getConnections(state, d -> true))
             {
@@ -134,7 +133,8 @@ public class BlockPipeVertex extends SimplePipeVertex
     protected float getNodeInflux(NodeSupplier nodeSupplier)
     {
         float nodeFlow = nodeSupplier.get().getFlow();
-        float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
+//        float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
+        float otherFlow = -getTotalHead() < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
         return nodeFlow != 0 ? nodeFlow : otherFlow;
     }
 
@@ -233,6 +233,18 @@ public class BlockPipeVertex extends SimplePipeVertex
             if (v != null) adj.append(System.identityHashCode(v)).append(", ");
         }
         return "Vertex@" + System.identityHashCode(this) + "{connection=" + adj + "nodes: " + Arrays.toString(nodes) + ", head:" + getTotalHead() + "}";
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return super.hashCode();
     }
 
     public static FluidVariant findExtractable(Storage<FluidVariant> storage, FluidVariant preferred, TransactionContext transaction)

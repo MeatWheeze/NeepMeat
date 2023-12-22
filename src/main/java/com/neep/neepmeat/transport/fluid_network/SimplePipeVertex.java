@@ -59,15 +59,24 @@ public class SimplePipeVertex implements PipeVertex
     @Override
     public boolean equals(Object o)
     {
-        if (o == this) // ?????
+        if (o == this)
         {
             return true;
         }
-        if (o instanceof SimplePipeVertex vertex)
-        {
-            return Arrays.equals(adjacentVertices, vertex.getAdjVertices());
-        }
+//        if (o instanceof SimplePipeVertex vertex)
+//        {
+//            return Arrays.equals(adjacentVertices, vertex.getAdjVertices())
+//                    && pressureHead == vertex.pressureHead
+//                    && elevationHead == vertex.elevationHead
+//                    && amount == vertex.amount;
+//        }
         return false;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return System.identityHashCode(this);
     }
 
     public void putAdjacent(Direction direction, PipeVertex vertex)
@@ -93,6 +102,12 @@ public class SimplePipeVertex implements PipeVertex
     public void setElevationHead(float value)
     {
         this.elevationHead = value;
+    }
+
+    @Override
+    public void addHead(int h)
+    {
+        pressureHead += h;
     }
 
     public float getTotalHead()

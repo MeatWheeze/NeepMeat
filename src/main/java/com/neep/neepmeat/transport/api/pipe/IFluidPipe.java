@@ -13,10 +13,7 @@ import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.w3c.dom.css.CSSStyleSheet;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -33,6 +30,12 @@ public interface IFluidPipe
             return acceptor.connectInDirection(world, pos, state, direction);
         }
         return false;
+    }
+
+    static Optional<IFluidPipe> findFluidPipe(World world, BlockPos pos, BlockState state)
+    {
+        if (state.getBlock() instanceof IFluidPipe pipe) return Optional.of(pipe);
+        return Optional.empty();
     }
 
     default boolean createStorageNodes(World world, BlockPos pos, BlockState state)
