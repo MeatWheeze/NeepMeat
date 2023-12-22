@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.program;
 
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLC;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
@@ -23,7 +24,7 @@ public interface PLCInstruction extends NbtSerialisable
         @Override
         public NbtCompound writeNbt(NbtCompound nbt)
         {
-            return null;
+            return nbt;
         }
 
         @Override
@@ -47,7 +48,7 @@ public interface PLCInstruction extends NbtSerialisable
         @Override
         public InstructionProvider getProvider()
         {
-            return null;
+            return Instructions.END;
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.init;
 
-import com.neep.neepmeat.network.PLCRobotC2S;
-import com.neep.neepmeat.network.PLCRobotEnterS2C;
+import com.neep.neepmeat.network.plc.PLCRobotC2S;
+import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 
 public class NMCommonNetwork
 {

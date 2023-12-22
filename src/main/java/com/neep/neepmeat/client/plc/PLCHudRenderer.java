@@ -3,7 +3,7 @@ package com.neep.neepmeat.client.plc;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.mixin.CameraAccessor;
-import com.neep.neepmeat.network.PLCRobotEnterS2C;
+import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import dev.architectury.event.events.client.ClientPlayerEvent;
 import net.fabricmc.api.EnvType;
@@ -43,7 +43,7 @@ public class PLCHudRenderer
         this.robotClient = new SurgicalRobot.Client(be.getRobot(), be);
         this.be.getRobot().setController(client.player);
         this.controller = new PLCMotionController(be.getRobot());
-        client.setScreen(new PLCProgramScreen());
+        client.setScreen(new PLCProgramScreen(be));
     }
 
     public void exit()

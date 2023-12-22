@@ -1,14 +1,21 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.util.Color;
 
@@ -58,10 +65,11 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         int count = 0;
         for (var entry : instructions)
         {
-            addDrawableChild(new OperationWidget(x + 3, y + 3 + (entryStride * count), elementWidth - 6, entryHeight, entry, this::onSelect));
+            addDrawableChild(new OperationWidget(x + 3, entryStride + y + 3 + (entryStride * count), elementWidth - 6, entryHeight, entry, this::onSelect));
             count++;
         }
     }
+
 
     protected void onSelect(InstructionProvider instructionProvider)
     {
@@ -75,15 +83,41 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         return instructionProvider;
     }
 
+    public static Identifier STRIPES = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/stripes.png");
+
+    protected void drawStripes(MatrixStack matrixStack, int x, int y, int width, int height)
+    {
+        int maxChunk = 32; // The pattern repeats horizontally after 30 pixels.
+        int whole = MathHelper.floorDiv(width, maxChunk);
+        int remainder = width % maxChunk;
+        int xi = 0;
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, STRIPES);
+        for (int i = 0; i < whole; ++i)
+        {
+            drawTexture(matrixStack, x + xi, y, 0, 0, maxChunk, height, 32, 32);
+            xi += maxChunk;
+        }
+        if (remainder != 0)
+        {
+            drawTexture(matrixStack, x + xi, y, 0, 0, remainder, height, 32, 32);
+        }
+    }
+
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        int offset = 2;
-        GUIUtil.renderBorder(matrices, x, y, elementWidth, elementHeight, Color.ofRGBA(255, 94, 33, 255).getColor(), 0);
-        GUIUtil.renderBorder(matrices, x + 1, y + 1, elementWidth - 2, elementHeight - 2, Color.ofRGBA(255, 94, 33, 100).getColor(), 0);
+        fill(matrices, x, y, x + elementWidth, y + elementHeight, 0x90000000);
+        int borderCol = Color.ofRGBA(255, 94, 33, 255).getColor();
+        int transparent =  Color.ofRGBA(255, 94, 33, 100).getColor();
+        GUIUtil.renderBorder(matrices, x, y, elementWidth, elementHeight, borderCol, 0);
+        GUIUtil.renderBorder(matrices, x + 1, y + 1, elementWidth - 2, elementHeight - 2, transparent, 0);
 
-//        MinecraftClient.getInstance().textRenderer.drawWithShadow()
-
+        drawHorizontalLine(matrices, x + 3, x + elementWidth - 3, y + 3, borderCol);
+        drawStripes(matrices, x + 3, y + 5, elementWidth - 5, 2);
+        drawStripes(matrices, x + 3, y + 16, elementWidth - 5, 2);
+        drawHorizontalLine(matrices, x + 3, x + elementWidth - 3, y + 19, borderCol);
+        DrawableHelper.drawCenteredTextWithShadow(matrices, textRenderer, Text.of("INSTRUCTIONS").asOrderedText(), x + elementWidth / 2, y + 8, borderCol);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
