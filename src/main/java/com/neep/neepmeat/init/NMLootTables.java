@@ -32,6 +32,7 @@ public class NMLootTables
     private static final Identifier DUNGEON = LootTables.SIMPLE_DUNGEON_CHEST;
     private static final Identifier GRASS = Blocks.GRASS.getLootTableId();
     private static final Identifier TALL_GRASS = Blocks.TALL_GRASS.getLootTableId();
+    private static final Identifier POTATO = Blocks.POTATOES.getLootTableId();
 
     public static void init()
     {
@@ -76,6 +77,15 @@ public class NMLootTables
                         .rolls(ConstantLootNumberProvider.create(1))
                         .conditionally(RandomChanceLootCondition.builder(0.125f))
                         .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.WHISPER_WHEAT).getSeedsItem()).weight(1));
+
+                tableBuilder.pool(builder);
+            }
+            if (POTATO.equals(id))
+            {
+                LootPool.Builder builder = LootPool.builder()
+                        .rolls(ConstantLootNumberProvider.create(1))
+                        .conditionally(RandomChanceLootCondition.builder(0.04f))
+                        .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.FLESH_POTATO).getSeedsItem()).weight(1));
 
                 tableBuilder.pool(builder);
             }

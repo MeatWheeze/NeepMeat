@@ -145,8 +145,8 @@ public class NMBlocks
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", 64, true, FLUID_PIPE_SETTINGS));
 
     // --- Crops ---
-    public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
-    public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, true, AbstractBlock.Settings.copy(Blocks.POTATOES)));
+    public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
 
     // --- Assembly ---
