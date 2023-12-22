@@ -88,11 +88,6 @@ public class ItemInPipe
         return variant.toStack(amount);
     }
 
-    public int getAmount()
-    {
-        return amount;
-    }
-
     public void set(Vec3d vec)
     {
         this.x = vec.x;
@@ -199,6 +194,20 @@ public class ItemInPipe
     public void setAmount(int amount)
     {
         this.amount = amount;
+    }
+
+    public ItemInPipe copyWith(int amount)
+    {
+        ItemInPipe newItem = new ItemInPipe(in, out, variant, amount, tickStart);
+
+        newItem.x = x;
+        newItem.y = y;
+        newItem.z = z;
+        newItem.speed = speed;
+        newItem.tickEnd = tickEnd;
+        newItem.pipeTicks = pipeTicks;
+
+        return newItem;
     }
 
 //    public ItemInPipe copyWith(int amount)
