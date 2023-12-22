@@ -20,22 +20,10 @@ public class IdleWormAction implements WormAction
     }
 
     @Override
-    public Identifier getId()
-    {
-        return ID;
-    }
-
-    @Override
     public void tick()
     {
         ++age;
         if (age >= maxTicks) this.finished = true;
-    }
-
-    @Override
-    public boolean isFinished()
-    {
-        return finished;
     }
 
     @Override

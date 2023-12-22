@@ -4,10 +4,9 @@ import com.neep.meatlib.api.entity.MultiPartEntity;
 import com.neep.neepmeat.util.Bezier;
 import com.neep.neepmeat.util.Easing;
 import com.neep.neepmeat.util.NMMaths;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityDimensions;
-import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EntityType;
+import net.minecraft.entity.*;
+import net.minecraft.entity.ai.TargetPredicate;
+import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
@@ -21,8 +20,8 @@ import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -51,6 +50,10 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     protected List<WormSegment> tail = new ArrayList<>(16);
     public final WormSegment head;
 
+    @Nullable protected LivingEntity target;
+
+    protected final GoalSelector goalSelector;
+//    protected final GoalSelector targetGoalSelector;
 
     public WormEntity(EntityType<? extends WormEntity> type, World world)
     {
@@ -65,7 +68,30 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         segments.addAll(tail);
         segments.add(head);
 
-//        segments.forEach(world::spawnEntity);
+        this.goalSelector = new GoalSelector(world.getProfilerSupplier());
+//        this.targetGoalSelector = new GoalSelector(world.getProfilerSupplier());
+
+        if (!world.isClient())
+        {
+            initGoals();
+        }
+    }
+
+    protected void initGoals()
+    {
+        this.goalSelector.add(1, new WormTargetGoal(this, TargetPredicate.DEFAULT, 14));
+        this.goalSelector.add(2, new WormBiteGoal(this));
+    }
+
+
+    public void setTarget(LivingEntity target)
+    {
+        this.target = target;
+    }
+
+    public LivingEntity getTarget()
+    {
+        return target;
     }
 
     @Override
@@ -124,15 +150,10 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 //        float radius = 8;
 //        float angle = MathHelper.wrapDegrees((float) world.getTime() / 3);
 
-        if (!world.isClient())
+        if (world.isClient())
         {
-//            setHeadPos(
-//                    getX() + radius * Math.cos(Math.toRadians(angle)),
-//                    getY() + 5,
-//                    getZ() + radius * Math.sin(Math.toRadians(angle)));
-//            setHeadAngles(0, angle - 90);
+            updateHead();
         }
-        else updateHead();
 
         Vec3d headLook = head.getPos().add(Vec3d.fromPolar(head.getPitch(), head.getYaw()).multiply(-8));
 
@@ -151,24 +172,43 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 
             Vec2f pitchYaw = NMMaths.rectToPol(u, v, w);
 
-//            float pitch1 = MathHelper.lerp(delta, pitch, head.getPitch());
-//            float yaw1 = MathHelper.lerp(delta, yaw, head.getYaw());
-
             segment.setPos(x1, y1, z1);
             segment.setPitch(pitchYaw.x);
             segment.setYaw(pitchYaw.y);
 //            segment.setYaw(0);
         }
 
-        if (currentAction != null && !world.isClient())
+        updateGoalControls();
+    }
+
+    @Override
+    protected void tickNewAi()
+    {
+        int i = this.world.getServer().getTicks() + this.getId();
+        if (i % 2 == 0 || this.age <= 1)
         {
-            currentAction.tick();
-            dataTracker.set(CURRENT_ACTION, currentAction.getId().toString());
-            if (currentAction.isFinished())
-            {
-                currentAction = chooseAction().create(this);
-            }
+//            this.world.getProfiler().push("targetSelector");
+//            this.targetSelector.tick();
+//            this.world.getProfiler().pop();
+            this.world.getProfiler().push("goalSelector");
+            this.goalSelector.tick();
+            this.world.getProfiler().pop();
         }
+        else
+        {
+//            this.world.getProfiler().push("targetSelector");
+//            this.targetSelector.tickGoals(false);
+//            this.world.getProfiler().pop();
+            this.world.getProfiler().push("goalSelector");
+            this.goalSelector.tickGoals(false);
+            this.world.getProfiler().pop();
+        }
+    }
+
+    protected void updateGoalControls()
+    {
+        this.goalSelector.setControlEnabled(Goal.Control.MOVE, true);
+        this.goalSelector.setControlEnabled(Goal.Control.TARGET, true);
     }
 
     protected Vec3d getNeutralHeadPos()
