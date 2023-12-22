@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block;
 
+import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -106,7 +107,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return null;
+        return new PneumaticPipeBlockEntity(pos, state);
     }
 
     @Override

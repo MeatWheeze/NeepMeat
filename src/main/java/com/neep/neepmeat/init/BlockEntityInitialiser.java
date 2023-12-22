@@ -5,6 +5,7 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
+import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -32,6 +33,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<HeaterBlockEntity> HEATER;
     public static BlockEntityType<SpigotBlockEntity> SPIGOT;
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
+    public static BlockEntityType<PneumaticPipeBlockEntity> PNEUMATIC_PIPE;
 
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -54,9 +56,11 @@ public class BlockEntityInitialiser
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, BlockInitialiser.HEATER);
         SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, BlockInitialiser.SPIGOT);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, BlockInitialiser.BIG_LEVER);
+        PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, BlockInitialiser.PNEUMATIC_TUBE);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
+        ItemStorage.SIDED.registerSelf(PNEUMATIC_PIPE);
         FluidStorage.SIDED.registerSelf(FLUID_PORT);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
