@@ -10,7 +10,9 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.EntityPose;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -57,5 +59,6 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     @Override
     protected void applyRotations(BovineHorrorEntity animatable, MatrixStack poseStack, float ageInTicks, float rotationYaw, float partialTick)
     {
+        poseStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - rotationYaw));
     }
 }
