@@ -19,6 +19,7 @@ import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.bottler.BottlerBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
+import com.neep.neepmeat.machine.centrifuge.CentrifugeBlock;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorBlock;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.machine.converter.ConverterBlock;
@@ -121,6 +122,8 @@ public class NMBlocks
     public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_structure", FabricBlockSettings.copy(SMALL_TROMMEL)));
+
+    public static Block CENTRIFUGE = BlockRegistry.queue(new CentrifugeBlock("centrifuge", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
