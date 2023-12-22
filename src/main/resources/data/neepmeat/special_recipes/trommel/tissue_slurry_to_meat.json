@@ -2,15 +2,15 @@
   "type": "neepmeat:trommel",
   "input": {
     "resource": "neepmeat:tissue_slurry",
-    "amount": 27000
+    "amount": 9000
   },
   "output": {
     "resource": "neepmeat:meat",
-    "amount": 27000
+    "amount": 9000
   },
   "aux_output": {
     "resource": "neepmeat:biomass",
     "amount": 1,
-    "chance": 0.5
+    "chance": 0.25
   }
 }
