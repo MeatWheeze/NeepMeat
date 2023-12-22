@@ -187,16 +187,16 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     {
         super.tick();
 
+        // Sync when spinTicks reaches zero
+        int prevSpinTicks = spinTicks;
+        spinTicks = Math.max(0, spinTicks - 1);
+        if (prevSpinTicks == 1 && spinTicks == 0) sync();
+
         if (getRunningRate() < 0.05) return;
 
         increment = MathHelper.lerp(getRunningRate(), MIN_INCREMENT, MAX_INCREMENT);
 
         progress = Math.min(MAX_PROGRESS, progress + increment);
-
-        // Sync when spinTicks reaches zero
-        int prevSpinTicks = spinTicks;
-        spinTicks = Math.max(0, spinTicks - 1);
-        if (prevSpinTicks == 1 && spinTicks == 0) sync();
 
         // Generate cache if needed
         BlockPos down = pos.down();
