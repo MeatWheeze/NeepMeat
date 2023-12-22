@@ -15,6 +15,7 @@ import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
+import com.neep.neepmeat.machine.cosmic_pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
@@ -47,7 +48,7 @@ public class NMBlockEntities
     public static BlockEntityType<CheckValveBlockEntity> CHECK_VALVE;
     public static BlockEntityType<StopValveBlockEntity> STOP_VALVE;
 
-    public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
+    public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
@@ -97,6 +98,7 @@ public class NMBlockEntities
     public static BlockEntityType<SmallTrommelBlockEntity.Structure> SMALL_TROMMEL_STRUCTURE;
     public static BlockEntityType<CastingBasinBlockEntity> CASTING_BASIN;
     public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
+    public static BlockEntityType<PylonBlockEntity> COSMIC_PYLON;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -125,7 +127,7 @@ public class NMBlockEntities
 
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
-        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
@@ -185,6 +187,8 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
+        COSMIC_PYLON = registerBlockEntity("cosmic_pylon", PylonBlockEntity::new, NMBlocks.COSMIC_PYLON);
+
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
@@ -205,7 +209,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), ALLOY_KILN);
-        ItemStorage.SIDED.registerForBlockEntity(ItemBufferBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);
+        ItemStorage.SIDED.registerForBlockEntity(DisplayPlatformBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getFuelStorage(direction), STIRLING_ENGINE);
 

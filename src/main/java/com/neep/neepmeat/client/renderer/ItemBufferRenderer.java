@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
+import com.neep.neepmeat.blockentity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
-import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.minecraft.client.MinecraftClient;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemBufferRenderer implements BlockEntityRenderer<ItemBufferBlockEntity>
+public class ItemBufferRenderer implements BlockEntityRenderer<DisplayPlatformBlockEntity>
 {
     Model model;
 
@@ -26,7 +26,7 @@ public class ItemBufferRenderer implements BlockEntityRenderer<ItemBufferBlockEn
     }
 
     @Override
-    public void render(ItemBufferBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
+    public void render(DisplayPlatformBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
         matrices.push();
 

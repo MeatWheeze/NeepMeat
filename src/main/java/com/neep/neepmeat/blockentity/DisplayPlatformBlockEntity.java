@@ -2,6 +2,7 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.cosmic_pylon.PylonBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -15,19 +16,26 @@ import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemBufferBlockEntity extends SyncableBlockEntity
+public class DisplayPlatformBlockEntity extends SyncableBlockEntity
 {
     protected final WritableStackStorage storage;
 
     public float stackRenderDelta; // Used by the renderer
 
-    public ItemBufferBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public DisplayPlatformBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.storage = new WritableStackStorage(this::sync);
+        this.storage = new WritableStackStorage(this::sync)
+        {
+            @Override
+            protected void onFinalCommit()
+            {
+                super.onFinalCommit();
+            }
+        };
     }
 
-    public ItemBufferBlockEntity(BlockPos pos, BlockState state)
+    public DisplayPlatformBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, pos, state);
     }
@@ -51,6 +59,7 @@ public class ItemBufferBlockEntity extends SyncableBlockEntity
         this.storage.readNbt(tag);
     }
 
+
     public void extractFromItem(ItemEntity itemEntity)
     {
         ItemStack itemStack = itemEntity.getStack();
@@ -68,6 +77,5 @@ public class ItemBufferBlockEntity extends SyncableBlockEntity
 
             transaction.commit();
         }
-
     }
 }
