@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.actuator;
 
 import com.neep.assembly.AssemblyEntity;
+import com.neep.assembly.block.IRail;
 import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.util.LinearDirection;
 import net.minecraft.block.Block;
@@ -20,10 +21,8 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class LinearRailBlock extends BaseFacingBlock
+public class LinearRailBlock extends BaseFacingBlock implements IRail
 {
-    public static final EnumProperty<LinearDirection> DIRECTION = EnumProperty.of("direction", LinearDirection.class);
-
     public LinearRailBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
