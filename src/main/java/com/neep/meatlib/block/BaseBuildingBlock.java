@@ -14,20 +14,20 @@ public class BaseBuildingBlock extends Block implements IMeatBlock
         super(settings);
 
         BaseStairsBlock stairs = new BaseStairsBlock(this.getDefaultState(),blockName + "_stairs", itemMaxStack, settings);
-        BlockRegistry.queueBlock(stairs);
+        BlockRegistry.queue(stairs);
 
         BaseSlabBlock slab = new BaseSlabBlock(this.getDefaultState(),blockName + "_slab", itemMaxStack, settings);
-        BlockRegistry.queueBlock(slab);
+        BlockRegistry.queue(slab);
 
         if (makeWall)
         {
             BaseWallBlock wall = new BaseWallBlock(blockName + "_wall", itemMaxStack, settings);
-            BlockRegistry.queueBlock(wall);
+            BlockRegistry.queue(wall);
         }
 
         this.registryName = blockName;
         this.blockItem = new BaseBlockItem(this, blockName, itemMaxStack, false);
-        BlockRegistry.queueBlock(this);
+        BlockRegistry.queue(this);
 
     }
 

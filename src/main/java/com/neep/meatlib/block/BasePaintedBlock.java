@@ -45,7 +45,7 @@ public class BasePaintedBlock
             this.registryName = registryName;
             this.blockItem = new BaseBlockItem(this, registryName, 64, false);
             this.col = col;
-            BlockRegistry.queueBlock(this);
+            BlockRegistry.queue(this);
         }
 
         @Override
