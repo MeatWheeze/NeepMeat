@@ -1,15 +1,10 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.block.TrommelBlock;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
-import com.neep.neepmeat.client.NeepMeatModelProvider;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
-import com.neep.neepmeat.init.BlockInitialiser;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -18,8 +13,6 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
-
-import java.util.Random;
 
 public class ItemBufferRenderer implements BlockEntityRenderer<ItemBufferBlockEntity>
 {
