@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluidNetwork
 {
-    private World world;
+    private ServerWorld world;
     public final long uid; // Unique identifier for every network
     private BlockPos origin;
     private Direction originFace;
@@ -36,7 +36,7 @@ public class NMFluidNetwork
     // TODO: Find a way to remove unloaded networks from this
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    private NMFluidNetwork(World world, BlockPos origin, Direction direction)
+    private NMFluidNetwork(ServerWorld world, BlockPos origin, Direction direction)
     {
         this.world = world;
         this.origin = origin;
@@ -51,7 +51,7 @@ public class NMFluidNetwork
         return ++currentUid;
     }
 
-    public static Optional<NMFluidNetwork> tryCreateNetwork(World world, BlockPos pos, Direction direction)
+    public static Optional<NMFluidNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
     {
         System.out.println("trying fluid network at " + pos);
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
@@ -151,7 +151,7 @@ public class NMFluidNetwork
 
     }
 
-    public void setWorld(World world)
+    public void setWorld(ServerWorld world)
     {
         this.world = world;
     }
@@ -212,48 +212,20 @@ public class NMFluidNetwork
                     continue;
                 }
 
-                List<BlockPos> nextSet = new ArrayList<>();
-                networkPipes.values().forEach((segment) -> segment.setVisited(false));
-
-                pipeQueue.clear();
-                pipeQueue.add(node.getPos());
-
-                for (int i = 0; i < UPDATE_DISTANCE; ++i)
-                {
-                    for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
-                    {
-                        BlockPos current = iterator.next();
-                        networkPipes.get(current).setDistance(i + 1);
-                        networkPipes.get(current).setVisited(true);
-//                        System.out.println(networkPipes.get(current).getDistance() + ", " + networkPipes.get(current).connections);
-                        for (Direction direction : networkPipes.get(current).connections)
-                        {
-                            if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
-//                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
-                            {
-                                nextSet.add(current.offset(direction));
-                            }
-                        }
-                        iterator.remove();
-                    }
-                    pipeQueue.addAll(nextSet);
-                    nextSet.clear();
-                }
-
-                // TODO: optimise further
                 for (Supplier<FluidNode> supplier1 : connectedNodes)
                 {
                     FluidNode targetNode = supplier1.get();
                     if (targetNode == null
                             || targetNode.equals(node)
-                            || node.mode == AcceptorModes.NONE)
+//                            || node.getMode(world) == AcceptorModes.NONE)
+                    )
                     {
                         continue;
                     }
-                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
+                    int distanceToNode = node.getNodePos().facingBlock().getManhattanDistance(targetNode.getNodePos().facingBlock());
+//                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
 //                    System.out.print(node + ",\n " + distanceToNode + "\n");
                     node.distances.put(targetNode, distanceToNode);
-//                    node.distances.put(node1, 1);
                 }
             }
         }
@@ -290,7 +262,7 @@ public class NMFluidNetwork
                     BlockState state1 = world.getBlockState(current);
                     BlockState state2 = world.getBlockState(next);
 
-                    if (FluidAcceptor.isConnectedIn(state1, direction) && !visited.contains(next))
+                    if (FluidAcceptor.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
                     {
                         visited.add(next);
 //                        System.out.println(next);
@@ -299,7 +271,7 @@ public class NMFluidNetwork
                                 && !(state2.getBlock() instanceof FluidNodeProvider))
                         {
                             // Next block is connected in opposite direction
-                            if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
+                            if (FluidAcceptor.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
                                 networkPipes.put(next, new PipeState(next.toImmutable(), state2));

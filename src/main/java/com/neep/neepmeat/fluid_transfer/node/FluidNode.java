@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid_transfer.node;
 
+import com.neep.neepmeat.block.DirectionalFluidAcceptor;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
@@ -9,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -29,7 +31,6 @@ public class FluidNode
     private final NodePos nodePos;
     public float flow;
     public float flowMultiplier;
-    public AcceptorModes mode;
     private NMFluidNetwork network = null;
     public long networkId;
     public Map<FluidNode, Integer> distances = new HashMap<>();
@@ -40,24 +41,12 @@ public class FluidNode
 
     public boolean needsDeferredLoading;
 
-    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
-    {
-        this.face = face;
-        this.pos = pos;
-        this.nodePos = new NodePos(pos, face);
-        this.storage = storage;
-        this.mode = mode;
-        this.flowMultiplier = flowMultiplier;
-        this.flow = mode.getFlow() * flowMultiplier;
-    }
-
     public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
         this.pos = nodePos.pos;
         this.face = nodePos.face;
         this.nodePos = nodePos;
         this.storage = storage;
-        this.mode = mode;
         this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
     }
@@ -68,7 +57,6 @@ public class FluidNode
         this.face = pos.face;
         this.pos = pos.pos;
         this.nodePos = pos;
-        this.mode = mode;
         this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
         this.networkId = networkId;
@@ -99,7 +87,6 @@ public class FluidNode
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put("pos", nodePos.toNbt(new NbtCompound()));
-        nbt.putInt("mode", mode.getId());
         nbt.putLong("network_id", networkId);
         nbt.putFloat("multiplier", flowMultiplier);
         return nbt;
@@ -152,7 +139,6 @@ public class FluidNode
 
     public void setMode(AcceptorModes mode)
     {
-        this.mode = mode;
         this.flow = mode.getFlow();
     }
 
@@ -230,16 +216,30 @@ public class FluidNode
         return storage;
     }
 
+    public AcceptorModes getMode(ServerWorld world)
+    {
+        BlockPos target = nodePos.facingBlock();
+        BlockState state = world.getBlockState(target);
+        if (state.getBlock() instanceof DirectionalFluidAcceptor acceptor)
+        {
+            return acceptor.getDirectionMode(world, target, state, face.getOpposite());
+        }
+        return AcceptorModes.INSERT_EXTRACT;
+    }
+
     public void transmitFluid(ServerWorld world, FluidNode node)
     {
-
+//        System.out.println(node.getNodePos().facingBlock() + ", " + node.getMode(world));
         if (distances.get(node) == null
-                || node.mode == AcceptorModes.NONE
-                || this.mode == AcceptorModes.NONE
+                || node.getMode(world) == AcceptorModes.NONE
+                || this.getMode(world) == AcceptorModes.NONE
                 )
         {
             return;
         }
+
+        AcceptorModes mode = this.getMode(world);
+        float flow = mode.getFlow() * flowMultiplier;
 
         // Here is the most realistic flow rate calculation that you have ever seen.
 
@@ -290,12 +290,9 @@ public class FluidNode
         }
 
         float Q = this.getFlow() + node.getFlow();
-//        if (getFlow() < 0)
-//            System.out.println(getFlow() + " " + getPos());
-//        System.out.println(node.getFlow());
 
-        float insertBranchFlow = (float) (10500 * (getFlow() + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
-        float extractBranchFlow = (float) (10500 * (getFlow() + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
+        float insertBranchFlow = (float) (10500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
+        float extractBranchFlow = (float) (10500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
         long amountMoved;
         if (insertBranchFlow >= 0)
