@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "  o",
+    "so ",
+    "is "
+  ],
+  "key": {
+    "o": {
+      "item": "minecraft:obsidian"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "s": {
+      "item": "minecraft:string"
+    }
+  },
+  "result": {
+    "item": "neepmeat:sacrificial_dagger",
+    "count": 1
+  }
+}

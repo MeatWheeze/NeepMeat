@@ -3,7 +3,7 @@
 	"texture_size": [32, 32],
 	"textures": {
 		"7": "neepmeat:block/pneumatic_pipe/pipe_centre_clear",
-		"particle": "neepmeat:block/glass"
+		"particle": "neepmeat:block/pneumatic_pipe/pipe_centre"
 	},
 	"elements": [
 		{

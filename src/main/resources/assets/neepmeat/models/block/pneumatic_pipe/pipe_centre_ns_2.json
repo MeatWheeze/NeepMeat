@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"2": "neepmeat:block/pneumatic_pipe/pipe_centre"
+		"2": "neepmeat:block/pneumatic_pipe/pipe_centre",
+		"particle": "neepmeat:block/pneumatic_pipe/pipe_centre"
 	},
 	"elements": [
 		{

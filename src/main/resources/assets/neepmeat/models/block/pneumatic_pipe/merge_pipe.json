@@ -3,7 +3,8 @@
 	"textures": {
 		"3": "neepmeat:block/pneumatic_pipe/merge_pipe",
 		"4": "neepmeat:block/pneumatic_pipe/pipe_output",
-		"7": "neepmeat:block/pneumatic_pipe/pipe_centre_clear"
+		"7": "neepmeat:block/pneumatic_pipe/pipe_centre_clear",
+		"particle": "neepmeat:block/pneumatic_pipe/pipe_centre"
 	},
 	"elements": [
 		{

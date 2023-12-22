@@ -29,6 +29,7 @@ public class CharnelCompactorBlock extends BaseBlock
     public CharnelCompactorBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(registryName, itemMaxStack, hasLore, settings);
+        this.setDefaultState((this.stateManager.getDefaultState()).with(LEVEL, 0));
     }
 
     public static float getIncreaseChance(Item item)
