@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluid;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,11 +20,17 @@ public class FluidFuelRegistry extends HashMap<Fluid, FluidFuelRegistry.Entry>
         put(fluid, new Entry(multiplier, isEnergised, exhaustType));
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static record Entry(float multiplier, boolean isEnergised, @Nullable Fluid exhaustType)
     {
         public boolean hasExhaust()
         {
             return exhaustType != null;
+        }
+
+        public @Nullable FluidVariant getExhaustVariant()
+        {
+            return hasExhaust() ? FluidVariant.of(exhaustType) : null;
         }
     }
 }

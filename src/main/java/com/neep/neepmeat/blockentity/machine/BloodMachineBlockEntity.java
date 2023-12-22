@@ -2,6 +2,7 @@ package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.machine.FluidFuelRegistry;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
@@ -10,11 +11,13 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
@@ -29,6 +32,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     protected boolean enabled = true;
     public long maxRunningRate = FluidConstants.BUCKET;
+    public long exhaustBufferSize = FluidConstants.BUCKET * 2;
 
     protected long runningRate;
     protected float fluidMultiplier;
@@ -41,16 +45,26 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
         {
-            if (enabled && canInsert(resource))
+            // Permit only one fluid type to enter at a time and ensure that the exhaust variants match.
+            if (enabled && canInsert(resource) && exhaustStorage.canAcceptExhaust(resource) && (lastFluid == null || resource.equals(lastFluid)))
             {
-                long inserted = Math.min(maxAmount, maxRunningRate - lastInput);
-                if (inserted > 0)
+                try (Transaction inner = transaction.openNested())
                 {
-                    updateSnapshots(transaction);
-                    lastFluid = resource;
-                    lastInput += inserted;
+                    long inserted = Math.min(maxAmount, maxRunningRate - lastInput);
+                    if (inserted > 0)
+                    {
+                        updateSnapshots(inner);
+                        lastFluid = resource;
+                        lastInput += inserted;
+                        if (exhaustStorage.insertFromFuel(resource, inserted, inner) != maxAmount)
+                        {
+                            inner.abort();
+                            return 0;
+                        }
+                    }
+                    inner.commit();
+                    return inserted;
                 }
-                return inserted;
             }
             return 0;
         }
@@ -58,7 +72,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
         {
-            return 0;
+            return exhaustStorage.extract(resource, maxAmount, transaction);
         }
 
         @Override
@@ -76,7 +90,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         public long getAmount()
         {
-            return 0;
+            return exhaustStorage.getAmount();
         }
 
         @Override
@@ -98,6 +112,47 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         }
     };
 
+    protected class ExhaustStorage extends WritableSingleFluidStorage
+    {
+        public ExhaustStorage(long capacity, Runnable finalCallback)
+        {
+            super(capacity, finalCallback);
+        }
+
+        /**
+         * @param inputVariant The fluid to be inserted into the machine, not its exhaust.
+         */
+        public boolean canAcceptExhaust(FluidVariant inputVariant)
+        {
+            Fluid inputFluid = inputVariant.getFluid();
+            FluidFuelRegistry.Entry entry = FluidFuelRegistry.getInstance().get(inputFluid);
+            return entry != null
+                    && BloodMachineBlockEntity.this.canInsert(inputVariant)
+                    && (entry.exhaustType() == null || getResource().isOf(entry.exhaustType()) || this.isResourceBlank());
+        }
+
+        /**
+         * @param fuelResource The fuel whose corresponding exhaust type is to be inserted
+         */
+        public long insertFromFuel(FluidVariant fuelResource, long maxAmount, TransactionContext transaction)
+        {
+            FluidFuelRegistry.Entry entry = FluidFuelRegistry.getInstance().get(fuelResource.getFluid());
+            if (entry != null  && entry.hasExhaust())
+            {
+                return insert(entry.getExhaustVariant(), maxAmount, transaction);
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean supportsInsertion()
+        {
+            return false;
+        }
+    };
+
+    protected ExhaustStorage exhaustStorage = new ExhaustStorage(exhaustBufferSize, this::sync);
+
     public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long inCapacity, long outCapacity)
     {
         super(type, pos, state);
@@ -115,9 +170,17 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
             // Get effective influx per tick
             this.runningRate = this.inputStorage.lastInput / PipeNetwork.TICK_RATE;
 
+            // Determine power multiplier from the inserted fluid
             if (inputStorage.lastInput != 0)
+            {
                 this.fluidMultiplier = FluidFuelRegistry.getInstance().get(inputStorage.lastFluid.getFluid()).multiplier();
+            }
+
+            //
+
+            // Reset input counter and fluid
             this.inputStorage.lastInput = 0;
+            inputStorage.lastFluid = null;
             sync();
         }
     }
@@ -130,7 +193,8 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     @Override
     public Storage<FluidVariant> getBuffer(Direction direction)
     {
-        return inputStorage;
+//        return inputStorage;
+        return direction == Direction.DOWN ? exhaustStorage : inputStorage;
     }
 
     @Override
