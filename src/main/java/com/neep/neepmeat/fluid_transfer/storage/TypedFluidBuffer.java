@@ -39,6 +39,16 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
         return extractDirect(resource, maxAmount, transaction);
     }
 
+    public void setMode(Mode mode)
+    {
+        this.mode = mode;
+    }
+
+    public Mode getMode()
+    {
+        return mode;
+    }
+
     public long insertDirect(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
 
