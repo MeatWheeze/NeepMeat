@@ -10,10 +10,12 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,5 +79,27 @@ public class MiscUitls
             pipeQueue.addAll(nextSet);
         }
         return output;
+    }
+
+    public static <T extends Entity> T closestEntity(List<T> entityList, Vec3d pos)
+    {
+        T out;
+        if (entityList.isEmpty())
+        {
+            return null;
+        }
+        else
+        {
+            out = entityList.get(0);
+        }
+        for (T entity : entityList)
+        {
+            double distance = pos.squaredDistanceTo(out.getX(), out.getY(), out.getZ());
+            if (pos.squaredDistanceTo(entity.getX(), entity.getY(), entity.getZ()) < distance)
+            {
+                out = entity;
+            }
+        }
+        return out;
     }
 }
