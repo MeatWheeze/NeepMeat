@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import it.unimi.dsi.fastutil.ints.IntIntImmutablePair;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
@@ -28,9 +28,9 @@ import java.util.function.Function;
 
 public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDisplay
 {
-    private SurgeryRecipe recipe;
+    private GeneralSurgeryRecipe recipe;
 
-    public SurgeryDisplay(SurgeryRecipe recipe)
+    public SurgeryDisplay(GeneralSurgeryRecipe recipe)
     {
         super(inputsToEntries(recipe.getInputs()),
                 Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getOutput().resource()), (int) recipe.getOutput().minAmount())));

@@ -7,12 +7,18 @@ import net.minecraft.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-import java.util.function.Consumer;
 
 @SuppressWarnings("UnstableApiUsage")
 public class SingleEntityStorage extends SnapshotParticipant<EntityVariant<?>> implements SingleSlotStorage<EntityVariant<?>>
 {
     @NotNull  public EntityVariant<?> variant = EntityVariant.getBlank();
+
+    public static SingleEntityStorage of(Entity entity)
+    {
+        SingleEntityStorage storage = new SingleEntityStorage();
+        storage.variant = EntityVariant.of(entity);
+        return storage;
+    }
 
     @Override
     public long insert(EntityVariant<?> resource, long maxAmount, TransactionContext transaction)
@@ -21,7 +27,7 @@ public class SingleEntityStorage extends SnapshotParticipant<EntityVariant<?>> i
 
         maxAmount = Math.min(getCapacity(), maxAmount);
 
-        updateSnapshots(transaction);
+//        updateSnapshots(transaction);
 
 
 

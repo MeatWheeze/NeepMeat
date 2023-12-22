@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class ScreenPropertyC2sPacket
+public class ScreenPropertyC2SPacket
 {
 
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "screen_int_update");
@@ -25,7 +25,7 @@ public class ScreenPropertyC2sPacket
 
     static
     {
-        ServerPlayNetworking.registerGlobalReceiver(ID, ScreenPropertyC2sPacket::apply);
+        ServerPlayNetworking.registerGlobalReceiver(ID, ScreenPropertyC2SPacket::apply);
     }
 
     private static void apply(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender sender)

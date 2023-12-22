@@ -22,16 +22,15 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.collection.DefaultedList;
 
-import javax.xml.crypto.dsig.TransformService;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import static com.neep.neepmeat.recipe.surgery.SurgeryRecipe.Serializer.getPattern;
-import static com.neep.neepmeat.recipe.surgery.SurgeryRecipe.Serializer.createPatternMatrix;
+import static com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe.Serializer.getPattern;
+import static com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe.Serializer.createPatternMatrix;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TransformingToolRecipe extends SurgeryRecipe
+public class TransformingToolRecipe extends GeneralSurgeryRecipe
 {
     public TransformingToolRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs)
     {

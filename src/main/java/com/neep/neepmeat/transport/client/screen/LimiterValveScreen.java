@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.network.ScreenPropertyC2sPacket;
+import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.screen_handler.LimiterValveScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -76,7 +76,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         textField.setChangedListener(s ->
         {
             int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
-            ClientPlayNetworking.send(ScreenPropertyC2sPacket.ID, ScreenPropertyC2sPacket.create(LimiterValveScreenHandler.PROP_MAX_AMOUNT, parsed));
+            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(LimiterValveScreenHandler.PROP_MAX_AMOUNT, parsed));
         });
         this.addDrawableChild(textField);
 
@@ -93,7 +93,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
                 setMessage(getButtonText());
 
                 // Update server
-                ClientPlayNetworking.send(ScreenPropertyC2sPacket.ID, ScreenPropertyC2sPacket.create(PROP_MB_MODE, newMode));
+                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(PROP_MB_MODE, newMode));
             }
 
             @Override

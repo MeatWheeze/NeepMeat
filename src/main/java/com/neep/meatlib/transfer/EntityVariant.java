@@ -33,9 +33,20 @@ public class EntityVariant<T extends Entity> implements TransferVariant<EntityTy
         this.hashCode = Objects.hash(entityType, nbt);
     }
 
-    public static <T extends Entity> void of(EntityType<T> type)
+    public static <T extends Entity> EntityVariant<T> of(EntityType<T> type)
     {
-        Objects.requireNonNull(type, "Fluid may not be null.");
+        Objects.requireNonNull(type, "EntityType may not be null.");
+
+        // TODO: Store specific entity details rather than just type
+        return new EntityVariant<>(type, null);
+    }
+
+    public static <T extends Entity> EntityVariant<T> of(Entity entity)
+    {
+        Objects.requireNonNull(entity, "Entity may not be null.");
+
+        // TODO: Store specific entity details rather than just type
+        return new EntityVariant<>((EntityType<T>) entity.getType(), null);
     }
 
     public static EntityVariant<?> getBlank()

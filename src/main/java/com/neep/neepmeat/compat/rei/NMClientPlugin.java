@@ -14,7 +14,7 @@ import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
-import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -48,7 +48,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     @Override
     public void registerDisplays(DisplayRegistry registry)
     {
-        registerRecipeFiller(registry, SurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
+        registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
         registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);

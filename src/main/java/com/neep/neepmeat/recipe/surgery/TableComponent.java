@@ -21,4 +21,9 @@ public interface TableComponent<T>
     }
 
     Identifier getType();
+
+    default <V, U extends TableComponent<V>> U as()
+    {
+        return (U) this;
+    }
 }
