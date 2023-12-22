@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
+import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
@@ -13,7 +14,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -36,7 +36,8 @@ public class NMBlockEntities
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
-    public static BlockEntityType<ItemPortBlock.ItemPortBlockEntity> VAT_ITEM_PORT;
+    public static BlockEntityType<ItemPortBlock.BlockEntity> VAT_ITEM_PORT;
+    public static BlockEntityType<FluidPortBlock.BlockEntity> VAT_FLUID_PORT;
     public static BlockEntityType<IMultiBlock.Entity> VAT_CASING;
     public static BlockEntityType<IMultiBlock.Entity> VAT_WINDOW;
     public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
@@ -58,7 +59,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
 
-    public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
+    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                 FabricBlockEntityTypeBuilder.create(factory, block).build());
@@ -100,7 +101,8 @@ public class NMBlockEntities
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
 //        VAT_CASING = registerBlockEntity("vat_casing", IMultiBlock.Entity.createFactory(VAT_CASING), NMBlocks.VAT_CASING);
-        VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.ItemPortBlockEntity::new, NMBlocks.VAT_ITEM_PORT);
+        VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
+        VAT_FLUID_PORT = registerBlockEntity("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
@@ -117,6 +119,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 
         ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
+        FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {

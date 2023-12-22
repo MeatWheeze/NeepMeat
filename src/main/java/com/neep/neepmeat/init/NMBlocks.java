@@ -12,10 +12,7 @@ import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
 import com.neep.neepmeat.block.item_transport.PneumaticTubeBlock;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
-import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.block.vat.VatWindowBlock;
-import com.neep.neepmeat.block.vat.VatCasingBlock;
-import com.neep.neepmeat.block.vat.VatControllerBlock;
+import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -79,7 +76,7 @@ public class NMBlocks
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
     public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", 64, false, METAL));
-    public static Block VAT_FLUID_PORT = BlockRegistry.queue(new ItemPortBlock("vat_fluid_port", 64, false, METAL));
+    public static Block VAT_FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("vat_fluid_port", 64, false, METAL));
     public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
 
     // --- Fluid Transfer ---

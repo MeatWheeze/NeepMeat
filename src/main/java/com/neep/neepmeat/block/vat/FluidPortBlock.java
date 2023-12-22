@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.vat;
 import com.neep.neepmeat.block.multiblock.IPortBlock;
 import com.neep.neepmeat.block.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,9 +17,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVariant>, IVatComponent, BlockEntityProvider
+public class FluidPortBlock extends VatCasingBlock implements IPortBlock<FluidVariant>, IVatComponent, BlockEntityProvider
 {
-    public ItemPortBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidPortBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(registryName, itemMaxStack, hasLore, settings);
     }
@@ -41,16 +42,16 @@ public class ItemPortBlock extends VatCasingBlock implements IPortBlock<ItemVari
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static class BlockEntity extends PortBlockEntity<ItemVariant> implements IPortBlock.Entity
+    public static class BlockEntity extends PortBlockEntity<FluidVariant> implements IPortBlock.Entity
     {
         public BlockEntity(BlockPos pos, BlockState state)
         {
-            this(NMBlockEntities.VAT_ITEM_PORT, pos, state);
+            this(NMBlockEntities.VAT_FLUID_PORT, pos, state);
         }
 
         public BlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
-            super(type, pos, state, ItemVariant.class);
+            super(type, pos, state, FluidVariant.class);
         }
     }
 }

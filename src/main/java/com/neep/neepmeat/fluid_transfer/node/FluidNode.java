@@ -292,7 +292,7 @@ public class FluidNode
         while (it.hasNext())
         {
             StorageView<FluidVariant> view = it.next();
-            if (view.getAmount() > 0)
+            if (view.getAmount() > 0 && !view.isResourceBlank())
             {
                 nested.abort();
                 return true;

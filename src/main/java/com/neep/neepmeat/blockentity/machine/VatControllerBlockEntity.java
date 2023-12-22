@@ -1,13 +1,13 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.transfer.CombinedFluidStorage;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.meatlib.transfer.MultiItemBuffer;
 import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.IVatComponent;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
-import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -40,6 +40,7 @@ import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("UnstableApiUsage")
 public class VatControllerBlockEntity extends BlockEntity implements IControllerBlockEntity, BlockEntityClientSerializable
 {
     protected boolean assembled;
@@ -139,6 +140,9 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
         Transaction transaction = Transaction.openOuter();
         for (StorageView<ItemVariant> view : storages.items.iterable(transaction))
         {
+            if (view.isResourceBlank())
+                continue;
+
             ItemScatterer.spawn(world, getPos().getX(), getPos().getY(), getPos().getZ(), view.getResource().toStack((int) view.getAmount()));
             view.extract(view.getResource(), Long.MAX_VALUE, transaction);
         }
@@ -236,7 +240,7 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
 
     public Storage<FluidVariant> getFluidStorage()
     {
-        return Storage.empty();
+        return storages.fluids;
     }
 
     public Storage<ItemVariant> getItemStorage()
@@ -252,9 +256,17 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     @Override
     public <V extends TransferVariant<?>> Storage<V> getStorage(Class<V> variant)
     {
-        if (variant == ItemVariant.class)
+//        System.out.println(variant);
+//        System.out.println("item: " + variant.equals(ItemVariant.class));
+//        System.out.println("fluid: " + variant.equals(FluidVariant.class));
+        if (variant.equals(ItemVariant.class))
         {
             return (Storage<V>) storages.items;
+        }
+
+        if (variant.equals(FluidVariant.class))
+        {
+            return (Storage<V>) storages.fluids;
         }
 
         return Storage.empty();
@@ -286,8 +298,6 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
         protected WritableStackStorage itemOutput;
         protected MultiItemBuffer items;
 
-        protected WritableFluidBuffer fluidInput;
-        protected WritableFluidBuffer fluidOutput;
         protected MultiFluidBuffer fluids;
 
         protected Storages(@Nullable BlockEntity parent)
@@ -296,9 +306,10 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
             itemOutput = new WritableStackStorage(parent);
             items = new MultiItemBuffer(List.of(itemInput, itemOutput));
 
-            fluidInput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
-            fluidOutput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
-            fluids = new MultiFluidBuffer(List.of(fluidInput, fluidOutput));
+//            fluidInput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
+//            fluidOutput = new WritableFluidBuffer(parent, 2 * FluidConstants.BUCKET);
+//            fluids = new CombinedFluidStorage(List.of(fluidInput, fluidOutput));
+            fluids = new MultiFluidBuffer(parent, 16 * FluidConstants.BUCKET, type -> true);
         }
 
         public void readNbt(NbtCompound nbt)

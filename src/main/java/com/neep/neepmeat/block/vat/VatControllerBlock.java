@@ -49,7 +49,7 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
             else if (player.isSneaking())
             {
                 System.out.println(be.blocks);
-                System.out.println(be.ports);
+                System.out.println(be.getFluidStorage());
             }
             return ActionResult.SUCCESS;
         }
