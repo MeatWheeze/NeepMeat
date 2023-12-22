@@ -14,13 +14,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
+public class PumpBlockEntity extends BlockEntity
 {
     // When fluid storage is directly in front, redirect insertions to neighboring storage.
 
@@ -36,7 +36,7 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
-        super(NMBlockEntities.PUMP_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.PUMP, pos, state);
 
         buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
 
@@ -143,11 +143,15 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         this.backMode = AcceptorModes.byId(tag.getInt(BACK_MODE));
     }
 
-    @Override
+//    @Override
     @Nullable
     public WritableFluidBuffer getBuffer(Direction direction)
     {
-        return buffer;
+        Direction facing = getCachedState().get(PumpBlock.FACING);
+        if (direction == facing || direction == facing.getOpposite() || direction == null)
+            return buffer;
+        else
+            return null;
     }
 
 }
