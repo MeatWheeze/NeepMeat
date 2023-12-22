@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "6.44/linux-x86_64" 1661033728
+<REAPER_PROJECT 0.1 "6.44/linux-x86_64" 1661033795
   <NOTES 0 2
   >
   RIPPLE 0
@@ -17,7 +17,7 @@
   VIDEO_CONFIG 0 0 256
   PANMODE 3
   CURSOR 0
-  ZOOM 198.12061739149752 0 0
+  ZOOM 50.4743026327212 0 0
   VZOOMEX 4 110
   USE_REC_CFG 0
   RECMODE 1
@@ -30,9 +30,8 @@
   >
   <APPLYFX_CFG
   >
-  RENDER_FILE ""
-  RENDER_PATTERN ""
-  RENDER_FMT 0 2 0
+  RENDER_FILE "/home/tom/projects/fabric_modding/realistic_fluid/src/main/resources/assets/neepmeat/sounds//cosmic_ray.ogg"
+  RENDER_FMT 0 1 44100
   RENDER_1X 0
   RENDER_RANGE 1 0 0 18 1000
   RENDER_RESAMPLE 3 0 1
@@ -46,7 +45,7 @@
   TAKELANE 1
   SAMPLERATE 44100 0 0
   <RENDER_CFG
-    ZXZhdxgAAA==
+    dmdnbwAAAD8AgAAAAIAAAAAgAAAAAAEAAA==
   >
   LOCK 1
   <METRONOME 6 2
@@ -850,7 +849,7 @@
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
-      SEL 1
+      SEL 0
       IGUID {823017D0-48BC-51BC-867F-DD078C54BBE0}
       IID 7885
       NAME "Distorted Strings untitled MIDI item"
@@ -877,83 +876,6 @@
         TRACKSEL 252
         EVTFILTER 0 -1 -1 -1 -1 0 0 0 0 -1 -1 -1 -1 0 -1 0 -1 -1
         CFGEDIT 1 1 0 1 0 0 1 1 1 1 1 0.25 62 70 1872 991 0 0 0 0 0 0 0 0 0 0.5 0 0 1 64
-      >
-    >
-    <ITEM
-      POSITION 104
-      SNAPOFFS 0
-      LENGTH 7.9999999999612
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {EC59796D-DF55-D772-4B87-87CEE3FA7411}
-      IID 7907
-      NAME "Distorted Strings untitled MIDI item-glued"
-      VOLPAN 1 0 1 -1
-      SOFFS 0 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {2D045CBC-2C8D-DF51-EE0E-48F534380DF5}
-      <SOURCE MIDI
-        HASDATA 1 960 QN
-        CCINTERP 32
-        POOLEDEVTS {A9E24A6C-3E9E-F323-2249-DEB317DE14C8}
-        E 0 90 23 01
-        E 0 90 41 01
-        e 0 90 47 01
-        e 3840 80 47 00
-        E 3840 80 23 00
-        E 0 80 41 00
-        E 0 90 23 01
-        E 0 90 3b 01
-        E 7680 80 23 00
-        E 0 80 3b 00
-        E 0 b0 7b 00
-        CCINTERP 32
-        CHASE_CC_TAKEOFFS 1
-        GUID {5FE4CE0F-553B-9080-4569-5BA47E86359A}
-        IGNTEMPO 0 120 4 4
-        SRCCOLOR 119817
-        VELLANE -1 199 0
-        CFGEDITVIEW -7595.131054 0.040299 44 12 0 -1 0 0 0 0.5
-        KEYSNAP 0
-        TRACKSEL 252
-        EVTFILTER 0 -1 -1 -1 -1 0 0 0 0 -1 -1 -1 -1 0 -1 0 -1 -1
-        CFGEDIT 1 1 0 1 0 0 1 1 1 1 1 0.25 78 86 1872 991 0 0 0 0 0 0 0 0 0 0.5 0 0 1 64
-      >
-    >
-    <ITEM
-      POSITION 111.9999999999612
-      SNAPOFFS 0
-      LENGTH 2
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {CE4276B5-7AF3-F6BE-8CB4-7CB64D55D2B2}
-      IID 7912
-      NAME "Distorted Strings untitled MIDI item"
-      VOLPAN 1 0 1 -1
-      SOFFS 0 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {4C8883A5-8434-4E64-3590-8425F6B0B0F2}
-      <SOURCE MIDI
-        HASDATA 1 960 QN
-        CCINTERP 32
-        POOLEDEVTS {9F0024BE-883C-F08E-8A25-F5132885B01B}
-        E 3840 b0 7b 00
-        CCINTERP 32
-        CHASE_CC_TAKEOFFS 1
-        GUID {29B74A7B-91EF-5A1F-4B02-2461B1C4D0B5}
-        IGNTEMPO 0 120 4 4
-        SRCCOLOR 119846
-        VELLANE -1 199 0
       >
     >
   >

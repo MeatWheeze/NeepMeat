@@ -130,7 +130,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
 
             getIntegrator().setLookPos(pos);
             world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
-            world.playSound(null, pos, SoundInitialiser.COSMIC_BEAM, SoundCategory.BLOCKS, 2, 3);
+            world.playSound(null, pos, SoundInitialiser.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
             spawnBeam((ServerWorld) world, integrator.up(), pos);
             sync();
         }

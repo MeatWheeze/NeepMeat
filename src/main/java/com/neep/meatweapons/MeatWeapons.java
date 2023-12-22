@@ -16,10 +16,8 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
-import net.minecraft.structure.pool.StructurePoolElement;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import software.bernie.example.GeckoLibMod;
 
 public class MeatWeapons implements ModInitializer
 {
@@ -68,7 +66,7 @@ public class MeatWeapons implements ModInitializer
                 .build());
 
         MeatLib.setNamespace(NAMESPACE);
-        ItemRegistry.registerItems();
+        ItemRegistry.init();
         MWParticles.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();

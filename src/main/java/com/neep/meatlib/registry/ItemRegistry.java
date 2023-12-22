@@ -37,7 +37,7 @@ public class ItemRegistry
         return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
     }
 
-    public static void registerItems()
+    public static void init()
     {
         for (Iterator<Map.Entry<Identifier, Item>> it = ITEMS.entrySet().iterator(); it.hasNext();)
         {
