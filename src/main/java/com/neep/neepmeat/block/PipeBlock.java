@@ -203,11 +203,9 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     // TODO: enforce api connections
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
-        System.out.println("stateforupdate");
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
         if (!world.isClient())
         {
-            System.out.println(direction);
             connection = connection || canConnectApi((World) world, pos, state, direction);
         }
 
@@ -222,7 +220,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        System.out.println("update");
         enforceApiConnections(world, pos, state);
 
 //        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, fromPos, Direction.NORTH);

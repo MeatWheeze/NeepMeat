@@ -14,12 +14,19 @@ public class NeepMeat implements ModInitializer
 	public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
 
 	@Override
-	public void onInitialize() {
+	public void onInitialize()
+	{
 
 		LOGGER.info("Hello Fabric world!");
 //		FluidStorage.SIDED.registerSelf(BlockEntityInitialiser.PUMP_BLOCK_ENTITY);
 		BlockInitialiser.registerBlocks();
 		ItemInit.registerItems();
 		BlockEntityInitialiser.initialiseBlockEntities();
+	}
+
+	float avgTime = 0;
+	public void addTimer(long value)
+	{
+
 	}
 }

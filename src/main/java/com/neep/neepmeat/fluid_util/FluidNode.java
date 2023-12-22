@@ -11,7 +11,6 @@ import net.minecraft.world.World;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /*
     An interface for fluid networks associated with a FluidNodeProvider's face.
@@ -21,25 +20,31 @@ public class FluidNode
 {
     private final Direction face;
     private final BlockPos pos;
-    public float pressure;
+    public float flow;
     public FluidAcceptor.AcceptorModes mode;
     private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
-    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode, float pressure)
+    public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, FluidAcceptor.AcceptorModes mode, float flow)
     {
         this.face = face;
         this.pos = pos;
         this.storage = storage;
         this.mode = mode;
-        this.pressure = pressure;
+        this.flow = flow;
     }
 
     @Override
     public String toString()
     {
         return "\n" + this.pos.toString() + " " + face;
+    }
+
+    public void setMode(FluidAcceptor.AcceptorModes mode)
+    {
+        this.mode = mode;
+        this.flow = mode.getFlow();
     }
 
     public void setNetwork(NMFluidNetwork network)
@@ -75,16 +80,18 @@ public class FluidNode
         return pos;
     }
 
-    public float getPressure()
+    public float getFlow()
     {
-        return pressure;
+        return flow;
     }
 
     public void transmitFluid(FluidNode node)
     {
-        if (distances.get(node) == null)
+        if (distances.get(node) == null
+                || node.mode == FluidAcceptor.AcceptorModes.NONE
+                || this.mode == FluidAcceptor.AcceptorModes.NONE)
         {
-            System.out.println("transmit null");
+//            System.out.println("transmit null");
             return;
         }
 
@@ -101,7 +108,7 @@ public class FluidNode
         AtomicReference<Float> sum = new AtomicReference<>((float) 0);
         distances.values().forEach((distance) -> sum.updateAndGet(v -> (v + ((float) Math.pow(r, 4) / (float) distance))));
 //
-        float branchFlow = 500 * (pressure) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get());
+        float branchFlow = 500 * (flow) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sum.get());
 //        System.out.println(branchFlow);
 
 //        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
