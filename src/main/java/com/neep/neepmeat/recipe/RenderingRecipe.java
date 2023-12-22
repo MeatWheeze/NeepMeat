@@ -5,7 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.crucible.CrucibleStorage;
@@ -33,9 +33,9 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
     protected RecipeInput<Fluid> fluidInput;
-    protected RecipeOutput<Fluid> fluidOutput;
+    protected RecipeOutputImpl<Fluid> fluidOutput;
 
-    public RenderingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput)
+    public RenderingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Fluid> fluidOutput)
     {
         this.itemInput = itemInput;
         this.fluidInput = fluidInput;
@@ -66,7 +66,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         return fluidInput;
     }
 
-    public RecipeOutput<Fluid> getFluidOutput()
+    public RecipeOutputImpl<Fluid> getFluidOutput()
     {
         return fluidOutput;
     }
@@ -155,7 +155,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
             if (outputElement.has("fat_item"))
             {
                 if (!(fluidOutput.resource().equals(NMFluids.STILL_DIRTY_ORE_FAT)))
@@ -176,7 +176,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, itemInput, fluidInput, fluidOutput);
         }
@@ -192,7 +192,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends RenderingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in, RecipeInput<Fluid> in2, RecipeOutput<Fluid> out);
+            T create(Identifier var1, RecipeInput<Item> in, RecipeInput<Fluid> in2, RecipeOutputImpl<Fluid> out);
         }
     }
 }

@@ -6,7 +6,7 @@ import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.GrinderStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -27,12 +27,12 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
-    protected RecipeOutput<Item> itemOutput;
-    protected RecipeOutput<Item> extraOutput;
+    protected RecipeOutputImpl<Item> itemOutput;
+    protected RecipeOutputImpl<Item> extraOutput;
     protected float experience;
     protected int processTime;
 
-    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutput<Item> itemOutput, RecipeOutput<Item> extraOutput, float experience, int processTime)
+    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutputImpl<Item> itemOutput, RecipeOutputImpl<Item> extraOutput, float experience, int processTime)
     {
         this.itemInput = itemInput;
         this.itemOutput = itemOutput;
@@ -56,12 +56,12 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
         return itemInput;
     }
 
-    public RecipeOutput<Item> getItemOutput()
+    public RecipeOutputImpl<Item> getItemOutput()
     {
         return itemOutput;
     }
 
-    public RecipeOutput<Item> getAuxOutput()
+    public RecipeOutputImpl<Item> getAuxOutput()
     {
         return extraOutput;
     }
@@ -151,14 +151,14 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
             RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, outputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, outputElement);
 
             // Extra output is optional in recipe json
-            RecipeOutput<Item> extraOutput = null;
+            RecipeOutputImpl<Item> extraOutput = null;
             if (json.has("extra"))
             {
                 JsonObject extraElement = JsonHelper.getObject(json, "extra");
-                extraOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, extraElement);
+                extraOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, extraElement);
             }
 
             float experience = JsonHelper.getFloat(json, "experience", 0);
@@ -171,12 +171,12 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
         public GrindingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
 
-            RecipeOutput<Item> extraOutput = null;
+            RecipeOutputImpl<Item> extraOutput = null;
             if (buf.readBoolean())
             {
-                extraOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+                extraOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
             }
 
             float experience = buf.readFloat();
@@ -206,7 +206,7 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends GrindingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out, @Nullable RecipeOutput<Item> eOut, float xp, int time);
+            T create(Identifier var1, RecipeInput<Item> in, RecipeOutputImpl<Item> out, @Nullable RecipeOutputImpl<Item> eOut, float xp, int time);
         }
     }
 }

@@ -3,7 +3,7 @@ package com.neep.neepmeat.recipe;
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinStorage;
@@ -26,9 +26,9 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
 {
     protected Identifier id;
     protected RecipeInput<Fluid> fluidInput;
-    protected RecipeOutput<Item> itemOutput;
+    protected RecipeOutputImpl<Item> itemOutput;
 
-    public PressingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutput<Item> itemOutput)
+    public PressingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Item> itemOutput)
     {
         this.fluidInput = fluidInput;
         this.itemOutput = itemOutput;
@@ -101,7 +101,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         return null;
     }
 
-    public RecipeOutput<Item> getItemOutput()
+    public RecipeOutputImpl<Item> getItemOutput()
     {
         return itemOutput;
     }
@@ -122,7 +122,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, itemOutputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, itemOutputElement);
 
             return this.factory.create(id, fluidInput, itemOutput);
         }
@@ -131,7 +131,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         public PressingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
 
             return this.factory.create(id, fluidInput, itemOutput);
         }
@@ -146,7 +146,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends PressingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Fluid> in, RecipeOutput<Item> out);
+            T create(Identifier var1, RecipeInput<Fluid> in, RecipeOutputImpl<Item> out);
         }
     }
 }

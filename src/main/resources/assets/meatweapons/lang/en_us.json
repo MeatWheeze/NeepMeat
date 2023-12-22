@@ -8,5 +8,8 @@
   "item.meatweapons.heavy_cannon": "Pocket Howitzer",
   "item.meatweapons.engine": "Engine",
 
-  "item.meatweapons.airtruck": "Airtruck"
+  "item.meatweapons.airtruck": "Airtruck",
+
+  "key.meatweapons.category.general": "MeatWeapons",
+  "key.meatweapons.down": "Vehicle Down"
 }

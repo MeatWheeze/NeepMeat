@@ -8,10 +8,9 @@ import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
-import com.neep.meatlib.recipe.ingredient.GenericIngredient;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -45,9 +44,9 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     private final int width;
     private final int height;
     private final DefaultedList<RecipeInput<?>> inputs;
-    private final RecipeOutput<Item> output;
+    private final RecipeOutputImpl<Item> output;
     private final Identifier id;
-    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, RecipeOutput<Item> output)
+    public SurgeryRecipe(Identifier id, int w, int h, DefaultedList<RecipeInput<?>> inputs, RecipeOutputImpl<Item> output)
     {
         this.id = id;
         this.width = w;
@@ -89,7 +88,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
         return true;
     }
 
-    public <T> boolean takeInput(SurgeryTableContext context, int i, TransactionContext transaction)
+    public boolean takeInput(SurgeryTableContext context, int i, TransactionContext transaction)
     {
         RecipeInput<?> input = inputs.get(i);
         TableComponent<TransferVariant<?>> component = context.getStructure(i);
@@ -165,9 +164,14 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
         return 3;
     }
 
-    public RecipeOutput<Item> getOutput()
+    public RecipeOutputImpl<Item> getOutput()
     {
         return output;
+    }
+
+    public boolean isInputEmpty(int recipeProgress)
+    {
+        return inputs.get(recipeProgress).isEmpty();
     }
 
     public static class Serializer implements MeatRecipeSerialiser<SurgeryRecipe>
@@ -202,7 +206,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             return map;
         }
 
-        private static String[] getPattern(JsonArray json)
+        protected static String[] getPattern(JsonArray json)
         {
             String[] strings = new String[3];
             if (json.size() != 3)
@@ -231,7 +235,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
         }
 
         // Creates a width×height list of inputs
-        private DefaultedList<RecipeInput<?>> createPatternMatrix(String[] pattern, Map<String, RecipeInput<?>> symbols, int width, int height)
+        protected static DefaultedList<RecipeInput<?>> createPatternMatrix(String[] pattern, Map<String, RecipeInput<?>> symbols, int width, int height)
         {
             DefaultedList<RecipeInput<?>> defaultedList = DefaultedList.ofSize(width * height, RecipeInputs.EMPTY);
 
@@ -258,7 +262,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             int w = strings[0].length();
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);
-            RecipeOutput<Item> output = RecipeOutput.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
             return new SurgeryRecipe(id, w, h, inputs, output);
         }
 
@@ -272,7 +276,7 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
 
             inputs.replaceAll(ignored -> RecipeInput.fromBuffer(buf));
 
-            RecipeOutput<Item> output = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
             return new SurgeryRecipe(id, width, height, inputs, output);
         }
 

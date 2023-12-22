@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:transforming_tool",
+  "pattern": [
+    "cbc",
+    " c ",
+    "   "
+  ],
+  "key": {
+    "b": {
+      "type": "minecraft:fluid",
+      "resource": "neepmeat:blood",
+      "amount": 27000
+    },
+    "c": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:integration_charge_adv",
+      "amount": 1
+    }
+  }
+}

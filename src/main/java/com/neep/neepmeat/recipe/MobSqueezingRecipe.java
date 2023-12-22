@@ -2,7 +2,7 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.hydraulic_press.MobSqueezeContext;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -32,9 +32,9 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
 {
     protected final Identifier id;
     protected final EntityType<? extends Entity> entityType;
-    protected final RecipeOutput<Fluid> fluidOutput;
+    protected final RecipeOutputImpl<Fluid> fluidOutput;
 
-    public MobSqueezingRecipe(Identifier id, EntityType<? extends Entity> entityType, RecipeOutput<Fluid> fluidOutput)
+    public MobSqueezingRecipe(Identifier id, EntityType<? extends Entity> entityType, RecipeOutputImpl<Fluid> fluidOutput)
     {
         this.entityType = entityType;
         this.fluidOutput = fluidOutput;
@@ -105,7 +105,7 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
             EntityType<? extends Entity> entityType = Registry.ENTITY_TYPE.get(entityId);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> itemOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, itemOutputElement);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, itemOutputElement);
 
             return this.factory.create(id, entityType, itemOutput);
         }
@@ -116,7 +116,7 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
 //            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
             Identifier entityId = buf.readIdentifier();
             EntityType<? extends Entity> entityType = Registry.ENTITY_TYPE.get(entityId);
-            RecipeOutput<Fluid> itemOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, entityType, itemOutput);
         }
@@ -131,7 +131,7 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
         @FunctionalInterface
         public interface RecipeFactory<T extends MobSqueezingRecipe>
         {
-            T create(Identifier var1, EntityType<? extends Entity> entityType, RecipeOutput<Fluid> out);
+            T create(Identifier var1, EntityType<? extends Entity> entityType, RecipeOutputImpl<Fluid> out);
         }
     }
 }

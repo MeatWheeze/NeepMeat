@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
@@ -26,10 +26,10 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
-    protected RecipeOutput<Item> itemOutput;
+    protected RecipeOutputImpl<Item> itemOutput;
     protected int data;
 
-    public EnlighteningRecipe(Identifier id, RecipeInput<Item> fluidInput, RecipeOutput<Item> itemOutput, int data)
+    public EnlighteningRecipe(Identifier id, RecipeInput<Item> fluidInput, RecipeOutputImpl<Item> itemOutput, int data)
     {
         this.itemInput = fluidInput;
         this.itemOutput = itemOutput;
@@ -107,7 +107,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         return null;
     }
 
-    public RecipeOutput<Item> getItemOutput()
+    public RecipeOutputImpl<Item> getItemOutput()
     {
         return itemOutput;
     }
@@ -133,7 +133,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
             RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, itemInputElement);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, itemOutputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, itemOutputElement);
 
             int data = JsonHelper.getInt(json, "data");
 
@@ -144,7 +144,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         public EnlighteningRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
             int data = buf.readVarInt();
 
             return this.factory.create(id, itemInput, itemOutput, data);
@@ -161,7 +161,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         @FunctionalInterface
         public interface RecipeFactory<T extends EnlighteningRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> in, RecipeOutput<Item> out, int data);
+            T create(Identifier var1, RecipeInput<Item> in, RecipeOutputImpl<Item> out, int data);
         }
     }
 }

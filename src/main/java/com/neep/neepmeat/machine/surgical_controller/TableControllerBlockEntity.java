@@ -2,15 +2,13 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.recipe.MeatRecipeManager;
-import com.neep.meatlib.recipe.ingredient.RecipeInput;
-import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
+import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -18,10 +16,10 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -52,14 +50,19 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     int counter = 0;
     public void tick()
     {
+        if (!context.isAssembled)
+        {
+            assemble();
+            context.isAssembled = true;
+        }
+
         counter = Math.min(counter + 1, 10);
 
         robot.tick();
-        Vec3d robotPos = robot.getPos();
 
         if (robot.isActive() && counter == 10)
         {
-            MeatRecipeManager.getInstance().get(NMrecipeTypes.SURGERY, currentRecipe).ifPresent(this::nextIngredient);
+            MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(this::nextIngredient);
             counter = 0;
         }
 
@@ -90,8 +93,18 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public void tryRecipe()
     {
-        MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).ifPresent(this::startRecipe);
-//        NeepMeat.LOGGER.info("Recipe: " + recipe);
+        SurgeryRecipe surgeryRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
+        if (surgeryRecipe != null)
+        {
+            startRecipe(surgeryRecipe);
+            return;
+        }
+        TransformingToolRecipe toolRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TRANSFORMING_TOOL, context).orElse(null);
+        if (toolRecipe != null)
+        {
+            startRecipe(toolRecipe);
+            return;
+        }
     }
 
     private void startRecipe(SurgeryRecipe recipe)
@@ -112,7 +125,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     private void finishRecipe()
     {
-        MeatRecipeManager.getInstance().get(NMrecipeTypes.SURGERY, currentRecipe).ifPresent(recipe ->
+        MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(recipe ->
         {
             Direction facing = getCachedState().get(TableControllerBlock.FACING);
             try (Transaction transaction = Transaction.openOuter())
@@ -137,8 +150,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 finishRecipe();
                 return;
             }
-            RecipeInput<?> input = recipe.getInputs().get(recipeProgress);
-            if (!input.isEmpty())
+            if (!recipe.isInputEmpty(recipeProgress))
             {
                 BlockPos itemPos = context.getPos(recipeProgress);
                 if (robot.reachedTarget())

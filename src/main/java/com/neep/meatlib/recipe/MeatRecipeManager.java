@@ -11,6 +11,7 @@ import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.profiler.Profiler;
 
 import java.util.*;
@@ -44,7 +45,15 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     {
         MeatRecipe<?> recipe = this.recipesById.get(id);
         if (recipe == null || recipe.getType() != type) return Optional.empty();
-        return Optional.ofNullable((T) recipe);
+        return Optional.of((T) recipe);
+    }
+
+    public <C, T extends MeatRecipe<C>, E extends T> Optional<T> get(TypeFilter<T, E> filter, Identifier id)
+    {
+        MeatRecipe<?> recipe = this.recipesById.get(id);
+
+        if (recipe == null || filter.downcast((T) recipe) == null) return Optional.empty();
+        return Optional.of((T) recipe);
     }
 
     public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)

@@ -6,7 +6,7 @@ import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
-import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -26,10 +26,10 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
 {
     protected Identifier id;
     protected RecipeInput<Fluid> fluidInput;
-    protected RecipeOutput<Fluid> fluidOutput;
+    protected RecipeOutputImpl<Fluid> fluidOutput;
     protected int processTime;
 
-    public FluidHeatingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutput<Fluid> fluidOutput, int processTime)
+    public FluidHeatingRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Fluid> fluidOutput, int processTime)
     {
         this.fluidInput = fluidInput;
         this.fluidOutput = fluidOutput;
@@ -55,7 +55,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
         return fluidInput;
     }
 
-    public RecipeOutput<Fluid> getFluidOutput()
+    public RecipeOutputImpl<Fluid> getFluidOutput()
     {
         return fluidOutput;
     }
@@ -142,7 +142,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
             RecipeInput<Fluid> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, inputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> itemOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput, itemOutput, time);
@@ -152,7 +152,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
         public FluidHeatingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
 
             int time = buf.readVarInt();
 
@@ -171,7 +171,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
         @FunctionalInterface
         public interface RecipeFactory<T extends FluidHeatingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Fluid> in, RecipeOutput<Fluid> out, int time);
+            T create(Identifier var1, RecipeInput<Fluid> in, RecipeOutputImpl<Fluid> out, int time);
         }
     }
 }

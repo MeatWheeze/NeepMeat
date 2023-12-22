@@ -205,6 +205,7 @@
   "block.neepmeat.fluid_rationer.lore_1": "a connected tank.",
 
 
+
   "block.neepmeat.surgery_controller": "Surgery Controller",
 
   "item.neepmeat.sacrificial_dagger": "Sacrificial Scalpel",
@@ -443,5 +444,8 @@
   "advancements.neepmeat.main.place_ejector.description": "Use an Ejector to insert items into pipes.",
 
   "advancements.neepmeat.main.obtain_meat_bucket.title": "Very Original",
-  "advancements.neepmeat.main.obtain_meat_bucket.description": "Fill a bucket with meat."
+  "advancements.neepmeat.main.obtain_meat_bucket.description": "Fill a bucket with meat.",
+
+  "key.neepmeat.category.neepmeat": "NEEPMeat",
+  "key.neepmeat.transform": "Tool Transform"
 }
