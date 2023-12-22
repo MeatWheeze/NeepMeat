@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "assembly:block/platform"
+    }
+  }
+}
