@@ -29,6 +29,7 @@ public class NeepMeat implements ModInitializer
 
 		// Oooh, the jank! There must be a better way.
 		MeatLib.setNamespace(NAMESPACE);
+		NMrecipeTypes.init();
 		NMRecipes.init();
 		NMBlocks blocks = new NMBlocks();
 		NMItems items = new NMItems();

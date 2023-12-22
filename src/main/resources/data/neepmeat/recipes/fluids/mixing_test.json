@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:mixing",
+  "item": {
+    "resource": "minecraft:stone",
+    "amount": 1
+  },
+  "fluid1": {
+    "resource": "minecraft:water",
+    "amount": 9000
+  },
+  "fluid2":{
+    "resource": "minecraft:lava",
+    "amount": 9000
+  },
+  "output":{
+    "resource": "neepmeat:work_fluid",
+    "amount": 9000
+  },
+  "processtime": 200
+}
