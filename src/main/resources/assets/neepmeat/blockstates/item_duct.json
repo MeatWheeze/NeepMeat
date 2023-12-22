@@ -1,0 +1,131 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "neepmeat:block/item_duct_centre"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side"
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side_alt"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side_alt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side",
+        "y": 270
+      }
+    },
+
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side",
+        "y": 270,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_side_alt",
+        "y": 270,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "y": 90,
+        "x": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "y": 0,
+        "x": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "y": 180,
+        "x": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "y": -90,
+        "x": 0
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/item_duct_facing",
+        "x": 90
+      }
+    }
+  ]
+}

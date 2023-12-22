@@ -242,7 +242,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 ;
     }
 
-    private BlockState getConnectedState(BlockView world, BlockState state, BlockPos pos)
+    protected BlockState getConnectedState(BlockView world, BlockState state, BlockPos pos)
     {
         for (Direction direction : Direction.values())
         {
