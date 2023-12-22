@@ -68,7 +68,8 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, I
         {
             if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
             {
-                be.showContents((ServerPlayerEntity) player);
+                if (!be.takeFromHand(player, hand))
+                    be.showContents((ServerPlayerEntity) player);
             }
         }
         return ActionResult.SUCCESS;

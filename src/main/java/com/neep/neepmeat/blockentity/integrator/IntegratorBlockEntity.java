@@ -1,25 +1,35 @@
 package com.neep.neepmeat.blockentity.integrator;
 
+import com.mojang.serialization.RecordBuilder;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMItems;
+import dev.architectury.event.events.common.TickEvent;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
@@ -34,10 +44,7 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnimatable
@@ -202,21 +209,43 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         if (growthTimeRemaining <= 0)
         {
             isMature = true;
-            hatch();
         }
     }
 
-    public void hatch()
+    public static final Map<Item, Integer> DATA_MAP = Map.of(
+            NMItems.WHISPER_FLOUR, 500
+    );
+
+    public boolean takeFromHand(PlayerEntity player, Hand hand)
     {
-        for (PlayerEntity otherPlayer : PlayerLookup.tracking(this))
+        ItemStack handStack = player.getStackInHand(hand);
+        Integer inc = DATA_MAP.get(handStack.getItem());
+        if (inc != null)
         {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                float ins = insertEnlightenment(inc, transaction);
+                if (ins == inc)
+                {
+                    transaction.commit();
+                    world.playSound(null, pos, SoundEvents.ENTITY_HORSE_EAT, SoundCategory.BLOCKS, 1, 1);
+                    handStack.decrement(1);
+                    return true;
+                }
+                else transaction.abort();
+
+            }
         }
+        return false;
     }
 
     public void showContents(ServerPlayerEntity player)
     {
         if (!isMature())
             player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET) * 100 + "%"), true);
+        else
+            player.sendMessage(Text.of("Enlightenment Level: " + data / MAX_DATA * 100 + "%"), true);
+
     }
 
     private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -240,9 +269,26 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         return storage.getFluidStorage(world, pos, state, direction);
     }
 
+    public Storage<ItemVariant> getItemStorage(Direction direction)
+    {
+        return storage.itemStorage;
+    }
+
     public float getData()
     {
         return data;
+    }
+
+    public float insertEnlightenment(float maxAmount, TransactionContext transaction)
+    {
+        float inserted = Math.min(MAX_DATA - data, maxAmount);
+        if (inserted > 0)
+        {
+            dataSnapshot.updateSnapshots(transaction);
+            data += inserted;
+            return inserted;
+        }
+        return 0;
     }
 
     public float extractEnlightenment(float maxAmount, TransactionContext transaction)

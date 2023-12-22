@@ -2,16 +2,24 @@ package com.neep.neepmeat.blockentity.integrator;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorStorage
@@ -51,17 +59,45 @@ public class IntegratorStorage
         immatureStorage.readNbt(immature);
     }
 
+    public Storage<ItemVariant> itemStorage = new ItemStorage();
+
+    protected class ItemStorage implements Storage<ItemVariant>
+    {
+        @Override
+        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            Integer inc = IntegratorBlockEntity.DATA_MAP.get(resource.getItem());
+            if (inc != null)
+            {
+                float inserted = parent.insertEnlightenment(inc, transaction);
+                if (inserted == inc)
+                {
+                    transaction.addOuterCloseCallback(result ->
+                    {
+                        parent.getWorld().playSound(null, parent.getPos(), SoundEvents.ENTITY_HORSE_EAT, SoundCategory.BLOCKS, 1, 1);
+                    });
+                    return 1;
+                }
+            }
+            return 0;
+        }
+
+        @Override
+        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            return 0;
+        }
+
+        @Override
+        public Iterator<? extends StorageView<ItemVariant>> iterator(TransactionContext transaction)
+        {
+            return Collections.emptyIterator();
+        }
+    }
+
     protected static class ImmatureStorage extends SingleVariantStorage<FluidVariant> implements InsertionOnlyStorage<FluidVariant>, SingleSlotStorage<FluidVariant>
     {
         protected long capacity = FluidConstants.BUCKET;
-
-        public long grow(long maxAmount, TransactionContext transaction)
-        {
-//            long amountExtracted = Math.max(0, amount - maxAmount);
-//            updateSnapshots(transaction);
-//            amount -= amountExtracted;
-            return this.extract(getResource(), maxAmount, transaction);
-        }
 
         @Override
         protected FluidVariant getBlankVariant()
@@ -87,66 +123,5 @@ public class IntegratorStorage
             this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));
         }
 
-//        @Override
-//        public boolean isResourceBlank()
-//        {
-//            return resource.isBlank();
-//        }
-//
-//        @Override
-//        public FluidVariant getResource()
-//        {
-//            return resource;
-//        }
-//
-//        @Override
-//        public long getAmount()
-//        {
-//            return amount;
-//        }
-//
-//        @Override
-//        public long getCapacity()
-//        {
-//            return capacity;
-//        }
-//
-//        @Override
-//        public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
-//        {
-//            StoragePreconditions.notBlankNotNegative(resource, maxAmount);
-//
-//            if (resource.equals(this.resource))
-//            {
-//                long amountInserted = Math.min(amount + maxAmount, capacity);
-//                if (amountInserted > 0)
-//                {
-//                    updateSnapshots(transaction);
-//                    this.amount += amountInserted;
-//                    return amountInserted;
-//                }
-//            }
-//            return 0;
-//        }
-//
-//        @Override
-//        public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
-//        {
-//            return 0;
-//        }
-//
-//        @Override
-//        protected ResourceAmount<FluidVariant> createSnapshot()
-//        {
-//            return new ResourceAmount<>(resource, amount);
-//        }
-//
-//        @Override
-//        protected void readSnapshot(ResourceAmount<FluidVariant> snapshot)
-//        {
-//            this.amount = snapshot.amount();
-//            this.resource = snapshot.resource();
-//        }
     }
-
 }

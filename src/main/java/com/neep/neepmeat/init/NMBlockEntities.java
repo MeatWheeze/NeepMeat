@@ -140,6 +140,7 @@ public class NMBlockEntities
 
         // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
+        ItemStorage.SIDED.registerForBlockEntity(IntegratorBlockEntity::getItemStorage, INTEGRATOR);
         TROMMEL = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         TROMMEL_STRUCTURE = registerBlockEntity("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
         SMALL_TROMMEL = registerBlockEntity("small_trommel", SmallTrommelBlockEntity::new, NMBlocks.SMALL_TROMMEL);
