@@ -32,6 +32,7 @@
 - Stop duplication glitch when items enter rotuers
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add cutting recipes for building blocks
+- Improve world loading speed by serialising fluid networks
 - Add torque shaft
 - Add coloured fluid pipes
 - Create REI plugin
