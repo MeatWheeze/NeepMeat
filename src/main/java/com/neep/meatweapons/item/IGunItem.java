@@ -19,6 +19,8 @@ public interface IGunItem
 
     default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType) {}
 
+    default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType) {}
+
     void playSound(World world, PlayerEntity player, GunSounds sound);
 
    default void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius) {}

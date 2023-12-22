@@ -1,6 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
@@ -128,7 +129,7 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
 
     protected void fireSecondary(World world, PlayerEntity player, ItemStack stack)
     {
-        fireShell(world, player, stack);
+        fireShell(world, player, stack, 1, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, x, y, z, vx, vy, vz)));
     }
 
     @Override

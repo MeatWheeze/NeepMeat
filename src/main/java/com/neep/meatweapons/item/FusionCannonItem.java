@@ -1,8 +1,11 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.entity.FusionBlastEntity;
+import com.neep.meatweapons.entity.WeaponCooldownAttachment;
 import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
+import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -10,9 +13,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -60,28 +68,96 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
+    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
+    {
+        System.out.println("Use: " + System.currentTimeMillis());
+        return TypedActionResult.fail(user.getStackInHand(hand));
+    }
+
+    protected static final String KEY_CHARGE = "charge";
+
+    @Override
     public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
     {
-        if (!player.getItemCooldownManager().isCoolingDown(this))
+//        System.out.println("Trigger: " + System.currentTimeMillis());
+        WeaponCooldownAttachment manager = player.neepmeat$getAttachmentManager().getAttachment(WeaponCooldownAttachment.ID);
+        if (id == 0)
         {
-            if (stack.getDamage() != this.maxShots)
+            if (!manager.isCoolingDown(stack))
             {
-                player.getItemCooldownManager().set(this, cooldown);
-
-//                if (world.isClient) System.out.println("Client: " + System.currentTimeMillis());
-                if (!world.isClient)
+                if (stack.getDamage() != this.maxShots)
                 {
-//                    System.out.println("Server: " + System.currentTimeMillis());
-                    fireBeam(world, player, stack, pitch, yaw);
+                    manager.set(stack, cooldown);
+
+                    if (!world.isClient)
+                    {
+                        fireBeam(world, player, stack, pitch, yaw);
+                        if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
+                    }
                 }
             }
+
+        }
+        else if (id == 1)
+        {
+            NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
+            nbt.putInt("charge", 0);
+            nbt.putBoolean("charging", true);
+
+            world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_CHARGE, SoundCategory.PLAYERS, 1f, 1f);
+
         }
 
-        if (!player.getItemCooldownManager().isCoolingDown(this) && stack.getDamage() == this.maxShots)
+        if (!manager.isCoolingDown(stack) && stack.getDamage() >= this.maxShots)
         {
             this.reload(player, stack, null);
         }
     }
+
+    @Override
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    {
+        WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
+        if (id == GunFireC2SPacket.TRIGGER_SECONDARY
+                && !manager.isCoolingDown(stack)
+                && stack.getDamage() + 2 <= maxShots
+                && canFireBlast(stack)
+    )
+        {
+            NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
+            int charge = nbt.getInt("charge");
+            float power = charge / 2f;
+
+            fireShell(world, player, stack, 2, (world1, x, y, z, vx, vy, vz) -> new FusionBlastEntity(world1, x, y, z, vx, vy, vz, power));
+            if (!player.isCreative()) stack.setDamage(stack.getDamage() + 2);
+
+            world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
+
+            nbt.putBoolean("charging", false);
+        }
+    }
+
+    @Override
+    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
+    {
+        NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
+        if (nbt.getBoolean("charging"))
+        {
+            int charge = nbt.getInt("charge");
+            nbt.putInt("charge", charge + 1);
+        }
+        super.inventoryTick(stack, world, entity, slot, selected);
+    }
+
+    public static final int MAX_CHARGE_TIME = 60; // 60 ticks
+    public static final int MIN_CHARGE_TIME = 13;
+    public static final int EXPLOSION_TIME = 150; // Number of ticks before the weapon explodes when charging
+
+    protected static boolean canFireBlast(ItemStack stack)
+    {
+        return stack.getOrCreateSubNbt(KEY_CHARGE).getInt("charge") > MIN_CHARGE_TIME;
+    }
+
 
     @Override
     public Vec3f getAimOffset()
@@ -113,10 +189,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         // Play fire sound
         playSound(world, player, GunSounds.FIRE_PRIMARY);
 
-        if (!player.isCreative())
-        {
-            stack.setDamage(stack.getDamage() + 1);
-        }
 
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
@@ -134,15 +206,14 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void onAnimationSync(int id, int state)
     {
+        final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
         if (state == ANIM_FIRE)
         {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-                controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire"));
+            controller.markNeedsReload();
+            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire"));
         }
         else if (state == ANIM_RELOAD)
         {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             controller.markNeedsReload();
             controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
         }

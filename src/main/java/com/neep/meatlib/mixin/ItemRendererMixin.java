@@ -1,6 +1,6 @@
 package com.neep.meatlib.mixin;
 
-import com.neep.meatlib.api.event.RenderItemGuiCallback;
+import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.item.ItemStack;
@@ -16,7 +16,7 @@ public class ItemRendererMixin
     @Inject(at = @At(value = "TAIL"),  method = "renderGuiItemOverlay(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/item/ItemStack;IILjava/lang/String;)V")
     private void onItemGuiRender(final TextRenderer textRenderer, final ItemStack stack, int x, int y, @Nullable String countLabel, CallbackInfo ci)
     {
-        RenderItemGuiCallback.EVENT.invoker().interact(textRenderer, stack, x, y, countLabel);
+        RenderItemGuiEvent.EVENT.invoker().interact(textRenderer, stack, x, y, countLabel);
 
     }
 

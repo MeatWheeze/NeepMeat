@@ -1,16 +1,19 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.player.MeatPlayerEntity;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.BulletDamageSource;
-import com.neep.meatweapons.entity.ExplodingShellEntity;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -186,15 +189,14 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
 
-    protected void fireShell(World world, PlayerEntity player, ItemStack stack)
+    protected void fireShell(World world, PlayerEntity player, ItemStack stack, double speed, ProjectileFactory factory)
     {
         double yaw = Math.toRadians(player.getHeadYaw());
         double pitch = Math.toRadians(player.getPitch(0.1f));
 
-        double mult = 1; // Multiplier for bullet speed.
-        double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
-        double vy = mult * -Math.sin(pitch) + player.getVelocity().getY();
-        double vz = mult * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
+        double vx = speed * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
+        double vy = speed * -Math.sin(pitch) + player.getVelocity().getY();
+        double vz = speed * Math.cos(yaw) * Math.cos(pitch) + player.getVelocity().getZ();
 
         Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
         if (!player.isSneaking())
@@ -203,13 +205,12 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
             pos = pos.add(transform);
         }
 
-        ExplodingShellEntity shell = new ExplodingShellEntity(world, 1, pos.x, pos.y, pos.z, vx, vy, vz);
+        PersistentProjectileEntity shell = factory.create(world, pos.x, pos.y, pos.z, vx, vy, vz);
         shell.setOwner(player);
         world.spawnEntity(shell);
 
         playSound(world, player, GunSounds.FIRE_SECONDARY);
 
-        stack.setDamage(stack.getDamage() + 1);
 
         syncAnimation(world, player, stack, ANIM_FIRE, true);
     }
@@ -277,5 +278,10 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IGunItem, I
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.CONTINUE;
+    }
+
+    public interface ProjectileFactory
+    {
+        PersistentProjectileEntity create(World world, double x, double y, double z, double vx, double vy, double vz);
     }
 }

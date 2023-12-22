@@ -59,7 +59,8 @@
       "net/minecraft/client/world/ClientWorld": ["com/neep/meatweapons/client/IEffectProvider"],
       "net/minecraft/block/entity/AbstractFurnaceBlockEntity": ["com/neep/neepmeat/machine/HeatableFurnace"],
       "net/minecraft/block/entity/ServerWorld": ["com/neep/neepmeat/transport/interfaces/IServerWorld"],
-      "net/minecraft/entity/LivingEntity": ["com/neep/neepmeat/interfaces/ILivingEntity"]
+      "net/minecraft/entity/LivingEntity": ["com/neep/neepmeat/interfaces/ILivingEntity"],
+      "net/minecraft/entity/player/PlayerEntity": ["com/neep/meatlib/player/MeatPlayerEntity"]
     }
   },
   "accessWidener" : "neepmeat.accesswidener"

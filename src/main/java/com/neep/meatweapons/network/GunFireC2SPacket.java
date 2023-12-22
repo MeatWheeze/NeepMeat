@@ -17,18 +17,22 @@ public class GunFireC2SPacket
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "weapon_trigger");
 
+    public static final int TRIGGER_PRIMARY = 0;
+    public static final int TRIGGER_SECONDARY = 1;
+
     public static void init()
     {
 
     }
 
-    public static PacketByteBuf create(int trigger, double pitch, double yaw, int hand)
+    public static PacketByteBuf create(int trigger, double pitch, double yaw, int hand, ActionType actionType)
     {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeVarInt(trigger);
         buf.writeDouble(pitch);
         buf.writeDouble(yaw);
         buf.writeByte(hand);
+        buf.writeByte(actionType.ordinal());
 
         return buf;
     }
@@ -40,10 +44,11 @@ public class GunFireC2SPacket
 
     private static void apply(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender sender)
     {
-        int id = buf.readVarInt();
+        int triggerId = buf.readVarInt();
         double pitch = buf.readDouble();
         double yaw = buf.readDouble();
         byte hand = buf.readByte();
+        ActionType actionType = ActionType.values()[buf.readByte()];
 
         ItemStack mainStack = player.getStackInHand(Hand.MAIN_HAND);
         ItemStack offStack = player.getStackInHand(Hand.OFF_HAND);
@@ -52,18 +57,21 @@ public class GunFireC2SPacket
 
         if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
         {
-            gunItem.trigger(player.world, player, mainStack, id, pitch, yaw, handType);
+            switch (actionType)
+            {
+                case PRESS -> gunItem.trigger(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                case RELEASE -> gunItem.release(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+            }
         }
 
         if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
         {
-            gunItem.trigger(player.world, player, offStack, id, pitch, yaw, handType);
+            switch (actionType)
+            {
+                case PRESS -> gunItem.trigger(player.world, player, offStack, triggerId, pitch, yaw, handType);
+                case RELEASE -> gunItem.release(player.world, player, offStack, triggerId, pitch, yaw, handType);
+            }
         }
-
-//        if (item instanceof IGunItem gun)
-//        {
-//            gun.trigger(player.world, player, mainStack, id, pitch, yaw);
-//        }
     }
 
     public enum HandType
@@ -77,5 +85,16 @@ public class GunFireC2SPacket
         {
 
         }
+
+        public Hand oneOrTheOther()
+        {
+            return this == OFF ? Hand.OFF_HAND : Hand.MAIN_HAND;
+        }
+    }
+
+    public enum ActionType
+    {
+        PRESS,
+        RELEASE
     }
 }
