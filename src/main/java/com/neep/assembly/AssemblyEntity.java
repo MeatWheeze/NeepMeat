@@ -17,13 +17,11 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.collection.ReusableStream;
 import net.minecraft.util.function.BooleanBiFunction;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -33,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
-import net.minecraft.world.event.GameEvent;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -45,7 +42,11 @@ public class AssemblyEntity extends Entity
     private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.TAG_COMPOUND);
 
     public BlockState state;
-    public PalettedContainer<BlockState> blocks;
+    public PalettedContainer<BlockState> blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+        Block.STATE_IDS,
+        NbtHelper::toBlockState,
+        NbtHelper::fromBlockState,
+            Blocks.AIR.getDefaultState());
     protected boolean needsBoxUpdate;
 
     public AssemblyEntity(EntityType<?> type, World world)
@@ -54,8 +55,9 @@ public class AssemblyEntity extends Entity
 
         this.state = Blocks.STONE.getDefaultState();
 
-        this.updatePalette();
+//        this.updatePalette();
 //        this.setBoundingBox(calculateBoundingBox());
+//        this.updatePalette();
         this.needsBoxUpdate = true;
     }
 
@@ -73,7 +75,7 @@ public class AssemblyEntity extends Entity
     protected void initDataTracker()
     {
         this.dataTracker.startTracking(BLOCK, Optional.empty());
-        this.dataTracker.startTracking(PALETTE, writePalette(new NbtCompound()));
+        this.dataTracker.startTracking(PALETTE, new NbtCompound());
     }
 
     @Override
@@ -90,7 +92,8 @@ public class AssemblyEntity extends Entity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        writePalette(nbt);
+//        writePalette(nbt);
+        blocks.write(nbt, "Palette", "BlockStates");
         return nbt;
     }
 
@@ -98,32 +101,51 @@ public class AssemblyEntity extends Entity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        readPalette(nbt);
+//        readPalette(nbt);
+        if (nbt.contains("Palette", 9) && nbt.contains("BlockStates", 12))
+        {
+            blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
+        }
    }
 
     public NbtCompound writePalette(NbtCompound nbt)
     {
-        if (blocks == null)
-        {
-            initPalette();
-        }
+//        if (blocks == null && !world.isClient)
+//        {
+//            initPalette();
+//            return nbt;
+//        }
+//        else if (world.isClient)
+//        {
+//            blocks = getPalette();
+//            initPalette();
+//        }
 
         blocks.write(nbt, "Palette", "BlockStates");
+//        dataTracker.set(PALETTE, writePalette(new NbtCompound()));
         return nbt;
     }
 
     public void readPalette(NbtCompound nbt)
     {
+        if (!world.isClient)
+        {
+        }
         if (nbt.contains("Palette", 9) && nbt.contains("BlockStates", 12))
         {
             blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
+//        dataTracker.set(PALETTE, writePalette(new NbtCompound()));
     }
 
     public void updatePalette()
     {
+        if (blocks == null)
+        {
+            initPalette();
+        }
         dataTracker.set(PALETTE, writePalette(new NbtCompound()));
-        this.setBoundingBox(getBounds());
+//        this.setBoundingBox(getBounds());
     }
 
     @Override
@@ -133,10 +155,14 @@ public class AssemblyEntity extends Entity
         if (this.needsBoxUpdate)
         {
             this.setBoundingBox(calculateBoundingBox());
+            if (!world.isClient)
+            {
+                updatePalette();
+            }
             this.needsBoxUpdate = false;
         }
 
-        setVelocity(0.0, 0.1, 0);
+        setVelocity(0.0, 0.0, 0);
         this.move(MovementType.SELF, (getVelocity()));
     }
 
@@ -174,7 +200,6 @@ public class AssemblyEntity extends Entity
                                     entity.setOnGround(true);
                                     entity.setVelocity(finalMovement);
                                 }
-//                        System.out.println(entity);
                             }
                     );
                 }
@@ -247,6 +272,10 @@ public class AssemblyEntity extends Entity
         double dz = 0;
 
         PalettedContainer<BlockState> states = getPalette();
+        if (states == null)
+        {
+            return new Box(0, 0, 0, 1, 1, 1);
+        }
         for (int i = 1; i <= 16; ++i)
         {
             for (int j = 1; j <= 16; ++j)
@@ -283,11 +312,11 @@ public class AssemblyEntity extends Entity
         {
             if (!player.isSneaking())
             {
-                blocks.set(0, 0, 0, Assembly.PLATFORM.getDefaultState());
-                blocks.set(0, 1, 0, Assembly.PLATFORM.getDefaultState());
-                blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
-                blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
-                blocks.set(2, 1, 1, Assembly.PLATFORM.getDefaultState());
+//                blocks.set(0, 0, 0, Assembly.PLATFORM.getDefaultState());
+//                blocks.set(0, 1, 0, Assembly.PLATFORM.getDefaultState());
+//                blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
+//                blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
+//                blocks.set(2, 1, 1, Assembly.PLATFORM.getDefaultState());
                 blocks.set(4, 1, 1, Assembly.PLATFORM.getDefaultState());
             }
             else
@@ -355,7 +384,8 @@ public class AssemblyEntity extends Entity
 
     public BlockState getState()
     {
-        return dataTracker.get(BLOCK).orElseGet(Blocks.COAL_ORE::getDefaultState);
+//        return dataTracker.get(BLOCK).orElseGet(Blocks.COAL_ORE::getDefaultState);
+        return Blocks.COAL_ORE.getDefaultState();
     }
 
     public void initPalette()
@@ -369,7 +399,11 @@ public class AssemblyEntity extends Entity
 
     public PalettedContainer<BlockState> getPalette()
     {
-        readPalette(dataTracker.get(PALETTE));
+        NbtCompound nbt;
+        if ((nbt = dataTracker.get(PALETTE)) != null);
+        {
+            readPalette(nbt);
+        }
         return this.blocks;
     }
 
