@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.blockentity.TestBlockEntity;
+import com.neep.neepmeat.blockentity.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
@@ -39,7 +39,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class PipeBlock extends BaseBlock implements FluidAcceptor
+public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityProvider
 {
 //    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = PipeProperties.NORTH_CONNECTION;
 //    public static final EnumProperty<PipeConnection> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
@@ -95,7 +95,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
             SHAPES.put(state, getShapeForState(state));
         }
-
     }
 
     public VoxelShape getShapeForState(BlockState state)
@@ -285,6 +284,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         if (!state.isOf(newState.getBlock()))
         {
             removeStorageNodes(world, pos);
+            world.removeBlockEntity(pos);
         }
     }
 
@@ -294,12 +294,12 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
         createStorageNodes(world, pos, updatedState);
-        world.addBlockEntity(new TestBlockEntity(pos, state));
-        BlockEntity be = world.getBlockEntity(pos);
-        System.out.println(be);
+//        world.addBlockEntity(new NodeContainerBlockEntity(pos, state));
+//        BlockEntity be = world.getBlockEntity(pos);
+//        System.out.println(be);
     }
 
-    // Produces connections to fluid containers after placing
+    // Creates blockstate connections to fluid containers after placing
     private BlockState enforceApiConnections(World world, BlockPos pos, BlockState state)
     {
         if (!world.isClient)
@@ -329,7 +329,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
 //            NodePos nodePos = new NodePos(pos.offset(direction), direction.getOpposite());
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.NETWORK.removeNode(nodePos);
+            FluidNetwork.INSTANCE.removeNode(world, nodePos);
         }
     }
 
@@ -345,43 +345,36 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                         && state.get(DIR_TO_CONNECTION.get(direction)))
                 {
                     FluidNode node;
-                    BlockState state1 = world.getBlockState(pos.offset(direction));
-                    if (state1.getBlock() instanceof FluidNodeProvider provider)
+                    BlockState nextPos = world.getBlockState(pos.offset(direction));
+                    if (nextPos.getBlock() instanceof FluidNodeProvider provider)
                     {
-                        node = new FluidNode(pos, direction, storage, provider.getDirectionMode(state1, direction.getOpposite()), 2);
-                    } else
+                        node = new FluidNode(pos, direction, storage, provider.getDirectionMode(nextPos, direction.getOpposite()), 2);
+                    }
+                    else
                     {
                         node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
                     }
-                    updateNetwork(pos, node, false);
+                    updateNetwork(world, pos, node, false);
                 } else
                 {
-                    FluidNetwork.NETWORK.removeNode(new NodePos(pos, direction));
+                    FluidNetwork.INSTANCE.removeNode(world, new NodePos(pos, direction));
                 }
             }
+            // TODO: avoid creating that will fail immediately
             Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
-            if (net.isPresent())
-            {
-                for (Supplier<FluidNode> supplier : net.get().connectedNodes)
-                {
-//                System.out.println(supplier.get());
-                }
-            } else
-            {
-            }
         }
     }
 
-    public void updateNetwork(BlockPos pos, FluidNode node, boolean removed)
+    public void updateNetwork(World world, BlockPos pos, FluidNode node, boolean removed)
     {
         if (removed)
         {
-            FluidNetwork.NETWORK.removeNode(new NodePos(node));
+            FluidNetwork.INSTANCE.removeNode(world, new NodePos(node));
 //            FluidNetwork.NETWORK.removeSegment(pos);
         }
         else
         {
-            FluidNetwork.NETWORK.updateNode(new NodePos(node), node);
+            FluidNetwork.INSTANCE.updateNode(world, new NodePos(node), node);
 //            FluidNetwork.NETWORK.updateSegment(pos, new PipeSegment(pos, state));
         }
     }
@@ -389,19 +382,18 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        if (!player.getAbilities().allowModifyWorld)
-//        {
-//            return ActionResult.PASS;
-//        }
-        // There must be an easier way to do this.
-//        if (player.getStackInHand(hand).getItem() instanceof BlockItem
-//                && (((BlockItem) player.getStackInHand(hand).getItem()).getBlock().equals(BlockInitialiser.PIPE)))
         if (!player.getStackInHand(hand).equals(ItemStack.EMPTY))
         {
             return ActionResult.PASS;
         }
         if (!world.isClient)
         {
+            if (player.isSneaking())
+            {
+                System.out.println(FluidNetwork.INSTANCE.getNodes(pos));
+                System.out.println("block entity: " + world.getBlockEntity(pos));
+                return ActionResult.SUCCESS;
+            }
             Direction direction = hit.getSide();
 
             Vec3d hitPos = hit.getPos();
@@ -436,52 +428,16 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         return ActionResult.SUCCESS;
     }
 
-//    public static Pair<List<BlockPos>, List<BlockPos>> findNodes(BlockPos pos, Direction fromDirection, List<BlockPos> visited, World world, int level)
-//    {
-//        System.out.println(pos.toString());
-//        List<BlockPos> list = new ArrayList<>();
-//        visited.add(pos);
-//        if (level > 0)
-//        {
-//            for (Direction direction : Direction.values())
-//            {
-//                BlockPos pos2 = pos.offset(direction);
-//                BlockState state = world.getBlockState(pos);
-//                BlockState state2 = world.getBlockState(pos2);
-//
-//                if (FluidAcceptor.isConnectedIn(state, direction))
-//                {
-//                    if (state2.getBlock() instanceof FluidAcceptor
-//                            && !(state2.getBlock() instanceof FluidNodeProvider)
-//                            && !visited.contains(pos2)
-//                            && direction != fromDirection)
-//                    {
-//                        // Next block is connected in opposite direction
-//                        if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
-//                        {
-//                            // Continue searching and add nodes.
-//                            Pair<List<BlockPos>, List<BlockPos>> pair = findNodes(pos2, direction.getOpposite(), visited, world, level - 1);
-//                            list.addAll(pair.getLeft());
-//                            visited.addAll(pair.getRight());
-//                        }
-//                    }
-//                    else if (state2.getBlock() instanceof FluidNodeProvider && direction != fromDirection)
-//                    {
-//                        if (((FluidNodeProvider) state2.getBlock()).connectInDirection(state2, direction.getOpposite()))
-//                        {
-////                            System.out.println(pos2.toString());
-//                            list.add(pos2);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return new Pair<>(list, visited);
-//    }
-
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         builder.add(NORTH_CONNECTION, EAST_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return null;
     }
 }
