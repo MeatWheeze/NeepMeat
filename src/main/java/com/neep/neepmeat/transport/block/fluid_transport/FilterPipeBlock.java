@@ -1,13 +1,12 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
-import com.neep.neepmeat.transport.fluid_network.PipeState;
+import com.neep.neepmeat.transport.fluid_network.FilterFunction;
+import com.neep.neepmeat.transport.fluid_network.ISpecialPipe;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
@@ -35,7 +34,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
+public class FilterPipeBlock extends AbstractAxialPipe implements ISpecialPipe, BlockEntityProvider
 {
     public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
@@ -44,14 +43,14 @@ public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpe
     }
 
     @Override
-    public PipeState.FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state)
+    public FilterFunction getFlowFunction(World world, Direction bias, BlockPos pos, BlockState state)
     {
         FilterPipeBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.FILTER_PIPE).orElse(null);
         if (be != null)
         {
             return (v, a) -> be.getFilterVariant().isBlank() || v.equals(be.getFilterVariant()) ? a : 0;
         }
-        return PipeState::identity;
+        return FilterFunction::identity;
     }
 
     @Override

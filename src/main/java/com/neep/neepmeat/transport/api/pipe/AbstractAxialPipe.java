@@ -2,10 +2,9 @@ package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FacingBlock;
@@ -64,7 +63,7 @@ public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFlui
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
             if (createStorageNodes(world, pos, state))
-                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -76,7 +75,7 @@ public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFlui
             return;
 
         createStorageNodes(world, pos, state);
-        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+        updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.PIPE_ADDED);
     }
 
     @Override

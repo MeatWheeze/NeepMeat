@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.util;
 
-import com.neep.neepmeat.transport.fluid_network.PipeState;
+import com.neep.neepmeat.transport.fluid_network.FilterFunction;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.SimplePipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.DFSFinder;
 import com.neep.neepmeat.util.IndexedHashMap;
@@ -9,22 +11,21 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.nio.channels.Pipe;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
+public class FluidPipeRouteFinder extends DFSFinder<FilterFunction>
 {
-    protected PipeState.FilterFunction flowFunc;
-    protected final Deque<PipeState.FilterFunction> filterStack = new ArrayDeque<>();
-    protected final Deque<PipeState> pipeStack = new ArrayDeque<>();
-    protected PipeState currentPipe;
+    protected FilterFunction flowFunc;
+    protected final Deque<FilterFunction> filterStack = new ArrayDeque<>();
+    protected final Deque<PipeVertex> pipeStack = new ArrayDeque<>();
+    protected PipeVertex currentPipe;
     protected final World world;
-    protected final IndexedHashMap<BlockPos, PipeState> pipes;
+    protected final IndexedHashMap<BlockPos, SimplePipeVertex> pipes;
     protected NodePos start;
     protected NodePos end;
 
-    public FluidPipeRouteFinder(World world, IndexedHashMap<BlockPos, PipeState> pipes)
+    public FluidPipeRouteFinder(World world, IndexedHashMap<BlockPos, SimplePipeVertex> pipes)
     {
         this.world = world;
         this.pipes = pipes;
@@ -49,7 +50,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
         super.reset();
         filterStack.clear();
         pipeStack.clear();
-        flowFunc = PipeState::identity;
+        flowFunc = FilterFunction::identity;
         currentPipe = null;
     }
 
@@ -69,7 +70,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
 //        directions.push(this.start.face);
         pipeStack.push(pipes.get(start));
         pipes.forEach(p -> p.flag = false);
-        filterStack.push(PipeState.IDENTITY);
+        filterStack.push(FilterFunction.IDENTITY);
 //        if (!processPipe(start, pipeStack.peek(), directions.peek(), world, filterStack))
 //        {
 //            // This should cause an early return if the starting pipe is blocked.
@@ -84,7 +85,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
     }
 
     private BlockPos.Mutable offset = new BlockPos.Mutable();
-    private PipeState offsetPipe;
+    private PipeVertex offsetPipe;
 
     @Override
     protected State processPos(BlockPos current, Direction fromDir)
@@ -98,7 +99,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
 
         if (current.equals(end.pos))
         {
-            for (PipeState.FilterFunction function : filterStack)
+            for (FilterFunction function : filterStack)
             {
                 flowFunc = flowFunc.andThen(function);
             }
@@ -112,7 +113,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
             offset.set(current, connection);
             offsetPipe = currentPipe.getAdjacent(connection);
 
-            if (offsetPipe != null && !offsetPipe.flag)
+            if (offsetPipe != null && !offsetPipe.flag())
             {
                 // Ignore potential branch if no fluid can flow.
                 // This is necessary to allow parallel stop valves and check valves.
@@ -120,7 +121,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
                 if (!offsetPipe.canFluidFlow(connection, offsetState)) continue;
 
                 // Flag next pipe as visited
-                offsetPipe.flag = true;
+                offsetPipe.setFlag(true);
                 setVisited(offset);
 
                 // Push next vertex to the stack
@@ -131,7 +132,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
                 {
                     filterStack.push(offsetPipe.getSpecial().getFlowFunction(world, connection, offset, offsetState));
                 }
-                else filterStack.push(PipeState.IDENTITY); // Default to identity function
+                else filterStack.push(FilterFunction.IDENTITY); // Default to identity function
 
                 // Temporarily ignore all other connections
                 return State.CONTINUE;
@@ -147,7 +148,7 @@ public class FluidPipeRouteFinder extends DFSFinder<PipeState.FilterFunction>
         return State.CONTINUE;
     }
 
-    private static boolean canFlow(BlockPos pos, PipeState pipe, Direction direction, World world, Deque<PipeState.FilterFunction> filterStack)
+    private static boolean canFlow(BlockPos pos, PipeVertex pipe, Direction direction, World world, Deque<FilterFunction> filterStack)
     {
         // Check if pipe can transfer fluid in the opposite direction
         BlockState currentState = world.getBlockState(pos);

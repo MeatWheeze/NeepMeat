@@ -84,7 +84,7 @@ public class FluidNodeManager
 
     public static boolean shouldTick(long worldTime)
     {
-        return (worldTime % PipeNetwork.TICK_RATE) == 0;
+        return (worldTime % PipeNetworkImpl1.TICK_RATE) == 0;
     }
 
     public static void tickNetwork(ServerWorld world)
@@ -102,7 +102,7 @@ public class FluidNodeManager
             {
                 for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
-                    if (network.getWorld().equals(world)) network.tick();
+                    if (network.canTick(world)) network.tick();
                 }
             };
             runnable.run();
@@ -314,7 +314,7 @@ public class FluidNodeManager
         // Some pipes variants need to retain their block entity even when there are no nodes
         if (nodes.isEmpty()) return;
 
-        PipeNetwork network = nodes.get(0).getNetwork();
+        PipeNetworkImpl1 network = nodes.get(0).getNetwork();
         if (network == null || network.isSaved) return;
 
         NbtCompound nbt = network.toNbt();

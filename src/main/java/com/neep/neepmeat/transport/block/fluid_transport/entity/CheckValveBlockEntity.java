@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -70,6 +70,6 @@ public class CheckValveBlockEntity extends BlockEntity implements Storage<FluidV
     public float getApparentFlow()
     {
         // TODO: Change these to longs somehow
-        return apparentFLow / (float) PipeNetwork.BASE_TRANSFER;
+        return apparentFLow / (float) PipeNetworkImpl1.BASE_TRANSFER;
     }
 }

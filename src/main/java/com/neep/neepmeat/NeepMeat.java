@@ -17,6 +17,7 @@ import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
 import com.neep.neepmeat.world.NMFeatures;
 import net.fabricmc.api.ModInitializer;
@@ -65,11 +66,16 @@ public class NeepMeat implements ModInitializer
 		MobSynthesisRegistry.initDefaults();
 		NMGraphicsEffects.init();
 
+		// --- Transport module ---
 		ItemTransport.init();
+		PipeNetwork.registerEvent();
+
 
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();
 
+
+		// --- Other misc things ---
 		ToolTransformPacket.registerReceiver();
 
 		NMFeatures.init();

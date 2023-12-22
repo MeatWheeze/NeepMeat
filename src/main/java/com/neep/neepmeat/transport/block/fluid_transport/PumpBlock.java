@@ -2,11 +2,12 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl2;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
@@ -92,30 +93,24 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
         {
             if (!player.isSneaking())
             {
-//                be.update(state, world);
-                HashSet<Supplier<FluidNode>> test = new HashSet<>();
-
-//                NodePos pos1 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
-//                NodePos pos2 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
-//                FluidNetwork.NodeSupplier supplier1 = new FluidNetwork.NodeSupplier(pos1);
-//                FluidNetwork.NodeSupplier supplier2 = new FluidNetwork.NodeSupplier(pos2);
-//
-//                test.add(supplier1);
-//
-//                System.out.println(test.contains(supplier2));
-
-//                NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
             }
             else
             {
-//                System.out.println(NMFluidNetwork.LOADED_NETWORKS);
                 for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
 //                    System.out.println(network.connectedNodes);
-                    System.out.print("\n" + network.uuid + " nodes: ");
-                    for (Supplier<FluidNode> supplier : network.getNodes())
+                    System.out.print("\n" + network.getUUID() + " nodes: ");
+                    if (network instanceof PipeNetworkImpl1 impl1)
                     {
-                        System.out.print(supplier.get());
+                        for (Supplier<FluidNode> supplier : impl1.getNodes())
+                        {
+                            System.out.print(supplier.get());
+                        }
+                    }
+                    else if (network instanceof PipeNetworkImpl2 impl2)
+                    {
+                        System.out.print("\n");
+                        impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
                     }
                     System.out.print("\n");
                 }

@@ -5,7 +5,7 @@ import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -138,7 +138,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     public void tick()
     {
         Direction facing = getCachedState().get(PumpBlock.FACING);
-        long transfer = PipeNetwork.BASE_TRANSFER / PipeNetwork.TICK_RATE;
+        long transfer = PipeNetworkImpl1.BASE_TRANSFER / PipeNetworkImpl1.TICK_RATE;
 
         // Create caches if they should be present
         if (hasFrontStorage && frontCache == null || hasRearStorage && rearCache == null)

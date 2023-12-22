@@ -17,9 +17,9 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PipeBranches extends HashMap<Long, PipeState>
+public class PipeBranches extends HashMap<Long, SimplePipeVertex>
 {
-    public static void test(ServerWorld world, HashSet<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static void test(ServerWorld world, HashSet<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, SimplePipeVertex> pipes)
     {
         if (nodes.size() > 1)
         {
@@ -37,34 +37,34 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static void displayMatrix(PipeState.FilterFunction[][] matrix)
+    public static void displayMatrix(FilterFunction[][] matrix)
     {
         for (int i = 0; i < matrix.length; ++i)
         {
             for (int j = 0; j < matrix[0].length; ++j)
             {
-                long out = matrix[i][j].applyVariant(FluidVariant.of(Fluids.WATER), PipeNetwork.BASE_TRANSFER);
+                long out = matrix[i][j].applyVariant(FluidVariant.of(Fluids.WATER), PipeNetworkImpl1.BASE_TRANSFER);
                 System.out.print(out + " ");
             }
             System.out.println();
         }
     }
 
-    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static FilterFunction[][] getMatrix(ServerWorld world, List<NodeSupplier> nodes, IndexedHashMap<BlockPos, SimplePipeVertex> pipes)
     {
         int size = nodes.size();
 
         // Initialise matrix
-        PipeState.FilterFunction[][] matrix = (PipeState.FilterFunction[][]) Array.newInstance(PipeState.FilterFunction.class, size, size);
+        FilterFunction[][] matrix = (FilterFunction[][]) Array.newInstance(FilterFunction.class, size, size);
         FluidPipeRouteFinder finder = new FluidPipeRouteFinder(world, pipes);
         for (int i = 0; i < size; ++i)
         {
             for (int j = 0; j < size; ++j)
             {
                 if (i == j)
-                    matrix[i][j] = PipeState::zero;
+                    matrix[i][j] = FilterFunction::zero;
                 else
-                    matrix[i][j] = PipeState::identity;
+                    matrix[i][j] = FilterFunction::identity;
             }
         }
 
@@ -88,14 +88,14 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
                     finder.init(start, end);
                     finder.loop(100);
-                    PipeState.FilterFunction function;
+                    FilterFunction function;
                     if (finder.hasResult() && (function = finder.getResult().right()) != null)
                     {
                         matrix[i][j] = function;
                     }
                     else
                     {
-                        matrix[i][j] = PipeState::zero;
+                        matrix[i][j] = FilterFunction::zero;
                     }
                 }
             }

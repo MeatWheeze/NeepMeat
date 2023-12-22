@@ -1,11 +1,10 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -57,7 +56,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
             if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -70,7 +69,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
-            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+            updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.PIPE_ADDED);
         }
     }
 
@@ -120,7 +119,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return;
 
         createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
+        updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.CONNECTION_CHANGED);
     }
 
     @Nullable
