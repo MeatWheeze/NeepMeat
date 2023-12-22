@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "neepmeat:duat_stone_wall",
+    "neepmeat:duat_cobblestone_wall",
     "neepmeat:polished_metal_bricks_wall",
     "neepmeat:polished_metal_small_bricks_wall",
     "neepmeat:polished_metal_wall",

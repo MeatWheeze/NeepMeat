@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "neepmeat:duat_stone"
+    }
+  },
+  "result": {
+    "item": "neepmeat:duat_stone_wall",
+    "count": 6
+  }
+}

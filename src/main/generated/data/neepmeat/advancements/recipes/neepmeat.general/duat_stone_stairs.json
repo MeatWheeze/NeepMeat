@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:duat_stone_stairs"
+    ]
+  },
+  "criteria": {
+    "has_duat_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:duat_stone"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:duat_stone_stairs"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_duat_stone",
+      "has_the_recipe"
+    ]
+  ]
+}
