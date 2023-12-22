@@ -37,7 +37,8 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
 
     protected void onFinalCommit()
     {
-        finalCallback.run();
+        if (finalCallback != null)
+            finalCallback.run();
     }
 
     public void writeNbt(NbtCompound nbt)

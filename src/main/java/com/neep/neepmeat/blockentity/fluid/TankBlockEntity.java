@@ -3,9 +3,14 @@ package com.neep.neepmeat.blockentity.fluid;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -19,14 +24,15 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
-    protected final WritableFluidBuffer buffer;
+    protected final WritableSingleFluidStorage buffer;
 
     public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
+        this.buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync);
     }
 
     public TankBlockEntity(BlockPos pos, BlockState state)
@@ -50,14 +56,14 @@ public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.
 
     @Override
     @Nullable
-    public WritableFluidBuffer getBuffer(Direction direction)
+    public WritableSingleFluidStorage getBuffer(Direction direction)
     {
         return buffer;
     }
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (buffer.handleInteract(world, player, hand))
+        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
         {
             return true;
         }
@@ -69,7 +75,7 @@ public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.
         return true;
     }
 
-    public static void showContents(ServerPlayerEntity player, World world, BlockPos pos, FluidBuffer buffer)
+    public static void showContents(ServerPlayerEntity player, World world, BlockPos pos, StorageView<FluidVariant> buffer)
     {
         world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
         TankMessagePacket.send(player, pos, buffer.getAmount(), buffer.getResource());

@@ -3,6 +3,7 @@ package com.neep.neepmeat.blockentity.fluid;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
@@ -17,12 +18,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class FluidBufferBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
-    protected final WritableFluidBuffer buffer;
+    protected final WritableSingleFluidStorage buffer;
 
     public FluidBufferBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new WritableFluidBuffer(this, (FluidConstants.BUCKET / 9 * 2));
+        this.buffer = new WritableSingleFluidStorage((FluidConstants.BUCKET / 9 * 2), this::sync);
     }
 
     public FluidBufferBlockEntity(BlockPos pos, BlockState state)
@@ -46,14 +47,14 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
 
     @Override
     @Nullable
-    public WritableFluidBuffer getBuffer(Direction direction)
+    public WritableSingleFluidStorage getBuffer(Direction direction)
     {
         return buffer;
     }
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (buffer.handleInteract(world, player, hand))
+        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
         {
             return true;
         }

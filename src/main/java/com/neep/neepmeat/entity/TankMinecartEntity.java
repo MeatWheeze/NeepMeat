@@ -1,5 +1,6 @@
 package com.neep.neepmeat.entity;
 
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
@@ -38,7 +39,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
 
     protected FluidVariant resource = FluidVariant.blank();
 
-    WritableFluidBuffer buffer = new WritableFluidBuffer(null, 8 * FluidConstants.BUCKET);
+    WritableSingleFluidStorage buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, null);
 
     public TankMinecartEntity(EntityType<?> entityType, World world)
     {
@@ -117,7 +118,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     @Override
     public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand)
     {
-        if (buffer.handleInteract(world, player, hand))
+        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
         {
             return ActionResult.SUCCESS;
         }

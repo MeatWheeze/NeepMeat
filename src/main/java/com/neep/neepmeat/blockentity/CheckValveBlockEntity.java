@@ -1,5 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -22,7 +23,7 @@ public class CheckValveBlockEntity extends BlockEntity implements Storage<FluidV
     // Maximum amount for the implicit buffer. Represents the max apparent flow rate through the block.
     public static long MAX_BUFFER_AMOUNT = 2 * FluidConstants.BUCKET;
 
-    protected WritableFluidBuffer buffer = new WritableFluidBuffer(this, MAX_BUFFER_AMOUNT);
+    protected WritableSingleFluidStorage buffer = new WritableSingleFluidStorage(MAX_BUFFER_AMOUNT, this::markDirty);
     protected long apparentFLow = 0;
 
     public CheckValveBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

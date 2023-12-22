@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.blockentity.fluid.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
@@ -11,6 +12,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -42,7 +44,7 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
     {
         matrices.push();
 
-        WritableFluidBuffer buffer = blockEntity.getBuffer(null);
+        WritableSingleFluidStorage buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         buffer.renderLevel = MathHelper.lerp(0.1f, buffer.renderLevel,(buffer.getAmount()) / (float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
