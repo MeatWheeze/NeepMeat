@@ -22,7 +22,7 @@ public class FluidNetworkManager extends PersistentState
     {
         ServerWorldEvents.LOAD.register((server, world1) ->
         {
-            world1.getPersistentStateManager().getOrCreate(nbt -> fromNbt(world1, nbt), () -> new FluidNetworkManager(world1), PIPES);
+//            world1.getPersistentStateManager().getOrCreate(nbt -> fromNbt(world1, nbt), () -> new FluidNetworkManager(world1), PIPES);
         });
     }
 

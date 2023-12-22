@@ -17,9 +17,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Optional;
 
 /*
@@ -179,8 +177,27 @@ public class FluidNode
         }
     }
 
+    public void setNetwork(PipeNetwork network)
+    {
+        if (!(this.network == null) && !this.network.equals(network))
+        {
+            this.network.removeNode(new NodePos(pos, face));
+        }
+        if (this.network != null)
+        {
+//            System.out.println(network.uuid + " replaces " + this.network.uuid);
+        }
+        this.network = network;
+    }
+
+    public PipeNetwork getNetwork()
+    {
+        return network;
+    }
+
     public Direction getFace()
     {
+
         return face;
     }
 
@@ -206,7 +223,7 @@ public class FluidNode
 
     public float getFlow()
     {
-        if (hasPump) return pump.getFlow();
+        if (hasPump) return getPump().getFlow();
         return getMode().getFlow();
     }
 
@@ -230,6 +247,13 @@ public class FluidNode
             load(world);
         }
         return storage;
+    }
+
+    public FluidPump getPump()
+    {
+        if (!hasPump) return null;
+        if (pump == null) findPump(network.getWorld());
+        return pump;
     }
 
     // Gets a quick and dirty idea of the tank's contents
@@ -259,7 +283,7 @@ public class FluidNode
 
     public AcceptorModes getMode()
     {
-        if (hasPump) pump.getMode();
+        if (hasPump) getPump().getMode();
         return AcceptorModes.INSERT_EXTRACT;
     }
 
