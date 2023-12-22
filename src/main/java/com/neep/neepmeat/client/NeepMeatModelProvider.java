@@ -1,7 +1,8 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.model.block.ScaffoldModel;
+import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
+import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
@@ -27,6 +28,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider
 
     static
     {
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), ScaffoldModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), ScaffoldTopModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_bottom"), ScaffoldBottomModel::new);
     }
 }
