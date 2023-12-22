@@ -47,7 +47,7 @@ public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity
         {
             matrices.push();
             matrices.multiply(Quaternion.fromEulerXyz(0, (angle * angleOffset * 2) / 20, 0));
-            float height = (float) ((Math.sin(angle / 20 + angleOffset) + 0.5) / 2 * fluidHeight) + 0.4f;
+            float height = (float) ((Math.sin(angle / 20 + angleOffset) + 0.4) / 2 * fluidHeight) + 0.2f;
             matrices.translate(0, height, offset);
 
             MinecraftClient.getInstance().getItemRenderer()
