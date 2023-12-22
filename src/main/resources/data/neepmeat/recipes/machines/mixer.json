@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "igi",
+    "cbc"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "g": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:mixer",
+    "count": 1
+  }
+}

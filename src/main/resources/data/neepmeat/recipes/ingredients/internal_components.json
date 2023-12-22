@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "cfi",
+    " o "
+  ],
+  "key": {
+    "o": {
+      "item": "neepmeat:copper_coil"
+    },
+    "c": {
+      "item": "minecraft:copper_ingot"
+    },
+    "I": {
+      "item": "neepmeat:integration_charge_crude"
+    },
+    "f": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:internal_components",
+    "count": 3
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bib",
+    "cic",
+    "bBb"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:whisper_brass"
+    },
+    "B": {
+      "item": "minecraft:iron_block"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "neepmeat:internal_components"
+    }
+  },
+  "result": {
+    "item": "neepmeat:hydraulic_press",
+    "count": 1
+  }
+}

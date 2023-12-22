@@ -18,7 +18,7 @@
 - [done] Fix hopper extension recipe
 - [done] Add break particles for item pipes
 - [done] Add break particles for Charnel CompactorG
-- Add a method for obtaining brains
+- [done] Add a method for obtaining brains
 - [done] Add recipe for Sacrificial Dagger
 - [done] Add Mixer
 - [done] Add Mixer recipes for Work Fluid and Patina Treatment
@@ -48,6 +48,8 @@
 - Improve world loading speed by serialising fluid networks
 - Add coloured fluid pipes
 - [done] Create REI plugin
+- Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
+- Add recipe for biomechanical components
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
