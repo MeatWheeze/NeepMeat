@@ -2,7 +2,10 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.block.*;
+import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.block.*;
+import com.neep.neepmeat.block.entity.CandleCronenCakeBlock;
+import com.neep.neepmeat.block.entity.CronenCakeBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.bottler.BottlerBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
@@ -209,6 +212,9 @@ public class NMBlocks
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
 
     public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", 64, false, FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
+
+    public static Block CRONENCAKE = BlockRegistry.queue(new CronenCakeBlock("cronencake", FabricBlockSettings.copyOf(Blocks.CAKE).sounds(BlockSoundGroup.SLIME)));
+    public static Block CANDLE_CRONENCAKE = BlockRegistry.queue(new CandleCronenCakeBlock("candle_cronencake", FabricBlockSettings.copyOf(Blocks.CANDLE_CAKE).sounds(BlockSoundGroup.SLIME)));
 
 //    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", FabricBlockSettings.of(Material.METAL)));
 

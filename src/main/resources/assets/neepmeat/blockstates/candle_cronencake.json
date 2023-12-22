@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "neepmeat:block/cronencake/candle_cake"
+    },
+    "lit=true": {
+      "model": "neepmeat:block/cronencake/candle_cake_lit"
+    }
+  }
+}
