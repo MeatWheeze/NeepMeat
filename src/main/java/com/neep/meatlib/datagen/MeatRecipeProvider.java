@@ -58,7 +58,7 @@ public class MeatRecipeProvider extends FabricRecipeProvider
 
     }
 
-    // Aargh! Multiple DataGeneratorEntrypoints under the namespace overwrite each other, so I am forced to employ this method...
+    // Aargh! Multiple DataGeneratorEntrypoints under the namespace overwrite each other so I am forced to employ this method...
     @FunctionalInterface
     public interface Subsidiary extends Consumer<Consumer<RecipeJsonProvider>> { }
 
