@@ -117,13 +117,13 @@ public class ImplantInstruction implements Instruction
     private void install(PLC plc)
     {
         var mip = toCache.find();
-        if (mip != null)
+        if (mip != null && stored != null)
         {
-            Entity entity = mip.get();
             ImplantStep step = new ImplantStep(stored.resource().getItem());
-            Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
-//            if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.ENTITY_MANUFACTURE, workpiece, step, entity.getType()))
-            if (workpiece != null)
+
+            Entity entity = mip.get();
+            Workpiece workpiece;
+            if (entity != null && (workpiece = NMComponents.WORKPIECE.getNullable(entity)) != null)
             {
                 step.mutate(entity);
 
@@ -150,7 +150,7 @@ public class ImplantInstruction implements Instruction
     private BlockPos getEntityPos(PLC plc)
     {
         var mip = toCache.find();
-        if (mip != null)
+        if (mip != null && mip.get() != null)
         {
             Entity entity = mip.get();
             return new BlockPos(entity.getBlockX(),

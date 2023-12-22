@@ -27,6 +27,7 @@ public class NMSounds
     public static SoundEvent PLC_SELECT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select");
     public static SoundEvent PLC_SELECT_BLOCK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select_block");
     public static SoundEvent IMPLANT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "implant_instruction_apply");
+    public static SoundEvent INJECT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "inject");
 
     public static SoundEvent FUSION_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_fire");
     public static SoundEvent FUSION_BLAST_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_blast_fire");
