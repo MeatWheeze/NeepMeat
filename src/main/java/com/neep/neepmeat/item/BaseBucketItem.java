@@ -17,7 +17,7 @@ private final String registryName;
     public BaseBucketItem(String namespace, String registryName, Fluid fluid, Settings settings)
     {
         super(fluid, settings);
-        this.registryName=registryName;
+        this.registryName = registryName;
         ItemRegistry.queueItem(this);
     }
 

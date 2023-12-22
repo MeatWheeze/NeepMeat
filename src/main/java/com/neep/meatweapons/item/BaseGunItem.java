@@ -56,8 +56,8 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
 
     public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, FabricItemSettings settings)
     {
-        super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots));
-        group(MeatWeapons.WEAPONS);
+        super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots).group(MeatWeapons.WEAPONS));
+//        group(MeatWeapons.WEAPONS);
         this.registryName = registryName;
         this.ammunition = ammunition;
         this.maxShots = maxShots;
