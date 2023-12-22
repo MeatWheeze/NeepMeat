@@ -28,13 +28,11 @@ import net.minecraft.world.event.GameEvent;
 public class CandleCronenCakeBlock extends CandleCakeBlock implements IMeatBlock
 {
     private final String registryName;
-    private final BlockItem blockItem;
 
     public CandleCronenCakeBlock(String registryName, Settings settings)
     {
         super(Blocks.WHITE_CANDLE, settings);
         this.registryName = registryName;
-        this.blockItem = new BaseBlockItem(this, registryName, 64, 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     }
 
     @Override
