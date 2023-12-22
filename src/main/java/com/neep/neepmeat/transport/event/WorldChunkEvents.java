@@ -32,6 +32,14 @@ public interface WorldChunkEvents
         }
     });
 
+    Event<BlockEntityEvent> BE_MANUAL_REMOVE = EventFactory.createArrayBacked(BlockEntityEvent.class, listeners -> (chunk, be) ->
+    {
+        for (var listener : listeners)
+        {
+            listener.apply(chunk, be);
+        }
+    });
+
     void load(WorldChunk chunk);
 
     @FunctionalInterface
