@@ -55,7 +55,7 @@ public class ItemInPipe
 
     public ItemVariant resource()
     {
-        return resource();
+        return variant;
     }
 
     public long amount()
