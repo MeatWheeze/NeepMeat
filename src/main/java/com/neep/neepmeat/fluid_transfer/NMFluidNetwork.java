@@ -139,7 +139,7 @@ public class NMFluidNetwork
             if (!validate())
                 return;
 
-//            buildPressures();
+            buildPressures();
 //            System.out.println(uid + " setting nodes");
 //            buildPressures();
 //            tick();
@@ -172,7 +172,7 @@ public class NMFluidNetwork
 
     public void tick()
     {
-        buildPressures();
+//        buildPressures();
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;
