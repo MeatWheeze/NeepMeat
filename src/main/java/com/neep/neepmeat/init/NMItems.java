@@ -20,8 +20,6 @@ public class NMItems
     public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(NMItemGroups.WEAPONS));
     public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(NMItemGroups.WEAPONS));
 
-//    public static Item DEBUG = new DebugItem("debug_item", false, new FabricItemSettings().group(NMItemGroups.GENERAL));
-
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item COPPER_COIL = new BaseCraftingItem("copper_coil", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
@@ -31,6 +29,7 @@ public class NMItems
     public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

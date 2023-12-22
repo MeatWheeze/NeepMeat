@@ -56,12 +56,15 @@
 - [done] Give Integrator a Data resource bufer
 - Add flywheel linkage
 - Add BIG FAN
+- Add Blood Bubble Tree
+- Remove stupid items (spigot, etc.)
 
 - [done] Shave down the number of failed networks by storing whether a node has a network
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
 
-- Add Caution Tape (looks similar to redstone)
+- Add Feeding Trough
+- [part] Add Caution Tape (looks similar to redstone)
 - Add MultiTank
 - Think of an auto-crafting solution
 - Item pipe routing
@@ -81,7 +84,7 @@
 
 ## MEAT Production
 
-We need to differentiate ourselves from MineFactory.
+We need to differentiate ourselves from MineFactory and the other one.
 
 - Add Biomass Reprocessor
 - Add Meat fluid
@@ -151,6 +154,7 @@ Divinity inspires growth, and this growth can be shepherded to generate resource
 
 Something has changed it to an Enlightened form. It exudes the heady scent of the Divine.
 
+Granting Enlightenment to a Warped Fungus gives it a meaty quality. Instead of fruit, the tree bears fleshy sacs filled with animal blood.
 
 ## Key Crafting Types
 
