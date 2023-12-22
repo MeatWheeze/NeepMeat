@@ -1,0 +1,39 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    "ege",
+    "oao",
+    "ebe"
+  ],
+  "key": {
+    "e": {
+      "type": "minecraft:item",
+      "resource": "meatweapons:engine",
+      "amount": 1
+    },
+    "g": {
+      "type": "minecraft:item",
+      "resource": "minecraft:glass",
+      "amount": 1
+    },
+    "o": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:bioelectric_organ",
+      "amount": 1
+    },
+    "b": {
+      "type": "minecraft:item",
+      "resource": "minecraft:iron_block",
+      "amount": 1
+    },
+    "a": {
+      "type": "minecraft:item",
+      "tag": "minecraft:boats",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "meatweapons:airtruck",
+    "amount": 1
+  }
+}
