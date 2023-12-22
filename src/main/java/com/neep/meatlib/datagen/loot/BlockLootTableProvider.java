@@ -31,16 +31,4 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider
             }
         }
     }
-
-    @Override
-    public void method_10379()
-    {
-
-    }
-
-    @Override
-    public void run(DataWriter writer) throws IOException
-    {
-
-    }
 }

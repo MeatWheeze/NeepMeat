@@ -46,7 +46,7 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
 
     public TankMinecartEntity(World world, double x, double y, double z)
     {
-        super(NMEntities.TANK_MINECART, world, x, y, z);
+        super(null, world, x, y, z);
         this.setCustomBlock(FluidTransport.GLASS_TANK.getDefaultState());
         this.setCustomBlockPresent(true);
     }

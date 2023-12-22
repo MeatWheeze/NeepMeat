@@ -15,7 +15,6 @@ import net.minecraft.entity.SpawnGroup;
 
 public class NMEntities
 {
-    public static EntityType<TankMinecartEntity> TANK_MINECART;
     public static EntityType<GlomeEntity> GLOME;
     public static EntityType<EggEntity> EGG;
 

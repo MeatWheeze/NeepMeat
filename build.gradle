@@ -18,8 +18,9 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
-//	maven { url 'https://maven.fabricmc.net/'}
+
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
+	maven { url "https://maven.architectury.dev/" }
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://www.jitpack.io' }
 }
@@ -31,13 +32,13 @@ dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 //	implementation "com.github.chocohead:fabric-asm:${project.mm_version}"
 
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
+	modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
@@ -119,7 +120,7 @@ modrinth {
 	projectId = 'Hagcl1FT'
 	versionType = "alpha"
 	uploadFile = remapJar // Tells Minotaur to use the remapped jar
-	gameVersions = ['1.18', '1.18.1', '1.18.2'] // An array of game versions the version supports
+	gameVersions = ['1.19.2'] // An array of game versions the version supports
 	loaders = ['fabric']
 	dependencies = [
 			new ModDependency('P7dR8mSH', 'required'), // Fabric API
