@@ -1,7 +1,9 @@
 package com.neep.neepmeat.plc.program;
 
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
+import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLC;
+import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -11,7 +13,9 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -24,6 +28,11 @@ public class CombineInstruction implements PLCInstruction
     {
         this.from = LazyBlockApiCache.of(ItemStorage.SIDED, from, worldSupplier, () -> Direction.UP);
         this.to = LazyBlockApiCache.of(ItemStorage.SIDED, to, worldSupplier, () -> Direction.UP);
+    }
+
+    public CombineInstruction(Supplier<World> worldSupplier, List<InstructionProvider.Argument> arguments)
+    {
+
     }
 
     @Override
@@ -46,6 +55,12 @@ public class CombineInstruction implements PLCInstruction
                 new RobotMoveToAction(plc.getRobot(), from.pos()),
                 new RobotMoveToAction(plc.getRobot(), to.pos())
         ), this::finish);
+    }
+
+    @Override
+    public InstructionProvider getProvider()
+    {
+        return Instructions.COMBINE;
     }
 
     void finish(PLC plc)

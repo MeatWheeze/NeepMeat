@@ -1,21 +1,26 @@
 package com.neep.neepmeat.client.screen.plc;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
+import com.neep.neepmeat.plc.opcode.InstructionBuilder;
+import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.program.PLCInstruction;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.render.Camera;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.RaycastContext;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 public class PLCProgramScreen extends Screen
 {
+    protected PLCOperationSelector operationSelector;
+    @Nullable protected InstructionBuilder instructionBuilder;
+    @Nullable private InstructionProvider instructionProvider;
 
     public PLCProgramScreen()
     {
@@ -27,6 +32,16 @@ public class PLCProgramScreen extends Screen
     public boolean shouldPause()
     {
         return false;
+    }
+
+    @Override
+    protected void init()
+    {
+        super.init();
+        operationSelector = new PLCOperationSelector(this);
+        addDrawableChild(operationSelector);
+        operationSelector.init(client, width, height);
+        operationSelector.setDimensions(width, height);
     }
 
     @Override
@@ -50,9 +65,59 @@ public class PLCProgramScreen extends Screen
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if (super.mouseClicked(mouseX, mouseY, button))
+        {
+            return true;
+        }
+
+        return handleWorldClick(mouseX, mouseY, button);
+    }
+
+    protected boolean handleWorldClick(double mouseX, double mouseY, int button)
+    {
         if (button == GLFW.GLFW_MOUSE_BUTTON_2)
             return false;
 
+        var result = raycastClick(mouseX, mouseY);
+
+        if (result.getType() == HitResult.Type.MISS)
+        {
+            return false;
+        }
+
+        addArgument(result);
+
+        for (int i = 0; i < 15; ++i)
+        {
+            client.world.addParticle(ParticleTypes.SMOKE, result.getPos().x, result.getPos().y, result.getPos().z, 0, 0, 0);
+        }
+//
+//        client.player.sendMessage(Text.of(String.valueOf(client.world.getBlockState(result.getBlockPos()))));
+
+        return true;
+    }
+
+    public void updateInstruction(InstructionProvider provider)
+    {
+        this.instructionProvider = provider;
+        this.instructionBuilder = provider.start(client.world, this::emitInstruction);
+    }
+
+    protected void addArgument(BlockHitResult result)
+    {
+        if (instructionBuilder == null)
+            return;
+
+        instructionBuilder.argument(result.getBlockPos(), result.getSide());
+    }
+
+    protected void emitInstruction(PLCInstruction instruction)
+    {
+        client.player.sendMessage(Text.of(instruction.toString()));
+    }
+
+    protected BlockHitResult raycastClick(double mouseX, double mouseY)
+    {
         Vec3d camPos = client.gameRenderer.getCamera().getPos();
         Vec3d farPos = screenToWorld(mouseX, mouseY, 1.0f);
         Vec3d nearPos = screenToWorld(mouseX, mouseY, 0.0f);
@@ -61,16 +126,7 @@ public class PLCProgramScreen extends Screen
                 new Vec3d(nearPos.getX(), nearPos.getY(), nearPos.getZ()).add(camPos),
                 new Vec3d(farPos.getX(), farPos.getY(), farPos.getZ()).add(camPos),
                 RaycastContext.ShapeType.VISUAL, RaycastContext.FluidHandling.NONE, client.player);
-        BlockHitResult result = client.world.raycast(raycastContext);
-
-        for (int i = 0; i < 15; ++i)
-        {
-            client.world.addParticle(ParticleTypes.SMOKE, result.getPos().x, result.getPos().y, result.getPos().z, 0, 0, 0);
-        }
-
-        client.player.sendMessage(Text.of(String.valueOf(client.world.getBlockState(result.getBlockPos()))));
-
-        return super.mouseClicked(mouseX, mouseY, button);
+        return client.world.raycast(raycastContext);
     }
 
     public Vec3d screenToWorld(double mouseX, double mouseY, double z)

@@ -25,6 +25,6 @@ public class PLCProgramImpl implements PlcProgram
         {
             return instructions.get(index);
         }
-        return PLCInstruction.empty();
+        return PLCInstruction.end();
     }
 }

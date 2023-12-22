@@ -30,8 +30,8 @@ public class PLCMotionController
             pitch = 20;
         }
 
-        lerpPitch = MathHelper.lerpAngleDegrees(0.7f, lerpPitch,  pitch);
-        lerpYaw = MathHelper.lerpAngleDegrees(0.7f, lerpYaw,  yaw);
+        lerpPitch = MathHelper.lerpAngleDegrees(0.3f, lerpPitch,  pitch);
+        lerpYaw = MathHelper.lerpAngleDegrees(0.3f, lerpYaw,  yaw);
     }
 
     public void setPitchYaw(float pitch, float yaw)
