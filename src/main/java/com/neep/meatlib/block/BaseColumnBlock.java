@@ -3,7 +3,7 @@ package com.neep.meatlib.block;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.PillarBlock;
 
-public class BaseColumnBlock extends PillarBlock implements NMBlock
+public class BaseColumnBlock extends PillarBlock implements IMeatBlock
 {
     BaseBlockItem blockItem;
     private String regsitryName;

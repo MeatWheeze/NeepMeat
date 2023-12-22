@@ -32,7 +32,7 @@ public class BasePaintedBlock
         }
     }
 
-    public static class PaintedBlock extends Block implements NMBlock
+    public static class PaintedBlock extends Block implements IMeatBlock
     {
         private final String registryName;
         public BlockItem blockItem;

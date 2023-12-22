@@ -8,7 +8,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.Direction;
 
-public class BaseFacingBlock extends FacingBlock implements NMBlock
+public class BaseFacingBlock extends FacingBlock implements IMeatBlock
 {
     BaseBlockItem blockItem;
     private final String registryName;

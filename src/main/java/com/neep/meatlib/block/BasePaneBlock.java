@@ -4,7 +4,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.PaneBlock;
 import net.minecraft.item.BlockItem;
 
-public class BasePaneBlock extends PaneBlock implements NMBlock
+public class BasePaneBlock extends PaneBlock implements IMeatBlock
 {
     protected String registryName;
     protected int maxStack;

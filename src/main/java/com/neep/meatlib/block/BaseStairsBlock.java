@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.StairsBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseStairsBlock extends StairsBlock implements NMBlock
+public class BaseStairsBlock extends StairsBlock implements IMeatBlock
 {
     protected String registryName;
     protected int maxStack;

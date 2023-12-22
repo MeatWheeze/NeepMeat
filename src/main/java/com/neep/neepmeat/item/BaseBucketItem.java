@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.meatlib.item.NMItem;
+import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -10,15 +10,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class BaseBucketItem extends BucketItem implements NMItem
+public class BaseBucketItem extends BucketItem implements IMeatItem
 {
 private final String registryName;
 
-    public BaseBucketItem(String registryName, Fluid fluid, Settings settings)
+    public BaseBucketItem(String namespace, String registryName, Fluid fluid, Settings settings)
     {
         super(fluid, settings);
         this.registryName=registryName;
-        ItemRegistry.queueItem(registryName, this);
+        ItemRegistry.queueItem(this, registryName);
     }
 
     @Override

@@ -20,7 +20,8 @@
   "entrypoints": {
     "main": [
       "com.neep.neepmeat.NeepMeat",
-      "com.neep.assembly.Assembly"
+      "com.neep.assembly.Assembly",
+      "com.neep.meatlib.MeatLib"
     ],
     "client": [
       "com.neep.neepmeat.NeepMeat",

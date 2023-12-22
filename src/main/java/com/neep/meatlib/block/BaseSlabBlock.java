@@ -5,7 +5,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.SlabBlock;
 import net.minecraft.item.BlockItem;
 
-public class BaseSlabBlock extends SlabBlock implements NMBlock
+public class BaseSlabBlock extends SlabBlock implements IMeatBlock
 {
     protected String registryName;
     protected int maxStack;

@@ -2,7 +2,7 @@ package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
 
-public class BaseCraftingItem extends BaseItem implements NMItem
+public class BaseCraftingItem extends BaseItem implements IMeatItem
 {
     private final String registryName;
 
@@ -10,7 +10,7 @@ public class BaseCraftingItem extends BaseItem implements NMItem
     {
         super(registryName, hasLore, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(registryName, this);
+        ItemRegistry.queueItem(this, registryName );
     }
 
     @Override

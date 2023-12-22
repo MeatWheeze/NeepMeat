@@ -1,6 +1,6 @@
 package com.neep.neepmeat;
 
-import com.neep.meatlib.item.NMItem;
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.client.NeepMeatClient;
@@ -25,12 +25,11 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 		GeckoLib.initialize();
 
 		// Oooh, the jank! There must be a better way.
+		MeatLib.setNamespace(NAMESPACE);
 		NMBlocks blocks = new NMBlocks();
 		NMItems items = new NMItems();
 
-		BlockRegistry.registerBlocks();
 		NMFluids.initialiseFluids();
-		ItemRegistry.registerItems();
 		SoundInitialiser.registerSounds();
 		NMBlockEntities.initialiseBlockEntities();
 		ScreenHandlerInit.registerScreenHandlers();

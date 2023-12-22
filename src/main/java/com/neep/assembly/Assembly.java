@@ -3,6 +3,9 @@ package com.neep.assembly;
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.client.renderer.AssemblyRenderer;
 import com.neep.assembly.client.renderer.BoatTestRenderer;
+import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import net.fabricmc.api.ClientModInitializer;
@@ -44,6 +47,7 @@ public class Assembly implements ModInitializer, ClientModInitializer
     @Override
     public void onInitialize()
     {
+        MeatLib.setNamespace(NAMESPACE);
         ASSEMBLY_ENTITY = registerEntity("assembly", AssemblyEntity::new);
         BOAT_TEST = registerEntity("boat_test", BoatTest::new);
 
@@ -64,5 +68,11 @@ public class Assembly implements ModInitializer, ClientModInitializer
     {
         EntityRendererRegistry.register(ASSEMBLY_ENTITY, AssemblyRenderer::new);
         EntityRendererRegistry.register(BOAT_TEST, BoatTestRenderer::new);
+    }
+
+    static
+    {
+//        MeatLib.setNamespace(NAMESPACE);
+//        PLATFORM = BlockRegistry.queueBlock(new Block(FabricBlockSettings.of(Material.METAL).strength(4.0f)), "platform");
     }
 }

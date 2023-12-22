@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class BaseItem extends Item implements NMItem
+public class BaseItem extends Item implements IMeatItem
 {
     private final String registryName;
     private final boolean hasLore;

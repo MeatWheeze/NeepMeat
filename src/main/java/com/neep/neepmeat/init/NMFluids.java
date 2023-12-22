@@ -31,12 +31,12 @@ public class NMFluids
     {
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
         FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());
-        BLOOD_BUCKET = new BaseBucketItem("blood_bucket", STILL_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
+        BLOOD_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "blood_bucket", STILL_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
         BLOOD = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "blood"), new FluidBlock(NMFluids.STILL_BLOOD, FabricBlockSettings.copy(Blocks.WATER)){});
 
         STILL_ENRICHED_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "enriched_blood"), new EnrichedBloodFluid.Still());
         FLOWING_ENRICHED_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "enriched_flowing_blood"), new EnrichedBloodFluid.Flowing());
-        ENRICHED_BLOOD_BUCKET = new BaseBucketItem("enriched_blood_bucket", STILL_ENRICHED_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
+        ENRICHED_BLOOD_BUCKET = new BaseBucketItem(NeepMeat.NAMESPACE, "enriched_blood_bucket", STILL_ENRICHED_BLOOD, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
         ENRICHED_BLOOD = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "enriched_blood"), new FluidBlock(NMFluids.STILL_ENRICHED_BLOOD, FabricBlockSettings.copy(Blocks.WATER)){});
     }
 }
