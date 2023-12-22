@@ -15,6 +15,8 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -33,6 +35,12 @@ public class BufferBlock extends BaseBlock implements BlockEntityProvider
     {
         super(itemName, itemMaxStack, hasLore, settings);
         this.setDefaultState(getDefaultState().with(POWERED, false));
+    }
+
+    @Override
+    public TagKey<Block> getPreferredTool()
+    {
+        return BlockTags.AXE_MINEABLE;
     }
 
     @Nullable
