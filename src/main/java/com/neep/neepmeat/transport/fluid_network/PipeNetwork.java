@@ -226,14 +226,12 @@ public class PipeNetwork
         for (int i = 0; i < connectedNodes.size(); i++)
         {
             Supplier<FluidNode> fromSupplier = connectedNodes.get(i);
-            Transaction transaction = Transaction.openOuter();
             FluidNode node = fromSupplier.get();
             if (node == null || node.getStorage(world) == null
                     || !fromSupplier.get().isStorage
 //                    || !fromSupplier.get().getMode(world).isDriving()
             )
             {
-                transaction.abort();
                 continue;
             }
 
@@ -241,6 +239,7 @@ public class PipeNetwork
             long baseTransfer = networkPipes.get(node.getPos()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
 
             // Prevent unpredictable distribution
+            Transaction transaction = Transaction.openOuter();
             long amount = node.firstAmount(world, transaction);
             long capacity = node.firstCapacity(world, transaction);
             long outBaseFlow = Math.min(baseTransfer, amount);
@@ -249,17 +248,13 @@ public class PipeNetwork
 
             // Filter out nodes that will cause crashes or are unnecessary for the calculation
             List<Integer> safeIndices;
-            List<Supplier<FluidNode>> safeNodes;
-            try (Transaction t2 = Transaction.openOuter())
-            {
-                Predicate<Supplier<FluidNode>> predicate = (supplier -> validForInsertion(world, node, supplier));
+            Predicate<Supplier<FluidNode>> predicate = (supplier -> validForInsertion(world, node, supplier));
 
-                safeIndices = new ArrayList<>();
-                for (int j = 0; j < connectedNodes.size(); j++)
-                {
-                    if (predicate.test(connectedNodes.get(j)))
-                        safeIndices.add(j);
-                }
+            safeIndices = new ArrayList<>();
+            for (int j = 0; j < connectedNodes.size(); j++)
+            {
+                if (predicate.test(connectedNodes.get(j)))
+                    safeIndices.add(j);
             }
 
             double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / FluidNode.exactDistance(connectedNodes.get(idx).get(), node)).sum();
@@ -279,19 +274,15 @@ public class PipeNetwork
                 double v1 = (1f / L) / (sumDist);
                 if (flow + gravityFlowIn > 0)
                 {
-                    Transaction t3 = Transaction.openOuter();
                     final int finalI = i;
                     long Q = (long) Math.ceil(outBaseFlow * (flow + gravityFlowIn) * v1);
-                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t3);
-                    t3.commit();
+                    StagedTransactions.queue(t -> StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t));
                 }
                 else if (flow + gravityFlowIn < 0)
                 {
-                    Transaction t3 = Transaction.openOuter();
                     final int finalI = i;
                     long Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) * v1);
-                    amountMoved = StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, t3);
-                    t3.commit();
+                    StagedTransactions.queue(t -> StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, t));
                 }
             }
         }
@@ -377,7 +368,7 @@ public class PipeNetwork
 
     static
     {
-        ServerLifecycleEvents.SERVER_STOPPED.register(server ->
+        ServerLifecycleEvents.SERVER_STOPPING.register(server ->
         {
             LOADED_NETWORKS.clear();
         });
