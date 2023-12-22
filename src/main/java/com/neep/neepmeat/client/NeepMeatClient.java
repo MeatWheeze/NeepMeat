@@ -58,7 +58,6 @@ import net.minecraft.client.model.Dilation;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
@@ -117,7 +116,7 @@ public class NeepMeatClient implements ClientModInitializer
         // BlockEntity renderers
         BlockEntityRendererFactories.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
 
-        BlockEntityRendererFactories.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
+        BlockEntityRendererFactories.register(NMBlockEntities.GLASS_TANK, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
         BlockEntityRendererFactories.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, c -> new ItemBlockEntityRenderer<>(

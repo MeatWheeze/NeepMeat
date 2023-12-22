@@ -1,7 +1,6 @@
 package com.neep.neepmeat.api.processing;
 
 import com.neep.neepmeat.NeepMeat;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.text.MutableText;
@@ -22,7 +21,7 @@ public class PowerUtils
      * one per-unit unit of energy corresponds to a unit increment in a machine's recipe counter.
      */
     public static final long BASE_POWER = referencePower();
-    public static final double DROPLET_POWER = dropletPower();
+    public static final long DROPLET_POWER = dropletPower();
 
     /**
      * The name of the power unit used can be defined in lang, but the default is eJ/t (esoteric joules per tick)
@@ -120,8 +119,9 @@ public class PowerUtils
         return 1000;
     }
 
-    public static double dropletPower()
+    public static long dropletPower()
     {
-        return referencePower() / (double) FluidConstants.BUCKET;
+//        return referencePower() / (double) FluidConstants.BUCKET;
+        return 1;
     }
 }
