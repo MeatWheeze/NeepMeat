@@ -178,7 +178,16 @@
 		},
 		"firstperson_righthand": {
 			"rotation": [22, 12, 0],
-			"scale": [0.78, 0.78, 0.78]
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"firstperson_lefthand": {
+			"rotation": [22, 12, 0],
+			"scale": [0.6, 0.6, 0.6]
+		},
+		"gui": {
+			"rotation": [42.25, 32, 0],
+			"translation": [0, -0.25, 0],
+			"scale": [0.96875, 0.96875, 0.96875]
 		}
 	}
 }
