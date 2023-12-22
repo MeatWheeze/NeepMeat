@@ -21,7 +21,7 @@ public abstract class ClientPlayerEntityMixin
     {
         if (((Entity) (Object) this).getVehicle() instanceof AbstractVehicleEntity vehicle)
         {
-            vehicle.setInputs(this.input.pressingLeft, this.input.pressingRight, this.input.pressingForward, this.input.pressingBack);
+//            vehicle.setInputs(this.input.pressingLeft, this.input.pressingRight, this.input.pressingForward, this.input.pressingBack);
             this.riding |= this.input.pressingLeft || this.input.pressingRight || this.input.pressingForward || this.input.pressingBack;
         }
     }
