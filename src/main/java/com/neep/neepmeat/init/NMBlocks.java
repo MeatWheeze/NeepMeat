@@ -71,7 +71,7 @@ public class NMBlocks
     public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
     public static Block CONVERTER_BASE = BlockRegistry.queue(new ConverterBlock.Base("converter_base", 64, false, FabricBlockSettings.copy(CONVERTER)));
 
-    public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, false, FabricBlockSettings.copy(CONVERTER)));
+    public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
 //    public static Block LARGE_CONVERTER = BlockRegistry.queueBlock(new LargeConverterBlock("large_converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE)));
