@@ -3,19 +3,19 @@ package com.neep.neepmeat.fluid_util;
 import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
+import com.neep.neepmeat.fluid_util.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluidNetwork
@@ -24,37 +24,42 @@ public class NMFluidNetwork
     private BlockPos origin;
     private Direction originFace;
     public static int UPDATE_DISTANCE = 5;
-    private HashSet<FluidNode> connectedNodes = new HashSet<>();
 
-    private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
-    private List<BlockPos> pipeQueue = new ArrayList<>();
+    public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
+
+    private final Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
+    private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
-    public static HashSet<NMFluidNetwork> NETWORKS = new HashSet<>();
 
     static
     {
         ServerTickEvents.END_SERVER_TICK.register(NMFluidNetwork::tickNetwork);
     }
 
-    public NMFluidNetwork(World world, BlockPos origin, Direction direction)
+    private NMFluidNetwork(World world, BlockPos origin, Direction direction)
     {
         this.world = world;
         this.origin = origin;
         this.originFace = direction;
-//        LOADED_NETWORKS.add(this);
     }
 
-    public static Optional<NMFluidNetwork> createNetwork(World world, BlockPos pos, Direction direction)
+    public static Optional<NMFluidNetwork> tryCreateNetwork(World world, BlockPos pos, Direction direction)
     {
         NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
         network.rebuild(pos, direction);
-        if (network.checkValid())
+        if (network.isValid())
         {
+            LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
         return Optional.empty();
+    }
+
+    private static void tickNetwork(MinecraftServer minecraftServer)
+    {
+        LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 
     @Override
@@ -63,21 +68,40 @@ public class NMFluidNetwork
         return "\nFluidNetwork at " + (origin).toString();
     }
 
-    private static void tickNetwork(MinecraftServer minecraftServer)
+    public static void validateAll()
     {
-        LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+        LOADED_NETWORKS.removeIf(current -> !current.isValid());
     }
 
-    // Removes a node that is no longer connected.
-    public void removeNode(FluidNode node)
+    public boolean isValid()
     {
-        connectedNodes.remove(node);
-        checkValid();
+        if (connectedNodes.size() < 2)
+            return false;
+
+        int count = 0;
+        for (Iterator<Supplier<FluidNode>> iterator = connectedNodes.iterator(); iterator.hasNext(); )
+        {
+            Supplier<FluidNode> supplier = iterator.next();
+            if (supplier.get() == null)
+            {
+                iterator.remove();
+                ++count;
+            }
+        }
+//        System.out.println(count + " " + connectedNodes2.size());
+        return connectedNodes.size() - count >= 2;
     }
 
-    public boolean checkValid()
+    // Removes network and connected nodes if not valid.
+    public boolean validate()
     {
-        return connectedNodes.size() != 0;
+        if (!isValid())
+        {
+            LOADED_NETWORKS.remove(this);
+            connectedNodes.clear();
+            return false;
+        }
+        return true;
     }
 
     public void rebuild(BlockPos startPos, Direction face)
@@ -85,7 +109,10 @@ public class NMFluidNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
-            buildPressures();
+            if (!validate())
+                return;
+            connectedNodes.forEach((node) -> node.get().setNetwork(this));
+//            buildPressures();
 //            tick();
         }
     }
@@ -102,18 +129,30 @@ public class NMFluidNetwork
 
     public void tick()
     {
-//        buildPressures();
+        buildPressures();
 //        rebuild(origin, originFace);
-        for (FluidNode node : connectedNodes)
+        for (Supplier<FluidNode> supplier : connectedNodes)
         {
-//            System.out.println(node);
-            for (FluidNode targetNode : connectedNodes)
+            FluidNode node;
+            if ((node = supplier.get()) == null)
             {
-                if (targetNode.equals(node))
+                continue;
+            }
+            for (Supplier<FluidNode> targetSupplier : connectedNodes)
+            {
+                FluidNode targetNode;
+                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null)
+                {
                     continue;
+                }
                 node.transmitFluid(targetNode);
             }
         }
+    }
+
+    public void addNode(Supplier<FluidNode> node)
+    {
+        connectedNodes.add(node);
     }
 
     public void buildPressures()
@@ -121,15 +160,20 @@ public class NMFluidNetwork
         try
         {
             // Set networks before updating distances.
-            connectedNodes.forEach((node) -> node.setNetwork(this));
 
-            for (FluidNode node : connectedNodes)
+            for (Supplier<FluidNode> supplier : connectedNodes)
             {
+                FluidNode node = supplier.get();
+                if (node == null)
+                {
+                    continue;
+                }
+
                 List<BlockPos> nextSet = new ArrayList<>();
                 networkPipes.values().forEach((segment) -> segment.setVisited(false));
 
                 pipeQueue.clear();
-                pipeQueue.add(node.getPos().offset(node.getFace()));
+                pipeQueue.add(node.getPos());
 
                 for (int i = 0; i < UPDATE_DISTANCE; ++i)
                 {
@@ -154,13 +198,14 @@ public class NMFluidNetwork
                 }
 
                 // TODO: optimise further
-                for (FluidNode node1 : connectedNodes)
+                for (Supplier<FluidNode> supplier1 : connectedNodes)
                 {
-                    if (node1.equals(node) || node1.mode == AcceptorModes.NONE)
+                    FluidNode node1 = supplier1.get();
+                    if (node1 == null || node1.equals(node) || node1.mode == AcceptorModes.NONE)
                     {
                         continue;
                     }
-                    int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
+                    int distanceToNode = networkPipes.get(node1.getPos()).getDistance();
                     node.distances.put(node1, distanceToNode);
 //                    node.distances.put(node1, 1);
                 }
@@ -168,7 +213,7 @@ public class NMFluidNetwork
         }
         catch (Exception e)
         {
-            System.out.println(e);
+            e.printStackTrace();
         }
     }
 
@@ -181,13 +226,16 @@ public class NMFluidNetwork
         // List of pipes to be searched in next iteration
         List<BlockPos> nextSet = new ArrayList<>();
 
-        networkPipes.put(startPos.offset(face), new PipeSegment(startPos.offset(face), world.getBlockState(startPos.offset(face))));
-        pipeQueue.add(startPos.offset(face));
+//        networkPipes.put(startPos.offset(face), new PipeSegment(startPos.offset(face), world.getBlockState(startPos.offset(face))));
+//        pipeQueue.add(startPos.offset(face));
+        pipeQueue.add(startPos);
+        networkPipes.put(startPos, new PipeSegment(startPos));
 
         // Pipe search depth
         for (int i = 0; i < UPDATE_DISTANCE; ++i)
         {
             nextSet.clear();
+            ListIterator<BlockPos> it = pipeQueue.listIterator();
             for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
             {
                 BlockPos current = iterator.next();
@@ -213,10 +261,15 @@ public class NMFluidNetwork
                         }
                         else if (state2.hasBlockEntity())
                         {
-                            BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
-                            Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
+//                            BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
+                            Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
                             if (storage != null)
                             {
+                                Supplier<FluidNode> node = FluidNetwork.NETWORK.getNodeSupplier(new NodePos(current, direction));
+                                if (node.get() != null)
+                                {
+                                    connectedNodes.add(node);
+                                }
 //                                FluidNetwork.NETWORK.
 //                                    FluidNode node;
 //                                    if (state2.getBlock() instanceof FluidNodeProvider provider)
@@ -237,8 +290,12 @@ public class NMFluidNetwork
             pipeQueue.addAll(nextSet);
         }
 
-        checkValid();
+        validate();
 //        System.out.println("targets: " + connectedNodes);
     }
 
+    public void removeNode(NodePos pos)
+    {
+        connectedNodes.remove(FluidNetwork.NETWORK.getNodeSupplier(pos));
+    }
 }

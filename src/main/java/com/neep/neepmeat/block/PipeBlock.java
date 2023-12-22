@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.PipeSegment;
+import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
 import com.neep.neepmeat.maths.NMMaths;
@@ -22,7 +22,6 @@ import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Pair;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -34,9 +33,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public class PipeBlock extends BaseBlock implements FluidAcceptor
 {
@@ -224,13 +223,12 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         BlockState state2 = enforceApiConnections(world, pos, state);
-        if (!state.equals(state2)) // Storage detected
-        {
-            // Dirty bodge for now. Might change if it works.
-            createStorageNodes(world, pos, state);
-        }
         world.setBlockState(pos, state2, Block.NOTIFY_ALL);
-//        updateNetwork(pos, state2, false);
+//        if (!state.equals(state2)) // Storage detected
+//        {
+            // Dirty bodge for now. Might change if it works.
+            createStorageNodes(world, pos, state2);
+//        }
 
     }
 
@@ -291,11 +289,12 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
-        BlockState state2 = enforceApiConnections(world, pos, state);
-        if (!state.equals(state2) && !world.isClient) // Storage detected
+        BlockState updatedState = enforceApiConnections(world, pos, state);
+        world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
+        if (!state.equals(updatedState) && !world.isClient) // Storage detected
         {
             // Dirty bodge for now. Might change if it works.
-            createStorageNodes(world, pos, state);
+            createStorageNodes(world, pos, updatedState);
 
             /*
                 Create a node when pipe placed
@@ -304,7 +303,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
              */
 
         }
-        world.setBlockState(pos, state2,  Block.NOTIFY_ALL);
     }
 
     // Produces connections to fluid containers after placing
@@ -337,29 +335,46 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
 //            NodePos nodePos = new NodePos(pos.offset(direction), direction.getOpposite());
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNetwork.NETWORK.removeSegment(nodePos);
+            FluidNetwork.NETWORK.removeNode(nodePos);
         }
     }
 
+    // TODO: Major code reduction may be possible
     public void createStorageNodes(World world, BlockPos pos, BlockState state)
     {
         for (Direction direction : Direction.values())
         {
             Storage<FluidVariant> storage;
-            if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null)
+            if ((storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite())) != null
+                && state.get(DIR_TO_CONNECTION.get(direction)))
             {
                 FluidNode node;
-                if (state.getBlock() instanceof FluidNodeProvider provider)
+                BlockState state1 = world.getBlockState(pos.offset(direction));
+                if (state1.getBlock() instanceof FluidNodeProvider provider)
                 {
-                    node = provider.getNode(world, pos, direction);
+                    node = new FluidNode(pos, direction, storage, provider.getDirectionMode(state1, direction.getOpposite()), 2);
                 }
                 else
                 {
                     node = new FluidNode(pos, direction, storage, AcceptorModes.INSERT_EXTRACT, 0);
                 }
-//                FluidNetwork.NETWORK.updateSegment(pos, node);
                 updateNetwork(pos, node, false);
             }
+            else
+            {
+                FluidNetwork.NETWORK.removeNode(new NodePos(pos, direction));
+            }
+        }
+        Optional<NMFluidNetwork> net = NMFluidNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+        if (net.isPresent())
+        {
+            for (Supplier<FluidNode> supplier : net.get().connectedNodes)
+            {
+//                System.out.println(supplier.get());
+            }
+        }
+        else
+        {
         }
     }
 
@@ -367,12 +382,12 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         if (removed)
         {
-            FluidNetwork.NETWORK.removeSegment(new NodePos(node));
+            FluidNetwork.NETWORK.removeNode(new NodePos(node));
 //            FluidNetwork.NETWORK.removeSegment(pos);
         }
         else
         {
-            FluidNetwork.NETWORK.updateSegment(new NodePos(node), node);
+            FluidNetwork.NETWORK.removeNode(new NodePos(node), node);
 //            FluidNetwork.NETWORK.updateSegment(pos, new PipeSegment(pos, state));
         }
     }
