@@ -20,6 +20,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.base.EmptyItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.base.FullItemFluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.item.Items;
@@ -78,5 +79,8 @@ public class NeepMeat implements ModInitializer
 
 		FluidStorage.combinedItemApiProvider(Items.MILK_BUCKET).register(context ->
 				new FullItemFluidStorage(context, Items.BUCKET, FluidVariant.of(NMFluids.STILL_MILK), FluidConstants.BUCKET));
+
+		FluidStorage.combinedItemApiProvider(Items.BUCKET).register(context ->
+				new EmptyItemFluidStorage(context, Items.MILK_BUCKET, NMFluids.STILL_MILK, FluidConstants.BUCKET));
 	}
 }
