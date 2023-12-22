@@ -12,7 +12,8 @@ import net.minecraft.util.registry.Registry;
 
 public class BulletEntityPacket
 {
-    public static Packet<?> create(Entity e, Identifier packetID) {
+    public static Packet<?> create(Entity e, Identifier packetID)
+    {
         if (e.world.isClient)
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
