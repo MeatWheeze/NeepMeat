@@ -45,6 +45,9 @@
     ],
     "rei_client": [
       "com.neep.neepmeat.compat.rei.NMClientPlugin"
+    ],
+    "emi": [
+      "com.neep.neepmeat.compat.emi.NMEmiPlugin"
     ]
   },
   "mixins": [
@@ -61,7 +64,8 @@
     "java": ">=17"
   },
   "suggests": {
-    "another-mod": "REI"
+    "rei": "*",
+    "emi": "*"
   },
   "custom": {
     "loom:injected_interfaces": {
