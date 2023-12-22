@@ -1,22 +1,19 @@
 package com.neep.neepmeat.machine.crucible;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.inventory.ImplementedInventory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class CrucibleStorage implements NbtSerialisable, ImplementedInventory
+public class CrucibleStorage implements NbtSerialisable, ImplementedRecipe.DummyInventory
 {
     protected CrucibleBlockEntity parent;
 
@@ -63,12 +60,6 @@ public class CrucibleStorage implements NbtSerialisable, ImplementedInventory
     public SingleSlotStorage<ItemVariant> getItemStorage(Direction direction)
     {
         return direction == Direction.UP ? itemStorage : null;
-    }
-
-    @Override
-    public DefaultedList<ItemStack> getItems()
-    {
-        throw new UnsupportedOperationException("CrucibleStorage is not a real inventory");
     }
 
     @Override

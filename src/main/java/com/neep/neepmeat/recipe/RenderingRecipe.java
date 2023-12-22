@@ -1,6 +1,7 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -10,7 +11,6 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
@@ -19,7 +19,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
-public class RenderingRecipe implements Recipe<CrucibleStorage>
+public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
@@ -46,21 +46,9 @@ public class RenderingRecipe implements Recipe<CrucibleStorage>
     }
 
     @Override
-    public ItemStack craft(CrucibleStorage inventory)
-    {
-        throw new UnsupportedOperationException("use ejectOutput instead");
-    }
-
-    @Override
     public boolean fits(int width, int height)
     {
         return false;
-    }
-
-    @Override
-    public ItemStack getOutput()
-    {
-        throw new UnsupportedOperationException("use getItemOutput instead");
     }
 
     public RecipeInput<Item> getItemInput()
@@ -95,11 +83,6 @@ public class RenderingRecipe implements Recipe<CrucibleStorage>
     {
         return NMrecipeTypes.RENDERING;
     }
-
-//    public int getTime()
-//    {
-//        return processTime;
-//    }
 
     public boolean takeInputs(CrucibleStorage storage, TransactionContext transaction)
     {
