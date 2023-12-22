@@ -137,6 +137,10 @@
   "advanced_integrator_charge": { "subtitle": "subtitles.neepmeat.advanced_integrator_charge",
     "sounds": [
       "neepmeat:advanced_integrator_charge"
+    ] },
+  "advanced_integrator_ambient": { "subtitle": "subtitles.neepmeat.advanced_integrator_ambient",
+    "sounds": [
+      "neepmeat:advanced_integrator_ambient"
     ]
   },
 

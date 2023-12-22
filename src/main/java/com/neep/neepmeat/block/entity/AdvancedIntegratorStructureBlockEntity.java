@@ -4,6 +4,7 @@ import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
 import com.neep.neepmeat.machine.integrator.Integrator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
