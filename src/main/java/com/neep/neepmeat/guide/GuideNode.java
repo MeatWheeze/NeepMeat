@@ -1,8 +1,7 @@
 package com.neep.neepmeat.guide;
 
-import com.neep.neepmeat.client.screen.tablet.ITabletScreen;
-import com.neep.neepmeat.client.screen.tablet.TabletArticlePane;
-import com.neep.neepmeat.client.screen.tablet.TabletListPane;
+import com.neep.neepmeat.client.screen.tablet.GuideArticlePane;
+import com.neep.neepmeat.client.screen.tablet.IGuideScreen;
 import com.neep.neepmeat.guide.article.Article;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -17,7 +16,7 @@ public interface GuideNode
     String getId();
     Identifier getIcon();
     Text getText();
-    void visitScreen(ITabletScreen screen);
+    void visitScreen(IGuideScreen screen);
 
     GuideNode BACK = new GuideNode()
     {
@@ -49,7 +48,7 @@ public interface GuideNode
         }
 
         @Override
-        public void visitScreen(ITabletScreen screen)
+        public void visitScreen(IGuideScreen screen)
         {
             screen.pop();
         }
@@ -110,7 +109,7 @@ public interface GuideNode
         }
 
         @Override
-        public void visitScreen(ITabletScreen screen)
+        public void visitScreen(IGuideScreen screen)
         {
             screen.push(this);
         }
@@ -136,10 +135,10 @@ public interface GuideNode
         }
 
         @Override
-        public void visitScreen(ITabletScreen screen)
+        public void visitScreen(IGuideScreen screen)
         {
             Article article = GuideReloadListener.getInstance().getArticle(getId());
-            screen.setRightPane(new TabletArticlePane(screen, article));
+            screen.setRightPane(new GuideArticlePane(screen, article));
         }
     }
 }

@@ -30,19 +30,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public class TabletScreen extends HandledScreen<ScreenHandler> implements ITabletScreen
+public class GuideScreen extends HandledScreen<ScreenHandler> implements IGuideScreen
 {
-//    public static final Identifier TABLET_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/tablet_background.png");
     public static final Identifier LOGO_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/neep.png");
 
-//    protected int screenOffsetX = 17;
-//    protected int screenOffsetY = 17;
-//    protected int tabletWidth = 255;
-//    protected int tabletHeight = 194;
     protected int contentWidth = 340;
     protected int contentHeight = 280;
-//    protected int screenWidth = 156;
-//    protected int screenHeight = 145;
     protected PlayerEntity player;
 
     protected int animationTicks;
@@ -54,12 +47,12 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     // Current location within the entry tree
     protected final Deque<GuideNode> path = new LinkedList<>();
 
-    public TabletScreen(PlayerEntity player, ScreenHandler handler)
+    public GuideScreen(PlayerEntity player, ScreenHandler handler)
     {
         super(handler, player.getInventory(), new TranslatableText(""));
         this.player = player;
-        this.leftPane = new TabletListPane(this);
-        this.rightPane = new TabletArticlePane(this, Article.EMPTY);
+        this.leftPane = new GuideListPane(this);
+        this.rightPane = new GuideArticlePane(this, Article.EMPTY);
         this.start = true;
 
         GuideNode root = GuideReloadListener.getInstance().getRootNode();
@@ -208,82 +201,6 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         int logoWidth = 60;
         drawTexture(matrices, x, y + contentHeight - logoHeight + 1, 0, 0, logoWidth, logoHeight, logoWidth, 26);
     }
-
-//    private void renderBlockTest(MatrixStack matrices)
-//    {
-//        ItemRenderer renderer = client.getItemRenderer();
-//        ItemModels models = renderer.getModels();
-//        BakedModel bakedModel = models.getModel(NMItems.COMPOUND_INJECTOR);
-//
-//        MatrixStack matrixStack = RenderSystem.getModelViewStack();
-//        matrixStack.push();
-//        matrixStack.translate(x, y, 100.0f + getZOffset());
-//        matrixStack.translate(8.0, 8.0, 0.0);
-//        matrixStack.scale(1.0f, -1.0f, 1.0f);
-//        matrixStack.scale(12.0f, 12.0f, 12.0f);
-//        RenderSystem.applyModelViewMatrix();
-//        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-//        renderItem(matrixStack, bakedModel, getZOffset());
-//
-//        RenderSystem.disableTexture();
-//        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-//        float r = 1;
-//        float g = 0;
-//        float b = 0;
-//        float a = 255f;
-//
-//    }
-//
-//    public static void renderItem(MatrixStack matrices, BakedModel model, int z)
-//    {
-//        ModelTransformation.Mode renderMode = ModelTransformation.Mode.GUI;
-//        matrices.push();
-//        model.getTransformation().getTransformation(renderMode).apply(false, matrices);
-//        matrices.translate(-0.5, -0.5, -0.5);
-////        RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
-////        VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, renderLayer, true, stack.hasGlint());
-//        renderBakedItemModel(model, matrices, z);
-//        matrices.pop();
-//    }
-//
-//    private static void renderBakedItemModel(BakedModel model, MatrixStack matrices, int z)
-//    {
-//        Random random = new Random();
-//
-//        for (Direction direction : Direction.values())
-//        {
-//            random.setSeed(42L);
-//            renderWireframe(matrices, model.getQuads(null, direction, random), z);
-//        }
-//        random.setSeed(42L);
-//        renderWireframe(matrices, model.getQuads(null, null, random), z);
-//    }
-//
-//    private static void renderWireframe(MatrixStack matrices, List<BakedQuad> quads, int z)
-//    {
-//        MatrixStack.Entry entry = matrices.peek();
-//        for (BakedQuad bakedQuad : quads)
-//        {
-//            int i = 0x77FF77;
-//            float r = (float)(i >> 16 & 0xFF) / 255.0f;
-//            float g = (float)(i >> 8 & 0xFF) / 255.0f;
-//            float b = (float)(i & 0xFF) / 255.0f;
-//
-//            Tessellator tessellator = Tessellator.getInstance();
-//            BufferBuilder bufferBuilder = tessellator.getBuffer();
-//            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
-//            bufferBuilder.vertex(bakedQuad.getVertexData(), height, getZOffset()).color(r, g, b, a).next();
-//            bufferBuilder.vertex(width, height, getZOffset()).color(r, g, b, a).next();
-//            bufferBuilder.vertex(width - 10, 0.0, getZOffset()).color(r, g, b, a).next();
-//            bufferBuilder.vertex(20.0, 20.0, getZOffset()).color(r, g, b, a).next();
-//
-//            ByteBuffer bb = new ByteBuffer();
-//            Vector4f vector4f = new Vector4f(f, g, h, 1.0f);
-//            vector4f.transform(matrix4f);
-//            bufferBuilder.vertex(vector4f.getX(), vector4f.getY(), vector4f.getZ()).color(r, g, b, a);
-//            tessellator.draw();
-//        }
-//    }
 
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)

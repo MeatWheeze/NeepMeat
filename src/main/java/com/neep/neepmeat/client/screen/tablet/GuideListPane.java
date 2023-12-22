@@ -30,7 +30,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
@@ -38,15 +37,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public class TabletListPane extends ContentPane implements Drawable, Element, Selectable
+public class GuideListPane extends ContentPane implements Drawable, Element, Selectable
 {
-    public static final Identifier TERMINAL_ICON = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/widgets/terminal.png");
-
     // Currently available entries
     protected final List<EntryWidget> entries = new ArrayList<>();
 
     private GuideNode lastNode;
-    private int highlighted;
     private int selected;
     protected int entryHeight = 11;
     protected int contentHeight;
@@ -56,7 +52,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     private boolean searchMode;
     private final StringBuilder searchString = new StringBuilder();
 
-    public TabletListPane(ITabletScreen parent)
+    public GuideListPane(IGuideScreen parent)
     {
         super(Text.of("eeeee"), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;

@@ -4,7 +4,7 @@ import com.neep.neepmeat.guide.GuideNode;
 
 import java.util.Deque;
 
-public interface ITabletScreen
+public interface IGuideScreen
 {
     void setLeftPane(ContentPane element);
     void setRightPane(ContentPane element);
