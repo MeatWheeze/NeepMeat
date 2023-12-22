@@ -60,6 +60,7 @@
 - [done] Remove redstone control in Breaker
 - [done] Make Router use filter slots or something
 - Make Assembler require power
+- Fix motors retaining BE reference
 
 ## Later
 

@@ -124,7 +124,7 @@ public class NMFluids
         MEAT = MEAT_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3, true, null);
-        FluidFuelRegistry.getInstance().register(Fluids.WATER, 2, false, null);
+        FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
         FluidFuelRegistry.getInstance().register(STILL_CHARGED_WORK_FLUID, 5, true, STILL_WORK_FLUID);
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
