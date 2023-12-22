@@ -1,13 +1,12 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.GenericIngredient;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnStorage;
-import com.neep.neepmeat.machine.grinder.GrinderStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -121,15 +120,18 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     {
         try (Transaction inner = transaction.openNested())
         {
-            Optional<Item> item1 = itemInput1.getFirstMatching(storage.getSlot(AlloyKilnStorage.INPUT_1));
-            Optional<Item> item2 = itemInput2.getFirstMatching(storage.getSlot(AlloyKilnStorage.INPUT_2));
+            Storage<ItemVariant> inputStorage = storage.getInputStorage();
+
+            Optional<Item> item1 = itemInput1.getFirstMatching(inputStorage, inner);
+            Optional<Item> item2 = itemInput2.getFirstMatching(inputStorage, inner);
+
             if (item1.isEmpty() || item2.isEmpty())
             {
                 throw new IllegalStateException("Storage contents must conform to recipe");
             }
 
-            long extracted1 = storage.getSlot(AlloyKilnStorage.INPUT_1).extract(ItemVariant.of(item1.get()), itemInput1.amount(), transaction);
-            long extracted2 = storage.getSlot(AlloyKilnStorage.INPUT_2).extract(ItemVariant.of(item2.get()), itemInput2.amount(), transaction);
+            long extracted1 = inputStorage.extract(ItemVariant.of(item1.get()), itemInput1.amount(), transaction);
+            long extracted2 = inputStorage.extract(ItemVariant.of(item2.get()), itemInput2.amount(), transaction);
             if (extracted1 == itemInput1.amount() && extracted2 == itemInput2.amount())
             {
                 inner.commit();
