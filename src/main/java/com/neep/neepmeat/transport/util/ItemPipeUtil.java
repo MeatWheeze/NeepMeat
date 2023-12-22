@@ -133,10 +133,9 @@ public class ItemPipeUtil
             if (simpleCheck)
             {
                 long simpleAmount = canEjectSimple(item.toResourceAmount(), world, toPos, out, transaction);
-                ItemInPipe newItem = item.copyWith((int) simpleAmount);
-                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), newItem, transaction);
+                item.setAmount((int) simpleAmount);
             }
-            else amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item, transaction);
+            amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item, transaction);
         }
         return amountInserted;
     }
