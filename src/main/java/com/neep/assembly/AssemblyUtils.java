@@ -4,10 +4,12 @@ import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.PalettedContainer;
 import org.apache.logging.log4j.Level;
 
 import java.util.ArrayList;
@@ -48,6 +50,34 @@ public class AssemblyUtils
         }
 
         assembleToEntity(world, origin, out);
+    }
+
+    public static void disassemble(World world, AssemblyEntity assembly)
+    {
+        PalettedContainer<BlockState> states = assembly.getPalette();
+
+        BlockPos origin = assembly.getBlockPos();
+        for (int i = 0; i < 16; ++i)
+        {
+            for (int j = 0; j < 16; ++j)
+            {
+                for (int k = 0; k < 16; ++k)
+                {
+                    System.out.println(i + ", " + j + ", " + k);
+                    BlockState state = states.get(i, j, k);
+                    BlockPos pos = new BlockPos(i, j, k).add(origin);
+                    if (world.getBlockState(pos).isAir())
+                    {
+                        world.setBlockState(pos, state);
+                    }
+                    else
+                    {
+//                        world.getBlockState(pos).
+                    }
+                }
+            }
+        }
+        assembly.remove(Entity.RemovalReason.DISCARDED);
     }
 
     public static void assembleToEntity(World world, BlockPos origin, List<BlockPos> posList)

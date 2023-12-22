@@ -6,11 +6,13 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
@@ -209,7 +211,8 @@ public class AssemblyEntity extends Entity
             else
             {
 //                initPalette();
-                this.remove(RemovalReason.DISCARDED);
+//                this.remove(RemovalReason.DISCARDED);
+                AssemblyUtils.disassemble(world, this);
             }
             updatePalette();
         }
@@ -287,4 +290,5 @@ public class AssemblyEntity extends Entity
         readPalette(dataTracker.get(PALETTE));
         return this.blocks;
     }
+
 }
