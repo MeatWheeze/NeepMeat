@@ -23,6 +23,7 @@ import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
+import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -45,7 +46,7 @@ public class NMBlockEntities
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
-    public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
+    public static BlockEntityType<TrommelBlockEntity> TROMMEL;
     public static BlockEntityType<MotorBlockEntity> MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
@@ -123,7 +124,7 @@ public class NMBlockEntities
 
         // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
-        TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
+        TROMMEL = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
         BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
         MOTOR = registerBlockEntity("motor_unit", MotorBlockEntity::new, NMBlocks.MOTOR);
         FluidPump.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getPump, MOTOR);
@@ -157,7 +158,6 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
-        ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);

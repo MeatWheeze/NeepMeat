@@ -78,6 +78,8 @@
 
 # Insane Ramblings
 
+Blood bubble trees!
+
 An Integrator is a biomechanical intelligence construct whose function is to ease the production of machines.
 
 The Integrator exudes alien microfauna that convert all biotic material into Body Compound, the basis of all machines.
@@ -91,6 +93,13 @@ Dissolving Whisper Flour in water gives Cosmic Fluid.
 Dissolving Whisper Flour in blood gives Work Fluid.
 
 An assembly table is used to construct late-game machinery.
+
+The Enlightened enzymes of the Gland Potato concentrate the fleshly nature of certain minerals into a layer of ethereal fat. These fats can be rendered into tallows and smelted to form ingots. Further yields can be obtained by congealing the fat under Enlightened Water in a Trommel. Since Enlightneded Water reveals that which is unseen, extra refined material, and sometimes other substances, will manifest during the process.
+
+Elution of a pure mineral fat with Enlightened Water will reveal that which is hidden, manifesting mineral crystals in a worldly phase. 
+
+Divinity inspires growth, and this growth can be shepherded to generate resources. Innoculation of an animal with a mixture of Divine Flesh, integration fluid and a fleshly mineral will cause it to develop new tissues that bear the mineral in a latent form. The organism will soon lose mobility, so it must be fed by pumping blood into it. Once maturation is reached, macerated flesh can be rendered to produce Raw Ore fat. 
+
 
 ## Key Crafting Types
 
@@ -107,7 +116,7 @@ Crafting
 ## Ore Duplication
 - [nyi] Grind up some raw ore in a crusher
 - [nyi] Remove the raw ore and dissolve in in ELDRITCH ENZYMES using a [nyi] Mixer or a [pi] Process Tank
-- [nyi] Insert the MEAT slurry into trommel to extract MORE ORES!
+- [nyi] Insert the ore fat into trommel to extract MORE ORES!
 - [nyi] Insert MEAT into the trommel to extract DIVINE FLESH
 
 ## Ethereal Fuel Production

@@ -50,6 +50,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier ETHEREAL_FUEL = new Identifier(NeepMeat.NAMESPACE, "block/ethereal_fuel_still");
     public static final Identifier ELDRITCH_ENZYMES_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/eldritch_enzymes_flowing");
     public static final Identifier ELDRITCH_ENZYMES = new Identifier(NeepMeat.NAMESPACE, "block/eldritch_enzymes_still");
+    public static final Identifier DIRTY_ORE_FAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/dirty_ore_fat_flowing");
+    public static final Identifier DIRTY_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/dirty_ore_fat_still");
 
     @Override
     public void onInitializeClient()
@@ -74,7 +76,7 @@ public class NeepMeatClient implements ClientModInitializer
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
         BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
@@ -156,8 +158,8 @@ public class NeepMeatClient implements ClientModInitializer
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_ORE_FAT, NMFluids.FLOWING_ORE_FAT, new SimpleFluidRenderHandler(
-                ETHEREAL_FUEL,
-                ETHEREAL_FUEL_FLOWING,
+                DIRTY_ORE_FAT,
+                DIRTY_ORE_FAT_FLOWING,
                 0x3657a2
         ));
 
@@ -172,6 +174,8 @@ public class NeepMeatClient implements ClientModInitializer
             registry.register(ETHEREAL_FUEL_FLOWING);
             registry.register(ELDRITCH_ENZYMES);
             registry.register(ELDRITCH_ENZYMES_FLOWING);
+            registry.register(DIRTY_ORE_FAT);
+            registry.register(DIRTY_ORE_FAT_FLOWING);
         });
 
 
@@ -217,6 +221,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.TRANSDUCER);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.WHISPER_WHEAT);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.FLESH_POTATO);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.SCAFFOLD_PLATFORM);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) NMBlocks.SCAFFOLD_PLATFORM.stairs);

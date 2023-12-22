@@ -87,15 +87,18 @@
 
   "block.neepmeat.pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",
+  "block.neepmeat.stop_valve": "Stop Valve",
+  "block.neepmeat.check_valve": "Check Valve",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
+  "block.neepmeat.merge_item_pipe": "Pneumatic Pipe",
 
   "block.neepmeat.data_cable": "Data Cable",
 
   "block.neepmeat.pump": "Redstone Pump",
 
   "block.neepmeat.item_pump": "Item Pump",
-  "block.neepmeat.exector": "Ejector",
+  "block.neepmeat.ejector": "Ejector",
   "block.neepmeat.buffer": "Buffer",
   "block.neepmeat.content_detector": "Content Detector",
 
@@ -104,7 +107,8 @@
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
   "block.neepmeat.fluid_port": "Fluid Port",
   "block.neepmeat.fluid_drain": "Fluid Drain",
-  "block.neepmeat.converter": "Fuel Transducer",
+  "block.neepmeat.converter": "Fluid Charger",
+  "block.neepmeat.transducer": "Fuel Transducer",
 
   "block.neepmeat.item_buffer": "Item Platform",
 
@@ -117,6 +121,17 @@
   "block.neepmeat.router": "Item Router",
   "block.neepmeat.grinder": "Grinder",
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
+  "block.neepmeat.alembic": "Fat Collector",
+  "block.neepmeat.crucible": "Rendering Basin",
+  "block.neepmeat.mixer": "Mixer",
+  "block.neepmeat.heater": "Heater",
+  "block.neepmeat.trommel": "Blasphemous Trommel",
+  "block.neepmeat.integrator_egg": "Integrator Egg",
+
+  "block.neepmeat.breaker": "Motorised Breaker",
+  "block.neepmeat.motor_unit": "Motor",
+  "block.neepmeat.stirling_engine": "Stirling Engine",
+  "block.neepmeat.agitator": "Fluid Agitator",
 
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
@@ -161,6 +176,8 @@
 
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
+  "item.neepmeat.flywheel": "Flywheel",
+
   "item.neepmeat.whisper_brass": "Whispering Brass",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
@@ -180,6 +197,12 @@
 
   "item.neepmeat.ethereal_fuel_bucket": "Ethereal Fuel Bucket",
   "block.neepmeat.ethereal_fuel": "Ethereal Fuel",
+
+  "item.neepmeat.eldritch_enzymes_bucket": "Bucket of Eldritch Enzymes",
+  "block.neepmeat.eldritch_enzymes": "Eldritch Enzymes",
+
+  "item.neepmeat.ore_fat_bucket": "Ore Fat Bucket",
+  "block.neepmeat.ore_fat": "Ore Fat",
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
 

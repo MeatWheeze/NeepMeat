@@ -73,7 +73,8 @@ public class NMBlocks
     // --- Machines
     public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, MACHINE_SETTINGS));
-    public static Block TROMMEL_CENTRE = BlockRegistry.queue(new BaseDummyBlock("trommel_centre", MACHINE_SETTINGS));
+    public static Block TROMMEL_TOP = BlockRegistry.queue(new TrommelBlock.Top("trommel_top", MACHINE_SETTINGS));
+
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, MACHINE_SETTINGS));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, MACHINE_SETTINGS));
     public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", 64, false, MACHINE_SETTINGS));
@@ -133,6 +134,7 @@ public class NMBlocks
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, true, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
 
     // --- Assembly ---

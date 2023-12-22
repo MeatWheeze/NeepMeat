@@ -67,7 +67,7 @@ public class CrucibleBlockEntity extends SyncableBlockEntity
                 continue;
 
             BlockPos offset = pos.offset(direction);
-            if (world.getBlockEntity(offset) instanceof AlembicBlockEntity be)
+            if (world.getBlockEntity(offset) instanceof AlembicBlockEntity be && be.getCachedState().get(AlembicBlock.FACING) == direction)
             {
                 storages.add(be.getStorage(null));
             }
