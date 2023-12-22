@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "geg",
+    " i ",
+    " c "
+  ],
+  "key": {
+    "g": {
+      "item": "neepmeat:reinforced_glass"
+    },
+    "e": {
+      "item": "neepmeat:open_eye"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:goggles",
+    "count": 1
+  }
+}
