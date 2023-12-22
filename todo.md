@@ -248,6 +248,9 @@ A Different God
 Heart Machine
 - Place a Fuel Transducer
 
+Grant us eyes!
+- Create an Enlightened Brain
+
 
 # Bespoke Energy System vs Work Fluid
 

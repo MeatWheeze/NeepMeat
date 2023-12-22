@@ -1,5 +1,6 @@
 package com.neep.meatweapons.client;
 
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
@@ -42,11 +43,11 @@ public class MWClient implements ClientModInitializer
 
     public static void registerAnimations()
     {
-        GeoItemRenderer.registerItemRenderer(MeatWeapons.HAND_CANNON, new BaseGunRenderer<>(new HandCannonItemModel()));
-        GeoItemRenderer.registerItemRenderer(MeatWeapons.FUSION_CANNON, new BaseGunRenderer<>(new FusionCannonItemModel()));
-        GeoItemRenderer.registerItemRenderer(MeatWeapons.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
-        GeoItemRenderer.registerItemRenderer(MeatWeapons.LMG, new BaseGunRenderer<>(new LMGItemModel()));
-        GeoItemRenderer.registerItemRenderer(MeatWeapons.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
+        GeoItemRenderer.registerItemRenderer(MWItems.HAND_CANNON, new BaseGunRenderer<>(new HandCannonItemModel()));
+        GeoItemRenderer.registerItemRenderer(MWItems.FUSION_CANNON, new BaseGunRenderer<>(new FusionCannonItemModel()));
+        GeoItemRenderer.registerItemRenderer(MWItems.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
+        GeoItemRenderer.registerItemRenderer(MWItems.LMG, new BaseGunRenderer<>(new LMGItemModel()));
+        GeoItemRenderer.registerItemRenderer(MWItems.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
 
         net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(MeatWeapons.AIRTRUCK, AirtruckEntityRenderer::new);
 

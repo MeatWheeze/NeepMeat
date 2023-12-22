@@ -1,5 +1,6 @@
 package com.neep.meatweapons.entity;
 
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.network.MWNetwork;
@@ -7,7 +8,6 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.particle.ParticleTypes;
@@ -16,8 +16,6 @@ import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
-
-import java.util.Random;
 
 public class ExplodingShellEntity extends PersistentProjectileEntity
 {
@@ -121,6 +119,6 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
 
     protected ItemStack asItemStack()
     {
-            return new ItemStack(MeatWeapons.BALLISTIC_CARTRIDGE);
+            return new ItemStack(MWItems.BALLISTIC_CARTRIDGE);
     }
 }

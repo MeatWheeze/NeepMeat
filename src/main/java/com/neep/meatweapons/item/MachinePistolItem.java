@@ -1,23 +1,19 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.BeamRenderer;
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.BeamEffect;
 import com.neep.meatweapons.particle.GraphicsEffect;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -46,7 +42,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
 
     public MachinePistolItem()
     {
-        super("machine_pistol", MeatWeapons.BALLISTIC_CARTRIDGE, 24, 10, false, new FabricItemSettings());
+        super("machine_pistol", MWItems.BALLISTIC_CARTRIDGE, 24, 10, false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
     }

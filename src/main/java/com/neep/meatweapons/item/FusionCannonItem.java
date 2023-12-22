@@ -1,6 +1,6 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
@@ -42,7 +42,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
     public FusionCannonItem()
     {
-        super("fusion", MeatWeapons.BALLISTIC_CARTRIDGE, 16, 10, false, new FabricItemSettings());
+        super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.FUSION_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.RELOAD);
     }

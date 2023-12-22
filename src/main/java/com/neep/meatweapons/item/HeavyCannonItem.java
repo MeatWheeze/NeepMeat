@@ -1,6 +1,6 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -31,7 +31,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
     public HeavyCannonItem()
     {
-        super("heavy_cannon", MeatWeapons.BALLISTIC_CARTRIDGE, 1, 15,false, new FabricItemSettings());
+        super("heavy_cannon", MWItems.BALLISTIC_CARTRIDGE, 1, 15,false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
     }

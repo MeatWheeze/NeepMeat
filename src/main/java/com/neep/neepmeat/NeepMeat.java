@@ -42,7 +42,6 @@ public class NeepMeat implements ModInitializer
 		NMParticles.init();
 
 		NMFluids.initialise();
-		SoundRegistry.init();
 		NMBlockEntities.initialise();
 		NMEntities.initialise();
 		OreFatRegistry.init();

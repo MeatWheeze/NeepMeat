@@ -1,5 +1,6 @@
 package com.neep.meatweapons.entity;
 
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.ItemStack;
@@ -114,7 +115,7 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     @Override
     public ItemStack asStack()
     {
-        return MeatWeapons.AIRTRUCK_ITEM.getDefaultStack();
+        return MWItems.AIRTRUCK_ITEM.getDefaultStack();
     }
 
     @Override
