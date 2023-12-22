@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPumpBlockEntity extends BloodMachineBlockEntity<ItemPumpBlockEntity> implements BlockEntityClientSerializable
+public class ItemPumpBlockEntity extends BloodMachineBlockEntity implements BlockEntityClientSerializable
 {
     public static final String NBT_ACTIVE = "active";
     public static final String NBT_COOLDOWN = "cooldown";
