@@ -453,6 +453,7 @@
 
   "entity.neepmeat.glome": "Glome",
   "entity.neepmeat.hound": "Hound",
+  "entity.neepmeat.bovine_horror": "The Bovine Horror",
 
   "message.neepmeat.implant.title": "Implant",
   "message.neepmeat.implant.install": "Implant installed: %s",
@@ -465,7 +466,7 @@
   "implant.neepmeat.extra_knee": "Powered Knees",
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
 
-  "implant.neepmeat.chrysalis": "Divine Chrysalis",
+  "item.neepmeat.chrysalis": "Divine Chrysalis",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
