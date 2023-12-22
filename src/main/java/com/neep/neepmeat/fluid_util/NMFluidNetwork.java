@@ -24,7 +24,7 @@ public class NMFluidNetwork
     public final long uid; // Unique identifier for every network
     private BlockPos origin;
     private Direction originFace;
-    public static int UPDATE_DISTANCE = 5;
+    public static int UPDATE_DISTANCE = 10;
 
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
 

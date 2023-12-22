@@ -291,8 +291,8 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-        if (!state.equals(updatedState) && !world.isClient) // Storage detected
-        {
+//        if (!state.equals(updatedState) && !world.isClient) // Storage detected
+//        {
             // Dirty bodge for now. Might change if it works.
             createStorageNodes(world, pos, updatedState);
 
@@ -302,7 +302,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                 If one or more other nodes are found, a network is created.
              */
 
-        }
+//        }
     }
 
     // Produces connections to fluid containers after placing
@@ -344,6 +344,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         if (!world.isClient)
         {
+            System.out.println("ooer");
             for (Direction direction : Direction.values())
             {
                 Storage<FluidVariant> storage;
