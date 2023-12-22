@@ -32,6 +32,16 @@ public enum AcceptorModes
         return id;
     }
 
+    public boolean canInsert()
+    {
+        return this == INSERT_ONLY || this == INSERT_EXTRACT || this == PULL;
+    }
+
+    public boolean canExtract()
+    {
+        return this == EXTRACT_ONLY || this == INSERT_EXTRACT || this == PUSH;
+    }
+
     public static AcceptorModes byId(int id)
     {
         return VALUES[MathHelper.abs(id % VALUES.length)];
