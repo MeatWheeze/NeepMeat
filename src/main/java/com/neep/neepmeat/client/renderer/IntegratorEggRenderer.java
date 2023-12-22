@@ -34,12 +34,14 @@ public class IntegratorEggRenderer implements BlockEntityRenderer<IntegratorEggB
     {
         matrices.push();
 
-//        MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
-//                Blocks.STONE.getDefaultState(),
-//                blockEntity.getCachedState(),
-//                blockEntity.getPos(),
-//                blockEntity.getWorld(), matrices,
-//                vertexConsumers.getBuffer(RenderLayer.getCutout()), true, new Random(0));
+        matrices.push();
+        if (blockEntity.canGrow())
+        {
+            float eggScale = 1 + (float) Math.sin(blockEntity.getWorld().getTime() / 50f) / 16;
+            matrices.translate(0.5, 0, 0.5);
+            matrices.scale(eggScale, eggScale, eggScale);
+            matrices.translate(-0.5, 0, -0.5);
+        }
 
         BlockRenderManager manager = MinecraftClient.getInstance().getBlockRenderManager();
         manager.getModelRenderer().render(
@@ -54,13 +56,14 @@ public class IntegratorEggRenderer implements BlockEntityRenderer<IntegratorEggB
                 0,
                 overlay
         );
+        matrices.pop();
 
         FluidBuffer buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
         matrices.translate(-1, 0, -1);
         matrices.scale(3, 2, 3);
-        renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.03f, 0.97f, 0.9f, scale);
+        renderFluidCuboid(vertexConsumers, matrices, fluid, 0f, 0.01f, 0.99f, 0.99f, scale);
 
         matrices.pop();
     }
