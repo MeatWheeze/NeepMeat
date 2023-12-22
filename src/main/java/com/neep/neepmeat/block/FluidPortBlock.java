@@ -36,7 +36,7 @@ public class FluidPortBlock extends BaseFacingBlock implements BlockEntityProvid
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-            return this.getDefaultState().with(FACING, context.getSide().getOpposite());
+            return this.getDefaultState().with(FACING, context.getPlayer().isSneaking() ? context.getSide() : context.getSide().getOpposite());
     }
 
     @Override
