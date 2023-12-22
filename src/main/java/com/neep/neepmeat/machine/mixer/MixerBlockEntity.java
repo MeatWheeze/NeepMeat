@@ -17,7 +17,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
@@ -215,8 +214,8 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
 
         if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
         {
-            spawnMixingParticles(storage.displayInput1, 2, 0.2, 0.5);
-            spawnMixingParticles(storage.displayInput2, 2, 0.2, 0.5);
+//            spawnMixingParticles(storage.displayInput1, 2, 0.2, 0.5);
+//            spawnMixingParticles(storage.displayInput2, 2, 0.2, 0.5);
         }
 //        sync();
     }
