@@ -60,8 +60,9 @@
 - [done] Remove redstone control in Breaker
 - [done] Make Router use filter slots or something
 - [done] Make Assembler require power
-- Fix motors retaining BE reference
+- [done] Fix motors retaining BE reference
 - [done] Merge GrinderBlockEntity::storageToWorld
+- Test on server
 
 
 ## Later
