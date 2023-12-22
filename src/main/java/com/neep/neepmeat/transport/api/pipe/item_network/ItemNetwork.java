@@ -9,10 +9,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
 public class ItemNetwork implements IItemNetwork
 {
@@ -92,7 +89,7 @@ public class ItemNetwork implements IItemNetwork
 
     public static final int MAX_DEPTH = 10;
 
-    public Route findPath(BlockPos startPos, Direction startDir, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
+    public Stack<Direction> findPath(BlockPos startPos, Direction startDir, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
     {
         HashSet<Long> visited = new HashSet<>();
         Stack<BlockPos> posRoute = new Stack<>();
@@ -127,7 +124,7 @@ public class ItemNetwork implements IItemNetwork
             }
             if (nodeFound) continue;
 
-            if (route.empty()) return new Route(route);
+            if (route.empty()) return route;
 
             // Remove from stack if stepping back
             current = posRoute.pop();
@@ -136,8 +133,9 @@ public class ItemNetwork implements IItemNetwork
 
         posRoute.push(endPos);
         route.push(endDir);
-//        route.remove(0);
-        return new Route(route);
+        System.out.println(route);
+
+        return route;
     }
 
     public BlockPos nextNode(BlockPos lastIntersection, Set<Long> visited, Direction from, BlockPos endPos, Direction endDir)

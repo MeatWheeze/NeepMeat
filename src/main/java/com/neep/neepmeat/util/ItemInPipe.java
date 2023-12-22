@@ -1,12 +1,18 @@
 package com.neep.neepmeat.util;
 
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.List;
+import java.util.Stack;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ItemInPipe
@@ -26,6 +32,8 @@ public class ItemInPipe
     protected ItemVariant variant;
     protected int amount;
 
+    protected Stack<Direction> route;
+
     public ItemInPipe(ResourceAmount<ItemVariant> amount, long tickStart)
     {
         this.in = null;
@@ -33,20 +41,9 @@ public class ItemInPipe
         this.progress = 0;
         this.variant = amount.resource();
         this.amount = (int) amount.amount();
-//        this.itemStack = amount.resource().toStack((int) amount.amount());
         this.speed = 0.1f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
-    }
-
-    public ItemInPipe(ItemStack itemStack, long tickStart)
-    {
-        this(null, null, itemStack, tickStart);
-    }
-
-    public ItemInPipe(Direction in, Direction out, ItemStack itemStack, long tickStart)
-    {
-        this(in, out, ItemVariant.of(itemStack), itemStack.getCount(), tickStart);
     }
 
     public ItemInPipe(Direction in, Direction out, ItemVariant variant, int amount, long tickStart)
@@ -59,6 +56,31 @@ public class ItemInPipe
         this.speed = 0.1f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
+    }
+
+    public ItemVariant resource()
+    {
+        return resource();
+    }
+
+    public long amount()
+    {
+        return amount;
+    }
+
+    public void setRoute(Stack<Direction> route)
+    {
+        this.route = route;
+    }
+
+    public Direction getPreferredOutputDirection(BlockState state, Direction in, IItemPipe pipe)
+    {
+        List<Direction> options = pipe.getConnections(state, d -> d != in);
+        if (options.size() > 1 && route != null && !route.empty())
+        {
+            return route.remove(0);
+        }
+        return null;
     }
 
     public static Vec3d directionUnit(Direction direction)
@@ -162,8 +184,8 @@ public class ItemInPipe
 
     public ItemInPipe copyWith(int amount)
     {
-        ItemStack newStack = getItemStack().copy();
-        newStack.setCount(amount);
-        return new ItemInPipe(in, out, newStack, tickStart);
+        ItemInPipe newItem = new ItemInPipe(in, out, variant, amount, tickStart);
+        newItem.setRoute((Stack<Direction>) route.clone());
+        return newItem;
     }
 }
