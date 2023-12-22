@@ -39,7 +39,7 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     private static final Identifier SIDE_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_side_up");
     private static final Identifier STRAIGHT_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_straight_up");
 
-    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_centre"));
+    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/rusty_pipe_centre"));
     private static Sprite PARTICLE_SPRITE;
 
     private final Triple<BakedModel, Float, Float>[] straight = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
