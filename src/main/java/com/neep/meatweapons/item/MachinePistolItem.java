@@ -84,7 +84,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                     if (!world.isClient)
                     {
 
-                        Optional<LivingEntity> target = this.hitScan(player, 400,0.5f);
+                        Optional<LivingEntity> target = this.hitScan(player, 100,0.5f);
                         if (target.isPresent())
                         {
 //                            target.get().maxHurtTime = 1;

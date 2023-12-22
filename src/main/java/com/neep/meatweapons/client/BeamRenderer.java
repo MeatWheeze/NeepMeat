@@ -15,9 +15,9 @@ import java.nio.FloatBuffer;
 public class BeamRenderer
 {
     public static final Identifier TEX_TEST = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
-    public static final RenderLayer LAYER_TEST = RenderLayer.getEntityAlpha(TEX_TEST);
-    public static Vec3d p0;
-    public static Vec3d p1;
+    public static final RenderLayer LAYER_TEST = RenderLayer.getEntityTranslucent(TEX_TEST);
+    public static Vec3d p0 = new Vec3d(10, 10, 10);
+    public static Vec3d p1 = new Vec3d(20, 20, 20);
 
     public static void init()
     {
@@ -30,15 +30,15 @@ public class BeamRenderer
             matrices.push();
             Vec3d pos = ctx.camera().getPos();
 
-            Vec3d p1 = new Vec3d(10, 10, 10);
-            Vec3d p2 = new Vec3d(20, 7, 2);
+//            Vec3d p1 = new Vec3d(10, 10, 10);
+//            Vec3d p2 = new Vec3d(20, 7, 2);
 
-            Vec3d offset = p1.subtract(pos);
+            Vec3d offset = p0.subtract(pos);
             matrices.translate(offset.x, offset.y, offset.z);
 
             VertexConsumer vertexConsumer = ctx.consumers().getBuffer(LAYER_TEST);
 
-            renderBeam(matrices, vertexConsumer, p1, p2, 255, 255, 255, thickness);
+            renderBeam(matrices, vertexConsumer, p0, p1, 255, 255, 255, thickness);
             matrices.pop();
 
         });
@@ -122,7 +122,7 @@ public class BeamRenderer
     public static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normalMatrix, int light, Vec3d pos, int u, int v)
     {
         buffer.vertex(matrix, (float) pos.x, (float) pos.y, (float) pos.z)
-                .color(128, 195, 255, 255)
+                .color(255, 255, 255, 255)
                 .texture(u, v)
                 .overlay(OverlayTexture.DEFAULT_UV)
                 .light(light)

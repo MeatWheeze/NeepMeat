@@ -3,6 +3,7 @@ package com.neep.meatweapons.item;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.BeamRenderer;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.client.item.TooltipContext;
@@ -12,6 +13,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -29,6 +32,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import org.lwjgl.system.CallbackI;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -93,7 +97,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
-//        System.out.println("fire");
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
         fire(world, user, itemStack);
@@ -139,21 +142,18 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     }
 
     // TODO: Currently reaches through blocks.
-    public List<EntityHitResult> getRayTargets(PlayerEntity caster, Vec3d pos, Vec3d look, Predicate<Entity> predicate, double margin, double distance)
+    public List<EntityHitResult> getRayTargets(PlayerEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
     {
         World world = caster.world;
 
-        Vec3d end = pos.add(look.multiply(distance));
 
-        RaycastContext ctx = new RaycastContext(pos, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
-        BlockHitResult result = world.raycast(ctx);
+        Box box = caster.getBoundingBox().stretch(endPos.subtract(startPos)).expand(1.0, 1.0, 1.0);
 
-        Box box = caster.getBoundingBox().stretch(result.getPos().subtract(pos)).expand(1.0, 1.0, 1.0);
-
+        // Remove entities not intersecting with the ray
         List<EntityHitResult> list = new ArrayList<>();
         world.getOtherEntities(caster, box, predicate).forEach(entity ->
         {
-            Optional<Vec3d> optional = entity.getBoundingBox().expand(entity.getTargetingMargin() + margin).raycast(pos, end);
+            Optional<Vec3d> optional = entity.getBoundingBox().expand(entity.getTargetingMargin() + margin).raycast(startPos, endPos);
             optional.ifPresent(vec3d -> list.add(new EntityHitResult(entity, vec3d)));
         });
 
@@ -169,21 +169,31 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             Vec3d look = caster.getRotationVec(tickDelta);
             Vec3d end = pos.add(look.multiply(distance));
 
-//            Box box = caster.getBoundingBox().stretch(look.multiply(distance)).expand(1.0, 1.0, 1.0);
-            Predicate<Entity> predicate = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
+            // Find where the ray hits a block
+            RaycastContext ctx = new RaycastContext(pos, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);
+            BlockHitResult blockResult = world.raycast(ctx);
 
-//            EntityHitResult entityHitResult = ProjectileUtil.raycast(caster, caster.getClientCameraPosVec(tickDelta),end , box, entity -> !entity.isSpectator() && entity.collides() && entity instanceof  LivingEntity, distance);
+            Predicate<Entity> entityFilter = entity -> !entity.isSpectator() && entity.collides() && entity instanceof LivingEntity;
 
             double minDistance = distance;
             Entity entity = null;
-            for (EntityHitResult result : getRayTargets(caster, pos, look, predicate, 0.1, distance))
+            EntityHitResult entityResult = null;
+            for (EntityHitResult result : getRayTargets(caster, pos, blockResult.getPos(), entityFilter, 0.1))
             {
                 if (result.getPos().distanceTo(pos) < minDistance)
                 {
                     minDistance = result.getPos().distanceTo(pos);
                     entity = result.getEntity();
+                    entityResult = result;
                 }
             }
+
+            Vec3d hitPos;
+            hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
+//            world.addParticle(ParticleTypes.ANGRY_VILLAGER, hitPos.x, hitPos.y, hitPos.z, 0, 0, 0);
+            BeamRenderer.p0 = pos;
+            BeamRenderer.p1 = hitPos;
+            System.out.println(hitPos);
 
             return Optional.ofNullable((LivingEntity) entity);
         }
