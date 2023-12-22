@@ -2,7 +2,8 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.fluid_util.FluidNetwork;
+import com.neep.neepmeat.fluid_util.PipeSegment;
 import com.neep.neepmeat.maths.NMMaths;
 import com.neep.neepmeat.maths.NMVec2f;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -11,7 +12,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
@@ -220,15 +220,10 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        enforceApiConnections(world, pos, state);
+        BlockState state2 = enforceApiConnections(world, pos, state);
+        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
+        updateNetwork(pos, state2, false);
 
-//        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, fromPos, Direction.NORTH);
-//        if (storage != null)
-//        {
-//
-//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction)))
-//        }
-//        System.out.println(storage);
     }
 
     // Only takes into account other pipes, connections to fluid containers are enforced later.
@@ -277,25 +272,47 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        updateNetwork(pos, newState, true);
+    }
+
+    @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
-        enforceApiConnections(world, pos, state);
+        BlockState state2 = enforceApiConnections(world, pos, state);
+        world.setBlockState(pos, state2,  Block.NOTIFY_ALL);
+        updateNetwork(pos, state2, false);
     }
 
     // Produces connections to fluid containers after placing
-    private void enforceApiConnections(World world, BlockPos pos, BlockState state)
+    private BlockState enforceApiConnections(World world, BlockPos pos, BlockState state)
     {
         if (!world.isClient)
         {
-            BlockState blockState2 = state;
+            BlockState state2 = state;
             for (Direction direction : Direction.values())
             {
                 if (canConnectApi(world, pos, state, direction))
                 {
-                    blockState2 = blockState2.with(DIR_TO_CONNECTION.get(direction), true);
+                    state2 = state2.with(DIR_TO_CONNECTION.get(direction), true);
                 }
             }
-            world.setBlockState(pos, blockState2,  Block.NOTIFY_ALL);
+//            world.setBlockState(pos, blockState2,  Block.NOTIFY_ALL);
+            return state2;
+        }
+        return state;
+    }
+
+    public void updateNetwork(BlockPos pos, BlockState state, boolean removed)
+    {
+        if (removed)
+        {
+            FluidNetwork.NETWORK.removeSegment(pos);
+        }
+        else
+        {
+            FluidNetwork.NETWORK.updateSegment(pos, new PipeSegment(pos, state));
         }
     }
 

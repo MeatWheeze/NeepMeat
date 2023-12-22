@@ -44,12 +44,6 @@ public class NMFluidNetwork
         LOADED_NETWORKS.add(this);
     }
 
-    public static NMFluidNetwork createNetwork(World world, BlockPos origin, Direction direction)
-    {
-//        if (
-
-    }
-
     @Override
     public String toString()
     {
