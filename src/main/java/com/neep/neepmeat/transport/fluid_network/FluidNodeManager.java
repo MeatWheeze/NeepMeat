@@ -5,7 +5,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -185,14 +185,14 @@ public class FluidNodeManager
             return be;
         }
         BlockState state = world.getBlockState(pos);
-        world.addBlockEntity(new NodeContainerBlockEntity(pos, state));
+        world.addBlockEntity(new FluidPipeBlockEntity(pos, state));
         return world.getBlockEntity(pos);
     }
 
     private void removeBlockEntity(ServerWorld world, BlockPos pos)
     {
         // Perform checks before removing
-        if (world.getBlockEntity(pos) instanceof NodeContainerBlockEntity be && be.isCreatedDynamically())
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be && be.isCreatedDynamically())
         {
             world.removeBlockEntity(pos);
         }

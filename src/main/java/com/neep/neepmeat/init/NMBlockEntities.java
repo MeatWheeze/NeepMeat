@@ -23,6 +23,7 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserStorage;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
@@ -148,19 +149,19 @@ public class NMBlockEntities
     {
 
         // --- Fluid Transfer ---
-        PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
+        PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, FluidTransport.PUMP);
         FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
 
-        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
+        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, FluidTransport.TANK);
         FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, NMBlockEntities.TANK_BLOCK_ENTITY);
 
         MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
-        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
+        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
         FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, NMBlockEntities.GLASS_TANK_BLOCK_ENTITY);
-        NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
-        FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, NMBlocks.FILTER_PIPE);
+        NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", FluidPipeBlockEntity::new, FluidTransport.PIPE);
+        FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);
 
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
         FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);

@@ -19,6 +19,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
@@ -153,6 +154,18 @@ public class PipeNetworkImpl1 implements PipeNetwork
         return this.world.equals(world);
     }
 
+    @Override
+    public void update(BlockPos vertexPos, @Nullable PipeVertex vertex, UpdateReason reason)
+    {
+
+    }
+
+    @Override
+    public void remove()
+    {
+
+    }
+
     // Removes network and connected nodes if not valid.
     public boolean validate()
     {
@@ -184,7 +197,7 @@ public class PipeNetworkImpl1 implements PipeNetwork
             connectedNodes.forEach((node) -> node.get().setNetwork(this, false));
             try
             {
-                this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
+//                this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
             }
             catch (Exception e)
             {
@@ -320,7 +333,8 @@ public class PipeNetworkImpl1 implements PipeNetwork
 
             // Adjust base flow if this fromNode is in a capillary pipe
             // TODO: Somehow avoid the mutable.toimuutable.aargh() thing
-            long baseTransfer = networkPipes.get(fromNode.getPos().mutableCopy().toImmutable()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
+//            long baseTransfer = networkPipes.get(fromNode.getPos().mutableCopy().toImmutable()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
+            long baseTransfer = BASE_TRANSFER;
 
             List<Integer> safeIndices = fromNode.getFlow() < 0.0 ? insertIndices : extractIndices;
 
@@ -415,7 +429,7 @@ public class PipeNetworkImpl1 implements PipeNetwork
         Set<BlockPos> visited = new HashSet<>();
 
         pipeQueue.add(startPos);
-        networkPipes.put(startPos, new SimplePipeVertex(world.getBlockState(startPos)));
+        networkPipes.put(startPos, new SimplePipeVertex());
         visited.add(startPos);
 
         int depth = 0;
@@ -445,7 +459,7 @@ public class PipeNetworkImpl1 implements PipeNetwork
                         if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                         {
                             pipeQueue.add(next);
-                            SimplePipeVertex nextPipe = new SimplePipeVertex(state2);
+                            SimplePipeVertex nextPipe = new SimplePipeVertex();
                             SimplePipeVertex currentPipe = networkPipes.get(current);
                             currentPipe.putAdjacent(direction, nextPipe);
                             nextPipe.putAdjacent(direction.getOpposite(), currentPipe);
@@ -479,20 +493,6 @@ public class PipeNetworkImpl1 implements PipeNetwork
     public List<NodeSupplier> getNodes()
     {
         return connectedNodes;
-    }
-
-//    public void notTicking()
-//    {
-//        if (this.isTicking) throw new IllegalStateException("Network was ticked in an incorrect state");
-//    }
-
-    public enum UpdateReason
-    {
-        PIPE_BROKEN,
-        PIPE_ADDED,
-        CONNECTION_CHANGED,
-        NODE_CHANGED,
-        VALVE_CHANGED;
     }
 
 }

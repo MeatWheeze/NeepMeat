@@ -1,8 +1,5 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.util.math.Direction;
-
 public interface PipeVertex
 {
     void tick();
@@ -13,15 +10,15 @@ public interface PipeVertex
 
     PipeVertex[] getAdjacentVertices();
 
-    boolean canFluidFlow(Direction connection, BlockState state);
+    float getTotalHead();
 
-    boolean isSpecial();
+    void setNetwork(PipeNetwork network);
 
-    ISpecialPipe getSpecial();
+    PipeNetwork getNetwork();
 
-    boolean flag();
+    void setElevationHead(float value);
 
-    void setFlag(boolean value);
+    boolean canSimplify();
 
-    Direction[] getConnections();
+    void reset();
 }

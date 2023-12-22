@@ -14,6 +14,7 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.potion.NMPotions;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -68,7 +69,7 @@ public class NeepMeat implements ModInitializer
 
 		// --- Transport module ---
 		ItemTransport.init();
-		PipeNetwork.registerEvent();
+		FluidTransport.init();
 
 
 //		EnlightenmentUtil.init();

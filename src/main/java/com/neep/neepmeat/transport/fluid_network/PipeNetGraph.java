@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.google.common.collect.Sets;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -9,8 +10,11 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PipeNetGraph
@@ -30,7 +34,8 @@ public class PipeNetGraph
      */
 
     protected final World world;
-    protected final Long2ObjectOpenHashMap<SimplePipeVertex> vertices = new Long2ObjectOpenHashMap<>();
+    protected final Long2ObjectOpenHashMap<PipeVertex> vertices = new Long2ObjectOpenHashMap<>();
+    protected final Long2ObjectOpenHashMap<PipeVertex> allVertices = new Long2ObjectOpenHashMap<>();
     protected final ArrayDeque<BlockPos> posQueue = new ArrayDeque<>(10);
 
     public PipeNetGraph(World world)
@@ -41,10 +46,9 @@ public class PipeNetGraph
     public void rebuild(BlockPos startPos)
     {
         vertices.clear();
+        allVertices.clear();
 
         buildGraph(startPos);
-        minimiseGraph();
-        calculateHead();
         vertices.forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
     }
 
@@ -56,13 +60,19 @@ public class PipeNetGraph
         posQueue.clear();
         posQueue.add(startPos);
 
-        vertices.put(startPos.asLong(), new SimplePipeVertex(world.getBlockState(startPos)));
+        BlockState startState = world.getBlockState(startPos);
+        IFluidPipe startPipe = FluidTransport.findFluidPipe(world, startPos, world.getBlockState(startPos));
+        if (startPipe == null) return;
+        PipeVertex startVertex = startPipe.getPipeVertex(world, startPos, startState);
+        startVertex.reset();
+        allVertices.put(startPos.asLong(), startVertex);
+        visited.add(startPos.asLong());
 
         while (!posQueue.isEmpty())
         {
             BlockPos current = posQueue.poll();
             BlockState currentState = world.getBlockState(current);
-            SimplePipeVertex currentPipe = vertices.get(current.asLong());
+            PipeVertex currentPipe = allVertices.get(current.asLong());
 
             if (currentState.getBlock() instanceof IFluidPipe currentPipeBlock)
             {
@@ -82,31 +92,33 @@ public class PipeNetGraph
 
                         posQueue.add(mutable.toImmutable());
 
-                        addVertex(currentPipe, nextPipe, direction, mutable, nextState);
+                        appendVertex(currentPipe, nextPipe, direction, mutable, nextState);
                     }
                 }
             }
         }
     }
 
-    private void addVertex(SimplePipeVertex currentVertex, IFluidPipe nextPipe, Direction from, BlockPos nextPos, BlockState nextState)
+    private void appendVertex(PipeVertex currentVertex, IFluidPipe nextPipe, Direction from, BlockPos nextPos, BlockState nextState)
     {
-        SimplePipeVertex nextVertex = nextPipe.createVertex(world, nextPos, nextState);
+        PipeVertex nextVertex = nextPipe.getPipeVertex(world, nextPos, nextState);
+        nextVertex.reset();
 
         // Create links
-        currentVertex.putAdjacent(from, nextVertex);
-        nextVertex.putAdjacent(from.getOpposite(), currentVertex);
+        currentVertex.putAdjacent(from.ordinal(), nextVertex);
+        nextVertex.putAdjacent(from.getOpposite().ordinal(), currentVertex);
 
-        vertices.put(nextPos.asLong(), nextVertex);
+        allVertices.put(nextPos.asLong(), nextVertex);
     }
 
     public void minimiseGraph()
     {
-        ObjectIterator<Long2ObjectMap.Entry<SimplePipeVertex>> it = vertices.long2ObjectEntrySet().fastIterator();
+        vertices.putAll(allVertices);
+        ObjectIterator<Long2ObjectMap.Entry<PipeVertex>> it = vertices.long2ObjectEntrySet().fastIterator();
         while (it.hasNext())
         {
-            SimplePipeVertex toRemove = it.next().getValue();
-            if (canRemoveVertex(toRemove))
+            PipeVertex toRemove = it.next().getValue();
+            if (toRemove.canSimplify())
             {
                 PipeVertex[] edge = new SimplePipeVertex[2];
                 int current = 0;
@@ -139,11 +151,6 @@ public class PipeNetGraph
         }
     }
 
-    protected boolean canRemoveVertex(SimplePipeVertex vertex)
-    {
-        return vertex.edges() == 2;
-    }
-
     public void calculateHead()
     {
         // Find the minimum Y coordinate
@@ -157,9 +164,9 @@ public class PipeNetGraph
             }
         });
 
-        for (ObjectIterator<Long2ObjectMap.Entry<SimplePipeVertex>> it = vertices.long2ObjectEntrySet().fastIterator(); it.hasNext();)
+        for (ObjectIterator<Long2ObjectMap.Entry<PipeVertex>> it = vertices.long2ObjectEntrySet().fastIterator(); it.hasNext();)
         {
-            Long2ObjectMap.Entry<SimplePipeVertex> entry = it.next();
+            Long2ObjectMap.Entry<PipeVertex> entry = it.next();
 
             // Set elevation head relative to the lowest vertex in the network.
             int vertexY = BlockPos.unpackLongY(entry.getLongKey());
@@ -169,8 +176,69 @@ public class PipeNetGraph
         }
     }
 
-    public Long2ObjectOpenHashMap<SimplePipeVertex> getVertices()
+    public Long2ObjectOpenHashMap<PipeVertex> getVertices()
     {
         return vertices;
     }
+
+    public void removeVertex(BlockPos pos, @Nullable PipeVertex vertex)
+    {
+        if (vertex != null)
+        {
+            removeVertex(pos.asLong());
+            removeAdjacent(vertex);
+        }
+        else
+        {
+            vertex = allVertices.get(pos.asLong());
+            removeAdjacent(vertex);
+            removeVertex(pos.asLong());
+        }
+    }
+
+    private void removeVertex(long pos)
+    {
+        vertices.remove(pos);
+        allVertices.remove(pos);
+    }
+
+    private void removeAdjacent(@NotNull PipeVertex toRemove)
+    {
+        // Check all of toRemove's adjacent vertices.
+        for (PipeVertex adj : toRemove.getAdjacentVertices())
+        {
+            if (adj == null) continue;
+
+            // Find the direction in which the vertex connects to toRemove and remove the connection.
+            for (int i = 0; i < 6; ++i)
+            {
+                if (adj.getAdjacentVertices()[i] == toRemove)
+                {
+                    adj.getAdjacentVertices()[i] = null;
+                }
+            }
+        }
+    }
+
+    public PipeVertex getVertex(BlockPos pos)
+    {
+        return allVertices.get(pos.asLong());
+    }
+
+//    public void addVertex(BlockPos pos)
+//    {
+//        BlockState state = world.getBlockState(pos);
+//        IFluidPipe pipe = FluidTransport.findFluidPipe(world, pos, state);
+//        if (pipe != null)
+//        {
+//            PipeVertex vertex = pipe.getPipeVertex(world, pos, state);
+//            putVertex(pos, vertex);
+//        }
+//    }
+//
+//    protected void putVertex(BlockPos pos, PipeVertex vertex)
+//    {
+//        vertices.put(pos.asLong(), vertex);
+//
+//    }
 }

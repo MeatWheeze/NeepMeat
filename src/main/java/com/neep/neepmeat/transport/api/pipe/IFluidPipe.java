@@ -1,10 +1,7 @@
 package com.neep.neepmeat.transport.api.pipe;
 
-import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.fluid_network.SimplePipeVertex;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.*;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
@@ -82,7 +79,29 @@ public interface IFluidPipe
     {
         try
         {
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos);
+            PipeNetwork net = PipeNetwork.LOOKUP.find(world, pos, null);
+            if (net != null)
+            {
+                net.update(pos, null, reason);
+            }
+            else
+            {
+                // Look for adjacent networks and add this pipe to the first one.
+                BlockPos.Mutable mutable = pos.mutableCopy();
+                for (Direction direction : Direction.values())
+                {
+                    mutable.set(pos, direction);
+                    net = PipeNetwork.LOOKUP.find(world, mutable, null);
+                    if (net != null)
+                    {
+                        net.update(pos, null, reason);
+                        return;
+                    }
+                }
+
+                // If there are no adjacent networks, try to create one here.
+                PipeNetwork.tryCreateNetwork(world, pos);
+            }
         }
         catch (Exception e)
         {
@@ -99,11 +118,12 @@ public interface IFluidPipe
     default void removePipe(ServerWorld world, BlockState state, BlockPos pos)
     {
         FluidNodeManager.removeStorageNodes(world, pos);
-        world.removeBlockEntity(pos); // Just in case
-        for (Direction direction : getConnections(state, dir -> true))
-        {
-            updateNetwork(world, pos.offset(direction), PipeNetworkImpl1.UpdateReason.PIPE_BROKEN);
-        }
+//        world.removeBlockEntity(pos); // Just in case
+//        for (Direction direction : getConnections(state, dir -> true))
+//        {
+//            updateNetwork(world, pos.offset(direction), PipeNetwork.UpdateReason.PIPE_REMOVED);
+//        }
+        updateNetwork(world, pos, PipeNetwork.UpdateReason.PIPE_REMOVED);
     }
 
     default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
@@ -116,8 +136,8 @@ public interface IFluidPipe
         return AcceptorModes.INSERT_EXTRACT;
     }
 
-    default SimplePipeVertex createVertex(World world, BlockPos pos, BlockState state)
+    default PipeVertex getPipeVertex(World world, BlockPos pos, BlockState state)
     {
-        return new SimplePipeVertex(state);
+        return new SimplePipeVertex();
     }
 }

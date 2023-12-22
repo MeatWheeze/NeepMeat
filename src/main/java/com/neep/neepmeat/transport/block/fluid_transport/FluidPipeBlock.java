@@ -4,7 +4,9 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl1;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -24,6 +26,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.CallbackI;
 
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
 {
@@ -35,6 +38,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        super.onStateReplaced(state, world, pos, newState, moved);
         if (world.isClient())
             return;
 
@@ -56,7 +60,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
             if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -69,7 +73,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
-            updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.PIPE_ADDED);
+            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
         }
     }
 
@@ -119,14 +123,14 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return;
 
         createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, PipeNetworkImpl1.UpdateReason.CONNECTION_CHANGED);
+        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return null;
+        return new FluidPipeBlockEntity(pos, state);
     }
 
     // Only takes into account other pipes, connections to storages are enforced later.
@@ -162,5 +166,15 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;
+    }
+
+    @Override
+    public PipeVertex getPipeVertex(World world, BlockPos pos, BlockState state)
+    {
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
+        {
+            return be.getPipeVertex();
+        }
+        return IFluidPipe.super.getPipeVertex(world, pos, state);
     }
 }

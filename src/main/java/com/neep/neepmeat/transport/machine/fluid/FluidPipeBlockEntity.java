@@ -2,6 +2,9 @@ package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.SimplePipeVertex;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -10,16 +13,26 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class NodeContainerBlockEntity extends BlockEntity
+public class FluidPipeBlockEntity extends BlockEntity
 {
     public NbtCompound queuedNbt;
+    protected PipeNetwork network;
+    protected PipeVertex vertex = new SimplePipeVertex()
+    {
+        @Override
+        public void setNetwork(PipeNetwork network)
+        {
+            super.setNetwork(network);
+            FluidPipeBlockEntity.this.network = network;
+        }
+    };
 
-    public NodeContainerBlockEntity(BlockPos pos, BlockState state)
+    public FluidPipeBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.NODE_BLOCK_ENTITY, pos, state);
     }
 
-    public NodeContainerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public FluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -60,11 +73,27 @@ public class NodeContainerBlockEntity extends BlockEntity
         {
             FluidNodeManager.getInstance(world).entityUnloaded(pos);
         }
-        else FluidNodeManager.getInstance(world).entityRemoved(pos);
+        else
+        {
+            FluidNodeManager.getInstance(world).entityRemoved(pos);
+        }
+    }
+
+    public void update(PipeNetwork.UpdateReason reason)
+    {
+        if (network != null)
+        {
+            network.update(pos, vertex, reason);
+        }
     }
 
     public boolean isCreatedDynamically()
     {
-        return true;
+        return false;
+    }
+
+    public PipeVertex getPipeVertex()
+    {
+        return vertex;
     }
 }

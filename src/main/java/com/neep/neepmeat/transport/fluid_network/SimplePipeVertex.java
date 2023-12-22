@@ -1,12 +1,9 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.ICapillaryPipe;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.math.Direction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SimplePipeVertex implements PipeVertex
@@ -15,40 +12,19 @@ public class SimplePipeVertex implements PipeVertex
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];
     protected float pressureHead;
     protected float elevationHead;
-    protected int distance;
-    protected boolean capillary;
 
     protected long amount;
+    private PipeNetwork network;
 
-    protected final ISpecialPipe special;
-    public boolean flag;
-
-    public SimplePipeVertex(BlockState state)
+    public SimplePipeVertex()
     {
-        if (state.getBlock() instanceof AbstractPipeBlock)
-        {
-            for (Direction direction : Direction.values())
-            {
-                if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
-                {
-                    connections.add(direction);
-                }
-            }
-        }
-        else if (state.getBlock() instanceof BaseFacingBlock facing)
-        {
-            connections.add(state.get(BaseFacingBlock.FACING));
-            connections.add(state.get(BaseFacingBlock.FACING).getOpposite());
-        }
-        this.capillary = state.getBlock() instanceof ICapillaryPipe;
-        this.special = state.getBlock() instanceof ISpecialPipe specialPipe ? specialPipe : null;
     }
 
     public void tick()
     {
         for (Direction direction : Direction.values())
         {
-            SimplePipeVertex adjacent = adjacentVertices[direction.ordinal()];
+            PipeVertex adjacent = adjacentVertices[direction.ordinal()];
             if (adjacent != null)
             {
                 float difference = adjacent.getTotalHead() - this.getTotalHead();
@@ -70,7 +46,12 @@ public class SimplePipeVertex implements PipeVertex
     @Override
     public String toString()
     {
-        return "PipeNetVertex{connection=" + connections + ", head:" + getTotalHead() + "}";
+        StringBuilder adj = new StringBuilder();
+        for (PipeVertex v : adjacentVertices)
+        {
+            if (v != null) adj.append(System.identityHashCode(v)).append(", ");
+        }
+        return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + ", head:" + getTotalHead() + "}";
     }
 
     @Override
@@ -82,21 +63,12 @@ public class SimplePipeVertex implements PipeVertex
         }
         if (o instanceof SimplePipeVertex vertex)
         {
-            return getDistance() == vertex.getDistance() && connections.equals(vertex.connections);
+            return connections.equals(vertex.connections);
         }
         return false;
     }
 
-    public boolean canFluidFlow(Direction bias, BlockState vertex)
-    {
-        if (!isSpecial())
-        {
-            return true;
-        }
-        return special.canTransferFluid(bias, vertex);
-    }
-
-    public void putAdjacent(Direction direction, SimplePipeVertex vertex)
+    public void putAdjacent(Direction direction, PipeVertex vertex)
     {
         adjacentVertices[direction.ordinal()] = vertex;
     }
@@ -116,31 +88,6 @@ public class SimplePipeVertex implements PipeVertex
         return adjacentVertices;
     }
 
-    public int edges()
-    {
-        int number = 0;
-        for (PipeVertex pipeNetVertex : adjacentVertices)
-        {
-            if (pipeNetVertex != null) ++number;
-        }
-        return number;
-    }
-
-    public boolean isCapillary()
-    {
-        return capillary;
-    }
-
-    public boolean isSpecial()
-    {
-        return special != null;
-    }
-
-    public ISpecialPipe getSpecial()
-    {
-        return special;
-    }
-
     public void setElevationHead(float value)
     {
         this.elevationHead = value;
@@ -151,9 +98,16 @@ public class SimplePipeVertex implements PipeVertex
         return pressureHead + elevationHead;
     }
 
-    public int getDistance()
+    @Override
+    public void setNetwork(PipeNetwork network)
     {
-        return distance;
+        this.network = network;
+    }
+
+    @Override
+    public PipeNetwork getNetwork()
+    {
+        return network;
     }
 
     public List<Direction> getConnections()
@@ -161,4 +115,25 @@ public class SimplePipeVertex implements PipeVertex
         return connections;
     }
 
+    @Override
+    public boolean canSimplify()
+    {
+        int edges = 0;
+        for (PipeVertex pipeNetVertex : getAdjacentVertices())
+        {
+            if (pipeNetVertex != null) ++edges;
+        }
+        return edges == 2;
+    }
+
+    @Override
+    public void reset()
+    {
+        pressureHead = 0;
+        elevationHead = 0;
+        amount = 0;
+        connections.clear();
+        network = null;
+        Arrays.fill(adjacentVertices, null);
+    }
 }
