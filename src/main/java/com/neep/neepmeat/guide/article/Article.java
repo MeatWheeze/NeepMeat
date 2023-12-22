@@ -1,10 +1,12 @@
 package com.neep.neepmeat.guide.article;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.LiteralText;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -23,6 +25,16 @@ public class Article
     public static final Function<JsonObject, Content> TEXT = DESERIALISERS.put("text",
     object ->
     {
+        JsonElement textObject = object.get("text");
+        if (textObject.isJsonArray())
+        {
+            MutableText text = LiteralText.EMPTY.copy();
+            textObject.getAsJsonArray().forEach(element ->
+            {
+                text.append(Text.Serializer.fromJson(element));
+            });
+            return new TextContent(text);
+        }
         MutableText text = Text.Serializer.fromJson(object);
         return new TextContent(text);
     });
