@@ -1,0 +1,113 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe"
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/merge_pipe",
+        "x": -90
+      }
+    },
+
+    {
+      "when": {
+        "north": "true", "facing": "east|south|west|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side"
+      }
+    },
+    {
+      "when": {
+        "south": "true", "facing": "north|east|west|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side_alt"
+      }
+    },
+    {
+      "when": {
+        "east": "true", "facing": "north|south|west|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side_alt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true", "facing": "north|east|south|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side",
+        "y": 270
+      }
+    },
+
+    {
+      "when": {
+        "up": "true", "facing": "north|east|south|west|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side",
+        "y": 270,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true", "facing": "north|east|south|west|up"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_side_alt",
+        "y": 270,
+        "x": 270
+      }
+    }
+  ]
+}

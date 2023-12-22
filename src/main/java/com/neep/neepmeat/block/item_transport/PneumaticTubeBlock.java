@@ -22,6 +22,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -33,17 +35,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
+
     public PneumaticTubeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
-    }
-
-    public static void removeStorageNodes(World world, BlockPos pos)
-    {
-        for (Direction direction : Direction.values())
-        {
-            NodePos nodePos = new NodePos(pos, direction);
-        }
     }
 
     @Override
@@ -55,7 +50,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
             {
                 be.dropItems();
             }
-//            removeStorageNodes(world, pos);
             world.removeBlockEntity(pos);
         }
     }
@@ -110,9 +104,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        if (player.isSneaking())
-//        {
-//        }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
@@ -183,7 +174,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
-//        return false;
         return storage != null;
     }
 
@@ -192,7 +182,6 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {
-//            ItemInPipe item = new ItemInPipe(Direction.UP, Direction.UP, amount.resource().toStack((int) amount.amount()), world.getTime());
             long transferred = be.insert(item, world, state, pos, direction);
             return transferred;
         }
