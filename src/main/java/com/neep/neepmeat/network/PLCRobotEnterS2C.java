@@ -8,13 +8,32 @@ import com.neep.neepmeat.plc.PLCBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 
 public class PLCRobotEnterS2C
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "plc_robot_enter");
+
+    public static void init()
+    {
+        ServerPlayNetworking.registerGlobalReceiver(ID, (server, player, handler, buf, responseSender) ->
+        {
+            BlockPos pos = PacketBufUtil.readBlockPos(buf);
+
+            server.execute(() ->
+            {
+                if (player.world.getBlockEntity(pos) instanceof PLCBlockEntity be)
+                {
+                    be.exit();
+                }
+            });
+        });
+    }
 
     public static void send(PlayerEntity player, PLCBlockEntity be)
     {
@@ -44,6 +63,15 @@ public class PLCRobotEnterS2C
                     }
                 });
             });
+        }
+
+        public static void send(PLCBlockEntity be)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            PacketBufUtil.writeBlockPos(buf, be.getPos());
+
+            ClientPlayNetworking.send(ID, buf);
         }
     }
 }

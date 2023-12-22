@@ -8,5 +8,6 @@ public class NMCommonNetwork
     public static void init()
     {
         PLCRobotC2S.init();
+        PLCRobotEnterS2C.init();
     }
 }
