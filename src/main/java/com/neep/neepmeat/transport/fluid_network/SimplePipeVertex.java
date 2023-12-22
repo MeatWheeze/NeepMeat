@@ -191,15 +191,8 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
     public void reset()
     {
         pumpHeight = 0;
-        height = 0;
         clearEdges();
     }
-
-    //    @Override
-//    public long[] getVelocity()
-//    {
-//        return null;
-//    }
 
     protected void clearEdges()
     {

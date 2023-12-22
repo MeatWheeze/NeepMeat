@@ -94,6 +94,14 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     }
 
     @Override
+    public void reset()
+    {
+        pumpHeight = 0;
+        height = parent.getPos().getY();
+        clearEdges();
+    }
+
+    @Override
     public void tick()
     {
         try (Transaction transaction = Transaction.openOuter())
