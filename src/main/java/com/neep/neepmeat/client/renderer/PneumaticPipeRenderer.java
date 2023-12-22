@@ -38,7 +38,8 @@ public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implement
 
             matrices.translate(item.x, item.y, item.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
+//            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
             renderer.renderItem(stack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
 
             matrices.pop();

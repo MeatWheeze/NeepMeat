@@ -27,7 +27,7 @@ public class ItemInPipe
         this.out = out;
         this.progress = 0;
         this.itemStack = itemStack;
-        this.speed = 0.2f;
+        this.speed = 0.1f;
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
     }
