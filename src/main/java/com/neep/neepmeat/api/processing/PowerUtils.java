@@ -1,10 +1,11 @@
-package com.neep.neepmeat.util;
+package com.neep.neepmeat.api.processing;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import org.jetbrains.annotations.Nullable;
@@ -47,9 +48,16 @@ public class PowerUtils
         return perUnitToAbsolute(perUnit) * 20;
     }
 
-    public static Text perUnitToText(double perUnit)
+    public static MutableText perUnitToText(double perUnit)
     {
         return POWER.copy().append(new LiteralText(POWER_FORMAT.format(perUnitToAbsolute(perUnit))).append(POWER_UNIT));
+    }
+
+    public static long absToAmount(Fluid fluid, long energy)
+    {
+        FluidEnegyRegistry.Entry entry = FluidEnegyRegistry.getInstance().getOrEmpty(fluid);
+        if (entry.baseEnergy() == 0) return 0;
+        return (long) Math.floor(energy / entry.baseEnergy());
     }
 
     /**

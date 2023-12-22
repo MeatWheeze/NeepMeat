@@ -17,6 +17,9 @@ public class FluidEnegyRegistry extends HashMap<Fluid, FluidEnegyRegistry.Entry>
         return INSTANCE;
     }
 
+    /**
+     * @param baseEnergy The energy in a droplet of this fluid
+     */
     public void register(Fluid fluid, double baseEnergy, boolean isEnergised, @Nullable Fluid exhaustType)
     {
         put(fluid, new FluidEnegyRegistry.Entry(baseEnergy, isEnergised, exhaustType));

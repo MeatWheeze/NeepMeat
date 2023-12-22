@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.transducer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
@@ -23,7 +24,6 @@ import net.minecraft.world.World;
 @SuppressWarnings("UnstableApiUsage")
 public class TransducerBlockEntity extends SyncableBlockEntity
 {
-    protected int baseAmount = (short) (FluidConstants.BUCKET / 150);
 
     protected WritableSingleFluidStorage storage = new WritableSingleFluidStorage(FluidConstants.BUCKET, this::markDirty)
     {
@@ -34,8 +34,8 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         }
     };
 
+    protected long outputPower;
     private int conversionTime;
-    private float multiplier;
     public boolean running;
 
     public TransducerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -80,22 +80,22 @@ public class TransducerBlockEntity extends SyncableBlockEntity
             }
             furnace.setCookTime(0);
             this.conversionTime = furnace.getBurnTime();
-            this.multiplier = 2f;
+            this.outputPower = 2 * 20;
         }
         else if (burnerState.isOf(Blocks.FIRE))
         {
             this.conversionTime = 1;
-            this.multiplier = 1;
+            this.outputPower = 1 * 15;
         }
         else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
         {
             this.conversionTime = 1;
-            this.multiplier = 1.5f;
+            this.outputPower = (long) (1.5f * 20);
         }
         else
         {
             this.conversionTime = 0;
-            this.multiplier = 1;
+            this.outputPower = 0;
         }
     }
 
@@ -105,10 +105,10 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                long convertAmount = (long) (baseAmount * multiplier);
-                long inserted = storage.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), convertAmount, transaction);
+                long produceAmount = PowerUtils.absToAmount(NMFluids.STILL_ETHEREAL_FUEL, outputPower);
+                long inserted = storage.insert(FluidVariant.of(NMFluids.STILL_ETHEREAL_FUEL), produceAmount, transaction);
 
-                if (inserted == convertAmount)
+                if (inserted == produceAmount)
                 {
                     this.running = true;
                     transaction.commit();

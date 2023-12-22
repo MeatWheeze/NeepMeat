@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.motor;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
-import com.neep.neepmeat.util.PowerUtils;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
