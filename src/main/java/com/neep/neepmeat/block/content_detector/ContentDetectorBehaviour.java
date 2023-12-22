@@ -7,6 +7,11 @@ public class ContentDetectorBehaviour
     public static final int DEL_COUNT = 0;
     public static final int DEL_BEHAVIOUR = 1;
 
+    public static final int MATCH_VARIANT = 0;
+    public static final int STORAGE_GREATER = 1;
+    public static final int STORAGE_LESS = 2;
+    public static final int STORAGE_EQUALS = 3;
+
     public int value;
     public int maxValue;
 
