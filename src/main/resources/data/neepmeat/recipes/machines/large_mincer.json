@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mim",
+    "mam",
+    "cbc"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_sword"
+    },
+    "a": {
+      "item": "neepmeat:control_unit"
+    },
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "c": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:mincer",
+    "count": 1
+  }
+}
