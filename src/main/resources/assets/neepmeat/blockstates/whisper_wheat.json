@@ -4,25 +4,25 @@
       "model": "neepmeat:block/whisper_wheat/stage0"
     },
     "age=1": {
-      "model": "neepmeat:block/whisper_wheat/stage1"
+      "model": "neepmeat:block/whisper_wheat/stage0"
     },
     "age=2": {
-      "model": "neepmeat:block/whisper_wheat/stage2"
+      "model": "neepmeat:block/whisper_wheat/stage1"
     },
     "age=3": {
-      "model": "neepmeat:block/whisper_wheat/stage3"
+      "model": "neepmeat:block/whisper_wheat/stage1"
     },
     "age=4": {
-      "model": "neepmeat:block/whisper_wheat/stage4"
+      "model": "neepmeat:block/whisper_wheat/stage2"
     },
     "age=5": {
-      "model": "neepmeat:block/whisper_wheat/stage5"
+      "model": "neepmeat:block/whisper_wheat/stage2"
     },
     "age=6": {
-      "model": "neepmeat:block/whisper_wheat/stage6"
+      "model": "neepmeat:block/whisper_wheat/stage3"
     },
     "age=7": {
-      "model": "neepmeat:block/whisper_wheat/stage7"
+      "model": "neepmeat:block/whisper_wheat/stage4"
     }
   }
 }

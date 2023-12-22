@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    " p ",
+    "ifi"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "f": {
+      "item": "minecraft:furnace"
+    },
+    "F": {
+      "item": "neepmeat:flywheel"
+    }
+  },
+  "result": {
+    "item": "neepmeat:stirling_engine",
+    "count": 1
+  }
+}
