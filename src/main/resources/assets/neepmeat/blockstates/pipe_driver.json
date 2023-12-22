@@ -1,6 +1,9 @@
 {
   "variants": {
-    "": {
+    "valid=false": {
+      "model": "neepmeat:block/pipe_driver_off"
+    },
+    "valid=true": {
       "model": "neepmeat:block/pipe_driver"
     }
   }

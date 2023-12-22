@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutablePipe;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
@@ -34,9 +35,9 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
-    public PipeDriverBlock(String registryName, Settings settings)
+    public PipeDriverBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, settings);
+        super(registryName, itemSettings, settings);
         this.setDefaultState(getDefaultState().with(VALID, false));
     }
 
@@ -169,6 +170,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
             if (be.network.needsUpdate())
             {
                 be.network.update();
+                world.setBlockState(pos, state.with(VALID, be.network.isValid()));
             }
         }
     }

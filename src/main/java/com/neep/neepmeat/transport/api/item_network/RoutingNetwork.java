@@ -27,6 +27,8 @@ public interface RoutingNetwork
 
     long getVersion();
 
+    boolean isValid();
+
     RoutingNetwork DEFAULT = new RoutingNetwork()
     {
         @Override
@@ -46,7 +48,14 @@ public interface RoutingNetwork
 
         @Override
         public long getVersion() { return 0;}
+
+        @Override
+        public boolean isValid()
+        {
+            return true;
+        }
     };
+
 
     enum RequestType
     {
