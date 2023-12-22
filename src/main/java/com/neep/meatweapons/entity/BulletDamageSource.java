@@ -9,17 +9,29 @@ public class BulletDamageSource extends EntityDamageSource
 {
     private final Entity attacker;
     private final float punch;
+    private final int regenTime;
 
-    protected BulletDamageSource(String name, LivingEntity attacker, float punch)
+    public BulletDamageSource(String name, LivingEntity attacker, float punch)
+    {
+        this(name, attacker, punch, 20);
+    }
+
+    public BulletDamageSource(String name, LivingEntity attacker, float punch, int regenTime)
     {
         super(name, attacker);
         this.attacker = attacker;
         this.punch = punch;
+        this.regenTime = regenTime;
     }
 
     public static BulletDamageSource create(LivingEntity attacker, float punch)
     {
         return new BulletDamageSource("bullet", attacker, punch);
+    }
+
+    public static BulletDamageSource create(LivingEntity attacker, float punch, int regenTime)
+    {
+        return new BulletDamageSource("bullet", attacker, punch, regenTime);
     }
 
     @Nullable
@@ -31,5 +43,10 @@ public class BulletDamageSource extends EntityDamageSource
     public float getPunch()
     {
         return punch;
+    }
+
+    public int getRegenTime()
+    {
+        return regenTime;
     }
 }

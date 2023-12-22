@@ -20,6 +20,7 @@ repositories {
 	// for more information about repositories.
 	maven { url 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/' }
 	maven { url "https://maven.shedaniel.me/" }
+	maven { url 'https://www.jitpack.io' }
 }
 
 dependencies {
@@ -32,6 +33,8 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	implementation "com.github.chocohead:fabric-asm:${project.mm_version}"
 
 	modImplementation 'software.bernie.geckolib:geckolib-fabric-1.18:3.0.78'
 

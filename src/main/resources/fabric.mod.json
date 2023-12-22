@@ -31,6 +31,9 @@
       "com.neep.meatweapons.client.MWClient",
       "com.neep.meatlib.client.MeatLibClient"
     ],
+    "mm:early_risers": [
+      "com.neep.meatweapons.mm.MWEarlyRiser"
+    ],
     "rei_server": [
       "com.neep.neepmeat.compat.rei.NMCommonPlugin"
     ],

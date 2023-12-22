@@ -2,6 +2,7 @@ package com.neep.meatweapons.mixin;
 
 import com.neep.meatweapons.entity.BulletDamageSource;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
@@ -12,6 +13,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.stat.Stats;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +26,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityMixin
 {
     // Intercepts the custom bullet DamageSource in order to prevent silly amounts of knockback
-
     @Shadow protected int playerHitTimer;
     @Shadow public float knockbackVelocity;
     @Shadow protected PlayerEntity attackingPlayer;
@@ -59,13 +60,27 @@ public abstract class LivingEntityMixin
 
     @Shadow protected abstract void playHurtSound(DamageSource source);
 
+    @Shadow protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
+
     @Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     private void injectMethod(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir)
     {
         // This is supposed to mirror the implementation of LivingEntity::damage()
         if (source instanceof BulletDamageSource bulletSource)
         {
+//            cir.setReturnValue(false);
+//            if (true) return;
+
             LivingEntity thisEntity = ((LivingEntity) (Object) this);
+
+            if (((Entity) (Object) this).timeUntilRegen > 10.0f)
+            {
+                if (amount <= this.lastDamageTaken)
+                {
+                    cir.setReturnValue(false);
+                    return;
+                }
+            }
 
             // Do shield things
             boolean shielded = false;
@@ -77,8 +92,10 @@ public abstract class LivingEntityMixin
                 shielded = true;
             }
 
+
             applyDamage(source, amount);
             lastDamageTaken = amount;
+            ((Entity) (Object) this).timeUntilRegen = bulletSource.getRegenTime();
 
             Entity sourceEntity = bulletSource.getAttacker();
             if (sourceEntity instanceof LivingEntity livingAttacker)

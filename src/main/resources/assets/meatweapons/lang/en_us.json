@@ -12,11 +12,17 @@
   "item.meatweapons.heavy_cannon": "Pocket Howitzer",
   "item.meatweapons.engine": "Engine",
 
+  "item.meatweapons.assault_drill": "Assault Drill",
+  "item.meatweapons.assault_drill.lore": "Shred your enemies! Impress your friends! Tons of fun at parties!",
+  "item.meatweapons.assault_drill.damage_per_tick": "Damage per tick: %s",
+
   "item.meatweapons.airtruck": "Airtruck",
   "item.meatweapons.airtruck.lore_0": "A flying vehicle that carries a pilot and a passenger.",
   "item.meatweapons.airtruck.lore_1": "Shift-click to disassemble.",
 
   "key.meatweapons.category.general": "MeatWeapons",
   "key.meatweapons.down": "Vehicle Down",
-  "key.meatweapons.fire_secondary": "Secondary Trigger"
+  "key.meatweapons.fire_secondary": "Secondary Trigger",
+
+  "enchantment.meatweapons.spikes": "Spikes"
 }
