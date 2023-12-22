@@ -5,7 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -31,7 +31,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
-public class CharnelCompactorBlock extends BaseBlock implements IDataCable
+public class CharnelCompactorBlock extends BaseBlock implements DataCable
 {
     public static final IntProperty LEVEL = Properties.LEVEL_8;
 

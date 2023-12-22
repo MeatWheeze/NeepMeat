@@ -2,9 +2,9 @@ package com.neep.neepmeat.machine.breaker;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -23,7 +23,7 @@ import net.minecraft.util.math.Direction;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     public static final String NBT_COOLDOWN = "cooldown";
     public static final String NBT_MAX_COOLDOWN = "max_cooldown";
@@ -167,7 +167,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         tick();
         return true;

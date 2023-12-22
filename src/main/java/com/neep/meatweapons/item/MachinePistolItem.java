@@ -19,7 +19,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAimable
+public class MachinePistolItem extends BaseGunItem implements IAnimatable, Aimable
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";

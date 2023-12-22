@@ -1,7 +1,7 @@
 package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.item.FluidComponentItem;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -125,7 +125,7 @@ public class ItemUtils
 
     public static boolean playerHoldingPipe(PlayerEntity player, Hand hand)
     {
-        return player.getStackInHand(hand).getItem() instanceof BlockItem blockItem && (blockItem.getBlock() instanceof IFluidPipe
+        return player.getStackInHand(hand).getItem() instanceof BlockItem blockItem && (blockItem.getBlock() instanceof FluidPipe
                 || blockItem instanceof FluidComponentItem);
     }
 

@@ -5,7 +5,7 @@ import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.AssaultDrillItem;
-import com.neep.meatweapons.item.IGunItem;
+import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -89,6 +89,6 @@ public class MeatWeapons implements ModInitializer
 
     public static boolean redirectClicks(ItemStack stack)
     {
-        return stack.getItem() instanceof IGunItem gun && gun.redirectClicks();
+        return stack.getItem() instanceof GunItem gun && gun.redirectClicks();
     }
 }

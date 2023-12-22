@@ -52,7 +52,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
     private boolean searchMode;
     private final StringBuilder searchString = new StringBuilder();
 
-    public GuideListPane(IGuideScreen parent)
+    public GuideListPane(GuideScreen parent)
     {
         super(Text.of("eeeee"), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;

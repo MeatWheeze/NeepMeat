@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class VatCasingBlock extends BaseBlock implements IVatComponent, BlockEntityProvider
+public class VatCasingBlock extends BaseBlock implements VatComponent, BlockEntityProvider
 {
     public VatCasingBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

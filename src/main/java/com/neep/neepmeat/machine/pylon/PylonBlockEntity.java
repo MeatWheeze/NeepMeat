@@ -1,13 +1,13 @@
 package com.neep.neepmeat.machine.pylon;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
-public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     public static final float RUNNING_SPEED = 16;
 
@@ -83,7 +83,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         float prevSpeed = speed;
         this.speed = motor.getSpeed();

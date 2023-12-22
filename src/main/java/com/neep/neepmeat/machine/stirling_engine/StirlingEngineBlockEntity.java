@@ -2,9 +2,9 @@ package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory, IMotorBlockEntity
+public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory, MotorEntity
 {
     protected StirlingEngineStorage storage;
 
@@ -144,7 +144,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             updateBurning();
         }
 
-        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
             motorised.setInputPower((float) getMechPUPower());
             doWork();

@@ -10,14 +10,14 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider;
 
 import java.util.function.Consumer;
 
-public class BaseBuildingBlock extends Block implements IMeatBlock
+public class BaseBuildingBlock extends Block implements MeatlibBlock
 {
     BaseBlockItem blockItem;
     String registryName;
 
-    public final IMeatBlock slab;
-    public final IMeatBlock stairs;
-    public IMeatBlock wall = null;
+    public final MeatlibBlock slab;
+    public final MeatlibBlock stairs;
+    public MeatlibBlock wall = null;
 
     public BaseBuildingBlock(String blockName, boolean makeWall, Settings settings)
     {

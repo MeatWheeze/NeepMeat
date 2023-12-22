@@ -7,7 +7,7 @@ import net.minecraft.item.BlockItem;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.TagKey;
 
-public class BaseWallBlock extends WallBlock implements IMeatBlock
+public class BaseWallBlock extends WallBlock implements MeatlibBlock
 {
     protected String registryName;
     protected BlockItem blockItem;

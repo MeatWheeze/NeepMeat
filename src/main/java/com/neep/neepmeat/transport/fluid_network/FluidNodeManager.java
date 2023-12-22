@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -225,7 +225,7 @@ public class FluidNodeManager
         // Get connected storage, remove node if there isn't one
         Storage<FluidVariant> storage;
         if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) == null
-                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof IFluidNodeProvider))
+                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof FluidNodeProvider))
         {
             if (getNodeSupplier(pos).exists())
             {

@@ -1,11 +1,11 @@
 package com.neep.neepmeat.machine.death_blades;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -22,7 +22,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class DeathBladesBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     protected static final int MAX_COOLDOWN = 10;
     public static final float MIN_INCREMENT = 0.2f;
@@ -46,7 +46,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         this.cooldown = Math.min(MAX_COOLDOWN, cooldown + increment);
 

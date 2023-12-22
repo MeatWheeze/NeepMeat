@@ -4,11 +4,11 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.util.MeatStorageUtil;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class GrinderBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     protected GrinderStorage storage = new GrinderStorage(this);
     protected int cooldownTicks = 2;
@@ -216,7 +216,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         tick();
         return currentRecipe != null;

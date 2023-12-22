@@ -19,7 +19,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements IFluidPipe
+public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements FluidPipe
 {
     public static final VoxelShape X_SHAPE = Block.createCuboidShape(0, 4, 4, 16, 12, 12);
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
@@ -81,7 +81,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        IFluidPipe.onStateReplaced(world, pos, state, newState);
+        FluidPipe.onStateReplaced(world, pos, state, newState);
         super.onStateReplaced(state, world, pos, newState, moved);
 
         if (world.isClient())

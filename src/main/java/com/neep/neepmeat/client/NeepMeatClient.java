@@ -13,7 +13,7 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.KeeperEntityRenderer;
 import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
 import com.neep.neepmeat.client.screen.*;
-import com.neep.neepmeat.client.screen.tablet.GuideScreen;
+import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
@@ -192,7 +192,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.ALLOY_KILN, AlloyKilnScreen::new);
         HandledScreens.register(ScreenHandlerInit.ASSEMBLER, AssemblerScreen::new);
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
-        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideScreen::new);
+        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideMainScreen::new);
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
     }
 

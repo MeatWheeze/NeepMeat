@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
@@ -111,7 +111,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             transaction.commit();
         }
         // Try to retrieve from pipes
-        else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof IItemPipe pipe)
+        else if (world.getBlockState(pos.offset(facing.getOpposite())).getBlock() instanceof ItemPipe pipe)
         {
             Transaction transaction = Transaction.openOuter();
             if (retrieve(transaction))

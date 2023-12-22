@@ -2,12 +2,12 @@ package com.neep.neepmeat.machine.item_mincer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.MeatFluidHelper;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
+public class ItemMincerBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     protected float power;
     protected State state = State.IDLE;
@@ -62,7 +62,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotor
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         try (Transaction transaction = Transaction.openOuter())
         {

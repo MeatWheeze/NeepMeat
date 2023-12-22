@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe, ICapillaryPipe
+public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe, CapillaryPipe
 {
     public CapillaryFluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
@@ -120,9 +120,9 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFluidPipe)
+        if (state.getBlock() instanceof FluidPipe)
         {
-            return ((IFluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return ((FluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
         }
         return false;
     }

@@ -17,7 +17,7 @@ public class GuideArticlePane extends ContentPane implements Drawable, Element, 
 {
     private final ArticleTextWidget articleWidget;
 
-    public GuideArticlePane(IGuideScreen parent, Article article)
+    public GuideArticlePane(GuideScreen parent, Article article)
     {
         super(Text.of(""), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;

@@ -5,7 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 
-public class BaseBlock extends Block implements IMeatBlock
+public class BaseBlock extends Block implements MeatlibBlock
 {
     public final BlockItem blockItem;
     private final String registryName;

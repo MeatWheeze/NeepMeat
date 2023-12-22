@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.redstone;
 
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntityProvider
+public class BigLeverBlock extends LeverBlock implements MeatlibBlock, BlockEntityProvider
 {
     static final VoxelShape NORTH_WALL_SHAPE = Block.createCuboidShape(4.0, 1.0, 10.0, 12.0, 15.0, 16.0);
     protected static final VoxelShape SOUTH_WALL_SHAPE = Block.createCuboidShape(4.0, 1.0, 0.0, 12.0, 15.0, 6.0);

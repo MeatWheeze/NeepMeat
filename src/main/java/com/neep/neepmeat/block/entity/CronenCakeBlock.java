@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.entity;
 
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
@@ -28,7 +28,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public class CronenCakeBlock extends CakeBlock implements IMeatBlock
+public class CronenCakeBlock extends CakeBlock implements MeatlibBlock
 {
     private final String registryName;
     private final BlockItem blockItem;

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
-public class MobEggItem extends Item implements IMeatItem
+public class MobEggItem extends Item implements MeatlibItem
 {
     private final String registryName;
 
@@ -25,7 +25,7 @@ public class MobEggItem extends Item implements IMeatItem
     {
         super(settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(NeepMeat.NAMESPACE, (IMeatItem) this);
+        ItemRegistry.queueItem(NeepMeat.NAMESPACE, (MeatlibItem) this);
     }
 
     @Override

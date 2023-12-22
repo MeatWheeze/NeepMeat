@@ -1,13 +1,13 @@
 package com.neep.neepmeat.machine.mincer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedBlock
+public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBlock
 {
     private int damageTime;
     protected boolean running;
@@ -155,7 +155,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         return false;
     }

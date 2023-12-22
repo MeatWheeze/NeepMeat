@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BaseItem extends Item implements IMeatItem
+public class BaseItem extends Item implements MeatlibItem
 {
     private final String registryName;
     private final TooltipSupplier tooltipSupplier;

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 
-public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityProvider, IMeatBlock
+public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityProvider, MeatlibBlock
 {
     public static final EnumProperty<AxialDirection> FACING = EnumProperty.of("direction", AxialDirection.class);
     public static final EnumProperty<RailShape> SHAPE = Properties.STRAIGHT_RAIL_SHAPE;

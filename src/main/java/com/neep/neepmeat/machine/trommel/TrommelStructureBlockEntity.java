@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.trommel;
 
-import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.ControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -86,7 +86,7 @@ public class TrommelStructureBlockEntity extends BlockEntity
 
     public void signalBroken(ServerWorld world)
     {
-        if (controllerPos != null && world.getBlockEntity(controllerPos) instanceof IControllerBlockEntity be)
+        if (controllerPos != null && world.getBlockEntity(controllerPos) instanceof ControllerBlockEntity be)
         {
             be.componentBroken(world);
         }

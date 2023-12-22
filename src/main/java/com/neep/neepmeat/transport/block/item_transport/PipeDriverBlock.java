@@ -5,7 +5,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -29,7 +29,7 @@ import java.util.*;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, IItemPipe
+public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, ItemPipe
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
@@ -154,7 +154,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
                         return;
                     }
 
-                    IItemPipe nextPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction.getOpposite());
+                    ItemPipe nextPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction.getOpposite());
                     if (nextPipe != null)
                     {
                         queue.add(mutable.toImmutable());

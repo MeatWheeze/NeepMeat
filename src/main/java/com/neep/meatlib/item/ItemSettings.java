@@ -1,6 +1,6 @@
 package com.neep.meatlib.item;
 
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 
@@ -9,11 +9,11 @@ import net.minecraft.item.BlockItem;
  * This exists to ease the addition of new general functionality to every block without having to change
  * constructor arguments.
  */
-public class ItemSettings implements IMeatBlock.ItemFactory
+public class ItemSettings implements MeatlibBlock.ItemFactory
 {
     protected int maxCount;
     protected TooltipSupplier tooltipSupplier;
-    protected IMeatBlock.ItemFactory factory;
+    protected MeatlibBlock.ItemFactory factory;
 
     protected ItemSettings()
     {
@@ -43,13 +43,13 @@ public class ItemSettings implements IMeatBlock.ItemFactory
         return this;
     }
 
-    public ItemSettings factory(IMeatBlock.ItemFactory factory)
+    public ItemSettings factory(MeatlibBlock.ItemFactory factory)
     {
         this.factory = factory;
         return this;
     }
 
-    public IMeatBlock.ItemFactory getFactory()
+    public MeatlibBlock.ItemFactory getFactory()
     {
         return factory;
     }

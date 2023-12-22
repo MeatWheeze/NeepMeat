@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.integrator;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, IDataCable
+public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, DataCable
 {
     public IntegratorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {

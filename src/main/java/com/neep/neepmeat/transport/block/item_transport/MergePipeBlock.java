@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
@@ -24,7 +24,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -94,7 +93,7 @@ public class MergePipeBlock extends ItemPipeBlock
         boolean adjConnect = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
         boolean connect = connectInDirection(world, pos, state, direction);
         boolean connection = adjConnect && connect;
-        if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe) && direction != facing)
+        if (!world.isClient() && !(neighborState.getBlock() instanceof ItemPipe) && direction != facing)
         {
             connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
@@ -129,7 +128,7 @@ public class MergePipeBlock extends ItemPipeBlock
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IItemPipe pipe)
+        if (state.getBlock() instanceof ItemPipe pipe)
         {
             return pipe.connectInDirection(world, pos, state, direction);
         }

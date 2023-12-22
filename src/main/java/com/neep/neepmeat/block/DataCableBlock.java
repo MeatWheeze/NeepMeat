@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
+import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
@@ -11,7 +11,7 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-public class DataCableBlock extends AbstractPipeBlock implements IDataCable
+public class DataCableBlock extends AbstractPipeBlock implements DataCable
 {
     public DataCableBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
@@ -21,7 +21,7 @@ public class DataCableBlock extends AbstractPipeBlock implements IDataCable
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IDataCable cable)
+        if (state.getBlock() instanceof DataCable cable)
         {
             return cable.connectInDirection(world, pos, state, direction);
         }

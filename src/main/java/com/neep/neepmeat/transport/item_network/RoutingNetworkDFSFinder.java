@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.util.DFSFinder;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.server.world.ServerWorld;
@@ -22,7 +22,7 @@ public class RoutingNetworkDFSFinder extends DFSFinder<BlockApiCache<RoutingNetw
     @Override
     protected State processPos(BlockPos current, Direction fromDir)
     {
-        IItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(world, current, fromDir);
+        ItemPipe fromPipe = ItemTransport.ITEM_PIPE.find(world, current, fromDir);
 
         BlockApiCache<RoutingNetwork, Void> cache = BlockApiCache.create(RoutingNetwork.LOOKUP, (ServerWorld) world, current);
         if (cache.find(null) != null)
@@ -37,7 +37,7 @@ public class RoutingNetworkDFSFinder extends DFSFinder<BlockApiCache<RoutingNetw
             mutable.set(current, direction);
             if (visited(mutable)) continue;
 
-            IItemPipe offsetPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction);
+            ItemPipe offsetPipe = ItemTransport.ITEM_PIPE.find(world, mutable, direction);
             if (offsetPipe != null)
             {
                 setVisited(mutable);

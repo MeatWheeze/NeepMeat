@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
@@ -10,7 +10,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
-public class BaseBucketItem extends BucketItem implements IMeatItem
+public class BaseBucketItem extends BucketItem implements MeatlibItem
 {
 private final String registryName;
 

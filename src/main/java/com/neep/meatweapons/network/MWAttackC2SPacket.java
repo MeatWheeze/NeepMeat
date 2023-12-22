@@ -1,6 +1,6 @@
 package com.neep.meatweapons.network;
 
-import com.neep.meatweapons.item.IGunItem;
+import com.neep.meatweapons.item.GunItem;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
@@ -60,24 +60,24 @@ public class MWAttackC2SPacket
         {
             case PRESS ->
             {
-                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
+                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof GunItem gunItem)
                 {
                     gunItem.trigger(player.world, player, mainStack, triggerId, pitch, yaw, handType);
                 }
 
-                if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
+                if ((hand & 0b10) > 0 && offStack.getItem() instanceof GunItem gunItem)
                 {
                     gunItem.trigger(player.world, player, offStack, triggerId, pitch, yaw, handType);
                 }
             }
             case RELEASE ->
             {
-                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
+                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof GunItem gunItem)
                 {
                     gunItem.release(player.world, player, mainStack, triggerId, pitch, yaw, handType);
                 }
 
-                if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
+                if ((hand & 0b10) > 0 && offStack.getItem() instanceof GunItem gunItem)
                 {
                     gunItem.release(player.world, player, offStack, triggerId, pitch, yaw, handType);
                 }

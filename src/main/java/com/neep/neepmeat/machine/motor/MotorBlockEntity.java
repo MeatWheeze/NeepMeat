@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.motor;
 
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorBlockEntity
+public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEntity
 {
     public float rotorSpeed = 1f; // rad per tick
     public float currentSpeed = 0;
@@ -68,7 +68,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         {
             update((ServerWorld) world, pos, pos, getCachedState());
         }
-        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
             motorised.tick(this);
         }
@@ -78,7 +78,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     protected void onPowerChange()
     {
 
-        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());
@@ -101,7 +101,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     @Override
     public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
-        IMotorBlockEntity.super.update(world, pos, fromPos, state);
+        MotorEntity.super.update(world, pos, fromPos, state);
         enabled = (!world.isReceivingRedstonePower(pos));
         loadTorque = updateLoadTorque();
         sync();

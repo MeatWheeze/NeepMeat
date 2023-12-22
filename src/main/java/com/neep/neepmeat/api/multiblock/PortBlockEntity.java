@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public abstract class PortBlockEntity<T extends TransferVariant<?>> extends IMultiBlock.Entity implements Storage<T>, IPortBlock.Entity
+public abstract class PortBlockEntity<T extends TransferVariant<?>> extends MultiBlock.Entity implements Storage<T>, IPortBlock.Entity
 {
     private final Class<T> resourceClazz;
 

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.item_network;
 
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
@@ -66,7 +66,7 @@ public class ItemInPipe
         this.route = route;
     }
 
-    public Direction getPreferredOutputDirection(BlockState state, Direction in, IItemPipe pipe)
+    public Direction getPreferredOutputDirection(BlockState state, Direction in, ItemPipe pipe)
     {
         List<Direction> options = pipe.getConnections(state, d -> d != in);
         if (options.size() > 1 && route != null && !route.isEmpty())

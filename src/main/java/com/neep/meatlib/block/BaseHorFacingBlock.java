@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.WorldView;
 
-public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBlock
+public class BaseHorFacingBlock extends HorizontalFacingBlock implements MeatlibBlock
 {
     BlockItem blockItem;
     private final String registryName;

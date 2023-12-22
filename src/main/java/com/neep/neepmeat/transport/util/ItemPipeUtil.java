@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.util;
 
 import com.neep.meatlib.util.MeatStorageUtil;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -42,7 +41,7 @@ public class ItemPipeUtil
 
         long amountInserted = 0;
         Storage<ItemVariant> storage;
-        if (toBlock instanceof IItemPipe pipe)
+        if (toBlock instanceof ItemPipe pipe)
         {
             amountInserted = itemToPipe(item, pipe, world, toPos, toState, out, simpleCheck, transaction);
         }
@@ -132,9 +131,9 @@ public class ItemPipeUtil
         return item.getCount();
     }
 
-    /** Handles transfer of an {@link ItemInPipe} into a {@link IItemPipe}
+    /** Handles transfer of an {@link ItemInPipe} into a {@link ItemPipe}
      */
-    public static long itemToPipe(ItemInPipe item, IItemPipe pipe, World world, BlockPos toPos, BlockState toState, Direction out, boolean simpleCheck, TransactionContext transaction)
+    public static long itemToPipe(ItemInPipe item, ItemPipe pipe, World world, BlockPos toPos, BlockState toState, Direction out, boolean simpleCheck, TransactionContext transaction)
     {
         long amountInserted = 0;
         long maxAmount = item.amount();
@@ -160,7 +159,7 @@ public class ItemPipeUtil
         Direction out;
         Direction in = item.out;
 
-        List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
+        List<Direction> connections = ((ItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
         var rand = world.getRandom();
         if (!connections.isEmpty())
@@ -192,7 +191,7 @@ public class ItemPipeUtil
                 transferred = itemToWorld(variant.toStack((int) amount), 0.5, 0.05f, world, offset, facing, nested);
                 nested.commit();
             }
-            else if (facingState.getBlock() instanceof IItemPipe itemPipe)
+            else if (facingState.getBlock() instanceof ItemPipe itemPipe)
             {
                 transferred = itemToPipe(new ItemInPipe(new ResourceAmount<>(variant, amount), world.getTime()), itemPipe, world, offset, facingState, facing, true, nested);
                 nested.commit();
@@ -213,19 +212,19 @@ public class ItemPipeUtil
     public static long canEjectSimple(ResourceAmount<ItemVariant> item, World world, BlockPos startPipe, Direction exit, @Nullable TransactionContext transaction)
     {
         Queue<BlockPos> queue = new LinkedList<>();
-        Queue<IItemPipe> pipeQueue = new LinkedList<>();
+        Queue<ItemPipe> pipeQueue = new LinkedList<>();
         Queue<Direction> dirQueue = new LinkedList<>();
         // TODO: Use a HashSet
         Set<Long> visited = new HashSet<>(); // Hopefully using longs will speed up comparison
         queue.add(startPipe);
-        pipeQueue.add((IItemPipe) world.getBlockState(startPipe).getBlock());
+        pipeQueue.add((ItemPipe) world.getBlockState(startPipe).getBlock());
         dirQueue.add(exit.getOpposite());
         visited.add(startPipe.offset(exit.getOpposite()).asLong());
 
         while (!queue.isEmpty())
         {
             BlockPos current = queue.poll();
-            IItemPipe currentPipe = pipeQueue.poll();
+            ItemPipe currentPipe = pipeQueue.poll();
             Direction currentDir = dirQueue.poll();
             BlockState currentState = world.getBlockState(current);
 
@@ -247,7 +246,7 @@ public class ItemPipeUtil
                     if (offsetState.isAir()) return item.amount();
 
                     Storage<ItemVariant> storage;
-                    if (offsetState.getBlock() instanceof IItemPipe pipe
+                    if (offsetState.getBlock() instanceof ItemPipe pipe
                                     && pipe.canItemEnter(item, world, offset, offsetState, direction.getOpposite())
                                     && !visited.contains(offset.asLong()))
                     {
@@ -289,15 +288,15 @@ public class ItemPipeUtil
                     BlockState currentState = world.getBlockState(current);
                     BlockState nextState = world.getBlockState(next);
 
-                    if (IItemPipe.isConnectedIn(world, current, currentState, direction) && !visited.contains(next))
+                    if (ItemPipe.isConnectedIn(world, current, currentState, direction) && !visited.contains(next))
                     {
                         visited.add(next);
 
                         // Check that target is a pipe and not a fluid block entity
-                        if (nextState.getBlock() instanceof IItemPipe && !(nextState.getBlock() instanceof ItemPumpBlock))
+                        if (nextState.getBlock() instanceof ItemPipe && !(nextState.getBlock() instanceof ItemPumpBlock))
                         {
                             // Next block is connected in opposite direction
-                            if (IItemPipe.isConnectedIn(world, next, nextState, direction.getOpposite()))
+                            if (ItemPipe.isConnectedIn(world, next, nextState, direction.getOpposite()))
                             {
                                 nextSet.add(next);
                             }

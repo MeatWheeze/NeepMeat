@@ -1,12 +1,12 @@
 package com.neep.neepmeat.machine.assembler;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -51,7 +51,7 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
     {
         if (player.getStackInHand(hand).getItem() instanceof BlockItem bi)
         {
-            if (bi.getBlock() instanceof IItemPipe || bi.getBlock() instanceof IFluidPipe) return ActionResult.PASS;
+            if (bi.getBlock() instanceof ItemPipe || bi.getBlock() instanceof FluidPipe) return ActionResult.PASS;
         }
 
         if (world.getBlockEntity(pos) instanceof AssemblerBlockEntity be)
@@ -136,7 +136,7 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
         return NMBlockEntities.ASSEMBLER.instantiate(pos, state);
     }
 
-    public static class Top extends Block implements IMeatBlock
+    public static class Top extends Block implements MeatlibBlock
     {
         protected final String registryName;
 

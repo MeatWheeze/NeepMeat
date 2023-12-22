@@ -2,7 +2,7 @@ package com.neep.meatlib.block;
 
 import net.minecraft.block.Block;
 
-public class BaseDummyBlock extends Block implements IMeatBlock
+public class BaseDummyBlock extends Block implements MeatlibBlock
 {
     private final String registryName;
 

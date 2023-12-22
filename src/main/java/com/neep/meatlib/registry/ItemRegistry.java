@@ -1,7 +1,7 @@
 package com.neep.meatlib.registry;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -14,7 +14,7 @@ public class ItemRegistry
 {
     public static Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
-    public static Item queueItem(String namespace, IMeatItem item)
+    public static Item queueItem(String namespace, MeatlibItem item)
     {
         MeatLib.assertActive(item);
         if (!(item instanceof Item))
@@ -25,7 +25,7 @@ public class ItemRegistry
         return (Item) item;
     }
 
-    public static Item queueItem(IMeatItem item)
+    public static Item queueItem(MeatlibItem item)
     {
         MeatLib.assertActive(item);
         if (!(item instanceof Item))

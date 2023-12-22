@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RoutingNetworkCache;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -108,7 +108,7 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
         {
             if (!r.wasCommitted()) return;
 
-            Direction out = ((IItemPipe) getCachedState().getBlock()).getOutputDirection(item, state, world, in);
+            Direction out = ((ItemPipe) getCachedState().getBlock()).getOutputDirection(item, state, world, in);
             item.reset(in, out, world.getTime());
             this.items.add(item);
         });

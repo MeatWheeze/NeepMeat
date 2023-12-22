@@ -9,7 +9,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.Direction;
 
-public class BaseFacingBlock extends FacingBlock implements IMeatBlock
+public class BaseFacingBlock extends FacingBlock implements MeatlibBlock
 {
     private final BlockItem blockItem;
     private final String registryName;

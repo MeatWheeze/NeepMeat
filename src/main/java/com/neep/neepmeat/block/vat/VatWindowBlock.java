@@ -12,7 +12,7 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import org.jetbrains.annotations.Nullable;
 
-public class VatWindowBlock extends VatCasingBlock implements IVatComponent
+public class VatWindowBlock extends VatCasingBlock implements VatComponent
 {
     public VatWindowBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

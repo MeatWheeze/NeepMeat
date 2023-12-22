@@ -6,7 +6,7 @@ import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
 import org.jetbrains.annotations.Nullable;
 
-public class BaseSwordItem extends SwordItem implements IMeatItem
+public class BaseSwordItem extends SwordItem implements MeatlibItem
 {
     private final String registryName;
 

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -138,7 +138,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         builder.add(FACING);
     }
 
-    public static class Structure extends Block implements IMeatBlock, BlockEntityProvider
+    public static class Structure extends Block implements MeatlibBlock, BlockEntityProvider
     {
         private final String registryName;
 

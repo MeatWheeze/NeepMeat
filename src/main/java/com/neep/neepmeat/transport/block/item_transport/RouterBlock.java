@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItemPipe
+public class RouterBlock extends BaseBlock implements BlockEntityProvider, ItemPipe
 {
     public RouterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {

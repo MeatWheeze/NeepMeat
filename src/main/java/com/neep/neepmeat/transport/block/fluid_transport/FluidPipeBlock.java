@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
@@ -30,7 +30,7 @@ import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
+public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe
 {
     public FluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
@@ -40,7 +40,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        IFluidPipe.onStateReplaced(world, pos, state, newState);
+        FluidPipe.onStateReplaced(world, pos, state, newState);
         super.onStateReplaced(state, world, pos, newState, moved);
         if (world.isClient())
             return;
@@ -67,7 +67,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
 
 //        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
-        if (IFluidPipe.findFluidPipe(world, fromPos, world.getBlockState(fromPos)).isEmpty())
+        if (FluidPipe.findFluidPipe(world, fromPos, world.getBlockState(fromPos)).isEmpty())
         {
             if (createStorageNodes(world, pos, nextState))
                 updateNetwork((ServerWorld) world, pos, nextState, PipeNetwork.UpdateReason.NODE_CHANGED);
@@ -159,9 +159,9 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
     {
-        if (state.getBlock() instanceof IFluidPipe)
+        if (state.getBlock() instanceof FluidPipe)
         {
-            return ((IFluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return ((FluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
         }
         return false;
     }

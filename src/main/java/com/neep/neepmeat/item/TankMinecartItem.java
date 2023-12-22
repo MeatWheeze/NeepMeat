@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
@@ -21,7 +21,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
 
-public class TankMinecartItem extends MinecartItem implements IMeatItem
+public class TankMinecartItem extends MinecartItem implements MeatlibItem
 {
     protected String registryName;
 

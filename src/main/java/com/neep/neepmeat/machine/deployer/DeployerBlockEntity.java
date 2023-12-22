@@ -3,11 +3,11 @@ package com.neep.neepmeat.machine.deployer;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
-import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -29,11 +29,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("UnstableApiUsage")
-public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, IMotorisedBlock
+public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, MotorisedBlock
 {
     protected final WritableStackStorage storage;
     public float shuttleOffset;
-    protected IMotorBlockEntity motor;
+    protected MotorEntity motor;
     public boolean powered;
     protected LazySupplier<FakePlayerEntity> playerSupplier = LazySupplier.of(() ->
     {
@@ -159,7 +159,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public boolean tick(IMotorBlockEntity motor)
+    public boolean tick(MotorEntity motor)
     {
         // I can't be bothered to add a timer
         if (!world.isClient() && world.getTime() % 2 == 0

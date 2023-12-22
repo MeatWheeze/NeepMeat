@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.meatlib.item.IMeatItem;
+import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
@@ -14,7 +14,7 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class MeatSteelArmourItem extends ArmorItem implements IMeatItem, IAnimatable
+public class MeatSteelArmourItem extends ArmorItem implements MeatlibItem, IAnimatable
 {
     private AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
