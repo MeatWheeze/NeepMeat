@@ -5,6 +5,7 @@ import com.google.gson.JsonParseException;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -21,23 +22,16 @@ public class CombineStep implements ManufactureStep<ItemStack>
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "combine");
 
-    private final Item item;
+    private final ItemVariant item;
 
     public CombineStep(ItemStack stack)
     {
-//        this.item = Registry.ITEM.getId(stack.getItem());
-        this.item = stack.getItem();
+        this.item = ItemVariant.of(stack);
     }
 
     public CombineStep(NbtCompound nbt)
     {
-        Identifier id = Identifier.tryParse(nbt.getString("id"));
-        if (id != null)
-        {
-            item = Registry.ITEM.get(id);
-        }
-        else
-            item = Items.AIR;
+        this.item = ItemVariant.fromNbt(nbt.getCompound("variant"));
     }
 
     public CombineStep(JsonObject jsonObject)
@@ -49,7 +43,7 @@ public class CombineStep implements ManufactureStep<ItemStack>
         if (item == Items.AIR)
             throw new JsonParseException("Unknown item " + id);
 
-        this.item = item;
+        this.item = ItemVariant.of(item);
     }
 
     @Override
@@ -71,13 +65,13 @@ public class CombineStep implements ManufactureStep<ItemStack>
     public void appendText(List<Text> tooltips)
     {
         tooltips.add(Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE));
-        tooltips.add(Text.literal("   ").append(item.getName()));
+        tooltips.add(Text.literal("   ").append(item.getObject().getName()));
     }
 
     public NbtCompound toNbt()
     {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("id", Registry.ITEM.getId(item).toString());
+        nbt.put("variant", item.toNbt());
         return nbt;
     }
 
@@ -86,7 +80,7 @@ public class CombineStep implements ManufactureStep<ItemStack>
     {
         if (o instanceof CombineStep other)
         {
-            return other.item == item;
+            return other.item.equals(item);
         }
         return false;
     }
@@ -98,6 +92,11 @@ public class CombineStep implements ManufactureStep<ItemStack>
     }
 
     public Item getItem()
+    {
+        return item.getItem();
+    }
+
+    public ItemVariant getVariant()
     {
         return item;
     }

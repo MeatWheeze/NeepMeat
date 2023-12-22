@@ -32,7 +32,7 @@ public class NMItems
     public static Item FLYWHEEL = new BaseCraftingItem("flywheel", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass_ingot", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel_ingot", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel_ingot", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.BLOOD_BUBBLE));
     public static Item MEAT_STEEL_COMPONENT = new BaseCraftingItem("meat_steel_component", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
@@ -63,16 +63,7 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD))
-    {
-//        @Override
-//        public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
-//        {
-//            ItemStack stack1 = super.finishUsing(stack, world, user);
-//            if (user instanceof ServerPlayerEntity serverPlayer) EnlightenmentUtil.addEnlightenment(serverPlayer, 1000);
-//            return stack1;
-//        }
-    };
+    public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
 
     public static Item TABLET = ItemRegistry.queue(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
@@ -98,6 +89,8 @@ public class NMItems
     public static PlayerImplantItem EXTRA_KNEES = new PlayerImplantItem("extra_knees", 1, ExtraKneeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
     public static ChrysalisItem CHRYSALIS = ItemRegistry.queue(new ChrysalisItem("chrysalis",TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.GENERAL)));
+
+    public static Item TRANSFORMING_TOOL_BASE = ItemRegistry.queue(new BaseCraftingItem("transforming_tool_base", 1, new FabricItemSettings().group(NMItemGroups.GENERAL)));
 
     public static Item DEBUG_ITEM = ItemRegistry.queue(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
 }

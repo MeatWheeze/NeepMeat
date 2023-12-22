@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.init.NMComponents;
+import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.text.Text;
@@ -26,6 +27,10 @@ public class PLCRecipes
 
     public static <B, C, T extends ManufactureRecipe<C>> boolean isValidStep(MeatRecipeType<T> type, Workpiece workpiece, ManufactureStep<?> nextStep, B base)
     {
+        // TODO: Somehow remove jank
+        if (base == NMItems.TRANSFORMING_TOOL_BASE)
+            return true;
+
         List<ManufactureStep<?>> steps = workpiece.getSteps();
         for (var recipe : MeatRecipeManager.getInstance().getAllOfType(type).values())
         {

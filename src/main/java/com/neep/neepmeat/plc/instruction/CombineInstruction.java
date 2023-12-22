@@ -12,6 +12,7 @@ import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
+import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -116,6 +117,16 @@ public class CombineInstruction implements Instruction
                 {
                     recipe.ejectOutputs(mip, null);
                     workpiece.clearSteps();
+                }
+                else
+                {
+                    // Special handling for transforming tools.
+//                    TransformingToolRecipe transformingToolRecipe = TransformingToolRecipe.getInstance();
+//                    if (transformingToolRecipe.matches(mip))
+//                    {
+//                        transformingToolRecipe.ejectOutputs(mip, null);
+//                        workpiece.clearSteps();
+//                    }
                 }
 
                 if (worldSupplier.get() instanceof ServerWorld serverWorld)
