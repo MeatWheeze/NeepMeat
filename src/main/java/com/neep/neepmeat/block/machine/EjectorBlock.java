@@ -6,6 +6,7 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -67,13 +68,13 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
 
     // TODO: make this do things
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
         System.out.println("fix this please");
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
         }
-        return 1;
+        return 0;
     }
 
     @Override

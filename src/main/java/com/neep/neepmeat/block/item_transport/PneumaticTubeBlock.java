@@ -188,12 +188,12 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     }
 
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {
-            ItemInPipe item = new ItemInPipe(Direction.UP, Direction.UP, amount.resource().toStack((int) amount.amount()), world.getTime());
-            long transferred = PneumaticPipeBlockEntity.insert(item, world, state, pos, direction);
+//            ItemInPipe item = new ItemInPipe(Direction.UP, Direction.UP, amount.resource().toStack((int) amount.amount()), world.getTime());
+            long transferred = be.insert(item, world, state, pos, direction);
             return transferred;
         }
         return 0;

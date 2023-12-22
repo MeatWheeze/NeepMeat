@@ -5,10 +5,12 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -74,14 +76,19 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
 
     // TODO: make this do things
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
-        System.out.println("fix this please");
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be)
         {
-//            be.
+            if (be.getCachedState().get(ItemPumpBlock.FACING) == direction.getOpposite())
+            {
+                Transaction transaction = Transaction.openOuter();
+                long transferred = be.forwardItem(item.getResourceAmount(), transaction);
+                transaction.commit();
+                return transferred;
+            }
         }
-        return 1;
+        return 0;
     }
 
     @Override

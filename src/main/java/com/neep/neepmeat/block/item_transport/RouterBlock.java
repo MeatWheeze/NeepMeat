@@ -3,6 +3,7 @@ package com.neep.neepmeat.block.item_transport;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
+import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockEntityProvider;
@@ -21,9 +22,9 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
     }
 
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ResourceAmount<ItemVariant> amount)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
     {
-        return 0;
+        return 1;
     }
 
     @Nullable

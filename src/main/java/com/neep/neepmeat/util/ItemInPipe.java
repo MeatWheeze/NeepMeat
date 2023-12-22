@@ -24,6 +24,17 @@ public class ItemInPipe
 
     protected ItemStack itemStack;
 
+    public ItemInPipe(ResourceAmount<ItemVariant> amount, long tickStart)
+    {
+        this.in = null;
+        this.out = null;
+        this.progress = 0;
+        this.itemStack = amount.resource().toStack((int) amount.amount());
+        this.speed = 0.1f;
+        this.tickStart = tickStart;
+        this.tickEnd = (long) (tickStart + 1 / speed);
+    }
+
     public ItemInPipe(Direction in, Direction out, ItemStack itemStack, long tickStart)
     {
         this.in = in;
