@@ -20,12 +20,13 @@ import java.util.*;
 import java.util.function.Predicate;
 
 /**
- * Represents a required quantity of a ingredient, supplied either by a tag or a specific resource.
+ * Represents a required quantity of an ingredient, supplied either by a tag or a specific resource.
  * @param <T> A resource with a corresponding registry, such as Item or Fluid
  */
 @SuppressWarnings("UnstableApiUsage")
 public class RecipeInput<T> implements Predicate<StorageView<? extends TransferVariant<T>>>
 {
+    // Only one entry at the moment.
     protected Entry<T> entry;
 
     protected long amount;
@@ -136,6 +137,11 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return Optional.empty();
     }
 
+    public Collection<T> getAll()
+    {
+        return entry.getMatching();
+    }
+
     public interface Entry<T>
     {
         Collection<T> getMatching();
@@ -162,6 +168,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
             return list;
         }
 
+        // TODO: Find a way of getting registry from RegistryKey
         @SuppressWarnings("unchecked")
         public static <T> Registry<T> getRegistry(RegistryKey<? extends Registry<T>> key)
         {

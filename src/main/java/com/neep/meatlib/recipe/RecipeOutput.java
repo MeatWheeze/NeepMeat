@@ -57,6 +57,16 @@ public class RecipeOutput<T>
         return lootFunction.getMax();
     }
 
+    public long minAmount()
+    {
+        return lootFunction.getMin();
+    }
+
+    public float chance()
+    {
+        return chance;
+    }
+
     public void update()
     {
         amount = lootFunction.get(random);

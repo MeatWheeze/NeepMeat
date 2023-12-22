@@ -31,6 +31,12 @@
       "com.neep.neepmeat.client.NeepMeatClient",
       "com.neep.assembly.Assembly",
       "com.neep.meatweapons.client.MWClient"
+    ],
+    "rei_server": [
+      "com.neep.neepmeat.compat.rei.NMCommonPlugin"
+    ],
+    "rei_client": [
+      "com.neep.neepmeat.compat.rei.NMClientPlugin"
     ]
   },
   "mixins": [
