@@ -4,7 +4,6 @@ import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.implant.ImplantAttributes;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.HUDOverlays;
@@ -21,6 +20,7 @@ import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.item.NetworkingToolItem;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorRenderer;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
@@ -103,6 +103,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         PLCHudRenderer.init();
         PLCClient.init();
+
+        NetworkingToolItem.Client.init();
 
 //        ImplantAttributes.register(Impla);
     }

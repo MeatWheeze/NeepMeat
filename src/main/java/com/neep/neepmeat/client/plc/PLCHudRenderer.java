@@ -132,7 +132,7 @@ public class PLCHudRenderer
 
     }
 
-    private static void drawCuboidShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape shape, double offsetX, double offsetY, double offsetZ,
+    public static void drawCuboidShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape shape, double offsetX, double offsetY, double offsetZ,
                                                float r, float g, float b, float a)
     {
         MatrixStack.Entry entry = matrices.peek();
