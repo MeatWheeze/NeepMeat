@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.render.model.*;
+import net.minecraft.client.render.model.json.JsonUnbakedModel;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.texture.Sprite;
@@ -32,6 +33,9 @@ import java.util.function.Supplier;
 public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedModel
 {
 
+    private static final Identifier DEFAULT_BLOCK_MODEL = new Identifier("minecraft:block/block");
+    private ModelTransformation transformation;
+
     private static final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[]
             {
             new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
@@ -46,7 +50,7 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     @Override
     public Collection<Identifier> getModelDependencies()
     {
-        return Collections.emptyList(); // This model does not depend on other models.
+        return Arrays.asList(DEFAULT_BLOCK_MODEL);
     }
 
     @Override
@@ -89,6 +93,9 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
             SIDES_INV[direction.getId()] = builder.build();
         }
 
+        JsonUnbakedModel defaultBlockModel = (JsonUnbakedModel) loader.getOrLoadModel(DEFAULT_BLOCK_MODEL);
+        transformation = defaultBlockModel.getTransformations();
+
         return this;
     }
 
@@ -127,7 +134,10 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
     {
-
+        for (Direction direction : Direction.values())
+        {
+            context.meshConsumer().accept(SIDES[direction.getId()]);
+        }
     }
 
     @Override
@@ -151,7 +161,7 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     @Override
     public boolean isSideLit()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -169,12 +179,12 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     @Override
     public ModelTransformation getTransformation()
     {
-        return null;
+        return transformation;
     }
 
     @Override
     public ModelOverrideList getOverrides()
     {
-        return null;
+        return ModelOverrideList.EMPTY;
     }
 }

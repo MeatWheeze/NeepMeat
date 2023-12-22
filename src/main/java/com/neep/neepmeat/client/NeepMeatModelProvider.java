@@ -29,6 +29,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider
     static
     {
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), ScaffoldTopModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"), ScaffoldTopModel::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_bottom"), ScaffoldBottomModel::new);
     }
 }
