@@ -75,7 +75,7 @@ public class SurgeryTableContext implements NbtSerialisable
     public void add(ServerWorld world, BlockPos pos)
     {
         posList.add(pos.toImmutable());
-        caches.add(BlockApiCache.create(TableComponent.STRUCTURE_LOOKUP, world, pos));
+        caches.add(BlockApiCache.create(TableComponent.STRUCTURE_LOOKUP, world, pos.toImmutable()));
     }
 
     public BlockPos getPos(int i)
