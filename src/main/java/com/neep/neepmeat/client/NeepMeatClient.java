@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.FluidInitialiser;
 import com.neep.neepmeat.init.ItemInit;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
@@ -36,6 +37,7 @@ public class NeepMeatClient
 
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
+        ModelLoadingRegistry.INSTANCE.registerModelProvider(NMExtraModels.EXTRA_MODELS);
 
         // BlockEntity renderers
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
@@ -43,6 +45,7 @@ public class NeepMeatClient
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.BIG_LEVER, BigLeverRenderer::new);
 
         GeoItemRenderer.registerItemRenderer(ItemInit.SLASHER, new SwordRenderer<>(new SwordModel<>(
                 NeepMeat.NAMESPACE,

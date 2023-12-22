@@ -7,6 +7,7 @@ import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.machine.FluidDrainBlock;
 import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.block.machine.TrommelBlock;
+import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
 import net.minecraft.sound.BlockSoundGroup;
@@ -67,6 +68,8 @@ public class BlockInitialiser
 
     public static Block LINEAR_RAIL;
 
+    public static Block BIG_LEVER;
+
     public static Block INTEGRATOR_EGG;
     public static Block TANK_WALL;
 
@@ -122,6 +125,8 @@ public class BlockInitialiser
 
         // --- Assembly ---
         LINEAR_RAIL = registerBlock(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+
+        BIG_LEVER = registerBlock(new BigLeverBlock("big_lever", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
         // --- Integrator ---
         INTEGRATOR_EGG = registerBlock(new IntegratorEggBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.SLIME)));

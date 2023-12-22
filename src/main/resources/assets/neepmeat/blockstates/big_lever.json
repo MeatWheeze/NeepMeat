@@ -1,0 +1,110 @@
+{
+  "variants": {
+    "face=ceiling,facing=east,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 270
+    },
+    "face=ceiling,facing=east,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 270
+    },
+    "face=ceiling,facing=north,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 180
+    },
+    "face=ceiling,facing=north,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 180
+    },
+    "face=ceiling,facing=south,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180
+    },
+    "face=ceiling,facing=south,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180
+    },
+    "face=ceiling,facing=west,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 90
+    },
+    "face=ceiling,facing=west,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 180,
+      "y": 90
+    },
+    "face=floor,facing=east,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 90
+    },
+    "face=floor,facing=east,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 90
+    },
+    "face=floor,facing=north,powered=false": {
+      "model": "neepmeat:block/big_lever_base"
+    },
+    "face=floor,facing=north,powered=true": {
+      "model": "neepmeat:block/big_lever_base"
+    },
+    "face=floor,facing=south,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 180
+    },
+    "face=floor,facing=south,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 180
+    },
+    "face=floor,facing=west,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 270
+    },
+    "face=floor,facing=west,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "y": 270
+    },
+    "face=wall,facing=east,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 90
+    },
+    "face=wall,facing=east,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 90
+    },
+    "face=wall,facing=north,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90
+    },
+    "face=wall,facing=north,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90
+    },
+    "face=wall,facing=south,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 180
+    },
+    "face=wall,facing=south,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 180
+    },
+    "face=wall,facing=west,powered=false": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 270
+    },
+    "face=wall,facing=west,powered=true": {
+      "model": "neepmeat:block/big_lever_base",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

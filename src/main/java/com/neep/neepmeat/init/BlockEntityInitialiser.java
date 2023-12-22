@@ -31,6 +31,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
     public static BlockEntityType<SpigotBlockEntity> SPIGOT;
+    public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
 
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -52,6 +53,7 @@ public class BlockEntityInitialiser
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, BlockInitialiser.HEATER);
         SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, BlockInitialiser.SPIGOT);
+        BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, BlockInitialiser.BIG_LEVER);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
