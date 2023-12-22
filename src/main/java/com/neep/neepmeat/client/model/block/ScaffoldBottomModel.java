@@ -11,10 +11,7 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.SideShapeType;
-import net.minecraft.block.SpreadableBlock;
+import net.minecraft.block.*;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
@@ -37,18 +34,16 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
 {
 
     private final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[1];
-//            {
-//            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
-//    };
-
     private final Sprite[] SPRITES = new Sprite[1];
 
-    private final Mesh[] SIDES = new Mesh[6];
-    private final Mesh[] SIDES_INV = new Mesh[6];
+    private Mesh outerMesh;
+    private Mesh innerMesh;
+    private final Block block;
 
-    public ScaffoldBottomModel(Identifier sideTexture)
+    public ScaffoldBottomModel(Identifier sideTexture, Block block)
     {
         SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, sideTexture);
+        this.block = block;
     }
 
     @Override
@@ -73,27 +68,31 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
         // Build the mesh using the Renderer API
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
+        MeshBuilder builder = renderer.meshBuilder();
+        QuadEmitter emitter = builder.getEmitter();
+
         for(Direction direction : Direction.values())
         {
-            MeshBuilder builder = renderer.meshBuilder();
-            QuadEmitter emitter = builder.getEmitter();
-
-            // Add a new face to the mesh
             emitter.square(direction, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f);
             emitter.spriteBake(0, SPRITES[0], MutableQuadView.BAKE_LOCK_UV);
             emitter.spriteColor(0, -1, -1, -1, -1);
             emitter.emit();
 
-            SIDES[direction.getId()] = builder.build();
+        }
+
+        outerMesh = builder.build();
+
+        for (Direction direction : Direction.values())
+        {
 
             emitter.square(direction.getOpposite(), 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
             emitter.nominalFace(direction);
             emitter.spriteBake(0, SPRITES[0], MutableQuadView.BAKE_LOCK_UV);
             emitter.spriteColor(0, -1, -1, -1, -1);
             emitter.emit();
-
-            SIDES_INV[direction.getId()] = builder.build();
         }
+
+        innerMesh = builder.build();
 
         return this;
     }
@@ -107,36 +106,16 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
     @Override
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
-        // Janky scaffolding rendering.
-        for (Direction direction : Direction.values())
-        {
-//            if (blockView.getBlockState(pos.offset(direction)).isOf(Blocks.AIR))
-//            if (!state.isSideSolid(blockView, pos, direction, SideShapeType.FULL))
-            BlockState state1 = blockView.getBlockState(pos.offset(direction));
-            if (!state1.isSideSolidFullSquare(blockView, pos, direction.getOpposite()))
-            {
-                context.meshConsumer().accept(SIDES[direction.getId()]);
-                context.meshConsumer().accept(SIDES_INV[direction.getId()]);
-            }
-        }
-//        context.meshConsumer().accept(mesh);
-//        QuadEmitter emitter = context.getEmitter();
-//        mesh.forEach((quadView -> {
-//            if (blockView.getBlockState(pos.offset(quadView.nominalFace())).isOf(BlockInitialiser.SCAFFOLD_PLATFORM))
-//            {
-//                emitter.cullFace(quadView.nominalFace());
-//                context.meshConsumer().accept(SIDES[quadView.nominalFace().getId()]);
-//            }
-//        }));
-//        context.meshConsumer().accept(mesh);
-
-//        for (ListIterator it = mesh.)
+        context.pushTransform(mesh -> ScaffoldTopModel.getFaces(mesh, blockView, pos, block));
+        context.meshConsumer().accept(outerMesh);
+        context.meshConsumer().accept(innerMesh);
+        context.popTransform();
     }
 
     @Override
     public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
     {
-
+        context.meshConsumer().accept(outerMesh);
     }
 
     @Override

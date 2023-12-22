@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
 import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import com.neep.neepmeat.client.model.block.SlopeTest;
+import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
@@ -30,31 +31,38 @@ public class NeepMeatModelProvider implements ModelResourceProvider
 
     static
     {
-        // Block
+        Identifier RUSTED_SCAFFOLD_SIDE = new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side");
+        Identifier RUSTED_SCAFFOLD_TOP = new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top");
+
+        Identifier BLUE_SCAFFOLD_SIDE = new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side");
+        Identifier BLUE_SCAFFOLD_TOP = new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top");
+
+                // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top"), () -> new ScaffoldTopModel(
 //                NeepMeat.NAMESPACE, "block/rusted_metal_scaffold"));
-                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top")));
+                RUSTED_SCAFFOLD_SIDE, RUSTED_SCAFFOLD_TOP, BlockInitialiser.SCAFFOLD_PLATFORM));
         // Item
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"), () -> new ScaffoldTopModel(
 //                NeepMeat.NAMESPACE, "rusted_metal_scaffold"));
-                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_top")));
+                RUSTED_SCAFFOLD_SIDE, RUSTED_SCAFFOLD_TOP,
+                BlockInitialiser.SCAFFOLD_PLATFORM));
         // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_bottom"), () -> new ScaffoldBottomModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/rusted_metal_scaffold_side")));
+                RUSTED_SCAFFOLD_SIDE,
+                BlockInitialiser.SCAFFOLD_PLATFORM));
 
         // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top"), () -> new ScaffoldTopModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top")));
+                BLUE_SCAFFOLD_SIDE, BLUE_SCAFFOLD_TOP,
+                BlockInitialiser.BLUE_SCAFFOLD));
         // Item
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/blue_metal_scaffold"), () -> new ScaffoldTopModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side"),
-                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top")));
+                BLUE_SCAFFOLD_SIDE, BLUE_SCAFFOLD_TOP,
+                BlockInitialiser.BLUE_SCAFFOLD));
         // Block
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_bottom"), () -> new ScaffoldBottomModel(
-                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side")));
+                BLUE_SCAFFOLD_SIDE,
+                BlockInitialiser.BLUE_SCAFFOLD));
 
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
     }
