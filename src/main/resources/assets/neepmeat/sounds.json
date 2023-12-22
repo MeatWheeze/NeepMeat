@@ -143,6 +143,16 @@
       "neepmeat:advanced_integrator_ambient"
     ]
   },
+  "metal_barrel_close": { "subtitle": "subtitles.neepmeat.metal_barrel_close",
+    "sounds": [
+      "neepmeat:metal_barrel_close"
+    ]
+  },
+  "metal_barrel_open": { "subtitle": "subtitles.neepmeat.metal_barrel_open",
+    "sounds": [
+      "neepmeat:metal_barrel_open"
+    ]
+  },
 
   "plc_select_block": { "subtitle": "subtitles.neepmeat.plc_select_block",
     "sounds": [
@@ -154,14 +164,17 @@
       "neepmeat:plc_select"
     ]
   },
-  "implant_instruction_apply": {
-    "subtitle": "subtitles.neepmeat.implant_instruction_apply",
+  "implant_instruction_apply": { "subtitle": "subtitles.neepmeat.implant_instruction_apply",
     "sounds": [
       "neepmeat:implant_instruction_apply"
     ]
   },
-  "inject": {
-    "subtitle": "subtitles.neepmeat.inject_instruction_apply",
+  "combine_instruction_apply": { "subtitle": "subtitles.neepmeat.combine_instruction_apply",
+    "sounds": [
+      "neepmeat:combine_instruction_apply"
+    ]
+  },
+  "inject": { "subtitle": "subtitles.neepmeat.inject_instruction_apply",
     "sounds": [
       "neepmeat:inject"
     ]

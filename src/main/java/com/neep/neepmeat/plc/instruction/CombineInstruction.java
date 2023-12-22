@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
@@ -24,6 +25,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -138,8 +140,11 @@ public class CombineInstruction implements Instruction
 
                 if (worldSupplier.get() instanceof ServerWorld serverWorld)
                 {
+                    var robot = plc.getRobot();
                     ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
                             plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
+
+                    serverWorld.playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.COMBINE_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
                 }
 
                 plc.getRobot().stored = null;

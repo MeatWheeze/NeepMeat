@@ -97,6 +97,8 @@ public class NMBlockEntities
     public static BlockEntityType<TankBlockEntity> ADVANCED_TANK;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
 
+    public static BlockEntityType<MetalBarrelBlockEntity> METAL_BARREL;
+
     public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<InventoryDetectorBlockEntity> INVENTORY_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK;
@@ -213,6 +215,8 @@ public class NMBlockEntities
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
         VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
+
+        METAL_BARREL = register("metal_barrel", (pos, state) -> new MetalBarrelBlockEntity(METAL_BARREL, pos, state), NMBlocks.METAL_BARREL);
 
         // --- Surgery Machine ---
 //        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
