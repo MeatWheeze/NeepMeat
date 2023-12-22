@@ -2,11 +2,11 @@
   "type": "neepmeat:mixing",
   "item": {
     "resource": "minecraft:lapis_lazuli",
-    "amount": 3
+    "amount": 1
   },
   "fluid1": {
     "resource": "minecraft:water",
-    "amount": 10125
+    "amount": 9000
   },
   "fluid2":{
     "resource": "minecraft:empty",
@@ -14,7 +14,7 @@
   },
   "output":{
     "resource": "neepmeat:patina_treatment",
-    "amount": 10125
+    "amount": 9000
   },
-  "processtime": 40
+  "processtime": 30
 }

@@ -115,7 +115,7 @@ public class NeepMeatClient implements ClientModInitializer
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PATINA_TREATMENT, NMFluids.FLOWING_PATINA_TREATMENT, new SimpleFluidRenderHandler(
                 new Identifier("minecraft:block/water_still"),
                 new Identifier("minecraft:block/water_still"),
-                0x947512
+                0x4db99a
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_WORK_FLUID, NMFluids.FLOWING_WORK_FLUID, new SimpleFluidRenderHandler(
