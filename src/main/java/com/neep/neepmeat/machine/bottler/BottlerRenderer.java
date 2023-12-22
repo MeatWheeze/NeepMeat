@@ -35,7 +35,7 @@ public class BottlerRenderer implements BlockEntityRenderer<BottlerBlockEntity>
         matrices.pop();
 
         float timeDiff = be.getWorld().getTime() + tickDelta - be.getStartTime();
-        float delta = timeDiff / ((float) be.getMaxProgress() / be.increment);
+        float delta = timeDiff / ((float) be.getMaxProgress() / be.progressIncrement());
         float yOffset = Math.min(0, MathHelper.lerp(delta, -8 / 16f, 0));
         matrices.translate(0, yOffset, 0);
         BERenderUtils.renderModel(NMExtraModels.PUMP, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);

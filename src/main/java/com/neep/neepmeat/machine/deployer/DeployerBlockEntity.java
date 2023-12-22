@@ -29,8 +29,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("UnstableApiUsage")
-public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, MotorisedBlock
+public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSlotStorage<ItemVariant>, MotorisedBlock,
+        MotorisedBlock.DiagnosticsProvider
 {
+    protected final float minPower = 0.02f;
     protected final WritableStackStorage storage;
     public float shuttleOffset;
     protected MotorEntity motor;
@@ -41,6 +43,9 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
 
         return new FakePlayerEntity(world.getServer(), (ServerWorld) world, getPos());
     });
+
+    private float power = 0;
+    private boolean running;
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -161,9 +166,11 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     @Override
     public boolean tick(MotorEntity motor)
     {
+        this.running = power > minPower;
+
         // I can't be bothered to add a timer
         if (!world.isClient() && world.getTime() % 2 == 0
-            && motor.getMechPUPower() >= 0.04)
+            && motor.getMechPUPower() >= minPower)
         {
             deploy((ServerWorld) world);
             return true;
@@ -174,6 +181,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     @Override
     public void setInputPower(float power)
     {
+        this.power = power;
         if (!powered && power > 0) // Rising edge
         {
             powered = true;
@@ -194,5 +202,11 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
             playerSupplier.get().remove(Entity.RemovalReason.DISCARDED);
         }
         super.markRemoved();
+    }
+
+    @Override
+    public Diagnostics get()
+    {
+        return Diagnostics.insufficientPower(power < minPower, power, minPower);
     }
 }

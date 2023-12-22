@@ -18,14 +18,11 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class HomogeniserBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class HomogeniserBlockEntity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
-//    protected static final long PROCESS_AMOUNT = FluidConstants.BOTTLE;
-
     protected HomogeniserStorage storage = new HomogeniserStorage(this);
     protected State state = State.IDLE;
 
@@ -214,6 +211,12 @@ public class HomogeniserBlockEntity extends SyncableBlockEntity implements Motor
     public float getLoadTorque()
     {
         return MotorisedBlock.super.getLoadTorque();
+    }
+
+    @Override
+    public Diagnostics get()
+    {
+        return Diagnostics.insufficientPower(false, power, 0);
     }
 
 

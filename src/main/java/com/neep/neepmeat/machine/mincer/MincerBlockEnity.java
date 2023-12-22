@@ -27,10 +27,11 @@ import net.minecraft.world.World;
 
 import java.util.List;
 
-public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBlock
+public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     private int damageTime;
     protected boolean running;
+    protected float power = 0;
 
     protected WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, this::markDirty)
     {
@@ -143,6 +144,8 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     {
         super.writeNbt(nbt);
         nbt.putInt("damageTime", damageTime);
+        nbt.putBoolean("running", running);
+        nbt.putFloat("power", power);
         fluidStorage.toNbt(nbt);
     }
 
@@ -151,6 +154,8 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     {
         super.readNbt(nbt);
         this.damageTime = nbt.getInt("damageTime");
+        this.power = nbt.getFloat("power");
+        this.running = nbt.getBoolean("running");
         fluidStorage.readNbt(nbt);
     }
 
@@ -172,8 +177,10 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     @Override
     public void setInputPower(float power)
     {
+        this.power = power;
         running = power >= 0.1;
         updateBlockstate();
+        sync();
     }
 
     @Override
@@ -181,5 +188,11 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     {
         running = false;
         updateBlockstate();
+    }
+
+    @Override
+    public Diagnostics get()
+    {
+        return Diagnostics.insufficientPower(!running, power, 0.1f);
     }
 }

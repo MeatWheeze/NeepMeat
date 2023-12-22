@@ -1,9 +1,8 @@
 package com.neep.neepmeat.machine.mixer;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.MeatStorageUtil;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -25,7 +24,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class MixerBlockEntity extends MotorisedMachineBlockEntity
 {
     protected MixerStorage storage = new MixerStorage(this);
     protected MixingRecipe currentRecipe;
@@ -44,9 +42,6 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
     protected float progress;
     protected int cooldownTicks;
 
-    public static float INCREMENT_MAX = 2;
-    public static float INCREMENT_MIN = 0.05f;
-    protected float progressIncrement;
     protected long processStart;
 
     public float bladeAngle;
@@ -54,7 +49,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
 
     public MixerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, 0.04f, 0.05f, 2);
     }
 
     public MixerBlockEntity(BlockPos pos, BlockState state)
@@ -182,7 +177,6 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
             nbt.putString("current_recipe", currentRecipe.getId().toString());
 
         nbt.putFloat("progress", progress);
-        nbt.putFloat("increment", progressIncrement);
         nbt.putInt("process_time", processLength);
         nbt.putLong("process_start", processStart);
         storage.writeNbt(nbt);
@@ -196,7 +190,6 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
         readCurrentRecipe();
 
         this.progress = nbt.getFloat("progress");
-        this.progressIncrement = nbt.getFloat("increment");
         this.processLength = nbt.getInt("process_time");
         this.processStart = nbt.getLong("process_start");
         storage.readNbt(nbt);
@@ -215,7 +208,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
     public void tick()
     {
         readCurrentRecipe();
-        if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
+        if (currentRecipe != null && progressIncrement > minIncrement)
         {
             progress = Math.min(processLength, progress + progressIncrement);
             if (progress >= this.processLength)
@@ -235,7 +228,7 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
             }
         }
 
-        if (currentRecipe != null && progressIncrement > INCREMENT_MIN)
+        if (currentRecipe != null && progressIncrement > minIncrement)
         {
 //            spawnMixingParticles(storage.displayInput1, 2, 0.2, 0.5);
 //            spawnMixingParticles(storage.displayInput2, 2, 0.2, 0.5);
@@ -269,11 +262,5 @@ public class MixerBlockEntity extends SyncableBlockEntity implements MotorisedBl
     {
         tick();
         return true;
-    }
-
-    @Override
-    public void setInputPower(float power)
-    {
-        this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 }
