@@ -66,7 +66,7 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
         {
 //            target.takeKnockback(1d, attacker.getVelocity().getX(), attacker.getVelocity().getZ());
             target.addVelocity(0, 0.4, 0);
-            System.out.println(new Throwable().getStackTrace()[0].getMethodName());
+//            System.out.println(new Throwable().getStackTrace()[0].getMethodName());
             writeCharged(stack, false);
         }
         return true;
@@ -136,7 +136,7 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
     {
        writeCharged(stack, true);
-        System.out.println(new Throwable().getStackTrace()[0].getMethodName());
+//        System.out.println(new Throwable().getStackTrace()[0].getMethodName());
        return stack;
     }
 
