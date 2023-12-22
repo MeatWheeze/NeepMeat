@@ -8,6 +8,7 @@ import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -26,6 +27,8 @@ public class FluidTransport
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", NMBlocks.block().factory(TankItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block GLASS_TANK = BlockRegistry.queue(new GlassTankBlock("basic_glass_tank", NMBlocks.block().factory(TankItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
+
+    public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 
     public static void init()
     {

@@ -29,7 +29,7 @@ public interface PipeVertex extends PipeFlowComponent
 
     boolean collapseEdges();
 
-    long[] getVelocity();
+//    long[] getVelocity();
 
     default boolean keepNetworkValid() {return false;}
 

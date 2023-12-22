@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.transport.FluidTransport;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -22,6 +23,21 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 
     public SimplePipeVertex()
     {
+    }
+
+    public long getCapacity()
+    {
+        return FluidTransport.MAX_TRANSFER;
+    }
+
+    public long getAmount()
+    {
+        return amount;
+    }
+
+    public FluidVariant getVariant()
+    {
+        return variant;
     }
 
     @Override
@@ -50,11 +66,12 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
     {
-        if (!insertVariant.isBlank() && (variant.isBlank() || insertVariant.equals(variant)))
+        long remaining = getCapacity() - amount;
+        if ((!insertVariant.isBlank() && (variant.isBlank() || insertVariant.equals(variant))) && remaining > 0)
         {
             updateSnapshots(transaction);
 
-            long permittedAmount = canInsert(world, toDir, insertVariant, maxAmount);
+            long permittedAmount = Math.min(canInsert(world, toDir, insertVariant, maxAmount), remaining);
 
             if (permittedAmount > 0)
             {
@@ -236,11 +253,11 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
         return false;
     }
 
-    @Override
-    public long[] getVelocity()
-    {
-        return null;
-    }
+//    @Override
+//    public long[] getVelocity()
+//    {
+//        return null;
+//    }
 
     protected void clearEdges()
     {
@@ -263,6 +280,6 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 
     public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
     {
-        return maxAmount;
+        return Math.min(maxAmount, getCapacity() - getAmount());
     }
 }

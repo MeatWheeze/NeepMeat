@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
 import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Block;
@@ -14,34 +14,35 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 
-public class WindowPipeBlockEntity extends FluidPipeBlockEntity implements BlockEntityClientSerializable
+@SuppressWarnings("UnstableApiUsage")
+public class WindowPipeBlockEntity extends FluidPipeBlockEntity<WindowPipeBlockEntity.WindowPipeVertex> implements BlockEntityClientSerializable
 {
+    public float clientFraction;
+    public long clientAmount;
+    public FluidVariant clientVariant;
+
     public WindowPipeBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.WINDOW_PIPE, pos, state, FilterPipeBlock.FilterPipeVertex::new);
+        this(NMBlockEntities.WINDOW_PIPE, pos, state, WindowPipeVertex::new);
     }
 
-    public WindowPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor constructor)
+    public WindowPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor<WindowPipeVertex> constructor)
     {
         super(type, pos, state, constructor);
-    }
-
-    @Override
-    public boolean isCreatedDynamically()
-    {
-        return false;
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        fromClientTag(nbt);
     }
 
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        toClientTag(nbt);
     }
 
     @Override
@@ -66,12 +67,36 @@ public class WindowPipeBlockEntity extends FluidPipeBlockEntity implements Block
     @Override
     public void fromClientTag(NbtCompound nbt)
     {
-
+        this.clientAmount = nbt.getLong("amount");
+        this.clientVariant = FluidVariant.fromNbt(nbt.getCompound("variant"));
     }
 
     @Override
     public NbtCompound toClientTag(NbtCompound nbt)
     {
-        return null;
+        nbt.putLong("amount", vertex.getAmount());
+        nbt.put("variant", vertex.getVariant().toNbt());
+        return nbt;
+    }
+
+    public static class WindowPipeVertex extends BlockPipeVertex
+    {
+        public WindowPipeVertex(FluidPipeBlockEntity<WindowPipeVertex> fluidPipeBlockEntity)
+        {
+            super(fluidPipeBlockEntity);
+        }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            super.onFinalCommit();
+            ((BlockEntityClientSerializable) parent).sync();
+        }
+
+        @Override
+        public boolean canSimplify()
+        {
+            return false;
+        }
     }
 }

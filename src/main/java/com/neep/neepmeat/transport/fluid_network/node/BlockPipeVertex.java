@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -23,7 +22,7 @@ public class BlockPipeVertex extends SimplePipeVertex
 {
     protected final FluidPipeBlockEntity parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
-    protected long[] velocity = new long[6];
+//    protected long[] velocity = new long[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
 
     public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
@@ -134,13 +133,6 @@ public class BlockPipeVertex extends SimplePipeVertex
         }
     }
 
-    private int numOutputs()
-    {
-        int outputs = 0;
-        for (PipeFlowComponent c : components) if (c != null) ++outputs;
-        return outputs;
-    }
-
     // Get the flow with respect to the node
     protected float getNodeInflux(NodeSupplier nodeSupplier)
     {
@@ -164,15 +156,18 @@ public class BlockPipeVertex extends SimplePipeVertex
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
                 float f = getNodeInflux(nodeSupplier);
-                long transferAmount = (long) Math.ceil(f * FluidConstants.BUCKET / 8);
-                if (transferAmount < 0)
+
+                // Calculate the amount with respect to this vertex.
+                long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 8);
+                if (transferAmount > 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
                     long extracted;
                     if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
                     {
+                        // Note the negative signs
                         long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
-                        extracted = storage.extract(foundVariant, -permittedAmount, transaction);
+                        extracted = storage.extract(foundVariant, permittedAmount, transaction);
                         variant = foundVariant;
                         amount += extracted;
                     }
@@ -222,11 +217,11 @@ public class BlockPipeVertex extends SimplePipeVertex
         }
     }
 
-    @Override
-    public long[] getVelocity()
-    {
-        return velocity;
-    }
+//    @Override
+//    public long[] getVelocity()
+//    {
+//        return velocity;
+//    }
 
     @Override
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
@@ -265,17 +260,5 @@ public class BlockPipeVertex extends SimplePipeVertex
     public int hashCode()
     {
         return super.hashCode();
-    }
-
-    public static FluidVariant findExtractable(Storage<FluidVariant> storage, FluidVariant preferred, TransactionContext transaction)
-    {
-        for (StorageView<FluidVariant> view : storage.iterable(transaction))
-        {
-            if (preferred.isBlank())
-            {
-                if (!view.isResourceBlank()) return view.getResource();
-            }
-        }
-        return FluidVariant.blank();
     }
 }
