@@ -16,12 +16,15 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
+@SuppressWarnings("UnstableApiUsage")
 public class NMFluidNetwork
 {
     private World world;
+    private BlockPos origin;
+    private Direction originFace;
     public static int UPDATE_DISTANCE = 5;
     private HashSet<FluidNode> connectedNodes = new HashSet<>();
-//    private List<PipeSegment> networkPipes = new ArrayList<>();
+
     private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
     private List<BlockPos> pipeQueue = new ArrayList<>();
 
@@ -33,20 +36,44 @@ public class NMFluidNetwork
         ServerTickEvents.END_SERVER_TICK.register(NMFluidNetwork::tickNetwork);
     }
 
+    public NMFluidNetwork(World world, BlockPos origin, Direction direction)
+    {
+        this.world = world;
+        this.origin = origin;
+        this.originFace = direction;
+        LOADED_NETWORKS.add(this);
+    }
+
+    public static NMFluidNetwork createNetwork(World world, BlockPos origin, Direction direction)
+    {
+//        if (
+
+    }
+
+    @Override
+    public String toString()
+    {
+        return "\nFluidNetwork at " + (origin).toString();
+    }
+
     private static void tickNetwork(MinecraftServer minecraftServer)
     {
         LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 
-    public static void tickNetwork(ServerWorld world)
+    // Removes a node that is no longer connected.
+    public void removeNode(FluidNode node)
     {
-
+        connectedNodes.remove(node);
+        checkValid();
     }
 
-    public NMFluidNetwork(World world)
+    public void checkValid()
     {
-        this.world = world;
-        LOADED_NETWORKS.add(this);
+        if (connectedNodes.size() == 0)
+        {
+            LOADED_NETWORKS.remove(this);
+        }
     }
 
     public void rebuild(BlockPos startPos, Direction face)
@@ -55,13 +82,19 @@ public class NMFluidNetwork
         {
             discoverNodes(startPos, face);
             buildPressures();
-            tick();
+//            tick();
         }
+    }
+
+    public void setWorld(World world)
+    {
+        this.world = world;
     }
 
     public void tick()
     {
 //        buildPressures();
+//        rebuild(origin, originFace);
         for (FluidNode node : connectedNodes)
         {
 //            System.out.println(node);
@@ -135,7 +168,7 @@ public class NMFluidNetwork
                 // TODO: optimise further
                 for (FluidNode node1 : connectedNodes)
                 {
-                    if (node1.equals(node) || node1.mode == FluidAcceptor.AcceptorModes.NONE)
+                    if (node1.equals(node) || node1.mode == AcceptorModes.NONE)
                     {
                         continue;
                     }
@@ -190,14 +223,13 @@ public class NMFluidNetwork
                                 networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
                             }
                         }
-                        else if (state2.getBlock() instanceof FluidNodeProvider)
-                        {
-                            FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
-                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
-                            {
-                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
-                            }
-                        }
+//                        else if (state2.getBlock() instanceof FluidNodeProvider nodeProvider)
+//                        {
+//                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
+//                            {
+//                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
+//                            }
+//                        }
                         else if (state2.hasBlockEntity())
                         {
                             {
@@ -205,8 +237,15 @@ public class NMFluidNetwork
                                 Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
                                 if (storage != null)
                                 {
-                                    FluidNode node = new FluidNode(next, direction.getOpposite(), storage, FluidAcceptor.AcceptorModes.INSERT_EXTRACT, 0);
-//                                    System.out.println(node);
+                                    FluidNode node;
+                                    if (state2.getBlock() instanceof FluidNodeProvider provider)
+                                    {
+                                        node = provider.getNode(world, next, direction);
+                                    }
+                                    else
+                                    {
+                                        node = new FluidNode(next, direction.getOpposite(), storage, AcceptorModes.INSERT_EXTRACT, 0);
+                                    }
                                     connectedNodes.add(node);
                                 }
                             }
@@ -217,6 +256,8 @@ public class NMFluidNetwork
             }
             pipeQueue.addAll(nextSet);
         }
+
+        checkValid();
 //        System.out.println("targets: " + connectedNodes);
     }
 

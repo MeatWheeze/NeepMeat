@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block;
 
+import com.neep.neepmeat.fluid_util.AcceptorModes;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.Direction;
 
