@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.DaggerItem;
+import com.neep.neepmeat.item.base.BaseCraftingItem;
 import com.neep.neepmeat.item.base.BaseItem;
 import com.neep.neepmeat.item.NMItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -18,10 +19,10 @@ public class ItemInit
     public static Map<String, NMItem> ITEMS = new HashMap<>();
 
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.GENERAL));
-    public static Item ANIMAL_HEART = new BaseItem("animal_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item REANIMATED_HEART = new BaseItem("reanimated_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item FLESH = new BaseItem("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item REANIMATED_FLESH = new BaseItem("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item FLESH = new BaseCraftingItem("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item REANIMATED_FLESH = new BaseCraftingItem("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static void putItem(String id, NMItem item)
     {
