@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.motor;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.util.PowerUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
@@ -17,12 +18,13 @@ public interface IMotorBlockEntity
         if ((world.getBlockEntity(pos.offset(facing)) instanceof IMotorisedBlock block))
         {
             setConnectedBlock(BlockApiCache.create(MeatLib.VOID_LOOKUP, world, pos.offset(facing)));
-            block.setInputPower(getOutputPower());
+            block.setInputPower((float) getMechPUPower());
         }
     }
 
     default void onRemoved()
     {
+        // TODO: replace instanceof with API lookup
         if (getConnectedBlock() != null && getConnectedBlock().getBlockEntity() instanceof IMotorisedBlock motorised)
         {
             motorised.setInputPower(0);
@@ -36,7 +38,18 @@ public interface IMotorBlockEntity
 
     float getSpeed();
 
-    float getOutputPower();
+    double getMechPUPower();
 
     BlockApiCache<Void, Void> getConnectedBlock();
+
+    default float updateLoadTorque()
+    {
+        BlockApiCache<Void, Void> cache = getConnectedBlock();
+        // TODO: replace instanceof with API lookup
+        if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
+        {
+            return motorised.getLoadTorque();
+        }
+        return PowerUtils.MOTOR_TORQUE_LOSS;
+    }
 }

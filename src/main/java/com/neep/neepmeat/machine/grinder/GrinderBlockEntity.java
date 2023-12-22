@@ -220,4 +220,10 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         this.progressIncrement = MathHelper.lerp(power, 0, INCREMENT_MAX);
         if (power < MULTIPLIER_MIN) progressIncrement = 0;
     }
+
+    @Override
+    public float getLoadTorque()
+    {
+        return 200f;
+    }
 }

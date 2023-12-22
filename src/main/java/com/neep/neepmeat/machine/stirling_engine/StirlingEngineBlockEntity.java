@@ -137,7 +137,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         if (burnTime == 0)
         {
             int time;
-            if (getOutputPower() < 0.8 && (time = storage.decrementFuel()) > 0)
+            if (getMechPUPower() < 0.8 && (time = storage.decrementFuel()) > 0)
             {
                 this.burnTime = time;
                 this.fuelTime = time;
@@ -147,7 +147,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
         if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            motorised.setInputPower(getOutputPower());
+            motorised.setInputPower((float) getMechPUPower());
             doWork();
             motorised.tick(this);
         }
@@ -233,7 +233,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
-    public float getOutputPower()
+    public double getMechPUPower()
     {
         return getRunningRate();
     }

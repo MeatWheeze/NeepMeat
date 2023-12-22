@@ -10,13 +10,9 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -67,7 +63,6 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
     public void tick()
     {
         super.tick();
-        maxRunningRate = FluidConstants.BUCKET / 2;
         if (heatable == null)
         {
             refreshCache(getWorld(), getPos(), getCachedState());
@@ -75,8 +70,8 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
         if (heatable != null)
         {
-            float runningRate = getRunningRate();
-            if (this.getRunningRate() > 0.05)
+            float runningRate = (float) getPUPower();
+            if (this.getPUPower() > 0.05)
             {
                 heatable.setBurning();
                 heatable.setHeat(runningRate);
@@ -88,11 +83,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             BlockState state = getWorld().getBlockState(furnacePos);
             heatable.updateState(getWorld(), furnacePos, state);
         }
-        else if (this.getRunningRate() > 0.05)
+        else if (this.getPUPower() > 0.05)
         {
             heatBlock();
         }
-
     }
 
     @Override
@@ -102,20 +96,6 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             heatable.setHeat(0);
 
         super.markRemoved();
-    }
-
-    @Override
-    public void onUse(PlayerEntity player, Hand hand)
-    {
-        if (player.isSneaking())
-        {
-            clearBuffers();
-            getWorld().playSound(null, getPos(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1f, 1f);
-        }
-//        player.sendMessage(Text.of((inputBuffer.getAmount())
-//                + ", "
-//                + (outputBuffer.getAmount())), true);
-//        getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
     }
 
     public void heatBlock()
@@ -156,6 +136,12 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             }
         }
         return false;
+    }
+
+    @Override
+    public long getMaxInsert()
+    {
+        return FluidConstants.BUCKET / 2;
     }
 
     protected static void spawnOxidationParticles(ServerWorld world, DefaultParticleType particle, BlockPos pos, Random random, int amount, int radius)
