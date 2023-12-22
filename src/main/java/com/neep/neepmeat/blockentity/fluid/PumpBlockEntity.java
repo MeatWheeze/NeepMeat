@@ -118,6 +118,7 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         }
 
         this.isActive = active;
+        this.markDirty();
     }
 
     public void update(BlockState state, World world)
