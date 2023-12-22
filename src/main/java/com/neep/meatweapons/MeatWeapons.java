@@ -5,6 +5,7 @@ import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatweapons.enchantment.MWEnchantmentTargets;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
+import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.IGunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
@@ -15,6 +16,7 @@ import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
@@ -83,15 +85,13 @@ public class MeatWeapons implements ModInitializer
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
 
         PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
+
+        FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
+
     }
 
     public static boolean redirectClicks(ItemStack stack)
     {
         return stack.getItem() instanceof IGunItem gun && gun.redirectClicks();
-    }
-
-    public static IGunItem getGun(ItemStack stack)
-    {
-        return stack.getItem() instanceof IGunItem gun ? gun : null;
     }
 }

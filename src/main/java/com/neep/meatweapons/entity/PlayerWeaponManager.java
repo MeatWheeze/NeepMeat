@@ -1,6 +1,5 @@
 package com.neep.meatweapons.entity;
 
-import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.IGunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,8 +19,8 @@ public class PlayerWeaponManager
 
     public void tick()
     {
-        IGunItem mainItem = MeatWeapons.getGun(player.getMainHandStack());
-        IGunItem offItem = MeatWeapons.getGun(player.getOffHandStack());
+        IGunItem mainItem = IGunItem.getGun(player.getMainHandStack());
+        IGunItem offItem = IGunItem.getGun(player.getOffHandStack());
 
         double pitch = Math.toRadians(player.getPitch(1));
         double yaw = Math.toRadians(player.getYaw(1));

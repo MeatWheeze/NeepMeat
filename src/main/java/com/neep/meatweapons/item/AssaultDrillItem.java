@@ -5,7 +5,17 @@ import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
@@ -46,6 +56,7 @@ import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -288,5 +299,93 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
         return PlayState.CONTINUE;
+    }
+
+    public static Storage<FluidVariant> getStorage(ItemStack stack, ContainerItemContext containerItemContext)
+    {
+        return new InternalStorage(stack, containerItemContext);
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    protected static class InternalStorage extends SnapshotParticipant<Integer> implements InsertionOnlyStorage<FluidVariant>, StorageView<FluidVariant>
+    {
+        protected static final int ENERGY_PER_DURABILITY = 10;
+        protected final ItemStack stack;
+        protected final ContainerItemContext context;
+
+        public InternalStorage(ItemStack stack, ContainerItemContext context)
+        {
+            this.stack = stack.copy();
+            this.context = context;
+        }
+
+        @Override
+        public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
+        {
+            long energy = PowerUtils.amountToAbsEnergy(maxAmount, insertedVariant.getFluid());
+            int currentEnergy = (stack.getMaxDamage() - stack.getDamage()) * ENERGY_PER_DURABILITY;
+            long insertedEnergy = Math.min(energy, energyCapacity() - currentEnergy);
+            if (insertedEnergy > 0)
+            {
+                updateSnapshots(transaction);
+                int insertedDamage = (int) (insertedEnergy / ENERGY_PER_DURABILITY);
+                stack.setDamage(stack.getDamage() - insertedDamage);
+                context.exchange(ItemVariant.of(stack), 1, transaction);
+            }
+            return PowerUtils.absToAmount(insertedVariant.getFluid(), insertedEnergy);
+        }
+
+        @Override
+        public boolean isResourceBlank()
+        {
+            return true;
+        }
+
+        @Override
+        public FluidVariant getResource()
+        {
+            return FluidVariant.blank();
+        }
+
+        @Override
+        public long getAmount()
+        {
+            return 0;
+        }
+
+        @Override
+        public long getCapacity()
+        {
+            return 0;
+        }
+
+        protected int energyCapacity()
+        {
+            return stack.getMaxDamage() * ENERGY_PER_DURABILITY;
+        }
+
+        @Override
+        public Iterator<? extends StorageView<FluidVariant>> iterator(TransactionContext transaction)
+        {
+            return SingleViewIterator.create(this, transaction);
+        }
+
+        @Override
+        protected Integer createSnapshot()
+        {
+            return (stack.getMaxDamage() - stack.getDamage()) * ENERGY_PER_DURABILITY ;
+        }
+
+        @Override
+        protected void readSnapshot(Integer snapshot)
+        {
+            stack.setDamage(stack.getMaxDamage() - snapshot / ENERGY_PER_DURABILITY);
+        }
+
+        @Override
+        public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+        {
+            return 0;
+        }
     }
 }

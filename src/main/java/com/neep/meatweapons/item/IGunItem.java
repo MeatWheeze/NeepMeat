@@ -15,6 +15,11 @@ public interface IGunItem
     int ANIM_FIRE = 0;
     int ANIM_RELOAD = 1;
 
+    static IGunItem getGun(ItemStack stack)
+    {
+        return stack.getItem() instanceof IGunItem gun ? gun : null;
+    }
+
     Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
 
     default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
