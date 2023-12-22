@@ -238,7 +238,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
             PipeState.ISpecialPipe special;
             if ((special = pipe.getSpecial()) != null)
             {
-                flow = flow.andThen(special.get(fromDir, world.getBlockState(pos)));
+                flow = flow.andThen(special.getFlowFunction(fromDir, world.getBlockState(pos)));
             }
 
             for (Direction direction : pipe.connections)
