@@ -32,7 +32,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
     public boolean stage;
     public boolean running;
     protected long conversionTime;
-    protected short baseAmount = (short) (FluidConstants.BUCKET / 200 / 2);
+    protected short baseAmount = (short) (FluidConstants.BUCKET / 300 / 2);
     protected float multiplier = 1;
 
     // Rendering only
@@ -94,7 +94,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
         else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
         {
             this.conversionTime = 1;
-            this.multiplier = 1.5f;
+            this.multiplier = 1f;
         }
         else
         {
@@ -111,7 +111,6 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
 
 //        cooldown = 2;
 
-        checkBurnerBlock();
         if (conversionTime > 0)
         {
             Transaction transaction = Transaction.openOuter();
@@ -120,6 +119,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
             transaction.commit();
         }
         this.running = running && conversionTime > 0;
+        checkBurnerBlock();
         this.sync();
     }
 
