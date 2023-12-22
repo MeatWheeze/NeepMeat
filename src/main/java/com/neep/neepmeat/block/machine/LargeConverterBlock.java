@@ -1,15 +1,10 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.blockentity.LargeConverterBlockEntity;
-import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.blockentity.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -29,7 +24,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 public class LargeConverterBlock extends BaseBlock implements BlockEntityProvider
@@ -114,7 +108,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.LARGE_CONVERTER, LargeConverterBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, NMBlockEntities.LARGE_CONVERTER, ConverterBlockEntity::serverTick, world);
     }
 
     public boolean checkValid(World world, BlockPos pos)

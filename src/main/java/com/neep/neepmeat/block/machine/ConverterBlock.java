@@ -2,8 +2,7 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.IMeatBlock;
-import com.neep.neepmeat.blockentity.LargeConverterBlockEntity;
-import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
+import com.neep.neepmeat.blockentity.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.MiscUitls;
@@ -72,8 +71,11 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        Direction look = context.getPlayerLookDirection();
-        return look.getAxis().isVertical() ? getDefaultState() : getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+//        Direction look = context.getPlayerLookDirection();
+//        return look.getAxis().isVertical() ? getDefaultState() : getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+//        System.out.println("place");
+//        return  this.getDefaultState();
     }
 
     @Override
@@ -112,7 +114,7 @@ public class ConverterBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.CONVERTER, LargeConverterBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, NMBlockEntities.CONVERTER, ConverterBlockEntity::serverTick, world);
     }
 
     @Nullable
