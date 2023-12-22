@@ -32,7 +32,7 @@
     },
     {
       "apply": {
-        "model": "neepmeat:block/rusty_pipe/pipe_test"
+        "model": "neepmeat:block/rusty_pipe/pipe_sides"
       }
     },
 
