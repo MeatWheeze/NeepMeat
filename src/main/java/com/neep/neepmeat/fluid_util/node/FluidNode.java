@@ -242,35 +242,34 @@ public class FluidNode
         float sumIn = 0;
         float sumOut = 0;
 
-        for (int dist : distances.values())
+        for (FluidNode distanceNode : distances.keySet())
         {
-            Transaction transaction =Transaction.openOuter();
-            Iterable<StorageView<FluidVariant>> iterable = storage.iterable(transaction);
-            AtomicInteger insert = new AtomicInteger();
-            AtomicInteger extract = new AtomicInteger();
-            iterable.forEach((view) -> {
-                FluidVariant resource;
-                if (!(resource = view.getResource()).isBlank())
+            Transaction transaction = Transaction.openOuter();
+
+            boolean canInsert = false;
+
+            for (StorageView<FluidVariant> view : this.storage.iterable(transaction))
+            {
+                for (StorageView<FluidVariant> targetView : distanceNode.storage.iterable(transaction))
                 {
-                    if (storage.simulateInsert(resource, 1, transaction) > 0)
+                    if (targetView.getAmount() >= targetView.getAmount() && targetView.getResource().equals(view.getResource()))
                     {
-                        insert.incrementAndGet();
-                    }
-                    if (storage.simulateInsert(resource, 1, transaction) > 0)
-                    {
-                        extract.incrementAndGet();
+                        canInsert = true;
                     }
                 }
-            });
-            transaction.abort();
-            if (insert.get() > 1)
-                sumIn += Math.pow(r, 4) / (float) dist;
+            }
 
-            if (extract.get() > 1)
-                sumOut += Math.pow(r, 4) / (float) dist;
+            transaction.abort();
+            System.out.println(canInsert);
+//            if (canInsert)
+            {
+                sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
+            }
+
+//            if (extract.get() > 1)
+                sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
         }
 
-        // Hazen-Williams approximation for gravity-driven flow of water
         float S = getTargetY() - node.getTargetY();
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
         // My linear approximation of the Hazen-Williams approximation
