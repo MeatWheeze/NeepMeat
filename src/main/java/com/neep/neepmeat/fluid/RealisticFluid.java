@@ -112,13 +112,14 @@ public class RealisticFluid extends FlowableFluid
 
         if (fluidstate.isEmpty() && state.isOf(Blocks.AIR))
         {
-//            world.setBlockState(pos, fluid.getStill().getDefaultState().with(LEVEL, 1).getBlockState(), Block.NOTIFY_ALL);
-//            return;
+            world.setBlockState(pos, fluid.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
+            System.out.println("emptu");
+            return;
         }
 
         int level = fluidstate.getLevel();
-        System.out.println(level);
+        System.out.println("level: " + level);
 //        world.setBlockState(pos, fluid.getFlowing(8, false).getBlockState(), Block.NOTIFY_ALL);
-        world.setBlockState(pos, fluid.getFlowing().getDefaultState().with(LEVEL, 2).getBlockState(), Block.NOTIFY_ALL);
+        world.setBlockState(pos, fluid.getFlowing(level + 1, false).getBlockState(), Block.NOTIFY_ALL);
     }
 }
