@@ -2,12 +2,14 @@ package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
+import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.datagen.NMRecipes;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
@@ -51,6 +53,8 @@ public class NeepMeat implements ModInitializer
 		NMBlockEntities.initialise();
 		NMEntities.initialise();
 		OreFatRegistry.init();
+		NMStatusEffects.init();
+		NMPotions.init();
 
 		NMFeatures.init();
 

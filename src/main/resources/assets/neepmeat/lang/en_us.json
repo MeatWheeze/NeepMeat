@@ -302,10 +302,16 @@
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
+  "item.neepmeat.essential_saltes": "Essential Saltes",
 
   "item.neepmeat.compound_injector": "Compound Injector",
   "item.neepmeat.compound_injector_lore_0": "Heals 4 hearts when used.",
   "item.neepmeat.compound_injector_lore_1": "Click with a %s in your inventory to reload.",
+
+  "effect.neepmeat.ash_preparation": "Ash Preparation",
+  "item.minecraft.potion.effect.ash_preparation": "Ash Preparation",
+  "item.minecraft.splash_potion.effect.ash_preparation": "Ash Preparation",
+  "item.minecraft.lingering_potion.effect.ash_preparation": "Ash Preparation",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
