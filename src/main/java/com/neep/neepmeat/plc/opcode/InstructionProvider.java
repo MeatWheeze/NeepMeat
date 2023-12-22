@@ -1,7 +1,9 @@
 package com.neep.neepmeat.plc.opcode;
 
+import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.plc.program.PLCInstruction;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -63,5 +65,19 @@ public class InstructionProvider
         return nbtConstructor.create(world, nbt);
     }
 
-    public record Argument(BlockPos pos, Direction face) { }
+    public record Argument(BlockPos pos, Direction face)
+    {
+        public void writeBuf(PacketByteBuf buf)
+        {
+            PacketBufUtil.writeBlockPos(buf, pos);
+            buf.writeInt(face.ordinal());
+        }
+
+        public static Argument fromBuf(PacketByteBuf buf)
+        {
+            BlockPos pos = PacketBufUtil.readBlockPos(buf);
+            Direction face = Direction.values()[buf.readInt()];
+            return new Argument(pos, face);
+        }
+    }
 }

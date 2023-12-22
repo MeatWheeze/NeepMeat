@@ -2,10 +2,13 @@ package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -15,15 +18,21 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class PLCSyncProgram
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "plc_sync_program");
 
-    public static void send()
+    public static void sendProgram(ServerPlayerEntity player, PLCBlockEntity be, PlcProgram program)
     {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(Action.PROGRAM.ordinal());
+        putPlc(buf, be);
 
+        buf.writeNbt(program.writeNbt(new NbtCompound()));
+
+        ServerPlayNetworking.send(player, ID, buf);
     }
 
     public static void init()
@@ -33,30 +42,130 @@ public class PLCSyncProgram
 
     private static void apply(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender)
     {
-        BlockPos pos = PacketBufUtil.readBlockPos(buf);
-        NbtCompound nbt = buf.readNbt();
+        Action action = Action.values()[buf.readInt()];
+
+        PacketByteBuf copy = PacketByteBufs.copy(buf.copy());
 
         server.execute(() ->
         {
-            if (player.world.getBlockEntity(pos) instanceof PLCBlockEntity be)
+            switch (action)
             {
-                if (be.getEditProgram() != null)
-                {
-                    be.getEditProgram().readNbt(nbt);
-                }
+                case ARGUMENT -> applyArgument(copy, player.world);
+                case OPERATION -> applyInstruction(copy, player.world);
+                case DELETE -> applyDelete(copy, player.world);
             }
         });
+    }
+
+    private static void applyDelete(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+        plc.getEditor().delete(buf.readInt());
+    }
+
+    private static void applyInstruction(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        Identifier id = Identifier.tryParse(buf.readString());
+
+        InstructionProvider provider = Instructions.REGISTRY.get(id);
+        if (provider != null)
+        {
+            plc.getEditor().setInstructionBuilder(provider);
+        }
+    }
+
+    private static void applyArgument(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        InstructionProvider.Argument argument = InstructionProvider.Argument.fromBuf(buf);
+        plc.getEditor().argument(argument);
+    }
+
+    private static void putPlc(PacketByteBuf buf, PLCBlockEntity be)
+    {
+        PacketBufUtil.writeBlockPos(buf, be.getPos());
+    }
+
+    private static PLCBlockEntity getPlc(PacketByteBuf buf, World world)
+    {
+        return (PLCBlockEntity) world.getBlockEntity(PacketBufUtil.readBlockPos(buf));
+    }
+
+    enum Action
+    {
+        ARGUMENT,
+        OPERATION,
+        PROGRAM,
+        DELETE,
     }
 
     @Environment(value = EnvType.CLIENT)
     public static class Client
     {
-        public static void syncProgram(PLCBlockEntity be, PlcProgram program)
+        public static void registerReceiver()
+        {
+            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
+            {
+                Action action = Action.values()[buf.readInt()];
+
+                PacketByteBuf copy = PacketByteBufs.copy(buf.copy());
+
+                client.execute(() ->
+                {
+                    switch (action)
+                    {
+                        case PROGRAM -> applySyncProgram(copy, client.world);
+                    }
+                });
+            });
+        }
+
+        private static void applySyncProgram(PacketByteBuf buf, World world)
+        {
+            PLCBlockEntity plc = getPlc(buf, world);
+
+            NbtCompound nbt = buf.readNbt();
+
+            plc.getEditor().receiveProgram(nbt);
+        }
+
+        public static void sendArgument(InstructionProvider.Argument argument, PLCBlockEntity plc)
         {
             PacketByteBuf buf = PacketByteBufs.create();
 
-            PacketBufUtil.writeBlockPos(buf, be.getPos());
-            buf.writeNbt(program.writeNbt(new NbtCompound()));
+            buf.writeInt(Action.ARGUMENT.ordinal());
+            putPlc(buf, plc);
+
+            argument.writeBuf(buf);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void switchOperation(InstructionProvider provider, PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            buf.writeInt(Action.OPERATION.ordinal());
+            putPlc(buf, plc);
+
+            String id = Instructions.REGISTRY.getId(provider).toString();
+            buf.writeString(id);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendDelete(int index, PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.DELETE.ordinal());
+            putPlc(buf, plc);
+
+            buf.writeInt(index);
+
+            ClientPlayNetworking.send(ID, buf);
         }
     }
 }

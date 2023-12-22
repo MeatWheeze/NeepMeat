@@ -28,9 +28,9 @@ public class InstructionBuilder
         }
     }
 
-    public InstructionBuilder argument(BlockPos pos, Direction face)
+    public InstructionBuilder argument(InstructionProvider.Argument argument)
     {
-        arguments.add(new InstructionProvider.Argument(pos, face));
+        arguments.add(argument);
         if (isComplete())
         {
             finished.accept(build());

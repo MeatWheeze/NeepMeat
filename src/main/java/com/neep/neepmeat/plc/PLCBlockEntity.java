@@ -31,6 +31,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     protected Queue<Pair<RobotAction, Consumer<PLC>>> robotActions = Queues.newArrayDeque();
     protected Pair<RobotAction, Consumer<PLC>> currentAction;
     protected final SurgicalRobot robot = new SurgicalRobot(this);
+    protected final PLCProgramEditor editor = new PLCProgramEditor(this);
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -153,5 +154,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         }
 
         return editingProgram;
+    }
+
+    public PLCProgramEditor getEditor()
+    {
+        return editor;
     }
 }

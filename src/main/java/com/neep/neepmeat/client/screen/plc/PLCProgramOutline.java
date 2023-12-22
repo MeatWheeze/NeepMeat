@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.screen.plc;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.network.plc.PLCSyncProgram;
+import com.neep.neepmeat.plc.PLCProgramEditor;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCInstruction;
 import com.neep.neepmeat.plc.program.PlcProgram;
@@ -18,7 +20,6 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import software.bernie.geckolib3.core.util.Color;
 
@@ -28,17 +29,20 @@ import java.util.stream.Collectors;
 public class PLCProgramOutline extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;
-    @Nullable protected InstructionProvider instructionProvider;
+    private final PLCProgramEditor editor;
 
     private int selectionIndex = -1;
 
-    public PLCProgramOutline(PLCProgramScreen parent)
+    public PLCProgramOutline(PLCProgramEditor editor, PLCProgramScreen parent)
     {
+        this.editor = editor;
         this.parent = parent;
         this.elementWidth = 100;
         this.elementHeight = 200;
         this.x = 0;
         this.y = 0;
+
+        editor.addListener(this::onProgramChanged);
     }
 
     @Override
@@ -62,7 +66,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
 
     protected void addEntries()
     {
-        PlcProgram program = parent.plc.getEditProgram();
+        PlcProgram program = editor.getProgram();
 
         int entryHeight = 11;
         int gap = 1;
@@ -99,12 +103,11 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE)
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE || keyCode == GLFW.GLFW_KEY_DELETE)
         {
             if (selectionIndex != -1)
             {
-                parent.plc.getEditProgram().remove(selectionIndex);
-                update();
+                PLCSyncProgram.Client.sendDelete(selectionIndex, parent.plc);
                 return true;
             }
         }
@@ -136,6 +139,83 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     public void update()
     {
         clearAndInit();
+    }
+
+    private void onProgramChanged(PlcProgram program)
+    {
+        clearAndInit();
+    }
+
+    public class InstructionWidget implements Drawable, Element, Selectable
+    {
+
+        protected final InstructionProvider instructionProvider;
+
+        protected final int x, y;
+        protected final int width, height;
+        protected final int id;
+        protected boolean selected;
+        public InstructionWidget(InstructionProvider instructionProvider, int x, int y, int width, int height, int id, boolean selected)
+        {
+            this.instructionProvider = instructionProvider;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.id = id;
+            this.selected = selected;
+        }
+
+        protected boolean isMouseInside(double mouseX, double mouseY)
+        {
+            return mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
+        }
+
+        @Override
+        public boolean mouseClicked(double mouseX, double mouseY, int button)
+        {
+            boolean valid =  mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
+            if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
+            {
+                selected = true;
+                onInstructionSelect(this);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        {
+            int col = Color.ofRGBA(255, 94, 33, 255).getColor();
+            int borderCol = Color.ofRGBA(255, selected ? 150 : 94, 33, 255).getColor();
+
+            Text lineNumber = Text.literal(String.valueOf(id));
+
+            textRenderer.draw(matrices, lineNumber, x + 1, y + (height - textRenderer.fontHeight) / 2.0f + 1, borderCol);
+
+            int textWidth = textRenderer.getWidth(lineNumber) + 2;
+            GUIUtil.renderBorder(matrices, x + textWidth, y, width - textWidth, height - 1, borderCol, 0);
+
+            textRenderer.draw(matrices, instructionProvider.getShortName(), x + textWidth + 2, (y + height) - textRenderer.fontHeight, col);
+
+            if (isMouseInside(mouseX, mouseY))
+            {
+                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderColour());
+            }
+        }
+
+        @Override
+        public SelectionType getType()
+        {
+            return selected ? SelectionType.FOCUSED : SelectionType.NONE;
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder)
+        {
+
+        }
     }
 
     private void renderTooltipText(MatrixStack matrices, List<Text> texts, int x, int y, int col)
@@ -207,77 +287,5 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
         }
         this.itemRenderer.zOffset = prevZ;
-    }
-
-    public class InstructionWidget implements Drawable, Element, Selectable
-    {
-        protected final InstructionProvider instructionProvider;
-        protected final int x, y;
-        protected final int width, height;
-        protected final int id;
-
-        protected boolean selected;
-
-        public InstructionWidget(InstructionProvider instructionProvider, int x, int y, int width, int height, int id, boolean selected)
-        {
-            this.instructionProvider = instructionProvider;
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-            this.id = id;
-            this.selected = selected;
-        }
-
-        protected boolean isMouseInside(double mouseX, double mouseY)
-        {
-            return mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
-        }
-
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button)
-        {
-            boolean valid =  mouseX >= this.x && mouseY >= this.y && mouseX < (this.x + this.width) && mouseY < (this.y + this.height);
-            if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
-            {
-                selected = true;
-                onInstructionSelect(this);
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
-        {
-            int col = Color.ofRGBA(255, 94, 33, 255).getColor();
-            int borderCol = Color.ofRGBA(255, selected ? 150 : 94, 33, 255).getColor();
-
-            Text lineNumber = Text.literal(String.valueOf(id));
-
-            textRenderer.draw(matrices, lineNumber, x + 1, y + (height - textRenderer.fontHeight) / 2.0f + 1, borderCol);
-
-            int textWidth = textRenderer.getWidth(lineNumber) + 2;
-            GUIUtil.renderBorder(matrices, x + textWidth, y, width - textWidth, height - 1, borderCol, 0);
-
-            textRenderer.draw(matrices, instructionProvider.getShortName(), x + textWidth + 2, (y + height) - textRenderer.fontHeight, col);
-
-            if (isMouseInside(mouseX, mouseY))
-            {
-                renderTooltipText(matrices, List.of(instructionProvider.getShortName()), x + width + 3, y, PLCProgramScreen.borderColour());
-            }
-        }
-
-        @Override
-        public SelectionType getType()
-        {
-            return selected ? SelectionType.FOCUSED : SelectionType.NONE;
-        }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
-        {
-
-        }
     }
 }

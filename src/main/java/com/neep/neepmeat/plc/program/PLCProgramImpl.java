@@ -45,7 +45,7 @@ public class PLCProgramImpl implements MutableProgram
     }
 
     @Override
-    public void emit(PLCInstruction instruction)
+    public void addBack(PLCInstruction instruction)
     {
         instructions.add(instruction);
     }
@@ -71,7 +71,8 @@ public class PLCProgramImpl implements MutableProgram
         {
             NbtCompound instructionNbt = new NbtCompound();
             instruction.writeNbt(instructionNbt);
-            instructionNbt.putString("id", Instructions.REGISTRY.getKey(instruction.getProvider()).toString());
+            instructionNbt.putString("id", Instructions.REGISTRY.getId(instruction.getProvider()).toString());
+            list.add(instructionNbt);
         }
         nbt.put("instructions", list);
         return nbt;

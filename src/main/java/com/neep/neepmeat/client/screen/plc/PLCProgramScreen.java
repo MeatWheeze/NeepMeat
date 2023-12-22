@@ -6,7 +6,6 @@ import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
-import com.neep.neepmeat.plc.opcode.InstructionBuilder;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCInstruction;
 import net.minecraft.client.MinecraftClient;
@@ -25,7 +24,6 @@ import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.RaycastContext;
-import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 import software.bernie.geckolib3.core.util.Color;
 
@@ -37,11 +35,8 @@ public class PLCProgramScreen extends Screen
     protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
 
-    protected PLCOperationSelector operationSelector = new PLCOperationSelector(this);
-    protected PLCProgramOutline outline = new PLCProgramOutline(this);
-
-    @Nullable protected InstructionBuilder instructionBuilder;
-    @Nullable private InstructionProvider instructionProvider;
+    protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
+    protected final PLCProgramOutline outline;
 
     protected final PLCBlockEntity plc;
 
@@ -50,6 +45,7 @@ public class PLCProgramScreen extends Screen
         super(Text.empty());
         this.passEvents = true;
         this.plc = plc;
+        this.outline = new PLCProgramOutline(plc.getEditor(), this);
     }
 
     @Override
@@ -158,24 +154,26 @@ public class PLCProgramScreen extends Screen
 
     public void updateInstruction(InstructionProvider provider)
     {
-        this.instructionProvider = provider;
-        this.instructionBuilder = provider.start(client.world, this::emitInstruction);
+//        this.instructionProvider = provider;
+//        this.instructionBuilder = provider.start(client.world, this::emitInstruction);
+        PLCSyncProgram.Client.switchOperation(provider, plc);
     }
 
     protected void addArgument(BlockHitResult result)
     {
-        if (instructionBuilder == null)
-            return;
+        PLCSyncProgram.Client.sendArgument(new InstructionProvider.Argument(result.getBlockPos(), result.getSide()), plc);
 
-        instructionBuilder.argument(result.getBlockPos(), result.getSide());
+//        if (instructionBuilder == null)
+//            return;
+//
+//        instructionBuilder.argument(result.getBlockPos(), result.getSide());
     }
 
     protected void emitInstruction(PLCInstruction instruction)
     {
         client.player.sendMessage(Text.of(instruction.toString()));
-        plc.getEditProgram().emit(instruction);
+        plc.getEditProgram().addBack(instruction);
         outline.update();
-        PLCSyncProgram.Client.syncProgram(plc, plc.getEditProgram());
     }
 
     protected BlockHitResult raycastClick(double mouseX, double mouseY)
