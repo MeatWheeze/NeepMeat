@@ -256,7 +256,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage().item(dir), CASTING_BASIN);
 
         HYDRAULIC_PRESS = registerBlockEntity("hydraulic_press", HydraulicPressBlockEntity::new, NMBlocks.HYDRAULIC_PRESS);
-        FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getStorage, HYDRAULIC_PRESS);
+//        FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getFluidStorageFromTop, HYDRAULIC_PRESS.);
+        FluidStorage.SIDED.registerForBlocks(HydraulicPressBlockEntity::getFluidStorageFromTop, NMBlocks.HYDRAULIC_PRESS.getStructureBlock());
 
         PYLON = registerBlockEntity("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
 

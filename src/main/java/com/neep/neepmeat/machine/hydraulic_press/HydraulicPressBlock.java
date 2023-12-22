@@ -1,10 +1,12 @@
 package com.neep.neepmeat.machine.hydraulic_press;
 
-import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.util.MiscUtils;
+import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -12,15 +14,16 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEntityProvider
+public class HydraulicPressBlock extends TallBlock implements BlockEntityProvider
 {
+    public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 10, 0, 16, 32 + 8, 16);
+
     public HydraulicPressBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
@@ -31,23 +34,6 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NMBlockEntities.HYDRAULIC_PRESS.instantiate(pos, state);
-    }
-
-    @Override
-    public BlockState getPlacementState(ItemPlacementContext context)
-    {
-        return getDefaultState().with(FACING, context.getPlayerFacing());
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
-    {
-        super.neighborUpdate(state, world, pos, block, fromPos, notify);
-//        if (!(world.getBlockEntity(pos.down()) instanceof CastingBasinBlockEntity) && world.getBlockEntity(pos) instanceof HydraulicPressBlockEntity be)
-//        {
-//            be.stopRecipe(null);
-//            be.setState(2);
-//        }
     }
 
     @Override
@@ -63,7 +49,13 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return Block.createCuboidShape(0, 7, 0, 16, 16, 16);
+        return OUTLINE;
+    }
+
+    @Override
+    protected Structure createStructure()
+    {
+        return BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(settings)));
     }
 
     @Override

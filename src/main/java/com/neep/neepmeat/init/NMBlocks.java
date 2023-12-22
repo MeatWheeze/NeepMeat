@@ -187,7 +187,7 @@ public class NMBlocks
     public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
 
     public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", block(), FabricBlockSettings.copyOf(MIXER)));
-    public static Block HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", block(), FabricBlockSettings.copyOf(MIXER)));
+    public static TallBlock HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", block(), FabricBlockSettings.copyOf(MIXER)));
 
     public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 

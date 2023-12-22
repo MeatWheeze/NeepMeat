@@ -31,14 +31,11 @@ public abstract class TallBlock extends BaseBlock
     public TallBlock(String registryName, Settings settings)
     {
         this(registryName, ItemSettings.block(), settings);
-//        super(registryName, settings);
-//        this.structureBlock = getStructure();
     }
 
     public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings);
-//        super(registryName, itemMaxStack, tooltipSupplier, settings);
         this.structureBlock = createStructure();
     }
 

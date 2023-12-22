@@ -80,7 +80,7 @@ public class NodeSupplier implements Supplier<FluidNode>, PipeFlowComponent
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant variant, TransactionContext transaction)
     {
         FluidNode node = get();
-        if (!variant.isBlank() && node != null)
+        if (!variant.isBlank() && node != null && node.getStorage(world) != null)
         {
             return node.getStorage(world).insert(variant, maxAmount, transaction);
         }
