@@ -112,10 +112,4 @@ public class WormBiteGoal extends AnimatedWormGoal<WormBiteGoal>
         setSequence(orientSequence);
         finished = false;
     }
-
-    @Override
-    public boolean shouldContinue()
-    {
-        return parent.getTarget() != null && !finished;
-    }
 }

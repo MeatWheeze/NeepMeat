@@ -15,6 +15,12 @@ public abstract class AnimatedWormGoal<T extends WormAction> extends Goal implem
     }
 
     @Override
+    public void start()
+    {
+        finished = false;
+    }
+
+    @Override
     public void tick()
     {
         if (sequence != null) sequence.tick(clazz.cast(this), counter);
@@ -26,6 +32,12 @@ public abstract class AnimatedWormGoal<T extends WormAction> extends Goal implem
     public boolean shouldRunEveryTick()
     {
         return true;
+    }
+
+    @Override
+    public boolean shouldContinue()
+    {
+        return !finished;
     }
 
     public void setSequence(Sequence<T> sequence)

@@ -37,11 +37,6 @@ public class WormTargetGoal extends Goal
         target = findTarget(getRange());
     }
 
-    @Override
-    public void tick()
-    {
-    }
-
     protected LivingEntity findTarget(float range)
     {
         Vec3d pos = parent.getPos();

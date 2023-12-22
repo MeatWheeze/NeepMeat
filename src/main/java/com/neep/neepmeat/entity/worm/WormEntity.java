@@ -80,6 +80,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     protected void initGoals()
     {
         this.goalSelector.add(1, new WormTargetGoal(this, TargetPredicate.DEFAULT, 14));
+        this.goalSelector.add(2, new WormFullSwingGoal(this, 8));
         this.goalSelector.add(2, new WormBiteGoal(this));
     }
 
@@ -145,11 +146,6 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         double x = getX();
         double z = getZ();
 
-//        head.setPos(x + 5, y + 16, z);
-//        updateHead();
-//        float radius = 8;
-//        float angle = MathHelper.wrapDegrees((float) world.getTime() / 3);
-
         if (world.isClient())
         {
             updateHead();
@@ -172,10 +168,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 
             Vec2f pitchYaw = NMMaths.rectToPol(u, v, w);
 
-            segment.setPos(x1, y1, z1);
-            segment.setPitch(pitchYaw.x);
-            segment.setYaw(pitchYaw.y);
-//            segment.setYaw(0);
+            segment.updatePositionAndAngles(x1, y1, z1, pitchYaw.y, pitchYaw.x);
         }
 
         updateGoalControls();
@@ -223,11 +216,11 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 
     protected void updateHead()
     {
-        double x = dataTracker.get(HEAD_X);
-        double y = dataTracker.get(HEAD_Y);
-        double z = dataTracker.get(HEAD_Z);
-        float pitch = dataTracker.get(HEAD_PITCH);
-        float yaw = dataTracker.get(HEAD_YAW);
+//        double x = dataTracker.get(HEAD_X);
+//        double y = dataTracker.get(HEAD_Y);
+//        double z = dataTracker.get(HEAD_Z);
+//        float pitch = dataTracker.get(HEAD_PITCH);
+//        float yaw = dataTracker.get(HEAD_YAW);
         head.updatePositionAndAngles(dataTracker.get(HEAD_X), dataTracker.get(HEAD_Y), dataTracker.get(HEAD_Z),
                 dataTracker.get(HEAD_YAW), dataTracker.get(HEAD_PITCH));
     }
@@ -396,6 +389,27 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         }
 
         @Override
+        public void updatePositionAndAngles(double x, double y, double z, float yaw, float pitch)
+        {
+            this.updatePosition(x, y, z);
+            this.prevYaw = getYaw();
+            this.prevPitch = getPitch();
+            this.setYaw(yaw);
+            this.setPitch(pitch);
+        }
+
+        @Override
+        public void updatePosition(double x, double y, double z)
+        {
+            double d = MathHelper.clamp(x, -3.0E7, 3.0E7);
+            double e = MathHelper.clamp(z, -3.0E7, 3.0E7);
+            this.prevX = getX();
+            this.prevY = getY();
+            this.prevZ = getZ();
+            this.setPosition(d, y, e);
+        }
+
+        @Override
         public boolean damage(DamageSource source, float amount)
         {
             return parent.damage(source, amount);
@@ -407,11 +421,4 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
             return false;
         }
     }
-
-    public enum Type
-    {
-        HEAD,
-        TAIL
-    }
-
 }
