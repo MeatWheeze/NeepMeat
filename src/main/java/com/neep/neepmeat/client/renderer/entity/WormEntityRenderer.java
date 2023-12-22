@@ -4,15 +4,11 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.entity.WormEntityModel;
 import com.neep.neepmeat.entity.worm.WormEntity;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.VertexConsumers;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -101,9 +97,6 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
         float lerpYaw = segment.getYaw();
         float lerpPitch = segment.getPitch();
 
-//        float lerpYaw = 0;
-//        float lerpPitch = MathHelper.wrapDegrees((base.world.getTime() + tickDelta) / 5);
-
         float ageInTicks = base.age + tickDelta;
 
         applyRotations(segment, matrices, lerpPitch, lerpYaw, tickDelta);
@@ -138,6 +131,12 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
 
         matrices.pop();
 
+    }
+
+    @Override
+    public boolean shouldRender(WormEntity entity, Frustum frustum, double x, double y, double z)
+    {
+        return super.shouldRender(entity, frustum, x, y, z);
     }
 
     protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)

@@ -2,6 +2,7 @@ package com.neep.neepmeat.entity.worm;
 
 import com.neep.meatlib.api.entity.MultiPartEntity;
 import com.neep.neepmeat.util.Bezier;
+import com.neep.neepmeat.util.NMMaths;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityPose;
@@ -17,6 +18,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.Arm;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -39,7 +41,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     private WormAction currentAction;
     protected List<WormSegment> segments = new ArrayList<>(17);
     protected List<WormSegment> tail = new ArrayList<>(16);
-    protected final WormSegment head;
+    public final WormSegment head;
 
     public WormEntity(EntityType<? extends WormEntity> type, World world)
     {
@@ -102,11 +104,12 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         double y = getY();
         double x = getX();
         double z = getZ();
-        float pitch = getPitch();
-        float yaw = getYaw();
+
         head.setPos(x + 5, y + 16, z);
+
+
         head.setPitch(0);
-        head.setBodyYaw(90);
+        head.setYaw(MathHelper.wrapDegrees((float) world.getTime() / 2));
 
         Vec3d headLook = head.getPos().add(Vec3d.fromPolar(head.getPitch(), head.getYaw()).multiply(-8));
 
@@ -119,22 +122,20 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
             double y1 = Bezier.bezier3(delta, y, y + 5, headLook.y, head.getY());
             double z1 = Bezier.bezier3(delta, z, z, headLook.z, head.getZ());
 
-//            double x1 = MathHelper.lerp(delta, x, head.getX());
-//            double y1 = MathHelper.lerp(delta, y, head.getY());
-//            double z1 = MathHelper.lerp(delta, z, head.getZ());
+            double u = Bezier.derivative3(delta, x, x, headLook.x, head.getX());
+            double v = Bezier.derivative3(delta, y, y + 5, headLook.y, head.getY());
+            double w = Bezier.derivative3(delta, z, z, headLook.z, head.getZ());
 
-            float pitch1 = MathHelper.lerp(delta, pitch, head.getPitch());
-            float yaw1 = MathHelper.lerp(delta, yaw, head.getYaw());
+            Vec2f pitchYaw = NMMaths.rectToPol(u, v, w);
+
+//            float pitch1 = MathHelper.lerp(delta, pitch, head.getPitch());
+//            float yaw1 = MathHelper.lerp(delta, yaw, head.getYaw());
 
             segment.setPos(x1, y1, z1);
-            segment.setPitch(pitch1);
-            segment.setYaw(yaw1);
-//            segment.refreshPositionAndAngles(x1, y1, z1, yaw1, pitch1);
-//            segment.updateTrackedPosition(x1, y1, z1);
-//            segment.updateTrackedPositionAndAngles();
+            segment.setPitch(pitchYaw.x);
+            segment.setYaw(pitchYaw.y);
+//            segment.setYaw(0);
         }
-
-
 
 //        if (currentAction != null)
 //        {
@@ -195,7 +196,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     @Override
     public Iterable<WormSegment> getParts()
     {
-        return tail;
+        return segments;
     }
 
     public static class WormSegment extends Entity

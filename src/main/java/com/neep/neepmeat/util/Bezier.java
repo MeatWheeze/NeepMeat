@@ -33,6 +33,17 @@ public class Bezier
         return sum;
     }
 
+    public static double bezier2(double t, double... weights)
+    {
+        double t2 = t * t;
+        double mt = 1 - t;
+        double mt2 = mt * mt;
+        return
+                weights[0] * mt2
+                + weights[1] * 2 * mt * t
+                + weights[2] * t2;
+    }
+
     public static double bezier3(double t, double... weights)
     {
         double t2 = t * t;
@@ -42,9 +53,17 @@ public class Bezier
         double mt3 = mt2 * mt;
         return
                 weights[0] * mt3
-                        + weights[1] * 3 * mt2 * t
-                        + weights[2] * 3 * mt * t2
-                        + weights[3] * t3;
+                + weights[1] * 3 * mt2 * t
+                + weights[2] * 3 * mt * t2
+                + weights[3] * t3;
+    }
+
+    public static double derivative3(double t, double... weights)
+    {
+        return bezier2(t,
+                3 * (weights[1] - weights[0]),
+                3 * (weights[2] - weights[1]),
+                3 * (weights[3] - weights[2]));
     }
 
     protected static long binomial(int n, int r)

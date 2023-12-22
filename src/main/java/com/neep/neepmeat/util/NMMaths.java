@@ -2,6 +2,7 @@ package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
@@ -109,5 +110,19 @@ public class NMMaths
         Vec3d offset2 = new Vec3d(node2.getNodePos().face().getUnitVector()).multiply(0.5);
         Vec3d v2 = Vec3d.ofCenter(node2.getNodePos().pos()).add(offset2);
         return manhattanDistance(v1, v2);
+    }
+
+    /**Converts a 3D position to pitch and yaw in degrees, neglecting roll.
+     * @param u X component
+     * @param v Y component
+     * @param w Z component
+     * @return A vector containing pitch and yaw.
+     */
+    public static Vec2f rectToPol(double u, double v, double w)
+    {
+        float xz = (float) Math.sqrt(w * w + u * u);
+        return new Vec2f(
+                (float) Math.toDegrees(Math.atan(-v / xz)), // Pitch
+                (float) Math.toDegrees(Math.atan2(-u, w))); // Yaw
     }
 }
