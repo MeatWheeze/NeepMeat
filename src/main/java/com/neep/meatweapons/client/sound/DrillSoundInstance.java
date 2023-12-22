@@ -71,7 +71,7 @@ public class DrillSoundInstance extends MovingSoundInstance implements PlayerAtt
         float targetPitch;
 
         ItemStack stack = player.getActiveItem();
-        if (stack.getItem() instanceof AssaultDrillItem drill)
+        if (stack.getItem() instanceof AssaultDrillItem drill && AssaultDrillItem.using(stack))
         {
             targetVolume = 1;
             targetPitch = 1;
