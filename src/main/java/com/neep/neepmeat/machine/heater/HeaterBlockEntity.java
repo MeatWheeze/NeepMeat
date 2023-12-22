@@ -1,13 +1,13 @@
 package com.neep.neepmeat.machine.heater;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
 import net.minecraft.block.entity.BlockEntityType;
@@ -21,13 +21,9 @@ import net.minecraft.world.World;
 import java.util.Optional;
 import java.util.Random;
 
-@SuppressWarnings("UnstableApiUsage")
-public class HeaterBlockEntity extends BloodMachineBlockEntity
+public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAcceptor
 {
-
-    public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
-    public static long CAPACITY = 4 * USE_AMOUNT;
-    public static float MIN_MULTIPLIER;
+    private float influx;
 
     protected IHeatable heatable;
     protected int copperTime;
@@ -47,23 +43,20 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         blockEntity.tick();
     }
 
-    public boolean refreshCache(World world, BlockPos pos, BlockState state)
+    public void refreshCache(World world, BlockPos pos, BlockState state)
     {
         if (world.getBlockEntity(pos.offset(state.get(HeaterBlock.FACING))) instanceof IHeatable furnace)
         {
             heatable = furnace;
-            return true;
         }
         else
         {
             heatable = null;
-            return false;
         }
     }
 
     public void tick()
     {
-        super.tick();
         if (heatable == null)
         {
             refreshCache(getWorld(), getPos(), getCachedState());
@@ -71,11 +64,11 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
         if (heatable != null)
         {
-            float runningRate = (float) getPUPower();
+            double runningRate = getPUPower();
             if (this.getPUPower() > 0.039)
             {
                 heatable.setBurning();
-                heatable.setHeat(runningRate);
+                heatable.setHeat((float) runningRate);
                 heatBlock();
             }
 
@@ -88,6 +81,11 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         {
             heatBlock();
         }
+    }
+
+    public double getPUPower()
+    {
+        return influx;
     }
 
     @Override
@@ -107,7 +105,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         {
             ++copperTime;
 //            getWorld().addParticle(ParticleTypes.LAVA, facingPos.getX() + 0.5, facingPos.getY() + 1.5, facingPos.getZ() + 0.5, 0, 0, 0);
-            if (copperTime % 5 == 0)
+//            if (copperTime % 5 == 0)
 //                spawnOxidiseParticles((ServerWorld) getWorld(), ParticleTypes.DRIPPING_LAVA, facingPos, new Random(world.getTime()), copperTime / 2, 16);
 
             if (copperTime == 100)
@@ -139,12 +137,6 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
         return false;
     }
 
-    @Override
-    public long getMaxInsert()
-    {
-        return FluidConstants.BUCKET / 2;
-    }
-
     protected static void spawnOxidationParticles(ServerWorld world, DefaultParticleType particle, BlockPos pos, Random random, int amount, int radius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, radius))
@@ -155,5 +147,17 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 //            ParticleSpawnPacket.send(player, particle, new Vec3d(pos.getX() + dx, pos.getY() + dy, pos.getZ() + dz), new Vec3d(0, 0, 0), amount);
             ParticleSpawnPacket.send(player, particle, pos, amount);
         }
+    }
+
+    @Override
+    public void updateInflux(float influx)
+    {
+        this.influx = influx;
+    }
+
+    @Override
+    public Mode getMode()
+    {
+        return Mode.IN;
     }
 }

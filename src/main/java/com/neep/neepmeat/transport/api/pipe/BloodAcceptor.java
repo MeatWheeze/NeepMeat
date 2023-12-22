@@ -12,7 +12,10 @@ public interface BloodAcceptor
             BloodAcceptor.class, Direction.class);
 
 
-    float getRate();
+    default float getRate()
+    {
+        return 0;
+    }
 
     void updateInflux(float influx);
 
