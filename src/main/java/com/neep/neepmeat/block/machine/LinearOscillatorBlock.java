@@ -13,6 +13,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -73,9 +74,9 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be && !world.isClient())
         {
-            be.update(fromPos, state);
+            be.update((ServerWorld) world, pos, fromPos, state);
         }
     }
 

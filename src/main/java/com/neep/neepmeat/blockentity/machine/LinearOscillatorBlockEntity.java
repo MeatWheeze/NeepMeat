@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.machine.LinearOscillatorBlock;
+import com.neep.neepmeat.block.machine.IKineticBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -20,10 +20,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEntityClientSerializable
+public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEntityClientSerializable, IKineticBlock
 {
     public static final String NBT_COOLDOWN = "cooldown";
     public static final String NBT_MAX_COOLDOWN = "max_cooldown";
@@ -78,18 +79,17 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
     public void extend()
     {
-        if (connectedMotor == null)
+        if (!hasMotor())
             return;
 
-//        if (!getWorld().isReceivingRedstonePower(getPos()))
         if (getWorld().getReceivedRedstonePower(getPos()) <= 0)
         {
-            connectedMotor.setRunning(false);
+            getConnectedMotor().setRunning(false);
             return;
         }
 
         Transaction transaction = Transaction.openOuter();
-        long converted = connectedMotor.doWork(BASE_WORK_AMOUNT, transaction);
+        long converted = doWork(BASE_WORK_AMOUNT, transaction);
         transaction.commit();
 
         if (converted != BASE_WORK_AMOUNT)
@@ -117,19 +117,19 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
     }
 
-    public void update(BlockPos updatePos, BlockState state)
-    {
-        Direction facing = getCachedState().get(LinearOscillatorBlock.FACING);
-        BlockPos backPos = getPos().offset(facing.getOpposite());
-        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be)
-        {
-            this.connectedMotor = be;
-        }
-        else
-        {
-            this.connectedMotor = null;
-        }
-    }
+//    public void update(ServerWorld world, BlockPos pos, BlockPos updatePos, BlockState state)
+//    {
+//        Direction facing = getCachedState().get(LinearOscillatorBlock.FACING);
+//        BlockPos backPos = getPos().offset(facing.getOpposite());
+//        if (world.getBlockEntity(backPos) instanceof MotorBlockEntity be)
+//        {
+//            this.connectedMotor = be;
+//        }
+//        else
+//        {
+//            this.connectedMotor = null;
+//        }
+//    }
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
@@ -175,5 +175,17 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
         nbt.putFloat("prev_extension", prevExtension);
         nbt.putFloat("extension", extension);
         return nbt;
+    }
+
+    @Override
+    public void setConnectedMotor(@Nullable MotorBlockEntity motor)
+    {
+        this.connectedMotor = motor;
+    }
+
+    @Override
+    public MotorBlockEntity getConnectedMotor()
+    {
+        return connectedMotor;
     }
 }
