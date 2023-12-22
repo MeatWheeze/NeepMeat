@@ -1,10 +1,8 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
-import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
@@ -91,12 +89,12 @@ public class FluidNodeManager
 
     public static void tickNetwork(ServerWorld world)
     {
-        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
-        while (!queue.isEmpty())
-        {
-            FluidNode node = queue.poll();
-            node.loadDeferred(world);
-        }
+//        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
+//        while (!queue.isEmpty())
+//        {
+//            FluidNode node = queue.poll();
+//            node.loadDeferred(world);
+//        }
 
         if (shouldTick(world.getTime()))
         {

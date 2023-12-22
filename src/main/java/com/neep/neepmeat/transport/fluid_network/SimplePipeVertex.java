@@ -18,11 +18,14 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
 
     protected long amount;
     protected long oldAmount;
+
+    protected final long pos;
     private PipeNetwork network;
     protected FluidVariant variant = FluidVariant.blank();
 
-    public SimplePipeVertex()
+    public SimplePipeVertex(long pos)
     {
+        this.pos = pos;
     }
 
     public long getCapacity()
@@ -159,6 +162,12 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
         pressureHeight += h;
     }
 
+    @Override
+    public long getPos()
+    {
+        return pos;
+    }
+
     public float getTotalHead()
     {
         return pressureHeight + getHeight();
@@ -221,7 +230,7 @@ public class SimplePipeVertex extends SnapshotParticipant<ResourceAmount<FluidVa
         {
             if (numEdges() == 2)
             {
-                PipeVertex[] edge = new SimplePipeVertex[2];
+                PipeVertex[] edge = new PipeVertex[2];
                 int current = 0;
 
                 for (int i = 0; i < 6; ++i)

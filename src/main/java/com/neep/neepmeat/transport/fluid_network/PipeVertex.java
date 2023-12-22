@@ -22,14 +22,11 @@ public interface PipeVertex extends PipeFlowComponent
 
     PipeNetwork getNetwork();
 
-
     boolean canSimplify();
 
     void reset();
 
     boolean collapseEdges();
-
-//    long[] getVelocity();
 
     default boolean keepNetworkValid() {return false;}
 
@@ -37,4 +34,6 @@ public interface PipeVertex extends PipeFlowComponent
     void setHeight(float value);
 
     void addHead(int h);
+
+    long getPos();
 }

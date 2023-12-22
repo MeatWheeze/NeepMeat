@@ -3,11 +3,10 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl2;
+import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -29,8 +28,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Supplier;
 
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 {
@@ -106,7 +103,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 //                            System.out.print(supplier.get());
 //                        }
 //                    }
-                    if (network instanceof PipeNetworkImpl2 impl2)
+                    if (network instanceof PipeNetworkImpl impl2)
                     {
                         System.out.print("\n");
                         impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));

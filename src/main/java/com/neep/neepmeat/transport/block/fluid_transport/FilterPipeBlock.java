@@ -41,19 +41,6 @@ public class FilterPipeBlock extends AbstractAxialPipe implements BlockEntityPro
         this.setDefaultState(this.getStateManager().getDefaultState());
     }
 
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
-    {
-        super.onStateReplaced(state, world, pos, newState, moved);
-        if (world.isClient())
-            return;
-
-        if (!state.isOf(newState.getBlock()))
-        {
-            removePipe((ServerWorld) world, state, pos);
-        }
-    }
-
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         FilterPipeBlockEntity be = world.getBlockEntity(pos, NMBlockEntities.FILTER_PIPE).orElse(null);
