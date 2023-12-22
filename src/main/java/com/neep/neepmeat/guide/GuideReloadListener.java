@@ -52,9 +52,6 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
 
                 processArticles((JsonObject) rootElement);
                 root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
-
-
-                System.out.println(root.getChildren().get(0));
             }
             catch(Exception e)
             {

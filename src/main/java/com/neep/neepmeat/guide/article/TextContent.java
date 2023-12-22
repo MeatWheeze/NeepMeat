@@ -19,14 +19,19 @@ public class TextContent implements Article.Content
     }
 
     @Override
-    public int render(MatrixStack matrices, float x, float y, float width, ArticleTextWidget parent)
+    public int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent)
     {
         TextRenderer renderer = parent.getTextRenderer();
         List<OrderedText> lines = renderer.wrapLines(text, (int) width);
         int i = 0;
-        for (;i < lines.size(); ++i)
+        while (i < lines.size())
         {
-            parent.getTextRenderer().draw(matrices, lines.get(i), x, y + i * renderer.fontHeight, 0x00FF00);
+            float head = y + i * renderer.fontHeight;
+            if (head > parent.getTop() && (head + renderer.fontHeight) < parent.getBottom())
+            {
+                parent.getTextRenderer().draw(matrices, lines.get(i), x, (float) (y - scroll + i * renderer.fontHeight), 0x00FF00);
+            }
+            ++i;
         }
         return i * renderer.fontHeight;
     }

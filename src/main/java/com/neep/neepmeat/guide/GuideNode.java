@@ -2,6 +2,7 @@ package com.neep.neepmeat.guide;
 
 import com.neep.neepmeat.client.screen.tablet.ITabletScreen;
 import com.neep.neepmeat.client.screen.tablet.TabletArticlePane;
+import com.neep.neepmeat.client.screen.tablet.TabletListPane;
 import com.neep.neepmeat.guide.article.Article;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -75,7 +76,7 @@ public interface GuideNode
         @Override
         public void visitScreen(ITabletScreen screen)
         {
-
+            screen.push(this);
         }
     }
 

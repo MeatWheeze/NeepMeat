@@ -3,9 +3,11 @@ package com.neep.neepmeat.client.screen.tablet;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -28,8 +30,6 @@ import java.util.stream.Collectors;
 public class TabletScreen extends HandledScreen<ScreenHandler> implements ITabletScreen
 {
     public static final Identifier TABLET_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/tablet_background.png");
-
-    public List<TabletScreenFactory> SCREENS = new ArrayList<>();
 
     private float mouseX;
     private float mouseY;
@@ -54,8 +54,14 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     {
         super(handler, player.getInventory(), new TranslatableText(""));
         this.player = player;
-        this.leftPane = new TabletListPane(player, this);
+        this.leftPane = new TabletListPane(this);
         this.rightPane = new TabletArticlePane(this, Article.EMPTY);
+
+        GuideNode root = GuideReloadListener.getInstance().getRootNode();
+        if (root != null)
+        {
+            push(root);
+        }
     }
 
     @Override
@@ -78,6 +84,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     public void push(GuideNode node)
     {
         path.push(node);
+        leftPane.init();
     }
 
     @Override
@@ -100,12 +107,12 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         GUIUtil.renderBorder(matrices, x, y, contentWidth, contentHeight, borderCol, offset);
     }
 
-
-    protected void enterNode(GuideNode node)
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
     {
-        path.push(node);
-        node.visitScreen(this);
-        init();
+        Optional<Element> op = this.hoveredElement(mouseX, mouseY);
+        return this.hoveredElement(mouseX, mouseY).filter(element ->
+                element.mouseScrolled(mouseX, mouseY, amount)).isPresent();
     }
 
     @Override
@@ -245,34 +252,5 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
             r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
         }
         this.itemRenderer.zOffset = f;
-    }
-
-    public static class TabletScreenFactory
-    {
-        private final Identifier icon;
-        private final Supplier<ScreenHandler> handler;
-        private final Supplier<TabletScreen> screenSupplier;
-
-        public TabletScreenFactory(Identifier widget, Supplier<TabletScreen> screenSupplier, Supplier<ScreenHandler> handler)
-        {
-            this.icon = widget;
-            this.handler = handler;
-            this.screenSupplier = screenSupplier;
-        }
-
-        public TabletScreen getScreen(PlayerEntity player)
-        {
-            return screenSupplier.get();
-        }
-
-        public ScreenHandler getHandler()
-        {
-            return handler.get();
-        }
-
-        public Identifier getIcon()
-        {
-            return icon;
-        }
     }
 }

@@ -20,7 +20,7 @@ public class TabletArticlePane extends ContentPane implements Drawable, Element,
 
     public TabletArticlePane(ITabletScreen parent, Article article)
     {
-        super(Text.of("eeeee"), parent);
+        super(Text.of(""), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
         articleWidget = new ArticleTextWidget(textRenderer, article);
     }
@@ -50,6 +50,24 @@ public class TabletArticlePane extends ContentPane implements Drawable, Element,
         {
         }
         super.charTyped(chr, modifiers);
+        return true;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
+    {
+        return articleWidget.mouseScrolled(mouseX, mouseY, amount);
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY)
+    {
         return true;
     }
 
