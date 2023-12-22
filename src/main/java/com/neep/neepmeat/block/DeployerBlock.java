@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.DeployerBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,12 +13,22 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.CallbackI;
 
 public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public DeployerBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
+        {
+            be.update(fromPos);
+        }
     }
 
     @Override

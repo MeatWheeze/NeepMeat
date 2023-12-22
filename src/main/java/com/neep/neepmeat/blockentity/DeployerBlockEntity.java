@@ -1,5 +1,9 @@
 package com.neep.neepmeat.blockentity;
 
+import com.mojang.authlib.GameProfile;
+import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.neepmeat.block.DeployerBlock;
+import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
@@ -7,19 +11,31 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.mixin.container.ServerPlayerEntityAccessor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypeFilter;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 
 @SuppressWarnings("UnstableApiUsage")
 public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorage<ItemVariant>, BlockEntityClientSerializable
 {
     protected final WritableStackStorage storage;
+    protected int cooldown= 0;
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -45,6 +61,40 @@ public class DeployerBlockEntity extends BlockEntity implements SingleSlotStorag
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
         return nbt;
+    }
+
+    public void update(BlockPos fromPos)
+    {
+        if (getWorld().isReceivingRedstonePower(fromPos))
+        {
+            deploy((ServerWorld) world);
+        }
+    }
+
+    public void deploy(ServerWorld world)
+    {
+        ServerPlayerEntity fakePlayer = new FakePlayerEntity(world.getServer(), world, pos);
+        fakePlayer.setWorld(world);
+        fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
+        Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+        fakePlayer.setPitch(0);
+
+        ItemStack stack = storage.getAsStack();
+        Item item = stack.getItem();
+
+        BlockPos targetPos = pos.offset(facing);
+        fakePlayer.setStackInHand(Hand.MAIN_HAND, stack);
+        Vec3d hitPos = new Vec3d(targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5);
+        BlockHitResult hit = new BlockHitResult(hitPos, facing.getOpposite(), targetPos, true);
+
+        item.useOnBlock(new ItemUsageContext(fakePlayer, Hand.MAIN_HAND, hit));
+
+        storage.setStack(stack);
+
+        fakePlayer.remove(Entity.RemovalReason.DISCARDED);
+
+//        Box box = new Box(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
+//        System.out.println(world.getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, entity -> true));
     }
 
     @Override
