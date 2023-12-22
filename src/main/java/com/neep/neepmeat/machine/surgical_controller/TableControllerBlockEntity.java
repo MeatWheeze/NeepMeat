@@ -38,6 +38,8 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     protected Identifier currentRecipe;
 
+    protected boolean redstone;
+
     public TableControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -87,7 +89,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         }
     }
 
-    public void testRecipe()
+    public void tryRecipe()
     {
         MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).ifPresent(this::startRecipe);
 //        NeepMeat.LOGGER.info("Recipe: " + recipe);
@@ -178,6 +180,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         super.writeNbt(nbt);
         nbt.putInt("recipeProgress", recipeProgress);
         nbt.putString("currentRecipe", currentRecipe != null ? currentRecipe.toString() : "null");
+        nbt.putBoolean("redstone", redstone);
         robot.writeNbt(nbt);
         context.writeNbt(nbt);
     }
@@ -188,6 +191,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         super.readNbt(nbt);
         this.recipeProgress = nbt.getInt("recipeProgress");
         this.currentRecipe = new Identifier(nbt.getString("currentRecipe"));
+        this.redstone = nbt.getBoolean("redstone");
         robot.readNbt(nbt);
         context.readNbt(nbt);
     }
@@ -196,5 +200,15 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     {
         Direction facing = getCachedState().get(TableControllerBlock.FACING);
         return direction == facing || direction == Direction.DOWN ? context.storage : null;
+    }
+
+    public void update(boolean receiving)
+    {
+        if (receiving && !redstone)
+        {
+            assemble();
+            tryRecipe();
+        }
+        redstone = receiving;
     }
 }
