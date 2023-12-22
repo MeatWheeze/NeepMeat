@@ -1,0 +1,32 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_block"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:meat_steel_component"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:synthesiser",
+    "amount": 1
+  }
+}

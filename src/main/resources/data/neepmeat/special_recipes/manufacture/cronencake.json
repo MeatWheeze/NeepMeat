@@ -1,0 +1,28 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:whisper_flour"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:egg"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:sugar"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:blood"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:cronencake",
+    "amount": 1
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_component"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:iron_ingot"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:vascular_conduit",
+    "amount": 8
+  }
+}
