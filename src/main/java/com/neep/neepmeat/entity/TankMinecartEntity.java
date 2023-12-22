@@ -5,6 +5,7 @@ import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMEntities;
+import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -14,6 +15,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -88,6 +90,13 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
         return buffer.iterator(transaction);
     }
 
+    @Override
+    public ItemStack getPickBlockStack()
+    {
+        return NMItems.TANK_MINECART.getDefaultStack();
+    }
+
+    @Override
     public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand)
     {
         if (buffer.handleInteract(world, player, hand))
