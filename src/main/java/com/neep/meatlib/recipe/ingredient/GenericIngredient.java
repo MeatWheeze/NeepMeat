@@ -1,4 +1,4 @@
-package com.neep.meatlib.recipe;
+package com.neep.meatlib.recipe.ingredient;
 
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;

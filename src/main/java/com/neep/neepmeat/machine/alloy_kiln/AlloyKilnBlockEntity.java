@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -9,7 +9,6 @@ import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

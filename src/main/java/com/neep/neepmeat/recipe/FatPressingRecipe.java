@@ -1,8 +1,7 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.ImplementedRecipe;
-import com.neep.meatlib.recipe.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;

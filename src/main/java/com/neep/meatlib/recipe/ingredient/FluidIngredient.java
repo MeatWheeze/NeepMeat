@@ -1,4 +1,4 @@
-package com.neep.meatlib.recipe;
+package com.neep.meatlib.recipe.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;

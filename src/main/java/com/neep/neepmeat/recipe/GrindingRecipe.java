@@ -1,8 +1,8 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.RecipeInput;
-import com.neep.meatlib.recipe.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.GrinderStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

@@ -1,10 +1,9 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.FluidIngredient;
-import com.neep.meatlib.recipe.GenericIngredient;
-import com.neep.meatlib.recipe.ItemIngredient;
-import com.neep.meatlib.recipe.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.FluidIngredient;
+import com.neep.meatlib.recipe.ingredient.GenericIngredient;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

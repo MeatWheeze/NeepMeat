@@ -1,4 +1,4 @@
-package com.neep.meatlib.recipe;
+package com.neep.meatlib.recipe.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 @SuppressWarnings("UnstableApiUsage")
 public class RecipeOutput<T>
