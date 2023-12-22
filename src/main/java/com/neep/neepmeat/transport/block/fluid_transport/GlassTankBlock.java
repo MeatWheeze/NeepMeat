@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.GlassTankBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -25,7 +26,7 @@ public class GlassTankBlock extends TankBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new GlassTankBlockEntity(pos, state);
+        return NMBlockEntities.GLASS_TANK.instantiate(pos, state);
     }
 
     @Override

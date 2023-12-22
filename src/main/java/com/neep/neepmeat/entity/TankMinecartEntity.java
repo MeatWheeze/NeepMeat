@@ -38,14 +38,14 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
     public TankMinecartEntity(EntityType<?> entityType, World world)
     {
         super(entityType, world);
-        this.setCustomBlock(FluidTransport.GLASS_TANK.getDefaultState());
+        this.setCustomBlock(FluidTransport.BASIC_GLASS_TANK.getDefaultState());
         this.setCustomBlockPresent(true);
     }
 
     public TankMinecartEntity(World world, double x, double y, double z)
     {
         super(null, world, x, y, z);
-        this.setCustomBlock(FluidTransport.GLASS_TANK.getDefaultState());
+        this.setCustomBlock(FluidTransport.BASIC_GLASS_TANK.getDefaultState());
         this.setCustomBlockPresent(true);
     }
 
@@ -101,7 +101,7 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
                 itemStack.setCustomName(this.getCustomName());
             }
             this.dropStack(itemStack);
-            this.dropStack(FluidTransport.GLASS_TANK.asItem().getDefaultStack());
+            this.dropStack(FluidTransport.BASIC_GLASS_TANK.asItem().getDefaultStack());
         }
     }
 

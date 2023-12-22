@@ -40,7 +40,6 @@ import com.neep.neepmeat.machine.item_mincer.ItemMincerBlock;
 import com.neep.neepmeat.machine.mincer.MincerBlock;
 import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
-import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
@@ -52,9 +51,6 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.FluidDrainBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.transport.machine.item.EjectorBlock;
@@ -214,19 +210,12 @@ public class NMBlocks
 
     public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", block().factory(FluidComponentItem::new), MACHINE_SETTINGS));
 
-    public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", block(), FLUID_MACHINE_SETTINGS));
-    public static Block FLUID_BUFFER = BlockRegistry.queue(new FluidBufferBlock("fluid_buffer", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
     public static Block ITEM_BUFFER = BlockRegistry.queue(new DisplayPlatformBlock("item_buffer", block(), MACHINE_SETTINGS));
-//    public static Block MOB_PLATFORM = BlockRegistry.queue(new MobPlatformBlock("mob_platform", block(), MACHINE_SETTINGS));
-//    public static Block FLUID_METER = BlockRegistry.queue(new FluidMeter("fluid_meter", 64, true, FLUID_MACHINE_SETTINGS));
-//    public static Block PRESSURE_GAUGE = BlockRegistry.queue(new PressureGauge("pressure_gauge", 64, true, FLUID_MACHINE_SETTINGS));
-    public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), FLUID_MACHINE_SETTINGS));
-    public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", block().tooltip(TooltipSupplier.simple(1)), FLUID_MACHINE_SETTINGS));
-//    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
+    //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
     public static Block BOTTLER = BlockRegistry.queue(new BottlerBlock("bottler", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FLUID_MACHINE_SETTINGS));
 
-    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(2)), FLUID_MACHINE_SETTINGS));
+    public static Block FLUID_RATIONER = BlockRegistry.queue(new FluidRationerBlock("fluid_rationer", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(FLUID_MACHINE_SETTINGS).nonOpaque()));
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", block(), FabricBlockSettings.copyOf(Blocks.HOPPER)));

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "neepmeat:block/advanced_tank",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "neepmeat:block/advanced_tank"
+    },
+    "axis=z": {
+      "model": "neepmeat:block/advanced_tank",
+      "x": 90
+    }
+  }
+}

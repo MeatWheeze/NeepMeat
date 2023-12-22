@@ -16,6 +16,7 @@ import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
+import com.neep.neepmeat.transport.FluidTransport;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -92,7 +93,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
-        registry.addWorkstations(HEATING, EntryStacks.of(NMBlocks.MULTI_TANK.asItem()));
+        registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));

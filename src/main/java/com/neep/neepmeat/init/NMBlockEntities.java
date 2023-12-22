@@ -59,6 +59,7 @@ import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.AdvancedTankBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
@@ -75,6 +76,7 @@ import com.neep.neepmeat.transport.machine.item.BufferBlockEntity;
 import com.neep.neepmeat.transport.machine.item.EjectorBlockEntity;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
@@ -93,6 +95,7 @@ public class NMBlockEntities
     public static BlockEntityType<WindowPipeBlockEntity> WINDOW_PIPE;
     public static BlockEntityType<PumpBlockEntity> PUMP;
     public static BlockEntityType<TankBlockEntity> TANK;
+    public static BlockEntityType<TankBlockEntity> ADVANCED_TANK;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
 
     public static BlockEntityType<DisplayPlatformBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
@@ -178,18 +181,22 @@ public class NMBlockEntities
         PUMP = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, FluidTransport.PUMP);
         FluidPump.SIDED.registerForBlockEntity(PumpBlockEntity::getPump, PUMP);
 
-        TANK = registerBlockEntity("tank_block_entity", TankBlockEntity::new, FluidTransport.TANK);
+        TANK = registerBlockEntity("tank_block_entity", (pos, state) -> new TankBlockEntity(TANK, pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_TANK);
         FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, TANK);
         TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, TANK);
 
-        GLASS_TANK = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, FluidTransport.GLASS_TANK);
+        GLASS_TANK = registerBlockEntity("glass_tank_block_entity", (pos, state) -> new GlassTankBlockEntity(pos, state, 8 * FluidConstants.BUCKET), FluidTransport.BASIC_GLASS_TANK);
         FluidStorage.SIDED.registerForBlockEntity(GlassTankBlockEntity::getStorage, GLASS_TANK);
         TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, GLASS_TANK);
 
-        MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
+        ADVANCED_TANK = registerBlockEntity("advanced_tank", (pos, state) -> new TankBlockEntity(ADVANCED_TANK, pos, state, 16 * FluidConstants.BUCKET), FluidTransport.ADVANCED_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(TankBlockEntity::getStorage, ADVANCED_TANK);
+        TankBlockEntity.LOOKUP.registerForBlockEntity(TankBlockEntity::find, ADVANCED_TANK);
+
+        MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, FluidTransport.MULTI_TANK);
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
         Heatable.LOOKUP.registerSelf(MULTI_TANK);
-        FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
+        FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, FluidTransport.FLUID_BUFFER);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
         FLUID_PIPE = registerBlockEntity("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
         STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
@@ -198,8 +205,8 @@ public class NMBlockEntities
         LIMITER_VALVE = registerBlockEntity("limiter_valve", LimiterValveBlockEntity::new, FluidTransport.LIMITER_VALVE);
         WINDOW_PIPE = registerBlockEntity("window_pipe", WindowPipeBlockEntity::new, FluidTransport.WINDOW_PIPE);
 
-        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
-        FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);
+        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, FluidTransport.FLUID_DRAIN);
+        FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, FluidTransport.FLUID_INTERFACE);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
