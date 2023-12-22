@@ -1,6 +1,8 @@
 package com.neep.meatweapons;
 
 import com.neep.meatlib.item.BaseCraftingItem;
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatweapons.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
@@ -18,5 +20,5 @@ public class MWItems
 
 //    public static Item BLASTER = new BlasterItem();
     public static Item HEAVY_CANNON = new HeavyCannonItem();
-    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", TooltipSupplier.hidden(2), new FabricItemSettings().group(MeatWeapons.WEAPONS));
 }

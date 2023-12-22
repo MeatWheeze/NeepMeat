@@ -13,6 +13,8 @@
   "item.meatweapons.engine": "Engine",
 
   "item.meatweapons.airtruck": "Airtruck",
+  "item.meatweapons.airtruck.lore_0": "A flying vehicle that carries a pilot and a passenger.",
+  "item.meatweapons.airtruck.lore_1": "Shift-click to disassemble.",
 
   "key.meatweapons.category.general": "MeatWeapons",
   "key.meatweapons.down": "Vehicle Down",

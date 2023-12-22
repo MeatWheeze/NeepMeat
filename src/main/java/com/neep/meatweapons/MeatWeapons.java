@@ -65,7 +65,7 @@ public class MeatWeapons implements ModInitializer
                 .trackedUpdateRate(1)
                 .forceTrackedVelocityUpdates(true)
                 .dimensions(EntityDimensions.fixed(3F, 2.2F))
-                .trackRangeBlocks(10)
+                .trackRangeBlocks(40)
                 .build());
 
         MeatLib.setNamespace(NAMESPACE);
