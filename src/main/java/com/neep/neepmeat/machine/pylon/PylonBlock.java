@@ -50,7 +50,7 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PYLON, PylonBlockEntity::serverTick, null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.PYLON, PylonBlockEntity::serverTick, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     public class PylonStructure extends Structure

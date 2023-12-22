@@ -43,7 +43,7 @@ public class PlayerUpgradeStatusS2CPacket
         {
             ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
             {
-                if (client.player == null) throw new IllegalStateException();
+                if (client.player == null) return;
 
                 Status status = Status.values()[buf.readVarInt()];
                 switch (status)
