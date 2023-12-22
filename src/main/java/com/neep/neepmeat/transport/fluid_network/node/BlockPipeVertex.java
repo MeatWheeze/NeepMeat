@@ -214,7 +214,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         }
         else
         {
-            pumpHeight = (total / found);
+            float f = total / found;
+            pumpHeight = Math.abs(f) <= 0.01 ? 0 : f;
         }
 
         for (NodeSupplier nodeSupplier : nodes)
