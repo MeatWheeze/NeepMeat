@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.block.base.BaseHorFacingBlock;
+import com.neep.neepmeat.api.block.BaseHorFacingBlock;
 import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;

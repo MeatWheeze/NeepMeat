@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.block.base.BaseFacingBlock;
+import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;

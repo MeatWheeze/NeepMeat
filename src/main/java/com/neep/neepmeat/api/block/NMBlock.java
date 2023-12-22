@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block.base;
+package com.neep.neepmeat.api.block;
 
 public interface NMBlock
 {

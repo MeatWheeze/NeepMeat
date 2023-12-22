@@ -1,9 +1,8 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.block.base.BaseTrapdoorBlock;
+import com.neep.neepmeat.api.block.BaseTrapdoorBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.enums.BlockHalf;
 import net.minecraft.entity.player.PlayerEntity;

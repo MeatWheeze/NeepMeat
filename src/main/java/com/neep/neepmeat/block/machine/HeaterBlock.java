@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.block.base.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
+import com.neep.neepmeat.api.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;

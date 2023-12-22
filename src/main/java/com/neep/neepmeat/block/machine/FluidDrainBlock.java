@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.block.base.BaseBlock;
+import com.neep.neepmeat.api.block.BaseBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidDrainBlockEntity;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;

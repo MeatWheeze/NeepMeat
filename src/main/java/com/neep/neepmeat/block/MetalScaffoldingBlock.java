@@ -1,9 +1,9 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.block.base.BaseBlock;
-import com.neep.neepmeat.block.base.BaseSlabBlock;
-import com.neep.neepmeat.block.base.BaseStairsBlock;
-import com.neep.neepmeat.block.base.NMBlock;
+import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.neepmeat.api.block.BaseSlabBlock;
+import com.neep.neepmeat.api.block.BaseStairsBlock;
+import com.neep.neepmeat.api.block.NMBlock;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
