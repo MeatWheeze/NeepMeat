@@ -4,6 +4,6 @@
   "textures": {
     "bottom": "neepmeat:block/reinforced_glass",
     "top": "neepmeat:block/reinforced_glass",
-    "side": "neepmeat:block/reinforced_glass"
+    "side": "neepmeat:block/reinforced_glass_half"
   }
 }
