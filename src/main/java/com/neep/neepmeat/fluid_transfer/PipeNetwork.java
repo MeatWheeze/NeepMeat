@@ -175,55 +175,69 @@ public class PipeNetwork
         return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
     }
 
+    public static boolean thing(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
+    {
+        FluidNode targetNode;
+        if ((targetNode = targetSupplier.get()).equals(node)
+                || targetSupplier.get() == null
+                || targetSupplier.get().getStorage(world) == null
+                || !targetSupplier.get().isStorage)
+        {
+            return false;
+        }
+
+        float h = node.getTargetY() - targetNode.getTargetY();
+        // TODO: gravity
+        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+        float flow = node.getMode(world).getFlow() * node.flowMultiplier - targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
+
+        if (targetNode.getMode(world) == AcceptorModes.NONE || targetNode.getMode(world) == AcceptorModes.PUSH
+                || node.getMode(world) == AcceptorModes.NONE
+                )
+        {
+            return false;
+        }
+        return true;
+    }
+
     public void tick()
     {
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;
-            if ((node = supplier.get()) == null || supplier.get().getStorage(world) == null)
+            if ((node = supplier.get()) == null || supplier.get().getStorage(world) == null
+                    || !supplier.get().isStorage)
             {
                 continue;
             }
-//            if (node.getMode(world) == AcceptorModes.PUSH)
-            {
-                long maxFlow = 10500;
 
-                Transaction transaction = Transaction.openOuter();
-                long amount = node.firstAmount(world, transaction);
-                transaction.abort();
+            long maxFlow = 10500;
 
-                long baseFlow = Math.min(maxFlow, amount);
+            Transaction transaction = Transaction.openOuter();
+            long amount = node.firstAmount(world, transaction);
+            transaction.abort();
+
+            long baseFlow = Math.min(maxFlow, amount);
 //                long baseFlow = maxFlow;
-                int nodes = connectedNodes.size();
 
-                for (Supplier<FluidNode> targetSupplier : connectedNodes)
+            List<Supplier<FluidNode>> safeNodes = connectedNodes.stream().filter(targetNode -> thing(world, node, targetNode)).collect(Collectors.toList());
+
+            for (Supplier<FluidNode> targetSupplier : safeNodes)
+            {
+                FluidNode targetNode = targetSupplier.get();
+
+                float h = node.getTargetY() - targetNode.getTargetY();
+                double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+                float flow = node.getMode(world).getFlow() * node.flowMultiplier -
+                        targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
+                long insertBranchFlow = (long) Math.ceil(baseFlow * (flow) / (safeNodes.size()));
+
+                long amountMoved;
+                if (insertBranchFlow >= 0)
                 {
-//                    --nodes;
-                    FluidNode targetNode;
-                    if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null
-                            || supplier.get().getStorage(world) == null || targetSupplier.get().getStorage(world) == null
-                            || !supplier.get().isStorage || !targetSupplier.get().isStorage
-
-                            || targetNode.getMode(world) == AcceptorModes.NONE || targetNode.getMode(world) == AcceptorModes.PUSH
-                            || node.getMode(world) == AcceptorModes.NONE)
-                    {
-                        continue;
-                    }
-
-                    float h = node.getTargetY() - targetNode.getTargetY();
-                    double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-                    float flow = node.getMode(world).getFlow() * node.flowMultiplier -
-                            targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
-                    long insertBranchFlow = (long) (baseFlow * (flow) / (nodes - 1));
-//                    System.out.println(insertBranchFlow);
-
-                    long amountMoved;
-                    if (insertBranchFlow >= 0)
-                    {
-                        Transaction t2 = Transaction.openOuter();
-                        amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, insertBranchFlow, t2);
-                        t2.commit();
-                    }
+                    Transaction t2 = Transaction.openOuter();
+                    amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, insertBranchFlow, t2);
+                    t2.commit();
                 }
             }
 //
