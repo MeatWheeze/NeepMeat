@@ -1,7 +1,7 @@
 package com.neep.neepmeat.util;
 
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.item.FluidComponentItem;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -122,5 +123,75 @@ public class ItemUtils
     {
         return player.getStackInHand(hand).getItem() instanceof BlockItem blockItem && (blockItem.getBlock() instanceof IFluidPipe
                 || blockItem instanceof FluidComponentItem);
+    }
+
+    public static boolean insertItem(ItemStack stack, Inventory inventory, int startIndex, int endIndex, boolean fromLast)
+    {
+        ItemStack itemStack;
+        boolean bl = false;
+        int i = startIndex;
+        if (fromLast)
+        {
+            i = endIndex - 1;
+        }
+        if (stack.isStackable())
+        {
+            while (!stack.isEmpty() && (fromLast ? i >= startIndex : i < endIndex))
+            {
+                itemStack = inventory.getStack(i);
+                if (!itemStack.isEmpty() && ItemStack.canCombine(stack, itemStack))
+                {
+                    int j = itemStack.getCount() + stack.getCount();
+                    if (j <= stack.getMaxCount())
+                    {
+                        stack.setCount(0);
+                        itemStack.setCount(j);
+                        inventory.markDirty();
+                        bl = true;
+                    } else if (itemStack.getCount() < stack.getMaxCount())
+
+                    {
+                        stack.decrement(stack.getMaxCount() - itemStack.getCount());
+                        itemStack.setCount(stack.getMaxCount());
+                        inventory.markDirty();
+                        bl = true;
+                    }
+                }
+                if (fromLast)
+                {
+                    --i;
+                    continue;
+                }
+                ++i;
+            }
+        }
+        if (!stack.isEmpty())
+        {
+            i = fromLast ? endIndex - 1 : startIndex;
+            while (fromLast ? i >= startIndex : i < endIndex)
+            {
+                itemStack = inventory.getStack(i);
+                if (itemStack.isEmpty()) // Removed canInsert call
+                {
+//                    if (stack.getCount() > slot.getMaxItemCount())
+//                    {
+//                        slot.setStack(stack.split(slot.getMaxItemCount()));
+//                    }
+                    {
+                        inventory.setStack(i, stack.split(stack.getCount()));
+                    }
+                    inventory.markDirty();
+                    bl = true;
+                    break;
+                }
+                if (fromLast)
+                {
+                    --i;
+                    continue;
+                }
+                ++i;
+            }
+        }
+        return bl;
     }
 }

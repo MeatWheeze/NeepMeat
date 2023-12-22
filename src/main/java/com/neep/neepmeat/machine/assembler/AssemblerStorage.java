@@ -7,6 +7,7 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.screen.PropertyDelegate;
 
 public class AssemblerStorage implements NbtSerialisable
 {
@@ -81,6 +82,12 @@ public class AssemblerStorage implements NbtSerialisable
             }
         }
         return ItemStack.EMPTY;
+    }
+
+    // Indices 1-12
+    public boolean isOutput(PropertyDelegate delegate, int index)
+    {
+        return ((delegate.get(0) >> index) & 1) == 1;
     }
 
     @Override

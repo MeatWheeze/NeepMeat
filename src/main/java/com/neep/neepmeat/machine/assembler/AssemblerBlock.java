@@ -12,11 +12,13 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -83,13 +85,24 @@ public class AssemblerBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        super.onStateReplaced(state, world, pos, newState, moved);
         BlockPos up = pos.up();
         if (world.getBlockState(up).isOf(NMBlocks.ASSEMBLER_TOP) && !newState.isOf(this))
         {
             world.setBlockState(up, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
         }
+        if (world.getBlockEntity(pos) instanceof AssemblerBlockEntity be)
+        {
+            scatterItems(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, be.storage.getInventory());
+        }
         super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    public static void scatterItems(World world, double x, double y, double z, Inventory inventory)
+    {
+        for (int i = 12; i < inventory.size(); ++i)
+        {
+            ItemScatterer.spawn(world, x, y, z, inventory.getStack(i));
+        }
     }
 
     @Override

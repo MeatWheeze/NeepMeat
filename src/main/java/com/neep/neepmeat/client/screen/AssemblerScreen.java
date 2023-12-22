@@ -39,8 +39,11 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
         int j = this.y;
         drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
 
+        // Indicate disabled slots
         renderCrosses(matrices, x + 7, y + 17);
-        renderCrosses(matrices, x + 66, y + 17);
+//        renderCrosses(matrices, x + 66, y + 17);
+        renderOutputOverlay(matrices, x + 7, y + 17);
+        renderOutputOverlay(matrices, x + 66, y + 17);
     }
 
     public void renderCrosses(MatrixStack matrices, int startX, int startY)
@@ -51,11 +54,27 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
         {
             for (int k = 0; k < nx; ++k)
             {
-                int oo = handler.getProperty(1);
+                // Draw red X if slot index is larger than the target inventiry
                 if (k + l * nx >= handler.getProperty(1))
                 {
                     drawTexture(matrices, startX + k * 18, startY + l * 18, 233, 0, 18, 18);
                 }
+            }
+        }
+    }
+
+    public void renderOutputOverlay(MatrixStack matrices, int startX, int startY)
+    {
+        int nx = 3;
+        int ny = 4;
+        for (int l = 0; l < ny; ++l)
+        {
+            for (int k = 0; k < nx; ++k)
+            {
+                int index = k + l * nx;
+                // Shift bit corresponding to the slot index to the right
+                if (((handler.getProperty(0) >> index) & 1) == 1)
+                    drawTexture(matrices, startX + k * 18, startY + l * 18, 216, 0, 18, 18);
             }
         }
     }
@@ -73,28 +92,6 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
     {
 //        this.textRenderer.draw(matrices, this.title, (float)this.titleX, (float)this.titleY, 0x404040);
 //        this.textRenderer.draw(matrices, this.playerInventoryTitle, (float)this.playerInventoryTitleX, (float)this.playerInventoryTitleY, 0x404040);
-    }
-
-    public void drawBurnTime(MatrixStack matrices, int i, int j)
-    {
-        int time = handler.getProperty(0);
-        if (time < 1)
-            return;
-
-        int total = handler.getProperty(1);
-        int k = (int) ((time / (total + 1f)) * 14);
-        this.drawTexture(matrices, i + 57, j + 37 + 12 - k, 176, 12 - k, 14, k + 1);
-    }
-
-    public void drawProgress(MatrixStack matrices, int i, int j)
-    {
-        int time = handler.getProperty(2);
-        if (time < 1)
-            return;
-
-        int total = handler.getProperty(3);
-        int k = (int) ((time / (total + 1f)) * 24);
-        this.drawTexture(matrices, i + 80, j + 36, 176, 14, k, 17);
     }
 
     @Override

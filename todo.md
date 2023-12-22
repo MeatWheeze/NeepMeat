@@ -102,6 +102,11 @@
 - When running, the assembler takes items from its internal buffer and places them into the filtered slots, one at a time. When the item output appears, it will eject it.
 - RECIPE REMAINDER HANDLING?
 
+- Add outpt selection
+- Add storage implementation
+- Add power consumption
+- Add brain and moving parts to model
+
 ## Meat Steel Recipe Ideas
 
 - Compress Iron Ingot and MEAT with Hydraulic Press
