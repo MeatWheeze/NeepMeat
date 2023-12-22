@@ -143,6 +143,15 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
         return ActionResult.CONSUME;
     }
 
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!newState.isOf(this))
+        {
+            world.removeBlockEntity(pos);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
     @Nullable
     protected static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
     checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> ticker, World world)

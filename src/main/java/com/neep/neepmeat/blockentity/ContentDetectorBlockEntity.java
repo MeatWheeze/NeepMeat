@@ -155,7 +155,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
         InventoryStorage storage = InventoryStorage.of(this.filterInventory, Direction.UP);
-        return storage.iterator(transaction);
+        return (Iterator<StorageView<ItemVariant>>) storage.iterator(transaction);
     }
 
     public void refreshCache()

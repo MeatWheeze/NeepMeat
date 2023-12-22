@@ -49,7 +49,6 @@ public class MotorBlockEntity extends BloodMachineBlockEntity
     @Override
     public NbtCompound toClientTag(NbtCompound nbt)
     {
-        super.toClientTag(nbt);
         nbt.putBoolean("running", running);
         return nbt;
     }
@@ -57,9 +56,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity
     @Override
     public void fromClientTag(NbtCompound nbt)
     {
-        super.readNbt(nbt);
         this.running = nbt.getBoolean("running");
-        readNbt(nbt);
     }
 
     public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
