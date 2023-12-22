@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.recipe.surgery.TableComponent;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.BlockState;
@@ -19,8 +20,7 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class TableControllerBlockEntity extends BloodMachineBlockEntity
 {
-//    private Int2ObjectMap<BlockApiCache<Storage<?>, Direction>> caches = new Int2ObjectArrayMap<>();
-    private List<BlockApiCache<?, Direction>> caches = new ArrayList<>(9);
+    private SurgeryTableContext context = new SurgeryTableContext();
 
     public TableControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -34,7 +34,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public void assemble()
     {
-        caches.clear();
+        context.clear();
 
         Direction facing = getCachedState().get(BaseHorFacingBlock.FACING).getOpposite();
         Direction left = facing.rotateYCounterclockwise();
@@ -49,16 +49,10 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 Vec3i zVec = facing.getVector().multiply(j);
                 mutable.set(corner, xVec);
                 mutable.set(mutable, zVec);
-                caches.add(createCache((ServerWorld) world, mutable));
-                if (caches.get(caches.size() - 1).find(Direction.UP) != null)
-                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, mutable.getX() + 0.5, mutable.getY() + 0.5, mutable.getZ() + 0.5, 5, 0, 0, 0, 0);
+                context.add((ServerWorld) world, mutable);
+//                if (caches.get(caches.size() - 1).find(null) != null)
+//                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, mutable.getX() + 0.5, mutable.getY() + 0.5, mutable.getZ() + 0.5, 5, 0, 0, 0, 0);
             }
         }
     }
-
-    private static BlockApiCache<?, Direction> createCache(ServerWorld world, BlockPos pos)
-    {
-        return BlockApiCache.create(FluidStorage.SIDED, world, pos);
-    }
-
 }

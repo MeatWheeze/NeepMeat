@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMFluids;
@@ -129,7 +130,7 @@ public class TrommelRecipe extends ImplementedRecipe<TrommelStorage>
         public TrommelRecipe read(Identifier id, JsonObject json)
         {
             JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromJson(Registry.FLUID, fluidInputElement);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             NbtCompound inputNbt = null;
             if (fluidInputElement.has("fat_item"))
@@ -141,7 +142,7 @@ public class TrommelRecipe extends ImplementedRecipe<TrommelStorage>
             }
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJson(Registry.FLUID, outputElement);
+            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, outputElement);
             if (outputElement.has("fat_item"))
             {
                 if (!(fluidOutput.resource().equals(NMFluids.STILL_CLEAN_ORE_FAT)))
@@ -160,7 +161,7 @@ public class TrommelRecipe extends ImplementedRecipe<TrommelStorage>
         @Override
         public TrommelRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
             NbtCompound nbt = buf.readNbt();
 
@@ -170,7 +171,7 @@ public class TrommelRecipe extends ImplementedRecipe<TrommelStorage>
         @Override
         public void write(PacketByteBuf buf, TrommelRecipe recipe)
         {
-            recipe.fluidInput.write(Registry.FLUID, buf);
+            recipe.fluidInput.write(buf);
             recipe.fluidOutput.write(Registry.FLUID, buf);
             buf.writeNbt(recipe.inputNbt);
         }

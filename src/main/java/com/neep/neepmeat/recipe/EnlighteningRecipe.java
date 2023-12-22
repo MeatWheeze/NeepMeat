@@ -3,6 +3,7 @@ package com.neep.neepmeat.recipe;
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -129,10 +130,10 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         public EnlighteningRecipe read(Identifier id, JsonObject json)
         {
             JsonObject itemInputElement = JsonHelper.getObject(json, "item_input");
-            RecipeInput<Item> itemInput = RecipeInput.fromJson(Registry.ITEM, itemInputElement);
+            RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, itemInputElement);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJson(Registry.ITEM, itemOutputElement);
+            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, itemOutputElement);
 
             int data = JsonHelper.getInt(json, "data");
 
@@ -142,7 +143,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         @Override
         public EnlighteningRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(Registry.ITEM, buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
             int data = buf.readVarInt();
 
@@ -152,7 +153,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
         @Override
         public void write(PacketByteBuf buf, EnlighteningRecipe recipe)
         {
-            recipe.itemInput.write(Registry.ITEM, buf);
+            recipe.itemInput.write(buf);
             recipe.itemOutput.write(Registry.ITEM, buf);
             buf.writeVarInt(recipe.data);
         }

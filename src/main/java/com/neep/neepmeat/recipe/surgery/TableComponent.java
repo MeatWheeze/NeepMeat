@@ -6,12 +6,19 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 
+@SuppressWarnings("UnstableApiUsage")
 public interface TableComponent<T>
 {
-    BlockApiLookup<TableComponent, Void> STRUCTURE_LOOKUP =
-            BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "structure"), TableComponent.class, Void.class);
+    BlockApiLookup<TableComponent<?>, Void> STRUCTURE_LOOKUP =
+            BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "structure"), asClass(), Void.class);
 
     BlockApiLookup<Storage<T>, Direction> getSidedLookup();
 
     Storage<T> getStorage();
+
+    @SuppressWarnings("unchecked")
+    static Class<TableComponent<?>> asClass()
+    {
+        return (Class<TableComponent<?>>) (Object) TableComponent.class;
+    }
 }

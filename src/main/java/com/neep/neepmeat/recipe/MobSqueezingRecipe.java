@@ -105,7 +105,7 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
             EntityType<? extends Entity> entityType = Registry.ENTITY_TYPE.get(entityId);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> itemOutput = RecipeOutput.fromJson(Registry.FLUID, itemOutputElement);
+            RecipeOutput<Fluid> itemOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, itemOutputElement);
 
             return this.factory.create(id, entityType, itemOutput);
         }

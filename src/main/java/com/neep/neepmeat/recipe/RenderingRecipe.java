@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -148,13 +149,13 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         public RenderingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject inputElement = JsonHelper.getObject(json, "item_input");
-            RecipeInput<Item> itemInput = RecipeInput.fromJson(Registry.ITEM, inputElement);
+            RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement);
 
             JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromJson(Registry.FLUID, fluidInputElement);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJson(Registry.FLUID, outputElement);
+            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, outputElement);
             if (outputElement.has("fat_item"))
             {
                 if (!(fluidOutput.resource().equals(NMFluids.STILL_DIRTY_ORE_FAT)))
@@ -173,8 +174,8 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @Override
         public RenderingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(Registry.ITEM, buf);
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
             RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
 
             return this.factory.create(id, itemInput, fluidInput, fluidOutput);
@@ -183,8 +184,8 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         @Override
         public void write(PacketByteBuf buf, RenderingRecipe recipe)
         {
-            recipe.itemInput.write(Registry.ITEM, buf);
-            recipe.fluidInput.write(Registry.FLUID, buf);
+            recipe.itemInput.write(buf);
+            recipe.fluidInput.write(buf);
             recipe.fluidOutput.write(Registry.FLUID, buf);
         }
 

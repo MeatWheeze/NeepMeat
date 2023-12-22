@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.FluidIngredient;
 import com.neep.meatlib.recipe.ingredient.GenericIngredient;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -206,7 +207,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         public MixingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject itemElement = JsonHelper.getObject(json, "item");
-            RecipeInput<Item> itemInput = RecipeInput.fromJson(Registry.ITEM, itemElement);
+            RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, itemElement);
 
             JsonObject fluidElement1 = JsonHelper.getObject(json, "fluid1");
             FluidIngredient fluidInput1 = FluidIngredient.fromJson(fluidElement1);
@@ -224,7 +225,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @Override
         public MixingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Item> ingredient = RecipeInput.fromBuffer(Registry.ITEM, buf);
+            RecipeInput<Item> ingredient = RecipeInput.fromBuffer(RecipeInputs.ITEM, buf);
             FluidIngredient fluidInput1 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidInput2 = FluidIngredient.fromPacket(buf);
             FluidIngredient fluidOutput = FluidIngredient.fromPacket(buf);
@@ -236,7 +237,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         @Override
         public void write(PacketByteBuf buf, MixingRecipe recipe)
         {
-            recipe.itemInput.write(Registry.ITEM, buf);
+            recipe.itemInput.write(buf);
             recipe.fluidInput1.write(buf);
             recipe.fluidInput2.write(buf);
             recipe.fluidOutput.write(buf);

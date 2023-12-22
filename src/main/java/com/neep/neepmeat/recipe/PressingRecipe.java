@@ -2,6 +2,7 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -118,10 +119,10 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         public PressingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromJson(Registry.FLUID, fluidInputElement);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutput<Item> itemOutput = RecipeOutput.fromJson(Registry.ITEM, itemOutputElement);
+            RecipeOutput<Item> itemOutput = RecipeOutput.fromJsonRegistry(Registry.ITEM, itemOutputElement);
 
             return this.factory.create(id, fluidInput, itemOutput);
         }
@@ -129,7 +130,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         @Override
         public PressingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(Registry.FLUID, buf);
+            RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(RecipeInputs.FLUID, buf);
             RecipeOutput<Item> itemOutput = RecipeOutput.fromBuffer(Registry.ITEM, buf);
 
             return this.factory.create(id, fluidInput, itemOutput);
@@ -138,7 +139,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         @Override
         public void write(PacketByteBuf buf, PressingRecipe recipe)
         {
-            recipe.fluidInput.write(Registry.FLUID, buf);
+            recipe.fluidInput.write(buf);
             recipe.itemOutput.write(Registry.ITEM, buf);
         }
 
