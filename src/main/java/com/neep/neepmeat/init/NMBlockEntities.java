@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.block.entity.*;
+import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -108,6 +109,7 @@ public class NMBlockEntities
     public static BlockEntityType<CastingBasinBlockEntity> CASTING_BASIN;
     public static BlockEntityType<HydraulicPressBlockEntity> HYDRAULIC_PRESS;
     public static BlockEntityType<PedestalBlockEntity> PEDESTAL;
+    public static BlockEntityType<AssemblerBlockEntity> ASSEMBLER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -198,6 +200,8 @@ public class NMBlockEntities
 
         PEDESTAL = registerBlockEntity("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
         ItemStorage.SIDED.registerForBlockEntity((be, dir) -> be.getStorage(dir), PEDESTAL);
+
+        ASSEMBLER = registerBlockEntity("assembler", AssemblerBlockEntity::new, NMBlocks.ASSEMBLER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

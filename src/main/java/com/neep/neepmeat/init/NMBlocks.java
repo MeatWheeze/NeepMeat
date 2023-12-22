@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.block.*;
 import com.neep.neepmeat.block.*;
+import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
@@ -42,7 +43,13 @@ import net.minecraft.sound.BlockSoundGroup;
 @SuppressWarnings("unused")
 public class NMBlocks
 {
-    public static FabricBlockSettings METAL = FabricBlockSettings.of(Material.METAL).hardness(4.0f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings METAL = FabricBlockSettings.of(Material.METAL).hardness(4.0f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE).nonOpaque().solidBlock(ContentDetectorBlock::never);
+    public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
 
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 
@@ -80,7 +87,6 @@ public class NMBlocks
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
     // --- Fluid Pipes ---
-    public static final FabricBlockSettings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
 //    public static Block IRON_PIPE = BlockRegistry.queue(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
@@ -88,7 +94,6 @@ public class NMBlocks
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", 64, true, FLUID_PIPE_SETTINGS));
 
     // --- Machines
-    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE).nonOpaque().solidBlock(ContentDetectorBlock::never);
     public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -104,6 +109,8 @@ public class NMBlocks
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", 64, false, FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", 64, false, FLUID_PIPE_SETTINGS));
     public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("alembic", 64, false, FLUID_PIPE_SETTINGS));
+    public static Block ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", 64, false, BRASS_BLOCKS));
+    public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
     public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
 
@@ -113,14 +120,12 @@ public class NMBlocks
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
 
-    public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", 64, true, FabricBlockSettings.copyOf(BRASS_BLOCKS)));
     public static Block MIXER_TOP = BlockRegistry.queue(new MixerTopBlock("mixer_top", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
     public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", 64, false, FabricBlockSettings.copyOf(MIXER)));
     public static Block HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
-    public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));
     public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", 64, false, VAT_SETTINGS));
@@ -128,7 +133,6 @@ public class NMBlocks
     public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
 
     // --- Fluid Transfer ---
-    public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block MULTI_TANK = BlockRegistry.queue(new MultiTankBlock("multi_tank", 64, true, FLUID_MACHINE_SETTINGS));
@@ -142,7 +146,6 @@ public class NMBlocks
 //    public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
     // --- Item Transfer ---
-    public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.copyOf(Blocks.HOPPER)));
     public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));

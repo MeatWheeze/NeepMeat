@@ -13,6 +13,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<RouterScreenHandler> ROUTER;
     public static ScreenHandlerType<StirlingEngineScreenHandler> STIRLING_ENGINE;
     public static ScreenHandlerType<AlloyKilnScreenHandler> ALLOY_KILN;
+    public static ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER;
 
     public static void registerScreenHandlers()
     {
@@ -21,5 +22,6 @@ public class ScreenHandlerInit
         ROUTER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "router"), RouterScreenHandler::new);
         STIRLING_ENGINE = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "stirling_engine"), StirlingEngineScreenHandler::new);
         ALLOY_KILN = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "alloy_kiln"), AlloyKilnScreenHandler::new);
+        ASSEMBLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "assembler"), AssemblerScreenHandler::new);
     }
 }

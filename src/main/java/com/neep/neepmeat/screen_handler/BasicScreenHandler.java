@@ -51,6 +51,18 @@ public abstract class BasicScreenHandler extends ScreenHandler
         }
     }
 
+    protected void createSlotBlock(int startX, int startY, int nx, int ny, Inventory inventory, int startIndex, SlotConstructor constructor)
+    {
+        int m, l;
+        for (m = 0; m < ny; ++m)
+        {
+            for (l = 0; l < nx; ++l)
+            {
+                this.addSlot(constructor.construct(inventory, startIndex + l + m * nx, startX + l * 18, startY + m * 18));
+            }
+        }
+    }
+
     // For some reason, not implementing this causes the game to freeze when shift-clicking.
     @Override
     public ItemStack transferSlot(PlayerEntity player, int invSlot)
@@ -84,5 +96,11 @@ public abstract class BasicScreenHandler extends ScreenHandler
         }
 
         return newStack;
+    }
+
+    @FunctionalInterface
+    public interface SlotConstructor
+    {
+        Slot construct(Inventory inventory, int index, int x, int y);
     }
 }
