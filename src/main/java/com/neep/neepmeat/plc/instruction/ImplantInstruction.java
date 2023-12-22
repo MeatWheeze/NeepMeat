@@ -160,6 +160,7 @@ public class ImplantInstruction implements Instruction
         else
         {
             plc.raiseError(new PLC.Error("No entity station found"));
+            plc.getRobot().spawnItem(stored);
         }
         return toCache.pos();
     }
