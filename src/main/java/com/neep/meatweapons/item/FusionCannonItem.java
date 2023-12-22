@@ -9,7 +9,9 @@ import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -146,21 +149,26 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     {
         // Check that the charge exceeds a threshold. If so, shoot the projectile.
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
-        if (id == MWAttackC2SPacket.TRIGGER_SECONDARY
-                && stack.getDamage() + 2 <= maxShots
-                && canFireBlast(stack)
-    )
+        if (id == MWAttackC2SPacket.TRIGGER_SECONDARY)
         {
-            NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
-            int charge = nbt.getInt("charge");
-            float power = charge / 2f;
+            if (stack.getDamage() + 2 <= maxShots
+                    && canFireBlast(stack))
+            {
+                NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
+                int charge = nbt.getInt("charge");
+                float power = charge / 2f;
 
-            fireShell(world, player, stack, 2, (world1, x, y, z, vx, vy, vz) -> new FusionBlastEntity(world1, x, y, z, vx, vy, vz, power));
-            if (!player.isCreative()) stack.setDamage(stack.getDamage() + 2);
+                fireShell(world, player, stack, 2, (world1, x, y, z, vx, vy, vz) -> new FusionBlastEntity(world1, x, y, z, vx, vy, vz, power));
+                if (!player.isCreative()) stack.setDamage(stack.getDamage() + 2);
 
-            world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
+                world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
 
-            nbt.putBoolean("charging", false);
+                nbt.putBoolean("charging", false);
+            }
+            else
+            {
+                world.playSoundFromEntity(null, player, NMSounds.CLICK, SoundCategory.PLAYERS, 1f, 1f);
+            }
         }
     }
 

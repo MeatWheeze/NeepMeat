@@ -9,6 +9,7 @@
   "client": [
     "ItemRendererMixin",
     "KeyboardMixin",
+    "MinecraftClientMixin",
     "MouseMixin"
   ],
   "injectors": {
