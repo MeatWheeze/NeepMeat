@@ -65,7 +65,6 @@ public class FluidNode
         this.storage = null;
         this.needsDeferredLoading = true;
 
-        System.out.println("-------- adding to queue");
         FluidNetwork.getInstance(world).queueNode(this);
     }
 
@@ -166,7 +165,6 @@ public class FluidNode
     // Removes node from and revalidates the network
     public void onRemove()
     {
-        System.out.println("removed " + this);
         if (!(this.network == null))
         {
             network.removeNode(new NodePos(pos, face));

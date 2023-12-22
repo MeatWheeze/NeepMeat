@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item.base;
 
-import com.neep.neepmeat.ItemGroups;
+import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.init.ItemInit;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.NMItem;
@@ -23,7 +23,7 @@ public class BaseBlockItem extends BlockItem implements NMItem
 
     public BaseBlockItem(Block block, String itemName, int itemMaxStack, boolean hasLore)
     {
-        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(ItemGroups.GENERAL));
+        super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
         this.name = itemName;
         this.hasLore = hasLore;
         ItemInit.putItem(getRegistryName(), this);
