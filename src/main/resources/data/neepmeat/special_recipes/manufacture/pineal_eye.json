@@ -17,7 +17,8 @@
       "resource": "neepmeat:blood"
     }
   ],
-  "output": {
-    "resource": "neepmeat:pineal_eye"
+  "result": {
+    "resource": "neepmeat:pineal_eye",
+    "amount": 1
   }
 }

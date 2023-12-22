@@ -37,9 +37,14 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         this.recipe = recipe;
     }
 
-    // I had no idea what I was doing when I made this.
+    public SurgeryDisplay(List<EntryIngredient> input, List<EntryIngredient> output, Optional<Identifier> location)
+    {
+        super(input, output);
+    }
 
+    // I had no idea what I was doing when I made this.
     // AAAAAAAAAAAAAAAAAAAAAAAa
+
     public static List<EntryIngredient> inputsToEntries(DefaultedList<RecipeInput<?>> inputs)
     {
         if (inputs.size() == 0) return Collections.emptyList();
@@ -60,12 +65,12 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         }
         return ImmutableList.copyOf(result);
     }
-
     // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaa
     public static final Map<Identifier, EntryType<?>> ENTRY_TYPE_MAP = new HashMap<>();
-    public static final Map<Identifier, Function<RecipeInput<?>, EntryIngredient>> ENTRY_STACK_MAP = new HashMap<>();
 
+    public static final Map<Identifier, Function<RecipeInput<?>, EntryIngredient>> ENTRY_STACK_MAP = new HashMap<>();
     // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAa
+
     public static <T> EntryIngredient entryFromInput(RecipeInput<T> input)
     {
         if (input.isEmpty()) return EntryIngredient.empty();
@@ -73,11 +78,6 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         if (matching.size() == 0) return EntryIngredient.empty();
 //        Function<?, ?> entryFunction = ENTRY_STACK_MAP.get(input.getType());
         return ENTRY_STACK_MAP.get(input.getType()).apply(input);
-    }
-
-    public SurgeryDisplay(List<EntryIngredient> input, List<EntryIngredient> output, Optional<Identifier> location)
-    {
-        super(input, output);
     }
 
     public static Serializer<SurgeryDisplay> getSerializer()

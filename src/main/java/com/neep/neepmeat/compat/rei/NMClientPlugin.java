@@ -1,6 +1,5 @@
 package com.neep.neepmeat.compat.rei;
 
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 import com.neep.meatlib.recipe.MeatRecipe;
@@ -13,6 +12,8 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
+import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
+import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
@@ -49,6 +50,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     @Override
     public void registerDisplays(DisplayRegistry registry)
     {
+        registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
         registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
         registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
@@ -76,6 +78,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     public void registerCategories(CategoryRegistry registry)
     {
         registry.add(
+                new ItemManufactureCategory(),
                 new SurgeryCategory(),
                 new TransformingToolCategory(),
                 new GrindingCategory(),
@@ -89,7 +92,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new PressingCategory()
         );
 
-        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
+        registry.addWorkstations(MANUFACTURE, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
+//        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
@@ -130,7 +134,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     }
 
     public static <T extends MeatRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, MeatRecipeType<? super T> recipeType, Function<? extends T, @Nullable D> filler) {
-        registerRecipeFiller(registry, typeClass, type -> Objects.equals(recipeType, type), Predicates.alwaysTrue(), filler);
+        registerRecipeFiller(registry, typeClass, type -> Objects.equals(recipeType, type), t -> true, filler);
     }
 
     public static <T extends MeatRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, Predicate<MeatRecipeType<? super T>> type, Predicate<? extends T> predicate, Function<? extends T, @Nullable D> filler)

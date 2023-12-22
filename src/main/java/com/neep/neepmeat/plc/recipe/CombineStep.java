@@ -56,6 +56,12 @@ public class CombineStep implements ManufactureStep<ItemStack>
     }
 
     @Override
+    public Text getName()
+    {
+        return Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE);
+    }
+
+    @Override
     public void appendText(List<Text> tooltips)
     {
         tooltips.add(Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE));
@@ -83,5 +89,10 @@ public class CombineStep implements ManufactureStep<ItemStack>
     public Identifier getId()
     {
         return ID;
+    }
+
+    public Item getItem()
+    {
+        return item;
     }
 }

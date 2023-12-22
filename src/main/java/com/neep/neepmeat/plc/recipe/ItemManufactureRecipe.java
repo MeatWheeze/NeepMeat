@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
+import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.component.MutateInPlace;
@@ -25,10 +27,10 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
 {
     protected final Identifier id;
     protected final Item base;
-    protected final Item output;
+    protected final RecipeOutput<Item> output;
     protected List<ManufactureStep<?>> steps;
 
-    public ItemManufactureRecipe(Identifier id, Item base, Item output, List<ManufactureStep<?>> steps)
+    public ItemManufactureRecipe(Identifier id, Item base, RecipeOutput<Item> output, List<ManufactureStep<?>> steps)
     {
         this.id = id;
         this.base = base;
@@ -87,8 +89,15 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
     @Override
     public boolean ejectOutputs(MutateInPlace<ItemStack> context, TransactionContext transaction)
     {
-        context.set(new ItemStack(output));
-        return false;
+//        context.set(new ItemStack(output));
+        ItemStack outputStack = new ItemStack(output.resource(), Math.toIntExact(output.amount()));
+        context.set(outputStack);
+        return true;
+    }
+
+    public RecipeOutput<Item> getOutput()
+    {
+        return output;
     }
 
     @Override
@@ -146,9 +155,11 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
 
             List<ManufactureStep<?>> steps = readSteps(json);
 
-            JsonObject outputObject = JsonHelper.getObject(json, "output");
-            Identifier outputId = Identifier.tryParse(JsonHelper.getString(outputObject, "resource"));
-            Item output = Registry.ITEM.get(outputId);
+//            JsonObject outputObject = JsonHelper.getObject(json, "output");
+//            Identifier outputId = Identifier.tryParse(JsonHelper.getString(outputObject, "resource"));
+//            Item output = Registry.ITEM.get(outputId);
+
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
 
             return new ItemManufactureRecipe(id, base, output, steps);
         }
@@ -157,13 +168,14 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
         public ItemManufactureRecipe read(Identifier id, PacketByteBuf buf)
         {
             // TODO: Implement
-            return new ItemManufactureRecipe(id, Items.DIRT, Items.DIRT, Collections.emptyList());
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            return new ItemManufactureRecipe(id, Items.DIRT, output, Collections.emptyList());
         }
 
         @Override
         public void write(PacketByteBuf buf, ItemManufactureRecipe recipe)
         {
-
+            recipe.output.write(Registry.ITEM, buf);
         }
     }
 }

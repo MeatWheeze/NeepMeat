@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -58,6 +59,12 @@ public class ImplantStep implements ManufactureStep<Entity>
     }
 
     @Override
+    public Text getName()
+    {
+        return Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE);
+    }
+
+    @Override
     public void appendText(List<Text> tooltips)
     {
         tooltips.add(Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE));
@@ -80,5 +87,10 @@ public class ImplantStep implements ManufactureStep<Entity>
             return other.item == item;
         }
         return false;
+    }
+
+    public ItemConvertible getItem()
+    {
+        return item;
     }
 }

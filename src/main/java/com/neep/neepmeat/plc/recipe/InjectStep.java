@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.init.NMComponents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
@@ -49,6 +50,12 @@ public class InjectStep implements ManufactureStep<ItemStack>
     }
 
     @Override
+    public Text getName()
+    {
+        return Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE);
+    }
+
+    @Override
     public void appendText(List<Text> tooltips)
     {
         tooltips.add(Text.translatable(ID.toTranslationKey("step")).formatted(Formatting.UNDERLINE));
@@ -76,5 +83,10 @@ public class InjectStep implements ManufactureStep<ItemStack>
     public Identifier getId()
     {
         return ID;
+    }
+
+    public Fluid getFluid()
+    {
+        return fluid.getFluid();
     }
 }
