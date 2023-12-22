@@ -175,8 +175,10 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                         target.removeStack(i, ejected);
                         target.markDirty();
                         spawnSmoke((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), stack);
+                        transaction.commit();
                         return true;
                     }
+                    transaction.abort();
                 }
             }
         }
