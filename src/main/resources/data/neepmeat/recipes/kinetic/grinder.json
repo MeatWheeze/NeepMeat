@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "dhd",
+    "fpf",
+    "iii"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "f": {
+      "item": "minecraft:flint"
+    },
+    "d": {
+      "item": "minecraft:yellow_dye"
+    },
+    "h": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "result": {
+    "item": "neepmeat:grinder",
+    "count": 1
+  }
+}
