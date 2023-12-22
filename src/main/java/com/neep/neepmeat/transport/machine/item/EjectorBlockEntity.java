@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.util.TubeUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.vehicle.StorageMinecartEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -129,7 +131,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
         be.needsRefresh = false;
     }
 
-    public long canForward(ResourceAmount<ItemVariant> amount, Transaction transaction)
+    public long canForward(ResourceAmount<ItemVariant> amount, TransactionContext transaction)
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         Storage<ItemVariant> storage;
@@ -137,31 +139,8 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
         {
             return storage.simulateInsert(amount.resource(), amount.amount(), transaction);
         }
+//        return TubeUtils.canEjectSimple(amount, world, pos.offset(facing), transaction);
         return amount.amount();
     }
 
-//    @Override
-//    public void fromClientTag(NbtCompound tag)
-//    {
-//        super.fromClientTag(tag);
-//    }
-//
-//    @Override
-//    public NbtCompound toClientTag(NbtCompound tag)
-//    {
-//        super.toClientTag(tag);
-//        return tag;
-//    }
-//
-//    @Override
-//    public void writeNbt(NbtCompound tag)
-//    {
-//        super.writeNbt(tag);
-//    }
-//
-//    @Override
-//    public void readNbt(NbtCompound tag)
-//    {
-//        super.readNbt(tag);
-//    }
 }

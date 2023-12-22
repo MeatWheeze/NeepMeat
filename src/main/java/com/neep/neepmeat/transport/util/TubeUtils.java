@@ -5,7 +5,9 @@ import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ItemEntity;
@@ -15,9 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TubeUtils
@@ -25,21 +27,27 @@ public class TubeUtils
     /** Handles the movement of an item from a pipe to an adjacent block.
      */
     // TODO: Cutoff depth
-    public static long tryTransfer(ItemInPipe item, BlockPos pos, BlockState state, Direction out, World world)
+    public static long tryTransfer(ItemInPipe item, BlockPos pos, BlockState state, Direction out, World world, TransactionContext transaction, boolean simpleCheck)
     {
         BlockPos toPos = pos.offset(out);
         BlockState toState = world.getBlockState(toPos);
         Block toBlock = toState.getBlock();
 
+
         long amountInserted = 0;
         Storage<ItemVariant> storage;
         if (toBlock instanceof IItemPipe pipe)
         {
+
             if (IItemPipe.isConnectedIn(world, pos, state, out))
-//            if (pipe.getConnections(state1, IItemPipe::all).contains(item.out))
             {
-//                if (insert(item, world, toState, toPos, item.out.getOpposite()) > 0)
-                amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item);
+                if (simpleCheck)
+                {
+                    long simpleAmount = canEjectSimple(item.getResourceAmount(), world, toPos, out, transaction);
+                    ItemInPipe newItem = item.copyWith((int) simpleAmount);
+                    amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), newItem);
+                }
+                else amountInserted = pipe.insert(world, toPos, toState, out.getOpposite(), item);
             }
         }
         else if (toState.isAir())
@@ -142,6 +150,52 @@ public class TubeUtils
                 long inserted = storage.insert(ItemVariant.of(stack), amount, transaction);
                 transaction.commit();
                 return (int) inserted;
+            }
+        }
+        return 0;
+    }
+
+    public static long canEjectSimple(ResourceAmount<ItemVariant> item, World world, BlockPos startPipe, Direction exit, @Nullable TransactionContext transaction)
+    {
+        Queue<BlockPos> queue = new LinkedList<>();
+        Queue<IItemPipe> pipeQueue = new LinkedList<>();
+        List<Long> visited = new ArrayList<>(); // Hopefully using longs will speed up comparison
+        queue.add(startPipe);
+        pipeQueue.add((IItemPipe) world.getBlockState(startPipe).getBlock());
+        visited.add(startPipe.offset(exit.getOpposite()).asLong());
+
+        while (!queue.isEmpty())
+        {
+            BlockPos current = queue.poll();
+            IItemPipe currentPipe = pipeQueue.poll();
+            BlockState currentState = world.getBlockState(current);
+
+            visited.add(current.asLong());
+
+            if (currentPipe.getConnections(currentState, v -> true).size() > 2 && !currentPipe.singleOutput())
+            {
+                return item.amount();
+            }
+
+            for (Direction direction : Direction.values())
+            {
+                BlockPos offset = current.offset(direction);
+                BlockState offsetState = world.getBlockState(offset);
+                if (currentPipe.canItemLeave(item, world, current, currentState, direction))
+                {
+                    Storage<ItemVariant> storage;
+                    if (offsetState.getBlock() instanceof IItemPipe pipe
+                                    && pipe.canItemEnter(item, world, offset, offsetState, direction.getOpposite())
+                                    && !visited.contains(offset.asLong()))
+                    {
+                        queue.add(offset);
+                        pipeQueue.add(pipe);
+                    }
+                    else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
+                    {
+                        return storage.simulateInsert(item.resource(), item.amount(), transaction);
+                    }
+                }
             }
         }
         return 0;

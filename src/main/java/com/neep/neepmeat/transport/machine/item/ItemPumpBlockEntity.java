@@ -216,7 +216,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             nested.commit();
             return transferred;
         }
-        return TubeUtils.tryTransfer(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld());
+        return TubeUtils.tryTransfer(new ItemInPipe(amount, world.getTime()), getPos(), getCachedState(), facing, getWorld(), transaction, true);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));

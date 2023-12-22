@@ -1,8 +1,8 @@
 package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.util.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.minecraft.block.BlockState;
@@ -18,7 +18,6 @@ import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 
 public class PneumaticPipeBlockEntity extends SyncableBlockEntity
 {
@@ -80,7 +79,7 @@ public class PneumaticPipeBlockEntity extends SyncableBlockEntity
             item.tick();
             if (item.progress >= 1)
             {
-                long transferred = TubeUtils.tryTransfer(item, blockPos, blockState, item.out, world);
+                long transferred = TubeUtils.tryTransfer(item, blockPos, blockState, item.out, world, null, false);
                 if (transferred == item.getCount() || item.getItemStack().isEmpty())
                 {
                     it.remove();
@@ -96,26 +95,10 @@ public class PneumaticPipeBlockEntity extends SyncableBlockEntity
 
     public long insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
     {
-        Direction out = getOutputDirection(item, state, world, in);
+        Direction out = ((IItemPipe) getCachedState().getBlock()).getOutputDirection(item, state, world, in);
         item.reset(in, out, world.getTime());
         this.items.add(item);
         return item.getItemStack().getCount();
-    }
-
-    protected Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
-    {
-        Direction out;
-        List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
-        Random rand = world.getRandom();
-        if (!connections.isEmpty())
-        {
-            out = connections.get(rand.nextInt(connections.size()));
-        }
-        else
-        {
-            out = in;
-        }
-        return out;
     }
 
     public void dropItems()

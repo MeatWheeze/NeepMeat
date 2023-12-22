@@ -147,4 +147,11 @@ public class ItemInPipe
 
         return item;
     }
+
+    public ItemInPipe copyWith(int amount)
+    {
+        ItemStack newStack = getItemStack().copy();
+        newStack.setCount(amount);
+        return new ItemInPipe(in, out, newStack, tickStart);
+    }
 }

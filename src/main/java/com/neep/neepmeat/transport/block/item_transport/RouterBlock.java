@@ -54,7 +54,7 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
             Direction output = be.getOutputDirection(item);
             if (direction != output && output != null)
             {
-                long transferred = TubeUtils.tryTransfer(item, pos, state, output, world);
+                long transferred = TubeUtils.tryTransfer(item, pos, state, output, world, null, false);
                 return transferred;
             }
         }
