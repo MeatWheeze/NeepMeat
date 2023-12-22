@@ -14,6 +14,7 @@ import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
+import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
@@ -117,6 +118,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererRegistry.register(NMBlockEntities.PEDESTAL, PedestalRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.ASSEMBLER, AssemblerRenderer::new);
+
+        BlockEntityRendererRegistry.register(NMBlockEntities.DEATH_BLADES, DeathBladesRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

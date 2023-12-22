@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.converter.ConverterBlock;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
+import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
 import com.neep.neepmeat.machine.heater.HeaterBlock;
@@ -128,6 +129,8 @@ public class NMBlocks
     public static Block HYDRAULIC_PRESS = BlockRegistry.queue(new HydraulicPressBlock("hydraulic_press", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
     public static Block WORKSTATION = BlockRegistry.queue(new WorkstationBlock("workstation", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
+    public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));
     public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", 64, false, VAT_SETTINGS));

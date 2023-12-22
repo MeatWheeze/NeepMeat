@@ -26,6 +26,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/trommel/mesh");
     public static Identifier SMALL_TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/small_trommel/mesh");
     public static Identifier HYDRAULIC_PRESS_ARM = new Identifier(NeepMeat.NAMESPACE, "block/hydraulic_press/arm");
+    public static Identifier LARGE_BLADE = new Identifier(NeepMeat.NAMESPACE, "block/blades/blade");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -44,5 +45,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(TROMMEL_MESH);
         out.accept(SMALL_TROMMEL_MESH);
         out.accept(HYDRAULIC_PRESS_ARM);
+        out.accept(LARGE_BLADE);
     }
 }
