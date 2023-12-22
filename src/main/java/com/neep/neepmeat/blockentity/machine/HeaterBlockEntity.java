@@ -68,7 +68,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         long work = doWork(USE_AMOUNT, transaction);
         if (work == USE_AMOUNT)
         {
-            accessor.setBurnTime(3);
+            accessor.setBurnTime(2);
         }
         transaction.commit();
     }
