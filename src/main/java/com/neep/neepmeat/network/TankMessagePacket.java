@@ -42,9 +42,8 @@ public class TankMessagePacket
             long amount = buf.readLong();
             FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
             MutableText text = FluidVariantRendering.getName(resource).shallowCopy();
-            Style style = text.getStyle();
-//            long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
-            client.player.sendMessage(text.append(": " + amount + "mb"), true);
+            long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
+            client.player.sendMessage(text.append(": " + mb + "mb"), true);
         });
     }
 }

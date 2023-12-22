@@ -51,14 +51,13 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
 
     public long insertDirect(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
-
         if (!validTypes.test(resource))
             return 0;
 
         if (getResource() == null || getResource().isBlank() || getAmount() <= 0)
         {
             this.amount = 0;
-            this.resource = resource;
+            this.variant = resource;
         }
 
         long inserted = Math.min(maxAmount, getCapacity() - getAmount());
@@ -97,7 +96,7 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
     public void clear()
     {
         this.amount = 0;
-        this.resource = FluidVariant.blank();
+        this.variant = FluidVariant.blank();
     }
 
     @Override

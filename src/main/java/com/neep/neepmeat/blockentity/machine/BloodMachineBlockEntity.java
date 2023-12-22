@@ -54,12 +54,6 @@ public abstract class BloodMachineBlockEntity<T extends BloodMachineBlockEntity>
     }
 
     @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-
-    }
-
-    @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);

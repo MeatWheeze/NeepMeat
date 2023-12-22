@@ -150,8 +150,4 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
         return buffer;
     }
 
-    @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-    }
 }

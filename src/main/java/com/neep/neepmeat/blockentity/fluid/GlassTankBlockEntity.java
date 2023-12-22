@@ -48,12 +48,6 @@ public class GlassTankBlockEntity extends TankBlockEntity implements com.neep.ne
     }
 
     @Override
-    public void setNeedsUpdate(boolean needsUpdate)
-    {
-
-    }
-
-    @Override
     public void fromClientTag(NbtCompound tag)
     {
         buffer.readNBT(tag);
