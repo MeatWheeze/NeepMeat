@@ -1,7 +1,7 @@
-package com.neep.neepmeat.plc;
+package com.neep.neepmeat.api.plc;
 
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
-import com.neep.neepmeat.plc.robot.RobotAction;
+import com.neep.neepmeat.api.plc.robot.RobotAction;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;

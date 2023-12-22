@@ -1,6 +1,9 @@
 package com.neep.neepmeat.plc;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.InstructionProviderImpl;
 import com.neep.neepmeat.plc.instruction.*;
 import com.neep.neepmeat.plc.program.CombineInstruction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -14,9 +17,9 @@ public class Instructions
             InstructionProvider.class,
             new Identifier(NeepMeat.NAMESPACE, "instruction_provider")).buildAndRegister();
 
-    public static final Registry<ImmediateInstructionProvider> IMMEDIATE = FabricRegistryBuilder.createSimple(
-            ImmediateInstructionProvider.class,
-            new Identifier(NeepMeat.NAMESPACE, "immediate_instruction_provider")).buildAndRegister();
+//    public static final Registry<ImmediateInstructionProvider> IMMEDIATE = FabricRegistryBuilder.createSimple(
+//            ImmediateInstructionProvider.class,
+//            new Identifier(NeepMeat.NAMESPACE, "immediate_instruction_provider")).buildAndRegister();
 
 
     public static final InstructionProvider END = register("end", new InstructionProviderImpl((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
@@ -26,10 +29,10 @@ public class Instructions
 
     private static InstructionProvider register(String path, InstructionProvider provider)
     {
-        if (provider instanceof ImmediateInstructionProvider immediate)
-        {
-            return Registry.register(IMMEDIATE, new Identifier(NeepMeat.NAMESPACE, path), immediate);
-        }
+//        if (provider instanceof ImmediateInstructionProvider immediate)
+//        {
+//            return Registry.register(IMMEDIATE, new Identifier(NeepMeat.NAMESPACE, path), immediate);
+//        }
         return Registry.register(REGISTRY, new Identifier(NeepMeat.NAMESPACE, path), provider);
     }
 }

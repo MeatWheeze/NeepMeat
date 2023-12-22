@@ -1,8 +1,10 @@
 package com.neep.neepmeat.plc.instruction;
 
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.PLC;
-import com.neep.neepmeat.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
 
 public class RestartInstruction implements Instruction

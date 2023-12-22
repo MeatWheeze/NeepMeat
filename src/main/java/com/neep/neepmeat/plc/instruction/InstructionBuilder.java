@@ -1,6 +1,9 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.api.plc.instruction.Argument;
+import com.neep.neepmeat.api.plc.instruction.Instruction;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;

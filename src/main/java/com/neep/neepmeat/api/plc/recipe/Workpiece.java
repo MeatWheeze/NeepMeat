@@ -1,4 +1,4 @@
-package com.neep.neepmeat.plc.recipe;
+package com.neep.neepmeat.api.plc.recipe;
 
 import dev.onyxstudios.cca.api.v3.component.Component;
 

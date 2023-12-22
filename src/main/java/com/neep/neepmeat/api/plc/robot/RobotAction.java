@@ -1,4 +1,4 @@
-package com.neep.neepmeat.plc.robot;
+package com.neep.neepmeat.api.plc.robot;
 
 public interface RobotAction
 {

@@ -1,6 +1,4 @@
-package com.neep.neepmeat.plc.robot;
-
-import com.neep.neepmeat.plc.program.CombineInstruction;
+package com.neep.neepmeat.api.plc.robot;
 
 public interface SingleAction extends RobotAction
 {

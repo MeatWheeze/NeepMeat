@@ -5,6 +5,8 @@ import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.RecipeRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
+import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.init.NMComponents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.text.Text;

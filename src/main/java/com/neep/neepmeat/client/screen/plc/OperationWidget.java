@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.screen.plc;
 
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;

@@ -1,4 +1,4 @@
-package com.neep.neepmeat.plc.robot;
+package com.neep.neepmeat.api.plc.robot;
 
 import java.util.ArrayDeque;
 import java.util.List;

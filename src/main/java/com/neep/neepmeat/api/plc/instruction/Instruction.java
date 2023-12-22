@@ -1,9 +1,9 @@
-package com.neep.neepmeat.plc.instruction;
+package com.neep.neepmeat.api.plc.instruction;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.PLC;
-import com.neep.neepmeat.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
 
 public interface Instruction extends NbtSerialisable
