@@ -29,8 +29,8 @@ public class BulletTrailEffect extends GraphicsEffect
     {
         super.tick();
 
-        Random random = new Random(time);
-        world.addParticle(ParticleTypes.SMOKE, end.x, end.y, end.z, 0, 0 , 0);
+//        Random random = new Random(time);
+//        world.addParticle(ParticleTypes.SMOKE, end.x, end.y, end.z, 0, 0 , 0);
     }
 
     @Override

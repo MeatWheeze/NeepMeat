@@ -8,6 +8,7 @@ import com.neep.meatweapons.client.renderer.CannonBulletEntityRenderer;
 import com.neep.meatweapons.client.renderer.PlasmaEntityRenderer;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.BulletEntityPacket;
+import com.neep.meatweapons.particle.MWParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -55,6 +56,7 @@ public class MWClient implements ClientModInitializer
         BeamPacket.registerReceiver();
         registerEntityModels();
         registerAnimations();
+        MWParticles.initClient();
     }
 
 }

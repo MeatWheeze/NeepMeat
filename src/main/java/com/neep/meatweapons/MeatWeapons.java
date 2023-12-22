@@ -10,6 +10,7 @@ import com.neep.meatweapons.item.FusionCannonItem;
 import com.neep.meatweapons.item.HandCannonItem;
 import com.neep.meatweapons.item.LMGItem;
 import com.neep.meatweapons.item.MachinePistolItem;
+import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -18,7 +19,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -55,6 +55,6 @@ public class MeatWeapons implements ModInitializer
         System.out.println(ItemRegistry.ITEMS);
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();
-//        MWParticles.register();
+        MWParticles.init();
     }
 }

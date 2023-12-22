@@ -31,8 +31,15 @@ public class BeamEffect extends GraphicsEffect
     {
         super.tick();
 
-        Random random = new Random(time);
-        world.addParticle(ParticleTypes.ENCHANTED_HIT, end.x, end.y, end.z, random.nextFloat() - 0.5, random.nextFloat() - 0.5 , random.nextFloat() - 0.5);
+        Random random = new Random(world.getTime());
+        double d = 0.1;
+        random.nextFloat();
+//        world.addParticle(ParticleTypes.ENCHANTED_HIT, end.x, end.y, end.z, random.nextFloat() - 0.5, random.nextFloat() - 0.5 , random.nextFloat() - 0.5);
+        world.addParticle(MWParticles.PLASMA_PARTICLE, end.x, end.y, end.z,
+                d * (random.nextFloat() - 0.75),
+//                0,
+                d * (random.nextFloat() - 0.5),
+                d * (random.nextFloat() - 0.5));
     }
 
     @Override
@@ -41,7 +48,8 @@ public class BeamEffect extends GraphicsEffect
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(BEAM_LAYER);
         Vec3d beam = (end.subtract(start));
-        float x = (maxTime - time + 2 - tickDelta) / (float) maxTime;
+        float x = Math.max(0, maxTime - time - tickDelta) / (float) maxTime;
+//        float x = 1;
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
 //                startPos.add(norm.multiply(beam.length() * (1 - x))), endPos, 123, 171, 254,
                 start, end, 123, 171, 254,
