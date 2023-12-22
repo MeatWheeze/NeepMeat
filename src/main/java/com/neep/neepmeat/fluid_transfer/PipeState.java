@@ -14,6 +14,7 @@ public class PipeState
     protected float pressure;
     protected int distance;
     protected boolean capillary;
+    protected final ISpecialPipe special;
 
     public PipeState(BlockState state)
     {
@@ -28,12 +29,14 @@ public class PipeState
             }
         }
         this.capillary = state.getBlock() instanceof ICapillaryPipe;
+        this.special = null;
     }
 
     @Override
     public String toString()
     {
-        return Float.toString(pressure);
+//        return Float.toString(pressure);
+        return "PipeState{connection=" + connections + "}";
     }
 
     @Override
@@ -55,24 +58,24 @@ public class PipeState
         return capillary;
     }
 
+    public boolean isSpecial()
+    {
+        return special != null;
+    }
+
+    public ISpecialPipe getSpecial()
+    {
+        return special;
+    }
+
     public float getPressure()
     {
         return pressure;
     }
 
-    public void addPressure(float pressure)
-    {
-        this.pressure += pressure;
-    }
-
     public int getDistance()
     {
         return distance;
-    }
-
-    public void setDistance(int distance)
-    {
-        this.distance = distance;
     }
 
     @FunctionalInterface
