@@ -31,7 +31,7 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
         this.parent = parent;
     }
 
-    public NbtCompound writeNBT(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putLong("amount", amount);
         nbt.put("resource", variant.toNbt());
@@ -39,7 +39,7 @@ public class WritableFluidBuffer extends SingleVariantStorage<FluidVariant> impl
         return nbt;
     }
 
-    public void readNBT(NbtCompound nbt)
+    public void readNbt(NbtCompound nbt)
     {
         this.amount = nbt.getLong("amount");
         this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));

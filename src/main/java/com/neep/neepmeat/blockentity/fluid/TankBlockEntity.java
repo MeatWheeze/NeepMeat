@@ -38,7 +38,7 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNBT(tag);
+        buffer.writeNbt(tag);
         return tag;
     }
 
@@ -46,7 +46,7 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-        buffer.readNBT(tag);
+        buffer.readNbt(tag);
     }
 
     @Override

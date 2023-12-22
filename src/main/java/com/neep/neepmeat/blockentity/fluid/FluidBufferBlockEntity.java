@@ -36,7 +36,7 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNBT(tag);
+        buffer.writeNbt(tag);
         return tag;
     }
 
@@ -44,7 +44,7 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-        buffer.readNBT(tag);
+        buffer.readNbt(tag);
     }
 
     @Override
@@ -71,13 +71,13 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
     @Override
     public void fromClientTag(NbtCompound tag)
     {
-        buffer.readNBT(tag);
+        buffer.readNbt(tag);
     }
 
     @Override
     public NbtCompound toClientTag(NbtCompound tag)
     {
-        return buffer.writeNBT(tag);
+        return buffer.writeNbt(tag);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        buffer.writeNBT(nbt);
+        buffer.writeNbt(nbt);
 
         return nbt;
     }
@@ -63,7 +63,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        buffer.readNBT(nbt);
+        buffer.readNbt(nbt);
     }
 
     @Override
