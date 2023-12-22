@@ -12,16 +12,20 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
@@ -88,6 +92,20 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
     {
         return buffer.iterator(transaction);
+    }
+
+    @Override
+    public void dropItems(DamageSource damageSource)
+    {
+        this.remove(Entity.RemovalReason.KILLED);
+        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+            ItemStack itemStack = new ItemStack(Items.MINECART);
+            if (this.hasCustomName()) {
+                itemStack.setCustomName(this.getCustomName());
+            }
+            this.dropStack(itemStack);
+            this.dropStack(NMBlocks.GLASS_TANK.asItem().getDefaultStack());
+        }
     }
 
     @Override

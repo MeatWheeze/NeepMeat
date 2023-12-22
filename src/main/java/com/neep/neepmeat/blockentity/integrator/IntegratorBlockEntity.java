@@ -6,16 +6,22 @@ import com.neep.neepmeat.fluid_transfer.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
@@ -23,6 +29,9 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.network.GeckoLibNetwork;
+import software.bernie.geckolib3.network.ISyncable;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
@@ -30,6 +39,9 @@ import java.util.List;
 public class IntegratorBlockEntity extends BlockEntity implements
         FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable, IAnimatable
 {
+
+    public static final int ANIM_HATCH = 0;
+    public static final int ANIM_IDLE = 1;
 
     protected int growthTimeRemaining = 1000;
     protected final MultiTypedFluidBuffer buffer;
@@ -41,6 +53,7 @@ public class IntegratorBlockEntity extends BlockEntity implements
     public float targetFacing = 0f;
 
     private final AnimationFactory factory = new AnimationFactory(this);
+    private boolean hatching;
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
@@ -72,7 +85,14 @@ public class IntegratorBlockEntity extends BlockEntity implements
     @Override
     public void fromClientTag(NbtCompound tag)
     {
-        readNbt(tag);
+        if (!isFullyGrown)
+        {
+            readNbt(tag);
+            if (isFullyGrown)
+                this.hatching = true;
+        }
+        else
+            readNbt(tag);
     }
 
     @Override
@@ -139,6 +159,14 @@ public class IntegratorBlockEntity extends BlockEntity implements
         if (growthTimeRemaining <= 0)
         {
             isFullyGrown = true;
+            hatch();
+        }
+    }
+
+    public void hatch()
+    {
+        for (PlayerEntity otherPlayer : PlayerLookup.tracking(this))
+        {
         }
     }
 
@@ -163,7 +191,38 @@ public class IntegratorBlockEntity extends BlockEntity implements
     private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
         event.getController().transitionLengthTicks = 20;
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch", true));
+        if (this.hatching)
+        {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch", true));
+            hatching = false;
+        }
+        else
+        {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.idle", true));
+        }
+
         return PlayState.CONTINUE;
+    }
+
+    public void onAnimationSync(int id, int state)
+    {
+        if (state == ANIM_HATCH)
+        {
+            final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, "controller");
+
+            if (controller.getAnimationState() == AnimationState.Stopped) {
+                final ClientPlayerEntity player = MinecraftClient.getInstance().player;
+                if (player != null) {
+                    player.sendMessage(new LiteralText("Opening the jack in the box!"), true);
+                }
+                // If you don't do this, the popup animation will only play once because the
+                // animation will be cached.
+                controller.markNeedsReload();
+                // Set the animation to open the JackInTheBoxItem which will start playing music
+                // and
+                // eventually do the actual animation. Also sets it to not loop
+                controller.setAnimation(new AnimationBuilder().addAnimation("Soaryn_chest_popup", false));
+            }
+        }
     }
 }
