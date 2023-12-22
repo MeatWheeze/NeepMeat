@@ -90,10 +90,9 @@ public interface ImplementedInventory extends Inventory
         return true;
     }
 
-    default NbtCompound writeNbt(NbtCompound tag)
+    default void writeNbt(NbtCompound tag)
     {
         Inventories.writeNbt(tag, getItems());
-        return tag;
     }
 
     default void readNbt(NbtCompound tag)

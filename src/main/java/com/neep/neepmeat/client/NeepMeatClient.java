@@ -8,6 +8,7 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.client.screen.RouterScreen;
+import com.neep.neepmeat.client.screen.StirlingEngineScreen;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
@@ -153,6 +154,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
         HandledScreens.register(ScreenHandlerInit.CONTENT_DETECTOR_SCREEN_HANDLER, ContentDetectorScreen::new);
         HandledScreens.register(ScreenHandlerInit.ROUTER, RouterScreen::new);
+        HandledScreens.register(ScreenHandlerInit.STIRLING_ENGINE, StirlingEngineScreen::new);
     }
 
     public static void registerLayers()

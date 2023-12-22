@@ -1,70 +1,66 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
-import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
 public class StirlingEngineStorage
 {
-    protected WritableStackStorage fuelStorage;
+    protected SimpleInventory inventory;
 
     public StirlingEngineStorage(StirlingEngineBlockEntity parent)
     {
-        this.fuelStorage = new WritableStackStorage(parent)
+        this.inventory = new SimpleInventory(1);
+    }
+
+    public Storage<ItemVariant> getFuelStorage(Direction direction)
+    {
+        return InventoryStorage.of(inventory, direction);
+    }
+
+    public Inventory getInventory()
+    {
+        return inventory;
+    }
+
+    public int decrementFuel()
+    {
+        if (!inventory.isEmpty())
         {
-            @Override
-            public boolean canInsert(ItemVariant resource)
+            ItemStack stack = inventory.getStack(0);
+            Item remainder = stack.getItem().getRecipeRemainder();
+            Integer time = FuelRegistry.INSTANCE.get(stack.getItem());
+
+            if (time != null)
             {
-                return FuelRegistry.INSTANCE.get(resource.getItem()) != null;
-            }
-
-            @Override
-            public long extract(ItemVariant variant, long maxAmount, TransactionContext transaction)
-            {
-                ItemVariant currentVariant = this.getResource();
-                Item remainder = currentVariant.getItem().getRecipeRemainder();
-
-                long extracted = super.extract(variant, maxAmount, transaction);
-
-                if (this.isEmpty() && remainder != null)
+                stack.decrement(1);
+                if (remainder != null && stack.isEmpty())
                 {
-                    this.insert(ItemVariant.of(remainder), 1, transaction);
+                    inventory.addStack(new ItemStack(remainder, 1));
                 }
-                return extracted;
+                return time;
             }
-        };
-    }
-
-    public WritableStackStorage getFuelStorage(Direction direction)
-    {
-        return fuelStorage;
-    }
-
-    public int decrementFuel(TransactionContext transaction)
-    {
-        ItemVariant resource = fuelStorage.getResource();
-        if (fuelStorage.isEmpty())
-            return -1;
-
-        if (fuelStorage.extract(resource, 1, transaction) == 1)
-        {
-            return FuelRegistry.INSTANCE.get(resource.getItem());
         }
+
         return -1;
     }
 
     public void writeNbt(NbtCompound nbt)
     {
-        this.fuelStorage.writeNbt(nbt);
+        nbt.put("inventory", this.inventory.toNbtList());
     }
 
     public void readNbt(NbtCompound nbt)
     {
-        this.fuelStorage.readNbt(nbt);
+        this.inventory.readNbtList((NbtList) nbt.get("inventory"));
     }
 }

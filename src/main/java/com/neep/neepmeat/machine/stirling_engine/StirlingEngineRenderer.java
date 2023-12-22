@@ -38,10 +38,11 @@ public class StirlingEngineRenderer implements BlockEntityRenderer<StirlingEngin
         float delta = (float) (currentFrame - lastFrame);
 //        this.lastFrame = currentFrame;
 
-        be.angle = MathHelper.wrapDegrees(be.angle + be.speed * delta);
+        // Temporal discretisation!
+        be.angle = MathHelper.wrapDegrees(be.angle + StirlingEngineBlockEntity.energyToSpeed(be.energyStored) * delta);
 
 //        float angle = MathHelper.wrapDegrees((be.getWorld().getTime() + tickDelta) * be.speed);
-        matrices.multiply(Vec3f.NEGATIVE_Z.getRadialQuaternion(be.angle));
+        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(be.angle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.STIRLING_ENGINE_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
         matrices.pop();
