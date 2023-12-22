@@ -11,14 +11,14 @@ public class WormActions
 {
     protected static RandomMap<Identifier, Entry> MAP = new RandomMap<>();
 
-    public static void put(Identifier id, WormActionFactory factory, float weight, String animation)
+    public static void put(Identifier id, WormActionFactory factory, float weight)
     {
         Entry entry = new Entry(weight, factory);
         MAP.put(id, entry, weight);
 
         // Make corresponding animation available
-        AnimationBuilder animationBuilder = new AnimationBuilder().addAnimation(animation);
-        ANIMATION_MAP.put(id.toString(), animationBuilder);
+//        AnimationBuilder animationBuilder = new AnimationBuilder().addAnimation(animation);
+//        ANIMATION_MAP.put(id.toString(), animationBuilder);
     }
     public static Entry random()
     {
@@ -29,11 +29,11 @@ public class WormActions
     {
         Entry emptyEntry = new Entry(1, WormAction.EmptyAction::new);
         MAP.getById().defaultReturnValue(emptyEntry);
-        ANIMATION_MAP.defaultReturnValue(IDLE);
+//        ANIMATION_MAP.defaultReturnValue(IDLE);
 
-        put(IdleWormAction.ID, IdleWormAction::new, 1, "animation.god_worm.idle");
-//        put(FullSwingWormAction.ID, FullSwingWormAction::new, 1, "animation.god_worm.full_swing");
-        put(BiteWormAction.ID, BiteWormAction::new, 1, "animation.god_worm.bite");
+//        put(IdleWormAction.ID, IdleWormAction::new, 1);
+//        put(FullSwingWormAction.ID, FullSwingWormAction::new, 1);
+        put(BiteWormAction.ID, BiteWormAction::new, 1);
     }
 
     public static NbtCompound toNbt(WormAction action)
@@ -53,13 +53,13 @@ public class WormActions
         return action;
     }
 
-    protected static Object2ObjectMap<String, AnimationBuilder> ANIMATION_MAP = new Object2ObjectOpenHashMap<>();
-    protected static final AnimationBuilder IDLE = new AnimationBuilder().addAnimation("animation.god_worm.idle");
+//    protected static Object2ObjectMap<String, AnimationBuilder> ANIMATION_MAP = new Object2ObjectOpenHashMap<>();
+//    protected static final AnimationBuilder IDLE = new AnimationBuilder().addAnimation("animation.god_worm.idle");
 
-    public static AnimationBuilder getAnimation(String actionId)
-    {
-        return ANIMATION_MAP.getOrDefault(actionId, IDLE);
-    }
+//    public static AnimationBuilder getAnimation(String actionId)
+//    {
+//        return ANIMATION_MAP.getOrDefault(actionId, IDLE);
+//    }
 
     public record Entry(float weight, WormActionFactory factory)
     {

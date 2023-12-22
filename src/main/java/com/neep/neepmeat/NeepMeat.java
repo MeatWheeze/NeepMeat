@@ -5,6 +5,7 @@ import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.entity.worm.WormActions;
+import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.player.upgrade.*;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
@@ -84,6 +85,8 @@ public class NeepMeat implements ModInitializer
 
 		// --- Other misc things ---
 		ToolTransformPacket.registerReceiver();
+
+		NMTrackedData.init();
 
 		NMFeatures.init();
 

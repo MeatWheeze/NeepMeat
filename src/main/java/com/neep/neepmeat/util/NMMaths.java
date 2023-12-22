@@ -2,7 +2,6 @@ package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
@@ -57,7 +56,7 @@ public class NMMaths
         return d + e + f;
     }
 
-    public static Vec2f flatten(Vec3d vec)
+    public static Vec2f flattenY(Vec3d vec)
     {
         return new Vec2f((float) vec.getX(), (float) vec.getZ());
     }
@@ -124,5 +123,15 @@ public class NMMaths
         return new Vec2f(
                 (float) Math.toDegrees(Math.atan(-v / xz)), // Pitch
                 (float) Math.toDegrees(Math.atan2(-u, w))); // Yaw
+    }
+
+    public static Vec2f rectToPol(Vec3d vec)
+    {
+        return rectToPol(vec.x, vec.y, vec.z);
+    }
+
+    public static double nlerp(double delta, double from, double to, Easing.Curve function)
+    {
+        return 0;
     }
 }
