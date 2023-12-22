@@ -71,16 +71,10 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             refreshCache(getWorld(), getPos(), getCachedState());
         }
 
-        Transaction transaction = Transaction.openOuter();
-        long work = doWork(USE_AMOUNT, transaction);
-        if (work == USE_AMOUNT)
-        {
-            if (heatable != null)
-                heatable.setBurning();
+        if (heatable != null)
+            heatable.setBurning();
 
-            heatBlock();
-        }
-        transaction.commit();
+        heatBlock();
     }
 
     @Override

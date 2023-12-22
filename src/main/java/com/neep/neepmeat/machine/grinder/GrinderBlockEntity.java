@@ -28,6 +28,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -39,9 +40,14 @@ import java.util.Optional;
 public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     protected GrinderStorage storage = new GrinderStorage(this);
-    protected int progress;
     protected int cooldownTicks = 2;
     protected int processLength;
+
+    public static final float INCREMENT_MAX = 2;
+    public static final float INCREMENT_MIN = 0.2f;
+    protected float progressIncrement;
+    protected float progress;
+
     protected Identifier currentRecipeId;
     protected GrindingRecipe currentRecipe;
 
@@ -86,7 +92,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
-        nbt.putInt("progress", progress);
+        nbt.putFloat("progress", progress);
         nbt.putInt("process_length", processLength);
 
         if (currentRecipe != null)
@@ -98,7 +104,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
-        this.progress = nbt.getInt("progress");
+        this.progress = nbt.getFloat("progress");
         this.processLength = nbt.getInt("process_length");
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
         readCurrentRecipe();
@@ -132,7 +138,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 //                }
 //            }
 
-            ++progress;
+            progress = Math.min(processLength, progress + progressIncrement);
 
             if (progress >= this.processLength)
             {
@@ -283,6 +289,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     @Override
     public void setWorkMultiplier(float multiplier)
     {
-
+        this.progressIncrement = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
     }
 }

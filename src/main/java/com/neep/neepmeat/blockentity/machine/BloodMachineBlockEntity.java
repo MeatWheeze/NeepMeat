@@ -147,9 +147,9 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         }
     }
 
-    public long getRunningRate()
+    public float getRunningRate()
     {
-        return runningRate;
+        return (this.runningRate / (float) this.maxRunningRate);
     }
 
     @Override
