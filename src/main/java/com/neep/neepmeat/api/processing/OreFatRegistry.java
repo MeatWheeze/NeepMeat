@@ -1,6 +1,7 @@
 package com.neep.neepmeat.api.processing;
 
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
+import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
@@ -12,6 +13,7 @@ import net.minecraft.util.registry.RegistryEntry;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("UnstableApiUsage")
 public class OreFatRegistry
 {
     protected static Map<Item, Entry> ENTRIES = new HashMap<>();
@@ -51,6 +53,30 @@ public class OreFatRegistry
             }
         }
         return null;
+    }
+
+    public static Item getItem(FluidVariant variant)
+    {
+        NbtCompound nbt = variant.getNbt();
+        if (variant.getObject() instanceof OreFatFluidFactory.Main && nbt != null)
+        {
+            return Registry.ITEM.get(new Identifier((nbt.getString("item"))));
+        }
+        return null;
+    }
+
+    public static FluidVariant getDirty(Item ore)
+    {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putString("item", Registry.ITEM.getId(ore).toString());
+        return FluidVariant.of(NMFluids.STILL_DIRTY_ORE_FAT, nbt);
+    }
+
+    public static FluidVariant getClean(Item ore)
+    {
+        NbtCompound nbt = new NbtCompound();
+        nbt.putString("item", Registry.ITEM.getId(ore).toString());
+        return FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt);
     }
 
     public record Entry(Item source, Integer col, Item result)

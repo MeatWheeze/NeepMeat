@@ -55,6 +55,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier ELDRITCH_ENZYMES = new Identifier(NeepMeat.NAMESPACE, "block/eldritch_enzymes_still");
     public static final Identifier DIRTY_ORE_FAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/dirty_ore_fat_flowing");
     public static final Identifier DIRTY_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/dirty_ore_fat_still");
+    public static final Identifier CLEAN_ORE_FAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/clean_ore_fat_flowing");
+    public static final Identifier CLEAN_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/clean_ore_fat_still");
 
     @Override
     public void onInitializeClient()
@@ -161,16 +163,27 @@ public class NeepMeatClient implements ClientModInitializer
                 0x3657a2
         ));
 
-        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_ORE_FAT, NMFluids.FLOWING_ORE_FAT, new SimpleFluidRenderHandler(
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_DIRTY_ORE_FAT, NMFluids.FLOWING_DIRTY_ORE_FAT, new SimpleFluidRenderHandler(
                 DIRTY_ORE_FAT,
                 DIRTY_ORE_FAT_FLOWING,
                 0x3657a2
         ));
 
-        FluidVariantRendering.register(NMFluids.STILL_ORE_FAT, new OreFatFluidVariantRenderHandler());
-        FluidVariantRendering.register(NMFluids.FLOWING_ORE_FAT, new OreFatFluidVariantRenderHandler());
-        FluidVariantAttributes.register(NMFluids.STILL_ORE_FAT, new OreFatAttributeHandler());
-        FluidVariantAttributes.register(NMFluids.FLOWING_ORE_FAT, new OreFatAttributeHandler());
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_CLEAN_ORE_FAT, NMFluids.FLOWING_CLEAN_ORE_FAT, new SimpleFluidRenderHandler(
+                CLEAN_ORE_FAT,
+                CLEAN_ORE_FAT_FLOWING,
+                0x3657a2
+        ));
+
+        FluidVariantRendering.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
+        FluidVariantRendering.register(NMFluids.FLOWING_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
+        FluidVariantAttributes.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatAttributeHandler());
+        FluidVariantAttributes.register(NMFluids.FLOWING_DIRTY_ORE_FAT, new OreFatAttributeHandler());
+
+        FluidVariantRendering.register(NMFluids.STILL_CLEAN_ORE_FAT, new OreFatFluidVariantRenderHandler());
+        FluidVariantRendering.register(NMFluids.FLOWING_CLEAN_ORE_FAT, new OreFatFluidVariantRenderHandler());
+        FluidVariantAttributes.register(NMFluids.STILL_CLEAN_ORE_FAT, new OreFatAttributeHandler());
+        FluidVariantAttributes.register(NMFluids.FLOWING_CLEAN_ORE_FAT, new OreFatAttributeHandler());
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
@@ -184,6 +197,8 @@ public class NeepMeatClient implements ClientModInitializer
             registry.register(ELDRITCH_ENZYMES_FLOWING);
             registry.register(DIRTY_ORE_FAT);
             registry.register(DIRTY_ORE_FAT_FLOWING);
+            registry.register(CLEAN_ORE_FAT);
+            registry.register(CLEAN_ORE_FAT_FLOWING);
         });
 
 

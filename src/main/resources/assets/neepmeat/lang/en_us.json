@@ -202,8 +202,8 @@
   "item.neepmeat.eldritch_enzymes_bucket": "Bucket of Eldritch Enzymes",
   "block.neepmeat.eldritch_enzymes": "Eldritch Enzymes",
 
-  "item.neepmeat.ore_fat_bucket": "Ore Fat Bucket",
-  "block.neepmeat.ore_fat": "Ore Fat",
+  "block.neepmeat.clean_ore_fat": "Clean Fat",
+  "block.neepmeat.ore_fat": "Dirty Fat",
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
