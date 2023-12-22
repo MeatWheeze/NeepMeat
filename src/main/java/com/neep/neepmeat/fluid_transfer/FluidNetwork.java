@@ -30,7 +30,7 @@ public class FluidNetwork
 {
     protected static final HashMap<ServerWorld, FluidNetwork> WORLD_NETWORKS = new HashMap<>();
 
-    public List<FluidNode> queuedNodes = new ArrayList<>();
+    public Queue<FluidNode> queuedNodes = new LinkedList<>();
     public final Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
     protected final ServerWorld world;
     public NetworkLookup networkLookup;
@@ -73,17 +73,17 @@ public class FluidNetwork
 
     public static void tickNetwork(ServerWorld world)
     {
-        // A mysterious ConcurrentModificationException is thrown when using ListIterator::remove()
-        List<FluidNode> removal = new ArrayList<>();
-        List<FluidNode> queue = new ArrayList<>(WORLD_NETWORKS.get(world).queuedNodes);
-        for (FluidNode node : queue)
+        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
+        while (!queue.isEmpty())
         {
+            FluidNode node = queue.poll();
             node.loadDeferred(world);
-            removal.add(node);
         }
-        WORLD_NETWORKS.get(world).queuedNodes.removeAll(removal);
 
-        PipeNetwork.LOADED_NETWORKS.forEach(PipeNetwork::tick);
+        if (world.getTime() % PipeNetwork.TICK_RATE == 0)
+        {
+            PipeNetwork.LOADED_NETWORKS.forEach(PipeNetwork::tick);
+        }
     }
 
     protected static void createNetwork(ServerWorld world)
