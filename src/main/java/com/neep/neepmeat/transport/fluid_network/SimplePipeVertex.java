@@ -17,6 +17,7 @@ public class SimplePipeVertex implements PipeVertex
     protected long amount;
     protected long oldAmount;
     private PipeNetwork network;
+    protected FluidVariant variant = FluidVariant.blank();
 
     public SimplePipeVertex()
     {
@@ -33,10 +34,15 @@ public class SimplePipeVertex implements PipeVertex
         oldAmount = amount;
     }
 
-    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant variant, TransactionContext transaction)
+    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
     {
-        this.amount += maxAmount;
-        return maxAmount;
+        if (!insertVariant.isBlank() && (variant.isBlank() || insertVariant.equals(variant)))
+        {
+            this.amount += maxAmount;
+            variant = insertVariant;
+            return maxAmount;
+        }
+        return 0;
     }
 
     @Override

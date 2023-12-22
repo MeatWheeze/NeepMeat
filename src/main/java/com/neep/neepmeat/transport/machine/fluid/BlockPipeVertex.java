@@ -8,6 +8,8 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -17,8 +19,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.Arrays;
-import java.util.function.Supplier;
 
+@SuppressWarnings("UnstableApiUsage")
 public class BlockPipeVertex extends SimplePipeVertex
 {
     private final FluidPipeBlockEntity parent;
@@ -85,22 +87,6 @@ public class BlockPipeVertex extends SimplePipeVertex
     @Override
     public void tick()
     {
-
-//        for (Direction direction : Direction.values())
-//        {
-//            PipeVertex adjacent = getAdjacent(direction.ordinal());
-//
-//            long u1 = amounts[direction.ordinal()];
-//            long u2 = amounts[direction.getOpposite().ordinal()];
-//
-//            float dx = 1;
-//
-//            float uu_x = (long) ((u2 * u2 - u1 * u1) / (dx * 2));
-//
-//            float uv_y = ( (((u4 + uc) / 2) * ((va + vb) / 2)) - (((uc + u3) / 2) * ( (vc + vd) / 2))) / dy;
-//        }
-
-
         try (Transaction transaction = Transaction.openOuter())
         {
             components.clear();
@@ -126,6 +112,7 @@ public class BlockPipeVertex extends SimplePipeVertex
                 }
             }
 
+            // Randomise transfer order to reduce opportunities for fluid to get stuck in loops.
             final int[] ints = parent.getWorld().getRandom().ints(0, 6).distinct().limit(6).toArray();
 
             for (int dir : ints)
@@ -134,8 +121,9 @@ public class BlockPipeVertex extends SimplePipeVertex
                 if (component == null) continue;
 
                 long transferAmount = (long) Math.min(amount, Math.ceil(oldAmount / (float) outputs));
-                long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), FluidVariant.of(Fluids.WATER), transaction);
+                long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), variant, transaction);
                 amount -= received;
+                if (amount <= 0) variant = FluidVariant.blank();
             }
 
             transaction.commit();
@@ -147,7 +135,7 @@ public class BlockPipeVertex extends SimplePipeVertex
     {
         float nodeFlow = nodeSupplier.get().getFlow();
         float otherFlow = getTotalHead() - getHead(nodeSupplier.getPos().face().ordinal());
-        return Math.abs(nodeFlow) > Math.abs(otherFlow) ? nodeFlow : otherFlow;
+        return nodeFlow != 0 ? nodeFlow : otherFlow;
     }
 
     @Override
@@ -164,13 +152,17 @@ public class BlockPipeVertex extends SimplePipeVertex
 
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-//                float dH = getTotalHead() + 0.5f - getHead(dir); // Negative for extraction, positive for insertion
                 float f = getNodeInflux(nodes[dir]);
                 long transferAmount = (long) Math.ceil(f * FluidConstants.BUCKET / 8);
                 if (transferAmount < 0)
                 {
-                    extracted = storage.extract(FluidVariant.of(Fluids.WATER), -transferAmount, transaction);
-                    amount += extracted;
+                    FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
+                    if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
+                    {
+                        extracted = storage.extract(foundVariant, -transferAmount, transaction);
+                        variant = foundVariant;
+                        amount += extracted;
+                    }
                 }
             }
             transaction.commit();
@@ -217,16 +209,20 @@ public class BlockPipeVertex extends SimplePipeVertex
     }
 
     @Override
-    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant variant, TransactionContext transaction)
+    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
     {
-
-        return super.insert(fromDir, toDir, maxAmount, world, variant, transaction);
+        return super.insert(fromDir, toDir, maxAmount, world, insertVariant, transaction);
     }
 
     @Override
     public boolean keepNetworkValid()
     {
-        return numNodes() >= 2;
+        int count = 0;
+        for (NodeSupplier nodeSupplier : nodes)
+        {
+            if (nodeSupplier != null && nodeSupplier.get() != null) ++count;
+        }
+        return count >= 2;
     }
 
     @Override
@@ -237,5 +233,17 @@ public class BlockPipeVertex extends SimplePipeVertex
             if (v != null) adj.append(System.identityHashCode(v)).append(", ");
         }
         return "Vertex@" + System.identityHashCode(this) + "{connection=" + adj + "nodes: " + Arrays.toString(nodes) + ", head:" + getTotalHead() + "}";
+    }
+
+    public static FluidVariant findExtractable(Storage<FluidVariant> storage, FluidVariant preferred, TransactionContext transaction)
+    {
+        for (StorageView<FluidVariant> view : storage.iterable(transaction))
+        {
+            if (preferred.isBlank())
+            {
+                if (!view.isResourceBlank()) return view.getResource();
+            }
+        }
+        return FluidVariant.blank();
     }
 }
