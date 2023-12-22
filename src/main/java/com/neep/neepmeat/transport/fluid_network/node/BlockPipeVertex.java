@@ -116,10 +116,12 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
             for (int dir = 0; dir < nodes.length; ++dir)
             {
-                NodeSupplier node = nodes[dir];
-                if (node != null && node.get() != null && getNodeFlow(node) >= 0)
+                NodeSupplier nodeSupplier = nodes[dir];
+                FluidNode node;
+                if (nodeSupplier != null && (node = nodeSupplier.get()) != null
+                        && getNodeFlow(nodeSupplier.getPos(), node) >= 0 && node.getMode().canInsert())
                 {
-                    components.set(dir, node);
+                    components.set(dir, nodeSupplier);
                     ++transfers;
                 }
             }
@@ -164,14 +166,14 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     }
 
     // Get the flow with respect to the node
-    protected float getNodeFlow(NodeSupplier nodeSupplier)
+    protected float getNodeFlow(NodePos pos, FluidNode node)
     {
         // Negative for influx, positive for efflux.
-        float nodeFlow = nodeSupplier.get().getFlow();
+        float nodeFlow = node.getFlow();
 
 //        float heightFlow = -getHead(nodeSupplier.getPos().face().ordinal()) < 0 ? -0.5f : 1; // TODO: Return something more sensible than 1
         // If a node is above this vertex, the height difference should be -0.5.
-        float heightFlow = -(getHeight(nodeSupplier.getPos().face().ordinal()) - height) - (nodeSupplier.get().getPressureHeight() - pressureHeight);
+        float heightFlow = -(getHeight(pos.face().ordinal()) - height) - (node.getPressureHeight() - pressureHeight);
 
         return nodeFlow != 0 ? nodeFlow : heightFlow;
     }
@@ -189,7 +191,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
                 Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
 
-                float f = getNodeFlow(nodeSupplier);
+                float f = getNodeFlow(nodeSupplier.getPos(), node);
 
                 // Calculate the amount with respect to this vertex.
                 long transferAmount = - (long) Math.ceil(f * FluidConstants.BUCKET / 8);

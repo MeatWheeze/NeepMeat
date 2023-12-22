@@ -13,8 +13,8 @@ public enum AcceptorModes
     PUSH(2, 1),
     INSERT_ONLY(3, 0),
     EXTRACT_ONLY(4, 0),
-    INSERT_EXTRACT(5, 0),
-    SENSOR(6, 0);
+    INSERT_EXTRACT(5, 0), // This is not used because I am stupid
+    SENSOR(6, 0); // This is also not used because I am stupid
 
     private final float flow;
     private final int id;
