@@ -1,8 +1,66 @@
 {
   "multipart": [
     {
+      "when": {
+        "OR": [
+          {"up": "true", "north": "true"},
+          {"up": "true", "east": "true"},
+          {"up": "true", "south": "true"},
+          {"up": "true", "west": "true"},
+
+          {"down": "true", "north": "true"},
+          {"down": "true", "east": "true"},
+          {"down": "true", "south": "true"},
+          {"down": "true", "west": "true"},
+
+          {"north": "true", "east": "true"},
+          {"north": "true", "west": "true"},
+
+          {"south": "true", "east": "true"},
+          {"south": "true", "west": "true"},
+
+          {"north": "false|forced", "east": "false|forced", "south": "false|forced", "west": "false|forced","up": "false|forced", "down": "false|forced"}
+        ]
+      },
       "apply": {
         "model": "neepmeat:block/pneumatic_pipe/pipe_centre"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+            {"north": "true", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
+            {"north": "true", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
+            {"north": "false|forced", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"}
+          ]
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_centre_ns"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {"north": "false|forced", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "true", "west": "true"},
+          {"north": "false|forced", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "true"},
+          {"north": "false|forced", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "true", "west": "false|forced"}
+        ]
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_centre_ew"
+      }
+    },
+    {
+      "when": {
+        "OR": [
+          {"north": "false|forced", "south": "false|forced", "up": "true", "down": "true", "east": "false|forced", "west": "false|forced"},
+          {"north": "false|forced", "south": "false|forced", "up": "true", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
+          {"north": "false|forced", "south": "false|forced", "up": "false|forced", "down": "true", "east": "false|forced", "west": "false|forced"}
+        ]
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_centre_ns",
+        "x": 90
       }
     },
     {
