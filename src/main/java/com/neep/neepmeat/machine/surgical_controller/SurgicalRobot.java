@@ -69,6 +69,9 @@ public class SurgicalRobot implements NbtSerialisable
     private float pitch;
     private float yaw;
 
+    // I can't be bothered to do this properly
+    public ResourceAmount<ItemVariant> stored;
+
     public SurgicalRobot(PLCBlockEntity parent)
     {
         this.parent = parent;
@@ -246,6 +249,14 @@ public class SurgicalRobot implements NbtSerialisable
         nbt.putFloat("pitch", pitch);
         nbt.putFloat("yaw", yaw);
 
+        if (stored != null)
+        {
+            NbtCompound storedNbt = new NbtCompound();
+            storedNbt.put("item", stored.resource().toNbt());
+            storedNbt.putLong("amount", stored.amount());
+            nbt.put("stored", storedNbt);
+        }
+
         return nbt;
     }
 
@@ -259,6 +270,15 @@ public class SurgicalRobot implements NbtSerialisable
 
         this.pitch = nbt.getFloat("pitch");
         this.yaw = nbt.getFloat("yaw");
+
+        if (nbt.contains("stored"))
+        {
+            NbtCompound storedNbt = nbt.getCompound("stored");
+            stored = new ResourceAmount<>(
+                    ItemVariant.fromNbt(storedNbt.getCompound("item")),
+                    storedNbt.getLong("amount")
+            );
+        }
     }
 
 //    public void writeBuf(PacketByteBuf buf)
@@ -326,7 +346,18 @@ public class SurgicalRobot implements NbtSerialisable
 
     public void spawnItem(ResourceAmount<ItemVariant> stored)
     {
+        if (stored == null)
+            return;
         ItemScatterer.spawn(parent.getWorld(), x, y, z, stored.resource().toStack((int) stored.amount()));
+    }
+
+    public void dumpStored()
+    {
+        if (stored != null)
+        {
+            spawnItem(stored);
+            stored = null;
+        }
     }
 
     @Environment(value = EnvType.CLIENT)

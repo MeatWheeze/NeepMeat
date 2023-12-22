@@ -7,6 +7,7 @@ import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.instruction.*;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,5 +66,17 @@ public class ImmediateState implements PLCState
     public RecordMode getMode()
     {
         return RecordMode.IMMEDIATE;
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+
     }
 }

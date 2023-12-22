@@ -21,7 +21,8 @@ public interface AtomicAction extends RobotAction
     }
 
     @Override
-    default void tick(PLC plc)
-    {
-    }
+    default void tick(PLC plc) { }
+
+    @Override
+    default void end(PLC plc) { }
 }

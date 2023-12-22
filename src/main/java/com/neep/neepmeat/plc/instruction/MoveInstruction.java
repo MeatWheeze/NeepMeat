@@ -4,9 +4,8 @@ import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
-import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
+import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -15,7 +14,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.ItemScatterer;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -55,11 +53,17 @@ public class MoveInstruction implements Instruction
                 Argument.fromNbt(nbt.getCompound("from")),
                 Argument.fromNbt(nbt.getCompound("to"))
             ));
+        group.readNbt(nbt.getCompound("action"));
+        this.stored = Instruction.readItem(nbt.getCompound("stored"));
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        nbt.put("from", from.toNbt());
+        nbt.put("to", to.toNbt());
+        nbt.put("action", group.writeNbt(new NbtCompound()));
+        nbt.put("stored", Instruction.writeItem(stored));
         return new NbtCompound();
     }
 
@@ -76,18 +80,9 @@ public class MoveInstruction implements Instruction
     }
 
     @Override
-    public void start(PlcProgram program, PLC plc)
+    public void start(PLC plc)
     {
-        stored = null;
-
         plc.addRobotAction(group, this::finish);
-
-//        plc.addRobotAction(GroupedRobotAction.of(
-//                new RobotMoveToAction(from.pos()),
-//                SingleAction.of(() -> takeFirst(plc)),
-//                new RobotMoveToAction(to.pos()),
-//                SingleAction.of(() -> complete(plc))
-//        ), this::finish);
     }
 
     private void takeFirst(PLC plc)
@@ -95,7 +90,7 @@ public class MoveInstruction implements Instruction
         stored = Instructions.takeItem(from, world, 64);
         if (stored == null)
         {
-            plc.raiseError(new PLC.Error("No extractable resource found"));
+            plc.raiseError(new PLC.Error("No extractable resource found at "));
         }
     }
 
@@ -110,24 +105,23 @@ public class MoveInstruction implements Instruction
                 if (inserted == stored.amount())
                 {
                     transaction.commit();
-                    plc.advanceCounter(1);
                     return;
                 }
                 else
                 {
                     transaction.abort();
-                    plc.advanceCounter(0);
-
+                    plc.getRobot().spawnItem(stored);
                 }
             }
         }
 
-        ItemScatterer.spawn(world.get(), plc.getRobot().getX(), plc.getRobot().getY(), plc.getRobot().getZ(),
-                stored.resource().toStack((int) stored.amount()));
+        plc.getRobot().spawnItem(stored);
+        stored = null;
     }
 
     private void finish(PLC plc)
     {
+        plc.advanceCounter(1);
     }
 
     @Override

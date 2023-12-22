@@ -4,7 +4,6 @@ import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
 
 public class RestartInstruction implements Instruction
@@ -30,7 +29,7 @@ public class RestartInstruction implements Instruction
     }
 
     @Override
-    public void start(PlcProgram program, PLC plc)
+    public void start(PLC plc)
     {
         plc.setCounter(0);
     }

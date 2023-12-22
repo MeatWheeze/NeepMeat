@@ -21,12 +21,17 @@ public class DelayAction implements RobotAction
     @Override
     public void start(PLC plc)
     {
-        ticks = 0;
     }
 
     @Override
     public void tick(PLC plc)
     {
         ++ticks;
+    }
+
+    @Override
+    public void end(PLC plc)
+    {
+        ticks = 0;
     }
 }

@@ -31,4 +31,10 @@ public class RobotMoveToAction implements RobotAction
     public void tick(PLC plc)
     {
     }
+
+    @Override
+    public void end(PLC plc)
+    {
+
+    }
 }
