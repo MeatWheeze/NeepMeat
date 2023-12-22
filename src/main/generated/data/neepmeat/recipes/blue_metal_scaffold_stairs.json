@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:blue_metal_scaffold"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:blue_metal_scaffold_stairs",
-    "count": 4
+    "count": 4,
+    "item": "neepmeat:blue_metal_scaffold_stairs"
   }
 }

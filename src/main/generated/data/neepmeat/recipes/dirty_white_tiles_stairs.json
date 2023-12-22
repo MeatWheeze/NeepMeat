@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:dirty_white_tiles"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:dirty_white_tiles_stairs",
-    "count": 4
+    "count": 4,
+    "item": "neepmeat:dirty_white_tiles_stairs"
   }
 }

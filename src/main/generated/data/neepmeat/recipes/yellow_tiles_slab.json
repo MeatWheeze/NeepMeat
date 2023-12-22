@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:yellow_tiles"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:yellow_tiles_slab",
-    "count": 6
+    "count": 6,
+    "item": "neepmeat:yellow_tiles_slab"
   }
 }

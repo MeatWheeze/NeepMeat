@@ -1,17 +1,17 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "#  ",
-    "## ",
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:caution_block"
     }
   },
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:caution_block_stairs",
-    "count": 4
+    "count": 4,
+    "item": "neepmeat:caution_block_stairs"
   }
 }

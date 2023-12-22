@@ -1,15 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "pattern": [
-    "###"
-  ],
   "key": {
     "#": {
       "item": "neepmeat:rusted_metal_scaffold"
     }
   },
+  "pattern": [
+    "###"
+  ],
   "result": {
-    "item": "neepmeat:rusted_metal_scaffold_slab",
-    "count": 6
+    "count": 6,
+    "item": "neepmeat:rusted_metal_scaffold_slab"
   }
 }
