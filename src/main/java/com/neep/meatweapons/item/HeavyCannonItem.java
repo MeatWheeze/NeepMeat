@@ -99,7 +99,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
                         pos = pos.add(transform);
                     }
 
-                    ExplodingShellEntity shell = new ExplodingShellEntity(world, 4, pos.x, pos.y, pos.z, vx, vy, vz);
+                    ExplodingShellEntity shell = new ExplodingShellEntity(world, 2, pos.x, pos.y, pos.z, vx, vy, vz);
                     shell.setOwner(player);
                     world.spawnEntity(shell);
 
@@ -119,7 +119,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
             {
                 if (!world.isClient)
                 {
-                    this.reload(player, stack);
+                    this.reload(player, stack, null);
                 }
             }
         }

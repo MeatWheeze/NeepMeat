@@ -77,7 +77,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         ItemStack stack = user.getStackInHand(hand);
         if (!user.getItemCooldownManager().isCoolingDown(this) && stack.getDamage() == this.maxShots)
         {
-            this.reload(user, stack);
+            this.reload(user, stack, null);
             return TypedActionResult.pass(stack);
         }
         return TypedActionResult.pass(user.getStackInHand(hand));

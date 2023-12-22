@@ -144,7 +144,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
                     } else
                     {
                         // Try to reload
-                        this.reload(player, stack);
+                        this.reload(player, stack, null);
                     }
                 }
             }
