@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.machine.item;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 

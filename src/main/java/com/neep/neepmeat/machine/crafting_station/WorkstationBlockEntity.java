@@ -4,7 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.CombinedInventory;
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
 import com.neep.neepmeat.util.ItemUtils;

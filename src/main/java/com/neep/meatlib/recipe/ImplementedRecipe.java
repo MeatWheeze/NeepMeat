@@ -1,6 +1,6 @@
 package com.neep.meatlib.recipe;
 
-import com.neep.neepmeat.inventory.ImplementedInventory;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.collection.DefaultedList;
