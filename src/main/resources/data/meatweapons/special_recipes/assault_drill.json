@@ -1,0 +1,34 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    " i ",
+    "bms",
+    "   "
+  ],
+  "key": {
+    "i": {
+      "type": "minecraft:item",
+      "resource": "minecraft:iron_ingot",
+      "amount": 1
+    },
+    "m": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:motor_unit",
+      "amount": 1
+    },
+    "b": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:fluid_buffer",
+      "amount": 1
+    },
+    "s": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:meat_steel_ingot",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "meatweapons:assault_drill",
+    "amount": 1
+  }
+}
