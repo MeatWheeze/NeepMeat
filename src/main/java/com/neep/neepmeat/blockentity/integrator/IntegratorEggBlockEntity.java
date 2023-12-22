@@ -14,11 +14,14 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.manager.AnimationData;
+import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorEggBlockEntity extends BlockEntity implements
         FluidBufferProvider,
-        BlockEntityClientSerializable
+        BlockEntityClientSerializable, IAnimatable
 {
 
     protected int growthTimeRemaining = 1000;
@@ -100,5 +103,17 @@ public class IntegratorEggBlockEntity extends BlockEntity implements
     public void setNeedsUpdate(boolean needsUpdate)
     {
 
+    }
+
+    @Override
+    public void registerControllers(AnimationData animationData)
+    {
+
+    }
+
+    @Override
+    public AnimationFactory getFactory()
+    {
+        return null;
     }
 }
