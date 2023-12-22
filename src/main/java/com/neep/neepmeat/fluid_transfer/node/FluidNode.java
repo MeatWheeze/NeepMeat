@@ -218,6 +218,7 @@ public class FluidNode
 
     public void transmitFluid(ServerWorld world, FluidNode node)
     {
+
         if (distances.get(node) == null
                 || node.mode == AcceptorModes.NONE
                 || this.mode == AcceptorModes.NONE
@@ -228,6 +229,11 @@ public class FluidNode
 
         // Here is the most realistic flow rate calculation that you have ever seen.
 
+        // My linear approximation of the Hazen-Williams approximation
+        float h = getTargetY() - node.getTargetY();
+        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+//        gravityFlowIn = 0;
+
         // Geometrical solution for velocity in branched pipes:
         // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
 
@@ -236,7 +242,7 @@ public class FluidNode
         float sumIn = 0;
         float sumOut = 0;
 
-        // First we calculate sum(r^4 / L_i), discounting full containers.
+        // Calculate sum(r^4 / L_i), discounting full containers.
         for (FluidNode distanceNode : distances.keySet())
         {
             Transaction transaction = Transaction.openOuter();
@@ -261,18 +267,13 @@ public class FluidNode
                 sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
             }
 
-//            if (extract.get() > 1)
-                sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
+            sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
         }
 
 //        double gravityFlowIn = 50 * (Math.pow(((S * 130f * Math.pow(100e-3, 1.852) * Math.pow(200e-3, 4.8704)) / 10.67f), 1 / 1.852));
-        // My linear approximation of the Hazen-Williams approximation
-        float h = getTargetY() - node.getTargetY();
-        double gravityFlowIn = h < -1 ? 0 : 0.4 * h;
-//        gravityFlowIn = 0;
 
-        float insertBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
-        float extractBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
+        float insertBranchFlow = (float) (500 * (this.flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
+        float extractBranchFlow = (float) (500 * (this.flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
         long amountMoved = 0;
         if (insertBranchFlow >= 0)
