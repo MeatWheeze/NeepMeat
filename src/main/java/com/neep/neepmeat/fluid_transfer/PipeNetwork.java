@@ -120,7 +120,6 @@ public class PipeNetwork
                 ++count;
             }
         }
-//        System.out.println(count + " " + connectedNodes.size());
         return connectedNodes.size() - count >= 2;
     }
 
@@ -145,10 +144,6 @@ public class PipeNetwork
             if (!validate())
                 return;
 
-            buildPressures();
-//            System.out.println(uid + " setting nodes");
-//            buildPressures();
-//            tick();
         }
     }
 
@@ -253,48 +248,6 @@ public class PipeNetwork
                     t3.commit();
                 }
             }
-        }
-    }
-
-    public void addNode(Supplier<FluidNode> node)
-    {
-        connectedNodes.add(node);
-    }
-
-    public void buildPressures()
-    {
-        try
-        {
-            for (Supplier<FluidNode> supplier : connectedNodes)
-            {
-                FluidNode node = supplier.get();
-                if (node == null)
-                {
-                    continue;
-                }
-
-                for (Supplier<FluidNode> supplier1 : connectedNodes)
-                {
-                    FluidNode targetNode = supplier1.get();
-                    if (targetNode == null
-                            || targetNode.equals(node)
-//                            || node.getMode(world) == AcceptorModes.NONE)
-                    )
-                    {
-                        continue;
-                    }
-                    int distanceToNode = node.getNodePos().facingBlock().getManhattanDistance(targetNode.getNodePos().facingBlock());
-                    PipeState pipe = networkPipes.get(targetNode.getPos());
-//                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
-//                    System.out.print(node + ",\n " + distanceToNode + "\n");
-                    node.distances.put(targetNode, 1);
-//                    node.distances.put(targetNode, pipe.isCapillary() ? 1 : distanceToNode);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
         }
     }
 
