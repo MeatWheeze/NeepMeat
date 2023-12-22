@@ -90,7 +90,7 @@ public class TransducerBlockEntity extends SyncableBlockEntity
         else if (burnerState.isOf(Blocks.LAVA) || burnerState.isOf(Blocks.LAVA_CAULDRON))
         {
             this.conversionTime = 1;
-            this.multiplier = 1f;
+            this.multiplier = 1.5f;
         }
         else
         {
