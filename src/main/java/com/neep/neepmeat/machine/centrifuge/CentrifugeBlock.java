@@ -27,7 +27,7 @@ public class CentrifugeBlock extends BigBlock
     public CentrifugeBlock(String registryName, Settings settings)
     {
         super(registryName, settings);
-        ItemRegistry.queueItem(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
+        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
     }
 
     @Override

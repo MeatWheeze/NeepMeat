@@ -74,16 +74,16 @@ public class NMItems
 //        }
     };
 
-    public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+    public static Item TABLET = ItemRegistry.queue(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
-    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", TooltipSupplier.hidden(3), new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+    public static Item PIPETTE = ItemRegistry.queue(new PipetteItem("pipette", TooltipSupplier.hidden(3), new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
 
     public static Item CAN = new BaseCraftingItem("can", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item CARTON = new BaseCraftingItem("carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
-    public static Item MILK_CARTON = ItemRegistry.queueItem(new MilkCartonItem("milk_carton", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.FOOD)));
-    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
+    public static Item MILK_CARTON = ItemRegistry.queue(new MilkCartonItem("milk_carton", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.FOOD)));
+    public static Item MEAT_CARTON = ItemRegistry.queue(new MeatCartonItem("meat_carton", TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
 
     // Mob cloning
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());
@@ -94,8 +94,10 @@ public class NMItems
 //    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static GogglesItem GOGGLES = new GogglesItem("goggles", ArmorMaterials.IRON, EquipmentSlot.HEAD, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static ImplantItem PINEAL_EYE = new ImplantItem("pineal_eye", 1, PinealEyeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
-    public static ImplantItem EXTRA_KNEES = new ImplantItem("extra_knees", 1, ExtraKneeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
+    public static PlayerImplantItem PINEAL_EYE = new PlayerImplantItem("pineal_eye", 1, PinealEyeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
+    public static PlayerImplantItem EXTRA_KNEES = new PlayerImplantItem("extra_knees", 1, ExtraKneeImplant.ID, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static Item DEBUG_ITEM = ItemRegistry.queueItem(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
+    public static ChrysalisItem CHRYSALIS = ItemRegistry.queue(new ChrysalisItem("chrysalis",TooltipSupplier.blank(), new FabricItemSettings().group(NMItemGroups.GENERAL)));
+
+    public static Item DEBUG_ITEM = ItemRegistry.queue(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
 }

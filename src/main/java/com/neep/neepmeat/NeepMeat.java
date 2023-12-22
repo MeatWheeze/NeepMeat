@@ -39,6 +39,7 @@ import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -127,6 +128,7 @@ public class NeepMeat implements ModInitializer
 
 			Registry.register(ImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
 			Registry.register(ImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
+			Registry.register(ImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
 		}
 	}
 

@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +47,7 @@ public class SurgeryPlatformBlockEntity extends SyncableBlockEntity
         public Entity getEntity()
         {
             Box box = new Box(getPos().up());
-            return world.getNonSpectatingEntities(PlayerEntity.class, box).stream().findFirst().orElse(null);
+            return world.getNonSpectatingEntities(LivingEntity.class, box).stream().findFirst().orElse(null);
         }
     };
 }

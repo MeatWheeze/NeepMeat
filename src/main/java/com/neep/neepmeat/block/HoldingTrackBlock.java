@@ -44,7 +44,7 @@ public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityP
         super(true, settings);
         this.registryName = registryName;
         this.setDefaultState(this.stateManager.getDefaultState().with(SHAPE, RailShape.NORTH_SOUTH).with(POWERED, false).with(WATERLOGGED, false).with(FACING, AxialDirection.POSITIVE));
-        ItemRegistry.queueItem(new BaseBlockItem(this, registryName, itemSettings));
+        ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
     }
 
     @Override

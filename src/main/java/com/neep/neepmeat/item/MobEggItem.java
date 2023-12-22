@@ -25,7 +25,7 @@ public class MobEggItem extends Item implements MeatlibItem
     {
         super(settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(NeepMeat.NAMESPACE, (MeatlibItem) this);
+        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) this);
     }
 
     @Override

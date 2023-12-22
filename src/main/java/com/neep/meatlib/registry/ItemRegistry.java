@@ -14,7 +14,7 @@ public class ItemRegistry
 {
     public static Map<Identifier, Item> ITEMS = new LinkedHashMap<>();
 
-    public static Item queueItem(String namespace, MeatlibItem item)
+    public static Item queue(String namespace, MeatlibItem item)
     {
         MeatLib.assertActive(item);
         if (!(item instanceof Item))
@@ -25,18 +25,14 @@ public class ItemRegistry
         return (Item) item;
     }
 
-    public static Item queueItem(MeatlibItem item)
+    public static <T extends Item & MeatlibItem> T queue(T item)
     {
         MeatLib.assertActive(item);
-        if (!(item instanceof Item))
-        {
-            throw new IllegalArgumentException("tried to queue a non-item for item registration");
-        }
         ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), (Item) item);
-        return (Item) item;
+        return item;
     }
 
-    public static Item queueItem(String path, Item item)
+    public static Item queue(String path, Item item)
     {
         MeatLib.assertActive(item);
         ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);

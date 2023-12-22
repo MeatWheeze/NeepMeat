@@ -27,7 +27,7 @@ public class BaseBlockItem extends BlockItem implements MeatlibItem
         super(block, settings);
         this.name = registryName;
         this.tooltipSupplier = itemSettings.tooltipSupplier;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override

@@ -22,7 +22,7 @@ public class BaseSeedsItem extends AliasedBlockItem implements MeatlibItem
         super(block, new FabricItemSettings().maxCount(maxCount));
         this.registryName = registryName;
         this.lore = loreLines;
-        ItemRegistry.queueItem(this);
+        ItemRegistry.queue(this);
     }
 
     @Override
