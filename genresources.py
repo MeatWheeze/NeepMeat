@@ -12,6 +12,7 @@ blocks = [
 'caution_block',
 'polished_metal_small_bricks',
 'dirty_red_tiles',
+'dirty_white_tiles',
 'sandy_bricks',
 'blood_bubble_planks',
 'meat_steel_block'

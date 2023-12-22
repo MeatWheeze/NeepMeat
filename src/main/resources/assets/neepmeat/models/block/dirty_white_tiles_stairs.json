@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "neepmeat:block/dirty_white_tiles",
+    "top": "neepmeat:block/dirty_white_tiles",
+    "side": "neepmeat:block/dirty_white_tiles"
+  }
+}
