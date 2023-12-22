@@ -1,7 +1,8 @@
-package com.neep.neepmeat.blockentity.machine;
+package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.blockentity.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;

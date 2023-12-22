@@ -2,6 +2,7 @@ package com.neep.neepmeat.fluid_transfer.storage;
 
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.entity.BlockEntity;
 import org.jetbrains.annotations.Nullable;
@@ -9,16 +10,41 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<FluidVariant>
+public class TypedFluidBuffer extends WritableSingleFluidStorage implements Storage<FluidVariant>
 {
     protected Predicate<FluidVariant> validTypes;
     protected Mode mode;
+    protected long capacity;
+    protected BlockEntity parent;
 
-    public TypedFluidBuffer(@Nullable BlockEntity parent, long capacity, Predicate<FluidVariant> validTypes, Mode mode)
+    public TypedFluidBuffer(long capacity, Predicate<FluidVariant> validTypes, Mode mode, Runnable finalCallback)
     {
-        super(parent, capacity);
+        super(capacity, finalCallback);
         this.validTypes = validTypes;
         this.mode = mode;
+        this.capacity = capacity;
+    }
+
+    protected boolean canInsert(FluidVariant variant)
+    {
+        return validTypes.test(variant);
+    }
+
+    protected boolean canExtract(FluidVariant variant)
+    {
+        return true;
+    }
+
+    @Override
+    protected FluidVariant getBlankVariant()
+    {
+        return FluidVariant.blank();
+    }
+
+    @Override
+    protected long getCapacity(FluidVariant variant)
+    {
+        return capacity;
     }
 
     @Override
@@ -68,7 +94,6 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
             amount += inserted;
             return inserted;
         }
-        syncIfPossible();
         return 0;
     }
 
@@ -89,7 +114,6 @@ public class TypedFluidBuffer extends WritableFluidBuffer implements Storage<Flu
             amount -= extracted;
             return extracted;
         }
-        syncIfPossible();
         return 0;
     }
 

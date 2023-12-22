@@ -1,10 +1,9 @@
 package com.neep.neepmeat.blockentity;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
-import com.neep.neepmeat.blockentity.machine.MotorBlockEntity;
+import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.storage.WritableStackStorage;
@@ -14,7 +13,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
