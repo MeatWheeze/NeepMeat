@@ -1,6 +1,6 @@
 package com.neep.meatweapons.client.sound;
 
-import com.neep.meatlib.player.PlayerAttachment;
+import com.neep.meatlib.attachment.player.PlayerAttachment;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;

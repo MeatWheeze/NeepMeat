@@ -1,7 +1,7 @@
 package com.neep.meatlib.mixin;
 
-import com.neep.meatlib.player.MeatPlayerEntity;
-import com.neep.meatlib.player.PlayerAttachmentManager;
+import com.neep.meatlib.attachment.player.MeatPlayerEntity;
+import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

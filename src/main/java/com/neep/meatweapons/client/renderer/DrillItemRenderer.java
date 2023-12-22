@@ -11,8 +11,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
+import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
+
+import java.util.function.DoubleSupplier;
 
 public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 {
@@ -27,6 +30,8 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
     public void render(ItemStack stack, ModelTransformation.Mode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
     {
         NbtCompound nbt = stack.getOrCreateNbt();
+//        NbtCompound renderNbt = stack.getVolatileNbt();
+        MolangParser parser = GeckoLibCache.getInstance().parser;
 
         MinecraftClient client = MinecraftClient.getInstance();
         float timeDegrees = client.world.getTime() % 360 + client.getTickDelta();
@@ -40,12 +45,15 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 
         b = using;
 
-        float thrust = nbt.getFloat("thrust");
+//        float thrust = renderNbt.getFloat("thrust");
+        double thrust = parser.getVariable("thrust", null).get();
         float targetThrust = using ? 0.07f : 0;
 
         float delta = using ? 0.1f : 0.05f;
-        float angle = nbt.getFloat("angle");
-        float currentSpeed = nbt.getFloat("currentSpeed");
+//        float angle = renderNbt.getFloat("angle");
+//        float currentSpeed = renderNbt.getFloat("currentSpeed");
+        double angle = parser.getVariable("angle", null).get();
+        double currentSpeed = parser.getVariable("currentSpeed", null).get();
         float targetSpeed = using ? 3 : 0;
 
         float shake = (float) (0.01f * Math.sin(Math.toRadians(timeDegrees) * 140));
@@ -55,12 +63,16 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
         currentSpeed = (MathHelper.lerp(delta, currentSpeed, targetSpeed));
         angle = MathHelper.wrapDegrees(angle + currentSpeed * MinecraftClient.getInstance().getLastFrameDuration());
 
-        nbt.putFloat("currentSpeed", currentSpeed);
-        nbt.putFloat("angle", angle);
-        nbt.putFloat("thrust", thrust);
+//        renderNbt.putFloat("currentSpeed", currentSpeed);
+//        renderNbt.putFloat("angle", angle);
+//        renderNbt.putFloat("thrust", thrust);
 
-        float finalAngle = angle;
-        GeckoLibCache.getInstance().parser.setValue("angle", () -> finalAngle);
+        double finalAngle = angle;
+        double finalCurrentSpeed = currentSpeed;
+        double finalThrust = thrust;
+        parser.setValue("thrust", () -> finalThrust);
+        parser.setValue("currentSpeed", () -> finalCurrentSpeed);
+        parser.setValue("angle", () -> finalAngle);
 
         poseStack.translate(-thrust / 2, shake, -thrust);
 
