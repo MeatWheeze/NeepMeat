@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.blood_network;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2LongMap;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -28,6 +29,12 @@ public class PosDirectionMap<T>
         map.long2ObjectEntrySet().fastForEach(consumer);
     }
 
+    public Long2ObjectMap<T[]> map()
+    {
+        dirty = true;
+        return map;
+    }
+
     public int size()
     {
         return map.size();
@@ -51,6 +58,12 @@ public class PosDirectionMap<T>
             return Collections.emptyList();
 
         return () -> Arrays.stream(array).iterator();
+    }
+
+    public void put(long key, T[] array)
+    {
+        dirty = true;
+        map.put(key, array);
     }
 
     public void clear()

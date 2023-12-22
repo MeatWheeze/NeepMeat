@@ -6,7 +6,7 @@ import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import net.minecraft.block.BlockState;
-import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.*;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -15,24 +15,28 @@ import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 public class BloodNetworkImpl implements BloodNetwork
 {
     protected final ServerWorld world;
+    protected final UUID uuid;
 
     protected final BloodNetGraph conduits;
-
     protected AcceptorManager acceptors = new AcceptorManager();
 
-//    protected Queue<BloodAcceptor> sinkUpdateQueue = Queues.newArrayDeque();
     protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
 
     protected float output;
     protected boolean removed = false;
+    protected boolean dirty = false;
 
-    public BloodNetworkImpl(ServerWorld world)
+    public BloodNetworkImpl(UUID uuid, ServerWorld world)
     {
+        this.uuid = uuid;
         this.world = world;
         this.conduits = new BloodNetGraph(world, acceptors);
     }
@@ -64,6 +68,8 @@ public class BloodNetworkImpl implements BloodNetwork
         if (!validate()) return;
 
         conduits.getConduits().values().forEach(c -> c.setNetwork(this));
+
+        dirty = true;
     }
 
     @Override
@@ -106,6 +112,7 @@ public class BloodNetworkImpl implements BloodNetwork
         newPart.setNetwork(this);
 
         sinkUpdateQueue.addAll(acceptors.sinks().asList());
+        dirty = true;
     }
 
     @Override
@@ -119,6 +126,7 @@ public class BloodNetworkImpl implements BloodNetwork
         sinkUpdateQueue.addAll(acceptors.sinks().asList());
 
         validate();
+        dirty = true;
     }
 
     @Override
@@ -133,14 +141,8 @@ public class BloodNetworkImpl implements BloodNetwork
         sinkUpdateQueue.addAll(acceptors.sinks().asList());
 
         validate();
+        dirty = true;
     }
-
-//    @Override
-//    public void addAcceptor(long pos, int dir, BloodAcceptor acceptor)
-//    {
-//        acceptors.add(pos, dir, acceptor);
-//    }
-
 
     public void mergeInto(BloodNetwork network)
     {
@@ -166,6 +168,8 @@ public class BloodNetworkImpl implements BloodNetwork
         }
         acceptors.sort();
         sinkUpdateQueue.addAll(acceptors.sinks().asList());
+
+        dirty = true;
     }
 
     public boolean isRemoved()
@@ -173,24 +177,45 @@ public class BloodNetworkImpl implements BloodNetwork
         return removed;
     }
 
+    @Override
+    public boolean isDirty()
+    {
+        return dirty;
+    }
+
+    @Override
+    public void resetDirty()
+    {
+        dirty = false;
+    }
+
+    @Override
+    public UUID getUUID()
+    {
+        return uuid;
+    }
+
     public NbtCompound toNbt()
     {
         NbtCompound root = new NbtCompound();
 
         root.put("conduits", conduits.toNbt());
+        root.put("acceptors", acceptors.toNbt());
 
         return root;
     }
 
-//    static class AcceptorReference
-//    {
-//        private @Nullable BloodAcceptor acceptor;
-//
-//        public @Nullable BloodAcceptor get()
-//        {
-//            return acceptor;
-//        }
-//    }
+    public static BloodNetwork fromNbt(ServerWorld world, UUID uuid, NbtCompound newtworkNbt)
+    {
+        BloodNetworkImpl network = new BloodNetworkImpl(uuid, world);
+
+        network.acceptors.readNbt(newtworkNbt.getCompound("acceptors"));
+        network.conduits.readNbt(newtworkNbt.getCompound("conduits"));
+
+        network.conduits.getConduits().values().forEach(c -> c.setNetwork(network));
+
+        return network;
+    }
 
     class AcceptorManager
     {
@@ -259,7 +284,6 @@ public class BloodNetworkImpl implements BloodNetwork
         {
             sources.clear();
             sinks.clear();
-//            acceptors.stream().forEach(acceptor ->
             acceptors.fastForEach(entry ->
             {
                 for (int dir = 0; dir < 6; ++dir)
@@ -315,14 +339,98 @@ public class BloodNetworkImpl implements BloodNetwork
         {
             NbtCompound root = new NbtCompound();
 
-//            var list = new NbtList();
+            var acceptorsNbt = mapToNbt(acceptors.map(), BloodNetworkImpl::writeKey, BloodNetworkImpl::writeAcceptors);
 
-            acceptors.fastForEach(entry ->
-            {
-//                list.add()
-            });
+            root.put("acceptors", acceptorsNbt);
 
             return root;
+        }
+
+        public void readNbt(NbtCompound nbt)
+        {
+            clear();
+
+            NbtList acceptorsNbt = nbt.getList("acceptors", NbtElement.BYTE_TYPE);
+
+            for (var entry : acceptorsNbt)
+            {
+                if (entry instanceof NbtCompound compound)
+                {
+                    long pos = compound.getLong("key");
+                    NbtList acceptorList = compound.getList("val", NbtElement.BYTE_TYPE);
+
+                    BloodAcceptor[] array = new BloodAcceptor[6];
+                    for (int dir = 0; dir < acceptorList.size(); ++dir)
+                    {
+                        boolean present = ((NbtByte) acceptorList.get(dir)).byteValue() > 0;
+                        if (present)
+                        {
+                            Direction direction = Direction.byId(dir);
+                            BlockPos acceptorPos = BlockPos.fromLong(pos).offset(direction);
+                            var acceptor = BloodAcceptor.SIDED.find(world, acceptorPos, direction.getOpposite());
+
+                            // This shouldn't happen
+                            if (acceptor == null)
+                                continue;
+
+                            array[dir] = acceptor;
+
+                            if (acceptor.getMode().isOut())
+                            {
+                                sources.put(pos, dir, acceptor);
+                            }
+                            else
+                            {
+                                sinks.put(pos, dir, acceptor);
+                            }
+                        }
+                    }
+
+                    acceptors.put(pos, array);
+                }
+            }
+        }
+    }
+
+
+    protected static NbtList writeAcceptors(BloodAcceptor[] acceptors)
+    {
+        NbtList list = new NbtList();
+        for (BloodAcceptor acceptor : acceptors)
+        {
+            list.add(NbtByte.of(acceptor != null));
+        }
+        return list;
+    }
+
+    protected static NbtLong writeKey(long pos)
+    {
+        return NbtLong.of(pos);
+    }
+
+    public static <K, V> NbtList mapToNbt(Map<K, V> map, Function<K, NbtElement> keyFunc, Function<V, NbtElement> valFunc)
+    {
+        NbtList list = new NbtList();
+        for (var entry : map.entrySet())
+        {
+            NbtCompound entryNbt = new NbtCompound();
+            entryNbt.put("key", keyFunc.apply(entry.getKey()));
+            entryNbt.put("val", valFunc.apply(entry.getValue()));
+        }
+        return list;
+    }
+
+    public static <K, V> void mapFromNbt(Map<K, V> map, Function<NbtElement, K> keyFunc, Function<NbtElement, V> valFunc, NbtList element)
+    {
+        for (var entry : element)
+        {
+            if (entry instanceof NbtCompound compound)
+            {
+                map.put(
+                        keyFunc.apply(compound.get("key")),
+                        valFunc.apply(compound.get("val"))
+                );
+            }
         }
     }
 }
