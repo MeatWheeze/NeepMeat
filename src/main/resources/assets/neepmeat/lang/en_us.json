@@ -200,6 +200,8 @@
   "item.neepmeat.meat_steel": "Meat Steel",
   "item.neepmeat.meat_steel_component": "Meat Steel Component",
 
+  "item.neepmeat.raw_meat_brick": "Raw Meat Brick",
+
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when connected to an Integrator.",
 

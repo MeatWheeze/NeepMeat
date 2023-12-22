@@ -5,11 +5,11 @@
     "amount": 1
   },
   "input2": {
-    "resource": "neepmeat:brain_rough",
+    "resource": "neepmeat:raw_meat_brick",
     "amount": 1
   },
   "output": {
-    "resource": "neepmeat:flywheel",
+    "resource": "neepmeat:meat_steel",
     "amount": 1
   },
   "processtime": 200

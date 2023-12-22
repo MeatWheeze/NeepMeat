@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "lll",
+    "lbl"
+  ],
+  "key": {
+    "l": {
+      "item": "neepmeat:blood_bubble"
+    },
+    "b": {
+      "item": "minecraft:bucket"
+    }
+  },
+  "result": {
+    "item": "neepmeat:blood_bucket",
+    "count": 1
+  }
+}

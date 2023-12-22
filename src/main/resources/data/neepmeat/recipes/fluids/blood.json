@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:mixing",
+  "item": {
+    "resource": "neepmeat:blood_bubble",
+    "amount": 1
+  },
+  "fluid1": {
+    "resource": "minecraft:water",
+    "amount": 20250
+  },
+  "fluid2":{
+    "resource": "minecraft:empty",
+    "amount": 0
+  },
+  "output":{
+    "resource": "neepmeat:blood",
+    "amount": 20250
+  },
+  "processtime": 20
+}
