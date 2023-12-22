@@ -3,7 +3,7 @@ package com.neep.meatweapons.entity;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.network.MWNetwork;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -57,7 +57,7 @@ public class PlasmaProjectileEntity extends PersistentProjectileEntity
     @Override
     protected SoundEvent getHitSound()
     {
-        return SoundInitialiser.FUSION_HIT;
+        return NMSounds.FUSION_HIT;
     }
 
     private void spawnParticles(int amount)

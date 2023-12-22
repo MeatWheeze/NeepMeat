@@ -28,5 +28,11 @@
     "sounds": [
       "neepmeat:cosmic_beam"
     ]
+  },
+  "compound_injector": {
+    "subtitle": "subtitles.neepmeat.compound_injector",
+    "sounds": [
+      "neepmeat:compound_injector"
+    ]
   }
 }

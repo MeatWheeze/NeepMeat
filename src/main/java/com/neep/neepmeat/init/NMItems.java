@@ -16,6 +16,8 @@ public class NMItems
 
     public static Item TANK_MINECART = new TankMinecartItem("tank_minecart", new FabricItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
 
+    public static Item COMPOUND_INJECTOR = new CompoundInjectorItem("compound_injector", new FabricItemSettings().group(MeatWeapons.WEAPONS));
+
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(MeatWeapons.WEAPONS));
     public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(MeatWeapons.WEAPONS));
     public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(MeatWeapons.WEAPONS));

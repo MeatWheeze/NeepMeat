@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
+import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.*;
@@ -72,6 +73,7 @@ public class NeepMeatClient implements ClientModInitializer
         registerRenderers();
         registerLayers();
         registerScreens();
+        HUDOverlays.init();
 
         TankMessagePacket.Client.registerReciever();
         ParticleSpawnPacket.Client.registerReceiver();

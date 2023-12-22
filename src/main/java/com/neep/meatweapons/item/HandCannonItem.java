@@ -1,7 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.entity.CannonBulletEntity;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.player.PlayerEntity;
@@ -33,8 +33,8 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
     public HandCannonItem()
     {
         super("hand_cannon", Items.DIRT, 8, 10,false, new FabricItemSettings());
-        this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.HAND_CANNON_FIRE);
-        this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
+        this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
+        this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }
 
     @Override

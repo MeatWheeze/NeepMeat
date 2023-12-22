@@ -10,7 +10,7 @@ import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
@@ -130,7 +130,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
 
             getIntegrator().setLookPos(pos);
             world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
-            world.playSound(null, pos, SoundInitialiser.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
+            world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
             spawnBeam((ServerWorld) world, integrator.up(), pos);
             sync();
         }

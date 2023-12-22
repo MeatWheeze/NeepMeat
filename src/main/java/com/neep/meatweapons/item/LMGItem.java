@@ -6,7 +6,7 @@ import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.GraphicsEffect;
-import com.neep.neepmeat.init.SoundInitialiser;
+import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -42,8 +42,8 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     public LMGItem()
     {
         super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new FabricItemSettings());
-        this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.LMG_FIRE);
-        this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
+        this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.LMG_FIRE);
+        this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }
 
     @Override

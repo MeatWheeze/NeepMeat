@@ -57,6 +57,7 @@
 - [done] Add Raw Meat Brick recipe
 - [done] Make fluid pipes retain connections
 - [done] Make Charnel Compactor accept c:raw_meat
+- Remove redstone control in Deployer
 
 ## Later
 
