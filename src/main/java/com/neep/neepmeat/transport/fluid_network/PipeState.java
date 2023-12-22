@@ -8,6 +8,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -137,14 +138,17 @@ public class PipeState
         return l;
     }
 
+    public static FilterFunction IDENTITY = (v, l) -> l;
+
     @FunctionalInterface
     public interface FilterFunction
     {
         long applyVariant(FluidVariant variant, long l);
 
-        default FilterFunction andThen(@Nullable FilterFunction after)
+        default FilterFunction andThen(@NotNull FilterFunction after)
         {
-            if (after == null) return this;
+            // Avoid excessively chaining identity functions
+            if (after == IDENTITY) return this;
 
             return (v, l) ->
             {

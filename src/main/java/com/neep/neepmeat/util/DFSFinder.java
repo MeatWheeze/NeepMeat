@@ -3,12 +3,14 @@ package com.neep.neepmeat.util;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 
 import java.util.*;
 
 public abstract class DFSFinder<T>
 {
     private final Deque<BlockPos> posStack = new ArrayDeque<>();
+    private final Deque<Direction> dirStack = new ArrayDeque<>();
     private final Set<Long> visited = new LongOpenHashSet();
     private Pair<BlockPos, T> result;
     private State state;
@@ -40,13 +42,15 @@ public abstract class DFSFinder<T>
     public void reset()
     {
         posStack.clear();
+        dirStack.clear();
         visited.clear();
         result = null;
     }
 
-    public void pushBlock(BlockPos pos)
+    public void pushBlock(BlockPos pos, Direction direction)
     {
-        posStack.push(pos);
+        posStack.push(pos.toImmutable());
+        dirStack.push(direction);
     }
 
     public BlockPos popBlock()
@@ -54,14 +58,23 @@ public abstract class DFSFinder<T>
         return posStack.pop();
     }
 
-    public void prepare(BlockPos start)
+    public Direction popDir()
     {
-        pushBlock(start);
+        return dirStack.pop();
+    }
+
+    public void prepare(BlockPos start, Direction startDir)
+    {
+        pushBlock(start, startDir);
     }
 
     public void loop(int maxDepth)
     {
-        while (propagate(maxDepth));
+        int oo = 0;
+        while (propagate(maxDepth))
+        {
+            ++oo;
+        }
     }
 
     public boolean propagate(int maxDepth)
@@ -69,7 +82,7 @@ public abstract class DFSFinder<T>
         if (!posStack.isEmpty())
         {
             // This method should push one adjacent vertex
-            state = processPos(posStack.peek());
+            state = processPos(posStack.peek(), dirStack.peek());
             return state == State.CONTINUE;
         }
         return false;
@@ -85,7 +98,7 @@ public abstract class DFSFinder<T>
 //        this.state = state;
 //    }
 
-    protected abstract State processPos(BlockPos current);
+    protected abstract State processPos(BlockPos current, Direction fromDir);
 
     public boolean hasResult()
     {
