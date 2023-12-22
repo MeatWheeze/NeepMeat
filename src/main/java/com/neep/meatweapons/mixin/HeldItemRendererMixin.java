@@ -1,12 +1,16 @@
 package com.neep.meatweapons.mixin;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatweapons.item.BaseGunItem;
+import com.neep.meatweapons.item.HeavyCannonItem;
 import com.neep.meatweapons.item.WeakTwoHanded;
 import com.neep.neepmeat.item.AnimatedSword;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.entity.EntityRenderDispatcher;
+import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -16,6 +20,7 @@ import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -45,6 +50,7 @@ public class HeldItemRendererMixin
     {
     }
 
+    @Shadow @Final private EntityRenderDispatcher renderManager;
     private boolean isAiming;
     private float itemXOffset = 0;
 
@@ -92,7 +98,27 @@ public class HeldItemRendererMixin
                 matrices.pop();
             }
         }
-//        client.textRenderer.draw(matrices, "cheemsborgerrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr", 0.5f, 0f, 0x00bbbbbb);
+        if (item.getItem() instanceof HeavyCannonItem)
+        {
+            matrices.push();
+
+//            boolean bl = true;
+//            float side = bl ? 1.0f : -1.0f;
+//            float g = MathHelper.sqrt(swingProgress);
+//            ClientPlayerEntity abstractClientPlayerEntity = this.client.player;
+//            RenderSystem.setShaderTexture(0, abstractClientPlayerEntity.getSkinTexture());
+//
+//            matrices.translate(side * -1.0f, 3.6f, 0);
+//            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(side * 120.0f));
+//            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(200.0f));
+//            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(side * -135.0f));
+//            matrices.translate(side * 5.6f, 0.5, 0.0);
+//
+//            ClientPlayerEntity clientPlayer = this.client.player;
+//            PlayerEntityRenderer playerRenderer = (PlayerEntityRenderer) renderManager.getRenderer(clientPlayer);
+//            playerRenderer.renderRightArm(matrices, vertexConsumers, light, clientPlayer);
+            matrices.pop();
+        }
     }
 
     @Inject(method = "renderFirstPersonItem", at = @At(value = "TAIL"))

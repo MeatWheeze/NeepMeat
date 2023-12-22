@@ -35,7 +35,9 @@ public class CannonBulletEntityRenderer extends EntityRenderer<CannonBulletEntit
     }
 
     @Override
-    public Identifier getTexture(CannonBulletEntity entity) {
+    public Identifier getTexture(CannonBulletEntity entity)
+    {
+        // TODO: change
         return new Identifier(MeatWeapons.NAMESPACE, "textures/block/composite.png");
     }
 }

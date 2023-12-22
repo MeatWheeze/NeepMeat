@@ -6,10 +6,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.BulletEntity;
 import com.neep.meatweapons.entity.CannonBulletEntity;
 import com.neep.meatweapons.entity.PlasmaProjectileEntity;
-import com.neep.meatweapons.item.FusionCannonItem;
-import com.neep.meatweapons.item.HandCannonItem;
-import com.neep.meatweapons.item.LMGItem;
-import com.neep.meatweapons.item.MachinePistolItem;
+import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.api.ModInitializer;
@@ -36,6 +33,7 @@ public class MeatWeapons implements ModInitializer
     public static Item HAND_CANNON = new HandCannonItem();
     public static Item MACHINE_PISTOL = new MachinePistolItem();
     public static Item LMG = new LMGItem();
+    public static Item HEAVY_CANNON = new HeavyCannonItem();
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
