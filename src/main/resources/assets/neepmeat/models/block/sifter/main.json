@@ -3,6 +3,7 @@
 	"texture_size": [128, 128],
 	"textures": {
 		"0": "neepmeat:block/sifter/main",
+		"missing": "neepmeat:block/rusty_panel",
 		"particle": "neepmeat:block/sifter/main"
 	},
 	"elements": [
