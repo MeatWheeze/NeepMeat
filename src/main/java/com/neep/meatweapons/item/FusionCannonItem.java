@@ -3,9 +3,8 @@ package com.neep.meatweapons.item;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.entity.FusionBlastEntity;
 import com.neep.meatweapons.entity.WeaponCooldownAttachment;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
-import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -14,17 +13,15 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import net.minecraft.world.explosion.Explosion;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -67,21 +64,14 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         return this.factory;
     }
 
-    @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        System.out.println("Use: " + System.currentTimeMillis());
-        return TypedActionResult.fail(user.getStackInHand(hand));
-    }
-
     protected static final String KEY_CHARGE = "charge";
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
 //        System.out.println("Trigger: " + System.currentTimeMillis());
-        WeaponCooldownAttachment manager = player.neepmeat$getAttachmentManager().getAttachment(WeaponCooldownAttachment.ID);
-        if (id == 0)
+        WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
+        if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
         {
             if (!manager.isCoolingDown(stack))
             {
@@ -98,14 +88,19 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             }
 
         }
-        else if (id == 1)
+        else if (id == MWAttackC2SPacket.TRIGGER_SECONDARY)
         {
+            if (stack.getDamage() + 2 > stack.getMaxDamage())
+            {
+                this.reload(player, stack, null);
+                return;
+            }
+
             NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
             nbt.putInt("charge", 0);
             nbt.putBoolean("charging", true);
 
             world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_CHARGE, SoundCategory.PLAYERS, 1f, 1f);
-
         }
 
         if (!manager.isCoolingDown(stack) && stack.getDamage() >= this.maxShots)
@@ -115,11 +110,42 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
-    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
+        {
+            trigger(world, player, stack, id, pitch, yaw, handType);
+        }
+
+        if (id == MWAttackC2SPacket.TRIGGER_SECONDARY)
+        {
+            NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
+            if (nbt.getBoolean("charging"))
+            {
+                int charge = nbt.getInt("charge");
+                nbt.putInt("charge", charge + 1);
+
+                // Play a beep every second to indicate charge.
+                if (charge != 0 && charge % 20 == 0)
+                    world.playSoundFromEntity(null, player, NMSounds.BEEP, SoundCategory.PLAYERS, 1f, 1f + (float) charge / EXPLOSION_TIME);
+
+                // Damage the player if they hold for too long.
+                if (charge > EXPLOSION_TIME)
+                {
+                    world.createExplosion(player, player.getX(), player.getY(), player.getZ(), 1, Explosion.DestructionType.NONE);
+                    world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
+                    nbt.putInt("charge", 0);
+                    nbt.putBoolean("charging", false);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
-        if (id == GunFireC2SPacket.TRIGGER_SECONDARY
-                && !manager.isCoolingDown(stack)
+        if (id == MWAttackC2SPacket.TRIGGER_SECONDARY
                 && stack.getDamage() + 2 <= maxShots
                 && canFireBlast(stack)
     )
@@ -140,12 +166,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
     {
-        NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
-        if (nbt.getBoolean("charging"))
-        {
-            int charge = nbt.getInt("charge");
-            nbt.putInt("charge", charge + 1);
-        }
         super.inventoryTick(stack, world, entity, slot, selected);
     }
 

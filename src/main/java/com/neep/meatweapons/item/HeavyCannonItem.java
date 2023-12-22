@@ -2,7 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.entity.ExplodingShellEntity;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -58,7 +58,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {

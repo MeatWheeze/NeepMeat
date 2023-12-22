@@ -13,12 +13,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 
-public class GunFireC2SPacket
+public class MWAttackC2SPacket
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "weapon_trigger");
 
-    public static final int TRIGGER_PRIMARY = 0;
-    public static final int TRIGGER_SECONDARY = 1;
+    public static final int TRIGGER_NONE = 0;
+    public static final int TRIGGER_PRIMARY = 1;
+    public static final int TRIGGER_SECONDARY = 2;
 
     public static void init()
     {
@@ -39,7 +40,7 @@ public class GunFireC2SPacket
 
     static
     {
-        ServerPlayNetworking.registerGlobalReceiver(ID, GunFireC2SPacket::apply);
+        ServerPlayNetworking.registerGlobalReceiver(ID, MWAttackC2SPacket::apply);
     }
 
     private static void apply(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler networkHandler, PacketByteBuf buf, PacketSender sender)
@@ -55,23 +56,35 @@ public class GunFireC2SPacket
 
         HandType handType = HandType.values()[hand];
 
-        if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
+        switch (actionType)
         {
-            switch (actionType)
+            case PRESS ->
             {
-                case PRESS -> gunItem.trigger(player.world, player, mainStack, triggerId, pitch, yaw, handType);
-                case RELEASE -> gunItem.release(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
+                {
+                    gunItem.trigger(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                }
+
+                if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
+                {
+                    gunItem.trigger(player.world, player, offStack, triggerId, pitch, yaw, handType);
+                }
+            }
+            case RELEASE ->
+            {
+                if ((hand & 0b01) > 0 && mainStack.getItem() instanceof IGunItem gunItem)
+                {
+                    gunItem.release(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                }
+
+                if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
+                {
+                    gunItem.release(player.world, player, offStack, triggerId, pitch, yaw, handType);
+                }
             }
         }
 
-        if ((hand & 0b10) > 0 && offStack.getItem() instanceof IGunItem gunItem)
-        {
-            switch (actionType)
-            {
-                case PRESS -> gunItem.trigger(player.world, player, offStack, triggerId, pitch, yaw, handType);
-                case RELEASE -> gunItem.release(player.world, player, offStack, triggerId, pitch, yaw, handType);
-            }
-        }
+        player.meatweapons$getWeaponManager().updateStatus(handType, triggerId, actionType);
     }
 
     public enum HandType
@@ -90,11 +103,27 @@ public class GunFireC2SPacket
         {
             return this == OFF ? Hand.OFF_HAND : Hand.MAIN_HAND;
         }
+
+        public boolean mainHand()
+        {
+            return this == MAIN || this == BOTH;
+        }
+
+        public boolean offHand()
+        {
+            return this == OFF || this == BOTH;
+        }
     }
 
     public enum ActionType
     {
         PRESS,
-        RELEASE
+        RELEASE;
+
+        public boolean pressed()
+        {
+            return this == PRESS;
+        }
+
     }
 }

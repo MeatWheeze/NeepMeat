@@ -2,7 +2,8 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.entity.ExplodingShellEntity;
-import com.neep.meatweapons.network.GunFireC2SPacket;
+import com.neep.meatweapons.entity.WeaponCooldownAttachment;
+import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -60,22 +61,6 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        user.setCurrentHand(hand);
-        ItemStack itemStack = user.getStackInHand(hand);
-        return TypedActionResult.pass(itemStack);
-//        return TypedActionResult.fail(itemStack);
-    }
-
-    @Override
-    public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
-    {
-        ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        fire(world, (PlayerEntity) user, itemStack, user.getPitch(), user.getYaw());
-    }
-
-    @Override
     public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
     {
         boolean sneak = player.isSneaking();
@@ -86,50 +71,50 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
     }
 
     @Override
-    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
     {
-        if (id == 0)
+        WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
+
+        if (stack.getDamage() >= stack.getMaxDamage())
+        {
+            reload(player, stack, null);
+            return;
+        }
+
+        if (id == MWAttackC2SPacket.TRIGGER_PRIMARY
+            && !manager.isCoolingDown(stack)
+            && stack.getDamage() < stack.getMaxDamage()
+        )
         {
             fire(world, player, stack, pitch, yaw);
+            manager.set(stack, 2);
+            if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
         }
-        if (id == 1)
+        if (id == MWAttackC2SPacket.TRIGGER_SECONDARY
+                && !manager.isCoolingDown(stack)
+                && stack.getDamage() < stack.getMaxDamage()
+        )
         {
             player.getItemCooldownManager().set(this, 3);
-            fireSecondary(world, player, stack);
+            fireShell(world, player, stack, 1, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, x, y, z, vx, vy, vz)));
+            manager.set(stack, 5);
+            if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
         }
+    }
+
+    @Override
+    public void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        trigger(world, player, stack, id, pitch, yaw, handType);
     }
 
     public void fire(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)
     {
-        if (!player.getItemCooldownManager().isCoolingDown(this))
+
+        if (!world.isClient)
         {
-            if (stack.getDamage() != this.maxShots)
-            {
-                player.getItemCooldownManager().set(this, 2);
-
-                if (!world.isClient)
-                {
-                    fireBeam(world, player, stack);
-                }
-            }
-            else // Weapon is out of ammunition.
-            {
-                if (world.isClient)
-                {
-                    // Play empty sound.
-                }
-                else
-                {
-                    // Try to reload
-                    this.reload(player, stack, null);
-                }
-            }
+            fireBeam(world, player, stack);
         }
-    }
-
-    protected void fireSecondary(World world, PlayerEntity player, ItemStack stack)
-    {
-        fireShell(world, player, stack, 1, ((world1, x, y, z, vx, vy, vz) -> new ExplodingShellEntity(world, 1, x, y, z, vx, vy, vz)));
     }
 
     @Override

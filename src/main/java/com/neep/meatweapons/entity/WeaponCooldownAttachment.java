@@ -1,5 +1,6 @@
 package com.neep.meatweapons.entity;
 
+import com.neep.meatlib.player.MeatPlayerEntity;
 import com.neep.meatlib.player.PlayerAttachment;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -18,7 +19,7 @@ public class WeaponCooldownAttachment implements PlayerAttachment
 
     public static WeaponCooldownAttachment get(PlayerEntity player)
     {
-        return player.neepmeat$getAttachmentManager().getAttachment(ID);
+        return ((MeatPlayerEntity) player).neepmeat$getAttachmentManager().getAttachment(ID);
     }
 
     public WeaponCooldownAttachment(PlayerEntity player)
