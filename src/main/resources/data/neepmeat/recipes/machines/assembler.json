@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bob",
+    "bab",
+    "c c"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:whisper_brass"
+    },
+    "c": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "a": {
+      "item": "minecraft:crafting_table"
+    },
+    "o": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:assembler",
+    "count": 1
+  }
+}

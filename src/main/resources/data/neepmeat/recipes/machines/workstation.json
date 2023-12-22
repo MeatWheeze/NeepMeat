@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "ici",
+    "www"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "c": {
+      "item": "minecraft:crafting_table"
+    },
+    "w": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "result": {
+    "item": "neepmeat:workstation",
+    "count": 1
+  }
+}

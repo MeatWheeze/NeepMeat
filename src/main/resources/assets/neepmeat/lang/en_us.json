@@ -135,6 +135,9 @@
   "block.neepmeat.stirling_engine": "Stirling Engine",
   "block.neepmeat.agitator": "Fluid Agitator",
 
+  "block.neepmeat.assembler": "Assembler",
+  "block.neepmeat.workstation": "Persistent Crafting Table",
+
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
   "item.neepmeat.animal_heart.lore_0": "Crude; it lacks any logical design sensibilities.",
