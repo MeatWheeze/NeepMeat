@@ -69,6 +69,16 @@ public class DataVariantImpl implements DataVariant
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof DataVariantImpl other)
+        {
+            return other.data == data;
+        }
+        return false;
+    }
+
+    @Override
     public void toPacket(PacketByteBuf buf)
     {
         buf.writeBoolean(!isBlank());

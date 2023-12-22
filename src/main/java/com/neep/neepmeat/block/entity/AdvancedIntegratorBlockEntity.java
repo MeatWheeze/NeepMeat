@@ -5,7 +5,9 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -58,6 +60,31 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         protected long getCapacity(DataVariant variant)
         {
             return DataPort.GIEB * 4;
+        }
+
+        @Override
+        public long insert(DataVariant insertedVariant, long maxAmount, TransactionContext transaction)
+        {
+            StoragePreconditions.notBlankNotNegative(insertedVariant, maxAmount);
+
+            if ((insertedVariant.equals(variant) || variant.isBlank()) && canInsert(insertedVariant)) {
+                long insertedAmount = Math.min(maxAmount, getCapacity(insertedVariant) - amount);
+
+                if (insertedAmount > 0) {
+                    updateSnapshots(transaction);
+
+                    if (variant.isBlank()) {
+                        variant = insertedVariant;
+                        amount = insertedAmount;
+                    } else {
+                        amount += insertedAmount;
+                    }
+
+                    return insertedAmount;
+                }
+            }
+
+            return 0;
         }
 
         public void readNbt(NbtCompound nbt)

@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.integrator;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
@@ -55,18 +57,19 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public float facing = 0f;
     public float targetFacing = 0f;
 
-    public static final int MAX_DATA = 8000;
-    protected float data;
-    protected SnapshotParticipant<Float> dataSnapshot = new SnapshotParticipant<>()
+    public static final long MAX_DATA = 8 * DataPort.GIEB;
+    protected long data;
+
+    protected SnapshotParticipant<Long> dataSnapshot = new SnapshotParticipant<>()
     {
         @Override
-        protected Float createSnapshot()
+        protected Long createSnapshot()
         {
             return data;
         }
 
         @Override
-        protected void readSnapshot(Float snapshot)
+        protected void readSnapshot(Long snapshot)
         {
             data = snapshot;
         }
@@ -135,7 +138,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         tag.putInt("growth_remaining", growthTimeRemaining);
         tag.putBoolean("fully_grown", isMature);
         tag.put("lookTarget", NbtHelper.fromBlockPos(lookTarget));
-        tag.putFloat("enlightenment", data);
+        tag.putLong("data", data);
         storage.writeNbt(tag);
     }
 
@@ -146,7 +149,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         growthTimeRemaining = tag.getInt("growth_remaining");
         isMature = tag.getBoolean("fully_grown");
         this.lookTarget = NbtHelper.toBlockPos(tag.getCompound("lookTarget"));
-        this.data = tag.getFloat("enlightenment");
+        this.data = tag.getLong("data");
         storage.readNbt(tag);
     }
 
@@ -242,7 +245,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         if (!isMature())
             player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET) * 100 + "%"), true);
         else
-            player.sendMessage(Text.of("Enlightenment Level: " + data / MAX_DATA * 100 + "%"), true);
+            player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data", data, MAX_DATA), true);
 
     }
 
