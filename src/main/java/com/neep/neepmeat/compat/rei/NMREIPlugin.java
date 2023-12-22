@@ -1,10 +1,7 @@
 package com.neep.neepmeat.compat.rei;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.compat.rei.display.AlloySmeltingDisplay;
-import com.neep.neepmeat.compat.rei.display.CompactingDisplay;
-import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
-import com.neep.neepmeat.compat.rei.display.MixingDisplay;
+import com.neep.neepmeat.compat.rei.display.*;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 
 public interface NMREIPlugin
@@ -13,4 +10,5 @@ public interface NMREIPlugin
     CategoryIdentifier<CompactingDisplay> COMPACTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/compacting");
     CategoryIdentifier<MixingDisplay> MIXING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/mixing");
     CategoryIdentifier<AlloySmeltingDisplay> ALLOY_SMELTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/alloy_smelting");
+    CategoryIdentifier<HeartExtractionDisplay> HEART_EXTRACTION = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/heart_extraction");
 }
