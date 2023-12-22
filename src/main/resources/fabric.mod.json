@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "realistic_fluid",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "Realistic Fluids",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "NeepMeat"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -14,16 +14,16 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "icon": "assets/realistic_fluid/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "com.neepmeat.realistic_fluid.RealisticFluid"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "realistic_fluid.mixins.json"
   ],
 
   "depends": {
