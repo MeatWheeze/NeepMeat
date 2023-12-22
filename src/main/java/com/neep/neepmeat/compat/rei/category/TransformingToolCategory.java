@@ -51,7 +51,7 @@ public class TransformingToolCategory implements DisplayCategory<TransformingToo
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER);
+        return EntryStacks.of(PLCBlocks.PLC);
     }
 
     @Override

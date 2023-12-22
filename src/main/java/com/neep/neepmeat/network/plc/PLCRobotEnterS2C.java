@@ -3,9 +3,9 @@ package com.neep.neepmeat.network.plc;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.S2CSender;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.PLCBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -57,7 +57,7 @@ public class PLCRobotEnterS2C
                 {
                     if (client.world != null)
                     {
-                        client.world.getBlockEntity(pos, NMBlockEntities.PLC).ifPresent(be ->
+                        client.world.getBlockEntity(pos, PLCBlocks.PLC_ENTITY).ifPresent(be ->
                         {
                             PLCHudRenderer.enter(be);
                         });

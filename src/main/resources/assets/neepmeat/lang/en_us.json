@@ -268,7 +268,7 @@
   "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from the facing",
   "block.neepmeat.fluid_rationer.lore_1": "storage into a pipe network.",
 
-  "block.neepmeat.surgery_controller": "PLC",
+  "block.neepmeat.plc": "PLC",
   "block.neepmeat.surgery_platform": "Surgery Platform",
   "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
   "block.neepmeat.redstone_interface": "PLC Redstone Interface",
