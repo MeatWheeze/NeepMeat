@@ -33,6 +33,7 @@ import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.BlockSoundPacket;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
+import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -279,6 +280,7 @@ public class NeepMeatClient implements ClientModInitializer
             ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
+        ColorProviderRegistry.BLOCK.register(FilterPipeBlock::getTint, NMBlocks.FILTER_PIPE);
     }
 
     public static void registerScreens()
