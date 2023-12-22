@@ -28,6 +28,7 @@
 - [done] Replace Whisper Wheat textures
 - Add a source of Whisper Wheat seeds
 - [done] Stirling engine (model can have a little flywheel)
+- Add simple uses for Whisper Wheat (food item, etc.)
 - Add torque shaft
 - Add coloured fluid pipes
 - Create REI plugin
