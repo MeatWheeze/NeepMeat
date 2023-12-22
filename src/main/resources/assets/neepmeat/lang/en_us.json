@@ -29,6 +29,8 @@
   "block.neepmeat.yellow_rough_concrete_stairs": "Yellow Rough Concrete Stairs",
   "block.neepmeat.yellow_rough_concrete_slab": "Yellow Rough Concrete Slab",
 
+  "block.neepmeat.smooth_tile_grey": "Grey Smooth Tile",
+
   "block.neepmeat.yellow_tiles": "Yellow Tiles",
   "block.neepmeat.yellow_tiles_stairs": "Yellow Tiles Stairs",
   "block.neepmeat.yellow_tiles_slab": "Yellow Tiles Slab",
@@ -55,6 +57,23 @@
   "block.neepmeat.caution_block": "Caution Stripes",
   "block.neepmeat.caution_block_slab": "Caution Stripes Slab",
   "block.neepmeat.caution_block_stairs": "Caution Stripes Stairs",
+
+  "block.neepmeat.smooth_tile_black": "Black Smooth Tile",
+  "block.neepmeat.smooth_tile_red": "Red Smooth Tile",
+  "block.neepmeat.smooth_tile_green": "Green Smooth Tile",
+  "block.neepmeat.smooth_tile_brown": "Brown Smooth Tile",
+  "block.neepmeat.smooth_tile_blue": "Blue Smooth Tile",
+  "block.neepmeat.smooth_tile_purple": "Purple Smooth Tile",
+  "block.neepmeat.smooth_tile_cyan": "Cyan Smooth Tile",
+  "block.neepmeat.smooth_tile_light_gray": "Light Gray Smooth Tile",
+  "block.neepmeat.smooth_tile_gray": "Gray Smooth Tile",
+  "block.neepmeat.smooth_tile_pink": "Pink Smooth Tile",
+  "block.neepmeat.smooth_tile_lime": "Lime Smooth Tile",
+  "block.neepmeat.smooth_tile_yellow": "Yellow Smooth Tile",
+  "block.neepmeat.smooth_tile_light_blue": "Light Blue Smooth Tile",
+  "block.neepmeat.smooth_tile_magenta": "Magenta Smooth Tile",
+  "block.neepmeat.smooth_tile_orange": "Orange Smooth Tile",
+  "block.neepmeat.smooth_tile_white": "White Smooth Tile",
 
   "block.neepmeat.pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.base.BasePaintedBlock;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.GlassTankRenderer;
 import com.neep.neepmeat.client.renderer.IntegratorEggRenderer;
@@ -14,15 +15,21 @@ import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NeepMeatClient
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
+
+    public static List<BasePaintedBlock.PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
 
     public static void registerRenderers()
     {
@@ -49,6 +56,15 @@ public class NeepMeatClient
                 new Identifier("minecraft:block/water_still"),
                 0xbb1d1d
         ));
+
+        for (BasePaintedBlock.PaintedBlock block : COLOURED_BLOCKS)
+        {
+            ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getColour(), block);
+            ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getColour(), block.asItem());
+        }
+
+//        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE);
+//        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE.asItem());
 
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_BLOOD, FluidInitialiser.FLOWING_BLOOD);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_ENRICHED_BLOOD, FluidInitialiser.FLOWING_ENRICHED_BLOOD);
