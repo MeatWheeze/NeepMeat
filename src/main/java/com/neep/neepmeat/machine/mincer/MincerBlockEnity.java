@@ -97,7 +97,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
         {
             entity.remove(Entity.RemovalReason.DISCARDED);
             insertFluidFromEntity(this, entity);
-            world.spawnParticles(NMParticles.MEAT_FOUNTAIN, pos.getX(), pos.getY() + 1 + 14 / 16f, pos.getZ(), 20, 0.4, 0.4, 0.4, 0.01);
+            world.spawnParticles(NMParticles.MEAT_FOUNTAIN, pos.getX() + 0.5, pos.getY() + 1 + 14 / 16f, pos.getZ() + 0.5, 20, 0.4, 0.4, 0.4, 0.01);
         }
         else
         {
