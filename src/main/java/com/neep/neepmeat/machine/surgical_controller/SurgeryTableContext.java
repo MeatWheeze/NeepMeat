@@ -33,6 +33,16 @@ public class SurgeryTableContext implements NbtSerialisable
         return (TableComponent<? extends TransferVariant<?>>) caches.get(i).find(null);
     }
 
+    public int getWidth()
+    {
+        return 3;
+    }
+
+    public int getHeight()
+    {
+        return 3;
+    }
+
     @Override
     public void writeNbt(NbtCompound nbt)
     {

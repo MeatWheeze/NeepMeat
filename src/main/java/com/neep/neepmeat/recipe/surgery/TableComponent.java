@@ -12,8 +12,6 @@ public interface TableComponent<T>
     BlockApiLookup<TableComponent<?>, Void> STRUCTURE_LOOKUP =
             BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "structure"), asClass(), Void.class);
 
-    BlockApiLookup<Storage<T>, Direction> getSidedLookup();
-
     Storage<T> getStorage();
 
     @SuppressWarnings("unchecked")
@@ -21,4 +19,6 @@ public interface TableComponent<T>
     {
         return (Class<TableComponent<?>>) (Object) TableComponent.class;
     }
+
+    Identifier getType();
 }

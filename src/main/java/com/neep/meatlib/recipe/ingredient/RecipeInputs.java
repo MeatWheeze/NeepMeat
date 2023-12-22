@@ -17,8 +17,12 @@ public class RecipeInputs
             (Class<RecipeInput.Serialiser<?>>) (Object) RecipeInput.Serialiser.class,
             new Identifier(NeepMeat.NAMESPACE, "recipe_input"),
             new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
-    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, Registry.FLUID.getKey().getValue(), new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
-    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, Registry.ITEM.getKey().getValue(), new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
+
+    public static final Identifier FLUID_ID = Registry.FLUID.getKey().getValue();
+    public static final Identifier ITEM_ID = Registry.ITEM.getKey().getValue();
+
+    public static final RecipeInput.Serialiser<Fluid> FLUID = Registry.register(SERIALISERS, FLUID_ID, new RecipeInput.RegistrySerialiser<>(Registry.FLUID));
+    public static final RecipeInput.Serialiser<Item> ITEM = Registry.register(SERIALISERS, ITEM_ID, new RecipeInput.RegistrySerialiser<>(Registry.ITEM));
 
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, new RecipeInput.Serialiser<>()
     {

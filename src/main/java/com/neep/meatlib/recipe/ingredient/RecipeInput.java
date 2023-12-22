@@ -52,7 +52,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return serialiser;
     }
 
-    private Identifier getType()
+    public Identifier getType()
     {
         return type;
     }
