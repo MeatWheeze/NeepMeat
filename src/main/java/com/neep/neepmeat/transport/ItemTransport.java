@@ -15,13 +15,12 @@ import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.ItemRequesterBlock;
 import com.neep.neepmeat.transport.block.item_transport.PipeDriverBlock;
 import com.neep.neepmeat.transport.block.item_transport.StorageBusBlock;
+import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
@@ -42,8 +41,6 @@ public class ItemTransport
     public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
 
-    public static ExtendedScreenHandlerType<ItemRequesterScreenHandler> ITEM_REQUESTER_HANDLER = new ExtendedScreenHandlerType<>(ItemRequesterScreenHandler::new);
-
     public static void init()
     {
         PIPE_DRIVER_BE = NMBlockEntities.registerBlockEntity("pipe_driver", PipeDriverBlock.PDBlockEntity::new, PIPE_DRIVER);
@@ -55,7 +52,7 @@ public class ItemTransport
 
         ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof IItemPipe pipe ? pipe : null);
 
-        ITEM_REQUESTER_HANDLER = ScreenHandlerInit.registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
+        TransportScreenHandlers.ITEM_REQUESTER_HANDLER = ScreenHandlerInit.registerExtended(NeepMeat.NAMESPACE, "item_requester", ItemRequesterScreenHandler::new);
     }
 
     public static void propagateUpdate(BlockPos pos, ServerWorld world)

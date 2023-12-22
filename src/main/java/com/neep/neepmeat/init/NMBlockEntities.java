@@ -56,6 +56,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.LimiterValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.WindowPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
@@ -80,6 +81,7 @@ public class NMBlockEntities
     public static BlockEntityType<?> CHECK_VALVE;
     public static BlockEntityType<?> STOP_VALVE;
     public static BlockEntityType<FilterPipeBlockEntity> FILTER_PIPE;
+    public static BlockEntityType<LimiterValveBlockEntity> LIMITER_VALVE;
     public static BlockEntityType<WindowPipeBlockEntity> WINDOW_PIPE;
     public static BlockEntityType<PumpBlockEntity> PUMP;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
@@ -175,6 +177,7 @@ public class NMBlockEntities
         STOP_VALVE = registerBlockEntity("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
         CHECK_VALVE = registerBlockEntity("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
         FILTER_PIPE = registerBlockEntity("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);
+        LIMITER_VALVE = registerBlockEntity("limiter_valve", LimiterValveBlockEntity::new, FluidTransport.LIMITER_VALVE);
         WINDOW_PIPE = registerBlockEntity("window_pipe", WindowPipeBlockEntity::new, FluidTransport.WINDOW_PIPE);
 
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);

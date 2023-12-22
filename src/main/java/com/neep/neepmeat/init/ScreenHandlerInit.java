@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.screen_handler.*;
+import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.minecraft.screen.ScreenHandler;
@@ -32,6 +33,8 @@ public class ScreenHandlerInit
         WORKSTATION = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "workstation"), WorkstationScreenHandler::new);
         GUIDE = register(NeepMeat.NAMESPACE, "guide", GuideScreenHandler::new);
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
+
+        TransportScreenHandlers.registerScreenHandlers();
     }
 
     public static <T extends ScreenHandler> ScreenHandlerType<T> register(String namespace, String id, ScreenHandlerType.Factory<T> factory)
