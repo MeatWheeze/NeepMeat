@@ -22,32 +22,33 @@ public class NMItems
 
 //    public static Item DEBUG = new DebugItem("debug_item", false, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item COPPER_COIL = new BaseCraftingItem("copper_coil", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item BIOELECTRIC_ORGAN = new BaseCraftingItem("bioelectric_organ", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item STATOR = new BaseCraftingItem("stator", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item FLYWHEEL = new BaseCraftingItem("flywheel", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item COPPER_COIL = new BaseCraftingItem("copper_coil", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item BIOELECTRIC_ORGAN = new BaseCraftingItem("bioelectric_organ", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item STATOR = new BaseCraftingItem("stator", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item FLYWHEEL = new BaseCraftingItem("flywheel", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
-    public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Organism Parts
-    public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item PRISTINE_BRAIN = new BaseCraftingItem("brain_pristine", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item PRISTINE_BRAIN = new BaseCraftingItem("brain_pristine", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-    public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
 //    public static Item GLAND_POTATO = new BaseCraftingItem("flesh_potato", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 

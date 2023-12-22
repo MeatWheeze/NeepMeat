@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:white_rough_concrete_slab"
+    ]
+  },
+  "criteria": {
+    "has_white_rough_concrete": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:white_rough_concrete"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:white_rough_concrete_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_white_rough_concrete",
+      "has_the_recipe"
+    ]
+  ]
+}

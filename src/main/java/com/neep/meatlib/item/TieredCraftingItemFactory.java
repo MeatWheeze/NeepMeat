@@ -18,7 +18,7 @@ public class TieredCraftingItemFactory
     {
         for (String prefix : prefixes)
         {
-            BaseCraftingItem item = new BaseCraftingItem(registryName + "_" + prefix, hasLore, settings);
+            BaseCraftingItem item = new BaseCraftingItem(registryName + "_" + prefix, hasLore ? 1 : 0, settings);
         }
         return null;
     }

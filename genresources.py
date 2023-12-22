@@ -6,6 +6,7 @@ rm = mcresources.ResourceManager('neepmeat')
 blocks = [
 'grey_rough_concrete',
 'yellow_rough_concrete',
+'white_rough_concrete',
 'yellow_tiles',
 'filled_scaffold',
 'caution_block',
