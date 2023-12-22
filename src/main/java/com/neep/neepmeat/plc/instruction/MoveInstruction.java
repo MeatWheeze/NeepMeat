@@ -11,7 +11,6 @@ import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import com.neep.neepmeat.api.plc.robot.SingleAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
@@ -79,7 +78,7 @@ public class MoveInstruction implements Instruction
 
     private void takeFirst(PLC plc)
     {
-        stored = takeItem(from);
+        stored = Instructions.takeItem(from, world, 64);
         if (stored == null)
         {
             plc.raiseError(new PLC.Error("No extractable resource found"));
@@ -105,41 +104,16 @@ public class MoveInstruction implements Instruction
                     transaction.abort();
                     plc.advanceCounter(0);
 
-                    ItemScatterer.spawn(world.get(), plc.getRobot().getX(), plc.getRobot().getY(), plc.getRobot().getZ(),
-                            stored.resource().toStack((int) stored.amount()));
                 }
             }
         }
+
+        ItemScatterer.spawn(world.get(), plc.getRobot().getX(), plc.getRobot().getY(), plc.getRobot().getZ(),
+                stored.resource().toStack((int) stored.amount()));
     }
 
     private void finish(PLC plc)
     {
-    }
-
-    private ResourceAmount<ItemVariant> takeItem(Argument target)
-    {
-        var storage = ItemStorage.SIDED.find(world.get(), target.pos(), target.face());
-        if (storage != null)
-        {
-            try (Transaction transaction = Transaction.openOuter())
-            {
-                ResourceAmount<ItemVariant> found = StorageUtil.findExtractableContent(storage, transaction);
-                if (found != null)
-                {
-                    long extracted = storage.extract(found.resource(), Math.min(found.amount(), 64), transaction);
-                    if (extracted > 0)
-                    {
-                        var res = new ResourceAmount<>(found.resource(), extracted);
-                        transaction.commit();
-                        return res;
-                    }
-
-                    transaction.abort();
-                }
-            }
-        }
-
-        return null;
     }
 
     @Override

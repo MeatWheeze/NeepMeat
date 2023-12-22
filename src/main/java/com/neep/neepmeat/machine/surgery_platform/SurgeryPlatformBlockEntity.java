@@ -4,9 +4,11 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.transfer.EntityVariant;
 import com.neep.meatlib.transfer.SingleEntityStorage;
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -18,6 +20,7 @@ import net.minecraft.util.math.Box;
 public class SurgeryPlatformBlockEntity extends SyncableBlockEntity
 {
     protected final Component tableComponent = new Component();
+    protected final Mutate mutate = new Mutate();
 
     public SurgeryPlatformBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -27,6 +30,11 @@ public class SurgeryPlatformBlockEntity extends SyncableBlockEntity
     public TableComponent<?> getTableComponent(Void ctx)
     {
         return tableComponent;
+    }
+
+    public MutateInPlace<Entity> getMutate(Void unused)
+    {
+        return mutate;
     }
 
     public class Component implements TableComponent<EntityVariant<?>>
@@ -49,4 +57,20 @@ public class SurgeryPlatformBlockEntity extends SyncableBlockEntity
             return world.getNonSpectatingEntities(LivingEntity.class, box).stream().findFirst().orElse(null);
         }
     };
+
+    public class Mutate implements MutateInPlace<Entity>
+    {
+        @Override
+        public Entity get()
+        {
+            Box box = new Box(getPos().up());
+            return world.getNonSpectatingEntities(LivingEntity.class, box).stream().findFirst().orElse(null);
+        }
+
+        @Override
+        public void set(Entity entity)
+        {
+
+        }
+    }
 }

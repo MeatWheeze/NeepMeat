@@ -13,7 +13,7 @@ import com.neep.neepmeat.api.plc.instruction.Argument;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.recipe.CombineStep;
-import com.neep.neepmeat.plc.recipe.ManufactureRecipe;
+import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
@@ -117,13 +117,13 @@ public class CombineInstruction implements Instruction
             var step = new CombineStep(stored.resource().toStack((int) stored.amount()));
 
             var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);
-            if (workpiece != null && PLCRecipes.isValidStep(workpiece, step))
+            if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.MANUFACTURE, workpiece, step, stack.getItem()))
             {
                 workpiece.addStep(step);
 
                 mip.set(stack);
 
-                ManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MIXING, mip).orElse(null);
+                ItemManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MANUFACTURE, mip).orElse(null);
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);
