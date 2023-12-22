@@ -3,9 +3,7 @@
         {
             "type": "ttf",
             "file": "neepmeat:vt323_regular.ttf",
-            "shift": [10.0, 10.0],
-            "size": 1,
-            "oversample": 1
+            "oversample": 10
 
         }
     ]
