@@ -75,12 +75,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
 
             int damageAmount = (int) (4 * multiplier);
             world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true).stream()
-//                .filter(entity ->
-//                {
-//                    Optional<Vec3d> optional = entity.getBoundingBox().raycast(startPos, endPos);
-//                    return optional.isPresent();
-//                })
-                    .filter(e -> e.hurtTime == 0).forEach(e ->
+                    .filter(e -> e.hurtTime == 0 && !e.isDead()).forEach(e ->
                     {
                         if (e.getHealth() > damageAmount)
                             e.damage(DamageSource.GENERIC, damageAmount);
@@ -107,7 +102,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
 
     public static long getEntityAmount(LivingEntity entity)
     {
-        return FluidConstants.BUCKET / 2;
+        return FluidConstants.BUCKET / 4;
     }
 
     @Override
