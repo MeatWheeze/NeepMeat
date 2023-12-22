@@ -86,9 +86,12 @@
     {"id": "fluids", "contents": [
       {"type": "text", "text": "Energetic Fluids\n", "bold": true},
       {"type": "text", "text": "Unlike other products which use such inferior elements as electricity, NEEP machines are powered by the Divine itself."},
+      {"type": "text", "text": "\nPower and energy are measured in NEEP customary units. The unit of energy is the esoteric Joule (eJ). Power is measured in esoteric Joules per tick (eJ/t)."},
       {"type": "text", "text": "\nEthereal Fuel\n", "bold": true},
+      {"type": "text", "text": "Energy density: 6keJ/b"},
       {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. Unlike Work Fluid, Ethereal Fuel is consumed totally by the machine it powers."},
       {"type": "text", "text": "\nWork Fluid\n", "bold": true},
+      {"type": "text", "text": "Energy density: 14keJ/b"},
       {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened animalcules that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Exciter when depleted."}
     ]},
 
