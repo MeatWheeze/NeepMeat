@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.assembler;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
@@ -43,6 +42,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     public static final float MIN_INCREMENT = 0.3f;
     protected float progress;
     protected float increment = 1;
+    protected boolean slotSelectMode;
 
     BlockApiCache<Storage<ItemVariant>, Direction> cache;
 
@@ -59,6 +59,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
             {
                 case 0 -> storage.outputSlots;
                 case 1 -> targetSize;
+                case 2 -> slotSelectMode ? 1 : 0;
                 default -> 0;
             };
         }
@@ -70,6 +71,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
             {
                 case 0: storage.outputSlots = value; break;
                 case 1: targetSize = value; break;
+                case 2: slotSelectMode = value > 0; break;
             }
             markDirty();
         }
@@ -77,7 +79,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
         @Override
         public int size()
         {
-            return 2;
+            return 3;
         }
     };
 

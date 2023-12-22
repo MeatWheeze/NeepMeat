@@ -245,6 +245,8 @@
   "container.neepmeat.router": "Item Router",
   "container.neepmeat.alloy_kiln": "Alloy Kiln",
 
+  "button.neepmeat.assembler.select": "Select Output Slots",
+
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.compacting": "Charnel Compacting",
   "category.neepmeat.mixing": "Mixing",

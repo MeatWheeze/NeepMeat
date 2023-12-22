@@ -33,6 +33,11 @@ public abstract class BasicScreenHandler extends ScreenHandler
         return -1;
     }
 
+    public void setProperty(int i, int value)
+    {
+        if (propertyDelegate != null) propertyDelegate.set(i, value);
+    }
+
     protected void createPlayerSlots(int startX, int startY, PlayerInventory playerInventory)
     {
         int m;
