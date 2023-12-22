@@ -90,10 +90,12 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
             {
                 emitter.square(direction, endXZ, startXYZ, startXYZ, dist, endXZ);
             }
-//            emitter.square(direction, 0.1f, 0.1f, 0.9f, 0.9f - fill, 0.9f);
 
-            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
-            emitter.spriteColor(0, -1, -1, -1, -1);
+            if (sprite != null)
+            {
+                emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+                emitter.spriteColor(0, -1, -1, -1, -1);
+            }
 
             consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
         }

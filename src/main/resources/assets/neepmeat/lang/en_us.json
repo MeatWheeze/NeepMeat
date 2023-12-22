@@ -280,7 +280,11 @@
   "item.neepmeat.whisper_bread.lore_0": "",
 
   "item.neepmeat.pinkdrink": "Pinkdrink",
-  "item.neepmeat.pinkdrink.lore_0": "It's pink, and it's a drink.",
+  "item.neepmeat.pinkdrink.lore_0": "It's pink and it's refreshing so don't ask what's in it.",
+
+  "item.neepmeat.can": "Can",
+  "item.neepmeat.carton": "Carton",
+  "item.neepmeat.milk_carton": "Milk Carton",
 
   "block.neepmeat.cronencake": "Cronencake",
   "block.neepmeat.cronencake.lore_0": "Ignore the screams. It's probably not sentient.",
@@ -310,6 +314,9 @@
   "item.neepmeat.meat_bucket": "Meat Bucket",
   "block.neepmeat.meat": "Meat",
 
+  "item.neepmeat.coarse_meat_bucket": "Coarse Meat Bucket",
+  "block.neepmeat.coarse_meat": "Coarse Meat",
+
   "item.neepmeat.patina_treatment_bucket": "Patina Treatment Bucket",
   "block.neepmeat.patina_treatment": "Patina Treatment",
 
@@ -329,7 +336,7 @@
   "block.neepmeat.animal_feed": "Animal Feed",
   "item.neepmeat.animal_feed_bucket": "Animal Feed Bucket",
 
-  "item.neepmeat.pinkdrink_bucket": "Pinkdrink",
+  "item.neepmeat.pinkdrink_bucket": "Pinkdrink Bucket",
   "block.neepmeat.pinkdrink": "Pinkdrink",
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
