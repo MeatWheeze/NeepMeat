@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "neepmeat:block/heater",
-		"1": "neepmeat:block/dark_plate",
+		"1": "neepmeat:block/motor/casing",
 		"3": "neepmeat:block/motor/side",
 		"particle": "neepmeat:block/heater"
 	},

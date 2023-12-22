@@ -36,8 +36,6 @@ public class ParticleSpawnPacket
         PacketByteBuf buf = PacketByteBufs.create();
 
         buf.writeBlockPos(pos);
-//        PacketBufUtil.writeVec3d(buf, pos);
-//        PacketBufUtil.writeVec3d(buf, vel);
         buf.writeInt(amount);
         buf.writeIdentifier(Registry.PARTICLE_TYPE.getId(particle));
 
@@ -45,17 +43,15 @@ public class ParticleSpawnPacket
     }
 
     @Environment(value=EnvType.CLIENT)
-    public static void registerReciever()
+    public static void registerReceiver()
     {
-        ClientPlayNetworking.registerGlobalReceiver(PARTICLE_SPAWN, (client, handler, buf, responseSender) ->
-        {
-            BlockPos pos = buf.readBlockPos();
-//            Vec3d pos = PacketBufUtil.readVec3d(buf);
-//            Vec3d vel = PacketBufUtil.readVec3d(buf);
-            int amount = buf.readInt();
-            Identifier id = buf.readIdentifier();
-
-            ParticleUtil.spawnParticle(client.world, pos, (ParticleEffect) Registry.PARTICLE_TYPE.get(id), UniformIntProvider.create(0, 1));
-        });
+//        ClientPlayNetworking.registerGlobalReceiver(PARTICLE_SPAWN, (client, handler, buf, responseSender) ->
+//        {
+//            BlockPos pos = buf.readBlockPos();
+//            int amount = buf.readInt();
+//            Identifier id = buf.readIdentifier();
+//
+//            ParticleUtil.spawnParticle(client.world, pos, (ParticleEffect) Registry.PARTICLE_TYPE.get(id), UniformIntProvider.create(0, 1));
+//        });
     }
 }
