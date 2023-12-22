@@ -26,6 +26,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
+import com.neep.neepmeat.machine.surgical_controller.TableControllerRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.BlockSoundPacket;
@@ -151,6 +152,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererRegistry.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
+        BlockEntityRendererRegistry.register(NMBlockEntities.TABLE_CONTROLLER, TableControllerRenderer::new);
+
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityRendererRegistry.register(NMEntities.GLOME, (ctx) -> new GlomeEntityRenderer(ctx, GLOME));
 
@@ -176,7 +179,7 @@ public class NeepMeatClient implements ClientModInitializer
                 "textures/entity/armour/meat_steel_armour.png",
                 "animations/meat_steel_armour.animation.json"
         )),
-                NMItems.MEAT_STEEL_BOOTS, NMItems.MEAT_STEEL_LEGS, NMItems.MEAT_STEEL_CHESTPLATE);
+        NMItems.MEAT_STEEL_BOOTS, NMItems.MEAT_STEEL_LEGS, NMItems.MEAT_STEEL_CHESTPLATE);
 
         // Fluid textures
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD, new SimpleFluidRenderHandler(
