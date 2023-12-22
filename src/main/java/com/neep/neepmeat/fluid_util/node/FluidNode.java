@@ -50,12 +50,22 @@ public class FluidNode
 
     public void setNetwork(NMFluidNetwork network)
     {
+//        System.out.println("called set network to replace " + this.network);
         if (!(this.network == null) && !this.network.equals(network))
         {
             this.network.removeNode(new NodePos(pos, face));
         }
+        if (this.network != null)
+        {
+            System.out.println(network.uid + " replaces " + this.network.uid);
+        }
         this.network = network;
         distances.clear();
+    }
+
+    public NMFluidNetwork getNetwork()
+    {
+        return network;
     }
 
     // Removed node from and revalidates the network
@@ -65,6 +75,7 @@ public class FluidNode
         if (!(this.network == null))
         {
             network.removeNode(new NodePos(pos, face));
+            network = null;
         }
         distances.clear();
     }
