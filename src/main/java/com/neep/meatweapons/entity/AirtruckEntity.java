@@ -24,9 +24,9 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 {
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    protected final float maxSpeed = 0.05f;
+    public final float maxSpeed = 0.05f;
     protected final float forwardsAccel = 0.004f;
-    protected float forwardsVelocity;
+    public float forwardsVelocity;
 
     protected boolean accelerating;
     protected boolean braking;
@@ -45,7 +45,6 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     @Override
     public void tick()
     {
-        updateSounds();
         super.tick();
     }
 
@@ -90,29 +89,6 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
         this.setVelocity(this.getVelocity().add(MathHelper.sin(-this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity,
                 upVelocity,
                 MathHelper.cos(this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity));
-    }
-
-    protected void updateSounds()
-    {
-        if (pressingForward || pressingBack)
-        {
-            if (Math.abs(this.forwardsVelocity) < 0.9 * maxSpeed)
-            {
-                // Play running sound
-//                if (soundStage == 0)
-//                    world.playSoundFromEntity(null, this, SoundInitialiser.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL, 1, 1);
-            }
-            else
-            {
-                if (soundStage == 0)
-                    soundStage = 1;
-
-                if (soundStage == 1)
-                {
-//                    world.playSoundFromEntity(null, this, SoundInitialiser.AIRTRUCK_RUNNING, SoundCategory.NEUTRAL, 1, 1);
-                }
-            }
-        }
     }
 
     public void onSpawnPacket(EntitySpawnS2CPacket packet)

@@ -58,7 +58,7 @@ public class AirtruckSoundInstance extends MovingSoundInstance
         if (f >= 0.01f)
         {
             this.distance = MathHelper.clamp(this.distance + 0.0025f, 0.0f, 1.0f);
-            this.volume = MathHelper.lerp(MathHelper.clamp(f, 0.0f, 0.5f), 0.0f, 2f);
+            this.volume = MathHelper.lerp(MathHelper.clamp(f, 0.0f, 1f), 0.0f, 3f);
             this.pitch = MathHelper.lerp(MathHelper.clamp(f, 0.0f, 0.5f), 0.7f, 1.4f);
         } else
         {

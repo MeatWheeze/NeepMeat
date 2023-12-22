@@ -10,6 +10,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -40,6 +43,8 @@ public abstract class AbstractVehicleEntity
 extends Entity {
     protected float velocityDecay;
     protected float yawVelocity;
+    protected float roll;
+    protected float prevRoll;
     private int delta;
     private double x;
     private double y;
@@ -64,6 +69,8 @@ extends Entity {
     protected boolean powered = true;
 
     protected int health;
+
+    private static final TrackedData<Float> ROLL = DataTracker.registerData(AbstractVehicleEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
     public AbstractVehicleEntity(EntityType<? extends Entity> entityType, World world)
     {
@@ -91,6 +98,7 @@ extends Entity {
     @Override
     protected void initDataTracker()
     {
+        this.dataTracker.startTracking(ROLL, 0f);
     }
 
     @Override
@@ -226,6 +234,7 @@ extends Entity {
                 this.pushAwayFrom(entity);
             }
         }
+        calculateRoll();
     }
 
     private void interpolatePosition()
@@ -253,7 +262,7 @@ extends Entity {
     private void updateVelocity()
     {
         this.velocityDecay = 0.9f;
-        float verticalVelocityDecay = 0.1f;
+        float verticalVelocityDecay = 0.8f;
 
         Vec3d vec3d = this.getVelocity();
         this.setVelocity(vec3d.x * (double)this.velocityDecay, vec3d.y * verticalVelocityDecay, vec3d.z * (double)this.velocityDecay);
@@ -461,6 +470,41 @@ extends Entity {
         }
     }
 
+    public float calculateRoll()
+    {
+//        Vec3d prevPos = new Vec3d(prevX, prevY, prevZ);
+//        Vec3d pos = getPos();
+//        float yaw = getYaw() % 360;
+//        if (yaw < 0) yaw += 360;
+//        float pYaw = prevYaw % 360;
+//        if (pYaw < 0) pYaw += 360;
+//
+////        double d = prevPos.distanceTo(getPos());
+//        double d = Math.sqrt(Math.pow(pos.x - prevPos.x, 2) + Math.pow(pos.z - prevPos.z, 2));
+//
+//        // Construct perpendicular lines
+//        var x1 = prevPos.x;
+//        var z1 = prevPos.z;
+//        var x2 = pos.x;
+//        var z2 = pos.z;
+//        var m1 = Math.tan(pYaw * Math.PI / 180);
+//        var m2 = Math.tan(yaw * Math.PI / 180);
+//
+//        // Find intersection point
+//        var h = (m1 * x1 - m2 * x2 + z2 - z1) / (m1 - m2);
+//        var k = m1 * (h - x1) + z1;
+//        Vec2d i = new Vec2d(h, k);
+//
+//        // Find mean distance to intersection
+//        var d1 = Vec2d.distanceTo(h, k, prevPos.x, prevPos.z);
+//        var d2 = Vec2d.distanceTo(h, k, pos.x, pos.z);
+//        float mean = (float) ((d1 + d2) / 2);
+
+        this.prevRoll = getRoll();
+        this.setRoll((float) (getVelocity().horizontalLength() * yawVelocity));
+        return 0;
+    }
+
     @Override
     protected boolean canAddPassenger(Entity passenger)
     {
@@ -489,6 +533,22 @@ extends Entity {
     public void dropDead()
     {
         this.dropStack(asStack());
+    }
+
+    public void setRoll(float roll)
+    {
+        this.roll = roll;
+        this.getDataTracker().set(ROLL, roll);
+    }
+
+    public float getRoll()
+    {
+        return this.roll;
+    }
+
+    public float getRoll(float tickDelta)
+    {
+        return MathHelper.lerp(tickDelta, this.prevRoll, this.getRoll());
     }
 }
 

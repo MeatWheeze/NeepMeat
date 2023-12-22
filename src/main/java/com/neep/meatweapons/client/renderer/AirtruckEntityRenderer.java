@@ -2,9 +2,7 @@ package com.neep.meatweapons.client.renderer;
 
 import com.google.common.collect.Lists;
 import com.neep.meatweapons.client.model.AirtruckModel;
-import com.neep.meatweapons.entity.AbstractVehicleEntity;
 import com.neep.meatweapons.entity.AirtruckEntity;
-import com.neep.meatweapons.entity.CannonBulletEntity;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
@@ -13,17 +11,10 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.PlayerModelPart;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.compat.PatchouliCompat;
@@ -31,10 +22,8 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.model.provider.GeoModelProvider;
 import software.bernie.geckolib3.model.provider.data.EntityModelData;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
@@ -43,10 +32,8 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
-public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatable> extends EntityRenderer<T> implements IGeoRenderer<T>
+public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> extends EntityRenderer<T> implements IGeoRenderer<T>
 {
-    public EntityModel<CannonBulletEntity> model;
-
     protected GeoModelProvider<T> modelProvider;
     protected final List<GeoLayerRenderer<T>> layerRenderers = Lists.newArrayList();
     private Identifier whTexture;
@@ -76,9 +63,15 @@ public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatabl
         return this.modelProvider.getTextureLocation(instance);
     }
 
+    public static float ease(float x)
+    {
+//        return (float) (1 / (1 + Math.exp(-9 * (x - 0.5))));
+        return x < 0.5 ? 2 * x * x : (float) (1 - Math.pow(-2 * x + 2, 2) / 2);
+    }
+
     @Override
-    public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack,
-                       VertexConsumerProvider bufferIn, int packedLightIn) {
+    public void render(T entity, float entityYaw, float partialTicks, MatrixStack stack, VertexConsumerProvider bufferIn, int packedLightIn)
+    {
         stack.push();
         EntityModelData entityModelData = new EntityModelData();
 
@@ -87,7 +80,11 @@ public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatabl
         float f7 = this.handleRotationFloat(entity, partialTicks);
         this.applyRotations(entity, stack, f7, f, partialTicks);
 
-        GeckoLibCache.getInstance().parser.setValue("r_lf", 90);
+        float prop = entity.forwardsVelocity / entity.maxSpeed;
+        GeckoLibCache.getInstance().parser.setValue("r_lf", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_rf", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_lb", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_rb", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
 
         AnimationEvent<T> predicate = new AnimationEvent<T>(entity, 0, 0, partialTicks,
                 !(0 > -0.15F && 0 < 0.15F), Collections.singletonList(entityModelData));
@@ -140,14 +137,11 @@ public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatabl
                 packedOverlayIn, red, green, blue, partialTicks);
     }
 
-    protected void applyRotations(T entityLiving, MatrixStack matrixStackIn, float ageInTicks, float rotationYaw,
-                                  float partialTicks)
+    protected void applyRotations(T entity, MatrixStack matrices, float ageInTicks, float rotationYaw, float tickDelta)
     {
-        EntityPose pose = entityLiving.getPose();
-        if (pose != EntityPose.SLEEPING)
-        {
-            matrixStackIn.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - rotationYaw));
-        }
+        EntityPose pose = entity.getPose();
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - rotationYaw));
+        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(entity.getRoll(tickDelta)));
     }
 
     public static int getPackedOverlay(Entity livingEntityIn, float uIn)
