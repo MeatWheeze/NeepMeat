@@ -4,6 +4,7 @@ import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
+import com.neep.neepmeat.entity.MobPlatformRidingEntity;
 import com.neep.neepmeat.entity.TankMinecartEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
@@ -15,6 +16,7 @@ public class NMEntities
     public static EntityType<TankMinecartEntity> TANK_MINECART;
     public static EntityType<GlomeEntity> GLOME;
     public static EntityType<EggEntity> EGG;
+    public static EntityType<MobPlatformRidingEntity> MOB_PLATFORM;
 
     public static void initialise()
     {
@@ -27,5 +29,8 @@ public class NMEntities
 
         EGG = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "mob_egg", FabricEntityTypeBuilder.<EggEntity>create(SpawnGroup.MISC, EggEntity::new)
                 .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
+
+        MOB_PLATFORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "mob_platform", FabricEntityTypeBuilder.create(SpawnGroup.MISC, MobPlatformRidingEntity::new)
+                .dimensions(EntityDimensions.fixed(0.1f, 0.1f)).trackedUpdateRate(1).build());
     }
 }

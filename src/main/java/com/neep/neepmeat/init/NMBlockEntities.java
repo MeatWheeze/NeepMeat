@@ -10,6 +10,7 @@ import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
 import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
+import com.neep.neepmeat.block.machine.MobPlatformBlockEntity;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
@@ -152,6 +153,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
     public static BlockEntityType<FluidExciterBlockEntity> FLUID_EXCITER;
     public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
+    public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -190,6 +192,7 @@ public class NMBlockEntities
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
         PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);

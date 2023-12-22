@@ -6,7 +6,7 @@ import net.minecraft.util.ActionResult;
 
 public class DebugItem extends BaseItem
 {
-    public DebugItem(String registryName, boolean hasLore, Settings settings)
+    public DebugItem(String registryName, Settings settings)
     {
         super(registryName, settings);
     }
