@@ -38,7 +38,7 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            FluidNodeManager.getInstance((ServerWorld) world).removeNode(world, nodePos);
+            FluidNodeManager.getInstance((ServerWorld) world).removeNode(nodePos);
         }
     }
 

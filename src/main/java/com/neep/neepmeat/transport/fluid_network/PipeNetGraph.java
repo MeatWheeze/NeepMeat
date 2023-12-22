@@ -25,6 +25,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Deprecated
 public class PipeNetGraph implements NbtSerialisable
 {
     /*

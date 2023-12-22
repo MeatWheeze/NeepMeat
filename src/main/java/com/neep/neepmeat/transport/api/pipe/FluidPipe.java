@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
@@ -15,11 +14,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.apache.commons.compress.utils.Lists;
 
 import java.util.*;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public interface FluidPipe
@@ -69,7 +66,7 @@ public interface FluidPipe
                 }
                 else
                 {
-                    changed |= FluidNodeManager.getInstance(world).removeNode(world, new NodePos(pos, direction));
+                    changed |= FluidNodeManager.getInstance(world).removeNode(new NodePos(pos, direction));
                 }
             }
             return changed;

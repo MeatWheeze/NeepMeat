@@ -5,7 +5,6 @@ import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
-import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.*;
 import net.minecraft.server.world.ServerWorld;

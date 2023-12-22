@@ -1,18 +1,14 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.transport.block.fluid_transport.FluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
@@ -28,9 +24,8 @@ import java.util.*;
 
 public class FluidNodeManager
 {
-    protected static final HashMap<ServerWorld, FluidNodeManager> WORLD_NETWORKS = new HashMap<>();
+    protected static final HashMap<ServerWorld, FluidNodeManager> WORLD_MANAGERS = new HashMap<>();
 
-    protected final Queue<FluidNode> queuedNodes = new LinkedList<>();
     protected final Long2ObjectMap<Map<NodePos, FluidNode>> chunkNodes = new Long2ObjectArrayMap<>();
     protected final ServerWorld world;
 
@@ -41,16 +36,16 @@ public class FluidNodeManager
 
     public static FluidNodeManager getInstance(ServerWorld world)
     {
-        return WORLD_NETWORKS.get(world);
+        return WORLD_MANAGERS.get(world);
     }
 
     public static FluidNodeManager getInstance(World world)
     {
-        if (!(world instanceof ServerWorld))
+        if (world instanceof ServerWorld serverWorld)
         {
-            return null;
+            return getInstance(serverWorld);
         }
-        return getInstance((ServerWorld) world);
+        throw new IllegalStateException("FluidNodeManager can only exist on the logical server");
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)
@@ -58,76 +53,28 @@ public class FluidNodeManager
         for (Direction direction : Direction.values())
         {
             NodePos nodePos = new NodePos(pos, direction);
-            getInstance((ServerWorld) world).removeNode(world, nodePos);
+            getInstance((ServerWorld) world).removeNode(nodePos);
         }
     }
 
-    public boolean isPosLoaded(BlockPos pos)
+    protected static void create(ServerWorld world)
     {
-        boolean loaded = true;
-        for (FluidNode node : getNodes(pos))
+        FluidNodeManager manager = WORLD_MANAGERS.get(world);
+        if (manager == null)
         {
-            loaded = loaded && !node.needsDeferredLoading;
-        }
-        return loaded;
-    }
-
-    public void queueNode(FluidNode node)
-    {
-        if (world.getServer().isOnThread())
-        {
-            this.queuedNodes.add(node);
-        }
-    }
-
-    public static int TICK_RATE = 1;
-
-    public static boolean shouldTick(long worldTime)
-    {
-        return (worldTime % TICK_RATE) == 0;
-    }
-
-    public static void tickNetwork(ServerWorld world)
-    {
-//        Queue<FluidNode> queue = WORLD_NETWORKS.get(world).queuedNodes;
-//        while (!queue.isEmpty())
-//        {
-//            FluidNode node = queue.poll();
-//            node.loadDeferred(world);
-//        }
-
-        if (shouldTick(world.getTime()))
-        {
-            Runnable runnable = () ->
-            {
-                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
-                {
-                    if (network.canTick(world)) network.tick();
-                }
-            };
-            runnable.run();
-//            StagedTransactions.getExecutor().execute(runnable);
-        }
-    }
-
-    protected static void createNetwork(ServerWorld world)
-    {
-        FluidNodeManager network = WORLD_NETWORKS.get(world);
-        if (network == null)
-        {
-            network = new FluidNodeManager(world);
-            WORLD_NETWORKS.put(world, network);
+            manager = new FluidNodeManager(world);
+            WORLD_MANAGERS.put(world, manager);
         }
     }
 
     private static void startWorld(MinecraftServer server, ServerWorld world)
     {
-        createNetwork(world);
+        create(world);
     }
 
     private static void stopWorld(MinecraftServer server, ServerWorld world)
     {
-        WORLD_NETWORKS.clear();
+        WORLD_MANAGERS.clear();
     }
 
     @Override
@@ -161,7 +108,7 @@ public class FluidNodeManager
         return out;
     }
 
-    private boolean removeNode(NodePos pos)
+    public boolean removeNode(NodePos pos)
     {
         Map<NodePos, FluidNode> nodes;
         if ((nodes = chunkNodes.get(pos.toChunkPos().toLong())) == null)
@@ -180,60 +127,16 @@ public class FluidNodeManager
         return false;
     }
 
-    // Creates or retrieves a node block entity
-    private BlockEntity getOrCreateBE(ServerWorld world, BlockPos pos)
-    {
-        BlockEntity be;
-        if ((be = world.getBlockEntity(pos)) != null)
-        {
-            return be;
-        }
-        BlockState state = world.getBlockState(pos);
-//        world.addBlockEntity(new FluidPipeBlockEntity(pos, state));
-        return world.getBlockEntity(pos);
-    }
-
-    private void removeBlockEntity(ServerWorld world, BlockPos pos)
-    {
-        // Perform checks before removing
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be && be.isCreatedDynamically())
-        {
-            world.removeBlockEntity(pos);
-        }
-    }
-
-    private boolean shouldPosHaveEntity(BlockPos pos)
-    {
-        return getNodes(pos).size() > 0;
-    }
-
-    private void validatePos(ServerWorld world, BlockPos pos)
-    {
-        if (shouldPosHaveEntity(pos))
-        {
-            getOrCreateBE(world, pos);
-        }
-        else
-        {
-            removeBlockEntity(world, pos);
-        }
-    }
-
+    @SuppressWarnings("UnstableApiUsage")
     public boolean updatePosition(World world, NodePos pos)
     {
-        if (!(world instanceof ServerWorld serverWorld))
-        {
-            return false;
-        }
-
         // Get connected storage, remove node if there isn't one
-        Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) == null
-                && !(world.getBlockState(pos.facingBlock()).getBlock() instanceof FluidNodeProvider))
+        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite());
+        if (storage == null)
         {
-            if (getNodeSupplier(pos).exists())
+            if (get(pos) != null)
             {
-                removeNode(world, pos);
+                removeNode(pos);
                 return true;
             }
             else
@@ -253,32 +156,7 @@ public class FluidNodeManager
             newNode = true;
         }
 
-        validatePos(serverWorld, pos.pos());
-
-//        System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
-    }
-
-//    public void replaceNode(World world, NodePos pos, FluidNode node)
-//    {
-//        if (!(world instanceof ServerWorld serverWorld))
-//        {
-//            return;
-//        }
-//        replaceNode(pos, node);
-//        validatePos(serverWorld, pos.pos);
-//    }
-
-    public boolean removeNode(World world, NodePos pos)
-    {
-        if (!(world instanceof ServerWorld serverWorld))
-        {
-            return false;
-        }
-
-        boolean removed = removeNode(pos);
-        validatePos(serverWorld, pos.pos());
-        return removed;
     }
 
     public List<FluidNode> getNodes(BlockPos pos)
@@ -286,8 +164,8 @@ public class FluidNodeManager
         List<FluidNode> list = new ArrayList<>();
         for (Direction direction : Direction.values())
         {
-            FluidNode node;
-            if ((node = getNodeSupplier(new NodePos(pos, direction)).get()) != null)
+            FluidNode node = get(new NodePos(pos, direction));
+            if (node != null)
             {
                 list.add(node);
             }
@@ -305,9 +183,6 @@ public class FluidNodeManager
         }
     }
 
-    /** Called whenever a node block entity is removed.
-     * @param pos Position of node block entity
-     */
     public void entityRemoved(BlockPos pos)
     {
         getNodes(pos).forEach(FluidNode::onRemove);
@@ -317,20 +192,12 @@ public class FluidNodeManager
     {
         List<FluidNode> nodes = getNodes(pos);
 
-        // Some pipes variants need to retain their block entity even when there are no nodes
-        if (nodes.isEmpty()) return;
-
-//        PipeNetworkImpl1 network = nodes.get(0).getNetwork();
-//        if (network == null || network.isSaved) return;
-
-//        NbtCompound nbt = network.toNbt();
-//        if (!network.isValid())
-//        {
-//            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
-//        }
-//        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
-//        network.isSaved = true;
         nodes.forEach(FluidNode::onRemove);
+    }
+
+    public FluidNode get(NodePos nodePos)
+    {
+        return getOrCreateMap(nodePos.toChunkPos()).get(nodePos);
     }
 
     public NbtCompound writeNodes(BlockPos pos, NbtCompound nbt)
@@ -360,17 +227,9 @@ public class FluidNodeManager
         putNodes(nodes, pos);
     }
 
-    public NodeSupplier getNodeSupplier(NodePos pos)
-    {
-        return new NodeSupplier(pos, world);
-    }
-
     public static void registerEvents()
     {
-        ServerTickEvents.START_WORLD_TICK.register(FluidNodeManager::tickNetwork);
         ServerWorldEvents.LOAD.register(FluidNodeManager::startWorld);
         ServerWorldEvents.UNLOAD.register(FluidNodeManager::stopWorld);
-//        ServerWorldEvents.UNLOAD.register(((server, world1) -> System.out.println("UNLOAD -----------------------------------------------------------------")));
-//        ServerChunkEvents.CHUNK_LOAD.registter
     }
 }

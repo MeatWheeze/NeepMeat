@@ -15,6 +15,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+@Deprecated
 public interface PipeNetwork
 {
     // My pet memory leak.
