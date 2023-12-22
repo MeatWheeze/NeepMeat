@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "neepmeat:white_rough_concrete"
+  },
+  "result": "neepmeat:white_rough_concrete_slab",
+  "count": 2
+}
