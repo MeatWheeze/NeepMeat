@@ -1,6 +1,5 @@
 package com.neep.neepmeat.entity.keeper;
 
-import com.neep.meatweapons.item.IGunItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.RangedAttackMob;
 import net.minecraft.entity.ai.goal.Goal;

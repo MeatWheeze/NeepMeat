@@ -3,23 +3,24 @@ package com.neep.meatlib.datagen.loot;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;
+import net.minecraft.data.DataWriter;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.util.Identifier;
 
+import java.io.IOException;
 import java.util.Map;
 
 public class BlockLootTableProvider extends FabricBlockLootTableProvider
 {
-    public BlockLootTableProvider(FabricDataOutput output)
+    public BlockLootTableProvider(FabricDataGenerator output)
     {
         super(output);
     }
 
     @Override
-    public void generate()
+    protected void generateBlockLootTables()
     {
         for (Map.Entry<Identifier, Block> entry : BlockRegistry.REGISTERED_BLOCKS.entrySet())
         {
@@ -29,5 +30,17 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider
                 if (meatBlock.autoGenDrop() && like != null) this.addDrop(entry.getValue(), like);
             }
         }
+    }
+
+    @Override
+    public void method_10379()
+    {
+
+    }
+
+    @Override
+    public void run(DataWriter writer) throws IOException
+    {
+
     }
 }

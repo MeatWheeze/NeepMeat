@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.machine.fluid.GlassTankBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;

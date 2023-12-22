@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.transfer.MultiFluidBuffer;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;

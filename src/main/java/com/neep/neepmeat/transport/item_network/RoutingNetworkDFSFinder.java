@@ -1,8 +1,8 @@
 package com.neep.neepmeat.transport.item_network;
 
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.util.DFSFinder;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.server.world.ServerWorld;

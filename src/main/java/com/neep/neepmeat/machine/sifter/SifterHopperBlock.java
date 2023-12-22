@@ -1,9 +1,7 @@
 package com.neep.neepmeat.machine.sifter;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

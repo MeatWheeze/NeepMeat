@@ -1,12 +1,11 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

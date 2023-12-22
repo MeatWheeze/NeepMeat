@@ -1,10 +1,10 @@
 package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
-import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
+import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;

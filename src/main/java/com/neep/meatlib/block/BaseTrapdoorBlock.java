@@ -2,8 +2,6 @@ package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
-import net.minecraft.block.BlockSetType;
 import net.minecraft.block.TrapdoorBlock;
 import net.minecraft.item.BlockItem;
 
@@ -14,7 +12,7 @@ public class BaseTrapdoorBlock extends TrapdoorBlock implements IMeatBlock
 
     public BaseTrapdoorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(settings, BlockSetType.IRON);
+        super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemSettings);
         this.registryName = itemName;
     }

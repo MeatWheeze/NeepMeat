@@ -3,9 +3,8 @@ package com.neep.neepmeat.entity.effect;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class NMStatusEffects
 {
@@ -18,6 +17,6 @@ public class NMStatusEffects
 
     private static StatusEffect register(String namespace, String id, StatusEffect entry)
     {
-        return Registry.register(Registries.STATUS_EFFECT, new Identifier(namespace, id), entry);
+        return Registry.register(Registry.STATUS_EFFECT, new Identifier(namespace, id), entry);
     }
 }

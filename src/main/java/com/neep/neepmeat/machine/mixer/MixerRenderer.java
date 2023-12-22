@@ -13,11 +13,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
-import org.joml.Quaternionf;
+import net.minecraft.util.math.Quaternion;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
@@ -75,7 +74,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
                 be.currentRecipe == null || be.progressIncrement <= MixerBlockEntity.INCREMENT_MIN ? 0 : 20f * be.progressIncrement
         );
         be.bladeAngle = MathHelper.wrapDegrees(be.bladeAngle + be.bladeSpeed * delta);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(be.bladeAngle));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 
@@ -98,10 +97,10 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
             float yOffset = (float) MathHelper.clamp(fluidHeight + 0.03f * Math.sin((be.getWorld().getTime() + tickDelta) / 6 + bobOffset), -0.27f, 1 - 0.4f);
 
             matrices.push();
-            matrices.multiply(new Quaternionf(0, (float) (angle + angleOffset), 0, 1));
+            matrices.multiply(Quaternion.fromEulerXyz(0, (float) (angle + angleOffset), 0));
             matrices.translate(0, yOffset, offset);
             MinecraftClient.getInstance().getItemRenderer()
-                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformationMode.GROUND, 255, overlay, matrices, vertexConsumers, null, 0);
+                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
             angleOffset += 2 * Math.PI / n;
             matrices.pop();
         }

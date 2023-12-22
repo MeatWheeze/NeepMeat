@@ -1,8 +1,8 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;

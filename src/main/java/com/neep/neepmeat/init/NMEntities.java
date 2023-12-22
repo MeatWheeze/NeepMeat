@@ -9,7 +9,9 @@ import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.minecraft.entity.*;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.SpawnGroup;
 
 public class NMEntities
 {

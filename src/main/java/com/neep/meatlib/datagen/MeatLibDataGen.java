@@ -9,9 +9,8 @@ public class MeatLibDataGen implements DataGeneratorEntrypoint
     @Override
     public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator)
     {
-        var pack = fabricDataGenerator.createPack();
-        pack.addProvider(BlockLootTableProvider::new);
-        pack.addProvider(BlockTagProvider::new);
-        pack.addProvider(MeatRecipeProvider::new);
+        fabricDataGenerator.addProvider(BlockLootTableProvider::new);
+        fabricDataGenerator.addProvider(BlockTagProvider::new);
+        fabricDataGenerator.addProvider(MeatRecipeProvider::new);
     }
 }

@@ -1,7 +1,6 @@
 package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
@@ -36,7 +35,7 @@ public class BaseBlockItem extends BlockItem implements IMeatItem
         tooltipSupplier.apply(this, tooltip);
 //        for (int i = 0; i < loreLines; ++i)
 //        {
-//            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
+//            tooltip.add(Text.translatable(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
 //        }
     }
 

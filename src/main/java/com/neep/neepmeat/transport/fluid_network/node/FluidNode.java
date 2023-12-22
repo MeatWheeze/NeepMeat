@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

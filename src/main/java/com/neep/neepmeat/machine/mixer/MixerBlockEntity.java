@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -28,7 +29,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
@@ -114,8 +118,8 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
-            if (recipe != null && StorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
-                                                             recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
+            if (recipe != null && MeatStorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
+                                                                 recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {

@@ -43,7 +43,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +102,7 @@ public class CompactingCategory implements DisplayCategory<CompactingDisplay>
 //                if (!entryStack.isEmpty()) {
 //                    ComposterBlock.ITEM_TO_LEVEL_INCREASE_CHANCE.object2FloatEntrySet().stream().filter(entry -> entry.getKey() != null && Objects.equals(entry.getKey().asItem(), entryStack.get(0).getValue())).findAny().map(Map.Entry::getValue).ifPresent(chance -> {
 //                        for (EntryStack<?> stack : entryStack) {
-//                            stack.tooltip(new TranslatableText("text.rei.composting.chance", MathHelper.fastFloor(chance * 100)).formatted(Formatting.YELLOW));
+//                            stack.tooltip(Text.translatable("text.rei.composting.chance", MathHelper.fastFloor(chance * 100)).formatted(Formatting.YELLOW));
 //                        }
 //                    });
 //                }

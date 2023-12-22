@@ -2,9 +2,7 @@ package com.neep.meatlib.block.multi;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseDummyBlock;
-import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

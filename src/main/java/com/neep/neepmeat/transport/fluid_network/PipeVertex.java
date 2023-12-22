@@ -1,7 +1,5 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import me.shedaniel.autoconfig.event.ConfigSerializeEvent;
-
 public interface PipeVertex extends PipeFlowComponent
 {
     void tick();

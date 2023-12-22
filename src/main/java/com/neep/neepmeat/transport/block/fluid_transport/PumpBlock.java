@@ -2,11 +2,11 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;

@@ -9,7 +9,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.List;
 
 public class MiscUtils
 {

@@ -2,7 +2,7 @@ package com.neep.neepmeat.util;
 
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.Direction;
-import org.joml.Vector3f;
+import net.minecraft.util.math.Vec3f;
 
 public enum AxialDirection implements StringIdentifiable
 {
@@ -35,16 +35,16 @@ public enum AxialDirection implements StringIdentifiable
                 POSITIVE : NEGATIVE;
     }
 
-    public Vector3f with(Direction.Axis direction)
+    public Vec3f with(Direction.Axis direction)
     {
-        Vector3f vec = switch (direction)
+        Vec3f vec = switch (direction)
         {
             case X -> Direction.EAST.getUnitVector();
             case Y -> Direction.UP.getUnitVector();
             case Z -> Direction.SOUTH.getUnitVector();
         };
 
-        vec.mul(sign, sign, sign);
+        vec.multiplyComponentwise(sign, sign, sign);
         return vec;
     }
 }

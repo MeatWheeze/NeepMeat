@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.machine.fluid.FluidBufferBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;

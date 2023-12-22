@@ -6,10 +6,9 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -50,7 +49,7 @@ public class FluidIngredient extends GenericIngredient<Fluid, FluidVariant>
         {
             buf.writeBoolean(true);
             Fluid fluid = this.resource.getFluid();
-            buf.writeVarInt(Registries.FLUID.getRawId(fluid)); // Fluid ID
+            buf.writeVarInt(Registry.FLUID.getRawId(fluid)); // Fluid ID
             buf.writeLong(this.amount()); // Amount
 
             NbtCompound nbtCompound = this.resource().copyNbt();
@@ -65,7 +64,7 @@ public class FluidIngredient extends GenericIngredient<Fluid, FluidVariant>
             return EMPTY;
         }
         int i = buf.readVarInt(); // Fluid ID
-        Fluid fluid = Registries.FLUID.get(i);
+        Fluid fluid = Registry.FLUID.get(i);
         long amount = buf.readLong(); // Amount
         NbtCompound nbt = buf.readNbt(); // NBT
 
@@ -82,7 +81,7 @@ public class FluidIngredient extends GenericIngredient<Fluid, FluidVariant>
         String string = JsonHelper.getString(json, "resource");
         long amount = JsonHelper.getLong(json, "amount");
         Identifier id = new Identifier(string);
-        Fluid fluid = Registries.FLUID.get(id);
+        Fluid fluid = Registry.FLUID.get(id);
         return new FluidIngredient(fluid, amount);
     }
 }

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.TrommelBlock;
@@ -110,7 +111,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
-            long extractable = StorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
+            long extractable = MeatStorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
             long outputAmount = random.nextInt(101) > 30 ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)

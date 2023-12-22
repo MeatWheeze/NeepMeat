@@ -9,10 +9,10 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
+import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(value = EnvType.CLIENT)
 public class ItemPipeRenderer<T extends ItemPipeBlockEntity> implements BlockEntityRenderer<T>
@@ -42,8 +42,8 @@ public class ItemPipeRenderer<T extends ItemPipeBlockEntity> implements BlockEnt
             matrices.translate(item.x, item.y, item.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
 //            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
-            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) (Math.PI / 2)));
-            renderer.renderItem(stack, ModelTransformationMode.FIXED, light, overlay, matrices, vertexConsumers, null, 0);
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
+            renderer.renderItem(stack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
 
             matrices.pop();
         }

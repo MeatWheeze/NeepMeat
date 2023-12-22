@@ -5,11 +5,11 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Matrix3f;
+import net.minecraft.util.math.Matrix4f;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.Vec3d;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
+
 
 @Environment(value= EnvType.CLIENT)
 public class BeamRenderer
@@ -25,8 +25,8 @@ public class BeamRenderer
         double pitch = Math.atan2(beam.getX(), beam.getZ());
         double yaw = Math.asin(-beam.getY() / beam.length());
 
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) pitch));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) yaw));
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
+        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) yaw));
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f model = entry.getPositionMatrix();
@@ -45,13 +45,13 @@ public class BeamRenderer
         matrices.pop();
     }
 
-    public static Vector3f pitchYaw(Vec3d vec)
+    public static Vec3f pitchYaw(Vec3d vec)
     {
         vec.normalize();
         float yaw = (float) Math.atan2(vec.z, vec.x);
         float pitch = (float) - Math.asin(vec.y);
 
-        return new Vector3f(pitch, yaw, 0);
+        return new Vec3f(pitch, yaw, 0);
     }
 
     public static void vertex(VertexConsumer buffer, Matrix4f matrix, Matrix3f normalMatrix, int r, int g, int b, int a, int light, Vec3d pos, int u, int v)

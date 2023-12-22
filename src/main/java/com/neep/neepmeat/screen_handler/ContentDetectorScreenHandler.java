@@ -1,7 +1,7 @@
 package com.neep.neepmeat.screen_handler;
 
-import com.neep.neepmeat.machine.content_detector.InventoryDetectorBehaviour;
 import com.neep.neepmeat.init.ScreenHandlerInit;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBehaviour;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -86,7 +86,7 @@ public class ContentDetectorScreenHandler extends ScreenHandler
 
     // Shift + Player Inv Slot
     @Override
-    public ItemStack quickMove(PlayerEntity player, int invSlot)
+    public ItemStack transferSlot(PlayerEntity player, int invSlot)
     {
         ItemStack newStack = ItemStack.EMPTY;
         Slot slot = this.slots.get(invSlot);
@@ -108,7 +108,7 @@ public class ContentDetectorScreenHandler extends ScreenHandler
 
             if (originalStack.isEmpty())
             {
-                slot.setStackNoCallbacks(ItemStack.EMPTY);
+                slot.setStack(ItemStack.EMPTY);
             }
             else
             {

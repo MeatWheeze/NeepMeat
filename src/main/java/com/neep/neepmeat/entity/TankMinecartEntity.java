@@ -1,11 +1,11 @@
 package com.neep.neepmeat.entity;
 
-import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.transport.FluidTransport;
-import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMEntities;
+import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

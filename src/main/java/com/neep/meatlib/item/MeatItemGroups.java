@@ -1,7 +1,6 @@
 package com.neep.meatlib.item;
 
 import com.google.common.collect.Maps;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 
@@ -16,16 +15,17 @@ public class MeatItemGroups
 
     public static void init()
     {
-        QUEUE.forEach((group, items) ->
-        {
-            ItemGroupEvents.modifyEntriesEvent(group).register(entries ->
-            {
-                for (var item : items)
-                {
-                    entries.add(item);
-                }
-            });
-        });
+        // 1.19.4 things
+//        QUEUE.forEach((group, items) ->
+//        {
+//            ItemGroupEvents.modifyEntriesEvent(group).register(entries ->
+//            {
+//                for (var item : items)
+//                {
+//                    entries.add(item);
+//                }
+//            });
+//        });
     }
 
     public static void queueItem(ItemGroup group, Item item)

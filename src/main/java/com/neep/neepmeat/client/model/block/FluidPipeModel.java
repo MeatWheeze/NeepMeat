@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.model.block;
 
+import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
@@ -25,6 +26,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.AffineTransformation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
@@ -77,27 +79,22 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     private final Triple<BakedModel, Float, Float>[] straight = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
     private final Triple<BakedModel, Float, Float>[] connectors = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
 
-    @Override
-    public void setParents(Function<Identifier, UnbakedModel> modelLoader)
-    {
-
-    }
-
+    /* UnbakedModel */
     @Override
     public Collection<Identifier> getModelDependencies()
     {
         return List.of(SIDE_ID, STRAIGHT_ID);
     }
 
-//    @Override
-//    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
-//    {
-//        return List.of(PARTICLE_SPRITE_ID, new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/rusty_pipe_straight")));
-//    }
+    @Override
+    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+    {
+        return List.of(PARTICLE_SPRITE_ID, new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/rusty_pipe_straight")));
+    }
 
     @Nullable
     @Override
-    public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
+    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
         PARTICLE_SPRITE = textureGetter.apply(PARTICLE_SPRITE_ID);
 
@@ -109,21 +106,21 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
 
         try
         {
-            addPart(connectors, Direction.NORTH, SIDE_ID, 0f, 0f, baker, textureGetter, modelId);
-            addPart(connectors, Direction.SOUTH, SIDE_ID, 0f, 0f, baker, textureGetter, modelId);
-            addPart(connectors, Direction.EAST, SIDE_ID, 270f, 0f, baker, textureGetter, modelId);
-            addPart(connectors, Direction.WEST, SIDE_ID, 270f, 0f, baker, textureGetter, modelId);
-            addPart(connectors, Direction.UP, SIDE_ID, 270f, 270f, baker, textureGetter, modelId);
-            addPart(connectors, Direction.DOWN, SIDE_ID, 270f, 270f, baker, textureGetter, modelId);
+            addPart(connectors, Direction.NORTH, SIDE_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(connectors, Direction.SOUTH, SIDE_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(connectors, Direction.EAST, SIDE_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(connectors, Direction.WEST, SIDE_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(connectors, Direction.UP, SIDE_ID, 270f, 270f, loader, textureGetter, modelId);
+            addPart(connectors, Direction.DOWN, SIDE_ID, 270f, 270f, loader, textureGetter, modelId);
 
-            addPart(straight, Direction.NORTH, STRAIGHT_ID, 0f, 0f, baker, textureGetter, modelId);
-            addPart(straight, Direction.SOUTH, STRAIGHT_ID, 0f, 0f, baker, textureGetter, modelId);
-            addPart(straight, Direction.EAST, STRAIGHT_ID, 270f, 0f, baker, textureGetter, modelId);
-            addPart(straight, Direction.WEST, STRAIGHT_ID, 270f, 0f, baker, textureGetter, modelId);
-            addPart(straight, Direction.UP, STRAIGHT_ID, 270f, 270f, baker, textureGetter, modelId);
-            addPart(straight, Direction.DOWN, STRAIGHT_ID, 270f, 270f, baker, textureGetter, modelId);
+            addPart(straight, Direction.NORTH, STRAIGHT_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.SOUTH, STRAIGHT_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.EAST, STRAIGHT_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.WEST, STRAIGHT_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.UP, STRAIGHT_ID, 270f, 270f, loader, textureGetter, modelId);
+            addPart(straight, Direction.DOWN, STRAIGHT_ID, 270f, 270f, loader, textureGetter, modelId);
 
-            UnbakedModel unbaked = baker.getOrLoadModel(SIDE_ID);
+            UnbakedModel unbaked = loader.getOrLoadModel(SIDE_ID);
         }
         catch (Exception e)
         {
@@ -132,11 +129,11 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
         return this;
     }
 
-    protected void addPart(Triple<BakedModel, Float, Float>[] parts, Direction face, Identifier id, float x, float y, Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, Identifier modelId)
+    protected void addPart(Triple<BakedModel, Float, Float>[] parts, Direction face, Identifier id, float x, float y, ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, Identifier modelId)
     {
-        UnbakedModel unbaked = baker.getOrLoadModel(id);
+        UnbakedModel unbaked = loader.getOrLoadModel(id);
         ModelVariant settings = new ModelVariant(id, new AffineTransformation(null, null, null, face.getRotationQuaternion()), false, 1);
-        parts[face.getId()] = Triple.of(unbaked.bake(baker, textureGetter, settings, modelId), x, y);
+        parts[face.getId()] = Triple.of(unbaked.bake(loader, textureGetter, settings, modelId), x, y);
     }
 
     /* FabricBakedModel */
@@ -144,8 +141,9 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     public boolean isVanillaAdapter() {return false;}
 
     @Override
-    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<net.minecraft.util.math.random.Random> randomSupplier, RenderContext context)
+    public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
+//        ((FabricBakedModel) connectors[Direction.NORTH.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
         for (Direction direction : Direction.values())
         {
             mutable.set(pos);
@@ -167,7 +165,7 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     }
 
     @Override
-    public void emitItemQuads(ItemStack stack, Supplier<net.minecraft.util.math.random.Random> randomSupplier, RenderContext context)
+    public void emitItemQuads(ItemStack stack, Supplier<Random> randomSupplier, RenderContext context)
     {
 
     }
@@ -178,8 +176,9 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
         return state.get(connection).isConnected() && (!offsetState.isOf(FluidTransport.PIPE) || !offsetState.get(connection).isConnected());
     }
 
+    /* BakedModel */
     @Override
-    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, net.minecraft.util.math.random.Random random)
+    public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction face, Random random)
     {
         return Collections.emptyList();
     }

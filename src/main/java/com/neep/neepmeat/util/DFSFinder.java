@@ -5,7 +5,9 @@ import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Set;
 
 public abstract class DFSFinder<T>
 {

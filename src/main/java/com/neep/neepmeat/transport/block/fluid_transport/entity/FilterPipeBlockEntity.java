@@ -3,19 +3,16 @@ package com.neep.neepmeat.transport.block.fluid_transport.entity;
 import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
-import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.function.Function;
 
 public class FilterPipeBlockEntity extends FluidPipeBlockEntity implements BlockEntityClientSerializable
 {

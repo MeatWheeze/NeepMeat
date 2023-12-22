@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
@@ -109,7 +110,8 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
                 List<LivingEntity> entityList = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true);
                 entityList.forEach(entity ->
                 {
-                    if (entity.damage(world.getDamageSources().lava(), 1.5f))
+//                    if (entity.damage(world.getDamageSources().lava(), 1.5f))
+                    if (entity.damage(DamageSource.LAVA, 1.5f))
                     {
                         entity.setFireTicks(10);
                     }

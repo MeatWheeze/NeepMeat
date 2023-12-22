@@ -2,11 +2,10 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

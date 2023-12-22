@@ -2,10 +2,8 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -14,7 +12,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -23,8 +20,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class FlameJetBlock extends BaseFacingBlock implements BlockEntityProvider
 {

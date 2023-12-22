@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.item_mincer;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

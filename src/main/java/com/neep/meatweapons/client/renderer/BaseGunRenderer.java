@@ -8,14 +8,14 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
-import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import org.joml.Vector3f;
+
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
@@ -23,7 +23,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoItemRenderer<T>
 {
-    public Vector3f currentTransform = new Vector3f(0, 0, 0);
+    public Vec3f currentTransform = new Vec3f(0, 0, 0);
 
     public BaseGunRenderer(AnimatedGeoModel<T> model)
     {
@@ -38,7 +38,7 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
-    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrices,
+    public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrices,
                        VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -46,16 +46,16 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
         if (mode.isFirstPerson())
         {
             Item item = itemStack.getItem();
-            Vector3f transform = item instanceof IAimable aimable ? aimable.getAimOffset() : new Vector3f(0, 0, 0);
+            Vec3f transform = item instanceof IAimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
             float delta = 0.2f;
-            currentTransform.lerp(isAiming ? transform : new Vector3f(0, 0, 0), delta);
+            currentTransform.lerp(isAiming ? transform : new Vec3f(0, 0, 0), delta);
 
             boolean stackInMain = GeckoLibUtil.getIDFromStack(player.getStackInHand(Hand.MAIN_HAND)) == GeckoLibUtil.getIDFromStack(itemStack);
 
             matrices.translate(
-                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.x : currentTransform.x,
-                    currentTransform.y,
-                    currentTransform.z);
+                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.getX() : currentTransform.getX(),
+                    currentTransform.getY(),
+                    currentTransform.getZ());
         }
         this.render((T) itemStack.getItem(), matrices, bufferIn, combinedLightIn, itemStack);
     }

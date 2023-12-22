@@ -3,7 +3,8 @@ package com.neep.meatlib.item;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
-import net.minecraft.text.*;
+import net.minecraft.text.Style;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;

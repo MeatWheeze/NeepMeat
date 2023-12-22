@@ -3,6 +3,7 @@ package com.neep.neepmeat.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
+import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -11,9 +12,10 @@ import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.AbstractFurnaceScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 
 @Environment(value = EnvType.CLIENT)
 public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHandler>
@@ -34,7 +36,7 @@ public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHand
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int x = (width - backgroundWidth) / 2;
@@ -75,7 +77,7 @@ public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHand
         this.currentFrame = MinecraftClient.getInstance().world.getTime() + MinecraftClient.getInstance().getTickDelta();
         float delta = (currentFrame - lastFrame);
         this.angle += delta * StirlingEngineBlockEntity.energyToSpeed(energy);
-        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(this.angle));
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.angle));
         this.drawTexture(matrices, -16, -16, 190, 0, 32, 32);
         this.lastFrame = currentFrame;
         matrices.pop();

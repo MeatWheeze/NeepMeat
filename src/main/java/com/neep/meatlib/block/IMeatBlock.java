@@ -1,12 +1,12 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.datagen.tag.BlockTagProvider;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemConvertible;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
+
 import java.util.List;
 
 public interface IMeatBlock extends ItemConvertible

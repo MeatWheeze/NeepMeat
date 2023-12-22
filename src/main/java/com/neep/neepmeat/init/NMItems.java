@@ -7,6 +7,7 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
@@ -86,9 +87,9 @@ public class NMItems
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", TooltipSupplier.simple(1), new FabricItemSettings().fireproof()).group(NMItemGroups.INGREDIENTS);
     public static Item MOB_EGG = new MobEggItem("mob_egg", new FabricItemSettings());
 
-    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, ArmorItem.Type.BOOTS, new FabricItemSettings()).group(NMItemGroups.GENERAL);
-    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, ArmorItem.Type.LEGGINGS, new FabricItemSettings()).group(NMItemGroups.GENERAL);
-    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, ArmorItem.Type.CHESTPLATE, new FabricItemSettings()).group(NMItemGroups.GENERAL);
+    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new FabricItemSettings()).group(NMItemGroups.GENERAL);
+    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, new FabricItemSettings()).group(NMItemGroups.GENERAL);
+    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new FabricItemSettings()).group(NMItemGroups.GENERAL);
 
     public static Item DEBUG_ITEM = ItemRegistry.queueItem(new DebugItem("debug", new FabricItemSettings()).group(NMItemGroups.GENERAL));
 

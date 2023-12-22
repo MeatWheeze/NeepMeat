@@ -18,14 +18,14 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
+import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -172,7 +172,7 @@ extends Entity {
     }
 
     @Override
-    public void animateDamage(float yaw)
+    public void animateDamage()
     {
         getEntityWorld().addParticle(ParticleTypes.SMOKE, this.x, this.y, this.z, 0, 0, 0);
     }
@@ -222,7 +222,7 @@ extends Entity {
 
         List<Entity> otherEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
         if (!otherEntities.isEmpty()) {
-            boolean soundEvent = !this.world.isClient && !(this.getControllingPassenger() instanceof PlayerEntity);
+            boolean soundEvent = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
             for (Entity entity : otherEntities)
             {
                 if (entity.hasPassenger(this))
@@ -456,7 +456,8 @@ extends Entity {
         {
             if (this.fallDistance > 3.0f && !powered)
             {
-                this.handleFallDamage(this.fallDistance, 1.0f, world.getDamageSources().fall());
+//                this.handleFallDamage(this.fallDistance, 1.0f, world.getDamageSources().fall());
+                this.handleFallDamage(this.fallDistance, 1.0f, DamageSource.FALL);
                 if (!this.world.isClient && !this.isRemoved())
                 {
                     this.kill();
@@ -488,7 +489,7 @@ extends Entity {
     }
 
     @Override
-    public LivingEntity getControllingPassenger()
+    public LivingEntity getPrimaryPassenger()
     {
         return this.getFirstPassenger() instanceof LivingEntity living ? living : null;
     }

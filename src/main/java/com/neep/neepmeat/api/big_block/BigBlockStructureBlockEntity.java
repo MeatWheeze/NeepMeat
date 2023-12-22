@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.big_block;
 
-import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;

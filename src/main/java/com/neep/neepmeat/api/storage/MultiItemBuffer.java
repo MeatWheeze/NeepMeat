@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.storage;
 
-import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.minecraft.nbt.NbtCompound;

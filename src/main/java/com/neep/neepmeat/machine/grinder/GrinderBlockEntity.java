@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.grinder;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -11,7 +12,6 @@ import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -159,8 +159,8 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         {
             GrindingRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
-            if (recipe != null && StorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
-                                                             recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
+            if (recipe != null && MeatStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
+                                                                 recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
 //                try (Transaction transaction = Transaction.openOuter())
 //                {

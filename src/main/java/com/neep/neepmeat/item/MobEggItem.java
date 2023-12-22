@@ -2,11 +2,8 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
-import com.neep.meatweapons.entity.AbstractVehicleEntity;
-import com.neep.meatweapons.entity.AirtruckEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -14,9 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -48,7 +43,8 @@ public class MobEggItem extends Item implements IMeatItem
             if (world.isSpaceEmpty(egg))
             {
                 world.spawnEntity(egg);
-                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
+//                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
+                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, new BlockPos(hit));
                 if (!user.isCreative())
                 {
                     stack.decrement(1);

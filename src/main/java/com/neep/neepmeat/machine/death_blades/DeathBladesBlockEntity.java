@@ -8,14 +8,10 @@ import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
-import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.nbt.NbtCompound;
@@ -24,7 +20,6 @@ import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
@@ -79,7 +74,8 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
                     .filter(e -> e.hurtTime == 0 && !e.isDead()).forEach(e ->
                     {
                         if (e.getHealth() > damageAmount)
-                            e.damage(world.getDamageSources().generic(), damageAmount);
+//                            e.damage(world.getDamageSources().generic(), damageAmount);
+                            e.damage(DamageSource.GENERIC, damageAmount);
                         else killEntity((ServerWorld) world, e);
                     });
         }

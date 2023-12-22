@@ -2,10 +2,9 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

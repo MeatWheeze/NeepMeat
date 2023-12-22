@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
-import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.meatlib.inventory.ImplementedInventory;
+import com.neep.meatlib.util.NbtSerialisable;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

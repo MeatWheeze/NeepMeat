@@ -2,12 +2,10 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RoutingNetworkCache;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
-import com.neep.neepmeat.transport.item_network.ItemInPipe;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;

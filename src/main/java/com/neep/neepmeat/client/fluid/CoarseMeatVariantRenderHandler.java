@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client.fluid;
 
 import com.neep.neepmeat.api.processing.MeatFluidHelper;
-import com.neep.neepmeat.api.processing.OreFatRegistry;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
@@ -10,7 +9,6 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandle
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;

@@ -2,11 +2,11 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.fluid.FluidFactory;
 import com.neep.neepmeat.fluid.MeatFluidFactory;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.item.MeatCartonStorage;
-import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;

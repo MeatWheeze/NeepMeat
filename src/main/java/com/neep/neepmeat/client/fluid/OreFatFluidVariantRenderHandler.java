@@ -9,10 +9,8 @@ import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRenderHandle
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +27,7 @@ public class OreFatFluidVariantRenderHandler implements FluidVariantRenderHandle
         NbtCompound nbt = fluidVariant.copyNbt();
         if (nbt != null)
         {
-//            tooltip.add(new TranslatableText("UwU").formatted(Formatting.AQUA));
+//            tooltip.add(Text.translatable("UwU").formatted(Formatting.AQUA));
         }
     }
 

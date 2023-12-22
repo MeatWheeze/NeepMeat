@@ -2,11 +2,14 @@ package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -89,7 +92,7 @@ public class LargeConverterBlock extends BaseBlock implements BlockEntityProvide
     }
 
     @Override
-    public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
+    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
     {
         return true;
     }

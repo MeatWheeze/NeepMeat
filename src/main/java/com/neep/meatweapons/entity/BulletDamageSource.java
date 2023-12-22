@@ -19,7 +19,8 @@ public class BulletDamageSource extends DamageSource
 
     public BulletDamageSource(LivingEntity attacker, float punch, int regenTime)
     {
-        super(MWDamageSources.get(attacker.world, MWDamageSources.BULLET), null, attacker);
+//        super(MWDamageSources.get(attacker.world, MWDamageSources.BULLET), null, attacker);
+        super("bullet");
         this.attacker = attacker;
         this.punch = punch;
         this.regenTime = regenTime;

@@ -1,13 +1,10 @@
 package com.neep.neepmeat.fluid.ore_fat;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.fluid.Fluid;
-import net.minecraft.item.BucketItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 

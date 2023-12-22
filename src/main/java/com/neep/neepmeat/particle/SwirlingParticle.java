@@ -5,11 +5,13 @@ import net.fabricmc.api.Environment;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.particle.*;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFactory;
+import net.minecraft.client.particle.ParticleTextureSheet;
+import net.minecraft.client.particle.SpriteBillboardParticle;
 import net.minecraft.client.render.WorldRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
-import oshi.driver.unix.Xrandr;
 
 import java.util.Random;
 
@@ -27,7 +29,8 @@ public class SwirlingParticle extends SpriteBillboardParticle
 
     public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state)
     {
-        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, BlockPos.ofFloored(x, y, z));
+//        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, BlockPos.ofFloored(x, y, z));
+        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, new BlockPos(x, y, z));
     }
 
     public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state, BlockPos blockPos)
@@ -119,25 +122,25 @@ public class SwirlingParticle extends SpriteBillboardParticle
         return ParticleTextureSheet.TERRAIN_SHEET;
     }
 
-    @Override
-    protected float getMinU() {
-        return this.sprite.getFrameU((this.sampleU + 1.0f) / 4.0f * 16.0f);
-    }
-
-    @Override
-    protected float getMaxU() {
-        return this.sprite.getFrameU(this.sampleU / 4.0f * 16.0f);
-    }
-
-    @Override
-    protected float getMinV() {
-        return this.sprite.getFrameV(this.sampleV / 4.0f * 16.0f);
-    }
-
-    @Override
-    protected float getMaxV() {
-        return this.sprite.getFrameV((this.sampleV + 1.0f) / 4.0f * 16.0f);
-    }
+//    @Override
+//    protected float method_18133() {
+//        return this.sprite.getFrameU((this.sampleU + 1.0f) / 4.0f * 16.0f);
+//    }
+//
+//    @Override
+//    protected float method_18134() {
+//        return this.sprite.getFrameU(this.sampleU / 4.0f * 16.0f);
+//    }
+//
+//    @Override
+//    protected float method_18135() {
+//        return this.sprite.getFrameV(this.sampleV / 4.0f * 16.0f);
+//    }
+//
+//    @Override
+//    protected float method_18136() {
+//        return this.sprite.getFrameV((this.sampleV + 1.0f) / 4.0f * 16.0f);
+//    }
 
     @Override
     public int getBrightness(float tint)

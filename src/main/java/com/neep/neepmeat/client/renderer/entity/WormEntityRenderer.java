@@ -1,21 +1,17 @@
 package com.neep.neepmeat.client.renderer.entity;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.entity.WormEntityModel;
 import com.neep.neepmeat.entity.worm.WormEntity;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.Frustum;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
-import software.bernie.geckolib3.core.util.Axis;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
+import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.util.EModelRenderCycle;
 
 public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
@@ -146,8 +142,8 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
     protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)
     {
         matrices.translate(0, 0.5, 0);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - yaw));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f - pitch));
+        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - yaw));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f - pitch));
         matrices.translate(0, -0.5, 0);
     }
 

@@ -9,13 +9,14 @@ import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
@@ -191,7 +192,8 @@ public class FusionBlastEntity extends PersistentProjectileEntity
         {
             // Damage reduces linearly with distance
             double d = getDamage() * (centre.distanceTo(e.getPos()) / r);
-            e.damage(world.getDamageSources().mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
+//            e.damage(world.getDamageSources().mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
+            e.damage(DamageSource.mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
         });
     }
 

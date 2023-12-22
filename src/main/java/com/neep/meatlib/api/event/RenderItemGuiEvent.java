@@ -23,13 +23,13 @@ public interface RenderItemGuiEvent
 
     static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha)
     {
-        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
         buffer.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
         buffer.vertex(x + 0, y + 0, 0.0).color(red, green, blue, alpha).next();
         buffer.vertex(x + 0, y + height, 0.0).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y + height, 0.0).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y + 0, 0.0).color(red, green, blue, alpha).next();
         var built = buffer.end();
-        BufferRenderer.draw(built);
+        BufferRenderer.drawWithoutShader(built);
     }
 }

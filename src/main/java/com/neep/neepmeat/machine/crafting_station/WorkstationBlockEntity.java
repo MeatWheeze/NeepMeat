@@ -1,10 +1,10 @@
 package com.neep.neepmeat.machine.crafting_station;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.CombinedInventory;
-import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
 import com.neep.neepmeat.util.ItemUtils;
@@ -22,7 +22,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -157,7 +156,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
         {
             if (recipe != null)
             {
-                output.reset(recipe.craft(input, null));
+                output.reset(recipe.craft(input));
             }
             else output.setStack(0, ItemStack.EMPTY);
         }
@@ -219,7 +218,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
                 input.setStack(i, remainderStack);
                 continue;
             }
-            if (ItemStack.areItemsEqual(currentStack, remainderStack) && ItemStack.areNbtEqual(currentStack, remainderStack))
+            if (ItemStack.areItemsEqualIgnoreDamage(currentStack, remainderStack) && ItemStack.areNbtEqual(currentStack, remainderStack))
             {
                 remainderStack.increment(currentStack.getCount());
                 input.setStack(i, remainderStack);

@@ -2,11 +2,11 @@ package com.neep.neepmeat.machine.pedestal;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
-import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.*;

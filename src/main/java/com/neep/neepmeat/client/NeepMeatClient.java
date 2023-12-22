@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client;
 
-import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
@@ -10,13 +9,11 @@ import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
-import com.neep.neepmeat.client.model.entity.KeeperEntityModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.KeeperEntityRenderer;
 import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideScreen;
-import com.neep.neepmeat.client.world.DuatDimensionEffects;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
@@ -63,7 +60,6 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 

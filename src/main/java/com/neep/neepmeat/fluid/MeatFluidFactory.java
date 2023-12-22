@@ -8,12 +8,10 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
 public class MeatFluidFactory extends FluidFactory
@@ -25,13 +23,13 @@ public class MeatFluidFactory extends FluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 

@@ -1,9 +1,9 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

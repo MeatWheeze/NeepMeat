@@ -1,8 +1,8 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
+import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
@@ -22,7 +22,7 @@ import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3f;
 import net.minecraft.util.math.random.Random;
 
 @Environment(value = EnvType.CLIENT)
@@ -43,17 +43,17 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
 
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation()));
+        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()));
 
         switch (face)
         {
-            case FLOOR -> matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) (Math.PI)));
-            case WALL -> matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) (Math.PI / 2)));
-            case CEILING -> matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) (Math.PI)));
+            case FLOOR -> matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI)));
+            case WALL -> matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI / 2)));
+            case CEILING -> matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI)));
         }
 
         matrices.translate(0, -0.2, 0);
-//        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(be.getWorld().getTime() + tickDelta * 1));
+//        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
         boolean switched = !be.getCachedState().get(BigLeverBlock.POWERED);
         float angle = 20;
 
@@ -62,7 +62,7 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
 
         be.leverDelta = (float) MathHelper.lerp(0.1, be.leverDelta, switched ? 0 : angle);
 //        be.leverDelta = switched ? 0 : angle;
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(be.leverDelta));
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.leverDelta));
         matrices.translate(0, 0.2, 0);
         matrices.translate(-0.5, -0.5, -0.5);
 
@@ -86,7 +86,7 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
 
 //        be.stackRenderDelta = MathHelper.lerp(delta, be.stackRenderDelta, be.getAmount() <= 0 ? 0.3f : 0f);
 //        matrices.translate(0.5, 0.25f, 0.5);
-//        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees((be.getWorld().getTime() + tickDelta) * 1));
+//        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion((be.getWorld().getTime() + tickDelta) * 1));
 
 
         matrices.pop();

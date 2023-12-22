@@ -8,7 +8,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.*;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
-import dev.architectury.event.events.common.ChatEvent;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

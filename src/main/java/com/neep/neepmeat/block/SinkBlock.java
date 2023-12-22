@@ -2,7 +2,6 @@ package com.neep.neepmeat.block;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.util.math.BlockPos;
@@ -14,9 +13,6 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
 import java.util.Map;
-
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 
 public class SinkBlock extends BaseHorFacingBlock
 {

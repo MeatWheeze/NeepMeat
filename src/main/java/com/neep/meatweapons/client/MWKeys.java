@@ -8,17 +8,11 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
-import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
-import net.fabricmc.fabric.api.event.player.UseItemCallback;
-import net.fabricmc.fabric.impl.event.interaction.InteractionEventsRouter;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
 import org.lwjgl.glfw.GLFW;
 
 @Environment(value= EnvType.CLIENT)
