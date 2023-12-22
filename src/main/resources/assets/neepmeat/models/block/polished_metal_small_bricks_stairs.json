@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "neepmeat:block/polished_metal_small_bricks",
+    "top": "neepmeat:block/polished_metal_small_bricks",
+    "side": "neepmeat:block/polished_metal_small_bricks"
+  }
+}
