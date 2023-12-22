@@ -1,9 +1,0 @@
-{
-  "__comment__": "This file was automatically created by mcresources",
-  "parent": "block/outer_stairs",
-  "textures": {
-    "bottom": "neepmeat:block/rusted_iron_bricks",
-    "top": "neepmeat:block/rusted_iron_bricks",
-    "side": "neepmeat:block/rusted_iron_bricks"
-  }
-}

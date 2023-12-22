@@ -1,8 +1,0 @@
-{
-	"parent": "block/cube_all",
-      	"textures": {
-        	"all": "neepmeat:block/blue_polished_metal_block"
-      	}
-}
-
-
