@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,6 +19,13 @@ public class FluidRationerBlock extends BaseFacingBlock implements BlockEntityPr
     public FluidRationerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+        world.getBlockEntity(pos, NMBlockEntities.FLUID_RATIONER).ifPresent(be -> be.updateCache());
     }
 
     @Nullable
