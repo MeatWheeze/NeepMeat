@@ -13,6 +13,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
@@ -47,6 +48,21 @@ public class RouterBlockEntity extends BlockEntity implements NamedScreenHandler
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
         return new RouterScreenHandler(syncId, inv, this.inventory);
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        inventory.writeNbt(nbt);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        inventory.readNbt(nbt);
     }
 
     @Nullable
