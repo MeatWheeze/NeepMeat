@@ -14,6 +14,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockBox;
@@ -67,6 +68,10 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
 
         if (cooldown <= 0)
         {
+            if (getConnectedMotor() == null)
+            {
+                update((ServerWorld) getWorld(), pos, pos, getCachedState());
+            }
             extend();
         }
         else
