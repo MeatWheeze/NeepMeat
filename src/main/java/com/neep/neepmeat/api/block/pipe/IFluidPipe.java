@@ -1,8 +1,8 @@
 package com.neep.neepmeat.api.block.pipe;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.BlockState;
@@ -44,12 +44,12 @@ public interface IFluidPipe
 //                if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 if (connections.contains(direction))
                 {
-                    if (FluidNetwork.getInstance(world).updatePosition(world, new NodePos(pos, direction)))
+                    if (FluidNodeManager.getInstance(world).updatePosition(world, new NodePos(pos, direction)))
                         newNode = true;
                 }
                 else
                 {
-                    FluidNetwork.getInstance(world).removeNode(world, new NodePos(pos, direction));
+                    FluidNodeManager.getInstance(world).removeNode(world, new NodePos(pos, direction));
                 }
             }
             return newNode;
@@ -81,7 +81,7 @@ public interface IFluidPipe
     {
         try
         {
-            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos);
         }
         catch (Exception e)
         {
@@ -97,7 +97,7 @@ public interface IFluidPipe
 
     default void removePipe(ServerWorld world, BlockState state, BlockPos pos)
     {
-        FluidNetwork.removeStorageNodes(world, pos);
+        FluidNodeManager.removeStorageNodes(world, pos);
         world.removeBlockEntity(pos); // Just in case
         for (Direction direction : getConnections(state, dir -> true))
         {

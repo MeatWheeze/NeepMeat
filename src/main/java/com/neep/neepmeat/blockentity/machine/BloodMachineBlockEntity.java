@@ -5,10 +5,8 @@ import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.machine.FluidFuelRegistry;
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -168,7 +166,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     public void tick()
     {
-        if (FluidNetwork.shouldTick(world.getTime()))
+        if (FluidNodeManager.shouldTick(world.getTime()))
         {
             // Get effective influx per tick
             this.runningRate = this.inputStorage.lastInput / PipeNetwork.TICK_RATE;

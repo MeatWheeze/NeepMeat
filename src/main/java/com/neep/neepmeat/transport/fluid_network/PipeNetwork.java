@@ -17,7 +17,6 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
@@ -31,7 +30,6 @@ public class PipeNetwork
     private ServerWorld world;
     public final UUID uuid;
     private final BlockPos origin;
-    private final Direction originFace;
     public static int UPDATE_DISTANCE = 50;
 
     public static short TICK_RATE = 1;
@@ -48,21 +46,20 @@ public class PipeNetwork
     // TODO: Find a way to remove unloaded networks from this
     public static List<PipeNetwork> LOADED_NETWORKS = new ArrayList<>();
 
-    private PipeNetwork(ServerWorld world, UUID uuid, BlockPos origin, Direction direction)
+    private PipeNetwork(ServerWorld world, UUID uuid, BlockPos origin)
     {
         this.world = world;
         this.uuid = uuid;
         this.origin = origin;
-        this.originFace = direction;
         this.isBuilt = false;
     }
 
-    public static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos, Direction direction)
+    public static Optional<PipeNetwork> tryCreateNetwork(ServerWorld world, BlockPos pos)
     {
         System.out.println("trying fluid network at " + pos);
         UUID uuid = UUID.randomUUID();
-        PipeNetwork network = new PipeNetwork(world, uuid, pos, direction);
-        network.rebuild(pos, direction);
+        PipeNetwork network = new PipeNetwork(world, uuid, pos);
+        network.rebuild(pos);
         if (network.isValid())
         {
             LOADED_NETWORKS.add(network);
@@ -87,7 +84,6 @@ public class PipeNetwork
         }
         return network.connectedNodes.equals(connectedNodes)
                 && network.origin.equals(origin)
-                && network.originFace.equals(originFace)
                 && network.uuid.equals(uuid);
     }
 
@@ -96,7 +92,6 @@ public class PipeNetwork
     {
         return new HashCodeBuilder()
                 .append(uuid)
-                .append(originFace.getId())
                 .append(origin.hashCode())
                 .build();
     }
@@ -152,11 +147,11 @@ public class PipeNetwork
         return true;
     }
 
-    public void rebuild(BlockPos startPos, Direction face)
+    public void rebuild(BlockPos startPos)
     {
         if (!world.isClient)
         {
-            discoverNodes(startPos, face);
+            discoverNodes(startPos);
             Runnable runnable = () ->
             {
                 this.isBuilt = false;
@@ -338,7 +333,7 @@ public class PipeNetwork
 //        System.out.println("World time: " + world.getTime() + "\t ID: " + uid + "\t Total: " + totalTime);
     }
 
-    public void discoverNodes(BlockPos startPos, Direction face)
+    public void discoverNodes(BlockPos startPos)
     {
         networkPipes.clear();
         Queue<BlockPos> pipeQueue = new LinkedList<>();
@@ -388,7 +383,7 @@ public class PipeNetwork
                     Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
                     if (storage != null)
                     {
-                        Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
+                        Supplier<FluidNode> node = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(current, direction));
                         if (node.get() != null)
                         {
                             connectedNodes.add(node);
@@ -401,7 +396,7 @@ public class PipeNetwork
 
     public void removeNode(NodePos pos)
     {
-        connectedNodes.remove(FluidNetwork.getInstance(world).getNodeSupplier(pos));
+        connectedNodes.remove(FluidNodeManager.getInstance(world).getNodeSupplier(pos));
         validate();
     }
 

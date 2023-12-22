@@ -3,14 +3,14 @@ package com.neep.neepmeat.transport.fluid_network;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
+import it.unimi.dsi.fastutil.longs.Long2IntArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2IntMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import org.lwjgl.system.CallbackI;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -199,20 +199,19 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    /** It's rather inefficient and janky.
+    /** It's rather inefficient and janky. It doesn't actually give the shortest path.
      * @return Resulting flow-limiting function of all special pipes in the shortest route. Null if there is no route between two nodes,
      */
     public static PipeState.FilterFunction shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         long t1 = System.nanoTime();
         pipes.forEach(p -> p.flag = false);
-        Map<BlockPos, Integer> distances = new LinkedHashMap<>();
+        Long2IntMap distances = new Long2IntArrayMap();
         PipeState.FilterFunction flowFunc = PipeState::identity;
         Queue<BlockPos> posQueue = new LinkedList<>();
         Queue<PipeState> pipeQueue = new LinkedList<>();
-        Direction reverse = end.face.getOpposite();
 
-        distances.put(end.pos, 0);
+        distances.put(end.pos.asLong(), 0);
         posQueue.add(end.pos);
         pipeQueue.add(pipes.get(end.pos));
 
@@ -226,7 +225,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         {
             BlockPos pos = posQueue.poll();
             PipeState currentPipe = pipeQueue.poll();
-            int dist = distances.get(pos);
+            int dist = distances.get(pos.asLong());
 
             if (pos.equals(start.pos))
             {
@@ -258,14 +257,13 @@ public class PipeBranches extends HashMap<Long, PipeState>
                         flowFunc = flowFunc.andThen(offsetPipe.getSpecial().getFlowFunction(world, connection.getOpposite(), offset, offsetState));
                     }
 
-                    distances.put(offset, dist + 1);
+                    distances.put(offset.asLong(), dist + 1);
                     posQueue.add(offset);
                     pipeQueue.add(offsetPipe);
                 }
             }
         }
         long t2 = System.nanoTime();
-//        System.out.println(t2-t1);
         return null;
     }
 

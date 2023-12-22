@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -19,6 +19,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Optional;
+import java.util.UUID;
 
 /*
     An interface for fluid networks associated with a block and a direction
@@ -30,7 +31,8 @@ public class FluidNode
     private final BlockPos pos;
     private final NodePos nodePos;
     private PipeNetwork network = null;
-    public long networkId;
+    protected boolean hasNetwork;
+    protected UUID networkUUID;
 
     private FluidPump pump;
     private boolean hasPump;
@@ -68,19 +70,19 @@ public class FluidNode
     }
 
     // For deferred loading only.
-    protected FluidNode(NodePos pos, long networkId, ServerWorld world, boolean isStorage, boolean hasPump)
+    protected FluidNode(NodePos pos, UUID networkUUID, ServerWorld world, boolean isStorage, boolean hasPump)
     {
         this.face = pos.face;
         this.pos = pos.pos;
         this.nodePos = pos;
-        this.networkId = networkId;
+        this.networkUUID = networkUUID;
         this.storage = null;
         this.pump = null;
         this.isStorage = isStorage;
         this.hasPump = hasPump;
         this.needsDeferredLoading = true;
 
-        FluidNetwork.getInstance(world).queueNode(this);
+        FluidNodeManager.getInstance(world).queueNode(this);
     }
 
     @Override
@@ -95,9 +97,14 @@ public class FluidNode
         NbtCompound posNbt = nbt.getCompound("pos");
         NodePos pos = NodePos.fromNbt(posNbt);
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
-        long networkId = nbt.getLong("network_id");
+        UUID networkId = null;
+        if (nbt.get("networkId") != null)
+        {
+            networkId = nbt.getUuid("networkId");
+        }
         boolean isStorage = nbt.getBoolean("is_storage");
         boolean hasPump = nbt.getBoolean("hasPump");
+        boolean hasNetwork = nbt.getBoolean("hasNetwork");
 
         return new FluidNode(pos, networkId, world, isStorage, hasPump);
     }
@@ -105,9 +112,13 @@ public class FluidNode
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put("pos", nodePos.toNbt(new NbtCompound()));
-        nbt.putLong("network_id", networkId);
+        if (networkUUID != null)
+        {
+            nbt.putUuid("networkId", networkUUID);
+        }
         nbt.putBoolean("is_storage", isStorage);
         nbt.putBoolean("hasPump", hasPump);
+        nbt.putBoolean("hasNetwork", hasNetwork);
         return nbt;
     }
 
@@ -119,7 +130,10 @@ public class FluidNode
         }
         boolean bl1 = findStorage(world);
         boolean bl2 = findPump(world);
-        Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+        if (networkUUID != null)
+        {
+            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos);
+        }
     }
 
     private void load(ServerWorld world)
@@ -188,6 +202,7 @@ public class FluidNode
 //            System.out.println(network.uuid + " replaces " + this.network.uuid);
         }
         this.network = network;
+        this.networkUUID = network != null ? network.uuid : null;
     }
 
     public PipeNetwork getNetwork()

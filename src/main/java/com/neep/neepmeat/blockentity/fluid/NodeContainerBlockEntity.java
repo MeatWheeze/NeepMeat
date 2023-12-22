@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -24,7 +24,7 @@ public class NodeContainerBlockEntity extends BlockEntity
         super.setWorld(world);
         if (getWorld() instanceof ServerWorld serverWorld && world.getServer().isOnThread() && queuedNbt != null)
         {
-            FluidNetwork.getInstance(getWorld()).readNodes(getPos(), queuedNbt, serverWorld);
+            FluidNodeManager.getInstance(getWorld()).readNodes(getPos(), queuedNbt, serverWorld);
         }
     }
 
@@ -39,13 +39,13 @@ public class NodeContainerBlockEntity extends BlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt = FluidNetwork.getInstance(getWorld()).writeNodes(getPos(), nbt);
+        nbt = FluidNodeManager.getInstance(getWorld()).writeNodes(getPos(), nbt);
     }
 
     @Override
     public void markRemoved()
     {
         super.markRemoved();
-        FluidNetwork.getInstance(world).markEntityRemoved(pos);
+        FluidNodeManager.getInstance(world).markEntityRemoved(pos);
     }
 }

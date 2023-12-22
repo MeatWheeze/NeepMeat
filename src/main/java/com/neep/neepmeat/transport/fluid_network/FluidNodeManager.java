@@ -4,7 +4,8 @@ import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
-import com.neep.neepmeat.transport.thread.NetworkRebuilding;
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -26,20 +27,20 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import java.util.*;
 import java.util.function.Supplier;
 
-public class FluidNetwork
+public class FluidNodeManager
 {
-    protected static final HashMap<ServerWorld, FluidNetwork> WORLD_NETWORKS = new HashMap<>();
+    protected static final HashMap<ServerWorld, FluidNodeManager> WORLD_NETWORKS = new HashMap<>();
 
-    public Queue<FluidNode> queuedNodes = new LinkedList<>();
-    public final Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
+    protected final Queue<FluidNode> queuedNodes = new LinkedList<>();
+    protected final Long2ObjectMap<Map<NodePos, FluidNode>> chunkNodes = new Long2ObjectArrayMap<>();
     protected final ServerWorld world;
 
-    protected FluidNetwork(ServerWorld world)
+    protected FluidNodeManager(ServerWorld world)
     {
         this.world = world;
     }
 
-    public static FluidNetwork getInstance(ServerWorld world)
+    public static FluidNodeManager getInstance(ServerWorld world)
     {
         return WORLD_NETWORKS.get(world);
     }
@@ -61,7 +62,7 @@ public class FluidNetwork
         }
     }
 
-    public static FluidNetwork getInstance(World world)
+    public static FluidNodeManager getInstance(World world)
     {
         if (!(world instanceof ServerWorld))
         {
@@ -99,10 +100,10 @@ public class FluidNetwork
 
     protected static void createNetwork(ServerWorld world)
     {
-        FluidNetwork network = WORLD_NETWORKS.get(world);
+        FluidNodeManager network = WORLD_NETWORKS.get(world);
         if (network == null)
         {
-            network = new FluidNetwork(world);
+            network = new FluidNodeManager(world);
             WORLD_NETWORKS.put(world, network);
         }
     }
@@ -124,7 +125,7 @@ public class FluidNetwork
     @Override
     public boolean equals(Object o)
     {
-        if (!(o instanceof FluidNetwork network))
+        if (!(o instanceof FluidNodeManager network))
         {
             return false;
         }
@@ -132,35 +133,21 @@ public class FluidNetwork
                 && network.chunkNodes.equals(chunkNodes);
     }
 
-    public Map<NodePos, FluidNode> getOrCreateMap(ChunkPos pos)
+    public Map<NodePos, FluidNode> getOrCreateMap(ChunkPos chunkPos)
     {
         Map<NodePos, FluidNode> out;
-        if ((out = chunkNodes.get(pos)) != null)
+        if ((out = chunkNodes.get(chunkPos.toLong())) != null)
         {
             return out;
         }
-        chunkNodes.put(pos, out = new HashMap<>());
+        chunkNodes.put(chunkPos.toLong(), out = new HashMap<>());
         return out;
     }
-
-    // Replace the node at a position with a new one, preserving the network reference
-//    private void replaceNode(NodePos pos, FluidNode node)
-//    {
-//        Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
-//        FluidNode presentNode;
-//        if ((presentNode = nodes.get(pos)) != null)
-//        {
-//            node.setNetwork(presentNode.getNetwork());
-//        }
-//        nodes.put(pos, node);
-//
-//        System.out.println("Node replaced: " + nodes.get(pos));
-//    }
 
     private void removeNode(NodePos pos)
     {
         Map<NodePos, FluidNode> nodes;
-        if ((nodes = chunkNodes.get(pos.toChunkPos())) == null)
+        if ((nodes = chunkNodes.get(pos.toChunkPos().toLong())) == null)
         {
             return;
         }
@@ -378,8 +365,8 @@ public class FluidNetwork
 
     public static void registerEvents()
     {
-        ServerTickEvents.START_WORLD_TICK.register(FluidNetwork::tickNetwork);
-        ServerWorldEvents.LOAD.register(FluidNetwork::startWorld);
+        ServerTickEvents.START_WORLD_TICK.register(FluidNodeManager::tickNetwork);
+        ServerWorldEvents.LOAD.register(FluidNodeManager::startWorld);
 //        ServerWorldEvents.UNLOAD.register(((server, world1) -> System.out.println("UNLOAD -----------------------------------------------------------------")));
 //        ServerChunkEvents.CHUNK_LOAD.registter
     }

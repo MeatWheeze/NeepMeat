@@ -1,9 +1,8 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.api.block.pipe.AbstractAxialPipe;
-import com.neep.neepmeat.blockentity.CheckValveBlockEntity;
+import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeState;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
@@ -32,7 +31,7 @@ public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityPro
         if (!world.isClient())
         {
             Direction facing = state.get(FACING);
-            System.out.println(FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(pos, facing)).get());
+            System.out.println(FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pos, facing)).get());
         }
         return ActionResult.SUCCESS;
     }
