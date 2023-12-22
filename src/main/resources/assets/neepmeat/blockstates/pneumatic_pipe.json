@@ -63,6 +63,60 @@
         "x": 90
       }
     },
+
+    {
+      "when": {
+        "north": "false|forced", "south": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap"
+      }
+    },
+    {
+      "when": {
+        "east": "false|forced", "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "false|forced", "north": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap_alt"
+      }
+    },
+    {
+      "when": {
+        "west": "false|forced", "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap_alt",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "up": "false|forced", "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap_alt",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "down": "false|forced", "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/pneumatic_pipe/pipe_cap_alt",
+        "x": -90
+      }
+    },
+
     {
       "when": {
         "north": "true"
