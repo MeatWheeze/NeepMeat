@@ -212,6 +212,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(SynthesiserStorage::getFluidStorage, SYNTHESISER);
 
         TABLE_CONTROLLER = registerBlockEntity("surgery_controller", TableControllerBlockEntity::new, NMBlocks.SURGERY_CONTROLLER);
+        ItemStorage.SIDED.registerForBlockEntity(TableControllerBlockEntity::getStorage, TABLE_CONTROLLER);
         FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, TABLE_CONTROLLER);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
