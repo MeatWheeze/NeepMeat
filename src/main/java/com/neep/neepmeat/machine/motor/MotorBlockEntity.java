@@ -1,62 +1,34 @@
 package com.neep.neepmeat.machine.motor;
 
-import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
-import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEntity
+public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
 {
     public float rotorSpeed = 1f; // rad per tick
     public float currentSpeed = 0;
     public float angle;
-    protected float influx;
-
+    protected float outputPower = 0;
     protected float loadTorque;
 
+
     protected BlockApiCache<Void, Void> cache = null;
-
-    protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
-    {
-        @Override
-        public float getRate()
-        {
-            return 0;
-        }
-
-        @Override
-        public void updateInflux(float influx)
-        {
-            MotorBlockEntity.this.influx = influx;
-            onPowerChange();
-        }
-
-        @Override
-        public Mode getMode()
-        {
-            return Mode.IN;
-        }
-    };
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
 
-    @Override
     public void tick()
     {
-        super.tick();
-
         if (cache == null)
         {
             update((ServerWorld) world, pos, pos, getCachedState());
@@ -65,9 +37,29 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
         {
             motorised.tick(this);
         }
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            long energy = 100;
+            long extracted = extractEnergy(energy, transaction);
+
+            float newPower;
+            if (extracted > 0)
+            {
+                newPower = (float) PowerUtils.absoluteToPerUnit(extracted);
+            }
+            else newPower = 0;
+
+            if (newPower != outputPower)
+            {
+                outputPower = newPower;
+                onPowerChange();
+            }
+
+            transaction.commit();
+        }
     }
 
-    @Override
     protected void onPowerChange()
     {
         if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
@@ -75,7 +67,6 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());
         }
-        super.onPowerChange();
     }
 
     @Override
@@ -94,7 +85,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
     public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         MotorEntity.super.update(world, pos, fromPos, state);
-        enabled = (!world.isReceivingRedstonePower(pos));
+//        enabled = (!world.isReceivingRedstonePower(pos));
         loadTorque = updateLoadTorque();
         sync();
     }
@@ -108,8 +99,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
     @Override
     public double getMechPUPower()
     {
-        return influx;
-//        return getPUPower();
+        return outputPower;
     }
 
     @Override
@@ -120,17 +110,11 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
     }
 
     @Override
-    public long getMaxInsert()
-    {
-        return FluidConstants.BUCKET / 2;
-    }
-
-    @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt.putFloat("loadTorque", loadTorque);
-        nbt.putFloat("influx", influx);
+        nbt.putFloat("influx", outputPower);
     }
 
     @Override
@@ -138,12 +122,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
     {
         super.readNbt(nbt);
         this.loadTorque = nbt.getFloat("loadTorque");
-        this.influx = nbt.getFloat("influx");
-    }
-
-    public BloodAcceptor getBloodAcceptor(Direction face)
-    {
-        return bloodAcceptor;
+        this.outputPower = nbt.getFloat("influx");
     }
 
     @Override
@@ -151,4 +130,5 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements MotorEn
     {
         super.markRemoved();
     }
+
 }
