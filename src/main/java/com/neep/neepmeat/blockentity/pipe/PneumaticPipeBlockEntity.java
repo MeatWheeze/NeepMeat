@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.awt.font.TransformAttribute;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -49,7 +48,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
     {
 //        items.add(new Pair<>(new PipeOffset(Direction.UP, Direction.EAST), resource.toStack(1)));
 //        items.add(new ItemInPipe(Direction.UP, Direction.EAST, resource.toStack(1)));
-        this.insert(new ItemInPipe(Direction.NORTH, Direction.NORTH, resource.toStack()), getWorld(), getCachedState(), getPos(), Direction.UP);
+        this.insert(new ItemInPipe(Direction.NORTH, Direction.NORTH, resource.toStack(), world.getTime()), getWorld(), getCachedState(), getPos(), Direction.UP);
         System.out.println(items);
         sync();
         return 1;
@@ -103,17 +102,20 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
 
     public static void serverTick(World world, BlockPos blockPos, BlockState blockState, PneumaticPipeBlockEntity be)
     {
+//        if (world.getTime() % 10 != 0)
+//            return;
+
         Iterator<ItemInPipe> it = be.items.listIterator();
         while (it.hasNext())
         {
             ItemInPipe item = it.next();
-            item.step(0.01f);
+            item.tick();
             if (item.progress >= 1)
             {
                 be.transfer(it, item, blockPos, blockState, world);
             }
-            be.sync();
         }
+        be.sync();
     }
 
     public static boolean insert(ItemInPipe item, World world, BlockState state, BlockPos pos, Direction in)
@@ -126,7 +128,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements Storage<Ite
             {
                 out = dir != in ? dir : out;
             }
-            item.reset(in, out);
+            item.reset(in, out, world.getTime());
             be.items.add(item);
             return true;
         }

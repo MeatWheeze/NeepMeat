@@ -10,6 +10,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Quaternion;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
@@ -29,19 +30,16 @@ public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implement
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
 
-        long time = be.getWorld().getTime();
-//        float t = (time % 100) / 100f;
-
-//        System.out.println(be.getItems().size());
-        for (ItemInPipe offset : be.getItems())
+        for (ItemInPipe item : be.getItems())
         {
-            ItemStack stack = offset.getItemStack();
-//            offset.step(0.0f);
+            ItemStack stack = item.getItemStack();
             matrices.push();
 
-            Vec3d interp = offset.interpolate(tickDelta);
-//            System.out.println(tickDelta);
-            matrices.translate(interp.x, interp.y, interp.z);
+            long diff = be.getWorld().getTime() - item.tickStart;
+            float progress = (diff + tickDelta) * item.speed;
+            item.set(item.update(progress));
+
+            matrices.translate(item.x, item.y, item.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
             matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
             renderer.renderItem(stack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);

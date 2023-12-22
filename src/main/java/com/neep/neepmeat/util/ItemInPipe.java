@@ -14,19 +14,22 @@ public class ItemInPipe
     public Direction in;
     public Direction out;
     public float progress;
-    protected float delta;
-    protected Vec3d deltaVec = new Vec3d(0, 0, 0);
+    public int pipeTicks;
+    public long tickStart;
+    public long tickEnd;
     public float speed;
 
     protected ItemStack itemStack;
 
-    public ItemInPipe(Direction in, Direction out, ItemStack itemStack)
+    public ItemInPipe(Direction in, Direction out, ItemStack itemStack, long tickStart)
     {
         this.in = in;
         this.out = out;
         this.progress = 0;
         this.itemStack = itemStack;
-        this.speed = 0.1f;
+        this.speed = 0.05f;
+        this.tickStart = tickStart;
+        this.tickEnd = (long) (tickStart + 1 / speed);
     }
 
     public static Vec3d directionUnit(Direction direction)
@@ -48,10 +51,10 @@ public class ItemInPipe
         this.z = vec.z;
     }
 
-    public void step(float delta)
+    public void tick()
     {
-        progress += speed;
-//        update();
+        ++pipeTicks;
+        progress = (pipeTicks) * speed;
     }
 
     public Vec3d update(float prog)
@@ -73,20 +76,26 @@ public class ItemInPipe
     public Vec3d interpolate(float tickDelta)
     {
 //        set(update(progress));
-        Vec3d vec = update(progress).lerp(update(progress + speed), tickDelta);
+//        Vec3d vec = update(progress).lerp(update(progress + speed), tickDelta);
 //        return new Vec3d(x, y, z);
 //        return new Vec3d(x + speed * tickDelta, y, z);
 //        return new Vec3d(x + speed * tickDelta, y + speed * tickDelta, z + speed * tickDelta);
 
 //        deltaVec = deltaVec.lerp(update(progress), 0.01);
-        return vec;
+        progress = (pipeTicks + tickDelta) * speed;
+//        progress = pipeTicks * speed;
+//        return update(progress + speed * tickDelta);
+        return update(progress);
     }
 
-    public void reset(Direction in, Direction out)
+    public void reset(Direction in, Direction out, long tickStart)
     {
         this.progress = 0;
+        this.pipeTicks = 0;
         this.in = in;
         this.out = out;
+        this.tickStart = tickStart;
+        this.tickEnd = (long) (tickStart + 1 / speed);
         this.set(new Vec3d(0, 0, 0));
     }
 
@@ -94,11 +103,12 @@ public class ItemInPipe
     {
         nbt.putInt("in", in.getId());
         nbt.putInt("out", out.getId());
-        nbt.putFloat("progress", progress);
+//        nbt.putFloat("progress", progress);
+        nbt.putLong("tick_start", tickStart);
+        nbt.putLong("tick_end", tickEnd);
 
         NbtCompound item = new NbtCompound();
         itemStack.writeNbt(item);
-//        System.out.println(itemStack);
         nbt.put("item", item);
 
         return nbt;
@@ -108,11 +118,11 @@ public class ItemInPipe
     {
         Direction in = Direction.byId(nbt.getInt("in"));
         Direction out = Direction.byId(nbt.getInt("out"));
-//        ItemStack stack = ItemStack.fromNbt(nbt.getCompound("item").getCompound("item"));
         ItemStack stack = ItemStack.fromNbt(nbt.getCompound("item"));
+        long tickStart = nbt.getLong("tick_start");
 
-        ItemInPipe offset = new ItemInPipe(in, out, stack);
-        offset.progress = nbt.getFloat("progress");
+        ItemInPipe offset = new ItemInPipe(in, out, stack, tickStart);
+//        offset.progress = nbt.getFloat("progress");
 
         return offset;
     }
