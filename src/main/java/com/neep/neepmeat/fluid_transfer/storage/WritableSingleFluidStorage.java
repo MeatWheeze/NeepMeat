@@ -10,10 +10,18 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
 {
     protected long capacity;
     public float renderLevel;
+    public Runnable finalCallback;
+
+    public WritableSingleFluidStorage(long capacity, Runnable finalCallback)
+    {
+        this(capacity);
+        this.finalCallback = finalCallback;
+    }
 
     public WritableSingleFluidStorage(long capacity)
     {
         this.capacity = capacity;
+        this.finalCallback = () -> {};
     }
 
     @Override
@@ -26,6 +34,11 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
     protected long getCapacity(FluidVariant variant)
     {
         return capacity;
+    }
+
+    protected void onFinalCommit()
+    {
+        finalCallback.run();
     }
 
     public void writeNbt(NbtCompound nbt)

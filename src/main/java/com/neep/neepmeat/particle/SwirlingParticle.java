@@ -22,17 +22,19 @@ public class SwirlingParticle extends SpriteBillboardParticle
     private final double originX;
     private final double originY;
     private final double originZ;
+    private final double speed;
     private double angle;
 
-    public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, BlockState state)
+    public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state)
     {
-        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, state, new BlockPos(x, y, z));
+        this(world, x, y, z, velocityX, velocityY, velocityZ, radius, angle, speed, state, new BlockPos(x, y, z));
     }
 
-    public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, BlockState state, BlockPos blockPos)
+    public SwirlingParticle(ClientWorld world, double x, double y, double z, double velocityX, double velocityY, double velocityZ, double radius, double angle, double speed, BlockState state, BlockPos blockPos)
     {
         super(world, x, y, z, velocityX, velocityY, velocityZ);
         this.radius = radius;
+        this.speed = speed;
         this.angle = random.nextDouble() * 2 * Math.PI;
         this.originX = x;
         this.originY = y;
@@ -75,7 +77,6 @@ public class SwirlingParticle extends SpriteBillboardParticle
     @Override
     public void tick()
     {
-        double speed = 0.2;
         this.angle += speed;
 
         this.prevPosX = this.x;
@@ -153,14 +154,15 @@ public class SwirlingParticle extends SpriteBillboardParticle
     public static class Factory implements ParticleFactory<SwirlingParticleEffect>
     {
         @Override
-        public Particle createParticle(SwirlingParticleEffect particleEffect, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i) {
-            BlockState blockState = particleEffect.getBlockState();
+        public Particle createParticle(SwirlingParticleEffect effect, ClientWorld clientWorld, double d, double e, double f, double g, double h, double i)
+        {
+            BlockState blockState = effect.getBlockState();
             if (blockState.isAir() || blockState.isOf(Blocks.MOVING_PISTON))
             {
                 return null;
             }
             Random rand = new Random(0);
-            return new SwirlingParticle(clientWorld, d, e, f, g, h, i, 0.4, rand.nextDouble() * 2 * Math.PI, blockState);
+            return new SwirlingParticle(clientWorld, d, e, f, g, h, i, effect.radius, 0, effect.speed, blockState);
         }
     }
 }

@@ -6,15 +6,15 @@
   },
   "fluid1": {
     "resource": "minecraft:water",
-    "amount": 9000
+    "amount": 10125
   },
   "fluid2":{
     "resource": "minecraft:lava",
-    "amount": 9000
+    "amount": 10125
   },
   "output":{
     "resource": "neepmeat:work_fluid",
-    "amount": 9000
+    "amount": 20250
   },
   "processtime": 40
 }

@@ -136,6 +136,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
         FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
+        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getOutputStorage(), MIXER);
+
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
             if (be instanceof FluidBuffer.FluidBufferProvider provider)

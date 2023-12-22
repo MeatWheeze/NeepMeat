@@ -18,12 +18,17 @@ public class MixerStorage extends SimpleInventory
 {
     protected MixerBlockEntity parent;
 
-    protected WritableSingleFluidStorage fluidInput1 = new WritableSingleFluidStorage(FluidConstants.BUCKET);
-    protected WritableSingleFluidStorage fluidInput2 = new WritableSingleFluidStorage(FluidConstants.BUCKET);
+    protected WritableSingleFluidStorage fluidInput1;
+    protected WritableSingleFluidStorage fluidInput2;
+    protected WritableSingleFluidStorage fluidOutput;
 
     public MixerStorage(MixerBlockEntity parent)
     {
         this.parent = parent;
+        Runnable callback = parent::sync;
+        fluidInput1 = new WritableSingleFluidStorage(FluidConstants.BUCKET, callback);
+        fluidInput2 = new WritableSingleFluidStorage(FluidConstants.BUCKET, callback);
+        fluidOutput = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, callback);
     }
 
     public List<StorageView<FluidVariant>> getFluidInputs(TransactionContext transaction)
@@ -42,6 +47,10 @@ public class MixerStorage extends SimpleInventory
         NbtCompound input2 = new NbtCompound();
         fluidInput2.writeNbt(input2);
         nbt.put("input_2", input2);
+
+        NbtCompound output = new NbtCompound();
+        fluidOutput.writeNbt(output);
+        nbt.put("output", output);
     }
 
     public void readNbt(NbtCompound nbt)
@@ -51,10 +60,13 @@ public class MixerStorage extends SimpleInventory
 
         NbtCompound input2 = nbt.getCompound("input_2");
         fluidInput2.readNbt(input2);
+
+        NbtCompound output = nbt.getCompound("output");
+        fluidOutput.readNbt(output);
     }
 
     public Storage<FluidVariant> getFluidOutput()
     {
-        return parent.getOutputStorage();
+        return fluidOutput;
     }
 }
