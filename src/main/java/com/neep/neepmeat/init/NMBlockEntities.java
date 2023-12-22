@@ -36,6 +36,7 @@ public class NMBlockEntities
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
     public static BlockEntityType<ItemPortBlock.ItemPortBlockEntity> VAT_ITEM_PORT;
+    public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
@@ -93,6 +94,7 @@ public class NMBlockEntities
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
         VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.ItemPortBlockEntity::new, NMBlocks.VAT_ITEM_PORT);
+        VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
