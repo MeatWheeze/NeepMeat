@@ -101,6 +101,11 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         return null;
     }
 
+    public RecipeOutput<Item> getItemOutput()
+    {
+        return itemOutput;
+    }
+
     public static class Serializer implements RecipeSerializer<PressingRecipe>
     {
         RecipeFactory<PressingRecipe> factory;
