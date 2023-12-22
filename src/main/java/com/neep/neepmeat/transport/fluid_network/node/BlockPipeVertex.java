@@ -24,8 +24,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 {
     protected final FluidPipeBlockEntity<?> parent;
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
-//    protected long[] velocity = new long[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
+    protected boolean dirty;
 
     public BlockPipeVertex(FluidPipeBlockEntity<?> fluidPipeBlockEntity)
     {
@@ -146,10 +146,17 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
 
                 amount -= received;
                 if (amount <= 0) variant = FluidVariant.blank();
+                dirty = true;
 
                 --transfers;
             }
             transaction.commit();
+
+            if (dirty)
+            {
+                parent.markDirty();
+                dirty = false;
+            }
         }
     }
 
@@ -194,10 +201,17 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                         extracted = storage.extract(foundVariant, permittedAmount, transaction);
                         variant = foundVariant;
                         amount += extracted;
+                        dirty = true;
                     }
                 }
             }
             transaction.commit();
+
+            if (dirty)
+            {
+                parent.markDirty();
+                dirty = false;
+            }
         }
         super.preTick();
     }
@@ -273,12 +287,15 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        nbt.putLong("amount", amount);
+        nbt.put("variant", variant.toNbt());
         return nbt;
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
-
+        this.amount = nbt.getLong("amount");
+        this.variant = FluidVariant.fromNbt(nbt.getCompound("variant"));
     }
 }
