@@ -5,7 +5,7 @@
         "facing": "north|south"
       },
       "apply": {
-        "model": "neepmeat:block/rusty_pipe/window_ns"
+        "model": "neepmeat:block/limiter_valve"
       }
     },
     {
@@ -13,7 +13,7 @@
         "facing": "east|west"
       },
       "apply": {
-        "model": "neepmeat:block/rusty_pipe/window_ns",
+        "model": "neepmeat:block/limiter_valve",
         "y": 90
       }
     },
@@ -22,7 +22,7 @@
         "facing": "up|down"
       },
       "apply": {
-        "model": "neepmeat:block/rusty_pipe/window_ns",
+        "model": "neepmeat:block/limiter_valve",
         "x": 90
       }
     },
