@@ -18,20 +18,18 @@ import java.util.Set;
 public class BloodNetGraph
 {
     protected final World world;
+    protected final BloodNetworkImpl.AcceptorManager acceptors;
     protected Long2ObjectOpenHashMap<VascularConduitEntity> conduits = new Long2ObjectOpenHashMap<>();
-    protected Set<BloodAcceptor> acceptors = Sets.newHashSet();
 
-    public BloodNetGraph(World world)
+    public BloodNetGraph(World world, BloodNetworkImpl.AcceptorManager acceptors)
     {
         this.world = world;
+        this.acceptors = acceptors;
     }
 
     public void clear()
     {
-        conduits.values().forEach(c -> c.setNetwork(null));
-
         conduits.clear();
-        acceptors.clear();
     }
 
     public Long2ObjectMap<VascularConduitEntity> getConduits()
@@ -39,12 +37,7 @@ public class BloodNetGraph
         return conduits;
     }
 
-    public Set<BloodAcceptor> getAcceptors()
-    {
-        return acceptors;
-    }
 
-    // TODO: Find acceptors
     public void rebuild(BlockPos startPos)
     {
         clear();
@@ -64,6 +57,8 @@ public class BloodNetGraph
             var conduit = VascularConduit.find(world, current, currentState);
             if (conduit != null)
             {
+                insert(current.asLong(), conduit.getEntity(world, current, currentState));
+
                 for (Direction direction : Direction.values())
                 {
                     if (!conduit.isConnectedIn(world, current, currentState, direction)) continue;
@@ -74,12 +69,11 @@ public class BloodNetGraph
                     visited.add(mutable.asLong());
 
                     BlockState nextState = world.getBlockState(mutable);
+
                     VascularConduit nextConduit = VascularConduit.find(world, mutable, nextState);
-                    if (nextConduit.isConnectedIn(world, mutable, nextState, direction.getOpposite()))
+                    if (nextConduit != null && nextConduit.isConnectedIn(world, mutable, nextState, direction.getOpposite()))
                     {
                         posQueue.add(mutable.toImmutable());
-//                        conduits.put(mutable.asLong(), VascularConduitEntity.find(world, mutable));
-                        insert(mutable.asLong(), conduit.getEntity(world, mutable, nextState));
                     }
                 }
             }
@@ -91,8 +85,32 @@ public class BloodNetGraph
         return conduits.isEmpty();
     }
 
-    public void insert(long pos, VascularConduitEntity newPart)
+    public void insert(long lpos, VascularConduitEntity newPart)
     {
-        conduits.put(pos, newPart);
+        conduits.put(lpos, newPart);
+
+        BlockPos pos = BlockPos.fromLong(lpos);
+        BlockState state = world.getBlockState(pos);
+        var conduit = VascularConduit.find(world, pos, world.getBlockState(pos));
+        if (conduit == null) return;
+
+        BlockPos.Mutable mutable = pos.mutableCopy();
+        for (Direction direction : Direction.values())
+        {
+            if (!conduit.isConnectedIn(world, pos, state, direction)) continue;
+
+            mutable.set(pos, direction);
+
+            BloodAcceptor acceptor = BloodAcceptor.SIDED.find(world, mutable, direction.getOpposite());
+            if (acceptor != null)
+            {
+                acceptors.add(lpos, acceptor);
+            }
+        }
+    }
+
+    public void remove(long pos)
+    {
+        conduits.remove(pos);
     }
 }

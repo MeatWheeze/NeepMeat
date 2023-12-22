@@ -21,6 +21,11 @@ public interface BloodAcceptor
     enum Mode
     {
         IN,
-        OUT
+        OUT;
+
+        public boolean isOut()
+        {
+            return this == OUT;
+        }
     }
 }

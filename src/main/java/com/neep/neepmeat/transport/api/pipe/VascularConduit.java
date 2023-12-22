@@ -23,7 +23,7 @@ public interface VascularConduit
 
     static VascularConduit find(World world, BlockPos pos, BlockState state)
     {
-        if (state instanceof VascularConduit conduit)
+        if (state.getBlock() instanceof VascularConduit conduit)
             return conduit;
 
         return LOOKUP.find(world, pos, null);
@@ -56,6 +56,7 @@ public interface VascularConduit
                 {
                     var network = BloodNetworkManager.get(world).create(pos);
                     network.add(pos, getEntity(world, pos, state));
+//                    network.update(pos, VascularConduitEntity.UpdateReason.ADDED);
                 }
                 else if (adjNetworks.size() == 1)
                 {
@@ -69,6 +70,12 @@ public interface VascularConduit
             }
             case REMOVED ->
             {
+                var original = BloodNetwork.find(world, pos);
+                if (original != null)
+                {
+                    original.remove(pos, getEntity(world, pos, state));
+                }
+
                 Set<BloodNetwork> updatedNetworks = Sets.newHashSet();
                 BlockPos.Mutable mutable = pos.mutableCopy();
                 for (Direction direction : Direction.values())
@@ -76,22 +83,33 @@ public interface VascularConduit
                     if (!isConnectedIn(world, pos, state, direction)) continue;
 
                     mutable.set(pos, direction);
+
+                    // Detect conduits with a null network
+                    var conduit = VascularConduit.find(world, mutable, world.getBlockState(mutable));
                     var network = BloodNetwork.find(world, mutable);
-                    if (network != null && !updatedNetworks.contains(network))
+                    if (conduit != null)
                     {
-                        updatedNetworks.add(network);
-                        network.update(mutable.toImmutable(), reason);
-                    }
-                    else
-                    {
-                        // If there is a connected pipe with a null network, it must have been disowned.
-                        BloodNetworkManager.get(world).create(mutable);
+                        if ( network != null && !updatedNetworks.contains(network))
+                        {
+                            updatedNetworks.add(network);
+                            network.rebuild(mutable.toImmutable(), reason);
+                        }
+                        else
+                        {
+                            // If there is a connected pipe with a null network, it must have been disowned.
+                            var newNetwork = BloodNetworkManager.get(world).create(mutable);
+                            newNetwork.rebuild(mutable.toImmutable(), reason);
+                        }
                     }
                 }
             }
             case CHANGED ->
             {
-
+                var network = BloodNetwork.find(world, pos);
+                if (network != null)
+                {
+                    network.update(pos, getEntity(world, pos, state));
+                }
             }
         }
     }

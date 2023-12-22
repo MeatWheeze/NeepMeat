@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -15,6 +16,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
@@ -29,7 +31,6 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class TransducerBlockEntity extends SyncableBlockEntity
 {
-
     public static final FluidVariant INPUT_VARIANT = FluidVariant.of(Fluids.WATER);
 
     protected WritableSingleFluidStorage storage = new WritableSingleFluidStorage(FluidConstants.BUCKET, this::markDirty)
@@ -148,5 +149,31 @@ public class TransducerBlockEntity extends SyncableBlockEntity
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+    }
+
+    BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    {
+        @Override
+        public float getRate()
+        {
+            return 0.1f;
+        }
+
+        @Override
+        public void updateInflux(float influx)
+        {
+
+        }
+
+        @Override
+        public Mode getMode()
+        {
+            return Mode.OUT;
+        }
+    };
+
+    public BloodAcceptor getBloodAcceptor(Direction direction)
+    {
+        return bloodAcceptor;
     }
 }

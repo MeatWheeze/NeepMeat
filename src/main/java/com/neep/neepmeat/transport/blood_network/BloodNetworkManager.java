@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
