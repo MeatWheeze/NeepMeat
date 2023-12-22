@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "idi",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:rusty_metal"
+    },
+    "d": {
+      "item": "minecraft:iron_bars"
+    }
+  },
+  "result": {
+    "item": "neepmeat:rusty_vent",
+    "count": 5
+  }
+}

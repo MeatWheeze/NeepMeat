@@ -66,7 +66,8 @@
   "block.neepmeat.yellow_metal_scaffold_stairs": "Yellow Metal Scaffold Stairs",
   "block.neepmeat.yellow_metal_scaffold_slab": "Yellow Metal Scaffold Slab",
 
-  "block.neepmeat.rusty_vent": "Rusty Column",
+  "block.neepmeat.rusty_vent": "Rusty Vent",
+  "block.neepmeat.rusty_column": "Rusty Column",
 
   "block.neepmeat.mesh_panel": "Mesh Pane",
 
@@ -99,36 +100,46 @@
   "block.neepmeat.check_valve": "Check Valve",
 
   "block.neepmeat.item_pipe": "Pneumatic Pipe",
+  "block.neepmeat.item_pipe.lore_0": "Items must be inserted with an Ejector or Item Pump.",
   "block.neepmeat.merge_item_pipe": "Merge Pneumatic Pipe",
   "block.neepmeat.dumper": "Smart Dumper",
+  "block.neepmeat.dumper.lore_0": "Drops items straight down.",
 
   "block.neepmeat.data_cable": "Data Cable",
 
   "block.neepmeat.pump": "Redstone Pump",
+  "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",
 
   "block.neepmeat.item_pump": "Item Pump",
+  "block.neepmeat.item_pump.lore_0": "Requests and ejects stacks of sixteen into connected pipes.",
   "block.neepmeat.ejector": "Ejector",
+  "block.neepmeat.ejector.lore_0": "Ejects single items into connected pipes.",
   "block.neepmeat.buffer": "Buffer",
+  "block.neepmeat.buffer.lore_0": "Holds nine stacks. Extraction can be disabled with redstone.",
   "block.neepmeat.content_detector": "Content Detector",
+  "block.neepmeat.content_detector.lore_0": "Detects certain items in the inventory it faces.",
 
   "block.neepmeat.basic_tank": "Basic Tank",
   "block.neepmeat.basic_glass_tank": "Glass Tank",
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
-  "block.neepmeat.fluid_port": "Fluid Port",
+  "block.neepmeat.fluid_buffer.lore_0": "Holds 1/3 of a bucket.",
   "block.neepmeat.fluid_drain": "Fluid Drain",
+  "block.neepmeat.fluid_drain.lore_0": "Collects fluids from the world.",
+  "block.neepmeat.fluid_interface": "Fluid Interface",
+  "block.neepmeat.fluid_interface.lore_0": "Acts as a proxy for the block it faces.",
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
 
   "block.neepmeat.item_buffer": "Display Platform",
 
-  "block.neepmeat.item_duct": "Hopper Extension",
+  "block.neepmeat.item_duct": "Hopper Extender",
 
   "block.neepmeat.rusty_panel": "Rusty Panel",
-  "block.neepmeat.rusty_grate": "Rusty Vent",
 
   "block.neepmeat.big_lever": "Big Lever",
 
   "block.neepmeat.router": "Item Router",
+  "block.neepmeat.router.lore_0": "Distributes items based on filters.",
   "block.neepmeat.grinder": "Grinder",
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
   "block.neepmeat.collector": "Fat Collector",
@@ -141,6 +152,7 @@
 
   "block.neepmeat.deployer": "Deployer",
   "block.neepmeat.mixer": "Mixer",
+  "block.neepmeat.mixer.lore_0": "Combines fluids and items from adjacent tanks.",
   "block.neepmeat.breaker": "Motorised Breaker",
   "block.neepmeat.motor_unit": "Motor",
   "block.neepmeat.stirling_engine": "Stirling Engine",
@@ -155,6 +167,7 @@
 
   "block.neepmeat.pedestal": "Pedestal",
   "block.neepmeat.death_blades": "Death Blades",
+  "block.neepmeat.death_blades.lore_0": "Macerated mobs, producing Meat.",
 
   "item.neepmeat.sacrificial_dagger": "Sacrificial Dagger",
   "item.neepmeat.animal_heart": "Rough Heart",
@@ -202,6 +215,7 @@
 
   "block.neepmeat.blood_bubble_sapling": "Blood Bubble Sapling",
   "item.neepmeat.blood_bubble": "Blood Bubble",
+  "item.neepmeat.blood_bubble.lore_0": "A membranous sac of animal blood.",
 
   "block.neepmeat.blood_bubble_log": "Blood Bubble Log",
   "block.neepmeat.blood_bubble_wood": "Blood Bubble Wood",
@@ -221,9 +235,10 @@
 
   "item.neepmeat.flywheel": "Flywheel",
 
-  "item.neepmeat.whisper_brass_ingot": "Whispering Brass",
+  "item.neepmeat.whisper_brass_ingot": "Whispering Brass Ingot",
 
-  "item.neepmeat.meat_steel_ingot": "Meat Steel",
+  "item.neepmeat.meat_steel_ingot": "Meat Steel Ingot",
+  "item.neepmeat.meat_steel_ingot.lore_0": "Forged from iron and flesh.",
   "item.neepmeat.meat_steel_component": "Meat Steel Component",
 
   "item.neepmeat.meat_scrap": "Meat Scrap",
@@ -231,7 +246,7 @@
   "item.neepmeat.cooked_meat_brick": "Cooked Meat Brick",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
-  "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when connected to an Integrator.",
+  "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when connected to an Integrator.",
 
   "message.neepmeat.compactor.not_found": "No Integrator organism is connected.",
   "message.neepmeat.compactor.immature": "The connected Integrator organism is not fully grown.",
