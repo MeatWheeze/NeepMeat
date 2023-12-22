@@ -8,7 +8,7 @@ public class DebugItem extends BaseItem
 {
     public DebugItem(String registryName, boolean hasLore, Settings settings)
     {
-        super(registryName, 0, settings);
+        super(registryName, settings);
     }
 
     public ActionResult useOnBlock(ItemUsageContext context)

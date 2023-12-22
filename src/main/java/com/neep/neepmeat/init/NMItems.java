@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.meatlib.item.BaseCraftingItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
@@ -64,17 +65,17 @@ public class NMItems
 
     public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
-    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", 0, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", TooltipSupplier.empty(), new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
 
     public static Item CAN = new BaseCraftingItem("can", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item CARTON = new BaseCraftingItem("carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item MILK_CARTON = new BaseCraftingItem("milk_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MILK_BOTTLE));
-    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
+    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", TooltipSupplier.empty(), new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
 
     // Mob cloning
-    public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());
+    public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());
     public static Item MOB_EGG = new MobEggItem("mob_egg", new FabricItemSettings());
 
     public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new FabricItemSettings().group(NMItemGroups.GENERAL));

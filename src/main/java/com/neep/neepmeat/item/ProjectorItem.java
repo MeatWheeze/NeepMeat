@@ -6,6 +6,7 @@ import com.neep.neepmeat.screen_handler.GuideScreenHandler;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -23,7 +24,7 @@ public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
 {
     public ProjectorItem(String name, Settings settings)
     {
-        super(name, 0, settings);
+        super(name, ProjectorItem::applyTooltip, settings);
     }
 
     @Override
@@ -42,11 +43,9 @@ public class ProjectorItem extends BaseItem implements NamedScreenHandlerFactory
         return new TranslatableText(NeepMeat.NAMESPACE + "screen.guide");
     }
 
-    @Override
-    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
+    public static void applyTooltip(Item item, List<Text> tooltip)
     {
-        super.appendTooltip(itemStack, world, tooltip, tooltipContext);
-        tooltip.add(new TranslatableText(getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
+        tooltip.add(new TranslatableText(item.getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
     }
 
     @Nullable

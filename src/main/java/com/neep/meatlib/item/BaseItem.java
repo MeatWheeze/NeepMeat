@@ -4,8 +4,6 @@ import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Formatting;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -13,13 +11,19 @@ import java.util.List;
 public class BaseItem extends Item implements IMeatItem
 {
     private final String registryName;
-    private final int lore;
+    private final TooltipSupplier tooltipSupplier;
 
-    public BaseItem(String registryName, int loreLines, Settings settings)
+    public BaseItem(final String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {
         super(settings);
         this.registryName = registryName;
-        this.lore = loreLines;
+        this.tooltipSupplier = tooltipSupplier;
+    }
+    public BaseItem(final String registryName, Settings settings)
+    {
+        super(settings);
+        this.registryName = registryName;
+        this.tooltipSupplier = TooltipSupplier.empty();
     }
 
     @Override
@@ -31,10 +35,6 @@ public class BaseItem extends Item implements IMeatItem
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        for (int i = 0; i < lore; ++i)
-        {
-            tooltip.add(new TranslatableText(getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY));
-        }
+        tooltipSupplier.apply(this, tooltip);
     }
-
 }

@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
@@ -31,12 +32,12 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class PipetteItem extends BaseItem
 {
-    protected static ItemApiLookup.ItemApiProvider<Storage<FluidVariant>, ContainerItemContext> PROVIDER = (stack, context) -> new StackStorage(stack, context, FluidConstants.BUCKET);
+    protected static ItemApiLookup.ItemApiProvider<Storage<FluidVariant>, ContainerItemContext> API_PROVIDER = (stack, context) -> new StackStorage(stack, context, FluidConstants.BUCKET);
 
-    public PipetteItem(String registryName, int loreLines, Settings settings)
+    public PipetteItem(String registryName, TooltipSupplier tooltip, Settings settings)
     {
-        super(registryName, loreLines, settings);
-        FluidStorage.ITEM.registerForItems(PROVIDER, this);
+        super(registryName, tooltip, settings);
+        FluidStorage.ITEM.registerForItems(API_PROVIDER, this);
     }
 
     @Override
