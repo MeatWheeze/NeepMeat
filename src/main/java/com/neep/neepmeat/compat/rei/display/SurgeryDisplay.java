@@ -37,6 +37,8 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         this.recipe = recipe;
     }
 
+    // I had no idea what I was doing when I made this.
+
     // AAAAAAAAAAAAAAAAAAAAAAAa
     public static List<EntryIngredient> inputsToEntries(DefaultedList<RecipeInput<?>> inputs)
     {
