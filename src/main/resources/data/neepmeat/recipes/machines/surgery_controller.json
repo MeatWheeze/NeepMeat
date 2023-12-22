@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bob",
+    "cac",
+    "msm"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "o": {
+      "item": "neepmeat:meat_steel_component"
+    },
+    "a": {
+      "item": "neepmeat:control_unit"
+    },
+    "c": {
+      "item": "neepmeat:integration_charge_crude"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "s": {
+      "item": "neepmeat:assembler"
+    }
+  },
+  "result": {
+    "item": "neepmeat:surgery_controller",
+    "count": 1
+  }
+}
