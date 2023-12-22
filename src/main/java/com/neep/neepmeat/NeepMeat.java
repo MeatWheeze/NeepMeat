@@ -9,6 +9,7 @@ import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -55,6 +56,7 @@ public class NeepMeat implements ModInitializer
 		OreFatRegistry.init();
 		NMStatusEffects.init();
 		NMPotions.init();
+		MobSynthesisRegistry.initDefaults();
 
 		NMFeatures.init();
 

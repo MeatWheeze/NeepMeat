@@ -29,6 +29,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier LARGE_BLADE = new Identifier(NeepMeat.NAMESPACE, "block/blades/blade");
     public static Identifier PUMP = new Identifier(NeepMeat.NAMESPACE, "block/bottler/pump");
     public static Identifier PYLON_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor");
+    public static Identifier SYNTHESISER_PLUNGER = new Identifier(NeepMeat.NAMESPACE, "block/synthesiser/plunger");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
@@ -50,5 +51,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(LARGE_BLADE);
         out.accept(PUMP);
         out.accept(PYLON_ROTOR);
+        out.accept(SYNTHESISER_PLUNGER);
     }
 }
