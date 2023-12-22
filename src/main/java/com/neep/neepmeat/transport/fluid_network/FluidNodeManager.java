@@ -240,7 +240,7 @@ public class FluidNodeManager
 
         validatePos(serverWorld, pos.pos);
 
-        System.out.println("Node updated: " + nodes.get(pos));
+//        System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
     }
 
