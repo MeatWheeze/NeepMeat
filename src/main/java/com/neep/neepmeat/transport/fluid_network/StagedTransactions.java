@@ -41,11 +41,16 @@ public class StagedTransactions
 
         while (!TRANSACTIONS.isEmpty())
         {
-            StagedTransaction entry = TRANSACTIONS.poll();
             try (Transaction transaction = Transaction.openOuter())
             {
+                StagedTransaction entry = TRANSACTIONS.poll();
                 entry.move(transaction);
                 transaction.commit();
+            }
+            catch (Exception e)
+            {
+                // Occasionally a spooky ClassCastException is thrown when hot-swapping
+                e.printStackTrace();
             }
         }
     }

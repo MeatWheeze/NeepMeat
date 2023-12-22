@@ -23,6 +23,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -32,6 +33,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 public class PedestalBlockEntity extends SyncableBlockEntity
 {
@@ -95,7 +97,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         }
     }
 
-    public static void spawmBeam(ServerWorld world, BlockPos startPos, BlockPos endPos)
+    public static void spawnBeam(ServerWorld world, BlockPos startPos, BlockPos endPos)
     {
         Vec3d start = Vec3d.ofCenter(startPos, 0.9);
         Vec3d end = Vec3d.ofCenter(endPos, 0.8f);
@@ -106,7 +108,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         }
     }
 
-    public Storage<ItemVariant> getStorage(Direction dir)
+    public Storage<ItemVariant> getStorage(@Nullable Direction dir)
     {
         return storage;
     }
@@ -117,21 +119,19 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         {
             return storage;
         }
+        protected BlockPos integrator = BlockPos.ORIGIN;
 
         @Override
         public void startRecipe(EnlighteningRecipe recipe)
         {
-            IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
-
-            if (integrator == null || !integrator.isMature()) return;
 
             setRecipe(recipe);
             hasRecipe = true;
 
-            integrator.setLookPos(pos);
+            getIntegrator().setLookPos(pos);
             world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
             world.playSound(null, pos, SoundInitialiser.AIRTRUCK_STARTING, SoundCategory.BLOCKS, 2, 3);
-            spawmBeam((ServerWorld) world, integrator.getPos().up(), pos);
+            spawnBeam((ServerWorld) world, integrator.up(), pos);
             sync();
         }
 
@@ -146,9 +146,11 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         public void finishRecipe()
         {
             load(world);
+            IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (currentRecipe != null) currentRecipe.craft(this, transaction);
+                if (currentRecipe != null && integrator != null)
+                    currentRecipe.craft(this, transaction);
                 transaction.commit();
             }
             setRecipe(null);
@@ -161,6 +163,10 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             load(world);
             if (currentRecipe == null)
             {
+                IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
+                if (integrator == null || !integrator.isMature()) return;
+                this.integrator = integrator.getPos();
+
                 EnlighteningRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ENLIGHTENING, this, world).orElse(null);
                 if (recipe != null)
                 {
@@ -174,6 +180,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         @Override
         public void writeNbt(NbtCompound tag)
         {
+            tag.put("integrator", NbtHelper.fromBlockPos(integrator));
             if (currentRecipe != null)
             {
                 tag.putString("recipe", currentRecipe.getId().toString());
@@ -183,6 +190,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         @Override
         public void readNbt(NbtCompound tag)
         {
+            this.integrator = NbtHelper.toBlockPos(tag.getCompound("integrator"));
             String id = tag.getString("recipe");
             if (id != null)
             {
@@ -198,6 +206,12 @@ public class PedestalBlockEntity extends SyncableBlockEntity
                 currentRecipe = (EnlighteningRecipe) world.getRecipeManager().get(recipeId).orElse(null);
             }
             recipeId = null;
+        }
+
+        public IntegratorBlockEntity getIntegrator()
+        {
+            if (world.getBlockEntity(integrator) instanceof IntegratorBlockEntity be) return be;
+            return null;
         }
     }
 

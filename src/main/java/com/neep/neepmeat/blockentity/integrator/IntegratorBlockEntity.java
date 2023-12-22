@@ -7,8 +7,11 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
@@ -17,9 +20,10 @@ import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
+import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Matrix3f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -38,7 +42,6 @@ import java.util.Queue;
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnimatable
 {
-
     protected int growthTimeRemaining = 1000;
     protected final IntegratorStorage storage;
 
@@ -46,7 +49,30 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public boolean isMature = false;
     public float facing = 0f;
     public float targetFacing = 0f;
-    public int playerSearch;
+
+    public static final int MAX_DATA = 8000;
+    protected float data;
+    protected SnapshotParticipant<Float> dataSnapshot = new SnapshotParticipant<>()
+    {
+        @Override
+        protected Float createSnapshot()
+        {
+            return data;
+        }
+
+        @Override
+        protected void readSnapshot(Float snapshot)
+        {
+            data = snapshot;
+        }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            super.onFinalCommit();
+            sync();
+        }
+    };
 
     private final AnimationFactory factory = new AnimationFactory(this);
     private boolean hatching;
@@ -54,9 +80,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
         super(NMBlockEntities.INTEGRATOR, pos, state);
-//        inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_BLOOD), TypedFluidBuffer.Mode.INSERT_ONLY);
-//        outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
-//        buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
         this.storage = new IntegratorStorage(this);
     }
 
@@ -107,6 +130,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         tag.putInt("growth_remaining", growthTimeRemaining);
         tag.putBoolean("fully_grown", isMature);
         tag.put("lookTarget", NbtHelper.fromBlockPos(lookTarget));
+        tag.putFloat("enlightenment", data);
         storage.writeNbt(tag);
     }
 
@@ -117,6 +141,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         growthTimeRemaining = tag.getInt("growth_remaining");
         isMature = tag.getBoolean("fully_grown");
         this.lookTarget = NbtHelper.toBlockPos(tag.getCompound("lookTarget"));
+        this.data = tag.getFloat("enlightenment");
         storage.readNbt(tag);
     }
 
@@ -129,6 +154,25 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         }
         if (be.isMature)
         {
+            be.data = Math.min(MAX_DATA, be.data + 1);
+            if ((world.getTime() % 20) == 0) be.sync();
+
+            if ((world.getTime() % 60) == 0) be.pointToEntity();
+
+        }
+    }
+
+    public void pointToEntity()
+    {
+        if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
+        {
+            Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+            List<Entity> players = be.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
+            if (players.size() > 0)
+            {
+                be.setLookPos(players.get(0).getBlockPos());
+                sync();
+            }
         }
     }
 
@@ -194,6 +238,23 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public Storage<FluidVariant> getStorage(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return storage.getFluidStorage(world, pos, state, direction);
+    }
+
+    public float getData()
+    {
+        return data;
+    }
+
+    public float extractEnlightenment(float maxAmount, TransactionContext transaction)
+    {
+        float extracted = Math.min(maxAmount, data);
+        if (extracted > 0)
+        {
+            dataSnapshot.updateSnapshots(transaction);
+            data -= extracted;
+            return extracted;
+        }
+        return 0;
     }
 
     public boolean isMature()

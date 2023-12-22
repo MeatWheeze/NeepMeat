@@ -30,7 +30,7 @@ public class TankMinecartRenderer extends MinecartEntityRenderer<TankMinecartEnt
         SingleVariantStorage<FluidVariant> storage = entity.getBuffer(null);
         FluidVariant fluid = storage.getResource();
         float scale = storage.getAmount() / (float) storage.getCapacity();
-        IntegratorEggRenderer.renderFluidCuboid(vertexConsumers, matrices, fluid, 0.1f, 0.1f, 0.9f, 0.9f, scale);
+        TankMinecartEntity.renderFluidCuboid(vertexConsumers, matrices, fluid, 0.1f, 0.1f, 0.9f, 0.9f, scale);
     }
 
 }
