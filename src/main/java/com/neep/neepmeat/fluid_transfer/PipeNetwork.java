@@ -140,9 +140,11 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
+//            PipeBranches.test(connectedNodes, networkPipes);
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
-                return;
+            {
+            }
 
         }
     }

@@ -54,6 +54,7 @@ public class NMBlocks
     public static Block PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block IRON_PIPE = BlockRegistry.queueBlock(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block COPPER_PIPE = BlockRegistry.queueBlock(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block CHECK_VALVE = BlockRegistry.queueBlock(new CheckValveBlock("check_valve", 64, true, FabricBlockSettings.copyOf(PIPE)));
 
     // --- Machines
     public static Block TROMMEL = BlockRegistry.queueBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

@@ -47,7 +47,6 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
         if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
         {
             boolean powered = world.isReceivingRedstonePower(pos);
-            System.out.println("powered: " + powered);
             be.setActive(powered);
         }
     }
