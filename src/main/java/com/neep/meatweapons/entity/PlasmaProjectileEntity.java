@@ -57,7 +57,7 @@ public class PlasmaProjectileEntity extends PersistentProjectileEntity
     @Override
     protected SoundEvent getHitSound()
     {
-        return SoundInitialiser.FUSION_FIRE;
+        return SoundInitialiser.FUSION_HIT;
     }
 
     private void spawnParticles(int amount)

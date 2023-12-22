@@ -1,5 +1,6 @@
 package com.neep.neepmeat.init;
 
+import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
@@ -13,21 +14,21 @@ public class SoundInitialiser
 
     public static Map<Identifier, SoundEvent> SOUNDS = new LinkedHashMap<>();
 
-    public static SoundEvent BIG_LEVER_ON = registerSound("big_lever_on");
-    public static SoundEvent BIG_LEVER_OFF = registerSound("big_lever_off");
-    public static SoundEvent CLICK = registerSound("click");
+    public static SoundEvent BIG_LEVER_ON = registerSound(NeepMeat.NAMESPACE, "big_lever_on");
+    public static SoundEvent BIG_LEVER_OFF = registerSound(NeepMeat.NAMESPACE, "big_lever_off");
+    public static SoundEvent CLICK = registerSound(NeepMeat.NAMESPACE, "click");
 
-    public static SoundEvent FUSION_FIRE = registerSound("big_lever_off");
-    public static SoundEvent FUSION_HIT = registerSound("big_lever_off");
-    public static SoundEvent RELOAD = registerSound("click");
+    public static SoundEvent FUSION_FIRE = registerSound(MeatWeapons.NAMESPACE, "fusion_fire");
+    public static SoundEvent FUSION_HIT = registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
+    public static SoundEvent RELOAD = registerSound(MeatWeapons.NAMESPACE, "fusion_reload");
 
-    public static SoundEvent HAND_CANNON_FIRE = registerSound("big_lever_off");
-    public static SoundEvent HAND_CANNON_HIT = registerSound("big_lever_off");
-    public static SoundEvent HAND_CANNON_RELOAD = registerSound("click");
+    public static SoundEvent HAND_CANNON_FIRE = registerSound(MeatWeapons.NAMESPACE, "hand_cannon_fire");
+    public static SoundEvent HAND_CANNON_HIT = registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
+    public static SoundEvent HAND_CANNON_RELOAD = registerSound(MeatWeapons.NAMESPACE, "fusion_reload");
 
-    public static SoundEvent registerSound(String path)
+    public static SoundEvent registerSound(String namespace, String path)
     {
-        Identifier id = new Identifier(NeepMeat.NAMESPACE, path);
+        Identifier id = new Identifier(namespace, path);
         SoundEvent event = new SoundEvent(id);
         SOUNDS.put(id, event);
         return event;
