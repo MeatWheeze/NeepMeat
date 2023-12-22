@@ -8,10 +8,8 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
 import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.minecraft.client.render.OverlayTexture;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.block.Blocks;
+import net.minecraft.client.render.*;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
@@ -24,6 +22,7 @@ public class MultiFluidRenderer
         float start = 0;
         matrices.translate(0.05, 0, 0.05);
         matrices.scale(2.9f, 2, 2.9f);
+        int max = 0;
         for (MultiFluidBuffer.Slot slot : multi.getSlots())
         {
             float height = slot.getAmount() / (float) multi.getCapacity();
@@ -34,13 +33,15 @@ public class MultiFluidRenderer
                     start + height,
                     1);
             start += height;
+            ++max;
         }
+//        System.out.println(max);
     }
 
     public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float endXZ, float endY, float scaleY)
     {
         Sprite sprite = FluidVariantRendering.getSprite(fluid);
-        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
+        VertexConsumer consumer = vertices.getBuffer(RenderLayers.getEntityBlockLayer(Blocks.BLACK_STAINED_GLASS.getDefaultState(), false));
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
         int col = FluidVariantRendering.getColor(fluid);

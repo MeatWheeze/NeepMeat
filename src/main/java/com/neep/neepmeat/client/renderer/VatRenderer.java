@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
@@ -25,11 +24,20 @@ public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity
     @Override
     public void render(VatControllerBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
+        MultiFluidBuffer buffer = ((MultiFluidBuffer) be.getFluidStorage());
         Direction facing = be.getCachedState().get(VatControllerBlock.FACING);
+        float maxHeight = 2;
+
         matrices.push();
 
         matrices.translate( 0.5 - facing.getOffsetX(), 1, 0.5 - facing.getOffsetZ());
-        float fluidHeight = 1.5f;
+
+        matrices.push();
+        matrices.translate(-1.5, 0, -1.5);
+        MultiFluidRenderer.renderMultiFluid(buffer, 1, maxHeight, matrices, vertexConsumers, light, overlay);
+        matrices.pop();
+
+        float fluidHeight = buffer.getTotalAmount() / (float) buffer.getCapacity() * maxHeight;
         float angleOffset = (float) (Math.PI / 3);
         float angle = be.getWorld().getTime() + tickDelta;
         float offset = 0.5f;
@@ -49,10 +57,11 @@ public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity
         }
         transaction.abort();
 
-        matrices.push();
-        matrices.translate(-1.5, 0, -1.5);
-        MultiFluidRenderer.renderMultiFluid((MultiFluidBuffer) be.getFluidStorage(), 1, 2, matrices, vertexConsumers, light, overlay);
-        matrices.pop();
+//        VertexConsumer consumer = vertexConsumers.getBuffer(BeamEffect.BEAM_LAYER);
+//        BeamRenderer.renderBeam(matrices, consumer, MinecraftClient.getInstance().cameraEntity.getEyePos(),
+//                new Vec3d(58, 4, 135),
+//                new Vec3d(58, 10, 133),
+//        123, 171, 354, 100, 1);
 
         matrices.translate(-0.5, -0.5, -0.5);
 
