@@ -1,5 +1,6 @@
 package com.neep.meatlib.datagen;
 
+import com.neep.meatlib.block.BaseWallBlock;
 import com.neep.meatlib.block.IMeatBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -22,9 +23,14 @@ public class BlockTagProvider extends FabricTagProvider.BlockTagProvider
     {
         for (Map.Entry<Identifier, Block> entry : BlockRegistry.BLOCKS.entrySet())
         {
-            if (entry.getValue() instanceof IMeatBlock meatBlock && meatBlock.dropsSelf())
+            if (entry.getValue() instanceof IMeatBlock meatBlock)
             {
-                this.getOrCreateTagBuilder(((IMeatBlock) entry.getValue()).getPreferredTool()).add(entry.getValue());
+                this.getOrCreateTagBuilder(meatBlock.getPreferredTool()).add(entry.getValue());
+            }
+
+            if (entry.getValue() instanceof BaseWallBlock wall)
+            {
+                this.getOrCreateTagBuilder(wall.getWallTag()).add(entry.getValue());
             }
         }
     }
