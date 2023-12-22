@@ -129,8 +129,9 @@ extends Entity {
     }
 
     @Override
-    public double getMountedHeightOffset() {
-        return -0.1;
+    public double getMountedHeightOffset()
+    {
+        return 0.2;
     }
 
     @Override
@@ -261,7 +262,7 @@ extends Entity {
 
     private void updateVelocity()
     {
-        this.velocityDecay = 0.9f;
+        this.velocityDecay = this.isOnGround() ? 0.2f : 0.9f;
         float verticalVelocityDecay = 0.8f;
 
         Vec3d vec3d = this.getVelocity();
@@ -472,37 +473,10 @@ extends Entity {
 
     public float calculateRoll()
     {
-//        Vec3d prevPos = new Vec3d(prevX, prevY, prevZ);
-//        Vec3d pos = getPos();
-//        float yaw = getYaw() % 360;
-//        if (yaw < 0) yaw += 360;
-//        float pYaw = prevYaw % 360;
-//        if (pYaw < 0) pYaw += 360;
-//
-////        double d = prevPos.distanceTo(getPos());
-//        double d = Math.sqrt(Math.pow(pos.x - prevPos.x, 2) + Math.pow(pos.z - prevPos.z, 2));
-//
-//        // Construct perpendicular lines
-//        var x1 = prevPos.x;
-//        var z1 = prevPos.z;
-//        var x2 = pos.x;
-//        var z2 = pos.z;
-//        var m1 = Math.tan(pYaw * Math.PI / 180);
-//        var m2 = Math.tan(yaw * Math.PI / 180);
-//
-//        // Find intersection point
-//        var h = (m1 * x1 - m2 * x2 + z2 - z1) / (m1 - m2);
-//        var k = m1 * (h - x1) + z1;
-//        Vec2d i = new Vec2d(h, k);
-//
-//        // Find mean distance to intersection
-//        var d1 = Vec2d.distanceTo(h, k, prevPos.x, prevPos.z);
-//        var d2 = Vec2d.distanceTo(h, k, pos.x, pos.z);
-//        float mean = (float) ((d1 + d2) / 2);
-
         this.prevRoll = getRoll();
+
+        // This replaces an in-depth calculation of approximate turning radius, centripetal acceleration and some rigid-body magic
         this.setRoll((float) (getVelocity().horizontalLength() * yawVelocity));
-//        this.setPitch((float) ((float) getVelocity().getY() * getVelocity().horizontalLength()));
         this.setPitch((float) ((float) - getVelocity().getY() * getVelocity().horizontalLength() * 10));
         return 0;
     }
