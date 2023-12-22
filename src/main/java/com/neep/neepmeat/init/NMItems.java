@@ -6,17 +6,11 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.item.ArmorMaterial;
-import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 
 @SuppressWarnings("unused")
 public class NMItems
 {
-
-
-
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
 
@@ -40,7 +34,8 @@ public class NMItems
     public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // MEAT
-    public static Item RAW_MEAT_BRICK = new BaseCraftingItem("raw_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item RAW_MEAT_BRICK = new BaseCraftingItem("raw_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.MEAT_BRICK));
+    public static Item COOKED_MEAT_BRICK = new BaseCraftingItem("cooked_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.COOKED_MEAT_BRICK));
 
     // Made from machine fluid
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
