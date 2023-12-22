@@ -17,7 +17,7 @@ public interface BloodAcceptor
         return 0;
     }
 
-    void updateInflux(float influx);
+    default void updateInflux(float influx) {};
 
     Mode getMode();
 

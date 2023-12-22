@@ -377,5 +377,20 @@ public class NMBlockEntities
             }
             return null;
         });
+
+        BloodAcceptor.SIDED.registerForBlocks(((world, pos, state, blockEntity, context) -> new BloodAcceptor()
+        {
+            @Override
+            public Mode getMode()
+            {
+                return Mode.OUT;
+            }
+
+            @Override
+            public float getRate()
+            {
+                return 0.1f;
+            }
+        }), NMBlocks.POWER_EMITTER);
     }
 }

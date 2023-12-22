@@ -245,6 +245,7 @@ public class NMBlocks
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), FLUID_PIPE_SETTINGS));
     public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block(), FLUID_PIPE_SETTINGS));
+    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block(), FLUID_PIPE_SETTINGS));
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
