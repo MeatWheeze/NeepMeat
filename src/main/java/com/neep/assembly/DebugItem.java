@@ -9,6 +9,7 @@ import net.minecraft.item.ItemUsageContext;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class DebugItem extends Item
@@ -31,6 +32,11 @@ public class DebugItem extends Item
                 AssemblyUtils.assembleBlocks(world, pos);
             }
             return ActionResult.SUCCESS;
+        }
+        if (world.isClient)
+        {
+//            context.getPlayer().setVelocity(new Vec3d(0, 1, 0));
+            context.getPlayer().travel(new Vec3d(50, 0, 50));
         }
         return ActionResult.FAIL;
     }

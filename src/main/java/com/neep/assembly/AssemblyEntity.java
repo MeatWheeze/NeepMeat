@@ -50,6 +50,14 @@ public class AssemblyEntity extends Entity
     protected boolean needsBoxUpdate;
 
     protected List<BlockPos> anchorPositions = new ArrayList<>();
+    private int delta;
+
+    private double x;
+    private double y;
+    private double z;
+    private double dx;
+    private double dy;
+    private double dz;
 
     public AssemblyEntity(EntityType<?> type, World world)
     {
@@ -126,7 +134,6 @@ public class AssemblyEntity extends Entity
         {
             blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
-//        dataTracker.set(PALETTE, writePalette(new NbtCompound()));
     }
 
     public void updatePalette()
@@ -136,7 +143,6 @@ public class AssemblyEntity extends Entity
             initPalette();
         }
         dataTracker.set(PALETTE, writePalette(new NbtCompound()));
-//        this.setBoundingBox(getBounds());
     }
 
     public void updateAnchorPositions()
@@ -158,24 +164,8 @@ public class AssemblyEntity extends Entity
         }
     }
 
-    @Override
-    public void tick()
+    public void updateVelocity()
     {
-        super.tick();
-        if (this.needsBoxUpdate)
-        {
-            this.setBoundingBox(calculateBoundingBox());
-            if (!world.isClient)
-            {
-                updatePalette();
-            }
-            this.needsBoxUpdate = false;
-        }
-
-//        setVelocity(0.0, 0.0, 0);
-//        this.move(MovementType.SELF, (getVelocity()));
-
-
         AssemblyContainer container = getPalette();
         if (anchorPositions.size() == 1)
         {
@@ -192,7 +182,6 @@ public class AssemblyEntity extends Entity
                     vel.multiplyComponentwise(0.1f, 0.1f, -0.1f);
                     this.setVelocity(vel);
                     this.velocityModified = true;
-//                    System.out.println(vel);
                 }
                 else
                 {
@@ -200,18 +189,226 @@ public class AssemblyEntity extends Entity
                 }
             }
         }
+    }
+
+//    @Override
+//    public void tick()
+//    {
+//        super.tick();
+//        if (this.needsBoxUpdate)
+//        {
+//            this.setBoundingBox(calculateBoundingBox());
+//            if (!world.isClient)
+//            {
+//                updatePalette();
+//            }
+//            this.needsBoxUpdate = false;
+//        }
+//
+////        setVelocity(0.0, 0.0, 0);
+////        this.move(MovementType.SELF, (getVelocity()));
+//
+//
+//
+//        interpolateMotion();
+//
+//        if (this.isLogicalSideForUpdatingMovement())
+//        {
+////            this.move(MovementType.SELF, new Vec3d(0, -0.1, 0));
+//            this.move(MovementType.SELF, getVelocity());
+//        }
+//        else
+//        {
+////            this.move(MovementType.SELF, getVelocity());
+////            this.setVelocity(Vec3d.ZERO);
+//            this.setVelocity(Vec3d.ZERO);
+//        }
+//    }
+
+    @Override
+    public void tick()
+    {
+        super.tick();
+        if (this.needsBoxUpdate)
+        {
+            this.setBoundingBox(calculateBoundingBox());
+            if (!world.isClient)
+            {
+                updatePalette();
+            }
+            this.needsBoxUpdate = false;
+        }
+
+        super.tick();
         if (this.isLogicalSideForUpdatingMovement())
         {
-//            this.move(MovementType.SELF, new Vec3d(0, -0.1, 0));
-            this.move(MovementType.SELF, getVelocity());
+            this.updateVelocity();
+            this.move(MovementType.SELF, this.getVelocity());
         }
         else
         {
-            this.move(MovementType.SELF, getVelocity());
-//            this.setVelocity(Vec3d.ZERO);
+            this.setVelocity(Vec3d.ZERO);
+//            this.move(MovementType.SELF, this.getVelocity());
         }
+
+        this.interpolateMotion();
+
+        List<LivingEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true);
+        for (LivingEntity entity : entities)
+        {
+//            if (world.isClient)
+//            {
+                Box box = entity.getBoundingBox();
+                Box thisBox = this.getBoundingBox();
+                Box intersect = thisBox.intersection(box);
+                Vec3d vel = entity.getVelocity();
+
+                Direction.Axis axis = Direction.Axis.Y;
+                double xArea = intersect.getYLength() * intersect.getZLength();
+                double yArea = intersect.getXLength() * intersect.getZLength();
+                double zArea = intersect.getXLength() * intersect.getYLength();
+//                System.out.println("x: " + xArea + " y: " + yArea + " z: " + zArea);
+
+                if (xArea > Math.max(yArea, zArea))
+                    axis = Direction.Axis.X;
+                if (yArea > Math.max(xArea, zArea))
+                    axis = Direction.Axis.Y;
+                if (zArea > Math.max(xArea, yArea))
+                    axis = Direction.Axis.Z;
+
+                double dist1 = thisBox.getMax(axis) - box.getMin(axis); // Positive direction
+                double dist2 = box.getMax(axis) - thisBox.getMin(axis); // Negative direction
+//                    System.out.println("dist1: " + dist1 + " dist2: " + dist2);
+
+                if (dist1 > 0 && dist2 > dist1)
+                {
+                    Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(dist1);
+                    entity.setPosition(entity.getPos().add(vec));
+                    entity.setOnGround(true);
+
+                    // Prevent falling when vertical
+                    if (entity.getVelocity().getComponentAlongAxis(axis) < 0)
+                    {
+                        entity.setVelocity(entity.getVelocity().multiply(1, this.getVelocity().y == 0 ? 0 : 0.9, 1));
+//                        entity.setVelocity(getVelocity().x, getVelocity().y, getVelocity().z);
+//                        entity.fallDistance = 0;
+                    }
+                    if (axis.isVertical())
+                    {
+//                        entity.setPosition(entity.getPos().add(this.getVelocity()));
+//                        entity.addVelocity(getVelocity().x, getVelocity().y, getVelocity().z);
+                    }
+                    break;
+                }
+                if (dist2 > 0 && dist1 > dist2)
+                {
+                    Vec3d vec = AssemblyUtils.getAxisUnitVector(axis).multiply(-dist2);
+                    entity.setPosition(entity.getPos().add(vec));
+                    break;
+                }
+                entity.setOnGround(true);
+                System.out.println(entity.isOnGround());
+//            }
+
+//            double distance = this.getBoundingBox().maxY - box.minY;
+//            if (distance > 0)
+//            {
+//                entity.setPosition(entity.getPos().add(0, distance, 0));
+//                entity.setOnGround(true);
+//                entity.fallDistance = 0;
+//            }
+        }
+
+//        this.moveEntities();
+        this.checkBlockCollision();
     }
 
+    public void moveEntities()
+    {
+        world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true).forEach(
+                entity ->
+                {
+                    if (false)
+                        entity.setPosition(getPos().add(0.5, 0.5, 0));
+                    if (world.isClient)
+                    {
+                        if (delta == 0)
+                            return;
+
+                        double d = entity.getX() + dx / (double) this.delta;
+                        double e = entity.getY() + dy / (double) this.delta;
+                        double f = entity.getZ() + dz / (double) this.delta;
+                        System.out.println(dy);
+//                        System.out.println(entity);
+                        entity.setPosition(entity.getPos().add(0, e, 0));
+//                        entity.setVelocity(getVelocity());
+//                        entity.setVelocity(new Vec3d(0, 1, 0));
+                        entity.setOnGround(true);
+                    }
+                }
+        );
+    }
+
+    @Override
+    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps, boolean interpolate)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.delta = 10;
+    }
+
+    protected void interpolateMotion()
+    {
+        if (this.isLogicalSideForUpdatingMovement())
+        {
+            this.delta = 0;
+            this.updateTrackedPosition(this.getX(), this.getY(), this.getZ());
+        }
+        if (this.delta <= 0)
+        {
+            return;
+        }
+
+        this.dx = this.x - getX();
+        this.dy = this.y - getY();
+        this.dz = this.z - getZ();
+
+        double d = this.getX() + dx / (double) this.delta;
+        double e = this.getY() + dy / (double) this.delta;
+        double f = this.getZ() + dz / (double) this.delta;
+
+        this.setVelocity(dx / (double) delta, dy / (double) delta, dz / (double) delta);
+        --this.delta;
+        this.setPosition(d, e, f);
+        this.setRotation(this.getYaw(), this.getPitch());
+
+        world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true).forEach(
+                entity ->
+                {
+                    if (false)
+                        entity.setPosition(getPos().add(0.5, 0.5, 0));
+                    if (world.isClient)
+                    {
+                        if (delta == 0)
+                            return;
+
+//                        double d = entity.getX() + dx / (double) this.delta;
+//                        double e = entity.getY() + dy / (double) this.delta;
+//                        double f = entity.getZ() + dz / (double) this.delta;
+
+                        double v = d + e + f;
+
+//                        entity.setPosition(entity.getPos().add(dx, dy, dz));
+//                        entity.setPos(entity.getX(), this.getY() + 2, entity.getZ());
+//                        System.out.println(entity.getPos().y);
+//                        entity.setVelocity(getVelocity());
+//                        entity.setVelocity(new Vec3d(0, 1, 0));
+//                        entity.setOnGround(true);
+                    }
+                });
+
+    }
 
     @Override
     public void move(MovementType movementType, Vec3d movement)
@@ -233,25 +430,26 @@ public class AssemblyEntity extends Entity
             {
                 Vec3d newPos = new Vec3d(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
                 this.setPosition(newPos);
-                if (this.isLogicalSideForUpdatingMovement())
-                {
-                    this.updateTrackedPosition(newPos);
-                }
+//                if (this.isLogicalSideForUpdatingMovement())
+//                {
+//                    this.updateTrackedPosition(newPos);
+//                }
                 Vec3d finalMovement = movement;
 //                if (false)
                 {
-                    world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.1, 0), (t) -> true).forEach(
-                            entity ->
-                            {
-                                if (false)
-                                    entity.setPosition(getPos().add(0.5, 0.5, 0));
-                                if (true)
-                                {
-                                    entity.setVelocity(finalMovement);
-                                    entity.setOnGround(true);
-                                }
-                            }
-                    );
+//                    world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.2, 0), (t) -> true).forEach(
+//                            entity ->
+//                            {
+//                                if (false)
+//                                    entity.setPosition(getPos().add(0.5, 0.5, 0));
+//                                if (true)
+//                                {
+//                                    entity.setVelocity(finalMovement);
+//                                    entity.setOnGround(true);
+////                                    System.out.println(finalMovement);
+//                                }
+//                            }
+//                    );
                 }
             }
 
@@ -282,7 +480,6 @@ public class AssemblyEntity extends Entity
         }
 
         this.world.getProfiler().pop();
-//        System.out.println(getPos());
     }
 
     private Vec3d adjustMovementForCollisions(Vec3d movement)
@@ -310,14 +507,11 @@ public class AssemblyEntity extends Entity
     @Override
     protected Box calculateBoundingBox()
     {
-//        return getBounds().offset(getPos().add(-0.5, -1, -0.5));
         return getBounds().offset(getPos());
     }
 
     public Box getBounds()
     {
-//        return Box.of(new Vec3d(0, 0, 0), 1, 2, 1);
-//        Box base = Box.of(new Vec3d(0, 0, 0), 0, 0, 0);
         double dx = 0;
         double dy = 0;
         double dz = 0;
@@ -337,7 +531,6 @@ public class AssemblyEntity extends Entity
 //                    if (!states.get(i, j, k).isAir())
                     if (states.get(i - 1, j - 1, k - 1).isOf(Assembly.PLATFORM))
                     {
-//                        System.out.println(i + ", " + j + ", " + k + ", " + ", current z: " + dz + ", " + states.get(i, j, k));
                         if (i > dx)
                             dx = i;
                         if (j > dy)
@@ -348,13 +541,11 @@ public class AssemblyEntity extends Entity
                 }
             }
         }
-//        return Box.of(Vec3d.ZERO, dx, dy, dz);
         if (dx == 0 || dy == 0 || dz == 0)
         {
             return new Box(0, 0, 0, 1, 1, 1);
         }
         return new Box(0, 0, 0, dx, dy, dz);
-//        return Box.of(Vec3d.ZERO, 1, 1, 1);
     }
 
     public ActionResult interact(PlayerEntity player, Hand hand)
@@ -372,15 +563,11 @@ public class AssemblyEntity extends Entity
             }
             else
             {
-//                initPalette();
-//                this.remove(RemovalReason.DISCARDED);
                 AssemblyUtils.disassemble(world, this);
             }
             updatePalette();
         }
 
-//        System.out.println(world.getBlockState(getBlockPos()));
-//        System.out.println(!world.getBlockState(getBlockPos()).isAir());
 
         return ActionResult.SUCCESS;
     }
@@ -390,7 +577,7 @@ public class AssemblyEntity extends Entity
     {
 //        if (entity.getBoundingBox().minY <= this.getBoundingBox().minY)
 //        {
-            super.pushAwayFrom(entity);
+//            super.pushAwayFrom(entity);
 //        }
     }
 
@@ -398,12 +585,13 @@ public class AssemblyEntity extends Entity
     public boolean collides()
     {
         return !this.isRemoved();
+//        return false;
     }
 
     @Override
     public boolean isCollidable()
     {
-        return true;
+        return false;
     }
 
     @Override

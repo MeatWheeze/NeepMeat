@@ -22,6 +22,6 @@ public class BoatTest extends BoatEntity
     public void move(MovementType type, Vec3d movement)
     {
         super.move(type, movement);
-        System.out.println(getPos());
+        System.out.println(getPos().z);
     }
 }
