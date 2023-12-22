@@ -4,11 +4,12 @@
   "package": "com.neep.meatweapons.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "LivingEntityMixin"
   ],
   "client": [
     "HeldItemRendererMixin",
-    "PlayerEntityRendererMixin",
-    "MixinClientWorld"
+    "MixinClientWorld",
+    "PlayerEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1
