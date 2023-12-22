@@ -48,8 +48,8 @@
 - Improve world loading speed by serialising fluid networks
 - Add coloured fluid pipes
 - [done] Create REI plugin
-- Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
-- Add recipe for biomechanical components
+- [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
+- [done] Add recipe for biomechanical components
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
@@ -167,6 +167,13 @@ Biomass reprocessor
 
 Surrogate nervous system collects XP. Taking cuttings gives XP-rich nervous tissue. These can be ground up to make XP meat. This can be packed XP cans or diffused into the world, at a loss.
 
+# Rocket-Plane
+
+Rocket Plane is nuclar powered! Rocket Plane can transport you or your objects VAST distances! Rocket Plane is our best friend!
+
+# Auto-Crafting Solutions
+
+- Nine display platforms are placed in a 3x3 square. 
 
 # Achievements
 
@@ -203,4 +210,3 @@ Heart Machine
 ## Work Fluid
 
 - *I'm not like the other mods*
-- 

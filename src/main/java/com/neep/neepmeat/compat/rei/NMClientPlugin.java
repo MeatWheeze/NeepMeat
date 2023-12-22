@@ -2,9 +2,11 @@ package com.neep.neepmeat.compat.rei;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
+import com.neep.neepmeat.compat.rei.category.AlloyKilnCategory;
 import com.neep.neepmeat.compat.rei.category.CompactingCategory;
 import com.neep.neepmeat.compat.rei.category.GrindingCategory;
 import com.neep.neepmeat.compat.rei.category.MixingCategory;
+import com.neep.neepmeat.compat.rei.display.AlloySmeltingDisplay;
 import com.neep.neepmeat.compat.rei.display.CompactingDisplay;
 import com.neep.neepmeat.compat.rei.display.GrindingDisplay;
 import com.neep.neepmeat.compat.rei.display.MixingDisplay;
@@ -13,6 +15,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
+import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -33,6 +36,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registry.registerRecipeFiller(GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
+        registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
 
         int page = 0;
         UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.CHARNEL_COMPACTOR).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
@@ -49,11 +53,13 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.add(
                 new GrindingCategory(),
                 new CompactingCategory(),
-                new MixingCategory()
+                new MixingCategory(),
+                new AlloyKilnCategory()
         );
 
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
+        registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
     }
 }

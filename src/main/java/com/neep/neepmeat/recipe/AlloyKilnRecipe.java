@@ -88,9 +88,24 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         throw new UnsupportedOperationException("use getItemOutput instead");
     }
 
+    public RecipeInput<Item> getItemInput1()
+    {
+        return itemInput1;
+    }
+
+    public RecipeInput<Item> getItemInput2()
+    {
+        return itemInput2;
+    }
+
     public RecipeOutput<Item> getItemOutput()
     {
         return itemOutput;
+    }
+
+    public int getProcessTime()
+    {
+        return processTime;
     }
 
     @Override
