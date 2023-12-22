@@ -1,72 +1,20 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.FluidTransport;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.*;
-import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import java.util.HashSet;
 
 public class FluidPipeBlockEntity extends BlockEntity
 {
     public NbtCompound queuedNbt;
     protected PipeNetwork network;
-    protected  BlockPipeVertex vertex = new BlockPipeVertex();
-
-    public class BlockPipeVertex extends SimplePipeVertex
-    {
-        private final HashSet<NodeSupplier> nodes = new HashSet<>();
-
-        @Override
-        public void setNetwork(PipeNetwork network)
-        {
-            super.setNetwork(network);
-            FluidPipeBlockEntity.this.network = network;
-        }
-
-        @Override
-        public boolean canSimplify()
-        {
-            return super.canSimplify() && nodes.isEmpty();
-        }
-
-        public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)
-        {
-            nodes.clear();
-            FluidTransport.findFluidPipe(world, pos, state).ifPresent(p ->
-            {
-                for (Direction direction : p.getConnections(state, d -> true))
-                {
-                    NodeSupplier node = FluidNodeManager.getInstance(world).getNodeSupplier(new NodePos(pos, direction));
-                    if (node.get() != null)
-                    {
-                        nodes.add(node);
-                    }
-                }
-            });
-
-        }
-
-        @Override
-        public String toString()
-        {
-            StringBuilder adj = new StringBuilder();
-            for (PipeVertex v : getAdjVertices())
-            {
-                if (v != null) adj.append(System.identityHashCode(v)).append(", ");
-            }
-            return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + "nodes: " + nodes + ", head:" + getTotalHead() + "}";
-        }
-    };
+    protected  BlockPipeVertex vertex = new BlockPipeVertex(this);
 
     public FluidPipeBlockEntity(BlockPos pos, BlockState state)
     {

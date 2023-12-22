@@ -1,10 +1,12 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+
 public interface PipeVertex
 {
     void tick();
 
-    long receiveFluid(long amount);
+    long insert(int fromDir, int toDir, long amount, TransactionContext transaction);
 
     PipeVertex[] getAdjVertices();
 

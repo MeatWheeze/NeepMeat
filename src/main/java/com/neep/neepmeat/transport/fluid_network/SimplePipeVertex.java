@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.math.Direction;
 
 import java.util.Arrays;
@@ -29,13 +30,13 @@ public class SimplePipeVertex implements PipeVertex
                 if (difference >= 0) continue;
 
                 long transfer = (long) Math.floor(Math.min(amount, difference * 100));
-                long received = adjacent.receiveFluid(transfer);
+//                long received = adjacent.insert(0, 0, transfer, transaction);
                 amount -= transfer;
             }
         }
     }
 
-    public long receiveFluid(long amount)
+    public long insert(int fromDir, int toDir, long amount, TransactionContext transaction)
     {
         this.amount += amount;
         return amount;
