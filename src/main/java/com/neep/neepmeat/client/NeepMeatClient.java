@@ -13,6 +13,8 @@ import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.tablet.GuideScreen;
+import com.neep.neepmeat.client.world.DuatDimensionEffects;
+import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
@@ -86,6 +88,8 @@ public class NeepMeatClient implements ClientModInitializer
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
+
+        NMDimensionEffects.init();
     }
 
     public static void registerRenderers()
