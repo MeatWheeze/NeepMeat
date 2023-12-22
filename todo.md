@@ -54,9 +54,9 @@
 - [done] Make SoundRegistry general
 - Add support for item input in Pressing
 - Add MEAT fluid
-- Add Meat Steel recipe
+- [done] Add Meat Steel recipe
 - Add Raw Meat Brick recipe
-- Make fluid pipes retain connections
+- [done] Make fluid pipes retain connections
 
 ## Later
 
@@ -67,6 +67,7 @@
 - Add BIG FAN
 - Make small multi tank usable
 - Sort out the Process Tank
+- Improve Big Lever texture
 
 - Improve speed of FluidNetwork node lookup
 - Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
@@ -74,6 +75,7 @@
 ## Much Later
 
 - Add Feeding Trough
+- Dyeable Meat Steel armour
 - [part] Add Caution Tape (looks similar to redstone)
 - Pipe Tree? 
 - Add MultiTank
@@ -84,6 +86,7 @@
 ## Crafting Ingredients
 
 - Add Meat Steel recipe (Compress iron and MEAT in a Casting Basin with a Hydraulic Press)
+- 
 - [done] Add Meat Steel casing
 
 ## Fixes
