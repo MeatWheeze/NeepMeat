@@ -10,8 +10,8 @@ import com.neep.meatlib.transfer.EntityVariant;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.surgery_platform.SurgeryPlatformBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.SurgeryTableContext;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeRegistry;
+import com.neep.neepmeat.player.implant.PlayerImplantManager;
+import com.neep.neepmeat.player.implant.PlayerImplantRegistry;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -25,7 +25,7 @@ import org.apache.commons.lang3.mutable.MutableBoolean;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class UpgradeInstallRecipe extends SurgeryRecipe
+public class ImplantInstallRecipe extends SurgeryRecipe
 {
     protected final Identifier id;
     protected final RecipeInput<?> resourceInput;
@@ -35,7 +35,7 @@ public class UpgradeInstallRecipe extends SurgeryRecipe
     protected static final int MODULE_SLOT = 7;
     protected static final int MOB_SLOT = 4;
 
-    public UpgradeInstallRecipe(Identifier id, RecipeInput<?> resourceInput, Identifier moduleId)
+    public ImplantInstallRecipe(Identifier id, RecipeInput<?> resourceInput, Identifier moduleId)
     {
         this.id = id;
         this.resourceInput = resourceInput;
@@ -78,13 +78,13 @@ public class UpgradeInstallRecipe extends SurgeryRecipe
     @Override
     public MeatRecipeType<?> getType()
     {
-        return NMrecipeTypes.UPGRADE_INSTALL;
+        return NMrecipeTypes.IMPLANT_INSTALL;
     }
 
     @Override
     public MeatRecipeSerialiser<?> getSerialiser()
     {
-        return NMrecipeTypes.UPGRADE_INSTALL_SERIALIZER;
+        return NMrecipeTypes.IMPLANT_INSTALL_SERIALIZER;
     }
 
     @Override
@@ -134,16 +134,16 @@ public class UpgradeInstallRecipe extends SurgeryRecipe
         // This is bad, but replacing it with something sensible would complicate everything else.
         if (component instanceof SurgeryPlatformBlockEntity.Component platform && platform.getEntity() instanceof ServerPlayerEntity player)
         {
-            PlayerUpgradeManager manager = PlayerUpgradeManager.get(player);
-            manager.installUpgrade(moduleId);
+            PlayerImplantManager manager = PlayerImplantManager.get(player);
+            manager.installImplant(moduleId);
         }
         return true;
     }
 
-    public static class Serializer implements MeatRecipeSerialiser<UpgradeInstallRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<ImplantInstallRecipe>
     {
         @Override
-        public UpgradeInstallRecipe read(Identifier id, JsonObject json)
+        public ImplantInstallRecipe read(Identifier id, JsonObject json)
         {
             RecipeInput<?> input;
             if (JsonHelper.hasJsonObject(json, "input"))
@@ -157,24 +157,24 @@ public class UpgradeInstallRecipe extends SurgeryRecipe
             {
                 moduleId = Identifier.tryParse(JsonHelper.getString(JsonHelper.getObject(json, "module"), "id"));
 
-                PlayerUpgradeRegistry.PlayerUpgradeConstructor constructor = PlayerUpgradeRegistry.REGISTRY.get(moduleId);
+                PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(moduleId);
                 if (constructor == null) throw new JsonSyntaxException("Module " + moduleId + " does not exist.");
             }
             else throw new JsonSyntaxException("Module not found.");
 
-            return new UpgradeInstallRecipe(id, input, moduleId);
+            return new ImplantInstallRecipe(id, input, moduleId);
         }
 
         @Override
-        public UpgradeInstallRecipe read(Identifier id, PacketByteBuf buf)
+        public ImplantInstallRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<?> input = RecipeInput.fromBuffer(buf);
             Identifier moduleId = buf.readIdentifier();
-            return new UpgradeInstallRecipe(id, input, moduleId);
+            return new ImplantInstallRecipe(id, input, moduleId);
         }
 
         @Override
-        public void write(PacketByteBuf buf, UpgradeInstallRecipe recipe)
+        public void write(PacketByteBuf buf, ImplantInstallRecipe recipe)
         {
             recipe.resourceInput.write(buf);
             buf.writeIdentifier(recipe.moduleId);

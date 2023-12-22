@@ -1,7 +1,7 @@
 package com.neep.neepmeat.network;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
+import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -12,7 +12,7 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 
-public class PlayerUpgradeStatusS2CPacket
+public class PlayerImplantStatusS2CPacket
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "player_upgrade_install");
 
@@ -48,12 +48,12 @@ public class PlayerUpgradeStatusS2CPacket
                 Status status = Status.values()[buf.readVarInt()];
                 switch (status)
                 {
-                    case INSTALL -> PlayerUpgradeManager.get(client.player).installUpgrade(buf.readIdentifier());
-                    case REMOVE -> PlayerUpgradeManager.get(client.player).removeUpgrade(buf.readIdentifier());
+                    case INSTALL -> PlayerImplantManager.get(client.player).installImplant(buf.readIdentifier());
+                    case REMOVE -> PlayerImplantManager.get(client.player).removeImplant(buf.readIdentifier());
                     case LOAD ->
                     {
                         NbtCompound fullNbt = buf.readNbt();
-                        PlayerUpgradeManager.get(client.player).sync(fullNbt);
+                        PlayerImplantManager.get(client.player).sync(fullNbt);
                     }
                 }
             });

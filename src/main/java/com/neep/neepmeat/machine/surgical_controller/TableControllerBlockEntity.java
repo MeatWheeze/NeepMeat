@@ -122,7 +122,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
             return;
         }
 
-        UpgradeInstallRecipe mobRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.UPGRADE_INSTALL, context).orElse(null);
+        ImplantInstallRecipe mobRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.IMPLANT_INSTALL, context).orElse(null);
         if (mobRecipe != null)
         {
             startRecipe(mobRecipe);

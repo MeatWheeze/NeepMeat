@@ -17,11 +17,10 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
-import com.neep.neepmeat.player.upgrade.*;
+import com.neep.neepmeat.player.implant.*;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -118,12 +117,13 @@ public class NeepMeat implements ModInitializer
 
 			WormActions.init();
 
-			PlayerUpgradeManager.init();
+			PlayerImplantManager.init();
 
-			PlayerAttachmentManager.registerAttachment(PlayerUpgradeManager.ID, PlayerUpgradeManager::new);
-			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraMouthUpgrade.ID, ExtraMouthUpgrade::new);
-			Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraKneeUpgrade.ID, ExtraKneeUpgrade::new);
-			Registry.register(PlayerUpgradeRegistry.REGISTRY, SkeltalUpgrade.ID, SkeltalUpgrade::new);
+			PlayerAttachmentManager.registerAttachment(PlayerImplantManager.ID, PlayerImplantManager::new);
+			Registry.register(PlayerImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
+			Registry.register(PlayerImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
+			Registry.register(PlayerImplantRegistry.REGISTRY, SkeltalImplant.ID, SkeltalImplant::new);
+			Registry.register(PlayerImplantRegistry.REGISTRY, PinealEyeImplant.ID, PinealEyeImplant::new);
 		}
 	}
 

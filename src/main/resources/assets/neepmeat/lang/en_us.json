@@ -439,7 +439,7 @@
 
   "item.neepmeat.compound_injector": "Compound Injector",
   "item.neepmeat.compound_injector_lore_0": "Heals 4 hearts when used.",
-  "item.neepmeat.compound_injector_lore_1": "Click with a %s in your inventory to reload.",
+  "item.neepmeat.compound_injector_lore_1": "Click with a %s in inventory to reload.",
 
   "effect.neepmeat.ash_preparation": "Ash Preparation",
   "item.minecraft.potion.effect.ash_preparation": "Ash Preparation",
@@ -448,7 +448,19 @@
 
   "item.neepmeat.goggles": "AR Goggles",
 
+  "entity.neepmeat.glome": "Glome",
   "entity.neepmeat.hound": "Hound",
+
+  "message.neepmeat.implant.title": "Implant",
+  "message.neepmeat.implant.install": "Implant installed: %s",
+
+  "item.neepmeat.pineal_eye": "Pineal Eye",
+  "implant.neepmeat.pineal_eye": "Pineal Eye",
+  "implant.neepmeat.pineal_eye.desc_0": "Permanently reveals the unseen.",
+
+  "item.neepmeat.extra_knees": "Extra Knees",
+  "implant.neepmeat.extra_knees": "Extra Knees",
+  "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",

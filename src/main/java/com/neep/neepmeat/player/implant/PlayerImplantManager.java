@@ -1,11 +1,12 @@
-package com.neep.neepmeat.player.upgrade;
+package com.neep.neepmeat.player.implant;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.api.event.EntityNbtEvents;
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.attachment.player.PlayerAttachment;
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.network.PlayerUpgradeStatusS2CPacket;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.network.PlayerImplantStatusS2CPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
@@ -18,110 +19,108 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
+public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
 {
     public static final String ID = "neepmeat:upgrades";
     protected PlayerEntity player;
-    protected Map<Identifier, PlayerUpgrade> upgrades = Maps.newHashMap();
+    protected Map<Identifier, PlayerImplant> implants = Maps.newHashMap();
 
     protected static final String KEY_ROOT = "neepmeat:upgrades";
 
-    public PlayerUpgradeManager(PlayerEntity player)
+    public static final String TRANSLATION_PREFIX = "implant";
+
+    public PlayerImplantManager(PlayerEntity player)
     {
         this.player = player;
     }
 
-    public void installUpgrade(Identifier id)
+    public static Text getImplantName(Identifier id)
+    {
+        return Text.translatable(id.toTranslationKey(TRANSLATION_PREFIX));
+    }
+
+    public void installImplant(Identifier id)
     {
 
-        if (PlayerUpgradeRegistry.REGISTRY.containsId(id))
+        if (PlayerImplantRegistry.REGISTRY.containsId(id))
         {
             if (!player.getWorld().isClient())
             {
-                PlayerUpgradeStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerUpgradeStatusS2CPacket.Status.INSTALL);
+                PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.INSTALL);
+                player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".implant.install", getImplantName(id)), true);
             }
 
-            addUpgrade(id);
+            addImplant(id);
         }
         else
         {
-            throw new IllegalArgumentException("Tried to add an unregistered player upgrade");
+            throw new IllegalArgumentException("Tried to add an unregistered implant to player " + player.getEntityName());
         }
     }
 
-    protected void addUpgrade(Identifier id)
+    protected void addImplant(Identifier id)
     {
-        PlayerUpgradeRegistry.PlayerUpgradeConstructor constructor = PlayerUpgradeRegistry.REGISTRY.get(id);;
+        PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(id);;
 
-        if (constructor == null) throw new IllegalArgumentException("Tried to add an unregistered player upgrade");
+        if (constructor == null) throw new IllegalArgumentException("Tried to add an unregistered implant to player " + player.getEntityName());
 
-        PlayerUpgrade upgrade = constructor.create(player);
-        upgrades.put(id, constructor.create(player));
+        PlayerImplant upgrade = constructor.create(player);
+        implants.put(id, constructor.create(player));
         upgrade.onInstall();
     }
 
     public void sync(NbtCompound fullNbt)
     {
         readNbt(fullNbt);
-//        PlayerUpgradeRegistry.PlayerUpgradeConstructor constructor = PlayerUpgradeRegistry.REGISTRY.get(id);
-//        if (constructor != null)
-//        {
-//            PlayerUpgrade upgrade = constructor.create(player);
-//            upgrades.put(id, constructor.create(player));
-//            upgrade.readNbt(initialNbt);
-//            upgrade.onInstall();
-//        }
-//        else
-//        {
-//            throw new IllegalArgumentException("Tried to add an unregistered player upgrade");
-//        }
     }
 
-    public void removeUpgrade(Identifier id)
+    public void removeImplant(Identifier id)
     {
-        PlayerUpgradeRegistry.PlayerUpgradeConstructor constructor = PlayerUpgradeRegistry.REGISTRY.get(id);
+        PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(id);
         if (constructor != null)
         {
             if (!player.getWorld().isClient())
             {
-                PlayerUpgradeStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerUpgradeStatusS2CPacket.Status.REMOVE);
+                PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.REMOVE);
             }
 
-            PlayerUpgrade upgrade = upgrades.get(id);
+            PlayerImplant upgrade = implants.get(id);
             upgrade.onUninstall();
-            upgrades.remove(id);
+            implants.remove(id);
         }
         else
         {
-            throw new IllegalArgumentException("Tried to remove an unregistered player upgrade");
+            throw new IllegalArgumentException("Tried to remove an unregistered implant in player " + player.getEntityName());
         }
     }
 
     @Override
     public void tickAttachment()
     {
-        upgrades.values().forEach(PlayerUpgrade::tick);
+        implants.values().forEach(PlayerImplant::tick);
     }
 
     public float getProtectionAmount(DamageSource source, float amount)
     {
-        return (float) upgrades.values().stream().mapToDouble(u -> u.getProtectionAmount(source, amount)).sum();
+        return (float) implants.values().stream().mapToDouble(u -> u.getProtectionAmount(source, amount)).sum();
     }
 
-    protected void addAll(PlayerUpgradeManager manager)
+    protected void addAll(PlayerImplantManager manager)
     {
-        upgrades.putAll(manager.upgrades);
+        implants.putAll(manager.implants);
     }
 
     protected void deferredLoad(NbtCompound fullNbt)
     {
         if (fullNbt != null && player instanceof ServerPlayerEntity serverPlayer)
         {
-            PlayerUpgradeStatusS2CPacket.sendLoad(serverPlayer, fullNbt);
+            PlayerImplantStatusS2CPacket.sendLoad(serverPlayer, fullNbt);
         }
     }
 
@@ -129,7 +128,7 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtList list = new NbtList();
-        upgrades.forEach((i, u) ->
+        implants.forEach((i, u) ->
         {
             NbtCompound nbt1 = new NbtCompound();
             nbt1.putString("id", i.toString());
@@ -148,11 +147,11 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
         {
             NbtCompound upgradeNbt = (NbtCompound) nbt1;
             Identifier id = Identifier.tryParse(upgradeNbt.getString("id"));
-            addUpgrade(id);
+            addImplant(id);
         });
     }
 
-    public static PlayerUpgradeManager get(PlayerEntity player)
+    public static PlayerImplantManager get(PlayerEntity player)
     {
         return player.meatlib$getAttachmentManager().getAttachment(ID);
     }
@@ -161,23 +160,23 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
     {
         ServerPlayConnectionEvents.INIT.register((handler, server) ->
         {
-            get(handler.getPlayer()).upgrades.values().forEach(PlayerUpgrade::onPlayerInit);
+            get(handler.getPlayer()).implants.values().forEach(PlayerImplant::onPlayerInit);
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
         {
-            PlayerUpgradeManager oldManager = get(oldPlayer);
-            PlayerUpgradeManager newManager = get(newPlayer);
+            PlayerImplantManager oldManager = get(oldPlayer);
+            PlayerImplantManager newManager = get(newPlayer);
 
             // Sync old upgrades to new manager
             newManager.addAll(oldManager);
-            newManager.upgrades.values().forEach(u -> u.onRespawn(oldPlayer, newPlayer));
+            newManager.implants.values().forEach(u -> u.onRespawn(oldPlayer, newPlayer));
         });
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
         {
-            PlayerUpgradeManager manager = get(handler.getPlayer());
-            manager.upgrades.values().forEach(PlayerUpgrade::onPlayerRemove);
+            PlayerImplantManager manager = get(handler.getPlayer());
+            manager.implants.values().forEach(PlayerImplant::onPlayerRemove);
         });
 
 
@@ -208,12 +207,18 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
                 // Unsure whether this state is possible
                 if (nbtCompound == null) return;
 
-                PlayerUpgradeManager manager = get(player1);
+                PlayerImplantManager manager = get(player1);
                 manager.readNbt(nbtCompound);
 
                 InitialTicks.getInstance(serverWorld).queue(w -> manager.deferredLoad(nbtCompound));
             }
         });
+    }
+
+    @Nullable
+    public PlayerImplant getImplant(Identifier id)
+    {
+        return implants.get(id);
     }
 
     @Environment(value= EnvType.CLIENT)
@@ -224,13 +229,13 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
             ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
             {
                 if (client.player != null)
-                    get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerRemove);
+                    get(client.player).implants.values().forEach(PlayerImplant::onPlayerRemove);
             });
 
             ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
             {
                 if (client.player != null)
-                    get(client.player).upgrades.values().forEach(PlayerUpgrade::onPlayerInit);
+                    get(client.player).implants.values().forEach(PlayerImplant::onPlayerInit);
             });
         }
     }

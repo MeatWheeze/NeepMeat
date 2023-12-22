@@ -1,4 +1,4 @@
-package com.neep.neepmeat.player.upgrade;
+package com.neep.neepmeat.player.implant;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.item.MeatCartonItem;
@@ -11,13 +11,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-public class ExtraMouthUpgrade implements PlayerUpgrade
+public class ExtraMouthImplant implements PlayerImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "extra_mouth");
     protected static final int MAX_FOOD = 20;
     protected final PlayerEntity player;
 
-    public ExtraMouthUpgrade(PlayerEntity player)
+    public ExtraMouthImplant(PlayerEntity player)
     {
         this.player = player;
     }

@@ -91,5 +91,7 @@ public class NMItems
 //    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new FabricItemSettings().group(NMItemGroups.GENERAL));
     public static GogglesItem GOGGLES = new GogglesItem("goggles", ArmorMaterials.IRON, EquipmentSlot.HEAD, new FabricItemSettings().group(NMItemGroups.GENERAL));
 
+    public static ImplantItem PINEAL_EYE = new ImplantItem("pineal_eye", 1, new FabricItemSettings().group(NMItemGroups.GENERAL));
+
     public static Item DEBUG_ITEM = ItemRegistry.queueItem(new DebugItem("debug", new FabricItemSettings().group(NMItemGroups.GENERAL)));
 }

@@ -8,7 +8,7 @@ import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
-import com.neep.neepmeat.recipe.surgery.UpgradeInstallRecipe;
+import com.neep.neepmeat.recipe.surgery.ImplantInstallRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 
@@ -55,8 +55,8 @@ public class NMrecipeTypes
     public static final MeatRecipeSerialiser<TransformingToolRecipe> TRANSFORMING_TOOL_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "transforming_tool", new TransformingToolRecipe.Serialiser());
     public static final MeatRecipeType<TransformingToolRecipe> TRANSFORMING_TOOL = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "transforming_tool");
 
-    public static final MeatRecipeSerialiser<UpgradeInstallRecipe> UPGRADE_INSTALL_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "upgrade_install", new UpgradeInstallRecipe.Serializer());
-    public static final MeatRecipeType<UpgradeInstallRecipe> UPGRADE_INSTALL = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "upgrade_install");
+    public static final MeatRecipeSerialiser<ImplantInstallRecipe> IMPLANT_INSTALL_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "implant_install", new ImplantInstallRecipe.Serializer());
+    public static final MeatRecipeType<ImplantInstallRecipe> IMPLANT_INSTALL = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "implant_install");
 
     public static final MeatRecipeSerialiser<FluidHeatingRecipe> HEATING_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "heating", new FluidHeatingRecipe.Serializer(FluidHeatingRecipe::new, 60));
     public static final MeatRecipeType<FluidHeatingRecipe> HEATING = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "heating");
