@@ -5,9 +5,11 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.neepmeat.api.item.OverrideSwingItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -43,7 +45,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.*;
 import java.util.function.Predicate;
 
-public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, IAnimatable, ISyncable
+public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, IAnimatable, ISyncable, OverrideSwingItem
 {
     public AnimationFactory factory = new SingletonAnimationFactory(this);
     Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
@@ -280,4 +282,10 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     {
         PersistentProjectileEntity create(World world, double x, double y, double z, double vx, double vy, double vz);
     }
+
+//    @Override
+//    public BipedEntityModel.ArmPose getPose(ItemStack stack, LivingEntity entity)
+//    {
+//        return BipedEntityModel.ArmPose.BOW_AND_ARROW;
+//    }
 }
