@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class ImmediateInstructionProviderImpl implements InstructionProvider.Immediate
+public class ImmediateInstructionProviderImpl implements InstructionProvider, ImmediateInstructionProvider
 {
     protected final ImmediateConstructor immediateConstructor;
     protected final int arguments;

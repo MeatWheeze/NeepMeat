@@ -21,8 +21,4 @@ public interface InstructionProvider
 
     Instruction create(ServerWorld world, List<Argument> arguments);
 
-    interface Immediate extends InstructionProvider
-    {
-        ImmediateInstruction createImmediate(Supplier<World> world);
-    }
 }
