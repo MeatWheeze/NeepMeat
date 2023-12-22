@@ -14,6 +14,7 @@ import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
+import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -34,6 +35,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
+    public static BlockEntityType<MultiTankBlockEntity> MULTI_TANK;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
     public static BlockEntityType<MotorBlockEntity> MOTOR;
@@ -80,6 +82,7 @@ public class NMBlockEntities
         // --- Fluid Transfer ---
         PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
         TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
+        MULTI_TANK = registerBlockEntity("multi_tank", MultiTankBlockEntity::new, NMBlocks.MULTI_TANK);
         FLUID_BUFFER = registerBlockEntity("fluid_buffer", FluidBufferBlockEntity::new, NMBlocks.FLUID_BUFFER);
         GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
         NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
@@ -136,7 +139,9 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
         FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
+
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getOutputStorage(), MIXER);
+        FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {

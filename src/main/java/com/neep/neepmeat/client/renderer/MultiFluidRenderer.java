@@ -21,7 +21,7 @@ public class MultiFluidRenderer
     {
         float start = 0;
         matrices.translate(0.05, 0, 0.05);
-        matrices.scale(2.9f, 2, 2.9f);
+        matrices.scale(2 * radius - 0.1f, maxHeight, 2 * radius - 0.1f);
         int max = 0;
         for (MultiFluidBuffer.Slot slot : multi.getSlots())
         {

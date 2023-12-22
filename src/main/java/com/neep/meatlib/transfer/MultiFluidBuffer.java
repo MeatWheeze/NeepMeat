@@ -1,20 +1,30 @@
 package com.neep.meatlib.transfer;
 
+import com.neep.meatlib.blockentity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.util.Hand;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -161,10 +171,32 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         {
             parent.markDirty();
         }
-//        if (parent instanceof BlockEntityClientSerializable serializable)
-//        {
-//            serializable.sync();
-//        }
+        if (parent instanceof BlockEntityClientSerializable serializable)
+        {
+            serializable.sync();
+        }
+    }
+
+    public boolean handleInteract(World world, PlayerEntity player, Hand hand)
+    {
+        ItemStack stack = player.getStackInHand(hand);
+        Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.ofPlayerHand(player, hand));
+//        SoundEvent fill = this.variant.getFluid().getBucketFillSound().orElse(SoundEvents.ITEM_BUCKET_FILL);
+        if (storage != null)
+        {
+            if (StorageUtil.move(storage, this, variant -> true, Long.MAX_VALUE, null) > 0)
+            {
+//                world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                return true;
+            }
+
+            if (StorageUtil.move(this, storage, variant -> true, Long.MAX_VALUE, null) > 0)
+            {
+//                world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<Slot> getSlots()
@@ -223,7 +255,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
             if ((insertedVariant.equals(variant) || variant.isBlank()))
             {
                 this.variant = insertedVariant;
-                long insertedAmount = Math.min(maxAmount, getCapacity() - maxAmount);
+                long insertedAmount = Math.min(maxAmount, getCapacity() - getAmount() + maxAmount);
                 if (insertedAmount > 0)
                 {
                     updateSnapshots(transaction);
@@ -274,7 +306,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         @Override
         public long getCapacity()
         {
-            return parent.capacity - parent.stagedTotalAmount;
+            return parent.capacity - parent.stagedTotalAmount + amount;
         }
 
         @Override

@@ -92,6 +92,7 @@
     "neepmeat:clear_tank_wall",
     "neepmeat:pump",
     "neepmeat:basic_tank",
+    "neepmeat:multi_tank",
     "neepmeat:basic_glass_tank",
     "neepmeat:fluid_buffer",
     "neepmeat:item_buffer",
