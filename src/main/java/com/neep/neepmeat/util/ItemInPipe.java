@@ -3,6 +3,7 @@ package com.neep.neepmeat.util;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -86,7 +87,18 @@ public class ItemInPipe
 
     public ResourceAmount<ItemVariant> getResourceAmount()
     {
-        return new ResourceAmount<ItemVariant>(ItemVariant.of(itemStack), itemStack.getCount());
+        ResourceAmount<ItemVariant> amount = new ResourceAmount<>(ItemVariant.of(itemStack), itemStack.getCount());
+        if (amount.resource().isBlank())
+        {
+            amount = new ResourceAmount<>(ItemVariant.of(Items.STONE.getDefaultStack()), 1);
+        }
+        return amount;
+//        return new ResourceAmount<ItemVariant>(ItemVariant.of(itemStack), itemStack.getCount());
+    }
+
+    public void decrement(int i)
+    {
+        this.itemStack.decrement(i);
     }
 
     public NbtCompound toNbt(NbtCompound nbt)
