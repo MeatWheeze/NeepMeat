@@ -4,12 +4,10 @@ import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -30,7 +28,7 @@ public class NMFluidNetwork
 
     public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
 
-    private final Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
+    private final Map<BlockPos, PipeState> networkPipes = new HashMap<>();
     private final List<BlockPos> pipeQueue = new ArrayList<>();
 
     // My pet memory leak.
@@ -249,7 +247,7 @@ public class NMFluidNetwork
         List<BlockPos> nextSet = new ArrayList<>();
 
         pipeQueue.add(startPos);
-        networkPipes.put(startPos, new PipeSegment(startPos, world.getBlockState(startPos)));
+        networkPipes.put(startPos, new PipeState(startPos, world.getBlockState(startPos)));
 
         // Pipe search depth
         for (int i = 0; i < UPDATE_DISTANCE; ++i)
@@ -266,7 +264,7 @@ public class NMFluidNetwork
                     BlockState state1 = world.getBlockState(current);
                     BlockState state2 = world.getBlockState(next);
 
-                    if (FluidAcceptor.isConnectedIn(state1, direction) && !networkPipes.containsValue(new PipeSegment(next)))
+                    if (FluidAcceptor.isConnectedIn(state1, direction) && !networkPipes.containsValue(new PipeState(next)))
                     {
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof FluidAcceptor
@@ -276,7 +274,7 @@ public class NMFluidNetwork
                             if (FluidAcceptor.isConnectedIn(state2, direction.getOpposite()))
                             {
                                 nextSet.add(next);
-                                networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
+                                networkPipes.put(next, new PipeState(next.toImmutable(), state2));
                             }
                         }
                         else if (state2.hasBlockEntity())

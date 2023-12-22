@@ -2,7 +2,7 @@ package com.neep.neepmeat.fluid_util;
 
 import net.minecraft.util.StringIdentifiable;
 
-public enum PipeConnection implements StringIdentifiable
+public enum PipeConnectionType implements StringIdentifiable
 {
     SIDE("true"),
     FORCED("forced"),
@@ -10,7 +10,7 @@ public enum PipeConnection implements StringIdentifiable
 
     private final String name;
 
-    PipeConnection(String name)
+    PipeConnectionType(String name)
     {
         this.name = name;
     }

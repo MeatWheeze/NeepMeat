@@ -41,7 +41,10 @@ public class FluidNetwork
 
     public void queueNode(FluidNode node)
     {
-        this.queuedNodes.add(node);
+        if (world.getServer().isOnThread())
+        {
+            this.queuedNodes.add(node);
+        }
     }
 
     public static FluidNetwork getInstance(World world)
@@ -56,12 +59,13 @@ public class FluidNetwork
     public static void tickNetwork(ServerWorld world)
     {
 //        System.out.println("tick: " + world.getRegistryKey());
-        for (FluidNode node : WORLD_NETWORKS.get(world).queuedNodes)
+        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.listIterator(); it.hasNext();)
         {
+            FluidNode node = it.next();
             node.loadDeferred(world);
-//            it.remove();
+            it.remove();
         }
-        WORLD_NETWORKS.get(world).queuedNodes.removeIf(node -> node.getStorage(world) != null);
+//        WORLD_NETWORKS.get(world).queuedNodes.removeIf(node -> node.getStorage(world) != null);
         NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 

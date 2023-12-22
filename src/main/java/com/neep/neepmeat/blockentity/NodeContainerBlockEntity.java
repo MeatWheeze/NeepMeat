@@ -22,11 +22,10 @@ public class NodeContainerBlockEntity extends BlockEntity
     public void setWorld(World world)
     {
         super.setWorld(world);
-        if (getWorld() instanceof ServerWorld serverWorld && queuedNbt != null)
+        if (getWorld() instanceof ServerWorld serverWorld && world.getServer().isOnThread() && queuedNbt != null)
         {
             FluidNetwork.getInstance(getWorld()).readNodes(getPos(), queuedNbt, serverWorld);
         }
-
     }
 
     @Override
@@ -34,7 +33,6 @@ public class NodeContainerBlockEntity extends BlockEntity
     {
         super.readNbt(nbt);
         queuedNbt = nbt.copy();
-
     }
 
     @Override

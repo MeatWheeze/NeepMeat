@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.block.base.BaseBlock;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.PipeConnection;
+import com.neep.neepmeat.fluid_util.PipeConnectionType;
 import com.neep.neepmeat.fluid_util.PipeProperties;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
@@ -13,7 +13,6 @@ import com.neep.neepmeat.maths.NMVec2f;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -35,13 +34,13 @@ import java.util.Map;
 public class PipeBlock extends BaseBlock implements FluidAcceptor
 {
     public static final BooleanProperty ooer = BooleanProperty.of("abc");
-    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = EnumProperty.of("north", PipeConnection.class);
+    public static final EnumProperty<PipeConnectionType> NORTH_CONNECTION = EnumProperty.of("north", PipeConnectionType.class);
 //    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = PipeProperties.NORTH_CONNECTION;
-    public static final EnumProperty<PipeConnection> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
-    public static final EnumProperty<PipeConnection> SOUTH_CONNECTION = PipeProperties.SOUTH_CONNECTION;
-    public static final EnumProperty<PipeConnection> WEST_CONNECTION = PipeProperties.WEST_CONNECTION;
-    public static final EnumProperty<PipeConnection> UP_CONNECTION = PipeProperties.UP_CONNECTION;
-    public static final EnumProperty<PipeConnection> DOWN_CONNECTION = PipeProperties.DOWN_CONNECTION;
+    public static final EnumProperty<PipeConnectionType> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
+    public static final EnumProperty<PipeConnectionType> SOUTH_CONNECTION = PipeProperties.SOUTH_CONNECTION;
+    public static final EnumProperty<PipeConnectionType> WEST_CONNECTION = PipeProperties.WEST_CONNECTION;
+    public static final EnumProperty<PipeConnectionType> UP_CONNECTION = PipeProperties.UP_CONNECTION;
+    public static final EnumProperty<PipeConnectionType> DOWN_CONNECTION = PipeProperties.DOWN_CONNECTION;
 //    public static final BooleanProperty NORTH_CONNECTION = Properties.NORTH;
 //    public static final BooleanProperty EAST_CONNECTION = Properties.EAST;
 //    public static final BooleanProperty SOUTH_CONNECTION = Properties.SOUTH;
@@ -51,7 +50,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
-    public static final Map<Direction, EnumProperty<PipeConnection>> DIR_TO_CONNECTION = (new ImmutableMap.Builder<Direction, EnumProperty<PipeConnection>>()
+    public static final Map<Direction, EnumProperty<PipeConnectionType>> DIR_TO_CONNECTION = (new ImmutableMap.Builder<Direction, EnumProperty<PipeConnectionType>>()
             .put(Direction.NORTH, NORTH_CONNECTION)
             .put(Direction.EAST, EAST_CONNECTION)
             .put(Direction.SOUTH, SOUTH_CONNECTION)
@@ -73,12 +72,12 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         super(itemName, itemMaxStack, hasLore, settings);
         this.setDefaultState(this.stateManager.getDefaultState()
-                .with(NORTH_CONNECTION, PipeConnection.NONE)
-                .with(EAST_CONNECTION, PipeConnection.NONE)
-                .with(SOUTH_CONNECTION, PipeConnection.NONE)
-                .with(WEST_CONNECTION, PipeConnection.NONE)
-                .with(UP_CONNECTION, PipeConnection.NONE)
-                .with(DOWN_CONNECTION, PipeConnection.NONE));
+                .with(NORTH_CONNECTION, PipeConnectionType.NONE)
+                .with(EAST_CONNECTION, PipeConnectionType.NONE)
+                .with(SOUTH_CONNECTION, PipeConnectionType.NONE)
+                .with(WEST_CONNECTION, PipeConnectionType.NONE)
+                .with(UP_CONNECTION, PipeConnectionType.NONE)
+                .with(DOWN_CONNECTION, PipeConnectionType.NONE));
 
         for (BlockState state : this.getStateManager().getStates())
         {
@@ -91,7 +90,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         VoxelShape shape = Block.createCuboidShape(4, 4, 4, 12, 12, 12);
         for (Direction direction : Direction.values())
         {
-            if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE)
+            if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
             {
                 shape = VoxelShapes.union(shape, DIR_SHAPES.get(direction));
             }
@@ -178,7 +177,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         for (Direction direction : Direction.Type.HORIZONTAL)
         {
             BlockState blockPos;
-            boolean connection = state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnection.SIDE;
+            boolean connection = state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE;
             if (!connection || world.getBlockState(mutable.set(pos, direction)).isOf(this)) continue;
             mutable.move(Direction.DOWN);
 
@@ -200,10 +199,10 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         // Already connected in direction
         if (connection && (state.get(DIR_TO_CONNECTION.get(direction)).isConnected()))
         {
-            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.SIDE);
+            return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.SIDE);
         }
 
-        return state.with(DIR_TO_CONNECTION.get(direction), PipeConnection.NONE);
+        return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
     }
 
     // Only takes into account other pipes, connections to fluid containers are enforced later.
@@ -219,23 +218,23 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     protected static boolean isNotConnected(BlockState state)
     {
         return
-                state.get(NORTH_CONNECTION) != PipeConnection.SIDE
-                && state.get(SOUTH_CONNECTION) != PipeConnection.SIDE
-                && state.get(EAST_CONNECTION) != PipeConnection.SIDE
-                && state.get(WEST_CONNECTION) != PipeConnection.SIDE
-                && state.get(UP_CONNECTION) != PipeConnection.SIDE
-                && state.get(DOWN_CONNECTION) != PipeConnection.SIDE
+                state.get(NORTH_CONNECTION) != PipeConnectionType.SIDE
+                && state.get(SOUTH_CONNECTION) != PipeConnectionType.SIDE
+                && state.get(EAST_CONNECTION) != PipeConnectionType.SIDE
+                && state.get(WEST_CONNECTION) != PipeConnectionType.SIDE
+                && state.get(UP_CONNECTION) != PipeConnectionType.SIDE
+                && state.get(DOWN_CONNECTION) != PipeConnectionType.SIDE
                 ;
     }
 
     protected static boolean isFullyConnected(BlockState state)
     {
-        return state.get(NORTH_CONNECTION) == PipeConnection.SIDE
-                && state.get(SOUTH_CONNECTION) == PipeConnection.SIDE
-                && state.get(EAST_CONNECTION) == PipeConnection.SIDE
-                && state.get(WEST_CONNECTION) == PipeConnection.SIDE
-                && state.get(UP_CONNECTION) == PipeConnection.SIDE
-                && state.get(DOWN_CONNECTION) == PipeConnection.SIDE
+        return state.get(NORTH_CONNECTION) == PipeConnectionType.SIDE
+                && state.get(SOUTH_CONNECTION) == PipeConnectionType.SIDE
+                && state.get(EAST_CONNECTION) == PipeConnectionType.SIDE
+                && state.get(WEST_CONNECTION) == PipeConnectionType.SIDE
+                && state.get(UP_CONNECTION) == PipeConnectionType.SIDE
+                && state.get(DOWN_CONNECTION) == PipeConnectionType.SIDE
                 ;
     }
 
@@ -243,11 +242,11 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         for (Direction direction : Direction.values())
         {
-            PipeConnection property = state.get(DIR_TO_CONNECTION.get(direction));
-            if (property == PipeConnection.SIDE) continue;
+            PipeConnectionType property = state.get(DIR_TO_CONNECTION.get(direction));
+            if (property == PipeConnectionType.SIDE) continue;
             BlockPos adjPos = pos.offset(direction);
             BlockState adjState = world.getBlockState(adjPos);
-            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos) ? PipeConnection.SIDE : PipeConnection.NONE);
+            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite(), (World) world, pos) ? PipeConnectionType.SIDE : PipeConnectionType.NONE);
         }
         return state;
     }
@@ -326,8 +325,8 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
                     case Z -> changeDirection = NMMaths.swapDirections(changeDirection.rotateClockwise(Direction.Axis.Y));
                 }
             }
-            boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnection.SIDE;
-            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnection.FORCED : PipeConnection.SIDE));
+            boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnectionType.SIDE;
+            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnectionType.FORCED : PipeConnectionType.SIDE));
 
             return ActionResult.SUCCESS;
 //        }

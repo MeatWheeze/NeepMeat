@@ -44,7 +44,7 @@ public class GlassTankBlock extends BaseColumnBlock implements BlockEntityProvid
         {
             if (world.getBlockEntity(pos) instanceof GlassTankBlockEntity be)
             {
-                player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount()/ FluidConstants.BUCKET)), true);
+                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
             }
         }
         return ActionResult.SUCCESS;
