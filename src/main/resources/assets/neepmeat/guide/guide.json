@@ -1,13 +1,23 @@
 {
   "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
-      {"type": "menu", "id": "machines", "icon": "neepmeat:motor_unit", "text": "Rotary Machines", "entries": [
+      {"type": "menu", "id": "rotary_machines", "icon": "neepmeat:motor_unit", "text": "Rotary Machines", "entries": [
         {"type": "page", "id": "mixer", "icon": "neepmeat:mixer", "text": "Mixer"},
         {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
-        {"type": "page", "id": "motor", "icon": "neepmeat:stirling_engine", "text": "Motor"},
+        {"type": "page", "id": "motor", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
         {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"}
       ]},
-      {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
+    {"type": "menu", "id": "ore_processing", "icon": "neepmeat:motor_unit", "text": "Ore Processing", "entries": [
+      {"type": "page", "id": "eldritch_enzymes", "icon": "neepmeat:eldritch_enzymes_bucket", "text": "Eldritch Enzymes"},
+      {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
+      {"type": "page", "id": "crucible", "icon": "neepmeat:crucible", "text": "Rendering Basin"},
+      {"type": "page", "id": "collector", "icon": "neepmeat:collector", "text": "Fat Collector"}
+    ]},
+    {"type": "menu", "id": "crops", "icon": "neepmeat:motor_unit", "text": "Crops", "entries": [
+      {"type": "page", "id": "gland_potato", "icon": "neepmeat:flesh_potato", "text": "Gland Potato"},
+      {"type": "page", "id": "whisper_wheat", "icon": "neepmeat:whisper_wheat", "text": "Whisper Wheat"}
+    ]},
+    {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
   ]},
 
   "articles": [
@@ -20,15 +30,45 @@
     {"id": "mixer", "contents": [
       {"type": "text", "text": "Mixer\n", "bold": true},
       {"type": "text", "text": "The Mixer is a two block tall machine that combines fluids and items. It requires a source of rotation to function.\n"},
-      {"type": "text", "text": "Usage\n", "bold": true},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Fluid inputs are taken from any tank that is adjacent to the mixer's lower block. Item inputs must be inserted directly into the machine through hoppers or pipes. Once a valid combination of items and fluids is present, the mixing will begin. The rate of this process is determined by the speed of the connected motor."}
+    ]
+    },
+    {"id": "gland_potato", "contents": [
+      {"type": "text", "text": "Gland Potato\n", "bold": true},
+      {"type": "text", "text": "The Gland Potato is the simplest example of an Enlightened organism. Exposure to the Divine has caused it to take on exotic fleshy characteristics, perhaps echoing Its nature. The tissues bear novel organic products that can be refined with a Mixer."}
+    ]},
+    {"id": "whisper_wheat", "contents": [
+      {"type": "text", "text": "Whisper Wheat\n", "bold": true},
+      {"type": "text", "text": "Many who cultivate it report hearing terrifying cosmic secrets in the rustling of its sheaves."}
+    ]},
+
+    {"id": "eldritch_enzymes", "contents": [
+      {"type": "text", "text": "Eldritch Enzymes\n", "bold": true},
+      {"type": "text", "text": "This product of the Gland Potato has many exotic properties and is well suited for mineral extraction."},
+      {"type": "text", "text": "\nProduction\n", "bold": true},
+      {"type": "text", "text": "Blending a gland potato in 333mb of water with a mixer will produce 333mb of Eldritch Enzymes."}
     ]
     },
     {"id": "trommel", "contents": [
       {"type": "text", "text": "Trommel\n", "bold": true},
       {"type": "text", "text": "The trommel is used to purify ethereal fats for higher yields. Solid impurities remain inside the rotating mesh while the fluent fat drains away.\n"},
-      {"type": "text", "text": "Usage\n", "bold": true},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Fluid inputs are inserted into the top of the nearest block and outputs leave through"}
+    ]
+    },
+    {"id": "crucible", "contents": [
+      {"type": "text", "text": "Rendering Basin\n", "bold": true},
+      {"type": "text", "text": "The enlightened enzymes of the Gland Potato concentrate the fleshly nature of certain minerals into a layer of ethereal fat. Thus, an important element of mineral extraction is the Rendering Basin."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "To obtain ore fat, fill a Rendering Basin with eldritch enzymes and drop in raw ore from above. The ore fat will appear within an adjacent Fat Collector from which it can be extracted. Each unit of raw ore requires 333mb of Eldritch Enzymes to process."}
+    ]
+    },
+    {"id": "collector", "contents": [
+      {"type": "text", "text": "Fat Collector\n", "bold": true},
+      {"type": "text", "text": "Fat collectors draw ethereal fats from adjacent Rendering Basins into their reservoirs."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "A Fat Collector must be placed with its arm facing a Rendering Basin. Provided enough Eldritch Enzymes are present in the basin, inserting any raw ore will produce its corresponding fat in the collector. Up to four Fat Collectors can be placed next to a single Rendering Basin to collect the fats from different ores."}
     ]
     }
   ]
