@@ -1,0 +1,99 @@
+{
+  "variants": {
+    "powered=false,shape=ascending_east,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_ne",
+      "y": 90
+    },
+    "powered=false,shape=ascending_east,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_sw",
+      "y": -90
+    },
+    "powered=false,shape=ascending_north,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_ne"
+    },
+    "powered=false,shape=ascending_north,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_sw",
+      "y": 180
+    },
+    "powered=false,shape=ascending_south,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_sw"
+    },
+    "powered=false,shape=ascending_south,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_ne",
+      "y": 180
+    },
+
+    "powered=false,shape=ascending_west,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_sw",
+      "y": 90
+    },
+    "powered=false,shape=ascending_west,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_raised_ne",
+      "y": -90
+    },
+
+    "powered=true,shape=ascending_east,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_ne",
+      "y": 90
+    },
+    "powered=true,shape=ascending_east,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_sw",
+      "y": -90
+    },
+    "powered=true,shape=ascending_north,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_ne"
+    },
+    "powered=true,shape=ascending_north,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_sw",
+      "y": 180
+    },
+    "powered=true,shape=ascending_south,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_sw"
+    },
+    "powered=true,shape=ascending_south,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_ne",
+      "y": 180
+    },
+
+    "powered=true,shape=ascending_west,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_sw",
+      "y": 90
+    },
+    "powered=true,shape=ascending_west,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on_raised_ne",
+      "y": -90
+    },
+
+
+    "powered=true,shape=east_west,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on",
+      "y": 90
+    },
+    "powered=true,shape=east_west,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on",
+      "y": -90
+    },
+    "powered=false,shape=east_west,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail",
+      "y": 90
+    },
+    "powered=false,shape=east_west,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail",
+      "y": -90
+    },
+    "powered=true,shape=north_south,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on"
+    },
+    "powered=true,shape=north_south,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail_on",
+      "y": -180
+    },
+    "powered=false,shape=north_south,direction=negative": {
+      "model": "neepmeat:block/holding_rail/holding_rail"
+    },
+    "powered=false,shape=north_south,direction=positive": {
+      "model": "neepmeat:block/holding_rail/holding_rail",
+      "y": -180
+    }
+  }
+}
