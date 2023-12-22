@@ -29,6 +29,7 @@ public class NMItems
     public static Item STATOR = new BaseCraftingItem("stator", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item FLYWHEEL = new BaseCraftingItem("flywheel", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass", false, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // Made from machine fluid
     public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", true, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

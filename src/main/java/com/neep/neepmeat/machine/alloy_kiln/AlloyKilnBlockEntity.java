@@ -3,23 +3,31 @@ package com.neep.neepmeat.machine.alloy_kiln;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.IHeatable;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
-import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.Recipe;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Optional;
+
+@SuppressWarnings("UnstableApiUsage")
 public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatable, NamedScreenHandlerFactory
 {
     protected int fuelTime;
@@ -27,11 +35,14 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     protected int cookTime;
     protected int cookTimeTotal;
 
+    protected Identifier currentRecipeId;
+    protected AlloyKilnRecipe currentRecipe;
+    protected IMotorBlockEntity connectedMotor;
+
     protected AlloyKilnStorage storage;
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
     {
-
         @Override
         public int get(int index)
         {
@@ -85,7 +96,108 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
 
     public static void serverTick(World world, BlockPos pos, BlockState state, AlloyKilnBlockEntity be)
     {
+        be.tick(world, pos, state);
+    }
 
+    public void tick(World world, BlockPos pos, BlockState state)
+    {
+        if (currentRecipe == null)
+            readCurrentRecipe();
+
+        this.burnTime = Math.max(0, this.burnTime - 1);
+
+        if (isBurning())
+        {
+            if (isCooking())
+                this.cookTime = Math.min(this.cookTimeTotal, this.cookTime + 1);
+            else
+                startCooking();
+        }
+        else
+        {
+            int time;
+            if ((time = storage.decrementFuel()) > 0)
+            {
+                this.fuelTime = time;
+                this.burnTime = time;
+            }
+            else
+            {
+                this.cookTime = Math.max(0, this.cookTime - 1);
+            }
+        }
+
+        if (this.cookTime == this.cookTimeTotal)
+        {
+            finishCooking();
+        }
+    }
+
+    protected void startCooking()
+    {
+        Optional<AlloyKilnRecipe> recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world);
+        if (recipe.isPresent())
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                if (recipe.get().takeInputs(storage, transaction))
+                {
+                    this.currentRecipe = recipe.get();
+                    this.currentRecipeId = recipe.get().getId();
+                    this.cookTimeTotal = recipe.get().getTime();
+                    transaction.commit();
+                    return;
+                }
+                transaction.abort();
+            }
+        }
+        this.currentRecipe = null;
+        this.currentRecipeId = null;
+        this.cookTimeTotal = -1;
+        this.cookTime = 0;
+    }
+
+    protected void finishCooking()
+    {
+        if (currentRecipe != null)
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                if (currentRecipe.ejectOutput(storage, transaction))
+                {
+                    transaction.commit();
+                }
+                else
+                {
+                    transaction.abort();
+                }
+            }
+        }
+
+        this.currentRecipe = null;
+        this.currentRecipeId = null;
+        this.cookTimeTotal = -1;
+        this.cookTime = 0;
+    }
+
+    protected boolean isCooking()
+    {
+        return cookTimeTotal != -1;
+    }
+
+    public boolean isBurning()
+    {
+        return burnTime > 0;
+    }
+
+    public void readCurrentRecipe()
+    {
+        if (world != null)
+        {
+            Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(currentRecipeId);
+            optional.ifPresentOrElse(recipe -> this.currentRecipe = (AlloyKilnRecipe) recipe,
+                    () -> this.currentRecipe = null);
+        }
     }
 
     @Override
@@ -127,7 +239,11 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         nbt.putShort("burnTime", (short) burnTime);
         nbt.putShort("cookTime", (short) cookTime);
         nbt.putShort("cookTimeTotal", (short) cookTimeTotal);
+
         storage.writeNbt(nbt);
+
+        if (currentRecipe != null)
+            nbt.putString("current_recipe", currentRecipe.getId().toString());
     }
 
     @Override
@@ -138,7 +254,11 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
         this.burnTime = nbt.getShort("burnTime");
         this.cookTime = nbt.getShort("cookTime");
         this.cookTimeTotal = nbt.getShort("cookTimeTotal");
+
         storage.readNbt(nbt);
+
+        this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
+        readCurrentRecipe();
     }
 
     public AlloyKilnStorage getStorage()
