@@ -147,7 +147,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             Storage<ItemVariant> facingStorage = insertionCache.find(facing);
             if (facingStorage != null)
             {
-                Transaction nested2 = transaction.openNested();
+                Transaction nested2 = nested1.openNested();
                 extractable = StorageUtil.findExtractableContent(targetStorage,
                         itemVariant -> facingStorage.insert(itemVariant, Long.MAX_VALUE, nested2) > 0, nested2);
                 nested2.abort();

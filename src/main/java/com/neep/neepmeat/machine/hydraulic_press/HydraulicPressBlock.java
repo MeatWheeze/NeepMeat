@@ -2,7 +2,9 @@ package com.neep.neepmeat.machine.hydraulic_press;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
 import com.neep.neepmeat.util.MiscUitls;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -31,6 +33,17 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         return getDefaultState().with(FACING, context.getPlayerFacing());
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
+//        if (!(world.getBlockEntity(pos.down()) instanceof CastingBasinBlockEntity) && world.getBlockEntity(pos) instanceof HydraulicPressBlockEntity be)
+//        {
+//            be.stopRecipe(null);
+//            be.setState(2);
+//        }
     }
 
     @Override

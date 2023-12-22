@@ -134,11 +134,12 @@ public class PressingRecipe extends ImplementedRecipe<CastingBasinStorage>
             JsonObject fluidInputElement = JsonHelper.getObject(json, "fluid_input");
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJson(Registry.FLUID, fluidInputElement);
 
-            NbtCompound nbt = new NbtCompound();
+            NbtCompound nbt = null;
             if (fluidInputElement.has("fat_item"))
             {
                 Identifier rawId = new Identifier(JsonHelper.getString(fluidInputElement, "fat_item"));
                 Registry.ITEM.getOrEmpty(rawId).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + rawId + "'"));
+                nbt = new NbtCompound();
                 nbt.putString("item", rawId.toString());
             }
 

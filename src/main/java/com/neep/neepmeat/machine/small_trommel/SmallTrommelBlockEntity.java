@@ -25,8 +25,8 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public static final float INCREMENT_MIN = 0.1f;
     public static final float INCREMENT_MAX = 1;
     public static long CONVERT_MIN = 100;
-    public static long BASE_AMOUNT = 3000;
-    public static long BONUS_CHANCE = 20;
+    public static long BASE_AMOUNT = 9000;
+    public static long BONUS_CHANCE = 5;
 
     public TrommelStorage storage;
     public FluidVariant currentFluid;
@@ -87,9 +87,9 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
-            long inputAmount = (long) Math.floor(workMultiplier * BASE_AMOUNT);
+            long inputAmount = (long) Math.floor(BASE_AMOUNT);
             long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
-            long outputAmount = random.nextInt(101) < BONUS_CHANCE ? extractable : extractable + extractable;
+            long outputAmount = random.nextInt(101) < 30 ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)
                 return;
@@ -117,18 +117,19 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     @Override
     public boolean tick(IMotorBlockEntity motor)
     {
-        totalProgress = 40;
+        totalProgress = 30;
+        currentFluid = !storage.fluidInput.getResource().isBlank() ? storage.fluidInput.getResource() : null;
         if (currentFluid != null)
         {
             progress = Math.min(totalProgress, progress + progressIncrement);
         }
         else progress = 0;
-        sync();
-        convert();
         if (progress >= totalProgress)
         {
             progress = 0;
+            convert();
         }
+        sync();
         return false;
     }
 

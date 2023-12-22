@@ -57,6 +57,8 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
         NbtCompound outputNbt = new NbtCompound();
         outputStorage.writeNbt(outputNbt);
         nbt.put("output", outputNbt);
+
+        nbt.putBoolean("locked", locked);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
     {
         inputStorage.readNbt((NbtCompound) nbt.get("input"));
         outputStorage.readNbt((NbtCompound) nbt.get("output"));
+        locked = nbt.getBoolean("locked");
     }
 
     public boolean lock()
