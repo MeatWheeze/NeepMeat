@@ -11,6 +11,6 @@ public interface ImplantInstaller
     SimpleRegistry<ImplantInstaller> REGISTRY = FabricRegistryBuilder.createSimple(
             ImplantInstaller.class, new Identifier(NeepMeat.NAMESPACE, "implant_installer")).buildAndRegister();
 
-    EntityImplant install(Entity entity);
+    void install(Entity entity);
 
 }

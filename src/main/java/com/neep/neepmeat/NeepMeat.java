@@ -119,7 +119,7 @@ public class NeepMeat implements ModInitializer
 
 			PlayerImplantManager.init();
 
-			PlayerAttachmentManager.registerAttachment(PlayerImplantManager.ID, PlayerImplantManager::new);
+//			PlayerAttachmentManager.registerAttachment(PlayerImplantManager.ID, PlayerImplantManager::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, SkeltalImplant.ID, SkeltalImplant::new);
 			Registry.register(ImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
