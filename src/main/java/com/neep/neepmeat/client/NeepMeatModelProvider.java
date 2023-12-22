@@ -29,8 +29,28 @@ public class NeepMeatModelProvider implements ModelResourceProvider
 
     static
     {
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), ScaffoldTopModel::new);
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"), ScaffoldTopModel::new);
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_bottom"), ScaffoldBottomModel::new);
+        // Block
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top"), () -> new ScaffoldTopModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")));
+        // Item
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/rusted_metal_scaffold"), () -> new ScaffoldTopModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")));
+        // Block
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/scaffold_bottom"), () -> new ScaffoldBottomModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")));
+
+        // Block
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top"), () -> new ScaffoldTopModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top")));
+        // Item
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "item/blue_metal_scaffold"), () -> new ScaffoldTopModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side"),
+                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_top")));
+        // Block
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_bottom"), () -> new ScaffoldBottomModel(
+                new Identifier(NeepMeat.NAMESPACE, "block/blue_metal_scaffold_side")));
     }
 }

@@ -36,16 +36,22 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
     private static final Identifier DEFAULT_BLOCK_MODEL = new Identifier("minecraft:block/block");
     private ModelTransformation transformation;
 
-    private static final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[]
-            {
-            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
-            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")),
-    };
+    private final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[2];
+//            {
+//            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
+//            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_top")),
+//    };
 
     private final Sprite[] SPRITES = new Sprite[2];
 
     private final Mesh[] SIDES = new Mesh[6];
     private final Mesh[] SIDES_INV = new Mesh[6];
+
+    public ScaffoldTopModel(Identifier sideTexture, Identifier topTexture)
+    {
+        SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, sideTexture);
+        SPRITE_IDS[1] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, topTexture);
+    }
 
     @Override
     public Collection<Identifier> getModelDependencies()

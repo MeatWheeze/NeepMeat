@@ -14,6 +14,7 @@ import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.SideShapeType;
+import net.minecraft.block.SpreadableBlock;
 import net.minecraft.client.render.model.*;
 import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
@@ -35,15 +36,20 @@ import java.util.function.Supplier;
 public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBakedModel
 {
 
-    private static final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[]
-            {
-            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
-    };
+    private final SpriteIdentifier[] SPRITE_IDS = new SpriteIdentifier[1];
+//            {
+//            new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/scaffold_side")),
+//    };
 
     private final Sprite[] SPRITES = new Sprite[1];
 
-    private Mesh[] SIDES = new Mesh[6];
-    private Mesh[] SIDES_INV = new Mesh[6];
+    private final Mesh[] SIDES = new Mesh[6];
+    private final Mesh[] SIDES_INV = new Mesh[6];
+
+    public ScaffoldBottomModel(Identifier sideTexture)
+    {
+        SPRITE_IDS[0] = new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, sideTexture);
+    }
 
     @Override
     public Collection<Identifier> getModelDependencies()
