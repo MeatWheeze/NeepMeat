@@ -1,4 +1,4 @@
-package com.neep.neepmeat.maths;
+package com.neep.neepmeat.util;
 
 public class NMVec2f extends net.minecraft.util.math.Vec2f
 {

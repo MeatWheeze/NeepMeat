@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
-import com.neep.neepmeat.maths.NMMaths;
+import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -19,7 +19,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.*;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
