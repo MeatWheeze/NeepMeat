@@ -1,0 +1,16 @@
+{
+  "type": "neepmeat:alloy_smelting",
+  "input1": {
+    "resource": "minecraft:copper_ingot",
+    "amount": 1
+  },
+  "input2": {
+    "resource": "neepmeat:whisper_flour",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:whisper_brass_ingot",
+    "amount": 1
+  },
+  "processtime": 200
+}
