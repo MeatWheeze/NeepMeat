@@ -7,15 +7,15 @@ import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.intprovider.UniformIntProvider;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.util.math.random.Random;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Random;
 import java.util.function.BiFunction;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -33,7 +33,7 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     {
         this.resource = resource;
         this.lootFunction = UniformIntProvider.create(min, max);
-        this.random = new Random();
+        this.random = Random.create();
         this.chance = probability;
     }
 

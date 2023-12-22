@@ -11,7 +11,7 @@ public class WormSpawnS2CPacket extends EntitySpawnS2CPacket
 {
     public WormSpawnS2CPacket(int id, UUID uuid, double x, double y, double z, float pitch, float yaw, EntityType<?> entityTypeId, int entityData, Vec3d velocity)
     {
-        super(id, uuid, x, y, z, pitch, yaw, entityTypeId, entityData, velocity);
+        super(id, uuid, x, y, z, pitch, yaw, entityTypeId, entityData, velocity, 0);
     }
 
     public WormSpawnS2CPacket(WormEntity entity)

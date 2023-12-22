@@ -25,17 +25,17 @@ public class MeatRecipeReloadListener implements SimpleSynchronousResourceReload
     @Override
     public void reload(ResourceManager manager)
     {
-        for(Identifier id : manager.findResources("recipes", path -> path.endsWith(".json")))
+        for(Identifier id : manager.findResources("recipes", path -> path.getPath().endsWith(".json")).keySet())
         {
-            try(InputStream stream = manager.getResource(id).getInputStream())
-            {
-//                Reader reader = new InputStreamReader(stream);
-//                JsonElement rootElement = JsonParser.parseReader(reader);
-            }
-            catch(Exception e)
-            {
-                MeatLib.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
-            }
+//            try(InputStream stream = manager.getResource(id).getInputStream())
+//            {
+////                Reader reader = new InputStreamReader(stream);
+////                JsonElement rootElement = JsonParser.parseReader(reader);
+//            }
+//            catch(Exception e)
+//            {
+//                MeatLib.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
+//            }
         }
     }
 }

@@ -2,6 +2,7 @@ package com.neep.meatlib;
 
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
+import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
@@ -24,27 +25,20 @@ public class MeatLib implements ModInitializer
 
     public static void assertActive(Object object)
     {
-        if (!active) throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
+        if (CURRENT_NAMESPACE == null) throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
     }
 
-    public static void setNamespace(String string)
+    public static Context getContext(String namespace)
     {
-        if (active) throw new IllegalStateException();
-        CURRENT_NAMESPACE = string;
-        active = true;
+        return new Context(namespace);
     }
 
-    public static void flush()
-    {
-        if (!active) throw new IllegalStateException();
-
-        BlockRegistry.flush();
-        ItemRegistry.flush();
-
-        CURRENT_NAMESPACE = null;
-        active = false;
-
-    }
+//    public static void setNamespace(String string)
+//    {
+//        if (active) throw new IllegalStateException();
+//        CURRENT_NAMESPACE = string;
+//        active = true;
+//    }
 
     public static BlockApiLookup<Void, Void> VOID_LOOKUP =
             BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "sided_void"), Void.class, Void.class);
@@ -56,5 +50,29 @@ public class MeatLib implements ModInitializer
         GraphicsEffects.init();
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());
         InitialTicks.init();
+        MeatItemGroups.init();
+    }
+
+    public static class Context implements AutoCloseable
+    {
+        private static boolean ACTIVE;
+
+        protected Context(String namespace)
+        {
+            if (ACTIVE) throw new IllegalStateException("Meatlib: " + namespace + " attempted to get context while it belongs to " + CURRENT_NAMESPACE);
+
+            CURRENT_NAMESPACE = namespace;
+            ACTIVE = true;
+        }
+
+        @Override
+        public void close()
+        {
+            BlockRegistry.flush();
+            ItemRegistry.flush();
+
+            CURRENT_NAMESPACE = null;
+            ACTIVE = false;
+        }
     }
 }

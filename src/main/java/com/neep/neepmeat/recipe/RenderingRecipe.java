@@ -20,9 +20,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -155,7 +156,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, outputElement);
             if (outputElement.has("fat_item"))
             {
                 if (!(fluidOutput.resource().equals(NMFluids.STILL_DIRTY_ORE_FAT)))
@@ -163,7 +164,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
 
                 NbtCompound nbt = new NbtCompound();
                 Identifier rawId = new Identifier(JsonHelper.getString(outputElement, "fat_item"));
-                Registry.ITEM.getOrEmpty(rawId).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + rawId + "'"));
+                Registries.ITEM.getOrEmpty(rawId).orElseThrow(() -> new JsonSyntaxException("Unknown item '" + rawId + "'"));
                 nbt.putString("item", rawId.toString());
                 fluidOutput.setNbt(nbt);
             }
@@ -176,7 +177,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
 
             return this.factory.create(id, itemInput, fluidInput, fluidOutput);
         }
@@ -186,7 +187,7 @@ public class RenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         {
             recipe.itemInput.write(buf);
             recipe.fluidInput.write(buf);
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.fluidOutput.write(Registries.FLUID, buf);
         }
 
         @FunctionalInterface

@@ -9,7 +9,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -40,7 +41,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
         return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
     }
@@ -110,7 +111,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     protected void explode()
     {
         boolean mobGriefing = world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) && destructive;
-        this.world.createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, mobGriefing ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
+        this.world.createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, World.ExplosionSourceType.NONE);
     }
 
     private void spawnParticles(int amount)

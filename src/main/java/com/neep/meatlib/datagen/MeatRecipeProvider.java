@@ -6,26 +6,27 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.block.MetalScaffoldingBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
-import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.server.recipe.RecipeProvider;
 import net.minecraft.data.server.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.Ingredient;
-import net.minecraft.tag.TagKey;
-
+import net.minecraft.recipe.book.RecipeCategory;
+import net.minecraft.registry.tag.TagKey;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class MeatRecipeProvider extends FabricRecipeProvider
 {
-    public MeatRecipeProvider(FabricDataGenerator dataGenerator)
+    public MeatRecipeProvider(FabricDataOutput output)
     {
-        super(dataGenerator);
+        super(output);
     }
 
     public static void offerStairsRecipe(Consumer<RecipeJsonProvider> exporter, ItemConvertible output, ItemConvertible input)
@@ -51,11 +52,11 @@ public class MeatRecipeProvider extends FabricRecipeProvider
 
     public static CraftingRecipeJsonBuilder createEightDyeingRecipe(ItemConvertible output, Ingredient dye, Ingredient input)
     {
-        return ShapedRecipeJsonBuilder.create(output, 8).input('i', input).input('d', dye).pattern("iii").pattern("idi").pattern("iii");
+        return ShapedRecipeJsonBuilder.create(RecipeCategory.BUILDING_BLOCKS, output, 8).input('i', input).input('d', dye).pattern("iii").pattern("idi").pattern("iii");
     }
 
     @Override
-    protected void generateRecipes(Consumer<RecipeJsonProvider> exporter)
+    public void generate(Consumer<RecipeJsonProvider> exporter)
     {
         BlockRegistry.REGISTERED_BLOCKS.values().stream()
                 .filter(block -> block instanceof BaseBuildingBlock)

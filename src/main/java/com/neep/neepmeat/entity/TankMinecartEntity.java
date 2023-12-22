@@ -6,11 +6,9 @@ import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMEntities;
-import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.Entity;
@@ -29,10 +27,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
-import java.util.Iterator;
-
 @SuppressWarnings("UnstableApiUsage")
-public class TankMinecartEntity extends AbstractMinecartEntity implements Storage<FluidVariant>, FluidBuffer.FluidBufferProvider
+public abstract class TankMinecartEntity extends AbstractMinecartEntity implements Storage<FluidVariant>, FluidBuffer.FluidBufferProvider
 {
     public static final String AMOUNT = "amount";
     public static final String RESOURCE = "resource";
@@ -59,7 +55,7 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        buffer.writeNbt(nbt);
+        buffer.writeNbt1(nbt);
 
         return nbt;
     }
@@ -70,6 +66,8 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
         super.readNbt(nbt);
         buffer.readNbt(nbt);
     }
+
+
 
     @Override
     public Type getMinecartType()
@@ -89,11 +87,11 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
         return buffer.extract(resource, maxAmount, transaction);
     }
 
-    @Override
-    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
-    {
-        return buffer.iterator(transaction);
-    }
+//    @Override
+//    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
+//    {
+//        return buffer.iterator(transaction);
+//    }
 
     @Override
     public void dropItems(DamageSource damageSource)
@@ -112,7 +110,9 @@ public class TankMinecartEntity extends AbstractMinecartEntity implements Storag
     @Override
     public ItemStack getPickBlockStack()
     {
-        return NMItems.TANK_MINECART.getDefaultStack();
+//        return NMItems.TANK_MINECART.getDefaultStack();
+        // TODO
+        return null;
     }
 
     @Override

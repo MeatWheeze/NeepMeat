@@ -1,5 +1,6 @@
 package com.neep.neepmeat.fluid;
 
+import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -13,10 +14,11 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
 public class FluidFactory
@@ -51,20 +53,21 @@ public class FluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 
     public Item registerItem()
     {
         if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1).recipeRemainder(Items.BUCKET));
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET));
+        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
         return bucketItem;
     }
 
@@ -76,7 +79,7 @@ public class FluidFactory
 
     public Block registerBlock()
     {
-        block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
+        block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
         return block;
     }
 

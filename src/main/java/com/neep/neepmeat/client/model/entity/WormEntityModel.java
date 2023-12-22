@@ -8,19 +8,19 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class WormEntityModel extends AnimatedGeoModel<WormEntity>
 {
     @Override
-    public Identifier getModelLocation(WormEntity object)
+    public Identifier getModelResource(WormEntity object)
     {
         return new Identifier(NeepMeat.NAMESPACE, "geo/god_worm.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(WormEntity object)
+    public Identifier getTextureResource(WormEntity object)
     {
         return new Identifier(NeepMeat.NAMESPACE, "textures/block/duat_stone.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(WormEntity animatable)
+    public Identifier getAnimationResource(WormEntity animatable)
     {
         return new Identifier(NeepMeat.NAMESPACE, "animations/god_worm.animation.json");
     }

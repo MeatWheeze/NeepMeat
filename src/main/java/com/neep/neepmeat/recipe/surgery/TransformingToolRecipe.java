@@ -53,7 +53,7 @@ public class TransformingToolRecipe extends GeneralSurgeryRecipe
 
                 // Iterate through all storage views. If at least one is not empty, pass.
                 boolean containsItem = false;
-                for (StorageView<? extends TransferVariant<?>> view : structure.getStorage().iterable(transaction))
+                for (StorageView<? extends TransferVariant<?>> view : structure.getStorage())
                 {
                     if (view.getAmount() != 0) containsItem = true;
                 }

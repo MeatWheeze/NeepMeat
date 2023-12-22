@@ -1,24 +1,16 @@
 package com.neep.meatweapons.mixin;
 
-import com.neep.meatweapons.item.BaseGunItem;
-import com.neep.meatweapons.item.FusionCannonItem;
-import com.neep.meatweapons.item.HeavyCannonItem;
 import com.neep.meatweapons.item.IWeakTwoHanded;
-import com.neep.neepmeat.item.AnimatedSword;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
 import net.minecraft.client.render.item.HeldItemRenderer;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -49,7 +41,6 @@ public class HeldItemRendererMixin
     {
     }
 
-    @Shadow @Final private EntityRenderDispatcher renderManager;
     private boolean isAiming;
     private float itemXOffset = 0;
 
@@ -87,7 +78,7 @@ public class HeldItemRendererMixin
             {
                 matrices.push();
                 // Change rotation if main hand is left.
-                matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(player.getMainArm() == Arm.RIGHT ? -55 : 55));
+                matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(player.getMainArm() == Arm.RIGHT ? -55 : 55));
                 this.renderArmHoldingItem(matrices, vertexConsumers, light, equipProgress, swingProgress, player.getMainArm().getOpposite());
                 matrices.pop();
             }

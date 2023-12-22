@@ -11,7 +11,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class PlasmaEntityRenderer extends EntityRenderer<FusionBlastEntity>
 {
@@ -34,8 +34,8 @@ public class PlasmaEntityRenderer extends EntityRenderer<FusionBlastEntity>
         matrixStack.push();
         matrixStack.scale(scale, scale , scale);
 
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(angle));
-        matrixStack.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(angle));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(angle));
+        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(angle));
 //        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.lerp(tickDelta, plasmaEntity.prevYaw, plasmaEntity.getYaw()) - 90.0F));
 //        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.lerp(tickDelta, plasmaEntity.prevPitch, plasmaEntity.getPitch())));
         model.render(matrixStack, vertexConsumerProvider.getBuffer(model.getLayer(getTexture(plasmaEntity))), light, 1, 1.0F, 1.0F, 1.0F, 0.5F);

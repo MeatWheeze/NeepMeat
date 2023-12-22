@@ -14,10 +14,10 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
-
 import java.util.Map;
 import java.util.Optional;
 
@@ -142,7 +142,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
             RecipeInput<Fluid> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, inputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput, itemOutput, time);
@@ -152,7 +152,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
         public FluidHeatingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
 
             int time = buf.readVarInt();
 
@@ -163,7 +163,7 @@ public class FluidHeatingRecipe implements MeatRecipe<MultiTankBlockEntity>
         public void write(PacketByteBuf buf, FluidHeatingRecipe recipe)
         {
             recipe.fluidInput.write(buf);
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.fluidOutput.write(Registries.FLUID, buf);
 
             buf.writeVarInt(recipe.processTime);
         }

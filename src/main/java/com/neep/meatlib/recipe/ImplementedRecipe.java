@@ -3,6 +3,7 @@ package com.neep.meatlib.recipe;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.collection.DefaultedList;
 
 /**
@@ -11,7 +12,7 @@ import net.minecraft.util.collection.DefaultedList;
 public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInventory> implements Recipe<T>
 {
     @Override
-    public ItemStack craft(T inventory)
+    public ItemStack craft(T inventory, DynamicRegistryManager manager)
     {
         throw new UnsupportedOperationException("Vanilla crafting methods are not supported");
     }
@@ -23,7 +24,7 @@ public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInvento
     }
 
     @Override
-    public ItemStack getOutput()
+    public ItemStack getOutput(DynamicRegistryManager manager)
     {
         throw new UnsupportedOperationException("Vanilla crafting methods are not supported");
     }

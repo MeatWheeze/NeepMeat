@@ -13,19 +13,19 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class IntegratorEggModel<I extends BlockEntity> extends AnimatedGeoModel<IntegratorBlockEntity>
 {
     @Override
-    public Identifier getModelLocation(IntegratorBlockEntity object)
+    public Identifier getModelResource(IntegratorBlockEntity object)
     {
         return new Identifier(NeepMeat.NAMESPACE, "geo/integrator.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(IntegratorBlockEntity object)
+    public Identifier getTextureResource(IntegratorBlockEntity object)
     {
         return new Identifier(NeepMeat.NAMESPACE, "textures/entity/integrator_basic.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(IntegratorBlockEntity animatable)
+    public Identifier getAnimationResource(IntegratorBlockEntity animatable)
     {
         return new Identifier(NeepMeat.NAMESPACE, "animations/integrator.animation.json");
     }

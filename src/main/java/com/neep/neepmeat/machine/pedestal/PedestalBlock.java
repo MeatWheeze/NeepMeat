@@ -21,12 +21,11 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Random;
 
 public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDataCable
 {
@@ -52,7 +51,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, net.minecraft.util.math.random.Random random)
     {
         super.scheduledTick(state, world, pos, random);
         if (world.getBlockEntity(pos) instanceof PedestalBlockEntity be)
@@ -105,7 +104,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
 
     public static void spawnParticles(World world, BlockPos pos, int count, double dy, double speed)
     {
-        Random random = new Random(pos.asLong());
+        Random random = Random.create();
         for (int i = 0; i <= count; ++i)
         {
             world.addParticle(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,

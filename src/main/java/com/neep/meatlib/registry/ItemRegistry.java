@@ -3,9 +3,9 @@ package com.neep.meatlib.registry;
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.item.IMeatItem;
 import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ public class ItemRegistry
         {
             Map.Entry<Identifier, Item> entry = it.next();
             // TODO: Remove the jank
-            Registry.register(Registry.ITEM, entry.getKey(), entry.getValue());
+            Registry.register(Registries.ITEM, entry.getKey(), entry.getValue());
             it.remove();
         }
         ITEMS.clear();

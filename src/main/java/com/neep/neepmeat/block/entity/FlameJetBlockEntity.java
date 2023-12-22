@@ -14,7 +14,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
@@ -28,7 +27,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
 public class FlameJetBlockEntity extends SyncableBlockEntity
@@ -67,7 +65,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
     {
         super.writeNbt(nbt);
         nbt.putBoolean("powered", powered);
-        storage.writeNbt(nbt);
+        storage.writeNbt1(nbt);
     }
 
     @Override
@@ -111,7 +109,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
                 List<LivingEntity> entityList = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true);
                 entityList.forEach(entity ->
                 {
-                    if (entity.damage(DamageSource.LAVA, 1.5f))
+                    if (entity.damage(world.getDamageSources().lava(), 1.5f))
                     {
                         entity.setFireTicks(10);
                     }
@@ -123,7 +121,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
     public static void clientTick(World world, BlockPos pos, BlockState blockState, FlameJetBlockEntity be)
     {
         Direction facing = blockState.get(FlameJetBlock.FACING);
-        Random random = world.getRandom();
+        var random = world.getRandom();
         if (be.canBurn())
         {
             for (int i = 0; i < 3; ++i)

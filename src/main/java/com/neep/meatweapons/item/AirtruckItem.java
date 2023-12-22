@@ -54,7 +54,7 @@ public class AirtruckItem extends BaseItem
             if (world.isSpaceEmpty(entity))
             {
                 world.spawnEntity(entity);
-                world.emitGameEvent((Entity)user, GameEvent.ENTITY_PLACE, new BlockPos(hit));
+                world.emitGameEvent((Entity)user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
                 if (!user.isCreative())
                 {
                     stack.decrement(1);

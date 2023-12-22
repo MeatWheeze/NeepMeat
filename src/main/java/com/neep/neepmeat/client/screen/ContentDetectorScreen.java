@@ -13,8 +13,6 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.util.List;
-
 @Environment(value = EnvType.CLIENT)
 public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHandler>
 {
@@ -34,7 +32,7 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.setShaderTexture(0, BACKGROUND);
         int x = (width - backgroundWidth) / 2;
@@ -64,30 +62,30 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
                 16, 0, 8, 32, 3, COUNT_WIDGET, 32, 128, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(InventoryDetectorBehaviour.DEL_COUNT);
-        },
-        (buttonWidget, matrices, mouseX, mouseY) ->
-        {
-            renderTooltip(matrices, Text.of("Stack Condition"), mouseX, mouseY);
         });
+//        (buttonWidget, matrices, mouseX, mouseY) ->
+//        {
+//            renderTooltip(matrices, Text.of("Stack Condition"), mouseX, mouseY);
+//        });
 
         this.countButton = new CyclingButtonWidget(this.x + 20, this.y + 54, 32, 16, 0, 8,
                 32, 1, BEHAVIOUR_WIDGET, 32, 64, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(InventoryDetectorBehaviour.DEL_BEHAVIOUR);
-        },
-        (buttonWidget, matrices, mouseX, mouseY) ->
-        {
-//            renderTooltip(matrices, Text.of("owo"), mouseX, mouseY);
-            switch (((CyclingButtonWidget) buttonWidget).index)
-            {
-                case 0:
-                    renderTooltip(matrices, List.of(Text.of("Regulate"), Text.of("Stays powered until all filter items have left")), mouseX, mouseY);
-                    break;
-                case 1:
-                    renderTooltip(matrices, List.of(Text.of("Absolute"), Text.of("Stays powered only while conditions are met")), mouseX, mouseY);
-
-            }
         });
+//        (buttonWidget, matrices, mouseX, mouseY) ->
+//        {
+//            renderTooltip(matrices, Text.of("owo"), mouseX, mouseY);
+//            switch (((CyclingButtonWidget) buttonWidget).index)
+//            {
+//                case 0:
+//                    renderTooltip(matrices, List.of(Text.of("Regulate"), Text.of("Stays powered until all filter items have left")), mouseX, mouseY);
+//                    break;
+//                case 1:
+//                    renderTooltip(matrices, List.of(Text.of("Absolute"), Text.of("Stays powered only while conditions are met")), mouseX, mouseY);
+
+//            }
+//        });
 
 
         this.addDrawableChild(countButton);

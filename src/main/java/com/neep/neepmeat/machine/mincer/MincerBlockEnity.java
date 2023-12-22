@@ -15,17 +15,16 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
 import java.util.List;
-import java.util.Random;
 
 public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedBlock
 {
@@ -101,7 +100,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
         }
         else
         {
-            entity.damage(DamageSource.GENERIC, damageAmount);
+            entity.damage(world.getDamageSources().generic(), damageAmount);
         }
     }
 
@@ -142,7 +141,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
     {
         super.writeNbt(nbt);
         nbt.putInt("damageTime", damageTime);
-        fluidStorage.writeNbt(nbt);
+        fluidStorage.writeNbt1(nbt);
     }
 
     @Override

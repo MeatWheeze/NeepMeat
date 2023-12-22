@@ -49,14 +49,14 @@ public class TerminalTextField extends TextFieldWidget
         int n = 0;
         for (String string : this.getText().split("\n"))
         {
-            n = this.textRenderer.drawWithShadow(matrices, string, this.x, this.y + yPos * textRenderer.fontHeight, editableColor);
+            n = this.textRenderer.drawWithShadow(matrices, string, this.getX(), this.getY() + yPos * textRenderer.fontHeight, editableColor);
             ++yPos;
         }
 
         boolean bl2 = this.isFocused() && this.focusedTicks / 6 % 2 == 0;
         if (bl2)
         {
-            this.textRenderer.drawWithShadow(matrices, cursor, (float) n - (getText().length() - j) * 5, (float) this.y + (yPos - 1) * textRenderer.fontHeight, editableColor);
+            this.textRenderer.drawWithShadow(matrices, cursor, (float) n - (getText().length() - j) * 5, (float) this.getY() + (yPos - 1) * textRenderer.fontHeight, editableColor);
         }
     }
 

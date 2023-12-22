@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.*;
 import net.minecraft.nbt.visitor.NbtTextFormatter;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.LiteralTextContent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -55,8 +55,8 @@ public class TransformingTools
         NbtCompound nbt1 = variant1.getNbt() != null ? variant1.copyNbt() : new NbtCompound();
 
         ItemStack itemStack2 = variant2.toStack();
-        setLore(itemStack2.getOrCreateNbt(), new LiteralText("[Transforming Tool]").formatted(Formatting.AQUA));
-        setLore(nbt1, new LiteralText("[Transforming Tool]").formatted(Formatting.AQUA));
+        setLore(itemStack2.getOrCreateNbt(), Text.literal("[Transforming Tool]").formatted(Formatting.AQUA));
+        setLore(nbt1, Text.literal("[Transforming Tool]").formatted(Formatting.AQUA));
 
         nbt1.put(ROOT_ID, itemStack2.writeNbt(new NbtCompound()));
 

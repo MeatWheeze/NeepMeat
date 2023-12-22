@@ -128,7 +128,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements ICo
     protected void dropItems(World world)
     {
         Transaction transaction = Transaction.openOuter();
-        for (StorageView<ItemVariant> view : storages.items.iterable(transaction))
+        for (StorageView<ItemVariant> view : storages.items)
         {
             if (view.isResourceBlank())
                 continue;

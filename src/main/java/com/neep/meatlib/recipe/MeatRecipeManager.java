@@ -129,7 +129,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     @Override
     public Identifier getFabricId()
     {
-        return new Identifier(MeatLib.CURRENT_NAMESPACE, "special_recipes");
+        return new Identifier(MeatLib.NAMESPACE, "special_recipes");
     }
 
     static

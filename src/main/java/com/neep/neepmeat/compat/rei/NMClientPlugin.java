@@ -28,7 +28,8 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -60,7 +61,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         // Charnel Compactor recipes
         int page = 0;
-        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
+        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registries.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
         while (iterator.hasNext())
         {
             List<Item> entries = iterator.next();

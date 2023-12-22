@@ -15,12 +15,11 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
+import net.minecraft.util.math.random.Random;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
-
-import java.util.Random;
 
 @Environment(value = EnvType.CLIENT)
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
@@ -50,12 +49,12 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
             renderBase(matrices, be, vertexConsumers);
             matrices.push();
             matrices.translate(0.5d, 0d, 0.5d);
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
             matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + partialTicks) / 20) / 15, 0);
 
             AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
-            GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(be));
+            GeoModel model = modelProvider.getModel(modelProvider.getModelResource(be));
             modelProvider.setCustomAnimations(be, this.getInstanceId(be));
             matrices.push();
             matrices.translate(0, 0.01f, 0);
@@ -106,7 +105,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
                 matrices,
                 vertexConsumers.getBuffer(RenderLayer.getCutout()),
                 true,
-                new Random(1),
+                Random.create(),
                 0,
                 overlay
         );

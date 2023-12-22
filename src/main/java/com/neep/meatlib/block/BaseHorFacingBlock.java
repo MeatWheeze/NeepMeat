@@ -29,7 +29,7 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBl
     {
 //        return context.getSide().getAxis().isVertical() ? getDefaultState() :
 //                this.getDefaultState().with(FACING, context.getSide().getOpposite());
-        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
-import com.neep.meatweapons.enchantment.MWEnchantmentTargets;
 import com.neep.meatweapons.enchantment.MWEnchantments;
 import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.AssaultDrillItem;
@@ -14,7 +13,7 @@ import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.entity.Entity;
@@ -23,16 +22,17 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class MeatWeapons implements ModInitializer
 {
     public static final String NAMESPACE = "meatweapons";
 
-    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
-            new Identifier(NeepMeat.NAMESPACE, "weapons"),
-            () -> new ItemStack(NMItems.SLASHER));
+    public static final ItemGroup WEAPONS = FabricItemGroup.builder(
+            new Identifier(NeepMeat.NAMESPACE, "weapons"))
+            .icon(() -> new ItemStack(NMItems.SLASHER)).build();
 
     public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
@@ -44,8 +44,8 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
-                builder
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id),
+                                   builder
                         .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
                         .build());
@@ -53,41 +53,41 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, EntityType<T> type)
     {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
     }
 
     @Override
     public void onInitialize()
     {
-        BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
-        CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
-        ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
-        FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
-        EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
+        try (var mcontext = MeatLib.getContext(NAMESPACE))
+        {
+            BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
+            CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
+            ZAP = registerEntity("zap", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ZapProjectileEntity::new));
+            FUSION_BLAST = registerEntity("fusion_blast", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FusionBlastEntity::new));
+            EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
 
-        AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
-                .trackedUpdateRate(1)
-                .forceTrackedVelocityUpdates(true)
-                .dimensions(EntityDimensions.fixed(3F, 2.2F))
-                .trackRangeBlocks(40)
-                .build());
+            AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
+                    .trackedUpdateRate(1)
+                    .forceTrackedVelocityUpdates(true)
+                    .dimensions(EntityDimensions.fixed(3F, 2.2F))
+                    .trackRangeBlocks(40)
+                    .build());
 
-        MeatLib.setNamespace(NAMESPACE);
-        new MWItems();
-        MeatLib.flush();
-        MWParticles.init();
-        MWGraphicsEffects.init();
-        MWAttackC2SPacket.init();
+            new MWItems();
+            MWParticles.init();
+            MWGraphicsEffects.init();
+            MWAttackC2SPacket.init();
 
 //        MWEnchantmentTargets.init();
-        MWEnchantments.init();
+            MWEnchantments.init();
 
-        ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
+            ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
 
-        PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
+            PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
 
-        FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
-
+            FluidStorage.ITEM.registerForItems(AssaultDrillItem::getStorage, MWItems.ASSAULT_DRILL);
+        }
     }
 
     public static boolean redirectClicks(ItemStack stack)

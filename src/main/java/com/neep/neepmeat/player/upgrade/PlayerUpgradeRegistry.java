@@ -3,8 +3,8 @@ package com.neep.neepmeat.player.upgrade;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.SimpleRegistry;
 
 public class PlayerUpgradeRegistry
 {

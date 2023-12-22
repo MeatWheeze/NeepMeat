@@ -79,7 +79,7 @@ public class MultiFluidBuffer extends SnapshotParticipant<Map<FluidVariant, Long
     }
 
     @Override
-    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
+    public Iterator<StorageView<FluidVariant>> iterator()
     {
         return map.object2LongEntrySet().stream().map(this::ofEntry).iterator();
     }

@@ -16,7 +16,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 
 @Environment(value= EnvType.CLIENT)
@@ -25,14 +24,14 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/fluid_rationer.png");
     protected TextField textField;
 
-    protected static final TranslatableText BUCKET = new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.bucket");
-    protected static final TranslatableText INGOT = new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.ingot");
-    protected static final TranslatableText BOTTLE = new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.bottle");
+    protected static final Text BUCKET = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.bucket");
+    protected static final Text INGOT = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.ingot");
+    protected static final Text BOTTLE = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.bottle");
 
     protected int slotX;
     protected int amountX;
     protected int amountY;
-    protected Text amountText = new TranslatableText("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.amount");
+    protected Text amountText = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.amount");
 
     public FluidRationerScreen(FluidRationerScreenHandler handler, PlayerInventory inventory, Text title)
     {
@@ -65,20 +64,21 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
         int startY = 20;
         int w = 40;
         int h = 20;
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY, w, h, BOTTLE, button ->
+
+        addDrawableChild(ButtonWidget.builder(BOTTLE, button ->
         {
             textField.setText(String.valueOf(FluidConstants.BOTTLE));
-        }));
+        }).position(x + 5, y + startY).size(w, h).build());
 
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + (h + 1) , w, h, BUCKET, button ->
+        this.addDrawableChild(ButtonWidget.builder(BUCKET, button ->
         {
             textField.setText(String.valueOf(FluidConstants.BUCKET));
-        }));
+        }).dimensions(x + 5, y + startY + (h + 1), w, h).build());
 
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + 2 * (h + 1), w, h, INGOT, button ->
+        this.addDrawableChild(ButtonWidget.builder( INGOT, button ->
         {
             textField.setText(String.valueOf(FluidConstants.INGOT));
-        }));
+        }).dimensions(x + 5, y + startY + 2 * (h + 1), w, h).build());
 
         this.titleX = 29;
     }
@@ -94,7 +94,7 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;

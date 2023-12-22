@@ -82,7 +82,7 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
     }
 
     @Override
-    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
+    public Iterator<StorageView<FluidVariant>> iterator()
     {
         if (cache == null)
         {
@@ -91,7 +91,7 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
         Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
         if (storage != null)
         {
-            return (Iterator<StorageView<FluidVariant>>) storage.iterator(transaction);
+            return storage.iterator();
         }
         return Collections.emptyIterator();
     }

@@ -14,8 +14,8 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -61,9 +61,9 @@ public class BlasterItem extends BaseGunItem implements IAnimatable, IAimable
     }
 
     @Override
-    public Vec3f getAimOffset()
+    public Vector3f getAimOffset()
     {
-        return new Vec3f(0.46f, 0, 0);
+        return new Vector3f(0.46f, 0, 0);
     }
 
     @Override

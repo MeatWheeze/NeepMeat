@@ -12,7 +12,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlockEntity>
@@ -28,9 +28,9 @@ public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlock
 
         matrices.translate(0.5, 0.5, 0.5);
         Direction facing = blockEntity.getCachedState().get(FluidBufferBlock.FACING);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(facing.getAxis() == Direction.Axis.Z ? 90 : 0));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(facing.getAxis() == Direction.Axis.Z ? 90 : 0));
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(facing.getAxis() == Direction.Axis.X ? 90 : 0));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(facing.getAxis() == Direction.Axis.Z ? 90 : 0));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(facing.getAxis() == Direction.Axis.Z ? 90 : 0));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(facing.getAxis() == Direction.Axis.X ? 90 : 0));
         matrices.translate(-0.5, -0.5, -0.5);
 
         WritableSingleFluidStorage buffer = blockEntity.getBuffer(null);

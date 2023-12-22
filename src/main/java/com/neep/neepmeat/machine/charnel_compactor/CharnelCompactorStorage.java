@@ -140,7 +140,7 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
 
         if (newLevel == 7)
         {
-            location.world.createAndScheduleBlockTick(location.pos, state.getBlock(), 20);
+            location.world.scheduleBlockTick(location.pos, state.getBlock(), 20);
         }
 
     }
@@ -170,7 +170,7 @@ public class CharnelCompactorStorage extends SnapshotParticipant<Float>
         }
 
         @Override
-        public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
+        public Iterator<StorageView<ItemVariant>> iterator()
         {
             return Collections.emptyIterator();
         }

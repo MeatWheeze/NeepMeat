@@ -9,12 +9,13 @@ import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryEntry;
-import net.minecraft.util.registry.RegistryKey;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
@@ -126,7 +127,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     {
         cacheMatching();
         Stream<?> entries = Arrays.stream(matchingObjects);
-        for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
+        for (StorageView<? extends TransferVariant<?>> view : storage)
         {
             if (entries.anyMatch(o -> view.getResource().getObject().equals(o))) return true;
         }
@@ -148,7 +149,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public Optional<T> getFirstMatching(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
     {
         cacheMatching();
-        for (StorageView<? extends TransferVariant<?>> view : storage.iterable(transaction))
+        for (StorageView<? extends TransferVariant<?>> view : storage)
         {
             Optional<T> optional = Arrays.stream(matchingObjects).filter(t -> view.getResource().getObject().equals(t)).findFirst();
             if (optional.isPresent())
@@ -160,7 +161,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public <V extends TransferVariant<T>> Optional<V> getFirstMatching(Storage<V> storage, NbtCompound nbt, BiFunction<T, NbtCompound, V> func, TransactionContext transaction)
     {
         cacheMatching();
-        for (StorageView<V> view : storage.iterable(transaction))
+        for (StorageView<V> view : storage)
         {
             Optional<T> optional = Arrays.stream(matchingObjects).filter(t ->
             {
@@ -218,13 +219,13 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         @SuppressWarnings("unchecked")
         public static <T> Registry<T> getRegistry(RegistryKey<? extends Registry<T>> key)
         {
-            if (Registry.ITEM_KEY.equals(key))
+            if (Registries.ITEM.getKey().equals(key))
             {
-                return (Registry<T>) Registry.ITEM;
+                return (Registry<T>) Registries.ITEM;
             }
-            else if (Registry.FLUID_KEY.equals(key))
+            else if (Registries.FLUID.getKey().equals(key))
             {
-                return (Registry<T>) Registry.FLUID;
+                return (Registry<T>) Registries.FLUID;
             }
             throw new NotImplementedException();
         }

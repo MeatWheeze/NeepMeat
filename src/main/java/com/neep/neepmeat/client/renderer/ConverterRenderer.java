@@ -1,9 +1,9 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
@@ -25,7 +25,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockEntityRenderer<T>
@@ -44,7 +44,7 @@ public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockE
 
         matrices.translate(0.5, 0.5, 0.5);
         if (be.getCachedState().get(HorizontalFacingBlock.FACING).getAxis() == Direction.Axis.X)
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) (Math.PI / 2)));
         matrices.translate(-0.5, -0.5, -0.5);
 //        matrices.translate(0, 1, 0);
 

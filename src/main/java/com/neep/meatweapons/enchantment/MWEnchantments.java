@@ -8,9 +8,10 @@ import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.entity.EntityGroup;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 
 public class MWEnchantments
 {
@@ -24,7 +25,7 @@ public class MWEnchantments
 
     private static Enchantment register(String name, Enchantment enchantment)
     {
-        return Registry.register(Registry.ENCHANTMENT, new Identifier(MeatWeapons.NAMESPACE, name), enchantment);
+        return Registry.register(Registries.ENCHANTMENT, new Identifier(MeatWeapons.NAMESPACE, name), enchantment);
     }
 
     protected static class ThingEnchantment extends Enchantment implements CustomEnchantment

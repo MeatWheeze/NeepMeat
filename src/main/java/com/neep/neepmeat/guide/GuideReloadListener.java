@@ -43,19 +43,25 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         articleNodes.clear();
         articles.clear();
 
-        for(Identifier id : manager.findResources("guide", path -> path.endsWith(".json")))
+        var map = manager.findResources("guide", path -> path.getPath().endsWith(".json")).keySet();
+        for(Identifier id : manager.findResources("guide", path -> path.getPath().endsWith(".json")).keySet())
         {
-            try(InputStream stream = manager.getResource(id).getInputStream())
+            var opt = manager.getResource(id);
+            if (opt.isPresent())
             {
-                Reader reader = new InputStreamReader(stream);
-                JsonElement rootElement = JsonParser.parseReader(reader);
+                try(InputStream stream = opt.get().getInputStream())
+                {
 
-                processArticles((JsonObject) rootElement);
-                root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
-            }
-            catch(Exception e)
-            {
-                NeepMeat.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
+                    Reader reader = new InputStreamReader(stream);
+                    JsonElement rootElement = JsonParser.parseReader(reader);
+
+                    processArticles((JsonObject) rootElement);
+                    root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
+                }
+                catch(Exception e)
+                {
+                    NeepMeat.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
+                }
             }
         }
     }

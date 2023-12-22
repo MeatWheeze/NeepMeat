@@ -4,8 +4,6 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.minecraft.block.DoubleBlockProperties;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -35,7 +33,7 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
         syncIfPossible();
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt1(NbtCompound nbt)
     {
         nbt.putLong("amount", getAmount());
         nbt.put("resource", getResource().toNbt());

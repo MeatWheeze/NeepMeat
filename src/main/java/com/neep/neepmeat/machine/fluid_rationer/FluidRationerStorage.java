@@ -34,12 +34,12 @@ public class FluidRationerStorage extends WritableSingleFluidStorage
     public void updateFilter(ItemStack stack)
     {
         filters.clear();
-        Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.withInitial(stack));
+        Storage<FluidVariant> storage = FluidStorage.ITEM.find(stack, ContainerItemContext.withConstant(stack));
         if (storage != null)
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                for (StorageView<FluidVariant> view : storage.iterable(transaction))
+                for (StorageView<FluidVariant> view : storage)
                 {
                     filters.add(view.getResource());
                 }
@@ -54,9 +54,9 @@ public class FluidRationerStorage extends WritableSingleFluidStorage
     }
 
     @Override
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt1(NbtCompound nbt)
     {
-        super.writeNbt(nbt);
+        super.writeNbt1(nbt);
         nbt.put("inventory", this.inventory.toNbtList());
         return nbt;
     }

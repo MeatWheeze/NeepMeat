@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.casting_basin;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
@@ -11,19 +10,22 @@ import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.*;
+import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.TexturedRenderLayers;
+import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
@@ -48,8 +50,8 @@ public class CastingBasinRenderer implements BlockEntityRenderer<CastingBasinBlo
         BakedModel bakedModel = this.itemRenderer.getModel(stack, be.getWorld(), null, 0);
         boolean depth = bakedModel.hasDepth();
         matrices.translate(0.5, 0.66, 0.5);
-        if (!depth) matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
-        itemRenderer.renderItem(stack, ModelTransformation.Mode.GROUND, false, matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV, bakedModel);
+        if (!depth) matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
+        itemRenderer.renderItem(stack, ModelTransformationMode.GROUND, false, matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV, bakedModel);
     }
 
     public static void renderSurface(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float start, float height, float depth, float scale)

@@ -8,19 +8,19 @@ import software.bernie.geckolib3.model.AnimatedGeoModel;
 public class DrillItemModel extends AnimatedGeoModel<AssaultDrillItem>
 {
     @Override
-    public Identifier getModelLocation(AssaultDrillItem object)
+    public Identifier getModelResource(AssaultDrillItem object)
     {
         return new Identifier(MeatWeapons.NAMESPACE, "geo/assault_drill.geo.json");
     }
 
     @Override
-    public Identifier getTextureLocation(AssaultDrillItem object)
+    public Identifier getTextureResource(AssaultDrillItem object)
     {
         return new Identifier(MeatWeapons.NAMESPACE, "textures/general/assault_drill.png");
     }
 
     @Override
-    public Identifier getAnimationFileLocation(AssaultDrillItem animatable)
+    public Identifier getAnimationResource(AssaultDrillItem animatable)
     {
         return new Identifier(MeatWeapons.NAMESPACE, "animations/assault_drill.animation.json");
     }

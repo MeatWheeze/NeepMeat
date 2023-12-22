@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -113,8 +114,8 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
-            if (recipe != null && getOutputStorage().simulateInsert(FluidVariant.of(recipe.fluidOutput.resource()),
-                        recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
+            if (recipe != null && StorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
+                                                             recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
@@ -222,14 +223,14 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
 
     public void dropItems()
     {
-        Transaction transaction = Transaction.openOuter();
-        Iterator<StorageView<ItemVariant>> it = this.storage.itemInput.iterator(transaction);
-        while (it.hasNext())
+        try (Transaction transaction = Transaction.openOuter())
         {
-            StorageView<ItemVariant> view = it.next();
-            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+            for (StorageView<ItemVariant> view : this.storage.itemInput)
+            {
+                ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+            }
+            transaction.commit();
         }
-        transaction.commit();
     }
 
     public void spawnMixingParticles(FluidVariant ingredient, int count, double dy, double speed)

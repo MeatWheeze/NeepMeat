@@ -15,7 +15,7 @@ public class OreFatAttributeHandler implements FluidVariantAttributeHandler
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(fluidVariant);
         if (entry != null)
         {
-            return (entry.name().copy()).append(" ").append(fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName());
+            return (entry.name().copyContentOnly()).append(" ").append(fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName());
         }
         return fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName();
     }

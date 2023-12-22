@@ -15,8 +15,7 @@ import me.shedaniel.rei.api.client.registry.display.DisplayCategory;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
-
+import net.minecraft.text.TranslatableTextContent;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -31,7 +30,7 @@ public class AlloyKilnCategory implements DisplayCategory<AlloySmeltingDisplay>
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".alloy_smelting");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".alloy_smelting");
     }
 
     @Override
@@ -51,7 +50,7 @@ public class AlloyKilnCategory implements DisplayCategory<AlloySmeltingDisplay>
         int processTime = display.getProcessTime();
         DecimalFormat df = new DecimalFormat("###.##");
         widgets.add(Widgets.createLabel(new Point(bounds.x + bounds.width - 5, bounds.y + 5),
-                new TranslatableText("category." + NeepMeat.NAMESPACE + ".alloy_smelting.time", df.format(processTime / 20d))).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
+                Text.translatable("category." + NeepMeat.NAMESPACE + ".alloy_smelting.time", df.format(processTime / 20d))).noShadow().rightAligned().color(0xFF404040, 0xFFBBBBBB));
         widgets.add(Widgets.createArrow(new Point(startPoint.x + 24, startPoint.y + 8)).animationDurationTicks(processTime));
 
         // Input slots

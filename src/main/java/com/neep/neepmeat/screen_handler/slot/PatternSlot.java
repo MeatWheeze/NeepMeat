@@ -32,9 +32,9 @@ public class PatternSlot extends Slot
     }
 
     @Override
-    public void setStack(ItemStack stack)
+    public void setStackNoCallbacks(ItemStack stack)
     {
-        super.setStack(stack);
+        super.setStackNoCallbacks(stack);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PatternSlot extends Slot
     {
         ItemStack thisStack = stack.copy();
         thisStack.setCount(1);
-        this.setStack(thisStack);
+        this.setStackNoCallbacks(thisStack);
         return stack;
     }
 

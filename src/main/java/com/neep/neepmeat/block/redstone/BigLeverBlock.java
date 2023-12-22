@@ -167,7 +167,7 @@ public class BigLeverBlock extends LeverBlock implements IMeatBlock, BlockEntity
     public void setPowered(World world, BlockPos pos, boolean powered)
     {
         BlockState state = world.getBlockState(pos).with(POWERED, powered);
-        world.emitGameEvent(null, world.getBlockState(pos).get(POWERED) != powered ? GameEvent.BLOCK_SWITCH : GameEvent.BLOCK_UNSWITCH, pos);
+        world.emitGameEvent(null, GameEvent.BLOCK_CHANGE, pos);
         world.setBlockState(pos, state, Block.NOTIFY_ALL);
 
         world.updateNeighborsAlways(pos, this);

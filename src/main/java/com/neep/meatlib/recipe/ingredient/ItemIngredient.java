@@ -6,9 +6,10 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -43,7 +44,7 @@ public class ItemIngredient extends GenericIngredient<Item, ItemVariant>
         {
             buf.writeBoolean(true);
             Item item = this.resource.getItem();
-            buf.writeVarInt(Registry.ITEM.getRawId(item)); // ID
+            buf.writeVarInt(Registries.ITEM.getRawId(item)); // ID
             buf.writeLong(this.amount()); // Amount
 
             NbtCompound nbtCompound = this.resource().copyNbt();
@@ -58,7 +59,7 @@ public class ItemIngredient extends GenericIngredient<Item, ItemVariant>
             return EMPTY;
         }
         int i = buf.readVarInt(); // Fluid ID
-        Item item = Registry.ITEM.get(i);
+        Item item = Registries.ITEM.get(i);
         long amount = buf.readLong(); // Amount
         NbtCompound nbt = buf.readNbt(); // NBT
 
@@ -75,7 +76,7 @@ public class ItemIngredient extends GenericIngredient<Item, ItemVariant>
         String string = JsonHelper.getString(json, "resource");
         long amount = JsonHelper.getLong(json, "amount");
         Identifier id = new Identifier(string);
-        Item item = Registry.ITEM.get(id);
+        Item item = Registries.ITEM.get(id);
         return new ItemIngredient(item, amount);
     }
 }

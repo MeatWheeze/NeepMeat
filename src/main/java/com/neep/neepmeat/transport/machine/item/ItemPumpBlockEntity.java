@@ -147,7 +147,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             {
                 Transaction nested2 = nested1.openNested();
                 extractable = MeatStorageUtil.findExtractableContent(targetStorage,
-                        (t, itemVariant) -> facingStorage.simulateInsert(itemVariant, Long.MAX_VALUE, t) > 0, nested2);
+                        (t, itemVariant) -> StorageUtil.simulateInsert(facingStorage, itemVariant, Long.MAX_VALUE, t) > 0, nested2);
                 nested2.abort();
             }
             else
@@ -249,7 +249,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-            return storage.simulateInsert(amount.resource(), amount.amount(), transaction);
+            return StorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
         }
         return amount.amount();
     }

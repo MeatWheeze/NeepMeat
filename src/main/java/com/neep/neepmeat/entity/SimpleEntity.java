@@ -3,15 +3,15 @@ package com.neep.neepmeat.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -255,7 +255,7 @@ public abstract class SimpleEntity extends Entity
                 }
                 if (j > i - 1)
                 {
-                    this.damage(DamageSource.CRAMMING, 6.0f);
+                    this.damage(getDamageSources().cramming(), 6.0f);
                 }
             }
             for (j = 0; j < list.size(); ++j)
@@ -279,13 +279,13 @@ public abstract class SimpleEntity extends Entity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
         return new EntitySpawnS2CPacket(this);
     }
 
     @Override
-    public boolean collides()
+    public boolean canHit()
     {
         return true;
     }

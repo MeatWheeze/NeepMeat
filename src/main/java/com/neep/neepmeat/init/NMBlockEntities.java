@@ -75,8 +75,9 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class NMBlockEntities
 {
@@ -113,7 +114,6 @@ public class NMBlockEntities
     public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
-    public static BlockEntityType<SpigotBlockEntity> SPIGOT;
 
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
 
@@ -161,8 +161,8 @@ public class NMBlockEntities
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
-                FabricBlockEntityTypeBuilder.create(factory, block).build());
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+                                 FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -191,7 +191,6 @@ public class NMBlockEntities
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
         FLUID_INTERFACE = registerBlockEntity("fluid_port", FluidInterfaceBlockEntity::new, NMBlocks.FLUID_INTERFACE);
         HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
-//        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
 
         // --- Surgery Machine ---
 //        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);

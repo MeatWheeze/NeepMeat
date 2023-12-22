@@ -151,6 +151,6 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     @Override
     public Stream<StorageView<ItemVariant>> getAvailable(TransactionContext transaction)
     {
-        return getTargets().stream().map(RetrievalTarget::find).filter(Objects::nonNull).flatMap(s -> Streams.stream(s.iterable(transaction)));
+        return getTargets().stream().map(RetrievalTarget::find).filter(Objects::nonNull).flatMap(Streams::stream);
     }
 }

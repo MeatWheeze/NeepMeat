@@ -34,7 +34,7 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
         this.parent = parent;
     }
 
-    public NbtCompound writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt1(NbtCompound nbt)
     {
         nbt.putLong("amount", amount);
         nbt.put("resource", variant.toNbt());
@@ -77,7 +77,7 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    StorageView<FluidVariant> view = storage.iterator(transaction).next();
+                    StorageView<FluidVariant> view = storage.iterator().next();
                     if (!view.isResourceBlank())
                     {
                         world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);

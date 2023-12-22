@@ -14,6 +14,7 @@ import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -109,7 +110,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
-            long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
+            long extractable = StorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
             long outputAmount = random.nextInt(101) > 30 ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)

@@ -132,7 +132,13 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             }
 
             // Randomise transfer order to reduce opportunities for fluid to get stuck in loops.
-            final int[] ints = parent.getWorld().getRandom().ints(0, 6).distinct().limit(6).toArray();
+//            final int[] ints = parent.getWorld().getRandom().(0, 6).distinct().limit(6).toArray();
+            int[] ints = new int[6];
+            for (int i = 0; i < 6; ++i)
+            {
+                ints[i] = parent.getWorld().random.nextInt(6);
+            }
+
 
             for (int dir : ints)
             {

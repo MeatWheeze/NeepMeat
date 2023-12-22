@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -67,7 +68,7 @@ public class ItemPipeUtil
      */
     public static boolean storageToAny(ServerWorld world, Storage<ItemVariant> storage, BlockPos pos, Direction facing, TransactionContext transaction)
     {
-        for (StorageView<ItemVariant> view : storage.iterable(transaction))
+        for (StorageView<ItemVariant> view : storage)
         {
             try (Transaction inner = transaction.openNested())
             {
@@ -160,7 +161,7 @@ public class ItemPipeUtil
 
         List<Direction> connections = ((IItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
-        Random rand = world.getRandom();
+        var rand = world.getRandom();
         if (!connections.isEmpty())
         {
             out = connections.get(rand.nextInt(connections.size()));
@@ -255,7 +256,7 @@ public class ItemPipeUtil
                     }
                     else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                     {
-                        return storage.simulateInsert(item.resource(), item.amount(), transaction);
+                        return StorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
                     }
                 }
             }

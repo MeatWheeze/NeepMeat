@@ -13,7 +13,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class EggEntityRenderer extends EntityRenderer<EggEntity>
@@ -38,7 +38,7 @@ public class EggEntityRenderer extends EntityRenderer<EggEntity>
         }
         if (p > 0.0f)
         {
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(MathHelper.sin(p) * p * q / 10.0f * entity.getWobbleDirection()));
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(MathHelper.sin(p) * p * q / 10.0f * entity.getWobbleDirection()));
         }
 
         matrices.translate(-0.5, 0, -0.5);

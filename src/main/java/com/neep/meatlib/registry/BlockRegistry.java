@@ -13,12 +13,12 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class BlockRegistry
     {
         for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
         {
-            Registry.register(Registry.BLOCK, entry.getKey(), entry.getValue());
+            Registry.register(Registries.BLOCK, entry.getKey(), entry.getValue());
 
             REGISTERED_BLOCKS.put(entry.getKey(), entry.getValue());
         }

@@ -57,7 +57,7 @@ public class UpgradeInstallRecipe extends SurgeryRecipe
 
                 b.setValue(b.getValue() && resourceInput.test(itemSlot.getStorage(), transaction));
 
-                mobSlot.getStorage().iterable(transaction).forEach(storageView ->
+                mobSlot.getStorage().forEach(storageView ->
                     b.setValue(b.getValue() && storageView.getAmount() == 1));
 
                 transaction.abort();

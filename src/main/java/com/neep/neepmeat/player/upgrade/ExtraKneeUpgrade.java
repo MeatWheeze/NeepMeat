@@ -31,18 +31,18 @@ public class ExtraKneeUpgrade implements PlayerUpgrade
     @Override
     public void tick()
     {
-        if (player.world.getTime() % 10 == 0) player.stepHeight = 1f;
+        if (player.world.getTime() % 10 == 0) player.setStepHeight(1f);
     }
 
     @Override
     public void onInstall()
     {
-        player.stepHeight = 1f;
+        player.setStepHeight(1f);
     }
 
     @Override
     public void onUninstall()
     {
-        player.stepHeight = 0.6f;
+        player.setStepHeight(0.6f);
     }
 }

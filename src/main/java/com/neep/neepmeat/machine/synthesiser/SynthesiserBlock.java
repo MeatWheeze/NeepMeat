@@ -19,7 +19,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
@@ -48,7 +48,7 @@ public class SynthesiserBlock extends TallBlock implements BlockEntityProvider
             if (player.isSneaking())
             {
                 Text name = be.getEntityType() != null ? be.getEntityType().getName() : Text.of("Empty");
-                player.sendMessage(new TranslatableText("message.neepmeat.synthesiser.template", name), true);
+                player.sendMessage(Text.translatable("message.neepmeat.synthesiser.template", name), true);
                 return ActionResult.SUCCESS;
             }
 

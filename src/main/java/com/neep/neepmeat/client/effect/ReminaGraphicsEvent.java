@@ -7,9 +7,10 @@ import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.util.UUID;
 
@@ -34,18 +35,18 @@ public class ReminaGraphicsEvent implements GraphicsEffect
     @Override
     public void renderAfter(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
 //        RenderSystem.depthMask(false);
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
 
-        RenderSystem.enableTexture();
+//        RenderSystem.enableTexture();
 //            RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
 
         matrices.push();
 //            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(-90.0f));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(0f));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-90.0f));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(0f));
         Matrix4f matrix4f2 = matrices.peek().getPositionMatrix();
 
         float k = 100f;
@@ -56,8 +57,8 @@ public class ReminaGraphicsEvent implements GraphicsEffect
         bufferBuilder.vertex(matrix4f2, k, 100.0f, -k).texture(1.0f, 0.0f).next();
         bufferBuilder.vertex(matrix4f2, k, 100.0f, k).texture(1.0f, 1.0f).next();
         bufferBuilder.vertex(matrix4f2, -k, 100.0f, k).texture(0.0f, 1.0f).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        var built = bufferBuilder.end();
+        BufferRenderer.draw(built);
         matrices.pop();
     }
 

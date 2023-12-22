@@ -4,23 +4,18 @@ import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
-import me.shedaniel.rei.api.common.util.EntryIngredients;
 import net.minecraft.entity.EntityType;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.text.TranslatableText;
-import net.minecraft.util.Identifier;
+import net.minecraft.text.Text;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class HeartExtractionDisplay extends BasicDisplay
 {
-    protected List<TranslatableText> entities;
+    protected List<Text> entities;
 
     public static HeartExtractionDisplay of(List<EntityType<?>> inputs, List<EntryIngredient> output)
     {
@@ -39,7 +34,7 @@ public class HeartExtractionDisplay extends BasicDisplay
     public HeartExtractionDisplay(List<EntryIngredient> inputs, List<EntryIngredient> outputs, NbtCompound nbt)
     {
         super(inputs, outputs);
-        this.entities = ((NbtList) nbt.get("list")).stream().map(e -> new TranslatableText(((NbtCompound) e).getString("entity"))).collect(Collectors.toList());
+        this.entities = ((NbtList) nbt.get("list")).stream().map(e -> Text.translatable(((NbtCompound) e).getString("entity"))).collect(Collectors.toList());
     }
 
     public static Serializer<HeartExtractionDisplay> serializer()
@@ -53,7 +48,7 @@ public class HeartExtractionDisplay extends BasicDisplay
         return NMREIPlugin.HEART_EXTRACTION;
     }
 
-    public List<TranslatableText> getEntities()
+    public List<Text> getEntities()
     {
         return entities;
     }

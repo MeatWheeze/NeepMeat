@@ -9,6 +9,7 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
@@ -29,7 +30,7 @@ public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
     }
 
     @Override
-    public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrixStackIn,
+    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrixStackIn,
                        VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         this.render((T) itemStack.getItem(), matrixStackIn, bufferIn, combinedLightIn, itemStack, mode);
@@ -41,23 +42,17 @@ public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
     }
 
     public void render(T animatable, MatrixStack stack, VertexConsumerProvider bufferIn, int packedLightIn,
-                       ItemStack itemStack, ModelTransformation.Mode mode)
+                       ItemStack itemStack, ModelTransformationMode mode)
     {
         this.currentItemStack = itemStack;
         AnimationEvent<AnimatedSword> itemEvent = new AnimationEvent<>(animatable, 0, 0,
                 MinecraftClient.getInstance().getTickDelta(), false, Collections.singletonList(itemStack));
 
-//        if (!mode.equals(ModelTransformation.Mode.GUI))
-        if (mode.isFirstPerson() && !mode.equals(ModelTransformation.Mode.GUI))
-        {
-//            getGeoModelProvider().setCustomAnimations(animatable, this.getInstanceId(animatable), itemEvent);
-        }
-
         stack.push();
         stack.translate(0.5, 0.5, 0.5);
 
         MinecraftClient.getInstance().getTextureManager().bindTexture(getTextureLocation(animatable));
-        GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(animatable));
+        GeoModel model = modelProvider.getModel(modelProvider.getModelResource(animatable));
         Color renderColor = getRenderColor(animatable, 0, stack, bufferIn, null, packedLightIn);
         RenderLayer renderType = getRenderType(animatable, 0, stack, bufferIn, null, packedLightIn,
                 getTextureLocation(animatable));

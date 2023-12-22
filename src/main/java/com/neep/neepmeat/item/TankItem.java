@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.world.World;
 
 import javax.tools.Tool;
@@ -39,7 +39,7 @@ public class TankItem extends FluidComponentItem
         {
             long mb = Math.floorDiv(blockNbt.getLong(WritableSingleFluidStorage.KEY_AMOUNT), FluidConstants.BUCKET / 1000);
             int col = FluidVariantRendering.getColor(variant);
-            MutableText text = FluidVariantAttributes.getName(variant).shallowCopy();
+            MutableText text = FluidVariantAttributes.getName(variant).copy();
             text.append(": " + mb + "mb");
             text.setStyle(text.getStyle().withColor(col));
             tooltip.add(text);
@@ -53,7 +53,7 @@ public class TankItem extends FluidComponentItem
         FluidVariant variant;
         if (blockNbt != null && !(variant = FluidVariant.fromNbt(blockNbt.getCompound(WritableSingleFluidStorage.KEY_RESOURCE))).isBlank())
         {
-            return new TranslatableText(this.getTranslationKey() + ".filled", FluidVariantAttributes.getName(variant));
+            return Text.translatable(this.getTranslationKey() + ".filled", FluidVariantAttributes.getName(variant));
         }
         return super.getName(stack);
     }

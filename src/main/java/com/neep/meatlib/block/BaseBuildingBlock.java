@@ -5,8 +5,9 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.Block;
-import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
+import net.minecraft.data.server.recipe.RecipeProvider;
+import net.minecraft.recipe.book.RecipeCategory;
 
 import java.util.function.Consumer;
 
@@ -48,14 +49,14 @@ public class BaseBuildingBlock extends Block implements IMeatBlock
 
     public void generateRecipes(Consumer<RecipeJsonProvider> exporter)
     {
-        MeatRecipeProvider.offerSlabRecipe(exporter, this.slab, this);
-        RecipeProvider.offerStonecuttingRecipe(exporter, this.slab, this, 2);
+        MeatRecipeProvider.offerSlabRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, this.slab, this);
+        RecipeProvider.offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, this.slab, this, 2);
         MeatRecipeProvider.offerStairsRecipe(exporter, this.stairs, this);
-        RecipeProvider.offerStonecuttingRecipe(exporter, this.stairs, this);
+        RecipeProvider.offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, this.stairs, this);
         if (wall != null)
         {
-            MeatRecipeProvider.offerWallRecipe(exporter, this.wall, this);
-            RecipeProvider.offerStonecuttingRecipe(exporter, this.wall, this);
+            MeatRecipeProvider.offerWallRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, this.wall, this);
+            RecipeProvider.offerStonecuttingRecipe(exporter, RecipeCategory.BUILDING_BLOCKS, this.wall, this);
         }
     }
 }

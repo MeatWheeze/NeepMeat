@@ -30,7 +30,7 @@ public class KeeperEntityRenderer extends BipedEntityRenderer<KeeperEntity, Keep
     {
         super(ctx, new KeeperEntityModel(ctx.getPart(layer)), 0.5f);
 //        super(ctx, new KeeperEntityModel(ctx.getPart(layer)), new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer)));
-        this.addFeature(new ArmorFeatureRenderer<>(this, new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer))));
+        this.addFeature(new ArmorFeatureRenderer<>(this, new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer)), ctx.getModelManager()));
     }
 
     @Override

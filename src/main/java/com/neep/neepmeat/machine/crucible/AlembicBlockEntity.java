@@ -43,7 +43,7 @@ public class AlembicBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        fluidStorage.writeNbt(nbt);
+        fluidStorage.writeNbt1(nbt);
     }
 
     @Override

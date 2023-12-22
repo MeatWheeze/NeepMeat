@@ -88,7 +88,7 @@ public class IntegratorStorage
         }
 
         @Override
-        public Iterator<? extends StorageView<ItemVariant>> iterator(TransactionContext transaction)
+        public Iterator<StorageView<ItemVariant>> iterator()
         {
             return Collections.emptyIterator();
         }
@@ -122,5 +122,16 @@ public class IntegratorStorage
             this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));
         }
 
+        @Override
+        public boolean supportsExtraction()
+        {
+            return InsertionOnlyStorage.super.supportsExtraction();
+        }
+
+        @Override
+        public Iterator<StorageView<FluidVariant>> iterator()
+        {
+            return InsertionOnlyStorage.super.iterator();
+        }
     }
 }

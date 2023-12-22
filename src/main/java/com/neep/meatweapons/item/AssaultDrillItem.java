@@ -1,5 +1,6 @@
 package com.neep.meatweapons.item;
 
+import com.google.common.collect.Iterators;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.item.PoweredItem;
@@ -14,7 +15,6 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.InsertionOnlyStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.Blocks;
@@ -31,9 +31,7 @@ import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundEvent;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -90,8 +88,8 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
     @Override
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
-        tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
-        tooltip.add(new TranslatableText("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null)).formatted(Formatting.BLUE));
+        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
+        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null)).formatted(Formatting.BLUE));
     }
 
     @Override
@@ -233,14 +231,6 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         stack.getOrCreateNbt().putBoolean("using", false);
     }
 
-
-    @Nullable
-    @Override
-    public SoundEvent getEquipSound()
-    {
-        return super.getEquipSound();
-    }
-
     protected float getDamage(ItemStack stack, @Nullable Entity target)
     {
         float damage = target instanceof LivingEntity livingTarget ?
@@ -366,9 +356,9 @@ public class AssaultDrillItem extends Item implements IMeatItem, IAnimatable, IS
         }
 
         @Override
-        public Iterator<? extends StorageView<FluidVariant>> iterator(TransactionContext transaction)
+        public Iterator<StorageView<FluidVariant>> iterator()
         {
-            return SingleViewIterator.create(this, transaction);
+            return Iterators.singletonIterator(this);
         }
 
         @Override

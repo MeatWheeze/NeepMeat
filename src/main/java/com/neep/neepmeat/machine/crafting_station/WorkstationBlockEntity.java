@@ -22,7 +22,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -146,7 +146,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
     @Override
     public Text getDisplayName()
     {
-        return new TranslatableText("container." + NeepMeat.NAMESPACE + ".workstation");
+        return Text.translatable("container." + NeepMeat.NAMESPACE + ".workstation");
     }
 
     public void onStackChanged(Inventory inventory)
@@ -157,7 +157,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
         {
             if (recipe != null)
             {
-                output.reset(recipe.craft(input));
+                output.reset(recipe.craft(input, null));
             }
             else output.setStack(0, ItemStack.EMPTY);
         }
@@ -219,7 +219,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
                 input.setStack(i, remainderStack);
                 continue;
             }
-            if (ItemStack.areItemsEqualIgnoreDamage(currentStack, remainderStack) && ItemStack.areNbtEqual(currentStack, remainderStack))
+            if (ItemStack.areItemsEqual(currentStack, remainderStack) && ItemStack.areNbtEqual(currentStack, remainderStack))
             {
                 remainderStack.increment(currentStack.getCount());
                 input.setStack(i, remainderStack);

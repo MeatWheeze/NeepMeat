@@ -21,7 +21,7 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
@@ -41,7 +41,7 @@ public class TransformingToolCategory implements DisplayCategory<SurgeryDisplay>
     @Override
     public Text getTitle()
     {
-        return new TranslatableText("category." + NeepMeat.NAMESPACE + ".transforming_tool");
+        return Text.translatable("category." + NeepMeat.NAMESPACE + ".transforming_tool");
     }
 
     @Override

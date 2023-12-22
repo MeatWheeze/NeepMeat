@@ -19,9 +19,10 @@ import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.Optional;
@@ -147,7 +148,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, outputElement);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, outputElement);
 
             return this.factory.create(id, fluidInput, fluidOutput);
         }
@@ -156,7 +157,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         public OreFatRenderingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
 
             return this.factory.create(id, fluidInput, fluidOutput);
         }
@@ -165,7 +166,7 @@ public class OreFatRenderingRecipe extends ImplementedRecipe<CrucibleStorage>
         public void write(PacketByteBuf buf, OreFatRenderingRecipe recipe)
         {
             recipe.fluidInput.write(buf);
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.fluidOutput.write(Registries.FLUID, buf);
         }
 
         @FunctionalInterface

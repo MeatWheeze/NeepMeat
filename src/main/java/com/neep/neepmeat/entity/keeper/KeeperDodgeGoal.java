@@ -79,7 +79,7 @@ public class KeeperDodgeGoal extends Goal
 
     protected static Vec3d findTeleportPos(World world, Vec3d v)
     {
-        BlockPos.Mutable mutable = new BlockPos(v).mutableCopy();
+        BlockPos.Mutable mutable = BlockPos.ofFloored(v).mutableCopy();
         while (world.getBlockState(mutable).getMaterial().blocksMovement())
         {
             mutable.set(mutable, Direction.UP);

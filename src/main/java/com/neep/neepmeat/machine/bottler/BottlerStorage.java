@@ -58,7 +58,7 @@ public class BottlerStorage implements NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.put("itemStorage", itemStorage.writeNbt(new NbtCompound()));
+        nbt.put("itemStorage", itemStorage.writeNbt1(new NbtCompound()));
 //        nbt.put("fluidStorage", fluidStorage.writeNbt(new NbtCompound()));
 
         return nbt;

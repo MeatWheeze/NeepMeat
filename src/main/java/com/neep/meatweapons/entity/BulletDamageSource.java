@@ -1,24 +1,25 @@
 package com.neep.meatweapons.entity;
 
+import com.neep.meatweapons.damage.MWDamageSources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.EntityDamageSource;
+import net.minecraft.entity.damage.DamageSource;
 import org.jetbrains.annotations.Nullable;
 
-public class BulletDamageSource extends EntityDamageSource
+public class BulletDamageSource extends DamageSource
 {
     private final Entity attacker;
     private final float punch;
     private final int regenTime;
 
-    public BulletDamageSource(String name, LivingEntity attacker, float punch)
+    public BulletDamageSource(LivingEntity attacker, float punch)
     {
-        this(name, attacker, punch, 20);
+        this(attacker, punch, 20);
     }
 
-    public BulletDamageSource(String name, LivingEntity attacker, float punch, int regenTime)
+    public BulletDamageSource(LivingEntity attacker, float punch, int regenTime)
     {
-        super(name, attacker);
+        super(MWDamageSources.get(attacker.world, MWDamageSources.BULLET), null, attacker);
         this.attacker = attacker;
         this.punch = punch;
         this.regenTime = regenTime;
@@ -26,12 +27,12 @@ public class BulletDamageSource extends EntityDamageSource
 
     public static BulletDamageSource create(LivingEntity attacker, float punch)
     {
-        return new BulletDamageSource("bullet", attacker, punch);
+        return new BulletDamageSource(attacker, punch);
     }
 
     public static BulletDamageSource create(LivingEntity attacker, float punch, int regenTime)
     {
-        return new BulletDamageSource("bullet", attacker, punch, regenTime);
+        return new BulletDamageSource(attacker, punch, regenTime);
     }
 
     @Nullable

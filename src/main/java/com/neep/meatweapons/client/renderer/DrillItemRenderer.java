@@ -1,12 +1,10 @@
 package com.neep.meatweapons.client.renderer;
 
-import com.eliotlash.mclib.math.functions.limit.Min;
 import com.neep.meatweapons.client.model.DrillItemModel;
 import com.neep.meatweapons.item.AssaultDrillItem;
-import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -14,8 +12,6 @@ import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.core.molang.MolangParser;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
-
-import java.util.function.DoubleSupplier;
 
 public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 {
@@ -27,7 +23,7 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
     boolean b;
 
     @Override
-    public void render(ItemStack stack, ModelTransformation.Mode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
+    public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
     {
         NbtCompound nbt = stack.getOrCreateNbt();
 //        NbtCompound renderNbt = stack.getVolatileNbt();
@@ -76,6 +72,6 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 
         poseStack.translate(-thrust / 2, shake, -thrust);
 
-        super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
+//        super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
     }
 }

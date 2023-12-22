@@ -13,6 +13,7 @@ import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
@@ -21,7 +22,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.TranslatableTextContent;
 import net.minecraft.util.*;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -113,8 +114,8 @@ public class CompoundInjectorItem extends BaseItem
     {
         if (Screen.hasShiftDown())
         {
-            tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
-            tooltip.add(new TranslatableText(item.getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
+            tooltip.add(Text.translatable(item.getTranslationKey() + "_lore_0").formatted(Formatting.GRAY));
+            tooltip.add(Text.translatable(item.getTranslationKey() + "_lore_1", NMItems.CRUDE_INTEGRATION_CHARGE.getName()).formatted(Formatting.YELLOW));
         }
         else TooltipSupplier.applyMessage(tooltip);
     }
@@ -156,7 +157,7 @@ public class CompoundInjectorItem extends BaseItem
                 stack.setDamage(stack.getDamage() + 1);
             }
             // Damage player by one heart.
-            player.damage(DamageSource.MAGIC, initialDamage);
+            player.damage(player.getDamageSources().magic(), initialDamage);
             setHealsRemaining(stack, healsFor + initialDamage);
         }
     }

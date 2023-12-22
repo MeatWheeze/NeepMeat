@@ -20,7 +20,7 @@ public class MeatSteelArmourItem extends ArmorItem implements IMeatItem, IAnimat
 
     protected final String registryName;
 
-    public MeatSteelArmourItem(String name ,ArmorMaterial material, EquipmentSlot slot, Settings settings)
+    public MeatSteelArmourItem(String name ,ArmorMaterial material, Type slot, Settings settings)
     {
         super(material, slot, settings);
         this.registryName = name;

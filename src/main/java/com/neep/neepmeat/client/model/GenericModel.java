@@ -20,19 +20,19 @@ public class GenericModel<T extends IAnimatable> extends AnimatedGeoModel<T>
     }
 
     @Override
-    public Identifier getModelLocation(IAnimatable object)
+    public Identifier getModelResource(IAnimatable object)
     {
         return new Identifier(namespace, modelPath);
     }
 
     @Override
-    public Identifier getTextureLocation(IAnimatable object)
+    public Identifier getTextureResource(IAnimatable object)
     {
         return new Identifier(namespace, texturePath);
     }
 
     @Override
-    public Identifier getAnimationFileLocation(IAnimatable animatable)
+    public Identifier getAnimationResource(IAnimatable animatable)
     {
         return new Identifier(namespace, animPath);
     }

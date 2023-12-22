@@ -6,9 +6,10 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.SimpleRegistry;
 
 public class RecipeRegistry
 {
@@ -20,12 +21,12 @@ public class RecipeRegistry
 
     public static <T extends Recipe<?>> RecipeSerializer<T> registerSerializer(final String namespace, final String id, RecipeSerializer<T> serializer)
     {
-        return Registry.register(Registry.RECIPE_SERIALIZER, new Identifier(namespace, id), serializer);
+        return Registry.register(Registries.RECIPE_SERIALIZER, new Identifier(namespace, id), serializer);
     }
 
     public static <T extends Recipe<?>> RecipeType<T> registerType(final String namespace, final String id)
     {
-        return Registry.register(Registry.RECIPE_TYPE, new Identifier(namespace, id), new RecipeType<T>()
+        return Registry.register(Registries.RECIPE_TYPE, new Identifier(namespace, id), new RecipeType<T>()
         {
             public String toString()
             {
