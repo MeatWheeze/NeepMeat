@@ -4,6 +4,7 @@
 		"0": "neepmeat:block/heater",
 		"1": "neepmeat:block/motor/casing",
 		"3": "neepmeat:block/motor/side",
+		"4": "neepmeat:block/motor/back",
 		"particle": "neepmeat:block/heater"
 	},
 	"elements": [
@@ -25,7 +26,7 @@
 			"to": [16, 16, 2],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"north": {"uv": [0, 0, 16, 16], "texture": "#4"},
 				"east": {"uv": [14, 0, 16, 16], "texture": "#1"},
 				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
 				"west": {"uv": [0, 0, 2, 16], "texture": "#1"},
