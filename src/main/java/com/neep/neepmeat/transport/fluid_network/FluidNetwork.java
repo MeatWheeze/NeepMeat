@@ -1,8 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
-import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -10,7 +9,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -228,44 +226,32 @@ public class FluidNetwork
             }
         }
 
-        // Get acceptor mode if present
-        AcceptorModes mode = AcceptorModes.INSERT_EXTRACT;
-        Block block = world.getBlockState(pos.facingBlock()).getBlock();
-        boolean isStorage = true;
-        if (block instanceof IFluidNodeProvider provider)
-        {
-            mode = provider.getDirectionMode(world, pos.pos, world.getBlockState(pos.facingBlock()), pos.face.getOpposite());
-            isStorage = provider.isStorage();
-        }
-
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
         boolean newNode = false;
         FluidNode node;
-        if ((node = nodes.get(pos)) == null)
+        if (nodes.get(pos) == null)
         {
             // Create new node with params
-            node = new FluidNode(pos, storage, isStorage);
+            node = new FluidNode(pos, (ServerWorld) world);
             nodes.put(pos, node);
             newNode = true;
         }
 
-        node.setMode(mode);
-        node.setStorage(storage);
         validatePos(serverWorld, pos.pos);
 
         System.out.println("Node updated: " + nodes.get(pos));
         return newNode;
     }
 
-    public void replaceNode(World world, NodePos pos, FluidNode node)
-    {
-        if (!(world instanceof ServerWorld serverWorld))
-        {
-            return;
-        }
-        replaceNode(pos, node);
-        validatePos(serverWorld, pos.pos);
-    }
+//    public void replaceNode(World world, NodePos pos, FluidNode node)
+//    {
+//        if (!(world instanceof ServerWorld serverWorld))
+//        {
+//            return;
+//        }
+//        replaceNode(pos, node);
+//        validatePos(serverWorld, pos.pos);
+//    }
 
     public void removeNode(World world, NodePos pos)
     {

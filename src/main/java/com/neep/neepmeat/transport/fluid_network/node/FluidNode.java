@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network.node;
 
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,36 +37,53 @@ public class FluidNode
     private PipeNetwork network = null;
     public long networkId;
     public Map<FluidNode, Integer> distances = new HashMap<>();
-    private Storage<FluidVariant> storage;
 
+    private FluidPump pump;
+    private boolean hasPump;
+
+    private Storage<FluidVariant> storage;
     public boolean isStorage;
+
 
     public boolean needsDeferredLoading;
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, boolean isStorage)
+    public FluidNode(NodePos nodePos, ServerWorld world)
     {
-        this(nodePos, storage);
-        this.isStorage = isStorage;
+        this.face = nodePos.face;
+        this.pos = nodePos.pos;
+        this.isStorage = findStorage(world);
+        this.hasPump = findPump(world);
+        this.nodePos = nodePos;
     }
 
-    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage)
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, boolean isStorage, boolean hasPump)
+    {
+        this(nodePos, storage, null);
+        this.isStorage = isStorage;
+        this.hasPump = hasPump;
+    }
+
+    public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, @Nullable FluidPump pump)
     {
         this.pos = nodePos.pos;
         this.face = nodePos.face;
         this.nodePos = nodePos;
         this.storage = storage;
+        this.pump = pump;
         this.isStorage = true;
     }
 
     // For deferred loading only.
-    protected FluidNode(NodePos pos, long networkId, ServerWorld world, boolean isStorage)
+    protected FluidNode(NodePos pos, long networkId, ServerWorld world, boolean isStorage, boolean hasPump)
     {
         this.face = pos.face;
         this.pos = pos.pos;
         this.nodePos = pos;
         this.networkId = networkId;
         this.storage = null;
+        this.pump = null;
         this.isStorage = isStorage;
+        this.hasPump = hasPump;
         this.needsDeferredLoading = true;
 
         FluidNetwork.getInstance(world).queueNode(this);
@@ -84,8 +103,9 @@ public class FluidNode
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
         long networkId = nbt.getLong("network_id");
         boolean isStorage = nbt.getBoolean("is_storage");
+        boolean hasPump = nbt.getBoolean("hasPump");
 
-        return new FluidNode(pos, networkId, world, isStorage);
+        return new FluidNode(pos, networkId, world, isStorage, hasPump);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
@@ -93,13 +113,8 @@ public class FluidNode
         nbt.put("pos", nodePos.toNbt(new NbtCompound()));
         nbt.putLong("network_id", networkId);
         nbt.putBoolean("is_storage", isStorage);
+        nbt.putBoolean("hasPump", hasPump);
         return nbt;
-    }
-
-    public int getDistance(FluidNode node)
-    {
-        Integer dist = distances.get(node);
-        return dist != null ? dist : Integer.MAX_VALUE;
     }
 
     public void loadDeferred(ServerWorld world)
@@ -108,7 +123,6 @@ public class FluidNode
         {
             return;
         }
-//        load(world);
         Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
     }
 
@@ -118,34 +132,38 @@ public class FluidNode
         {
             return;
         }
-        findStorage(world);
+        boolean bl1 = findStorage(world);
+        boolean bl2 = findPump(world);
     }
 
+    public boolean findPump(ServerWorld world)
+    {
+        FluidPump pump;
+        if ((pump = FluidPump.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
+        {
+            this.pump = pump;
+            return true;
+        }
+        return false;
+    }
 
-    public void findStorage(ServerWorld world)
+    public boolean findStorage(ServerWorld world)
     {
         Storage<FluidVariant> storage;
-        if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
+       if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
         {
             this.storage = storage;
-            this.needsDeferredLoading = false;
+            return true;
+//            this.needsDeferredLoading = false;
         }
-        else
-        {
+        return false;
             // Remove nodes with no connected storage that are not queued for deferred loading
 //            FluidNetwork.getInstance(world).removeNode(world, nodePos);
-        }
     }
 
     public void setStorage(Storage<FluidVariant> storage)
     {
         this.storage = storage;
-    }
-
-    // TODO: Find out what this does
-    public void setMode(AcceptorModes mode)
-    {
-//        this.flow = mode.getFlow();
     }
 
     public void setNetwork(ServerWorld world, PipeNetwork network)
@@ -211,11 +229,7 @@ public class FluidNode
 
     public float getFlow(ServerWorld world)
     {
-        BlockState state = world.getBlockState(getTargetPos());
-        if (state.getBlock() instanceof IVariableFlowBlock variableFlow)
-        {
-            return variableFlow.getFlow(world, getTargetPos(), state, face.getOpposite());
-        }
+        if (hasPump) return pump.getFlow();
         return getMode(world).getFlow();
     }
 
@@ -259,12 +273,7 @@ public class FluidNode
 
     public AcceptorModes getMode(ServerWorld world)
     {
-        BlockPos target = nodePos.facingBlock();
-        BlockState state = world.getBlockState(target);
-        if (state.getBlock() instanceof IDirectionalFluidAcceptor acceptor)
-        {
-            return acceptor.getDirectionMode(world, target, state, face.getOpposite());
-        }
+        if (hasPump) pump.getMode();
         return AcceptorModes.INSERT_EXTRACT;
     }
 

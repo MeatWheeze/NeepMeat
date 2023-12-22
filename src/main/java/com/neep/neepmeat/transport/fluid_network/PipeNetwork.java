@@ -217,7 +217,7 @@ public class PipeNetwork
         return check1 && (activePulling && targetExtract || activePushing && targetInsert || gravityFlowIn != 0);
     }
 
-    // This is responsible for transferring the fluid from node to node
+    // This abomination is responsible for transferring the fluid from node to node
     public void tick()
     {
         if (!isBuilt())
@@ -230,7 +230,9 @@ public class PipeNetwork
             Transaction transaction = Transaction.openOuter();
             FluidNode node;
             if ((node = fromSupplier.get()) == null || fromSupplier.get().getStorage(world) == null
-                    || !fromSupplier.get().isStorage)
+                    || !fromSupplier.get().isStorage
+//                    || !fromSupplier.get().getMode(world).isDriving()
+            )
             {
                 transaction.abort();
                 continue;
@@ -334,9 +336,7 @@ public class PipeNetwork
 
                     if (!visited.contains(next))
                     {
-                        // Check that target is a pipe and not a fluid block entity
-                        if (state2.getBlock() instanceof IFluidPipe
-                                && !(state2.getBlock() instanceof IFluidNodeProvider))
+                        if (state2.getBlock() instanceof IFluidPipe)
                         {
                             visited.add(next);
                             // Next block is connected in opposite direction
@@ -346,19 +346,8 @@ public class PipeNetwork
                                 networkPipes.put(next, new PipeState(state2));
                             }
                         }
-                        else if (state2.hasBlockEntity())
-                        {
-                            Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
-                            if (storage != null)
-                            {
-                                Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
-                                if (node.get() != null)
-                                {
-                                    connectedNodes.add(node);
-                                }
-                            }
-                        }
-                        else if (state2.getBlock() instanceof IFluidNodeProvider)
+                        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
+                        if (storage != null)
                         {
                             Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
                             if (node.get() != null)
@@ -369,8 +358,6 @@ public class PipeNetwork
                     }
                 }
             }
-//        System.out.println("special: " + special + "state: " + state);
-//        System.out.println(networkPipes);
     }
 
     public void removeNode(NodePos pos)

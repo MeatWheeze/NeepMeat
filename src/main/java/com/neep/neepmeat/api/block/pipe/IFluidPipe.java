@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 
 public interface IFluidPipe
 {
-
     static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
