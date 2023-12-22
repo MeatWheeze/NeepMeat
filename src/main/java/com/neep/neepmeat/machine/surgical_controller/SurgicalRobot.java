@@ -75,7 +75,7 @@ public class SurgicalRobot implements NbtSerialisable
             if (moveTo(attachPos))
             {
                 movementState = STATE_DOCKING;
-                setTarget(basePos);
+//                setTarget(basePos);
             }
         }
         else if (movementState == STATE_DOCKING)
@@ -182,5 +182,6 @@ public class SurgicalRobot implements NbtSerialisable
     public void returnToBase()
     {
         movementState = STATE_RETURNING;
+        setTarget(basePos);
     }
 }
