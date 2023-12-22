@@ -10,11 +10,11 @@
       "item": "neepmeat:fluid_pipe"
     },
     "c": {
-      "item": "minecraft:lever"
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "neepmeat:stop_valve",
+    "item": "neepmeat:limiter_valve",
     "count": 1
   }
 }
