@@ -63,11 +63,11 @@ public class LinearOscillatorBlock extends BaseFacingBlock implements BlockEntit
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof LinearOscillatorBlockEntity be && be.onUse(player, hand))
         {
-            return ActionResult.success(be.onUse(player, hand));
+            return ActionResult.SUCCESS;
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.FAIL;
     }
 
     @Override
