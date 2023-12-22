@@ -72,7 +72,8 @@
 - [done] Add Meat Potato farming
 - [done] Add Whisper Wheat processing
 - [done] Create Whisper Brass ingot
-- Update item pipe recipes
+- [done] Update item pipe recipes
+- Add Meat Steel
 
 ## Other
 - [part] Add Data cables
