@@ -23,7 +23,7 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
-        this.backgroundHeight = 255;
+        this.backgroundHeight = 231;
     }
 
     @Override

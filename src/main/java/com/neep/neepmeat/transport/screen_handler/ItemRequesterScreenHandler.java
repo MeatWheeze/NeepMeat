@@ -37,7 +37,7 @@ public class ItemRequesterScreenHandler extends BasicScreenHandler
         this.routingNetwork = network;
         this.pos = pos;
         checkSize(inventory, 1);
-        createPlayerSlots(8, 174, playerInventory);
+        createPlayerSlots(8, 149, playerInventory);
         createSlots();
     }
 
