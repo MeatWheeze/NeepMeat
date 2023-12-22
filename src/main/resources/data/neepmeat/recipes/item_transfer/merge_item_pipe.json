@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " p ",
+    " i ",
+    "   "
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "neepmeat:item_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:merge_item_pipe",
+    "count": 1
+  }
+}

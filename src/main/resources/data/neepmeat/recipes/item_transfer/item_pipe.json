@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "g g",
+    "lll",
+    "g g"
+  ],
+  "key": {
+    "g": {
+      "item": "minecraft:gold_ingot"
+    },
+    "l": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_pipe",
+    "count": 4
+  }
+}
