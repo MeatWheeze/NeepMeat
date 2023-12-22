@@ -154,14 +154,14 @@ public class NMFluidNetwork
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;
-            if ((node = supplier.get()) == null)
+            if ((node = supplier.get()) == null || supplier.get().getStorage((ServerWorld) world) == null)
             {
                 continue;
             }
             for (Supplier<FluidNode> targetSupplier : connectedNodes)
             {
                 FluidNode targetNode;
-                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null)
+                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null || supplier.get().getStorage((ServerWorld) world) == null)
                 {
                     continue;
                 }
