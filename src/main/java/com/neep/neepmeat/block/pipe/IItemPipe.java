@@ -3,11 +3,10 @@ package com.neep.neepmeat.block.pipe;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.util.ItemInPipe;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.Arrays;
@@ -42,7 +41,7 @@ public interface IItemPipe
 
     long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item);
 
-    default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
+    default boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         return true;
     }

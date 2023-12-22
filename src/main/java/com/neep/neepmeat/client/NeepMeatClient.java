@@ -69,6 +69,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.BIG_LEVER, BigLeverRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.PNEUMATIC_PIPE, PneumaticPipeRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
@@ -161,7 +162,6 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CONVERTER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.DEPLOYER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.LEADED_GLASS);
-//        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.LARGE_CONVERTER);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.WHISPER_WHEAT);
 
