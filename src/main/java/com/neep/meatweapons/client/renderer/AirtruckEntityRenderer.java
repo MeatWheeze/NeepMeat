@@ -87,7 +87,7 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
         GeckoLibCache.getInstance().parser.setValue("r_rb", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
 
         AnimationEvent<T> predicate = new AnimationEvent<T>(entity, 0, 0, partialTicks,
-                !(0 > -0.15F && 0 < 0.15F), Collections.singletonList(entityModelData));
+                false, Collections.singletonList(entityModelData));
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entity));
         if (modelProvider instanceof IAnimatableModel)
         {
@@ -142,6 +142,7 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
         EntityPose pose = entity.getPose();
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - rotationYaw));
         matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(entity.getRoll(tickDelta)));
+        matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(entity.getPitch(tickDelta)));
     }
 
     public static int getPackedOverlay(Entity livingEntityIn, float uIn)
