@@ -19,7 +19,6 @@ import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
-import java.util.Optional;
 import java.util.UUID;
 
 /*
@@ -28,8 +27,7 @@ import java.util.UUID;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidNode
 {
-    private final Direction face;
-    private final BlockPos pos;
+    private final NodePos pos;
     private final NodePos nodePos;
     private PipeNetworkImpl1 network = null;
     protected boolean hasNetwork;
@@ -46,8 +44,7 @@ public class FluidNode
 
     public FluidNode(NodePos nodePos, ServerWorld world)
     {
-        this.face = nodePos.face;
-        this.pos = nodePos.pos;
+        this.pos = nodePos;
         this.isStorage = findStorage(world);
         this.hasPump = findPump(world);
         this.nodePos = nodePos;
@@ -62,8 +59,7 @@ public class FluidNode
 
     public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, @Nullable FluidPump pump)
     {
-        this.pos = nodePos.pos;
-        this.face = nodePos.face;
+        this.pos = nodePos;
         this.nodePos = nodePos;
         this.storage = storage;
         this.pump = pump;
@@ -73,8 +69,7 @@ public class FluidNode
     // For deferred loading only.
     protected FluidNode(NodePos pos, UUID networkUUID, ServerWorld world, boolean isStorage, boolean hasPump)
     {
-        this.face = pos.face;
-        this.pos = pos.pos;
+        this.pos = pos;
         this.nodePos = pos;
         this.networkUUID = networkUUID;
         this.storage = null;
@@ -89,7 +84,7 @@ public class FluidNode
     @Override
     public String toString()
     {
-        return "\n" + this.pos.toString() + " " + face + " storage: " + storage;
+        return "\n" + this.pos.toString() + " " + pos.face() + " storage: " + storage;
     }
 
     // Load a node from NBT data
@@ -158,7 +153,7 @@ public class FluidNode
     public boolean findPump(ServerWorld world)
     {
         FluidPump pump;
-        if ((pump = FluidPump.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
+        if ((pump = FluidPump.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) != null)
         {
             this.pump = pump;
             return true;
@@ -169,7 +164,7 @@ public class FluidNode
     public boolean findStorage(ServerWorld world)
     {
         Storage<FluidVariant> storage;
-       if ((storage = FluidStorage.SIDED.find(world, pos.offset(face), face.getOpposite())) != null)
+       if ((storage = FluidStorage.SIDED.find(world, pos.facingBlock(), pos.face().getOpposite())) != null)
         {
             this.storage = storage;
             return true;
@@ -208,7 +203,7 @@ public class FluidNode
         // Not sure how to explain it. It should prevent a ConcurrentModificationException.
         if (this.network != null && !clearing)
         {
-            this.network.removeNode(new NodePos(pos, face));
+            this.network.removeNode(pos);
         }
 
         this.network = network;
@@ -222,18 +217,12 @@ public class FluidNode
 
     public Direction getFace()
     {
-
-        return face;
+        return pos.face();
     }
 
     public int getTargetY()
     {
-        return pos.offset(face).getY();
-    }
-
-    public BlockPos getTargetPos()
-    {
-        return pos.offset(face);
+        return pos.facingBlock().getY();
     }
 
     public BlockPos getPos()
@@ -254,9 +243,9 @@ public class FluidNode
 
     public static double exactDistance(FluidNode node1, FluidNode node2)
     {
-        Vec3d offset1 = new Vec3d(node1.face.getUnitVector()).multiply(0.5);
+        Vec3d offset1 = new Vec3d(node1.pos.face().getUnitVector()).multiply(0.5);
         Vec3d v1 = Vec3d.ofCenter(node1.pos).add(offset1);
-        Vec3d offset2 = new Vec3d(node2.face.getUnitVector()).multiply(0.5);
+        Vec3d offset2 = new Vec3d(node2.pos.face().getUnitVector()).multiply(0.5);
         Vec3d v2 = Vec3d.ofCenter(node2.pos).add(offset2);
         return NMMaths.manhattanDistance(v1, v2);
     }

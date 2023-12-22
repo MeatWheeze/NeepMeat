@@ -30,6 +30,10 @@ public interface PipeNetwork
             LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
+        else
+        {
+            network.remove();
+        }
         System.out.println("fluid network failed");
         return Optional.empty();
     }

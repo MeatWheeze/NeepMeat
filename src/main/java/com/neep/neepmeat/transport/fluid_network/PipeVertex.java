@@ -6,9 +6,17 @@ public interface PipeVertex
 
     long receiveFluid(long amount);
 
-    void putAdjacent(int dir, PipeVertex vertex);
+    PipeVertex[] getAdjVertices();
 
-    PipeVertex[] getAdjacentVertices();
+    default PipeVertex getAdjVertex(int dir)
+    {
+        return getAdjVertices()[dir];
+    }
+
+    default void setAdjVertex(int dir, PipeVertex vertex)
+    {
+        getAdjVertices()[dir] = vertex;
+    }
 
     float getTotalHead();
 
@@ -21,4 +29,6 @@ public interface PipeVertex
     boolean canSimplify();
 
     void reset();
+
+    boolean collapseEdges();
 }

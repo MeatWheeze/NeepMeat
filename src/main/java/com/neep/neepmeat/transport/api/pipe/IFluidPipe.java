@@ -10,8 +10,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.w3c.dom.css.CSSStyleSheet;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -35,7 +37,7 @@ public interface IFluidPipe
     {
         if (!world.isClient)
         {
-            boolean newNode = false;
+            boolean changed = false;
             List<Direction> connections = getConnections(state, dir -> true);
             for (Direction direction : Direction.values())
             {
@@ -43,14 +45,15 @@ public interface IFluidPipe
                 if (connections.contains(direction))
                 {
                     if (FluidNodeManager.getInstance(world).updatePosition(world, new NodePos(pos, direction)))
-                        newNode = true;
+                        changed = true;
                 }
                 else
                 {
                     FluidNodeManager.getInstance(world).removeNode(world, new NodePos(pos, direction));
+                    changed = true;
                 }
             }
-            return newNode;
+            return changed;
         }
         return false;
     }
@@ -75,6 +78,16 @@ public interface IFluidPipe
         }
     }
 
+    static List<Direction> getConnections(World world, BlockPos pos)
+    {
+        BlockState state = world.getBlockState(pos);
+        if (world.getBlockState(pos).getBlock() instanceof IFluidPipe pipe)
+        {
+            return pipe.getConnections(state, d -> true);
+        }
+        return Collections.emptyList();
+    }
+
     default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetworkImpl1.UpdateReason reason)
     {
         try
@@ -83,6 +96,7 @@ public interface IFluidPipe
             if (net != null)
             {
                 net.update(pos, null, reason);
+                return;
             }
             else if (reason.isRemoved())
             {
@@ -101,11 +115,13 @@ public interface IFluidPipe
                         PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
                     }
                 }
+                return;
             }
             else if (reason.isNewPart())
             {
                 List<PipeNetwork> mergeNetworks = Lists.newArrayList();
                 BlockPos.Mutable mutable = pos.mutableCopy();
+                boolean merged = false;
                 for (Direction direction : this.getConnections(state, d -> true))
                 {
                     mutable.set(pos, direction);
@@ -118,9 +134,11 @@ public interface IFluidPipe
                 for (PipeNetwork network : mergeNetworks)
                 {
                     mergeNetworks.get(0).merge(mutable.toImmutable(), network);
+                    merged = true;
                 }
+                if (merged) return;
             }
-            else
+
             {
                 // If there are no adjacent networks, try to create one here.
                 PipeNetwork.tryCreateNetwork(world, pos);
@@ -159,7 +177,7 @@ public interface IFluidPipe
         return AcceptorModes.INSERT_EXTRACT;
     }
 
-    default PipeVertex getPipeVertex(World world, BlockPos pos, BlockState state)
+    default PipeVertex getPipeVertex(ServerWorld world, BlockPos pos, BlockState state)
     {
         return new SimplePipeVertex();
     }

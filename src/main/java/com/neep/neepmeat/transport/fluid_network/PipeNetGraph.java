@@ -7,11 +7,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Set;
@@ -33,12 +31,13 @@ public class PipeNetGraph
         - Pumps make this happen. Decrement each pump's contribution by a scaled unit with every block of distance. (?)
      */
 
-    protected final World world;
+    protected final ServerWorld world;
     protected final Long2ObjectOpenHashMap<PipeVertex> vertices = new Long2ObjectOpenHashMap<>();
     protected final Long2ObjectOpenHashMap<PipeVertex> allVertices = new Long2ObjectOpenHashMap<>();
     protected final ArrayDeque<BlockPos> posQueue = new ArrayDeque<>(10);
+//    protected final HashSet<NodeSupplier> connectedNodes = new HashSet<>();
 
-    public PipeNetGraph(World world)
+    public PipeNetGraph(ServerWorld world)
     {
         this.world = world;
     }
@@ -61,7 +60,7 @@ public class PipeNetGraph
         posQueue.add(startPos);
 
         BlockState startState = world.getBlockState(startPos);
-        IFluidPipe startPipe = FluidTransport.findFluidPipe(world, startPos, world.getBlockState(startPos));
+        IFluidPipe startPipe = FluidTransport.findFluidPipe(world, startPos, world.getBlockState(startPos)).orElse(null);
         if (startPipe == null) return;
         PipeVertex startVertex = startPipe.getPipeVertex(world, startPos, startState);
         startVertex.reset();
@@ -105,8 +104,8 @@ public class PipeNetGraph
         nextVertex.reset();
 
         // Create links
-        currentVertex.putAdjacent(from.ordinal(), nextVertex);
-        nextVertex.putAdjacent(from.getOpposite().ordinal(), currentVertex);
+        currentVertex.setAdjVertex(from.ordinal(), nextVertex);
+        nextVertex.setAdjVertex(from.getOpposite().ordinal(), currentVertex);
 
         allVertices.put(nextPos.asLong(), nextVertex);
     }
@@ -118,34 +117,8 @@ public class PipeNetGraph
         while (it.hasNext())
         {
             PipeVertex toRemove = it.next().getValue();
-            if (toRemove.canSimplify())
+            if (toRemove.canSimplify() && toRemove.collapseEdges())
             {
-                PipeVertex[] edge = new SimplePipeVertex[2];
-                int current = 0;
-
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (toRemove.getAdjacentVertices()[i] != null)
-                    {
-                        edge[current] = toRemove.getAdjacentVertices()[i];
-                        ++current;
-                    }
-                }
-
-                // Determine the directions to link together.
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (edge[0].getAdjacentVertices()[i] == toRemove)
-                    {
-                        edge[0].putAdjacent(i, edge[1]);
-                    }
-
-                    if (edge[1].getAdjacentVertices()[i] == toRemove)
-                    {
-                        edge[1].putAdjacent(i, edge[0]);
-                    }
-                }
-
                 it.remove();
             }
         }
@@ -181,20 +154,20 @@ public class PipeNetGraph
         return vertices;
     }
 
-    public void removeVertex(BlockPos pos, @Nullable PipeVertex vertex)
-    {
-        if (vertex != null)
-        {
-            removeVertex(pos.asLong());
-            removeAdjacent(vertex);
-        }
-        else
-        {
-            vertex = allVertices.get(pos.asLong());
-            removeAdjacent(vertex);
-            removeVertex(pos.asLong());
-        }
-    }
+//    public void removeVertex(BlockPos pos, @Nullable PipeVertex vertex)
+//    {
+//        if (vertex != null)
+//        {
+//            removeVertex(pos.asLong());
+//            removeAdjacent(vertex);
+//        }
+//        else
+//        {
+//            vertex = allVertices.get(pos.asLong());
+//            removeAdjacent(vertex);
+//            removeVertex(pos.asLong());
+//        }
+//    }
 
     private void removeVertex(long pos)
     {
@@ -202,23 +175,23 @@ public class PipeNetGraph
         allVertices.remove(pos);
     }
 
-    private void removeAdjacent(@NotNull PipeVertex toRemove)
-    {
-        // Check all of toRemove's adjacent vertices.
-        for (PipeVertex adj : toRemove.getAdjacentVertices())
-        {
-            if (adj == null) continue;
-
-            // Find the direction in which the vertex connects to toRemove and remove the connection.
-            for (int i = 0; i < 6; ++i)
-            {
-                if (adj.getAdjacentVertices()[i] == toRemove)
-                {
-                    adj.getAdjacentVertices()[i] = null;
-                }
-            }
-        }
-    }
+//    private void removeAdjacent(@NotNull PipeVertex toRemove)
+//    {
+//        // Check all of toRemove's adjacent vertices.
+//        for (PipeVertex adj : toRemove.getAdjVertices())
+//        {
+//            if (adj == null) continue;
+//
+//            // Find the direction in which the vertex connects to toRemove and remove the connection.
+//            for (int i = 0; i < 6; ++i)
+//            {
+//                if (adj.getAdjVertex(i) == toRemove)
+//                {
+//                    adj.setAdjVertex(i, null);
+//                }
+//            }
+//        }
+//    }
 
     public PipeVertex getVertex(BlockPos pos)
     {

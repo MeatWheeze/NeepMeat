@@ -92,8 +92,8 @@ public class PipeNetworkImpl2 implements PipeNetwork
     @Override
     public void update(BlockPos vertexPos, @Nullable PipeVertex vertex, UpdateReason reason)
     {
-        if (reason.isRemoved())
-        {
+//        if (reason.isRemoved())
+//        {
 //            if (vertex == null) vertex = graph.getVertex(vertexPos);
 //
 //            for (Direction direction : Direction.values())
@@ -108,14 +108,15 @@ public class PipeNetworkImpl2 implements PipeNetwork
 //                    network.rebuild(nextPos);
 //                }
 //            }
-            rebuild(vertexPos);
-        }
+//            rebuild(vertexPos);
+//        }
 
-        if (reason.isNewPart())
-        {
-            rebuild(vertexPos);
-        }
+//        if (reason.isNewPart())
+//        {
+//            rebuild(vertexPos);
+//        }
 
+        rebuild(vertexPos);
         validate();
     }
 

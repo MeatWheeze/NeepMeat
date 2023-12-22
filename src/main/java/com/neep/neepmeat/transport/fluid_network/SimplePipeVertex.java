@@ -2,13 +2,11 @@ package com.neep.neepmeat.transport.fluid_network;
 
 import net.minecraft.util.math.Direction;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class SimplePipeVertex implements PipeVertex
 {
-    protected final List<Direction> connections = new ArrayList<>();
+//    protected final List<Direction> connections = new ArrayList<>();
     private final PipeVertex[] adjacentVertices = new PipeVertex[6];
     protected float pressureHead;
     protected float elevationHead;
@@ -51,7 +49,7 @@ public class SimplePipeVertex implements PipeVertex
         {
             if (v != null) adj.append(System.identityHashCode(v)).append(", ");
         }
-        return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + ", head:" + getTotalHead() + "}";
+        return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + "head:" + getTotalHead() + "}";
     }
 
     @Override
@@ -63,7 +61,7 @@ public class SimplePipeVertex implements PipeVertex
         }
         if (o instanceof SimplePipeVertex vertex)
         {
-            return connections.equals(vertex.connections);
+            return Arrays.equals(adjacentVertices, vertex.getAdjVertices());
         }
         return false;
     }
@@ -73,17 +71,17 @@ public class SimplePipeVertex implements PipeVertex
         adjacentVertices[direction.ordinal()] = vertex;
     }
 
-    public void putAdjacent(int dir, PipeVertex vertex)
-    {
-        adjacentVertices[dir] = vertex;
-    }
-
     public PipeVertex getAdjacent(Direction direction)
     {
-        return adjacentVertices[direction.ordinal()];
+        return getAdjacent(direction.ordinal());
     }
 
-    public PipeVertex[] getAdjacentVertices()
+    public PipeVertex getAdjacent(int dir)
+    {
+        return adjacentVertices[dir];
+    }
+
+    public PipeVertex[] getAdjVertices()
     {
         return adjacentVertices;
     }
@@ -110,20 +108,25 @@ public class SimplePipeVertex implements PipeVertex
         return network;
     }
 
-    public List<Direction> getConnections()
+//    public List<Direction> getConnections()
+//    {
+//        return connections;
+//    }
+
+    protected int numEdges()
     {
-        return connections;
+        int edges = 0;
+        for (PipeVertex pipeNetVertex : getAdjVertices())
+        {
+            if (pipeNetVertex != null) ++edges;
+        }
+        return edges;
     }
 
     @Override
     public boolean canSimplify()
     {
-        int edges = 0;
-        for (PipeVertex pipeNetVertex : getAdjacentVertices())
-        {
-            if (pipeNetVertex != null) ++edges;
-        }
-        return edges == 2;
+        return numEdges() <= 2;
     }
 
     @Override
@@ -132,8 +135,71 @@ public class SimplePipeVertex implements PipeVertex
         pressureHead = 0;
         elevationHead = 0;
         amount = 0;
-        connections.clear();
         network = null;
-        Arrays.fill(adjacentVertices, null);
+        clearEdges();
+    }
+
+    @Override
+    public boolean collapseEdges()
+    {
+        if (canSimplify())
+        {
+            if (numEdges() == 2)
+            {
+                PipeVertex[] edge = new SimplePipeVertex[2];
+                int current = 0;
+
+                for (int i = 0; i < 6; ++i)
+                {
+                    if (getAdjVertices()[i] != null)
+                    {
+                        edge[current] = getAdjVertex(i);
+                        ++current;
+                    }
+                }
+
+                // Determine the directions to link together.
+                for (int i = 0; i < 6; ++i)
+                {
+                    if (edge[0].getAdjVertex(i) == this)
+                    {
+                        edge[0].setAdjVertex(i, edge[1]);
+                    }
+
+                    if (edge[1].getAdjVertex(i) == this)
+                    {
+                        edge[1].setAdjVertex(i, edge[0]);
+                    }
+                }
+                return true;
+
+            }
+            else if (numEdges() == 1)
+            {
+                clearEdges();
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected void clearEdges()
+    {
+        for (int i = 0; i < 6; ++i)
+        {
+            PipeVertex adj = getAdjacent(i);
+            if (adj == null) continue;
+
+            for (int j = 0; j < 6; ++j)
+            {
+                if (adj.getAdjVertex(j) == this)
+                {
+                    adj.setAdjVertex(j, null);
+                }
+            }
+
+            setAdjVertex(i, null);
+        }
     }
 }

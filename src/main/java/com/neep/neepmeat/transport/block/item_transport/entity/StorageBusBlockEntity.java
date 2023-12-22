@@ -142,7 +142,7 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
         foundTargets.forEach(p ->
         {
 //                ItemPipeUtil.stackToAny((ServerWorld) world, p.first().getPos(), Direction.UP, variant, p.right(), transaction);
-            ((IServerWorld) world).getItemNetwork().route(p.first().getPos(), p.first().getFace(), fromPos.pos, fromPos.face, variant, p.right(), transaction);
+            ((IServerWorld) world).getItemNetwork().route(p.first().getPos(), p.first().getFace(), fromPos, fromPos.face(), variant, p.right(), transaction);
         });
 
         return amount - remaining;
