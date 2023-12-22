@@ -3,7 +3,11 @@ package com.neep.neepmeat.machine.stirling_engine;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -18,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory
+public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory, IMotorBlockEntity
 {
     protected StirlingEngineStorage storage;
 
@@ -109,17 +113,26 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
                 this.burnTime = time;
                 this.fuelTime = time;
             }
+            updateBurning();
         }
     }
 
-    public static void serverTick(World world, BlockPos pos, BlockState blockState, StirlingEngineBlockEntity be)
+    public static void serverTick(World world, BlockPos pos, BlockState state, StirlingEngineBlockEntity be)
     {
         be.tick();
+
     }
 
     public boolean isBurning()
     {
         return burnTime > 0;
+    }
+
+    protected void updateBurning()
+    {
+        BlockState state = getCachedState();
+        state = state.with(AbstractFurnaceBlock.LIT, this.isBurning());
+        getWorld().setBlockState(pos, state, Block.NOTIFY_ALL);
     }
 
     public StirlingEngineStorage getStorage()
@@ -145,5 +158,30 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         // E=Iw^2. Assume the flywheel has a moment of inertia of 100kgm^2, divide by 20 to get velocity in rad / tick.
         float w1 = (float) Math.sqrt(2f * energy / 100) / 20;
         return (float) (w1 * 180 / Math.PI); // Convert to degrees / tick
+    }
+
+    @Override
+    public long doWork(long amount, TransactionContext transaction)
+    {
+        long convertAmount = amount / 10;
+        if (energyStored > convertAmount)
+        {
+            energyStored -= convertAmount;
+            sync();
+            return amount;
+        }
+        return 0;
+    }
+
+    @Override
+    public void setRunning(boolean running)
+    {
+
+    }
+
+    @Override
+    public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
+    {
+
     }
 }

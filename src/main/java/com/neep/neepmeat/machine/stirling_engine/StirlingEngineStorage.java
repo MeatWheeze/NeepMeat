@@ -10,7 +10,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class StirlingEngineStorage
@@ -52,6 +55,11 @@ public class StirlingEngineStorage
         }
 
         return -1;
+    }
+
+    public void dropItems(World world, BlockPos pos)
+    {
+        ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, inventory.getStack(0));
     }
 
     public void writeNbt(NbtCompound nbt)

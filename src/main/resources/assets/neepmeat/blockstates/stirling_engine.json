@@ -1,31 +1,59 @@
 {
   "variants": {
-    "facing=east": {
+    "facing=east,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
       "y": 90,
       "x": 0
     },
-    "facing=north": {
+    "facing=north,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
       "y": 0,
       "x": 0
     },
-    "facing=south": {
+    "facing=south,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
       "y": 180,
       "x": 0
     },
-    "facing=west": {
+    "facing=west,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
       "y": -90,
       "x": 0
     },
-    "facing=up": {
+    "facing=up,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
       "x": -90
     },
-    "facing=down": {
+    "facing=down,lit=false": {
       "model": "neepmeat:block/stirling_engine/base",
+      "x": 90
+    },
+    "facing=east,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
+      "x": -90
+    },
+    "facing=down,lit=true": {
+      "model": "neepmeat:block/stirling_engine/base_lit",
       "x": 90
     }
   }
