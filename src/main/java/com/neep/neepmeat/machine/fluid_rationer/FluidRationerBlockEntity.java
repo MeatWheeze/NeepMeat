@@ -165,7 +165,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        outputStorage.writeNbt1(nbt);
+        outputStorage.toNbt(nbt);
         nbt.putInt("state", state.ordinal());
         nbt.putInt("inMode", inMode.ordinal());
         nbt.putInt("outMode", outMode.ordinal());

@@ -147,7 +147,7 @@ public class FluidDrainBlockEntity extends SyncableBlockEntity implements FluidB
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt1(tag);
+        buffer.toNbt(tag);
     }
 
     @Override

@@ -47,11 +47,11 @@ public class MixerStorage implements ImplementedRecipe.DummyInventory
         nbt.put("displayInput2", displayInput2.toNbt());
         
         NbtCompound input1 = new NbtCompound();
-        fluidInput1.writeNbt1(input1);
+        fluidInput1.toNbt(input1);
         nbt.put("input_1", input1);
 
         NbtCompound input2 = new NbtCompound();
-        fluidInput2.writeNbt1(input2);
+        fluidInput2.toNbt(input2);
         nbt.put("input_2", input2);
 
         NbtCompound itemNbt = new NbtCompound();
@@ -59,7 +59,7 @@ public class MixerStorage implements ImplementedRecipe.DummyInventory
         nbt.put("item_input", itemNbt);
 
         NbtCompound output = new NbtCompound();
-        fluidOutput.writeNbt1(output);
+        fluidOutput.toNbt(output);
         nbt.put("output", output);
 
         return nbt;

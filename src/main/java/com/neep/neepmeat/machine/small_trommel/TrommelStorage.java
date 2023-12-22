@@ -38,11 +38,11 @@ public class TrommelStorage implements NbtSerialisable
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtCompound inputNbt = new NbtCompound();
-        fluidInput.writeNbt1(inputNbt);
+        fluidInput.toNbt(inputNbt);
         nbt.put("fluidInput", inputNbt);
 
         NbtCompound outputNbt = new NbtCompound();
-        fluidOutput.writeNbt1(outputNbt);
+        fluidOutput.toNbt(outputNbt);
         nbt.put("fluidOutput", outputNbt);
 
         NbtCompound itemOutputNbt = new NbtCompound();

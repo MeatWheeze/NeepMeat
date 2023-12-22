@@ -80,7 +80,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt1(tag);
+        buffer.toNbt(tag);
         tag.putInt(FRONT_MODE, frontMode.getId());
         tag.putInt(BACK_MODE, backMode.getId());
         tag.putBoolean("hasFrontStorage", hasFrontStorage);

@@ -46,7 +46,7 @@ public class TankBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        buffer.writeNbt1(tag);
+        buffer.toNbt(tag);
     }
 
     @Override

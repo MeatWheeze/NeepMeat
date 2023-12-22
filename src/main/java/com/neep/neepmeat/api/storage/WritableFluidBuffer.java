@@ -34,7 +34,7 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
         this.parent = parent;
     }
 
-    public NbtCompound writeNbt1(NbtCompound nbt)
+    public NbtCompound toNbt(NbtCompound nbt)
     {
         nbt.putLong("amount", amount);
         nbt.put("resource", variant.toNbt());

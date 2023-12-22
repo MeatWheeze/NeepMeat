@@ -54,9 +54,9 @@ public class FluidRationerStorage extends WritableSingleFluidStorage
     }
 
     @Override
-    public NbtCompound writeNbt1(NbtCompound nbt)
+    public NbtCompound toNbt(NbtCompound nbt)
     {
-        super.writeNbt1(nbt);
+        super.toNbt(nbt);
         nbt.put("inventory", this.inventory.toNbtList());
         return nbt;
     }

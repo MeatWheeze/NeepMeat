@@ -41,7 +41,7 @@ public class ItemMincerStorage implements NbtSerialisable
         var inNbt = new NbtCompound();
         var outNbt = new NbtCompound();
         inputStorage.writeNbt(inNbt);
-        outputStorage.writeNbt1(outNbt);
+        outputStorage.toNbt(outNbt);
         nbt.put("output", outNbt);
         nbt.put("input", inNbt);
 
