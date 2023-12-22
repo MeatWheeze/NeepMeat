@@ -22,6 +22,7 @@ public class GrinderStorage extends SimpleInventory
     protected GrinderBlockEntity parent;
     protected WritableStackStorage inputStorage;
     protected WritableStackStorage outputStorage;
+    protected WritableStackStorage extraStorage;
     protected XpStorage xpStorage;
 
     public GrinderStorage(GrinderBlockEntity parent)
@@ -42,6 +43,15 @@ public class GrinderStorage extends SimpleInventory
         };
 
         this.outputStorage = new WritableStackStorage(parent, 32)
+        {
+            @Override
+            public boolean supportsInsertion()
+            {
+                return false;
+            }
+        };
+
+        this.extraStorage = new WritableStackStorage(parent, 32)
         {
             @Override
             public boolean supportsInsertion()
@@ -96,6 +106,11 @@ public class GrinderStorage extends SimpleInventory
     public WritableStackStorage getOutputStorage()
     {
         return outputStorage;
+    }
+
+    public WritableStackStorage getExtraStorage()
+    {
+        return extraStorage;
     }
 
     public void dropItems(World world, BlockPos pos)

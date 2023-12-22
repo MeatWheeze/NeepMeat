@@ -5,10 +5,13 @@ import com.neep.neepmeat.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.storage.WritableStackStorage;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -26,6 +29,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -105,6 +109,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity
             try (Transaction transaction = Transaction.openOuter())
             {
                 ejectOutput(transaction);
+                transaction.commit();
             }
         }
 
@@ -132,7 +137,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity
     {
         if (currentRecipe == null && storage.outputStorage.isEmpty() && !storage.inputStorage.isEmpty())
         {
-            GrindingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
+            GrindingRecipe recipe = getWorld().getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
 
             if (recipe != null && storage.outputStorage.simulateInsert(ItemVariant.of(recipe.getItemOutput().resource()),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
@@ -175,31 +180,59 @@ public class GrinderBlockEntity extends SyncableBlockEntity
     protected void ejectOutput(TransactionContext transaction)
     {
         Direction facing = getCachedState().get(GrinderBlock.FACING);
-        ItemStack stack = storage.outputStorage.getAsStack();
+        CombinedStorage<ItemVariant, WritableStackStorage> combined = new CombinedStorage<>(List.of(storage.outputStorage, storage.extraStorage));
+        storageToWorld(getWorld(), combined, pos.offset(facing), facing.getOpposite(), transaction);
 
-        BlockPos offsetPos = pos.offset(facing);
-        BlockState offsetState = world.getBlockState(offsetPos);
-        Storage<ItemVariant> ejectStorage;
-        if (offsetState.getBlock() instanceof IItemPipe pipe && pipe.getConnections(offsetState, d -> true).contains(facing.getOpposite()))
-        {
-            pipe.insert(world, offsetPos, offsetState, facing.getOpposite(), new ItemInPipe(stack, world.getTime()));
-        }
-        else if ((ejectStorage = ItemStorage.SIDED.find(world, offsetPos, Direction.UP)) != null)
-        {
-            ejectStorage.insert(storage.outputStorage.getResource(), stack.getCount(), transaction);
-        }
-        else
-        {
-            Vec3d itemPos = Vec3d.ofCenter(getPos(), 0.5).add(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ());
-            ItemEntity entity = new ItemEntity(getWorld(), itemPos.x, itemPos.y, itemPos.z, storage.outputStorage.getAsStack());
-            float mult = 0.1f;
-            entity.setVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
-            world.spawnEntity(entity);
-        }
-        storage.outputStorage.extract(storage.outputStorage.getResource(), stack.getCount(), transaction);
         Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
         ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
         storage.xpStorage.extract(Float.MAX_VALUE, transaction);
+    }
+
+    public static void storageToWorld(World world, Storage<ItemVariant> storage, BlockPos toPos, Direction direction, TransactionContext transaction)
+    {
+        BlockState state = world.getBlockState(toPos);
+        Storage<ItemVariant> ejectStorage = ItemStorage.SIDED.find(world, toPos, direction);
+        for (StorageView<ItemVariant> view : storage.iterable(transaction))
+        {
+            try (Transaction inner = transaction.openNested())
+            {
+                if (view.isResourceBlank())
+                {
+                    inner.abort();
+                    continue;
+                }
+
+                long maxAmount = view.getAmount();
+                long transferred = 0;
+                ItemStack stack = view.getResource().toStack((int) maxAmount);
+                if (ejectStorage != null)
+                {
+                    transferred = ejectStorage.insert(view.getResource(), maxAmount, inner);
+                }
+                else if (state.getBlock() instanceof IItemPipe pipe && pipe.getConnections(state, d -> true).contains(direction))
+                {
+//                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime())) == -1 ? maxAmount : 0;
+                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime()));
+                }
+                else
+                {
+                    Direction facing = direction.getOpposite();
+                    Vec3d itemPos = Vec3d.ofCenter(toPos, 0.5);
+                    ItemEntity entity = new ItemEntity(world, itemPos.x, itemPos.y, itemPos.z, stack);
+                    float mult = 0.1f;
+                    entity.setVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
+                    world.spawnEntity(entity);
+                    transferred = maxAmount;
+                }
+                long extracted = view.extract(view.getResource(), maxAmount, inner);
+                if (transferred == maxAmount && extracted == maxAmount)
+                {
+                    inner.commit();
+                    continue;
+                }
+                inner.abort();
+            }
+        }
     }
 
     public static void serverTick(World world, BlockPos pos,BlockState state, GrinderBlockEntity be)

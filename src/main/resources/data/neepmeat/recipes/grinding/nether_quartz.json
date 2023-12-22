@@ -6,8 +6,12 @@
   },
   "output": {
     "resource": "minecraft:quartz",
-    "min": 1,
-    "max": 2
+    "amount": 1
+  },
+  "extra": {
+    "resource": "minecraft:quartz",
+    "amount": 1,
+    "chance": 0.5
   },
   "experience": 3.5,
   "processtime": 10
