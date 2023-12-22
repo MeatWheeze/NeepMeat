@@ -41,6 +41,8 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     protected final RecipeBehaviour recipeBehaviour;
     protected boolean powered;
     protected boolean hasRecipe;
+    public static final int MAX_COOLDOWN = 10;
+    protected int cooldown;
 
     public PedestalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -66,7 +68,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     {
         if (!powered && redstone)
         {
-            recipeBehaviour.update();
+//            recipeBehaviour.update();
         }
         powered = redstone;
     }
@@ -75,6 +77,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        nbt.putInt("cooldown", cooldown);
         recipeBehaviour.writeNbt(nbt);
         storage.writeNbt(nbt);
         nbt.putBoolean("hasRecipe", hasRecipe);
@@ -84,6 +87,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.cooldown = nbt.getInt("cooldown");
         recipeBehaviour.readNbt(nbt);
         storage.readNbt(nbt);
         this.hasRecipe = nbt.getBoolean("hasRecipe");
@@ -111,6 +115,17 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     public Storage<ItemVariant> getStorage(@Nullable Direction dir)
     {
         return storage;
+    }
+
+    public void tick()
+    {
+        this.cooldown = Math.max(0, cooldown - 1);
+
+        if (cooldown == 0)
+        {
+            cooldown = MAX_COOLDOWN;
+            recipeBehaviour.update();
+        }
     }
 
     public class RecipeBehaviour extends com.neep.meatlib.recipe.RecipeBehaviour<EnlighteningRecipe> implements ImplementedRecipe.DummyInventory, NbtSerialisable
