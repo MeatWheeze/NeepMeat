@@ -1,6 +1,6 @@
 # To Do
 
-## 0.0.1 Release
+## 0.1.0 Release
 - [2022-07-11 done] Add Integrator Egg to dungeon loot table
 - [2022-07-09 done] Add charnel compactor
 - [2022-07-11 done] Add recipe for Charnel Compactor
@@ -63,7 +63,7 @@
 - [done] Fix motors retaining BE reference
 - [done] Merge GrinderBlockEntity::storageToWorld
 - [done] Test on server
-- Scaffolding recipes
+- [done] Scaffolding recipes
 
 
 ## Later
@@ -319,6 +319,10 @@ Grant us eyes!
 
 
 # Mod Page Text
+
+All meat is an unknowing ritual sacrifice to the gods of nature. Through the sifting of flesh, we will find remnants of the Divine, and through them will be delivered enlightenment. At NEEP, we are pleased to announce a new range of superior, flesh-based industrial machines that will allow your company to augur the Divine with efficiency and excellence.
+
+- Katherine Ursula Hydroxonium McSpree, Director of NEEP, 1922
 
 Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logistics and cosmic horror (WIP). 
 
