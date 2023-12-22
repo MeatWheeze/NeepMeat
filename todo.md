@@ -149,6 +149,7 @@ Raw Meat Brick can be crafted from 9 Meat Scraps, obtained from crushing charnel
 - Will only be possible with an attached tube driver (?)
 - Each ItemInPipe will carry an array of 6-bit integers that encodes its desired route.
 - When there is a mismatch between the item's route and the current pipe's connections, the route will be voided.
+- If there are no branches, an ejector can check if the item can be inserted into the target inventory
 
 ## Potion Effects
 
