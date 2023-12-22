@@ -5,6 +5,7 @@ import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.ItemRequester;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.item_network.RoutingNetworkCache;
 import com.neep.neepmeat.transport.item_network.RoutingNetworkDFSFinder;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -35,7 +36,9 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
     public static final int W_GRID = 9;
     public static final int H_GRID = 7;
 
-    protected Inventory inventory = new SimpleInventory(W_GRID * H_GRID);
+    protected Inventory inventory = new Inventory(W_GRID * H_GRID);
+
+    protected RoutingNetworkCache networkCache;
 
     public ItemRequesterBlockEntity(BlockPos pos, BlockState state)
     {
@@ -64,7 +67,7 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
         RoutingNetworkDFSFinder finder = new RoutingNetworkDFSFinder(world);
         finder.pushBlock(pos, Direction.UP);
         finder.loop(50);
-        return finder.getResult().right();
+        return finder.hasResult() ? finder.getResult().right() : null;
     }
 
     @Override
@@ -77,18 +80,38 @@ public class ItemRequesterBlockEntity extends ItemPipeBlockEntity implements Ite
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        RoutingNetwork network = getController().find(null);
+        BlockApiCache<RoutingNetwork, Void> cache1 = getController();
+
+        if (cache1 == null) return null;
+
+        RoutingNetwork network = cache1.find(null);
+
+        if (network == null) return null;
+
         try (Transaction transaction = Transaction.openOuter())
         {
-            inventory.clear();
+            inventory.updateInventory(network, transaction);
+            transaction.commit();
+            return new ItemRequesterScreenHandler(syncId, inv, inventory, network, pos);
+        }
+    }
+
+    public static class Inventory extends SimpleInventory
+    {
+        public Inventory(int size)
+        {
+            super(size);
+        }
+
+        public void updateInventory(RoutingNetwork network, TransactionContext transaction)
+        {
+            clear();
             List<ResourceAmount<ItemVariant>> items = network.getAllAvailable(transaction);
             for (int i = 0; i < W_GRID * H_GRID && i < items.size(); ++i)
             {
                 ResourceAmount<ItemVariant> amount = items.get(i);
-                inventory.setStack(i, amount.resource().toStack((int) amount.amount()));
+                setStack(i, amount.resource().toStack((int) amount.amount()));
             }
-            transaction.commit();
-            return new ItemRequesterScreenHandler(syncId, inv, inventory);
         }
     }
 }

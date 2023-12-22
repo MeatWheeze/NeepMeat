@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
+import java.util.Collections;
 import java.util.List;
 
 public interface RoutingNetwork
@@ -25,6 +26,27 @@ public interface RoutingNetwork
     void update();
 
     long getVersion();
+
+    RoutingNetwork DEFAULT = new RoutingNetwork()
+    {
+        @Override
+        public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction) { return Collections.emptyList(); }
+
+        @Override
+        public void request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) {}
+
+        @Override
+        public void invalidate() {}
+
+        @Override
+        public boolean needsUpdate() { return false; }
+
+        @Override
+        public void update() {}
+
+        @Override
+        public long getVersion() { return 0;}
+    };
 
     enum RequestType
     {
