@@ -115,7 +115,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, IDa
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PEDESTAL, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
+        return MiscUtils.checkType(type, NMBlockEntities.PEDESTAL, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
     }
 
     @Nullable

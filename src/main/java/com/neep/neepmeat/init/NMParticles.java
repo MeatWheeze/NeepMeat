@@ -26,11 +26,13 @@ public class NMParticles
     public static final ParticleType<SwirlingParticleEffect> BLOCK_SWIRL = ParticleRegistry.register(NeepMeat.NAMESPACE, "block_swirl", SwirlingParticleEffect.PARAMETERS_FACTORY, SwirlingParticleEffect::createCodec);
 
     public static DefaultParticleType MEAT_SPLASH = FabricParticleTypes.simple();
+    public static DefaultParticleType MEAT_FOUNTAIN = FabricParticleTypes.simple();
 //    public static DefaultParticleType MEAT_DROP = FabricParticleTypes.simple();
 
     public static void init()
     {
         MEAT_SPLASH = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_splash", MEAT_SPLASH);
+        MEAT_FOUNTAIN = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_fountain", MEAT_FOUNTAIN);
 //        MEAT_DROP = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_drop", MEAT_DROP);
     }
 
@@ -48,6 +50,7 @@ public class NMParticles
 
             ParticleFactoryRegistry.getInstance().register(BLOCK_SWIRL, new SwirlingParticle.Factory());
             ParticleFactoryRegistry.getInstance().register(MEAT_SPLASH, FlameParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(MEAT_FOUNTAIN, LavaEmberParticle.Factory::new);
 //            ParticleFactoryRegistry.getInstance().register(MEAT_DROP, FlameParticle.Factory::new);
         }
 

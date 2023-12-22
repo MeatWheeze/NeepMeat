@@ -76,7 +76,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
+        return MiscUtils.checkType(type, NMBlockEntities.MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
     }
 
     @Nullable

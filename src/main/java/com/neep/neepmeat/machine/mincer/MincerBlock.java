@@ -1,4 +1,4 @@
-package com.neep.neepmeat.machine.pylon;
+package com.neep.neepmeat.machine.mincer;
 
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -18,11 +18,11 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PylonBlock extends TallBlock implements BlockEntityProvider
+public class MincerBlock extends TallBlock implements BlockEntityProvider
 {
-    public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 32 + 16, 16);
+    public static final VoxelShape OUTLINE = Block.createCuboidShape(0, 0, 0, 16, 29, 16);
 
-    public PylonBlock(String registryName, Settings settings)
+    public MincerBlock(String registryName, Settings settings)
     {
         super(registryName, settings);
     }
@@ -36,28 +36,22 @@ public class PylonBlock extends TallBlock implements BlockEntityProvider
     @Override
     protected Structure getStructure()
     {
-        return (Structure) BlockRegistry.queue(new PylonStructure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
+        return (Structure) BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.PYLON.instantiate(pos, state);
+        return NMBlockEntities.MINCER.instantiate(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PYLON, PylonBlockEntity::serverTick, null, world);
-    }
-
-    public class PylonStructure extends Structure
-    {
-        public PylonStructure(String registryName, Settings settings)
-        {
-            super(registryName, settings);
-        }
+        BlockEntityTicker<MincerBlockEnity> clientTicker = (world1, pos, state1, be) -> be.clientTick();
+        BlockEntityTicker<T> ticker = MiscUtils.checkType(type, NMBlockEntities.MINCER, (world1, pos, state1, be) -> be.serverTick(), clientTicker, world);
+        return ticker;
     }
 }
