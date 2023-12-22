@@ -1,0 +1,22 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"3": "neepmeat:block/vascular_conduit/pipe_side",
+		"particle": "neepmeat:block/vascular_conduit/pipe_side"
+	},
+	"elements": [
+		{
+			"from": [4, 4, 4],
+			"to": [12, 12, 12],
+			"rotation": {"angle": 0, "axis": "x", "origin": [8, 8, 8]},
+			"faces": {
+				"north": {"uv": [16, 8, 8, 0], "texture": "#3"},
+				"east": {"uv": [8, 0, 16, 8], "rotation": 180, "texture": "#3"},
+				"south": {"uv": [8, 0, 16, 8], "rotation": 180, "texture": "#3"},
+				"west": {"uv": [8, 0, 16, 8], "rotation": 180, "texture": "#3"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#3"},
+				"down": {"uv": [0, 0, 8, 8], "rotation": 180, "texture": "#3"}
+			}
+		}
+	]
+}

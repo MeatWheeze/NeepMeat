@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.casting_basin;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -12,6 +13,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -42,6 +44,20 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
             ItemUtils.singleVariantInteract(player, hand, be.getStorage().outputStorage);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!world.getBlockState(pos).isOf(this))
+        {
+            world.getBlockEntity(pos, NMBlockEntities.CASTING_BASIN).ifPresent(be ->
+            {
+                ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                        be.getStorage().outputStorage.getAsStack());
+            });
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Nullable
