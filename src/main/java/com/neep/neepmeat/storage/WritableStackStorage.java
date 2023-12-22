@@ -37,7 +37,6 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
     {
         nbt.putLong("amount", getAmount());
         nbt.put("resource", getResource().toNbt());
-//        System.out.println("writing " + getResource() + " =------------------------------------------");
         return nbt;
     }
 
@@ -45,7 +44,6 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
     {
         this.amount = nbt.getLong("amount");
         this.variant = ItemVariant.fromNbt((NbtCompound) nbt.get("resource"));
-//        System.out.println("reading " + " =------------ ------------------------------");
     }
 
     public void syncIfPossible()
@@ -54,12 +52,6 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
         {
             parent.markDirty();
             parent.getWorld().updateListeners(parent.getPos(), parent.getCachedState(), parent.getCachedState(), Block.NOTIFY_LISTENERS);
-
-//            if (parent instanceof BlockEntityClientSerializable becs)
-//            {
-//                becs.sync();
-//            }
-//            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
         }
     }
 
@@ -89,6 +81,10 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
     @Override
     protected long getCapacity(ItemVariant variant)
     {
+        if (!variant.isBlank())
+        {
+            return variant.getItem().getMaxCount();
+        }
         return capacity;
     }
 }
