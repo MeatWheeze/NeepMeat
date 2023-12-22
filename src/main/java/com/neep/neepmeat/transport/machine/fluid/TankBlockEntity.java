@@ -9,6 +9,7 @@ import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -36,6 +37,11 @@ public class TankBlockEntity extends SyncableBlockEntity
     public TankBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.TANK_BLOCK_ENTITY, pos, state);
+    }
+
+    public WritableSingleFluidStorage getStorage(Direction direction)
+    {
+        return buffer;
     }
 
     @Override

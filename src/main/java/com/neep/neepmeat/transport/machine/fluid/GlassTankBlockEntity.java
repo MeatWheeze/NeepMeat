@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class GlassTankBlockEntity extends TankBlockEntity implements FluidBuffer.FluidBufferProvider
+public class GlassTankBlockEntity extends TankBlockEntity
 {
 //    private final WritableFluidBuffer buffer;
 
