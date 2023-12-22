@@ -17,7 +17,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public MotorBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
     }
 
     @Override
