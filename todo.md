@@ -51,8 +51,7 @@
 - Remove stupid items (spigot, etc.)
 - [done] Shave down the number of failed networks by storing whether a node has a network
 - Move machine blocks and entities together
-- Make SoundRegistry general
-- Separate modules
+- [done] Make SoundRegistry general
 - Add recipes for MeatWeapons
 
 ## Later
