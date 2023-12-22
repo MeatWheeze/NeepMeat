@@ -116,13 +116,13 @@ public class MergePipeBlock extends ItemPipeBlock
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        Vec3d hitPos = hit.getPos();
-        Direction side = hit.getSide();
-        Direction useDirection = getUseDirection(side, pos, hitPos);
-        if (useDirection == state.get(FACING).getOpposite())
-        {
-            return ActionResult.SUCCESS;
-        }
+//        Vec3d hitPos = hit.getPos();
+//        Direction side = hit.getSide();
+//        Direction useDirection = getUseDirection(side, pos, hitPos);
+//        if (useDirection == state.get(FACING).getOpposite())
+//        {
+//            return ActionResult.SUCCESS;
+//        }
         return ActionResult.PASS;
     }
 

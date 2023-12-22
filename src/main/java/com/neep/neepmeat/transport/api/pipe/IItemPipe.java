@@ -20,11 +20,11 @@ public interface IItemPipe
 {
     static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
     {
-        if (state.getBlock() instanceof AbstractPipeBlock)
-        {
-            return state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
-        }
-        else if (state.getBlock() instanceof IItemPipe acceptor)
+//        if (state.getBlock() instanceof AbstractPipeBlock)
+//        {
+//            return state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
+//        }
+        if (state.getBlock() instanceof IItemPipe acceptor)
         {
             return acceptor.connectInDirection(world, pos, state, direction);
         }
