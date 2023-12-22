@@ -28,8 +28,11 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     protected final WritableFluidBuffer buffer;
     private boolean isActive;
 
-    public AcceptorModes frontMode = AcceptorModes.PUSH;
-    public AcceptorModes backMode = AcceptorModes.PULL;
+    public static final String FRONT_MODE = "front_mode";
+    public static final String BACK_MODE = "back_mode";
+
+    public AcceptorModes frontMode = AcceptorModes.NONE;
+    public AcceptorModes backMode = AcceptorModes.NONE;
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
@@ -126,6 +129,8 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     {
         super.writeNbt(tag);
         buffer.writeNBT(tag);
+        tag.putInt(FRONT_MODE, frontMode.getId());
+        tag.putInt(BACK_MODE, backMode.getId());
         return tag;
     }
 
@@ -134,14 +139,14 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
     {
         super.readNbt(tag);
         buffer.readNBT(tag);
+        this.frontMode = AcceptorModes.byId(tag.getInt(FRONT_MODE));
+        this.backMode = AcceptorModes.byId(tag.getInt(BACK_MODE));
     }
 
     @Override
     @Nullable
     public WritableFluidBuffer getBuffer(Direction direction)
     {
-//        return sideModes.get(direction) != FluidAcceptor.AcceptorModes NONE
-//                || direction == null ? buffer : null;
         return buffer;
     }
 
