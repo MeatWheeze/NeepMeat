@@ -98,13 +98,14 @@ public class FluidNodeManager
 
         if (shouldTick(world.getTime()))
         {
-//            Runnable runnable = () ->
-//            {
+            Runnable runnable = () ->
+            {
                 for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
                     if (network.getWorld().equals(world)) network.tick();
                 }
-//            };
+            };
+            runnable.run();
 //            StagedTransactions.getExecutor().execute(runnable);
         }
     }

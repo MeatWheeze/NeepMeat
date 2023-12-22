@@ -196,20 +196,21 @@ public class FluidNode
         if (!(this.network == null))
         {
 //            network.removeNode(new NodePos(pos, face));
-            setNetwork(null);
+            setNetwork(null, false);
         }
     }
 
-    public void setNetwork(PipeNetwork network)
+    public void setNetwork(PipeNetwork network, boolean clearing)
     {
-        if (!(this.network == null) && !this.network.equals(network))
+        if (this.network != null && this.network.equals(network)) return;
+
+        // Skip removing this from the network if the current network is responsible for clearing this network...
+        // Not sure how to explain it. It should prevent a ConcurrentModificationException.
+        if (this.network != null && !clearing)
         {
             this.network.removeNode(new NodePos(pos, face));
         }
-        if (this.network != null)
-        {
-//            System.out.println(network.uuid + " replaces " + this.network.uuid);
-        }
+
         this.network = network;
         this.networkUUID = network != null ? network.uuid : null;
     }
