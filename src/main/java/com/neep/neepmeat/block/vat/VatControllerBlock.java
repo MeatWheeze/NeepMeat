@@ -60,7 +60,7 @@ public class VatControllerBlock extends BaseHorFacingBlock implements IMultiBloc
     {
         if (!newState.isOf(this) && world.getBlockEntity(pos) instanceof VatControllerBlockEntity be && !world.isClient())
         {
-            be.disassemble((ServerWorld) world);
+            be.disassemble((ServerWorld) world, true);
         }
     }
 

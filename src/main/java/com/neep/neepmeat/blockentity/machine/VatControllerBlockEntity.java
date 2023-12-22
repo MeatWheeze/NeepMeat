@@ -1,14 +1,14 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.neep.meatlib.transfer.MultiItemBuffer;
 import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
-import com.neep.neepmeat.block.multiblock.IPortBlock;
 import com.neep.neepmeat.block.vat.IVatComponent;
-import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -24,6 +24,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +37,7 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     protected boolean assembled;
     public List<BlockPos> blocks;
     public List<BlockPos> ports;
+    protected Storages storages;
 
     public VatControllerBlockEntity(BlockPos pos, BlockState state)
     {
@@ -45,6 +47,7 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        storages = new Storages(this);
         blocks = new ArrayList<>();
     }
 
@@ -52,19 +55,26 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.assembled = nbt.getBoolean("assembled");
         NbtList list = (NbtList) nbt.get("blocks");
         if (list != null)
             blocks.addAll(list.stream().map(element -> NbtHelper.toBlockPos((NbtCompound) element)).collect(Collectors.toList()));
+
+        storages.readNbt(nbt);
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        nbt.putBoolean("assembled", isAssembled());
         NbtList list = new NbtList();
         if (blocks != null)
             list.addAll(blocks.stream().map(NbtHelper::fromBlockPos).collect(Collectors.toList()));
         nbt.put("blocks", list);
+
+        storages.writeNbt(nbt);
+
         return nbt;
     }
 
@@ -98,15 +108,18 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
                 .forEach(be -> {be.setController(getPos());});
 
         world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, true), Block.NOTIFY_LISTENERS);
+        this.assembled = true;
         markDirty();
         return true;
     }
 
-    public boolean disassemble(ServerWorld world)
+    public boolean disassemble(ServerWorld world, boolean replaced)
     {
         blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> ((IMultiBlock.Entity) be).setController(null));
-        world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, false), Block.NOTIFY_LISTENERS);
+        if (!replaced)
+            world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, false), Block.NOTIFY_LISTENERS);
         blocks.clear();
+        this.assembled = false;
         markDirty();
         System.out.println("Disassemble");
         return true;
@@ -218,12 +231,42 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     @Override
     public <V extends TransferVariant<?>> Storage<V> getStorage(Class<V> variant)
     {
-        return null;
+        if (variant == ItemVariant.class)
+        {
+            return (Storage<V>) storages.items;
+        }
+
+        return Storage.empty();
     }
 
     @Override
     public void componentBroken(ServerWorld world)
     {
-        disassemble(world);
+        disassemble(world, false);
+    }
+
+    protected static class Storages
+    {
+        protected WritableStackStorage itemInput;
+        protected WritableStackStorage itemOutput;
+        protected MultiItemBuffer items;
+
+        protected Storages(@Nullable BlockEntity parent)
+        {
+            itemInput = new WritableStackStorage(parent);
+            itemOutput = new WritableStackStorage(parent);
+            items = new MultiItemBuffer(List.of(itemInput, itemOutput));
+        }
+
+        public void readNbt(NbtCompound nbt)
+        {
+            items.readNbt(nbt);
+        }
+
+        public NbtCompound writeNbt(NbtCompound nbt)
+        {
+            items.writeNbt(nbt);
+            return nbt;
+        }
     }
 }
