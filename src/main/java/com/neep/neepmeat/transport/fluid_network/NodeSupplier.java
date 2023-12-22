@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.server.world.ServerWorld;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -16,8 +17,8 @@ import java.util.function.Supplier;
  */
 public class NodeSupplier implements Supplier<FluidNode>, PipeFlowComponent
 {
-    NodePos pos;
-    ServerWorld world;
+    protected NodePos pos;
+    protected ServerWorld world;
 
     public NodeSupplier(NodePos pos, ServerWorld world)
     {
@@ -43,6 +44,11 @@ public class NodeSupplier implements Supplier<FluidNode>, PipeFlowComponent
                 .toHashCode();
     }
 
+    public NodePos getPos()
+    {
+        return pos;
+    }
+
     @Override
     public String toString()
     {
@@ -52,7 +58,8 @@ public class NodeSupplier implements Supplier<FluidNode>, PipeFlowComponent
     @Override
     public FluidNode get()
     {
-        return FluidNodeManager.getInstance(world).getOrCreateMap(pos.toChunkPos()).get(pos);
+        Map<NodePos, FluidNode> map = FluidNodeManager.getInstance(world).getOrCreateMap(pos.toChunkPos());
+        return map.get(pos);
     }
 
     public void ifPresent(Consumer<FluidNode> consumer)

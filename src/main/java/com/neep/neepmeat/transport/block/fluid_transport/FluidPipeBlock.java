@@ -171,7 +171,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
         {
-            be.getPipeVertex().updateNodes(world, pos, state);
+            be.getPipeVertex().updateNodes(world, pos.toImmutable(), state);
             return be.getPipeVertex();
         }
         return IFluidPipe.super.getPipeVertex(world, pos, state);

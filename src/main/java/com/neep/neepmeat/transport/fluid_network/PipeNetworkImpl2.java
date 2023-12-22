@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
@@ -75,7 +76,14 @@ public class PipeNetworkImpl2 implements PipeNetwork
     @Override
     public boolean isValid()
     {
-        return graph.getVertices().size() >= 2;
+        // A network is definitely valid if there are two or more vertices.
+        if (graph.getVertices().size() >= 2) return true;
+        else
+        {
+            // If there is only one vertex, it can choose to keep the network valid.
+            Long2ObjectMap.Entry<PipeVertex> vertexEntry = getGraph().getVertices().long2ObjectEntrySet().stream().findFirst().orElse(null);
+            return vertexEntry != null && vertexEntry.getValue().keepNetworkValid();
+        }
     }
 
     @Override

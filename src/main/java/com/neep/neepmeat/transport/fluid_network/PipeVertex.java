@@ -1,7 +1,5 @@
 package com.neep.neepmeat.transport.fluid_network;
 
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-
 public interface PipeVertex extends PipeFlowComponent
 {
     void tick();
@@ -32,6 +30,8 @@ public interface PipeVertex extends PipeFlowComponent
     boolean collapseEdges();
 
     long[] getVelocity();
+
+    default boolean keepNetworkValid() {return false;}
 
     float getTotalHead();
     void setElevationHead(float value);
