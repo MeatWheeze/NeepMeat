@@ -55,13 +55,13 @@ public class FluidNetwork
 
     public static void tickNetwork(ServerWorld world)
     {
-        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.listIterator(); it.hasNext();)
+//        System.out.println("tick: " + world.getRegistryKey());
+        for (FluidNode node : WORLD_NETWORKS.get(world).queuedNodes)
         {
-            FluidNode node = it.next();
             node.loadDeferred(world);
-            it.remove();
+//            it.remove();
         }
-
+        WORLD_NETWORKS.get(world).queuedNodes.removeIf(node -> node.getStorage(world) != null);
         NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 

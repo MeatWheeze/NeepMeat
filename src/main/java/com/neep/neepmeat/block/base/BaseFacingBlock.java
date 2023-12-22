@@ -24,7 +24,7 @@ public class BaseFacingBlock extends FacingBlock implements NMBlock
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlayerLookDirection());
+        return this.getDefaultState().with(FACING, context.getPlayer().isSneaking() ? context.getPlayerLookDirection().getOpposite() : context.getPlayerLookDirection());
     }
 
     @Override
