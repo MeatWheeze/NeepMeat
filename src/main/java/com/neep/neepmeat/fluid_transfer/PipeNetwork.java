@@ -6,7 +6,6 @@ import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.FilterUtils;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -177,7 +176,7 @@ public class PipeNetwork
         return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
     }
 
-    public static boolean thing(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
+    public static boolean validNode(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
         FluidNode targetNode;
         if ((targetNode = targetSupplier.get()).equals(node)
@@ -214,9 +213,17 @@ public class PipeNetwork
 
             long baseFlow = Math.min(BASE_TRANSFER, amount);
 
-            List<Supplier<FluidNode>> safeNodes = connectedNodes.stream().filter(targetNode -> thing(world, node, targetNode)).collect(Collectors.toList());
+            Transaction t2 = Transaction.openOuter();
+            List<Supplier<FluidNode>> safeNodes = connectedNodes.stream()
+                    .filter(targetNode -> validNode(world, node, targetNode))
+                    .filter(supplier1 -> supplier1.get().canInsert(world, t2))
+                    .collect(Collectors.toList());
+            t2.abort();
 
             double r = 0.5d;
+
+            // Geometrical solution for flow in branched pipes:
+            // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
 
             // Calculate sum_i(r^2 / L_i^2)
             double sumDist = safeNodes.stream()
@@ -240,9 +247,9 @@ public class PipeNetwork
                 long amountMoved;
                 if (Q >= 0)
                 {
-                    Transaction t2 = Transaction.openOuter();
+                    Transaction t3 = Transaction.openOuter();
                     amountMoved = StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), FilterUtils::any, Q, t2);
-                    t2.commit();
+                    t3.commit();
                 }
             }
         }
