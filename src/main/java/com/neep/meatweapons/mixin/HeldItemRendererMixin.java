@@ -58,20 +58,20 @@ public class HeldItemRendererMixin
     public void render(CallbackInfo ci)
     {
         // Using this.client.player returns null in unpredictable circumstances.
-        ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
-        ItemStack itemStack = clientPlayerEntity.getMainHandStack();
-        ItemStack itemStack2 = clientPlayerEntity.getOffHandStack();
-
-        if (itemStack.getItem() instanceof BaseGunItem && ItemStack.areItemsEqualIgnoreDamage(mainHand, itemStack))
-        {
-            this.equipProgressMainHand = 1;
-            this.mainHand = itemStack;
-        }
-        if (itemStack2.getItem() instanceof BaseGunItem && ItemStack.areItemsEqualIgnoreDamage(offHand, itemStack2))
-        {
-            this.equipProgressOffHand = 1;
-            this.offHand = itemStack2;
-        }
+//        ClientPlayerEntity clientPlayerEntity = MinecraftClient.getInstance().player;
+//        ItemStack itemStack = clientPlayerEntity.getMainHandStack();
+//        ItemStack itemStack2 = clientPlayerEntity.getOffHandStack();
+//
+//        if (itemStack.getItem() instanceof BaseGunItem && ItemStack.areItemsEqualIgnoreDamage(mainHand, itemStack))
+//        {
+//            this.equipProgressMainHand = 1;
+//            this.mainHand = itemStack;
+//        }
+//        if (itemStack2.getItem() instanceof BaseGunItem && ItemStack.areItemsEqualIgnoreDamage(offHand, itemStack2))
+//        {
+//            this.equipProgressOffHand = 1;
+//            this.offHand = itemStack2;
+//        }
     }
 
     // Causes offhand arm to render for certain weapons.

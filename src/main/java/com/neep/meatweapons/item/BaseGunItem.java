@@ -84,6 +84,12 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
     }
 
     @Override
+    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack)
+    {
+        return false;
+    }
+
+    @Override
     public UseAction getUseAction(ItemStack stack)
     {
         return UseAction.NONE;
