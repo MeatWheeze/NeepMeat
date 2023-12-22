@@ -3,11 +3,8 @@ package com.neep.neepmeat.machine.synthesiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.tag.EntityTypeTags;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
@@ -37,6 +34,11 @@ public class MobSynthesisRegistry
 
     public static record Entry(EntityType<?> type, Identifier id, long meat, int time)
     {
+    }
+
+    public static long meatForEntity(Entity entity)
+    {
+        return (long) Math.floor(entity.getHeight() * entity.getWidth() * entity.getWidth());
     }
 
     public static void initDefaults()

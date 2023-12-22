@@ -6,7 +6,9 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
+import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -102,7 +104,12 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
 
     public static long getEntityAmount(LivingEntity entity)
     {
-        return FluidConstants.BUCKET / 4;
+        MobSynthesisRegistry.Entry entry = MobSynthesisRegistry.get(entity);
+        if (entry != null)
+        {
+            return entry.meat() / 2;
+        }
+        return MobSynthesisRegistry.meatForEntity(entity) / 2;
     }
 
     @Override

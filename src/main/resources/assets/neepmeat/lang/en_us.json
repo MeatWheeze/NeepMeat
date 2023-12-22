@@ -314,6 +314,8 @@
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
   "item.neepmeat.essential_saltes": "Essential Saltes: %s",
+  "item.neepmeat.essential_saltes.lore_0": "Use in a Synthesiser to replicate an organism.",
+  "item.neepmeat.essential_saltes.meat": "Meat value: %s",
   "item.neepmeat.mob_egg": "Mob Egg: %s",
 
   "item.neepmeat.compound_injector": "Compound Injector",
