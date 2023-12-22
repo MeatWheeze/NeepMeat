@@ -54,7 +54,6 @@ public class PLCSyncProgram
             {
                 case ARGUMENT -> applyArgument(copy, player.world);
                 case OPERATION -> applyInstruction(copy, player.world);
-//                case OPERATION_IMMEDIATE -> applyInstructionImmediate(copy, player.world);
                 case DELETE -> applyDelete(copy, player.world);
                 case PAUSE -> applyPause(copy, player.world);
                 case RUN -> applyRun(copy, player.world);
@@ -107,19 +106,6 @@ public class PLCSyncProgram
             plc.getState().setInstructionBuilder(provider);
         }
     }
-
-//    private static void applyInstructionImmediate(PacketByteBuf buf, World world)
-//    {
-//        PLCBlockEntity plc = getPlc(buf, world);
-//
-//        Identifier id = Identifier.tryParse(buf.readString());
-//
-//        InstructionProvider provider = Instructions.IMMEDIATE.get(id);
-//        if (provider != null)
-//        {
-//            plc.getState().setInstructionBuilder(provider);
-//        }
-//    }
 
     private static void applyArgument(PacketByteBuf buf, World world)
     {
@@ -193,19 +179,6 @@ public class PLCSyncProgram
 
             ClientPlayNetworking.send(ID, buf);
         }
-
-//        public static void switchOperationImmediate(ImmediateInstructionProvider provider, PLCBlockEntity plc)
-//        {
-//            PacketByteBuf buf = PacketByteBufs.create();
-//
-//            buf.writeInt(Action.OPERATION_IMMEDIATE.ordinal());
-//            putPlc(buf, plc);
-//
-//            String id = Instructions.IMMEDIATE.getId(provider).toString();
-//            buf.writeString(id);
-//
-//            ClientPlayNetworking.send(ID, buf);
-//        }
 
         public static void switchOperation(InstructionProvider provider, PLCBlockEntity plc)
         {

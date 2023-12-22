@@ -86,10 +86,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         outline.init(client, width, height);
         outline.setDimensions(width, height);
 
-        addDrawableChild(new SaveButton(width - 17, 2, 16, 16, Text.of("Save")));
-        addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
-        addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
-        addDrawableChild(new ImmediateRecordButton(width - 4 * 17, 2, 16, 16, Text.of("")));
+        addDrawableChild(new StopButton(width - 1 * 17, 2, 16, 16, Text.of("Stop")));
+        addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
+        addDrawableChild(new ModeSwitchButton(width - 3 * 17, 2, 16, 16));
 
     }
 
@@ -479,11 +478,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
-    class ImmediateRecordButton extends SaveButton
+    class ModeSwitchButton extends SaveButton
     {
-        public ImmediateRecordButton(int x, int y, int width, int height, Text message)
+        public ModeSwitchButton(int x, int y, int width, int height)
         {
-            super(x, y, width, height, message);
+            super(x, y, width, height, Text.empty());
         }
 
         @Override
@@ -498,8 +497,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             return switch (handler.getMode())
             {
-                case RECORD -> Text.of("Mode: Record");
-                case IMMEDIATE -> Text.of("Mode: Immediate");
+                case RECORD -> Text.of("Record Mode: Instructions will be added to the current program");
+                case IMMEDIATE -> Text.of("Shell Mode: Instructions will be executed immediately");
             };
         }
 
