@@ -2,6 +2,10 @@
 
 NeepMeat is a Minecraft mod that adds various forms of darkly aesthetic automation.
 
+For anyone who wants to look at my ~spaghetti~ codebase:
+
+Lasciate ogne speranza, voi ch'intrate!
+
 ## Features
 
 - **Fluid pipes**: Complete with tanks, valves and pumps.
