@@ -21,6 +21,8 @@ import net.minecraft.util.math.Direction;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -36,7 +38,7 @@ public class PipeNetwork
     public static short TICK_RATE = 1;
     public static long BASE_TRANSFER = 10500 * TICK_RATE;
 
-    public List<NodeSupplier> connectedNodes = new ArrayList<>();
+    public List<NodeSupplier> connectedNodes = new CopyOnWriteArrayList<>();
 
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     protected PipeState.FilterFunction[][] nodeMatrix = null;
@@ -45,8 +47,7 @@ public class PipeNetwork
     public boolean isSaved;
 
     // My pet memory leak.
-    // TODO: Find a way to remove unloaded networks from this
-    public static List<PipeNetwork> LOADED_NETWORKS = new ArrayList<>();
+    public static Set<PipeNetwork> LOADED_NETWORKS = new CopyOnWriteArraySet<>();
 
     private PipeNetwork(ServerWorld world, UUID uuid, BlockPos origin)
     {
