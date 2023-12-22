@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.fluid_util.ResourceSnapshotParticipant;
+import com.neep.neepmeat.fluid_transfer.ResourceSnapshotParticipant;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;

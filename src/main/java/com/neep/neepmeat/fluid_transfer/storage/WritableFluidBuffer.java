@@ -1,6 +1,6 @@
-package com.neep.neepmeat.fluid_util.storage;
+package com.neep.neepmeat.fluid_transfer.storage;
 
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

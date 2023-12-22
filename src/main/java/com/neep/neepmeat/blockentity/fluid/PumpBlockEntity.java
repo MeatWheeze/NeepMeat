@@ -1,11 +1,11 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.fluid_util.AcceptorModes;
+import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
-import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
-import com.neep.neepmeat.fluid_util.node.FluidNode;
-import com.neep.neepmeat.fluid_util.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("UnstableApiUsage")
-public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_util.FluidBuffer.FluidBufferProvider
+public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
 {
 
     // When fluid storage is directly in front, redirect insertions to neighboring storage.

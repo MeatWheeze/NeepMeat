@@ -1,8 +1,8 @@
 package com.neep.neepmeat.blockentity.machine;
 
-import com.neep.neepmeat.fluid_util.FluidBuffer;
-import com.neep.neepmeat.fluid_util.storage.MultiTypedFluidBuffer;
-import com.neep.neepmeat.fluid_util.storage.TypedFluidBuffer;
+import com.neep.neepmeat.fluid_transfer.FluidBuffer;
+import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
+import com.neep.neepmeat.fluid_transfer.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.FluidInitialiser;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
