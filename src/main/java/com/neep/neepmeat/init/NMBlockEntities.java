@@ -54,6 +54,8 @@ import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
+import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
+import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -167,6 +169,7 @@ public class NMBlockEntities
     public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
 //    public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
     public static BlockEntityType<? extends SurgeryPlatformBlockEntity> SURGERY_PLATFORM;
+    public static BlockEntityType<UpgradeManagerBlockEntity> UPGRADE_MANAGER;
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
@@ -226,6 +229,8 @@ public class NMBlockEntities
         SURGERY_PLATFORM = register("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
         TableComponent.LOOKUP.registerForBlockEntity(SurgeryPlatformBlockEntity::getTableComponent, SURGERY_PLATFORM);
         MutateInPlace.ENTITY.registerForBlockEntity(SurgeryPlatformBlockEntity::getMutate, SURGERY_PLATFORM);
+
+        UPGRADE_MANAGER = register("upgrade_manager", (p, s) -> new UpgradeManagerBlockEntity(UPGRADE_MANAGER, p, s), NMBlocks.UPGRADE_MANAGER);
 
         // --- Item Transfer ---
         ITEM_DUCT_BLOCK_ENTITY = register("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);

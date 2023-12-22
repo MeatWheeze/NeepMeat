@@ -63,9 +63,7 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
 
         if (stack.getOrCreateNbt().getBoolean("charged"))
         {
-//            target.takeKnockback(1d, attacker.getVelocity().getX(), attacker.getVelocity().getZ());
             target.addVelocity(0, 0.4, 0);
-//            System.out.println(new Throwable().getStackTrace()[0].getMethodName());
             writeCharged(stack, false);
         }
         return true;
@@ -75,20 +73,6 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
         user.setCurrentHand(hand);
-//        if (!world.isClient)
-//        {
-//            final int id = GeckoLibUtil.guaranteeIDForStack(user.getStackInHand(hand), (ServerWorld) world);
-//
-//            if (user.isSprinting())
-//            {
-//                GeckoLibNetwork.syncAnimation(user, this, id, ANIM_STAB);
-//            }
-//            else
-//            {
-//                GeckoLibNetwork.syncAnimation(user, this, id, ANIM_SWING);
-//            }
-//        }
-//        System.out.println("eeee");
         return TypedActionResult.pass(user.getStackInHand(hand));
     }
 
@@ -117,6 +101,14 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
     }
 
     @Override
+    public boolean onSwing(ItemStack stack, PlayerEntity player)
+    {
+//        onAnimationSync(GeckoLibUtil.getIDFromStack(stack), AnimatedSword.ANIM_SWING);
+//        return false;
+        return true;
+    }
+
+    @Override
     public UseAction getUseAction(ItemStack stack)
     {
         if (stack.getOrCreateNbt().getBoolean("charged"))
@@ -135,7 +127,6 @@ public class CheeseCleaverItem extends AnimatedSword implements ISyncable, IAnim
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user)
     {
        writeCharged(stack, true);
-//        System.out.println(new Throwable().getStackTrace()[0].getMethodName());
        return stack;
     }
 

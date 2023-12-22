@@ -21,6 +21,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<AssemblerScreenHandler> ASSEMBLER;
     public static ScreenHandlerType<WorkstationScreenHandler> WORKSTATION;
     public static ScreenHandlerType<GuideScreenHandler> GUIDE;
+    public static ScreenHandlerType<UpgradeManagerScreenHandler> UPGRADE_MANAGER;
     public static ExtendedScreenHandlerType<FluidRationerScreenHandler> FLUID_RATIONER = new ExtendedScreenHandlerType<>(FluidRationerScreenHandler::new);
 
     public static ScreenHandlerType<PLCScreenHandler> PLC;
@@ -35,6 +36,7 @@ public class ScreenHandlerInit
         ASSEMBLER = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "assembler"), AssemblerScreenHandler::new);
         WORKSTATION = ScreenHandlerRegistry.registerSimple(new Identifier(NeepMeat.NAMESPACE, "workstation"), WorkstationScreenHandler::new);
         GUIDE = register(NeepMeat.NAMESPACE, "guide", GuideScreenHandler::new);
+        UPGRADE_MANAGER = register(NeepMeat.NAMESPACE, "upgrade_manager", UpgradeManagerScreenHandler::new);
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
 
         PLC = registerExtended(NeepMeat.NAMESPACE, "plc", PLCScreenHandler::new);
