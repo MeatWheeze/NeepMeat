@@ -272,7 +272,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         }
         else
         {
-            FluidNetwork.getInstance(world).updateNode(world, new NodePos(node), node);
+            FluidNetwork.getInstance(world).replaceNode(world, new NodePos(node), node);
         }
     }
 
