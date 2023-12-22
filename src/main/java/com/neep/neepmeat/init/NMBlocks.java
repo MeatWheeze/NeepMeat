@@ -52,12 +52,12 @@ import net.minecraft.sound.BlockSoundGroup;
 @SuppressWarnings("unused")
 public class NMBlocks
 {
-    public static final FabricBlockSettings METAL = FabricBlockSettings.of(Material.METAL).hardness(4.0f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings METAL = FabricBlockSettings.of(Material.METAL).hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
     public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
-    public static final FabricBlockSettings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
-    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE).nonOpaque().solidBlock(ContentDetectorBlock::never);
-    public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
-    public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque().solidBlock(ContentDetectorBlock::never);
+    public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(BlockSoundGroup.NETHERITE);
+    public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(BlockSoundGroup.NETHERITE);
     public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
 
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
