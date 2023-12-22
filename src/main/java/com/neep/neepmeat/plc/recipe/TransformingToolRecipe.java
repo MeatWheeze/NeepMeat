@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.recipe;
 
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.init.NMComponents;
@@ -9,8 +10,10 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.item.TransformingTools;
 import com.neep.neepmeat.plc.component.MutateInPlace;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.NotImplementedException;
@@ -25,6 +28,10 @@ public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<I
     {
         return INSTANCE;
     }
+
+    private final Item base = NMItems.TRANSFORMING_TOOL_BASE;
+    private final ManufactureStep<?> step = new InjectStep(FluidVariant.of(NMFluids.STILL_WORK_FLUID));
+    private final Identifier id = new Identifier(NeepMeat.NAMESPACE, "transforming_tool");
 
     @Override
     public boolean matches(MutateInPlace<ItemStack> context)
@@ -89,18 +96,18 @@ public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<I
     @Override
     public Identifier getId()
     {
-        throw new NotImplementedException();
+        return id;
     }
 
     @Override
     public Object getBase()
     {
-        throw new NotImplementedException();
+        return base;
     }
 
     @Override
     public List<ManufactureStep<?>> getSteps()
     {
-        throw new NotImplementedException();
+        return List.of(step);
     }
 }

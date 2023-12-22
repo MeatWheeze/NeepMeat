@@ -52,8 +52,6 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     public void registerDisplays(DisplayRegistry registry)
     {
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
-//        registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
-//        registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
         registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
@@ -72,7 +70,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
             registry.add(CompactingDisplay.of(entries, Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CRUDE_INTEGRATION_CHARGE))), page++));
         }
 
-        // Heart extraction
+        // Vivisection
         registry.add(VivisectionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.REANIMATED_HEART)))));
         registry.add(VivisectionDisplay.of(NMBlocks.INTEGRATOR_EGG.asItem(), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CHRYSALIS)))));
     }
@@ -96,6 +94,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         );
 
         registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.PLC.asItem()));
+        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.PLC.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));
@@ -118,7 +117,6 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     @Override
     public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage)
     {
-
         // This method is executed twice for START and twice for END. To prevent all recipes from being injected twice,
         // it must detect a state that only occurs once.
         if (stage == ReloadStage.END && lastStage == ReloadStage.START)

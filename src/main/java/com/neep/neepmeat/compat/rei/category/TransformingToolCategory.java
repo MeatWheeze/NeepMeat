@@ -32,9 +32,8 @@ import java.util.List;
 
 public class TransformingToolCategory implements DisplayCategory<TransformingToolDisplay>
 {
-
-    public static final Identifier GHOST_AXE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_axe.png");
-    public static final Identifier GHOST_SWORD = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_sword.png");
+    private static final Identifier GHOST_AXE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_axe.png");
+    private static final Identifier GHOST_SWORD = new Identifier(NeepMeat.NAMESPACE, "textures/gui/ghost_sword.png");
 
     @Override
     public CategoryIdentifier<TransformingToolDisplay> getCategoryIdentifier()
@@ -78,7 +77,7 @@ public class TransformingToolCategory implements DisplayCategory<TransformingToo
         widgets.add(toolWidget);
         entryY += toolWidget.height() + 2;
         ItemManufactureCategory.EntryWidget entryWidget = new ItemManufactureCategory.EntryWidget(new Point(entryX, entryY),
-                new InjectStep(FluidVariant.of(NMFluids.STILL_WORK_FLUID)), 160 - 20);
+                display.getStep(), 120 - 20);
         widgets.add(entryWidget);
 
         return widgets;
