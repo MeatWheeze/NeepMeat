@@ -7,6 +7,7 @@ import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
@@ -66,7 +67,8 @@ public class DaggerItem extends BaseSwordItem
 
     public static void spawnBloodParticles(Vec3d entityPos, ServerWorld world)
     {
-        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, NMFluids.BLOOD.getDefaultState()),
+//        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, NMFluids.BLOOD.getDefaultState()),
+        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()),
                 entityPos.x, entityPos.y, entityPos.z,
                 30,
                 0.1, 1, 0.1,

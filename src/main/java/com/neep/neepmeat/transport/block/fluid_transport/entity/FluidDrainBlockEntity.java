@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -159,7 +158,7 @@ public class FluidDrainBlockEntity extends SyncableBlockEntity implements FluidB
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(buffer, world, player, hand))
         {
             return true;
         }

@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.machine.fluid;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.api.storage.FluidBuffer;
-import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
@@ -61,7 +60,7 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
 
     public boolean onUse(PlayerEntity player, Hand hand)
     {
-        if (WritableFluidBuffer.handleInteract(buffer, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(buffer, world, player, hand))
         {
             return true;
         }
