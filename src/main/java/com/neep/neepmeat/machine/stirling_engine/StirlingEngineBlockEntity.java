@@ -28,12 +28,12 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 {
     protected StirlingEngineStorage storage;
 
-    public static final int MAX_ENERGY = 100;
-    public static final float MULTIPLIER = 0.08f;
+    public static final int MAX_THINGY = 100;
+    public static final float MAX_PU = 0.08f;
 
     public float angle;
 
-    protected float energyStored;
+    protected float thingyStored;
     protected float prevEnergy;
 
     protected int burnTime;
@@ -65,7 +65,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
                 {
                     case 0 -> burnTime;
                     case 1 -> fuelTime;
-                    case 2 -> (int) energyStored;
+                    case 2 -> (int) thingyStored;
                     default -> 0;
                 };
         }
@@ -77,7 +77,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             {
                 case 0 -> burnTime = value;
                 case 1 -> fuelTime = value;
-                case 2 -> energyStored = value;
+                case 2 -> thingyStored = value;
             }
         }
 
@@ -106,7 +106,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         storage.writeNbt(nbt);
         nbt.putInt("burn_time", burnTime);
         nbt.putInt("fuel_time", fuelTime);
-        nbt.putFloat("energy", energyStored);
+        nbt.putFloat("energy", thingyStored);
 //        nbt.putInt("fuel_time", fuelTime);
     }
 
@@ -116,7 +116,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         storage.readNbt(nbt);
         this.burnTime = nbt.getInt("burn_time");
         this.fuelTime = nbt.getInt("fuel_time");
-        this.energyStored = nbt.getFloat("energy");
+        this.thingyStored = nbt.getFloat("energy");
 //        this.fuelTime = nbt.getInt("fuel_time");
     }
 
@@ -129,7 +129,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
         if (isBurning())
         {
-            this.energyStored = Math.min(MAX_ENERGY, energyStored + 1);
+            this.thingyStored = Math.min(MAX_THINGY, thingyStored + 1);
             sync();
         }
 
@@ -154,8 +154,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
     public float getRunningRate()
     {
-//        return this.isBurning() ? MULTIPLIER : 0;
-        return energyStored / (float) MAX_ENERGY * MULTIPLIER;
+        return thingyStored / (float) MAX_THINGY * MAX_PU;
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, StirlingEngineBlockEntity be)
@@ -203,10 +202,10 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     public float doWork()
     {
         float convertAmount = 0.5f;
-        if (energyStored >= convertAmount)
+        if (thingyStored >= convertAmount)
         {
-            this.prevEnergy = energyStored;
-            energyStored = Math.max(0, energyStored - convertAmount);
+            this.prevEnergy = thingyStored;
+            thingyStored = Math.max(0, thingyStored - convertAmount);
             sync();
             return convertAmount;
         }
@@ -228,7 +227,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     @Override
     public float getSpeed()
     {
-        return energyToSpeed(energyStored);
+        return energyToSpeed(thingyStored);
     }
 
     @Override

@@ -165,8 +165,8 @@ public class NMBlocks
 
     public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -175,9 +175,7 @@ public class NMBlocks
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
     public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block(), MACHINE_SETTINGS));
-//    public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
-//    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
@@ -244,8 +242,8 @@ public class NMBlocks
 
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), FLUID_PIPE_SETTINGS));
-    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block(), FLUID_PIPE_SETTINGS));
-    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block(), FLUID_PIPE_SETTINGS));
+    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), FLUID_PIPE_SETTINGS));
+    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));

@@ -1,7 +1,7 @@
 {
   "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
     {"type": "page", "id": "intro", "icon": "neepmeat:meat_steel_ingot", "text": "Introduction"},
-    {"type": "article", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Energetic Fluids"},
+    {"type": "article", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Power Transfer"},
     {"type": "menu", "id": "getting_started", "icon": "neepmeat:motor_unit", "text": "Getting Started", "entries": [
       {"type": "page", "id": "brains", "icon": "neepmeat:brain_rough", "text": "Brains"},
       {"type": "page", "id": "meat", "icon": "neepmeat:raw_meat_brick", "text": "Meat"},
@@ -13,7 +13,7 @@
     {"type": "menu", "id": "power", "icon": "neepmeat:motor_unit", "text": "Power", "entries": [
       {"type": "page", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Energetic Fluids"},
       {"type": "page", "id": "fuel_transducer", "icon": "neepmeat:transducer", "text": "Fuel Transducer"},
-      {"type": "page", "id": "fluid_exciter", "icon": "neepmeat:fluid_exciter", "text": "Fluid Exciter"}
+      {"type": "page", "id": "heart_machine", "icon": "neepmeat:fluid_exciter", "text": "Heart Machine"}
       ]},
     {"type": "menu", "id": "farming", "icon": "neepmeat:motor_unit", "text": "Farming", "entries": [
       {"type": "page", "id": "gland_potato", "icon": "neepmeat:flesh_potato", "text": "Gland Potato"},
@@ -25,6 +25,7 @@
         {"type": "page", "id": "mixer", "icon": "neepmeat:mixer", "text": "Mixer"},
         {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
+        {"type": "page", "id": "advanced_motor", "icon": "neepmeat:advanced_motor", "text": "Advanced Motor"},
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
         {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Grinder"},
         {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"},
@@ -89,33 +90,33 @@
       {"type": "text", "text": "\nNote: Crafting and processing recipes are not yet supported in this guide. To view them, you must install Roughly Enough Items."}
     ]},
     {"id": "fluids", "contents": [
-      {"type": "text", "text": "Energetic Fluids\n", "bold": true},
+      {"type": "text", "text": "Power Transfer\n", "bold": true},
       {"type": "text", "text": "Unlike other products which use such inferior elements as electricity, NEEP machines are powered by the Divine itself."},
-      {"type": "text", "text": "\nPower and energy are measured in NEEP customary units. The unit of energy is the esoteric Joule (eJ). Power is measured in esoteric Joules per tick (eJ/t)."},
+      {"type": "text", "text": "\nPower and energy are measured in NEEP customary units. The unit of energy is the esoteric joule (eJ). Power is measured in esoteric joules per tick (eJ/t)."},
       {"type": "text", "text": "\nEthereal Fuel\n", "bold": true},
       {"type": "text", "text": "Energy density: 6keJ/b"},
-      {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. Unlike Work Fluid, Ethereal Fuel is consumed totally by the machine it powers."},
-      {"type": "text", "text": "\nWork Fluid\n", "bold": true},
-      {"type": "text", "text": "Energy density: 14keJ/b"},
-      {"type": "text", "text": "Work Fluid is a liquid conglomeration of Enlightened animalcules that carries large quantities of energy. It is not consumed by machines and must be cycled back through a Fluid Exciter when depleted."}
+      {"type": "text", "text": "Ethereal Fuel is a transient manifestation of Divine efficacy that is produced in a Fuel Transducer. It is used to power basic motors and is transferred through fluid pipes."},
+      {"type": "text", "text": "\nVascular Conduits\n", "bold": true},
+      {"type": "text", "text": "Vascular Conduits simply encapsulate the complex logistics of power flow. Work Fluid (blood fortified with Enlightened animalcules) is transmitted in a three-phase peristaltic cycle, delivering consistent power to advanced machines."}
     ]},
 
     {"id": "fuel_transducer", "contents": [
       {"type": "text", "text": "Fuel Transducer\n", "bold": true},
-      {"type": "text", "text": "The Fuel Transducer receives heat and imbues it into a transmutative substrate, producing Ethereal Fuel."},
-      {"type": "text", "text": "\nTo function, a Fuel Transducer must have one or more hot blocks adjacent to its dome. These can include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. Additional heat sources add to the output power. Ethereal fuel is ejected at pressure from the top of the dome."},
-      {"type": "text", "text": "\nWater can be supplied by placing a tank below its base. Doing so will double the output power at the cost of water."},
+      {"type": "text", "text": "The Fuel Transducer imbues a working substrate with received heat, producing Ethereal Fuel."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "The Transducer must be incorporated into the structure shown below. It must be placed above a tank of water with a heat source below. Heat sources include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. \nEthereal fuel is ejected at pressure from the top of the dome."},
+      {"type": "image", "width": 32, "height": 98, "scale": 0.2, "path": "neepmeat:guide/images/transducer_usage.png"},
       {"type": "text", "text": "\nHeat sources and power outputs:\n", "bold": true},
       {"type": "text", "text": "Lava: 20eJ/t"},
       {"type": "text", "text": "Lava Cauldron: 20eJ/t"},
       {"type": "text", "text": "Magma Block: 20eJ/t"},
       {"type": "text", "text": "Lit Furnace: 40eJ/t"}
     ]},
-    {"id": "fluid_exciter", "contents": [
-      {"type": "text", "text": "Fluid Exciter\n", "bold": true},
-      {"type": "text", "text": "Ethereal fuel holds a lot of energy, but most of it cannot be harnessed directly in a motor, making it quite inefficient to use directly. The Fluid Exciter consumes Ethereal Fuel to charge Work Fluid. In the process, it liberates 1.5 times as much energy than would be obtained by sending the Ethereal Fuel directly into a motor."},
+    {"id": "heart_machine", "contents": [
+      {"type": "text", "text": "Heart Machine\n", "bold": true},
+      {"type": "text", "text": "This machine forms the heart and lungs of a vascular network. It imbibes Ethereal Fuel to energise the network and regulates its operating frequency."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "The Work Fluid input tank must be placed below the base of the Fluid Exciter. When ethereal fuel is pumped into the bottom block of the machine, Charged Work Fluid will be emitted at pressure from the upper dome. This can be piped into motors and other powered machines. Remember to pump the uncharged Work Fluid from the bottom of each Motor back into the Exciter's input tank."}
+      {"type": "text", "text": "The Heart Machine consumes Ethereal Fuel through its lower block and injects energy into a vascular network through its upper block. Its greater efficiency allows it to liberate 50% more energy from the Ethereal Fuel than a basic motor would."}
     ]},
 
     {"id": "mixer", "contents": [
@@ -126,15 +127,21 @@
     ]},
     {"id": "motor", "contents": [
       {"type": "text", "text": "Motor\n", "bold": true},
-      {"type": "text", "text": "Arcane artifice, a blessing of the Integrator, allows a motor to convert the subtle efficacies of an energetic fluid into mechanical work."},
+      {"type": "text", "text": "Arcane artifice, a blessing of the Integrator, allows a motor to convert the subtle efficacies of Ethereal Fuel into mechanical work."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Many blocks cannot accept energetic fluids directly, instead they require an adjacent motor. In many cases, the Motor must face the machine.\nThe Motor's speed is determined by the type of fluid and the rate at which the fluid is inserted. The speed of the motor often affects the speed of the connected machine. If an energetic fluid that has a remainder is used, this will be ejected from the Motor's lower face."}
+      {"type": "text", "text": "Many rotary machines require an external motor in order to function. This motor accepts Ethereal Fuel, produced with a Fuel Trasnducer, through fluid pipes. \nThe motor's speed is determined by the rate at which fluid is inserted. This often affects the speed of the connected machine."}
+    ]},
+    {"id": "advanced_motor", "contents": [
+      {"type": "text", "text": "Advanced Motor\n", "bold": true},
+      {"type": "text", "text": "Unlike its more primitive alternative which accepts Ethereal Fuel directly, this motor is powered by fortified blood delivered through vascular conduits."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "The Advanced Motor works exactly like the standard version except it must be connected to a vascular network."}
     ]},
     {"id": "stirling_engine", "contents": [
       {"type": "text", "text": "Stirling Engine\n", "bold": true},
-      {"type": "text", "text": "The Stirling Engine directly converts heat energy from burning fuel into mechanical work."},
+      {"type": "text", "text": "The Stirling Engine converts heat energy from burning fuel into mechanical work."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "The engine can accept any fuel that is valid in a furnace and will rotate as long as the fuel burns."}
+      {"type": "text", "text": "The Stirling Engine can accept any valid furnace fuel and will rotate as long as the fuel burns. At full speed it will output 80eJ/t of mechanical power."}
     ]},
     {"id": "grinder", "contents": [
       {"type": "text", "text": "Grinder\n", "bold": true},
