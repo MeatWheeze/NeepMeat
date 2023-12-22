@@ -2,11 +2,12 @@ package com.neep.neepmeat.machine.deployer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
-import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -34,6 +35,12 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public float shuttleOffset;
     protected IMotorBlockEntity motor;
     public boolean powered;
+    protected LazySupplier<FakePlayerEntity> playerSupplier = LazySupplier.of(() ->
+    {
+        if (world == null || world.isClient()) return null;
+
+        return new FakePlayerEntity(world.getServer(), (ServerWorld) world, getPos());
+    });
 
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -66,29 +73,23 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
 
     public void deploy(ServerWorld world)
     {
-
-        ServerPlayerEntity fakePlayer = new FakePlayerEntity(world.getServer(), world, pos);
-        fakePlayer.setWorld(world);
-        fakePlayer.setPos(pos.getX(), pos.getY(), pos.getZ());
+        ServerPlayerEntity fakePlayer1 = this.playerSupplier.get();
+        fakePlayer1.setWorld(world);
+        fakePlayer1.setPos(pos.getX(), pos.getY(), pos.getZ());
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
-        fakePlayer.setPitch(0);
+        fakePlayer1.setPitch(0);
 
         ItemStack stack = storage.getAsStack();
         Item item = stack.getItem();
 
         BlockPos targetPos = pos.offset(facing);
-        fakePlayer.setStackInHand(Hand.MAIN_HAND, stack);
+        fakePlayer1.setStackInHand(Hand.MAIN_HAND, stack);
         Vec3d hitPos = new Vec3d(targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5);
         BlockHitResult hit = new BlockHitResult(hitPos, facing.getOpposite(), targetPos, true);
 
-        item.useOnBlock(new ItemUsageContext(fakePlayer, Hand.MAIN_HAND, hit));
+        item.useOnBlock(new ItemUsageContext(fakePlayer1, Hand.MAIN_HAND, hit));
 
         storage.setStack(stack);
-
-        fakePlayer.remove(Entity.RemovalReason.DISCARDED);
-
-//        Box box = new Box(pos.getX() - 1, pos.getY() - 1, pos.getZ() - 1, pos.getX() + 2, pos.getY() + 2, pos.getZ() + 2);
-//        System.out.println(world.getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, entity -> true));
     }
 
     @Override
@@ -160,6 +161,13 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     @Override
     public boolean tick(IMotorBlockEntity motor)
     {
+        // I can't be bothered to add a timer
+        if (!world.isClient() && world.getTime() % 2 == 0
+            && motor.getMechPUPower() >= 0.04)
+        {
+            deploy((ServerWorld) world);
+            return true;
+        }
         return false;
     }
 
@@ -168,7 +176,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     {
         if (!powered && power > 0) // Rising edge
         {
-            deploy((ServerWorld) world);
             powered = true;
             sync();
         }
@@ -177,5 +184,15 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
             powered = false;
             sync(); // Falling edge
         }
+    }
+
+    @Override
+    public void markRemoved()
+    {
+        if (playerSupplier.isInitialised())
+        {
+            playerSupplier.get().remove(Entity.RemovalReason.DISCARDED);
+        }
+        super.markRemoved();
     }
 }

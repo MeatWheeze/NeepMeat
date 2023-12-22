@@ -36,17 +36,6 @@ public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvide
     }
 
     @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
-    {
-        super.neighborUpdate(state, world, pos, block, fromPos, notify);
-        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
-        {
-//            be.update((ServerWorld) world, pos, fromPos, state);
-//            be.update(fromPos);
-        }
-    }
-
-    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (player.getStackInHand(hand).getItem() instanceof BlockItem blockitem
