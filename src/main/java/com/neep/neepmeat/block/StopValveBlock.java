@@ -9,8 +9,10 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -24,11 +26,14 @@ import java.util.function.Function;
 public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
 {
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
+    public static final BooleanProperty POWERED = Properties.POWERED;
 
     public StopValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
-        this.setDefaultState(this.getStateManager().getDefaultState().with(OPEN, true));
+        this.setDefaultState(this.getStateManager().getDefaultState()
+                .with(OPEN, true)
+                .with(POWERED, false));
     }
 
     @Override
@@ -52,10 +57,27 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     }
 
     @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.isClient())
+            return;
+
+        boolean powered = world.isReceivingRedstonePower(pos);
+        if (powered != state.get(POWERED))
+        {
+            if (state.get(OPEN) == powered)
+            {
+                state = state.with(OPEN, !powered);
+            }
+            world.setBlockState(pos, state.with(POWERED, powered), Block.NOTIFY_LISTENERS);
+        }
+    }
+
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
     {
         super.appendProperties(builder);
-        builder.add(OPEN);
+        builder.add(OPEN, POWERED);
     }
 
     @Nullable
