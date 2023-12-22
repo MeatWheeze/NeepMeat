@@ -1,12 +1,11 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
+import com.neep.neepmeat.block.multiblock.IMultiBlock;
+import com.neep.neepmeat.block.multiblock.IPortBlock;
+import com.neep.neepmeat.block.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,11 +17,8 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.CallbackI;
 
-import java.util.Iterator;
-
-public class ItemPortBlock extends BaseBlock implements IPortBlock<ItemVariant>, IVatStructure, BlockEntityProvider
+public class ItemPortBlock extends BaseBlock implements IPortBlock<ItemVariant>, IVatComponent, BlockEntityProvider
 {
     public ItemPortBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
@@ -51,10 +47,9 @@ public class ItemPortBlock extends BaseBlock implements IPortBlock<ItemVariant>,
         return new ItemPortBlockEntity(pos, state);
     }
 
-    public static class ItemPortBlockEntity extends BlockEntity implements Storage<ItemVariant>, IVatStructure.Entity
+    @SuppressWarnings("UnstableApiUsage")
+    public static class ItemPortBlockEntity extends PortBlockEntity<ItemVariant> implements IPortBlock.Entity
     {
-        protected VatControllerBlockEntity controller;
-
         public ItemPortBlockEntity(BlockPos pos, BlockState state)
         {
             this(NMBlockEntities.VAT_ITEM_PORT, pos, state);
@@ -62,37 +57,7 @@ public class ItemPortBlock extends BaseBlock implements IPortBlock<ItemVariant>,
 
         public ItemPortBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
-            super(type, pos, state);
-        }
-
-        @Override
-        public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
-        {
-            return 0;
-        }
-
-        @Override
-        public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
-        {
-            return 0;
-        }
-
-        @Override
-        public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
-        {
-            return null;
-        }
-
-        @Override
-        public VatControllerBlockEntity getController()
-        {
-            return controller;
-        }
-
-        @Override
-        public void setController(VatControllerBlockEntity controller)
-        {
-            this.controller = controller;
+            super(type, pos, state, ItemVariant.class);
         }
     }
 }

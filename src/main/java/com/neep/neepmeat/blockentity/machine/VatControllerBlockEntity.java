@@ -1,14 +1,16 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.block.vat.IPortBlock;
-import com.neep.neepmeat.block.vat.IVatStructure;
+import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
+import com.neep.neepmeat.block.multiblock.IMultiBlock;
+import com.neep.neepmeat.block.vat.IVatComponent;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -22,13 +24,20 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-public class VatControllerBlockEntity extends BlockEntity
+public class VatControllerBlockEntity extends BlockEntity implements IControllerBlockEntity
 {
     protected boolean assembled;
+    protected List<IMultiBlock.Entity> entities;
 
     public VatControllerBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.VAT_CONTROLLER, pos, state);
+    }
+
+    public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    {
+        super(type, pos, state);
+        this.entities = new ArrayList<>();
     }
 
     public boolean tryAssemble(ServerWorld world)
@@ -44,11 +53,20 @@ public class VatControllerBlockEntity extends BlockEntity
             return false;
 
         blocks.stream()
-                .filter(pos1 -> world.getBlockState(pos1).getBlock() instanceof IPortBlock<?>)
-                .map(pos1 -> (IVatStructure.Entity) world.getBlockEntity(pos1))
+//                .filter(pos1 -> world.getBlockState(pos1).getBlock() instanceof IPortBlock<?>)
+                .map(pos1 -> world.getBlockEntity(pos1) instanceof IMultiBlock.Entity entity ? entity : null)
                 .filter(Objects::nonNull)
-                .forEach(be -> be.setController(this));
+                .forEach(be -> {be.setController(getPos()); entities.add(be);});
 
+        System.out.println(entities);
+        return true;
+    }
+
+    public boolean disassemble(ServerWorld world)
+    {
+        entities.forEach(be -> be.setController(null));
+        entities.clear();
+        System.out.println("diaadsajdnsa");
         return true;
     }
 
@@ -58,7 +76,7 @@ public class VatControllerBlockEntity extends BlockEntity
         List<BlockPos> blocks = new ArrayList<>();
         for (int i = 0; i < 3; ++i)
         {
-            List<BlockPos> list = checkOddSquare(world, centre.add(0, i, 0), 1, state -> state.getBlock() instanceof IVatStructure);
+            List<BlockPos> list = checkOddSquare(world, centre.add(0, i, 0), 1, state -> state.getBlock() instanceof IVatComponent);
             if (list != null)
             {
                 blocks.addAll(list);
@@ -69,7 +87,7 @@ public class VatControllerBlockEntity extends BlockEntity
             }
         }
 
-        List<BlockPos> list = checkOddRing(world, centre.add(0, 3, 0), 1, state -> state.getBlock() instanceof IVatStructure);
+        List<BlockPos> list = checkOddRing(world, centre.add(0, 3, 0), 1, state -> state.getBlock() instanceof IVatComponent);
         if (list != null)
         {
             blocks.addAll(list);
@@ -141,16 +159,11 @@ public class VatControllerBlockEntity extends BlockEntity
         return list;
     }
 
-    public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-    {
-        super(type, pos, state);
-    }
-
     public Storage<FluidVariant> getFluidStorage()
     {
         return null;
     }
-    public Storage<ItemVariant> getItemVariant()
+    public Storage<ItemVariant> getItemStorage()
     {
         return null;
     }
@@ -158,5 +171,17 @@ public class VatControllerBlockEntity extends BlockEntity
     public boolean isAssembled()
     {
         return assembled;
+    }
+
+    @Override
+    public <V extends TransferVariant<?>> Storage<V> getStorage(Class<V> variant)
+    {
+        return null;
+    }
+
+    @Override
+    public void componentBroken(ServerWorld world)
+    {
+        disassemble(world);
     }
 }
