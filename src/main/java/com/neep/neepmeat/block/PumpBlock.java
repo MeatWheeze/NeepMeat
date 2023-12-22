@@ -99,4 +99,13 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         }
         return ActionResult.SUCCESS;
     }
+
+//    @Override
+//    public void addAllAttributes(World world, BlockPos pos, BlockState state, AttributeList<?> to) {
+//        Direction facing = state.get(FACING);
+//        if (to.getSearchDirection() == facing) {
+//            to.offer(EmptyFluidExtractable.SUPPLIER);
+//        }
+//    }
+
 }

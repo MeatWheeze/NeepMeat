@@ -2,11 +2,12 @@ package com.neep.neepmeat.blockentity;
 
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
-import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.fluid_util.FluidNetwork2;
 import com.neep.neepmeat.fluid_util.FluidNode;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -15,9 +16,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
-public class PumpBlockEntity extends BlockEntity
+public class PumpBlockEntity extends BlockEntity implements Storage<FluidVariant>
 {
     private Map<Direction, FluidNode> sides = new HashMap<>();
 
@@ -33,7 +35,7 @@ public class PumpBlockEntity extends BlockEntity
                 FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
                 if (nodeProvider.connectInDirection(state, direction))
                 {
-                    sides.put(direction, new FluidNode(pos, direction, nodeProvider.getDirectionMode(state, direction)));
+                    sides.put(direction, new FluidNode(pos, direction, this, nodeProvider.getDirectionMode(state, direction)));
                 }
             }
         }
@@ -70,5 +72,23 @@ public class PumpBlockEntity extends BlockEntity
     public FluidNode getNode(Direction direction)
     {
         return sides.get(direction);
+    }
+
+    @Override
+    public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+        return 0;
+    }
+
+    @Override
+    public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+    {
+        return 0;
+    }
+
+    @Override
+    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
+    {
+        return null;
     }
 }
