@@ -1,11 +1,8 @@
-package com.neep.neepmeat.client.model.block;
+package com.neep.neepmeat.transport.client.model;
 
 import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.FluidTransport;
-import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
-import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
-import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
+import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel;
@@ -16,11 +13,9 @@ import net.minecraft.client.render.model.json.ModelOverrideList;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.ModelVariant;
 import net.minecraft.client.texture.Sprite;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.util.SpriteIdentifier;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.PlayerScreenHandler;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.AffineTransformation;
 import net.minecraft.util.math.BlockPos;
@@ -39,12 +34,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @Environment(value= EnvType.CLIENT)
-public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedModel
+public class VascularConduitModel implements UnbakedModel, BakedModel, FabricBakedModel
 {
-    private static final Identifier SIDE_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_side_up");
-    private static final Identifier STRAIGHT_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_straight_up");
+    private static final Identifier SIDE_ID = new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side_up");
+    private static final Identifier STRAIGHT_ID = new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_straight_up");
 
-    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_centre"));
+    private static final SpriteIdentifier PARTICLE_SPRITE_ID = new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_centre"));
     private static Sprite PARTICLE_SPRITE;
 
     private final Triple<BakedModel, Float, Float>[] straight = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
@@ -60,7 +55,10 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     @Override
     public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
     {
-        return List.of(PARTICLE_SPRITE_ID, new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/rusty_pipe_straight")));
+        return List.of(PARTICLE_SPRITE_ID,
+                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side")),
+                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_centre"))
+        );
     }
 
     @Nullable
@@ -68,12 +66,6 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
         PARTICLE_SPRITE = textureGetter.apply(PARTICLE_SPRITE_ID);
-
-//        Arrays.stream(CENTRE_IDS).forEach(id ->
-//        {
-//            BakedModel bakedPart = loader.getOrLoadModel(id).bake(loader, textureGetter, rotationContainer, modelId);
-//            if (bakedPart != null) parts.add(bakedPart);
-//        });
 
         try
         {
@@ -109,22 +101,25 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
     @Override
     public boolean isVanillaAdapter() {return false;}
 
+
+//    ThreadLocal<BlockPos.Mutable> mutable = new ThreadLocal<>();
+
     @Override
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
         for (Direction direction : Direction.values())
         {
-            boolean forward = IFluidPipe.isConnectedIn(blockView, pos, state, direction);
-            if (!forward) continue;
-
-            BlockState offsetState = blockView.getBlockState(pos.offset(direction));
-            if (!IFluidPipe.isConnectedIn(blockView, pos, state, direction.getOpposite()) || !(offsetState.getBlock() instanceof IFluidPipe) || !IFluidPipe.isConnectedIn(blockView, pos, offsetState, direction))
+            if (VascularConduit.isConnected(blockView, pos, state, direction))
             {
-                ((FabricBakedModel) connectors[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
-            }
-            else if (IFluidPipe.isConnectedIn(blockView, pos, offsetState, direction))
-            {
-                ((FabricBakedModel) straight[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                BlockState offsetState = blockView.getBlockState(pos.offset(direction));
+                if (!(offsetState.getBlock() instanceof VascularConduit))
+                {
+                    ((FabricBakedModel) connectors[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                }
+                else
+                {
+                    ((FabricBakedModel) straight[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                }
             }
         }
     }

@@ -66,68 +66,10 @@
     },
 
     {
-      "when": {
-        "north": "true"
-      },
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side"
-      }
-    },
-    {
-      "when": {
-        "south": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side_alt"
-      }
-    },
-    {
-      "when": {
-        "east": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side_alt",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side",
-        "y": 270
-      }
-    },
-
-    {
-      "when": {
-        "west": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "up": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side",
-        "y": 270,
-        "x": 270
-      }
-    },
-    {
-      "when": {
-        "down": "true"
-      },
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_side_alt",
-        "y": 270,
-        "x": 270
+        "model": "neepmeat:block/vascular_conduit/pipe_sides"
       }
     }
+
   ]
 }
