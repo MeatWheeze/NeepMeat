@@ -41,6 +41,7 @@ public class NMFluidNetwork
     {
         for (FluidNode node : connectedNodes)
         {
+//            System.out.println(node);
             for (FluidNode targetNode : connectedNodes)
             {
                 if (targetNode.equals(node))
