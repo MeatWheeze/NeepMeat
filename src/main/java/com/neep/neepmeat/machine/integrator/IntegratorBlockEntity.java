@@ -2,8 +2,8 @@ package com.neep.neepmeat.machine.integrator;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
+import com.neep.neepmeat.api.data.DataUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
@@ -59,7 +59,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
     public float facing = 0f;
     public float targetFacing = 0f;
 
-    public static final long MAX_DATA = 8 * DataPort.GIEB;
+    public static final long MAX_DATA = 8 * DataUtil.GIEB;
     protected long data;
 
     protected SnapshotParticipant<Long> dataSnapshot = new SnapshotParticipant<>()
@@ -134,13 +134,13 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
             be.grow();
             be.sync();
         }
+
         if (be.isMature)
         {
             be.data = Math.min(MAX_DATA, be.data + 1);
             if ((world.getTime() % 20) == 0) be.sync();
 
             if ((world.getTime() % 60) == 0) be.pointToEntity();
-
         }
     }
 
@@ -219,7 +219,11 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
         if (!canEnlighten())
             player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET) * 100 + "%"), true);
         else
-            player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data", data, MAX_DATA), true);
+        {
+            player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data",
+                    DataUtil.formatData(data),
+                    DataUtil.formatData(MAX_DATA)), true);
+        }
 
     }
 

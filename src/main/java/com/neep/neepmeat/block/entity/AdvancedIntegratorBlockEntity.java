@@ -2,11 +2,11 @@ package com.neep.neepmeat.block.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import com.neep.neepmeat.api.data.DataUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 {
-    private final DataStorage storage = new DataStorage();
+    private final DataStorage storage = new DataStorage(this::sync);
 
     public AdvancedIntegratorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -26,7 +26,9 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 
     public void onUse(PlayerEntity player)
     {
-        player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data", storage.getAmount(), storage.getCapacity()), true);
+        player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data",
+                DataUtil.formatData(storage.getAmount()),
+                DataUtil.formatData(storage.getCapacity())), true);
     }
 
     @Override
@@ -48,8 +50,33 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         return storage;
     }
 
+    public void serverTick()
+    {
+        // Passive accumulation. Exceeding this limit requires a Pylon.
+        if (storage.getAmount() < 8 * DataUtil.GIEB && world.getTime() % 4 == 0)
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                storage.insert(DataVariant.NORMAL, 4, transaction);
+                transaction.commit();
+            }
+        }
+    }
+
     public static class DataStorage extends SingleVariantStorage<DataVariant>
     {
+        private final Runnable finalCallback;
+
+        public DataStorage(Runnable finalCallback)
+        {
+            this.finalCallback = finalCallback;
+        }
+
+        protected void setAmount(long amount)
+        {
+            this.amount = amount;
+        }
+
         @Override
         protected DataVariant getBlankVariant()
         {
@@ -59,7 +86,7 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         @Override
         protected long getCapacity(DataVariant variant)
         {
-            return DataPort.GIEB * 4;
+            return DataUtil.GIEB * 16;
         }
 
         @Override
@@ -91,6 +118,13 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         {
             this.variant = DataVariant.fromNbt(nbt.getCompound("variant"));
             this.amount = nbt.getLong("amount");
+        }
+
+        @Override
+        protected void onFinalCommit()
+        {
+            super.onFinalCommit();
+            finalCallback.run();
         }
     }
 }

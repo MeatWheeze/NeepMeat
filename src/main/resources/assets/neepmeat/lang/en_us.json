@@ -11,6 +11,10 @@
 
   "message.neepmeat.power": "Power: ",
   "message.neepmeat.power_unit": "eJ/t",
+
+  "text.neepmeat.data.gieb_unit": "%sGeB",
+  "text.neepmeat.data.eb_unit": "%seB",
+
   "message.neepmeat.insufficient_power": "Insufficient power",
   "message.neepmeat.insufficient_power_2": "%s < %s",
   "message.neepmeat.running": "Running",
