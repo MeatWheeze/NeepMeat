@@ -1,5 +1,6 @@
 package com.neep.meatweapons.network;
 
+import com.neep.meatlib.network.PacketBufUtil;
 import io.netty.buffer.Unpooled;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

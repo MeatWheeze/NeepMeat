@@ -8,6 +8,7 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
@@ -49,6 +50,7 @@ public class NeepMeatClient implements ClientModInitializer
         NeepMeatClient.registerRenderers();
 
         TankMessagePacket.registerReciever();
+        ParticleSpawnPacket.registerReciever();
     }
 
     public static void registerRenderers()
