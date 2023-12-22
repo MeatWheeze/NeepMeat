@@ -237,7 +237,7 @@
       {"type": "text", "text": "Brains\n", "bold": true},
       {"type": "text", "text": "Animal brains are a highly valuable resource. Thought can be reawakened with the application of Body Compound, making them useful for machines that require a small amount of intelligence."},
       {"type": "text", "text": "\nAcquisition\n", "bold": true},
-      {"type": "text", "text": "It is sometimes possible to salvage the reanimated brain of a Zombie. Feeding an Enlightened Brain to a cow stimulates rapid growth of new neural tissue, yielding more brains. This process is, unfortunately, fatal to the cow."}
+      {"type": "text", "text": "It is sometimes possible to salvage the reanimated brain of a Zombie. \n\nFeeding an Enlightened Brain to a cow rapidly induces a condition known as bovine fungiform encephalopathy, where extra brains develop in the cow. These brains can be harvested, but the process is unfortunately fatal to the cow."}
     ]},
     {"id": "blood", "contents": [
       {"type": "text", "text": "Blood\n", "bold": true},

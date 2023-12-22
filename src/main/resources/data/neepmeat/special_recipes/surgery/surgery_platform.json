@@ -1,0 +1,34 @@
+{
+  "type": "neepmeat:surgery",
+  "pattern": [
+    " c ",
+    "mim",
+    "mom"
+  ],
+  "key": {
+    "m": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:meat_steel_ingot",
+      "amount": 1
+    },
+    "i": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:integration_charge_crude",
+      "amount": 1
+    },
+    "c": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:internal_components",
+      "amount": 1
+    },
+    "o": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:control_unit",
+      "amount": 1
+    }
+  },
+  "result": {
+    "resource": "neepmeat:surgery_platform",
+    "amount": 1
+  }
+}
