@@ -2,6 +2,7 @@ package com.neep.neepmeat.entity.bovine_horror;
 
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
@@ -76,7 +77,7 @@ public class HorrorAcidAttackGoal extends Goal
         if (ticks > 30 && ticks < 50 && (world.getTime() & 2) == 0)
         {
 //            Vec3d toTarget = new Vec3d(Math.sin(mob.getYaw()), 0.1, Math.cos(mob.getY()));
-            Vec3d toTarget = new Vec3d(0, 0.1, 0);
+           Vec3d toTarget = new Vec3d(0, 0.1, 0);
             Vec3d spread = new Vec3d(1, 1, 1);
             Vec3d origin = new Vec3d(mob.getX(), mob.getY() + 3, mob.getZ());
 
@@ -91,11 +92,12 @@ public class HorrorAcidAttackGoal extends Goal
             Vec3d toTarget = target.getPos().subtract(mob.getPos());
 
             var projectile = NMEntities.ACID_SPRAY.create(world);
-            world.spawnEntity(projectile);
             float speed = toTarget.length() > 20 ? 2 : 0.5f;
             projectile.target(new Vec3d(mob.getX(), mob.getY() + 4, mob.getZ()),
                     target.getPos(), speed, 1);
             projectile.setOwner(mob);
+            world.spawnEntity(projectile);
+            mob.playSound(NMSounds.BH_SPIT, 4, 0.9f);
 
             cooldown = 6;
             spawned++;
