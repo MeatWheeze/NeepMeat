@@ -1,6 +1,7 @@
 {
   "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
-      {"type": "menu", "id": "rotary_machines", "icon": "neepmeat:motor_unit", "text": "Rotary Machines", "entries": [
+    {"type": "page", "id": "intro", "icon": "neepmeat:meat_steel_ingot", "text": "Introduction"},
+    {"type": "menu", "id": "rotary_machines", "icon": "neepmeat:motor_unit", "text": "Rotary Machines", "entries": [
         {"type": "page", "id": "mixer", "icon": "neepmeat:mixer", "text": "Mixer"},
         {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
         {"type": "page", "id": "motor", "icon": "neepmeat:motor_unit", "text": "Motor"},
@@ -15,18 +16,31 @@
     ]},
     {"type": "menu", "id": "crops", "icon": "neepmeat:motor_unit", "text": "Crops", "entries": [
       {"type": "page", "id": "gland_potato", "icon": "neepmeat:flesh_potato", "text": "Gland Potato"},
-      {"type": "page", "id": "whisper_wheat", "icon": "neepmeat:whisper_wheat", "text": "Whisper Wheat"}
+      {"type": "page", "id": "whisper_wheat", "icon": "neepmeat:whisper_wheat", "text": "Whisper Wheat"},
+      {"type": "page", "id": "blood_bubble_tree", "icon": "neepmeat:blood_bubble_sapling", "text": "Blood Bubble Tree"}
     ]},
-    {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
+    {"type": "page", "id": "test", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"},
+    {"type": "menu", "id": "getting_started", "icon": "neepmeat:motor_unit", "text": "Getting Started", "entries": [
+      {"type": "page", "id": "heart_extraction", "icon": "neepmeat:reanimated_heart", "text": "Heart Extraction"},
+      {"type": "page", "id": "meat", "icon": "neepmeat:raw_meat_brick", "text": "Meat"},
+      {"type": "page", "id": "blood", "icon": "neepmeat:blood_bucket", "text": "Blood"},
+      {"type": "page", "id": "integrator", "icon": "neepmeat:integrator_egg", "text": "Integrator Organism"},
+      {"type": "page", "id": "enlightening", "icon": "neepmeat:pedestal", "text": "Enlightening"},
+      {"type": "page", "id": "charnel_compactor", "icon": "neepmeat:charnel_compactor", "text": "Charnel Compactor"}
+    ]}
   ]},
 
   "articles": [
-    {"id": "charnel_compactor", "contents": [
+    {"id": "test", "contents": [
       {"type": "text", "text": "Charnel Compactor\n", "bold": true},
       {"type": "text", "text": "Test article text. There is lots of thext. Loriem ipsum sit dolor foobar blah blah"},
       {"type": "text", "text": "More text!\n\n\n\n\n\n\n\n\n _____________________________________________________________________________________________________________________________________________________________________________________________--________________________________________________________________________________________________________________"}
-      ]
-    },
+      ]},
+    {"id": "intro", "contents": [
+      {"type": "text", "text": "Introduction\n", "bold": true},
+      {"type": "text", "text": "We thank you for choosing solutions from NEEP."},
+      {"type": "text", "text": "\n Crafting and processing recipes are not yet supported in this guide. To view them, you must install REI."}
+    ]},
     {"id": "mixer", "contents": [
       {"type": "text", "text": "Mixer\n", "bold": true},
       {"type": "text", "text": "The Mixer is a two block tall machine that combines fluids and items. It requires a source of rotation to function.\n"},
@@ -41,6 +55,10 @@
     {"id": "whisper_wheat", "contents": [
       {"type": "text", "text": "Whisper Wheat\n", "bold": true},
       {"type": "text", "text": "Many who cultivate it report hearing terrifying cosmic secrets in the rustling of its sheaves."}
+    ]},
+    {"id": "blood_bubble_tree", "contents": [
+      {"type": "text", "text": "Blood Bubble Tree\n", "bold": true},
+      {"type": "text", "text": "Granting Enlightenment to a Warped Fungus remakes its flesh. Instead of fruit, the tree bears membranous sacs filled with animal blood."}
     ]},
 
     {"id": "eldritch_enzymes", "contents": [
@@ -69,7 +87,45 @@
       {"type": "text", "text": "Fat collectors draw ethereal fats from adjacent Rendering Basins into their reservoirs."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "A Fat Collector must be placed with its arm facing a Rendering Basin. Provided enough Eldritch Enzymes are present in the basin, inserting any raw ore will produce its corresponding fat in the collector. Up to four Fat Collectors can be placed next to a single Rendering Basin to collect the fats from different ores."}
-    ]
-    }
+    ]},
+
+    {"id": "heart_extraction", "contents": [
+      {"type": "text", "text": "Heart Extraction\n", "bold": true},
+      {"type": "text", "text": ""}
+    ]},
+    {"id": "blood", "contents": [
+      {"type": "text", "text": "Blood\n", "bold": true},
+      {"type": "text", "text": "Blood is an important precursor for many industrial processes."},
+      {"type": "text", "text": "[note: Blood can't be automated yet and there aren't that many uses for it."},
+      {"type": "text", "text": "\nAcquisition\n", "bold": true},
+      {"type": "text", "text": "Blood can be obtained by killing a living entity with a Sacrificial Dagger above a Drain. Alternatively, the fruit of the Blood Bubble tree can be pressed into a bucket or blended in a Mixer to obtain fresh blood."}
+    ]},
+    {"id": "meat", "contents": [
+      {"type": "text", "text": "Meat\n", "bold": true},
+      {"type": "text", "text": "As well as a being a nourishing food, purest meat is the precursor to Meat Steel."},
+      {"type": "text", "text": "\nAcquisition\n", "bold": true},
+      {"type": "text", "text": "Crushing any item of impure meat in a Grinder will produce 1-2 meat scraps. Nine of these can be crafted into a Raw Meat Brick."},
+      {"type": "text", "text": "\nMeat in its liquid form comes from macerating living entities with the Death Blades. When supplied with a source of rotation, the Death Blades will damage nearby entities. If an entity is killed above a drain, a small amount of meat will be collected. Liquid meat can be converted into solid bricks using a Hydraulic Press."}
+    ]},
+    {"id": "integrator", "contents": [
+      {"type": "text", "text": "Integrator Organism\n", "bold": true},
+      {"type": "text", "text": "An Integrator is a biomechanical information processing system intended to ease the production of machines. Designed to withstand high quantities of inhuman knowledge, Integrators can confer this information to certain substances, ascending them to Enlightened forms."},
+      {"type": "text", "text": "\nAcquisition\n", "bold": true},
+      {"type": "text", "text": "The technology to produce Integrators is long-lost, but their eggs can still be found in dungeons. To hatch an Integrator Egg, place it in a comfy place and pump in a bucketfull of blood. After a short time, the Integrator will hatch."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "Each Integrator has an internal reservoir of Enlightenment that is gradually filled as it listens to the cosmos. Feeding the organism with Whisper Flour will quickly fill this reservoir."}
+    ]},
+    {"id": "enlightening", "contents": [
+      {"type": "text", "text": "Enlightening\n", "bold": true},
+      {"type": "text", "text": "Enlightenment brings about great changes in objects that can withstand it. Many organisms exist whose Enlightened forms have industrial applications."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "To enlighten an item, place it in a Pedestal that is connected via data cables to a mature Integrator. If the item is valid, the Integrator will manifest a cosmic beam that confers eldritch wisdom to the item. This process takes approximately 12% of the Integrator's stored Enlightenment."}
+    ]},
+    {"id": "charnel_compactor", "contents": [
+      {"type": "text", "text": "Charnel Compactor\n", "bold": true},
+      {"type": "text", "text": "The Charnel Compactor produces Body Compound from raw meat. This coming together of diverse tissues is a sacrament. With the blessing of Enlightenment, dead organs can be half-imbued with life and can go on to create all manner of new machines."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "Like a composter, raw materials can be inserted by right-clicking or through hoppers and pipes into the top of the block. If the compactor is full and connected to an Integrator via Data Cables, a Body Compound Cartridge will be produced. This can be extracted via hoppers and pipes from the block's bottom face."}
+    ]}
   ]
 }
