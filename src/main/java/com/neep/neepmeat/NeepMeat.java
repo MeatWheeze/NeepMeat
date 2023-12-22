@@ -133,6 +133,8 @@ public class NeepMeat implements ModInitializer
 			Registry.register(ImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
 			Registry.register(ImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
 			Registry.register(ImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
+
+			NMCommonNetwork.init();
 		}
 	}
 

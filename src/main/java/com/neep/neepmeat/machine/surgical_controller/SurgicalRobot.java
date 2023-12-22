@@ -1,9 +1,19 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.network.PLCRobotC2S;
+import com.neep.neepmeat.plc.PLCBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.render.Camera;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
 public class SurgicalRobot implements NbtSerialisable
 {
@@ -12,12 +22,16 @@ public class SurgicalRobot implements NbtSerialisable
     private static final byte STATE_ACTIVE = 2;
     private static final byte STATE_RETURNING = 3;
     private static final byte STATE_DOCKING = 4;
+    private final PLCBlockEntity parent;
     private byte movementState;
 
     private byte nextType;  //0: base, 1: item, 2: fluid, 3: entity
 
     public static final double SPEED = 0.05;
 
+    public double prevX;
+    public double prevY;
+    public double prevZ;
     private double x;
     private double y;
     private double z;
@@ -33,9 +47,25 @@ public class SurgicalRobot implements NbtSerialisable
     private final Vec3d dockingPos;
     private final Vec3d attachPos;
 
-    public SurgicalRobot(BlockPos basePos)
+    protected boolean pressingLeft;
+    protected boolean pressingRight;
+    protected boolean pressingForward;
+    protected boolean pressingBack;
+    protected boolean pressingUp;
+    protected boolean pressingDown;
+    protected boolean prevForward;
+    protected boolean prevBack;
+    protected boolean prevLeft;
+    protected boolean prevRight;
+    protected boolean prevUp;
+    protected boolean prevDown;
+
+    @Nullable private PlayerEntity controller;
+
+    public SurgicalRobot(PLCBlockEntity parent)
     {
-        this.basePos = basePos;
+        this.parent = parent;
+        this.basePos = parent.getPos();
         setTarget(basePos);
         this.dockingPos = Vec3d.ofCenter(basePos, 0.5);
         this.attachPos = Vec3d.ofCenter(basePos, 1.4);
@@ -47,9 +77,22 @@ public class SurgicalRobot implements NbtSerialisable
         this.clientZ = z;
     }
 
+    public void setController(PlayerEntity player)
+    {
+        this.controller = player;
+    }
+
     public void tick()
     {
-        move();
+        if (controller == null)
+        {
+            move();
+        }
+        else
+        {
+
+        }
+
     }
 
     protected void move()
@@ -180,6 +223,20 @@ public class SurgicalRobot implements NbtSerialisable
         this.z = nbt.getDouble("rz");
     }
 
+//    public void writeBuf(PacketByteBuf buf)
+//    {
+//        buf.writeDouble(x);
+//        buf.writeDouble(y);
+//        buf.writeDouble(z);
+//    }
+//
+//    public void readBuf(PacketByteBuf buf)
+//    {
+//        this.x = buf.readDouble();
+//        this.y = buf.readDouble();
+//        this.z = buf.readDouble();
+//    }
+
     public boolean isActive()
     {
         return movementState == STATE_ACTIVE;
@@ -194,5 +251,82 @@ public class SurgicalRobot implements NbtSerialisable
     {
         movementState = STATE_RETURNING;
         setTarget(basePos);
+    }
+
+    public void setPos(double x, double y, double z)
+    {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        parent.markDirty();
+    }
+
+    @Environment(value = EnvType.CLIENT)
+    public static class Client
+    {
+        private final SurgicalRobot robot;
+        private final PLCBlockEntity be;
+
+        public Client(SurgicalRobot robot, PLCBlockEntity be)
+        {
+            this.robot = robot;
+            this.be = be;
+        }
+
+        public void tick()
+        {
+            updateKeys();
+            motion();
+
+            if (be.getWorld().getTime() % 4 == 0)
+            {
+                PLCRobotC2S.send(be);
+            }
+        }
+
+        public void motion()
+        {
+            robot.prevX = robot.x;
+            robot.prevY = robot.y;
+            robot.prevZ = robot.z;
+
+            Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
+
+            double speed = 0.2;
+            float pitch = camera.getPitch();
+            float yaw = camera.getYaw();
+            double vx = speed * -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+            double vy = speed * -Math.sin(Math.toRadians(pitch));
+            double vz = speed * Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+
+            if (robot.pressingForward)
+            {
+                robot.x += vx;
+                robot.y += vy;
+                robot.z += vz;
+            }
+        }
+
+        public void updateKeys()
+        {
+            if (robot.controller == null)
+                return;
+
+            GameOptions options = MinecraftClient.getInstance().options;
+
+            robot.prevForward = robot.pressingForward;
+            robot.prevBack = robot.pressingBack;
+            robot.prevLeft = robot.pressingLeft;
+            robot.prevRight = robot.pressingRight;
+            robot.prevUp = robot.pressingUp;
+            robot.prevDown = robot.pressingDown;
+
+            robot.pressingForward = options.forwardKey.isPressed();
+            robot.pressingBack = options.backKey.isPressed();
+            robot.pressingLeft = options.leftKey.isPressed();
+            robot.pressingRight = options.rightKey.isPressed();
+            robot.pressingUp = options.jumpKey.isPressed();
+            robot.pressingDown = options.sneakKey.isPressed();
+        }
     }
 }

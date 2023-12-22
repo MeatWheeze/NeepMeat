@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -30,10 +31,16 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+//         TODO: Client separation
         if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
         {
-            be.setCounter(0);
+            be.enter(player);
         }
+
+//        if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
+//        {
+//            be.setCounter(0);
+//        }
 
 //        world.getBlockEntity(pos, NMBlockEntities.PLC).ifPresent(be ->
 //        {
@@ -56,7 +63,7 @@ public class TableControllerBlock extends BaseHorFacingBlock implements BlockEnt
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PLC, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.PLC, (world1, pos, state1, blockEntity) -> blockEntity.tick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     @Nullable
