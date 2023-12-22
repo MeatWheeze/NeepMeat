@@ -6,6 +6,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.IDirectionalFluidAccept
 import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -18,6 +19,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -231,6 +233,15 @@ public class FluidNode
     {
         if (hasPump) return pump.getFlow();
         return getMode(world).getFlow();
+    }
+
+    public static double exactDistance(FluidNode node1, FluidNode node2)
+    {
+        Vec3d offset1 = new Vec3d(node1.face.getUnitVector()).multiply(0.5);
+        Vec3d v1 = Vec3d.ofCenter(node1.pos).add(offset1);
+        Vec3d offset2 = new Vec3d(node2.face.getUnitVector()).multiply(0.5);
+        Vec3d v2 = Vec3d.ofCenter(node2.pos).add(offset2);
+        return NMMaths.manhattanDistance(v1, v2);
     }
 
     public Storage<FluidVariant> getStorage(ServerWorld world)
