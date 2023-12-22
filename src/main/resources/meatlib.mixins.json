@@ -4,6 +4,7 @@
   "package": "com.neep.meatlib.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "EntityMixin",
     "ItemStackMixin",
     "PlayerEntityMixin"
   ],

@@ -16,7 +16,7 @@ public class SingleEntityStorage extends SnapshotParticipant<EntityVariant<?>> i
     public static SingleEntityStorage of(Entity entity)
     {
         SingleEntityStorage storage = new SingleEntityStorage();
-        storage.variant = EntityVariant.of(entity);
+        storage.variant = entity != null ? EntityVariant.of(entity) : EntityVariant.getBlank();
         return storage;
     }
 
@@ -26,10 +26,6 @@ public class SingleEntityStorage extends SnapshotParticipant<EntityVariant<?>> i
         if (!isResourceBlank() || maxAmount == 0) return 0;
 
         maxAmount = Math.min(getCapacity(), maxAmount);
-
-//        updateSnapshots(transaction);
-
-
 
         return 0;
     }
