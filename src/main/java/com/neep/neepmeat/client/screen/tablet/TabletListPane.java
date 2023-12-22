@@ -4,6 +4,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
+import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -200,7 +201,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         @Override
         public void playDownSound(SoundManager soundManager)
         {
-            soundManager.play(PositionedSoundInstance.master(SoundEvents.BLOCK_WOODEN_TRAPDOOR_CLOSE, 1.0f));
+            soundManager.play(PositionedSoundInstance.master(NMSounds.BEEP, 1.0f));
         }
 
         @Override

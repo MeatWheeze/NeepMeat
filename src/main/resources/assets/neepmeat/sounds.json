@@ -34,5 +34,11 @@
     "sounds": [
       "neepmeat:compound_injector"
     ]
+  },
+  "beep": {
+    "subtitle": "subtitles.neepmeat.beep",
+    "sounds": [
+      "neepmeat:beep"
+    ]
   }
 }
