@@ -54,15 +54,15 @@ public class AssemblerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack transferSlot(PlayerEntity player, int index)
     {
         ItemStack newStack = ItemStack.EMPTY;
-        Slot slot = this.slots.get(invSlot);
+        Slot slot = this.slots.get(index);
         if (slot != null && slot.hasStack())
         {
             ItemStack originalStack = slot.getStack();
             newStack = originalStack.copy();
-            if (invSlot < this.inventory.size())
+            if (index < this.inventory.size())
             {
                 if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true))
                 {

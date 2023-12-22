@@ -39,9 +39,9 @@ public class FluidRationerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int invSlot)
+    public ItemStack transferSlot(PlayerEntity player, int index)
     {
-        ItemStack oldStack = getStacks().get(invSlot);
+        ItemStack oldStack = getStacks().get(index);
 //        super.transferSlot(player, invSlot);
 //        if (invSlot < playerInventory.size())
 //        {

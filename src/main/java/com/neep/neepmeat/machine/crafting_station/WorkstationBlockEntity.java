@@ -56,7 +56,8 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
                 inputsTaken = true;
                 onTakeItem(world, input);
             }
-            else onStackChanged(input);
+
+            onStackChanged(input);
             return retStack;
         }
 
@@ -160,6 +161,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
             }
             else output.setStack(0, ItemStack.EMPTY);
         }
+        output.markDirty();
         markDirty();
     }
 
