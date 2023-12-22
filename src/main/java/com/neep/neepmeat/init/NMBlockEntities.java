@@ -1,6 +1,7 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
@@ -34,6 +35,7 @@ public class NMBlockEntities
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
     public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
+    public static BlockEntityType<ItemPortBlock.ItemPortBlockEntity> VAT_ITEM_PORT;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
@@ -90,6 +92,7 @@ public class NMBlockEntities
         LINEAR_OSCILLATOR = registerBlockEntity("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
+        VAT_ITEM_PORT = registerBlockEntity("vat_item_port", ItemPortBlock.ItemPortBlockEntity::new, NMBlocks.VAT_ITEM_PORT);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);

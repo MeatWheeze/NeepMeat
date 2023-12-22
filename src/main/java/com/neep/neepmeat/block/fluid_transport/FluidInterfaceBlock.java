@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class FluidPortBlock extends BaseFacingBlock implements BlockEntityProvider
+public class FluidInterfaceBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
 
@@ -28,7 +28,7 @@ public class FluidPortBlock extends BaseFacingBlock implements BlockEntityProvid
 //            Direction.WEST, Block.createCuboidShape(0, 0, 3, 1, 15.75, 13),
 //            Direction.EAST, Block.createCuboidShape(15, 0, 3, 16, 15.75, 13)));
 
-    public FluidPortBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public FluidInterfaceBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
     }

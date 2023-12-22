@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block;
+package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseBlock;
 import net.minecraft.block.BlockState;
@@ -9,7 +9,7 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
-public class TankWallBlock extends BaseBlock
+public class TankWallBlock extends BaseBlock implements IVatStructure
 {
     public TankWallBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {

@@ -1,0 +1,8 @@
+{
+  "parent": "neepmeat:block/cube_vertical",
+  "textures": {
+    "top": "neepmeat:block/vat_casing/top",
+    "bottom": "neepmeat:block/vat_casing/top",
+    "side": "neepmeat:block/vat_casing/side"
+  }
+}
