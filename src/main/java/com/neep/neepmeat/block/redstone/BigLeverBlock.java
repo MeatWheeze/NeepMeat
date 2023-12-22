@@ -2,23 +2,24 @@ package com.neep.neepmeat.block.redstone;
 
 import com.neep.neepmeat.api.block.NMBlock;
 import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
-import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.SoundInitialiser;
 import com.neep.neepmeat.item.base.BaseBlockItem;
+import com.neep.neepmeat.util.NMMaths;
+import com.neep.neepmeat.util.NMVec2f;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -113,10 +114,36 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        BlockState blockState = this.togglePower(state, world, pos);
-        ((BigLeverBlockEntity) world.getBlockEntity(pos)).togglePower();
+        if (!player.isSneaking())
+        {
+            BlockState blockState = this.togglePower(state, world, pos);
+            ((BigLeverBlockEntity) world.getBlockEntity(pos)).togglePower();
 
-        world.emitGameEvent(player, blockState.get(POWERED) ? GameEvent.BLOCK_SWITCH : GameEvent.BLOCK_UNSWITCH, pos);
+        }
+        else
+        {
+            BigLeverBlockEntity be = ((BigLeverBlockEntity) world.getBlockEntity(pos));
+            if (be.activeTicks > 0)
+                be.activeTicks = 0;
+            else
+                be.activeTicks = 40;
+
+            System.out.println(be.activeTicks);
+
+            world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.4f, 2);
+
+//            Direction facing = state.get(FACING);
+//            Direction hitSide = hit.getSide();
+//            if (hitSide == facing.rotateYClockwise() || hitSide == facing.rotateYCounterclockwise())
+//            {
+//                Vec3d hitPos = hit.getPos();
+//                NMVec2f relative = NMMaths.removeAxis(hitSide.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
+//                boolean increasing = relative.getX() > 0.25;
+//                world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.4f, increasing ? 2 : 1);
+//            }
+        }
+        if (world.isClient)
+            return ActionResult.SUCCESS;
         return ActionResult.CONSUME;
     }
 
@@ -136,6 +163,7 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
     public void setPowered(World world, BlockPos pos, boolean powered)
     {
         BlockState state = world.getBlockState(pos).with(POWERED, powered);
+        world.emitGameEvent(null, world.getBlockState(pos).get(POWERED) != powered ? GameEvent.BLOCK_SWITCH : GameEvent.BLOCK_UNSWITCH, pos);
         world.setBlockState(pos, state, Block.NOTIFY_ALL);
 
         world.updateNeighborsAlways(pos, this);
@@ -145,5 +173,6 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
             world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundInitialiser.BIG_LEVER_ON, SoundCategory.HOSTILE, 1f, 0.8f);
         else
             world.playSound(null, pos, SoundInitialiser.BIG_LEVER_OFF, SoundCategory.HOSTILE, 1f, 0.9f);
+
     }
 }
