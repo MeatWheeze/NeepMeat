@@ -3,22 +3,74 @@ package com.neep.neepmeat.machine.synthesiser;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class SynthesiserBlock extends TallBlock implements BlockEntityProvider
 {
+    public static final BooleanProperty FULL = BooleanProperty.of("full");
+
     public SynthesiserBlock(String registryName, Settings settings)
     {
         super(registryName, settings.nonOpaque());
+        this.setDefaultState(getStateManager().getDefaultState().with(FULL, false));
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (ItemUtils.playerHoldingPipe(player, hand)) return ActionResult.PASS;
+
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof SynthesiserBlockEntity be)
+        {
+            if (player.isSneaking())
+            {
+                Text name = be.getEntityType() != null ? be.getEntityType().getName() : Text.of("Empty");
+                player.sendMessage(new TranslatableText("message.neepmeat.synthesiser.template", name), true);
+                return ActionResult.SUCCESS;
+            }
+
+            ItemStack stack = player.getStackInHand(hand);
+            if (be.changeEntityType(player, stack))
+            {
+                world.playSound(null, pos, SoundEvents.BLOCK_RESPAWN_ANCHOR_CHARGE, SoundCategory.BLOCKS, 1, 1);
+                world.setBlockState(pos, state.with(SynthesiserBlock.FULL, true));
+            }
+            else
+            {
+                world.setBlockState(pos, state.with(SynthesiserBlock.FULL, false));
+            }
+
+        }
+
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        builder.add(FULL);
     }
 
     @Override

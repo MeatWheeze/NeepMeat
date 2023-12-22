@@ -279,6 +279,8 @@
   "message.neepmeat.compactor.not_found": "No Integrator organism is connected.",
   "message.neepmeat.compactor.immature": "The connected Integrator organism is not fully grown.",
 
+  "message.neepmeat.synthesiser.template": "Current template organism: %s",
+
   "block.neepmeat.work_fluid": "Work Fluid",
   "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
 
@@ -311,7 +313,7 @@
 
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
-  "item.neepmeat.essential_saltes": "Essential Saltes",
+  "item.neepmeat.essential_saltes": "Essential Saltes: %s",
 
   "item.neepmeat.compound_injector": "Compound Injector",
   "item.neepmeat.compound_injector_lore_0": "Heals 4 hearts when used.",

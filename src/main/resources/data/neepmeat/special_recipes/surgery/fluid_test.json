@@ -2,8 +2,8 @@
   "type": "neepmeat:surgery",
   "pattern": [
     "rbr",
-    "   ",
-    "   "
+    " c ",
+    "s s"
   ],
   "key": {
     "b": {
@@ -14,6 +14,21 @@
     "r": {
       "type": "minecraft:item",
       "resource": "neepmeat:enlightened_brain",
+      "amount": 1
+    },
+    "m": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:biomechanical_components",
+      "amount": 1
+    },
+    "c": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:meat_steel_component",
+      "amount": 1
+    },
+    "s": {
+      "type": "minecraft:item",
+      "resource": "neepmeat:meat_steel_ingot",
       "amount": 1
     }
   },
