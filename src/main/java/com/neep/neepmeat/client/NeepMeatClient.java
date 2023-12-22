@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
-import com.neep.meatweapons.client.model.PlasmaEntityModel;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
@@ -102,6 +101,12 @@ public class NeepMeatClient implements ClientModInitializer
                 new Identifier("minecraft:block/water_still"),
                 new Identifier("minecraft:block/water_still"),
                 0xbb1d1d
+        ));
+
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PATINA_TREATMENT, NMFluids.FLOWING_PATINA_TREATMENT, new SimpleFluidRenderHandler(
+                new Identifier("minecraft:block/water_still"),
+                new Identifier("minecraft:block/water_still"),
+                0x947512
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_WORK_FLUID, NMFluids.FLOWING_WORK_FLUID, new SimpleFluidRenderHandler(

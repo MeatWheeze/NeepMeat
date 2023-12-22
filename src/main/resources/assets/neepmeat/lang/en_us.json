@@ -142,12 +142,16 @@
   "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
 
   "block.neepmeat.work_fluid": "Work Fluid",
-  "block.neepmeat.charged_work_fluid": "Charged Work Fluid",
   "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
+
+  "block.neepmeat.charged_work_fluid": "Charged Work Fluid",
   "item.neepmeat.charged_work_fluid_bucket": "Charged Work Fluid Bucket",
 
   "item.neepmeat.blood_bucket": "Blood Bucket",
   "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket",
+
+  "item.neepmeat.patina_treatment_bucket": "Patina Treatment Bucket",
+  "block.neepmeat.patina_treatment": "Patina Treatment",
 
   "item.neepmeat.tank_minecart": "Tank Minecart"
 }
