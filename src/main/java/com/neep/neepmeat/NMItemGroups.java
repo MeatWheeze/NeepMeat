@@ -17,7 +17,4 @@ public class NMItemGroups
             new Identifier(NeepMeat.NAMESPACE, "ingredients"),
             () -> new ItemStack(NMItems.INTERNAL_COMPONENTS));
 
-    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
-            new Identifier(NeepMeat.NAMESPACE, "weapons"),
-            () -> new ItemStack(NMItems.SLASHER));
 }

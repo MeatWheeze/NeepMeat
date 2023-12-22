@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.blockentity.ConverterBlockEntity;
+import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.init.NMFluids;

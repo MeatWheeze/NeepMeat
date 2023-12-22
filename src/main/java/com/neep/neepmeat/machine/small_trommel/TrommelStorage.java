@@ -4,12 +4,9 @@ import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.storage.WritableStackStorage;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.Objects;

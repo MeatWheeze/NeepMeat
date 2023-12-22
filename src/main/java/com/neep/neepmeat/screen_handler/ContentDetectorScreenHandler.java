@@ -1,6 +1,6 @@
 package com.neep.neepmeat.screen_handler;
 
-import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,8 +11,6 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.slot.Slot;
-
-import javax.swing.text.AbstractDocument;
 
 public class ContentDetectorScreenHandler extends ScreenHandler
 {

@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
-import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
+import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

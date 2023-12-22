@@ -1,20 +1,27 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.block.multiblock.IMultiBlock;
+import com.neep.neepmeat.api.multiblock.IMultiBlock;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
-import com.neep.neepmeat.blockentity.*;
-import com.neep.neepmeat.blockentity.fluid.*;
-import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.blockentity.machine.*;
-import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
-import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
-import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
+import com.neep.neepmeat.block.entity.*;
+import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.StopValveBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.*;
+import com.neep.neepmeat.transport.machine.fluid.*;
+import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.block.entity.machine.*;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBlockEntity;
+import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
+import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
+import com.neep.neepmeat.machine.heater.HeaterBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.machine.crucible.AlembicBlockEntity;
 import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
@@ -31,6 +38,9 @@ import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
+import com.neep.neepmeat.transport.machine.item.BufferBlockEntity;
+import com.neep.neepmeat.transport.machine.item.EjectorBlockEntity;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -65,7 +75,6 @@ public class NMBlockEntities
     public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
-    public static BlockEntityType<ConverterBaseBlockEntity> CONVERTER_BASE;
     public static BlockEntityType<ConverterBlockEntity> LARGE_CONVERTER;
 
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
@@ -179,7 +188,6 @@ public class NMBlockEntities
         VAT_CONTROLLER = registerBlockEntity("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
 
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
-        CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
         MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
@@ -193,7 +201,6 @@ public class NMBlockEntities
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
-        ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
         ItemStorage.SIDED.registerSelf(DEPLOYER);
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 

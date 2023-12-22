@@ -1,8 +1,8 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.neepmeat.block.multiblock.IMultiBlock;
-import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.IMultiBlock;
+import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

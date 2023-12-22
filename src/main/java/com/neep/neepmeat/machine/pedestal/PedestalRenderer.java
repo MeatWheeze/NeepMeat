@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.pedestal;
 
-import com.neep.neepmeat.storage.WritableStackStorage;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;

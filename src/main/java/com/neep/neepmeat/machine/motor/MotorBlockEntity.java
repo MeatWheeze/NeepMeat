@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.motor;
 
-import com.neep.neepmeat.block.machine.IMotorisedBlock;
-import com.neep.neepmeat.blockentity.machine.BloodMachineBlockEntity;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;

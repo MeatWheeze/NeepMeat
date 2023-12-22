@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
+import com.neep.neepmeat.api.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;

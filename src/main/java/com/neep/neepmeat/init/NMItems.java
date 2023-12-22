@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TieredCraftingItemFactory;
+import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
@@ -16,9 +17,9 @@ public class NMItems
 
     public static Item TANK_MINECART = new TankMinecartItem("tank_minecart", new FabricItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
 
-    public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.WEAPONS));
-    public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(NMItemGroups.WEAPONS));
-    public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(NMItemGroups.WEAPONS));
+    public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item CHEESE_CLEAVER = new CheeseCleaverItem("cheese_cleaver", new FabricItemSettings().group(MeatWeapons.WEAPONS));
+    public static Item SLASHER = new SlasherItem("slasher", new FabricItemSettings().group(MeatWeapons.WEAPONS));
 
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));

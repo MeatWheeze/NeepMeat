@@ -1,8 +1,7 @@
 package com.neep.neepmeat.machine.motor;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.machine.IMotorisedBlock;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

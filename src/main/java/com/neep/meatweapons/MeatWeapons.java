@@ -7,8 +7,10 @@ import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.*;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
-import com.neep.neepmeat.NMItemGroups;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.Entity;
@@ -16,6 +18,8 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -23,20 +27,24 @@ public class MeatWeapons implements ModInitializer
 {
     public static final String NAMESPACE = "meatweapons";
 
+    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
+            new Identifier(NeepMeat.NAMESPACE, "weapons"),
+            () -> new ItemStack(NMItems.SLASHER));
+
     public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
     public static EntityType<ExplodingShellEntity> EXPLODING_SHELL;
     public static EntityType<AirtruckEntity> AIRTRUCK;
 
-    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", 1, new FabricItemSettings().group(NMItemGroups.WEAPONS));
-    public static Item ENGINE = new BaseCraftingItem("engine", 0, new FabricItemSettings().group(NMItemGroups.WEAPONS));
+    public static Item BALLISTIC_CARTRIDGE = new BaseCraftingItem("ballistic_cartridge", 1, new FabricItemSettings().group(WEAPONS));
+    public static Item ENGINE = new BaseCraftingItem("engine", 0, new FabricItemSettings().group(WEAPONS));
     public static Item FUSION_CANNON = new FusionCannonItem();
     public static Item HAND_CANNON = new HandCannonItem();
     public static Item MACHINE_PISTOL = new MachinePistolItem();
     public static Item LMG = new LMGItem();
     public static Item HEAVY_CANNON = new HeavyCannonItem();
-    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(NMItemGroups.WEAPONS));
+    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(WEAPONS));
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {

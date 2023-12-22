@@ -2,10 +2,9 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;

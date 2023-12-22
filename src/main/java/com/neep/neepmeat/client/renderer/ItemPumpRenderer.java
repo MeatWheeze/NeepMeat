@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.block.machine.ItemPumpBlock;
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.client.MinecraftClient;

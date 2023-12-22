@@ -1,8 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.block.machine.ItemPumpBlock;
-import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
-import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
+import com.neep.neepmeat.transport.machine.item.EjectorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.client.MinecraftClient;
@@ -14,7 +13,6 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;

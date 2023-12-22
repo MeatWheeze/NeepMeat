@@ -2,7 +2,7 @@ package com.neep.neepmeat.mixin;
 
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.intrfaces.IServerWorld;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
+import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;

@@ -2,21 +2,25 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.block.*;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.block.*;
-import com.neep.neepmeat.block.actuator.LinearRailBlock;
-import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.machine.breaker.LinearOscillatorBlock;
+import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
+import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorBlock;
+import com.neep.neepmeat.machine.converter.ConverterBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
+import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
+import com.neep.neepmeat.machine.heater.HeaterBlock;
+import com.neep.neepmeat.machine.integrator.IntegratorBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
-import com.neep.neepmeat.block.item_transport.*;
+import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
@@ -28,9 +32,11 @@ import com.neep.neepmeat.machine.mixer.MixerTopBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
+import com.neep.neepmeat.transport.machine.item.BufferBlock;
+import com.neep.neepmeat.transport.machine.item.EjectorBlock;
+import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
-import net.minecraft.block.sapling.OakSaplingGenerator;
 import net.minecraft.sound.BlockSoundGroup;
 
 @SuppressWarnings("unused")
@@ -100,7 +106,6 @@ public class NMBlocks
     public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("alembic", 64, false, FLUID_PIPE_SETTINGS));
 
     public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", 64, false, FabricBlockSettings.of(Material.METAL).sounds(BlockSoundGroup.NETHERITE).hardness(4.0f)));
-    public static Block CONVERTER_BASE = BlockRegistry.queue(new ConverterBlock.Base("converter_base", 64, false, FabricBlockSettings.copy(CONVERTER)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", 64, false, FLUID_PIPE_SETTINGS));
 
@@ -165,7 +170,7 @@ public class NMBlocks
     public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock("blood_bubble_planks", 64, true, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD));
 
     // --- Assembly ---
-    public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+//    public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
     public static Block BIG_LEVER = BlockRegistry.queue(new BigLeverBlock("big_lever", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 

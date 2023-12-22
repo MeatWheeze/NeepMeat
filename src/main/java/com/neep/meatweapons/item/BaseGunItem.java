@@ -8,7 +8,6 @@ import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.GraphicsEffect;
-import com.neep.neepmeat.NMItemGroups;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -58,7 +57,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
 
     public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, FabricItemSettings settings)
     {
-        super(settings.group(NMItemGroups.WEAPONS).maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots));
+        super(settings.group(MeatWeapons.WEAPONS).maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots));
         this.registryName = registryName;
 
         this.ammunition = ammunition;

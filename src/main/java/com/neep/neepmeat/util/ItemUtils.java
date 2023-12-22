@@ -1,8 +1,7 @@
 package com.neep.neepmeat.util;
 
-import com.neep.neepmeat.api.block.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.item.FluidComponentItem;
-import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;

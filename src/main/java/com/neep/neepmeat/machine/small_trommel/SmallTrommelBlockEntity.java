@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
-import com.neep.neepmeat.block.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;

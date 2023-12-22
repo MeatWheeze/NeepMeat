@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.redstone;
 
 import com.neep.meatlib.block.IMeatBlock;
-import com.neep.neepmeat.blockentity.BigLeverBlockEntity;
+import com.neep.neepmeat.block.entity.BigLeverBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.SoundInitialiser;
 import com.neep.meatlib.item.BaseBlockItem;

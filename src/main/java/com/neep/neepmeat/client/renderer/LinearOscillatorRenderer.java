@@ -1,7 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.blockentity.machine.LinearOscillatorBlockEntity;
+import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;

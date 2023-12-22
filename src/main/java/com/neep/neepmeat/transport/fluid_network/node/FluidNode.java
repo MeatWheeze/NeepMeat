@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.fluid_network.node;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.intrfaces.IServerWorld;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
