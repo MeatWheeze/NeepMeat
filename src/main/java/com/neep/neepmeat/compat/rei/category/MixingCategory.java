@@ -54,7 +54,7 @@ public class MixingCategory implements DisplayCategory<MixingDisplay>
         widgets.add(Widgets.createArrow(new Point(startPoint.x + 24, startPoint.y + 8)).animationDurationTicks(processTime));
 
         // Input slots
-        if (!display.getRecipe().getFluidInputs().get(1).isBlank())
+        if (!display.getRecipe().getFluidInputs().get(1).isEmpty())
         {
             widgets.add(Widgets.createSlot(new Point(startPoint.x + 1, startPoint.y - 1)).entries(display.getInputEntries().get(0)).markInput());
             widgets.add(Widgets.createSlot(new Point(startPoint.x + 1, startPoint.y + 19)).entries(display.getInputEntries().get(1)).markInput());

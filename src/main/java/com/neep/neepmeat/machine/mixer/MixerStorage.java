@@ -1,23 +1,19 @@
 package com.neep.neepmeat.machine.mixer;
 
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MixerStorage extends SimpleInventory
+public class MixerStorage implements ImplementedRecipe.DummyInventory
 {
     protected MixerBlockEntity parent;
 
@@ -25,6 +21,10 @@ public class MixerStorage extends SimpleInventory
     protected WritableSingleFluidStorage fluidInput2;
     protected WritableSingleFluidStorage fluidOutput;
     protected WritableStackStorage itemInput;
+
+    // Silly method of remembering the input fluids to show their particles
+    public FluidVariant displayInput1 = FluidVariant.blank();
+    public FluidVariant displayInput2 = FluidVariant.blank();
 
     public MixerStorage(MixerBlockEntity parent)
     {
@@ -36,16 +36,17 @@ public class MixerStorage extends SimpleInventory
         fluidOutput = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, callback);
     }
 
-    public List<StorageView<?>> getInputStorages(TransactionContext transaction)
+    public Storage<FluidVariant> getInputStorages()
     {
         List<Storage<FluidVariant>> storages = parent.getAdjacentStorages();
-//        Storage<ItemVariant> itemStorage = parent.getItemStorage(null);
-//        return Stream.concat(storages.stream(), Stream.of(itemStorage))
-        return storages.stream().flatMap(storage -> StreamSupport.stream(storage.iterable(transaction).spliterator(), false)).collect(Collectors.toList());
+        return new CombinedStorage<>(storages);
     }
 
     public void writeNbt(NbtCompound nbt)
     {
+        nbt.put("displayInput1", displayInput1.toNbt());
+        nbt.put("displayInput2", displayInput2.toNbt());
+        
         NbtCompound input1 = new NbtCompound();
         fluidInput1.writeNbt(input1);
         nbt.put("input_1", input1);
@@ -66,6 +67,9 @@ public class MixerStorage extends SimpleInventory
 
     public void readNbt(NbtCompound nbt)
     {
+        this.displayInput1 = FluidVariant.fromNbt(nbt.getCompound("displayInput1"));
+        this.displayInput2 = FluidVariant.fromNbt(nbt.getCompound("displayInput2"));
+        
         NbtCompound input1 = nbt.getCompound("input_1");
         fluidInput1.readNbt(input1);
 

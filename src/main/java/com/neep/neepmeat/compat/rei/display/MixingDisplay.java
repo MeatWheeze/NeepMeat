@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,13 +27,11 @@ public class MixingDisplay extends BasicDisplay
     {
         this(
                 List.of(
-                        EntryIngredients.of(ingredientToStack(recipe.getFluidInputs().get(0))),
-                        EntryIngredients.of(ingredientToStack(recipe.getFluidInputs().get(1))),
-                        EntryIngredients.ofItems((Collection<ItemConvertible>) (Object) recipe.getItemIngredient().getAll(), (int) recipe.getItemIngredient().amount())
+                        SurgeryDisplay.entryFromInput(recipe.getFluidInputs().get(0)),
+                        SurgeryDisplay.entryFromInput(recipe.getFluidInputs().get(1)),
+                        SurgeryDisplay.entryFromInput(recipe.getItemIngredient())
                         ),
-                List.of(
-                        EntryIngredients.of(ingredientToStack(recipe.getFluidOutput()))
-                        ),
+                Collections.singletonList(EntryIngredients.of(recipe.getFluidOutput().resource(), recipe.getFluidOutput().minAmount())),
                 Optional.empty()
         );
         this.recipe = recipe;
@@ -44,19 +43,9 @@ public class MixingDisplay extends BasicDisplay
         super(input, output);
     }
 
-    public static FluidStack ingredientToStack(FluidIngredient ingredient)
-    {
-        return FluidStack.create(ingredient.resource().getFluid(), ingredient.amount());
-    }
-
     public MixingRecipe getRecipe()
     {
         return recipe;
-    }
-
-    public static ItemStack ingredientToStack(ItemIngredient ingredient)
-    {
-        return new ItemStack(ingredient.resource().getItem(), (int) ingredient.amount());
     }
 
     public static Serializer<MixingDisplay> serializer()

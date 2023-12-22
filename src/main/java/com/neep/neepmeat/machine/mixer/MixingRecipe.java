@@ -1,22 +1,22 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.ingredient.FluidIngredient;
-import com.neep.meatlib.recipe.ingredient.GenericIngredient;
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
@@ -24,19 +24,21 @@ import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MixingRecipe implements Recipe<MixerStorage>
+public class MixingRecipe extends ImplementedRecipe<MixerStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
-    protected FluidIngredient fluidInput1;
-    protected FluidIngredient fluidInput2;
-    protected FluidIngredient fluidOutput;
+    protected RecipeInput<Fluid> fluidInput1;
+    protected RecipeInput<Fluid> fluidInput2;
+    protected RecipeOutput<Fluid> fluidOutput;
     protected int processTime;
 
-    public MixingRecipe(Identifier id, RecipeInput<Item> itemInput, FluidIngredient fluidInput1, FluidIngredient fluidInput2, FluidIngredient fluidOutput, int processTime)
+    public MixingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeInput<Fluid> fluidInput1, RecipeInput<Fluid> fluidInput2, RecipeOutput<Fluid> fluidOutput, int processTime)
     {
         this.itemInput = itemInput;
         this.fluidInput1 = fluidInput1;
@@ -51,12 +53,12 @@ public class MixingRecipe implements Recipe<MixerStorage>
         return itemInput;
     }
 
-    public List<FluidIngredient> getFluidInputs()
+    public List<RecipeInput<Fluid>> getFluidInputs()
     {
         return List.of(fluidInput1, fluidInput2);
     }
 
-    public FluidIngredient getFluidOutput()
+    public RecipeOutput<Fluid> getFluidOutput()
     {
         return fluidOutput;
     }
@@ -70,13 +72,19 @@ public class MixingRecipe implements Recipe<MixerStorage>
     public boolean matches(MixerStorage inventory, World world)
     {
         Transaction transaction = Transaction.openOuter();
-        List<GenericIngredient<?, ?>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
+        List<RecipeInput<Fluid>> queue = new LinkedList<>(List.of(fluidInput1, fluidInput2));
 
-        ListIterator<GenericIngredient<?, ?>> it = queue.listIterator();
+        ListIterator<RecipeInput<Fluid>> it = queue.listIterator();
+        Iterable<? extends StorageView<FluidVariant>> parentStorages = inventory.getInputStorages().iterable(transaction);
         while (it.hasNext())
         {
-            GenericIngredient<?, ?> ingredient = it.next();
-            for (StorageView<?> view : inventory.getInputStorages(transaction))
+            RecipeInput<Fluid> ingredient = it.next();
+            if (ingredient.isEmpty())
+            {
+                it.remove();
+                continue;
+            }
+            for (StorageView<FluidVariant> view : parentStorages)
             {
                 if (ingredient.test(view))
                 {
@@ -94,19 +102,27 @@ public class MixingRecipe implements Recipe<MixerStorage>
         try (Transaction inner = transactionContext.openNested())
         {
             List<Storage<FluidVariant>> inputList = inventory.parent.getAdjacentStorages();
-            CombinedStorage<FluidVariant, Storage<FluidVariant>> fluidStorage = new CombinedStorage<>(inputList);
-            Storage<ItemVariant> itemStorage = inventory.parent.getItemStorage(null);
+            Storage<FluidVariant> fluidStorage = inventory.getInputStorages();
 
             if (!inputList.isEmpty())
             {
-                long ext1 = fluidInput1.take(fluidStorage, transactionContext);
-                long ext2 = fluidInput2.take(fluidStorage, transactionContext);
-                Item item = itemInput.getFirstMatching(inventory.getItemInput()).orElseThrow(() -> new IllegalStateException("Storage contents must conform to recipe"));
-                long ext3 = inventory.getItemInput().extract(ItemVariant.of(item), itemInput.amount(), inner);
+                Fluid fluid1 = fluidInput1.isEmpty() ? Fluids.EMPTY : fluidInput1.getFirstMatching(fluidStorage, transactionContext).orElseThrow(() -> new IllegalStateException("Storage contents must conform to recipe"));
+                Fluid fluid2 = fluidInput2.isEmpty() ? Fluids.EMPTY : fluidInput2.getFirstMatching(fluidStorage, transactionContext).orElseThrow(() -> new IllegalStateException("Storage contents must conform to recipe"));
+                Item item = itemInput.isEmpty() ? Items.DIRT : itemInput.getFirstMatching(inventory.getItemInput()).orElseThrow(() -> new IllegalStateException("Storage contents must conform to recipe"));
+
+                FluidVariant variant1 = FluidVariant.of(fluid1);
+                FluidVariant variant2 = FluidVariant.of(fluid2);
+
+                long ext1 = fluidStorage.extract(variant1, fluidInput1.amount(), inner);
+                // Do not attempt to extract blank variant
+                long ext2 = variant2.isBlank() ? fluidInput2.amount() : fluidStorage.extract(variant2, fluidInput2.amount(), inner);
+                long ext3 = itemInput.isEmpty() ? itemInput.amount() : inventory.getItemInput().extract(ItemVariant.of(item), itemInput.amount(), inner);
 
                 if (ext1 == fluidInput1.amount() && ext2 == fluidInput2.amount() && ext3 == itemInput.amount())
                 {
                     inner.commit();
+                    inventory.displayInput1 = variant1;
+                    inventory.displayInput2 = variant2;
                     return true;
                 }
             }
@@ -122,8 +138,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
             Storage<FluidVariant> output = inventory.getFluidOutput();
             if (output != null)
             {
-                long ins = output.insert((FluidVariant) fluidOutput.resource(), fluidOutput.amount(), transaction);
-                if (ins == fluidOutput.amount())
+                if (fluidOutput.insertInto(output, FluidVariant::of, transaction))
                 {
                     inner.commit();
                     return true;
@@ -133,41 +148,7 @@ public class MixingRecipe implements Recipe<MixerStorage>
         }
         return false;
     }
-
-    @Override
-    public ItemStack craft(MixerStorage inventory)
-    {
-        try (Transaction transaction = Transaction.openOuter())
-        {
-            if (!takeInputs(inventory, transaction))
-            {
-                transaction.abort();
-                return getOutput();
-            }
-
-            if (!ejectOutput(inventory, transaction))
-            {
-                transaction.abort();
-                return getOutput();
-            }
-
-            transaction.commit();
-        }
-        return getOutput();
-    }
-
-    @Override
-    public boolean fits(int width, int height)
-    {
-        return false;
-    }
-
-    @Override
-    public ItemStack getOutput()
-    {
-        return ItemStack.EMPTY;
-    }
-
+    
     @Override
     public Identifier getId()
     {
@@ -184,12 +165,6 @@ public class MixingRecipe implements Recipe<MixerStorage>
     public RecipeType<?> getType()
     {
         return NMrecipeTypes.MIXING;
-    }
-
-    @Override
-    public boolean isIgnoredInRecipeBook()
-    {
-        return true;
     }
 
     public static class MixerSerializer implements RecipeSerializer<MixingRecipe>
@@ -210,13 +185,13 @@ public class MixingRecipe implements Recipe<MixerStorage>
             RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, itemElement);
 
             JsonObject fluidElement1 = JsonHelper.getObject(json, "fluid1");
-            FluidIngredient fluidInput1 = FluidIngredient.fromJson(fluidElement1);
+            RecipeInput<Fluid> fluidInput1 = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidElement1);
 
             JsonObject fluidElement2 = JsonHelper.getObject(json, "fluid2");
-            FluidIngredient fluidInput2 = FluidIngredient.fromJson(fluidElement2);
+            RecipeInput<Fluid> fluidInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidElement2);
 
             JsonObject fluidElement3 = JsonHelper.getObject(json, "output");
-            FluidIngredient fluidOutput = FluidIngredient.fromJson(fluidElement3);
+            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromJsonRegistry(Registry.FLUID, fluidElement3);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput, fluidInput1, fluidInput2, fluidOutput, time);
@@ -226,9 +201,9 @@ public class MixingRecipe implements Recipe<MixerStorage>
         public MixingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Item> ingredient = RecipeInput.fromBuffer(buf);
-            FluidIngredient fluidInput1 = FluidIngredient.fromPacket(buf);
-            FluidIngredient fluidInput2 = FluidIngredient.fromPacket(buf);
-            FluidIngredient fluidOutput = FluidIngredient.fromPacket(buf);
+            RecipeInput<Fluid> fluidInput1 = RecipeInput.fromBuffer(buf);
+            RecipeInput<Fluid> fluidInput2 = RecipeInput.fromBuffer(buf);
+            RecipeOutput<Fluid> fluidOutput = RecipeOutput.fromBuffer(Registry.FLUID, buf);
             int time = buf.readVarInt();
 
             return this.factory.create(id, ingredient, fluidInput1, fluidInput2, fluidOutput, time);
@@ -240,14 +215,14 @@ public class MixingRecipe implements Recipe<MixerStorage>
             recipe.itemInput.write(buf);
             recipe.fluidInput1.write(buf);
             recipe.fluidInput2.write(buf);
-            recipe.fluidOutput.write(buf);
+            recipe.fluidOutput.write(Registry.FLUID, buf);
             buf.writeVarInt(recipe.processTime);
         }
 
         @FunctionalInterface
         public interface RecipeFactory<T extends MixingRecipe>
         {
-            T create(Identifier var1, RecipeInput<Item> var3, FluidIngredient f1, FluidIngredient f2, FluidIngredient out, int time);
+            T create(Identifier var1, RecipeInput<Item> var3, RecipeInput<Fluid> f1, RecipeInput<Fluid> f2, RecipeOutput<Fluid> out, int time);
         }
     }
 
