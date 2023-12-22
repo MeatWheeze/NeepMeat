@@ -61,7 +61,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof HeaterBlockEntity be)
             {
-                player.sendMessage(Text.of(((float) be.inputBuffer.getAmount() / FluidConstants.BUCKET) + ", " + ((float) be.outputBuffer.getAmount()) / FluidConstants.BUCKET), true);
+                be.onUse(player, hand);
             }
         }
         return ActionResult.SUCCESS;

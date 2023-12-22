@@ -10,6 +10,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -57,29 +62,27 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         }
 
         Transaction transaction = Transaction.openOuter();
-        long amount = FluidConstants.BUCKET / 300;
-        if (doWork(amount, transaction) == amount)
+        long amount = FluidConstants.BUCKET / 200;
+        long work = doWork(amount, transaction);
+        if (work == amount)
         {
             accessor.setBurnTime(2);
-            world.setBlockState(pos.add(0, 1, 0), Blocks.DIRT.getDefaultState(), Block.NOTIFY_ALL);
-        }
-        else
-        {
-            world.setBlockState(pos.add(0, 1, 0), Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
         }
         transaction.commit();
-//        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
-//        {
-//            Transaction transaction = Transaction.openOuter();
-//            long transferred = inputBuffer.extractDirect(NMFluids.CHARGED, transfer, transaction);
-//            long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, transferred, transaction);
-//            if (transferred >= transfer)
-//            {
-//                accessor.setBurnTime(10);
-//                updateBlockState(accessor, getWorld(), getPos().offset(getCachedState().get(HeaterBlock.FACING)));
-//            }
-//            transaction.commit();
-//        }
+    }
+
+    @Override
+    public void onUse(PlayerEntity player, Hand hand)
+    {
+        if (player.isSneaking())
+        {
+            clearBuffers();
+            getWorld().playSound(null, getPos(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1f, 1f);
+        }
+        player.sendMessage(Text.of((inputBuffer.getAmount())
+                + ", "
+                + (outputBuffer.getAmount())), true);
+        getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
     }
 
     public static void updateBlockState(FurnaceAccessor accessor, World world, BlockPos pos)

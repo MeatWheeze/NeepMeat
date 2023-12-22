@@ -32,7 +32,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
     public boolean stage;
     public boolean running;
     protected long conversionTime;
-    protected short baseAmount = (short) (FluidConstants.BUCKET / 300 / 2);
+    protected short baseAmount = (short) (FluidConstants.BUCKET / 200 / 2);
     protected float multiplier = 1;
 
     // Rendering only
@@ -84,7 +84,7 @@ public class ConverterBlockEntity extends BlockEntity implements BlockEntityClie
             }
             furnace.setCookTime(0);
             this.conversionTime = furnace.getBurnTime();
-            this.multiplier = 2;
+            this.multiplier = 2f;
         }
         else if (burnerState.isOf(Blocks.FIRE))
         {
