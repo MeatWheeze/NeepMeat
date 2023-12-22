@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.screen.tablet;
 
+import com.neep.neepmeat.guide.article.Article;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
@@ -8,7 +9,6 @@ import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
-import net.minecraft.text.Text;
 
 import java.util.function.BiFunction;
 
@@ -16,13 +16,13 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
 {
     private int x, y, width, height;
     private final TextRenderer textRenderer;
-    private Text text;
+    private final Article article;
     private BiFunction<String, Integer, OrderedText> renderTextProvider = (string, firstCharacterIndex) -> OrderedText.styledForwardsVisitedString(string, Style.EMPTY);
 
-    public ArticleTextWidget(TextRenderer textRenderer, Text text)
+    public ArticleTextWidget(TextRenderer textRenderer, Article article)
     {
         this.textRenderer = textRenderer;
-        this.text = text;
+        this.article = article;
     }
 
     public void setDimensions(int x, int y, int width, int height)
@@ -33,9 +33,9 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
         this.height = height;
     }
 
-    public void setText(Text text)
+    public TextRenderer getTextRenderer()
     {
-        this.text = text;
+        return textRenderer;
     }
 
     @Override
@@ -46,9 +46,16 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
 //        int l = Math.min(128 / this.textRenderer.fontHeight, this.cachedPage.size());
 //        for (int m = 0; m < l; ++m) {
 //            OrderedText orderedText = this.cachedPage.get(m);
-        int m = 0;
-        this.textRenderer.draw(matrices, text, (float) (x), (float) (y + m * this.textRenderer.fontHeight), 0);
+//        int m = 0;
+//        this.textRenderer.draw(matrices, article, (float) (x + 2), (float) (y + m * this.textRenderer.fontHeight), 0x00FF00);
 //        }
+
+        int head = 0;
+        for (Article.Content content : article.getContents())
+        {
+            head += content.render(matrices, x + 2, y + 2 + head, width, this);
+        }
+
     }
 
     @Override

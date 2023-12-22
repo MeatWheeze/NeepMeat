@@ -1,9 +1,11 @@
 package com.neep.neepmeat.guide;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
@@ -14,12 +16,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GuideReloadListener implements SimpleSynchronousResourceReloadListener
 {
-    private GuideNode root;
     private static final GuideReloadListener INSTANCE = new GuideReloadListener();
+
+    private GuideNode root;
+    private final Map<String, Article> articles = new HashMap<>();
 
     public static GuideReloadListener getInstance()
     {
@@ -43,7 +49,10 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
             {
                 Reader reader = new InputStreamReader(stream);
                 JsonElement rootElement = JsonParser.parseReader(reader);
+
+                processArticles((JsonObject) rootElement);
                 root = processNode(JsonHelper.getObject((JsonObject) rootElement, "tree"));
+
 
                 System.out.println(root.getChildren().get(0));
             }
@@ -52,6 +61,17 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
                 NeepMeat.LOGGER.error("Error occurred while loading resource json " + id.toString(), e);
             }
         }
+    }
+
+    protected void processArticles(JsonObject root)
+    {
+        JsonArray array = JsonHelper.getArray(root, "articles", new JsonArray());
+        array.forEach(e ->
+        {
+            String id = JsonHelper.getString((JsonObject) e, "id");
+            Article article = Article.fromJson((JsonObject) e);
+            articles.put(id, article);
+        });
     }
 
     protected GuideNode processNode(JsonObject object)
@@ -67,11 +87,16 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
             // Using recursion because I can't be bothered to traverse it properly
             return new GuideNode.MenuNode(id, new Identifier(icon), Text.of(text), nodes);
         }
-        return new GuideNode.PageNode(id, new Identifier(icon), Text.of(text));
+        return new GuideNode.ArticleNode(id, new Identifier(icon), Text.of(text));
     }
 
     public GuideNode getRootNode()
     {
         return root;
+    }
+
+    public Article getArticle(String id)
+    {
+        return articles.get(id);
     }
 }

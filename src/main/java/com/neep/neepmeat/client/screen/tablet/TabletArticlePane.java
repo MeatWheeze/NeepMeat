@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.screen.tablet;
 
+import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -8,7 +9,6 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
 
@@ -16,13 +16,13 @@ import org.lwjgl.glfw.GLFW;
 public class TabletArticlePane extends ContentPane implements Drawable, Element, Selectable
 {
     private int page;
-    private ArticleTextWidget article;
+    private ArticleTextWidget articleWidget;
 
-    public TabletArticlePane(ITabletScreen parent, Text text)
+    public TabletArticlePane(ITabletScreen parent, Article article)
     {
         super(Text.of("eeeee"), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
-        article = new ArticleTextWidget(textRenderer, text);
+        articleWidget = new ArticleTextWidget(textRenderer, article);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class TabletArticlePane extends ContentPane implements Drawable, Element,
     {
         super.init();
 //        text = new TextFieldWidget(textRenderer, x, y, width, height, Text.of("uwu"));
-        addDrawableChild(article);
-        article.setDimensions(x, y, width, height);
+        addDrawableChild(articleWidget);
+        articleWidget.setDimensions(x, y, width, height);
     }
 
     protected int getPageLines()

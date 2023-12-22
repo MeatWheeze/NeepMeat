@@ -2,6 +2,7 @@ package com.neep.neepmeat.guide;
 
 import com.neep.neepmeat.client.screen.tablet.ITabletScreen;
 import com.neep.neepmeat.client.screen.tablet.TabletArticlePane;
+import com.neep.neepmeat.guide.article.Article;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -78,9 +79,9 @@ public interface GuideNode
         }
     }
 
-    class PageNode extends GuideNodeImpl
+    class ArticleNode extends GuideNodeImpl
     {
-        public PageNode(String id, Identifier icon, Text text)
+        public ArticleNode(String id, Identifier icon, Text text)
         {
             super(id, icon, text);
         }
@@ -100,7 +101,8 @@ public interface GuideNode
         @Override
         public void visitScreen(ITabletScreen screen)
         {
-            screen.setRightPane(new TabletArticlePane(screen, Text.of("eoooooooooooooooooo")));
+            Article article = GuideReloadListener.getInstance().getArticle(getId());
+            screen.setRightPane(new TabletArticlePane(screen, article));
         }
     }
 }
