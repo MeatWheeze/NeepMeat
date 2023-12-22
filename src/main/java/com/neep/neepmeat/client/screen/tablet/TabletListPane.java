@@ -369,9 +369,9 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         MatrixStack matrixStack = RenderSystem.getModelViewStack();
         matrixStack.push();
         matrixStack.translate(x, y, 100.0f + zOffset);
-        matrixStack.translate(8.0, 8.0, 0.0);
+        matrixStack.translate(8.0, 7.0, 0.0); // Positive y is downwards on the screen
         matrixStack.scale(1.0f, -1.0f, 1.0f);
-        matrixStack.scale(12.0f, 12.0f, 12.0f);
+        matrixStack.scale(10.0f, 10.0f, 10.0f);
         RenderSystem.applyModelViewMatrix();
         VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
 //        renderer.renderItem(stack, ModelTransformation.Mode.GUI, false, matrixStack2, immediate, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV, bakedModel);
@@ -418,7 +418,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         for (BakedQuad bakedQuad : quads)
         {
 
-            int i = 0x77FF77;
+            int i = 0xFFFFFF;
             float r = (float)(i >> 16 & 0xFF) / 255.0f;
             float g = (float)(i >> 8 & 0xFF) / 255.0f;
             float b = (float)(i & 0xFF) / 255.0f;

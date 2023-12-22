@@ -267,6 +267,7 @@
   "item.neepmeat.compound_injector_lore_0": "Heals 4 hearts when used.",
   "item.neepmeat.compound_injector_lore_1": "Click with a %s in your inventory to reload.",
 
+  "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
   "container.neepmeat.stirling_engine": "Stirling Engine",
   "container.neepmeat.router": "Item Router",
