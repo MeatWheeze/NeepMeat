@@ -25,4 +25,9 @@ public enum PipeConnectionType implements StringIdentifiable
     {
         return this == SIDE;
     }
+
+    public boolean canBeChanged()
+    {
+        return this == SIDE || this == NONE;
+    }
 }

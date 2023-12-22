@@ -29,6 +29,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -80,25 +81,29 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     {
         PipeConnectionType type = state.get(DIR_TO_CONNECTION.get(direction));
         boolean forced = type == PipeConnectionType.FORCED;
+        boolean otherConnected = false;
 
-        boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
+        boolean canConnect = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
         if (!world.isClient() && !(neighborState.getBlock() instanceof IItemPipe))
         {
-            connection = connection || (canConnectApi((World) world, pos, state, direction));
+            canConnect = canConnect || (canConnectApi((World) world, pos, state, direction));
         }
 
         // Check if neighbour is forced
         if (neighborState.getBlock() instanceof PneumaticTubeBlock)
         {
             forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
+            otherConnected = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.SIDE;
+
         }
 
-        PipeConnectionType connection1 = forced
-                ? PipeConnectionType.FORCED
-                : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
+        // AAAAAAAAAAAAAAAAAAAA
+        PipeConnectionType finalConnection =
+                otherConnected ? PipeConnectionType.SIDE :
+                        forced ? PipeConnectionType.FORCED
+                : canConnect ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
-        // I don't know what this bit was for.
-        return state.with(DIR_TO_CONNECTION.get(direction), connection1);
+        return state.with(DIR_TO_CONNECTION.get(direction), finalConnection);
     }
 
 
@@ -127,6 +132,12 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
             return pipe.connectInDirection(world, pos, state, direction);
         }
         return false;
+    }
+
+    @Override
+    public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
+    {
+        return state.get(DIR_TO_CONNECTION.get(direction)).canBeChanged();
     }
 
     @Override
