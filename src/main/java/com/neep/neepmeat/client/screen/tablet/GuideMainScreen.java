@@ -9,7 +9,7 @@ import com.neep.neepmeat.screen_handler.GuideScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.client.render.*;
@@ -29,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
-public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implements GuideScreen
+public class GuideMainScreen extends Screen implements ScreenHandlerProvider<GuideScreenHandler>, GuideScreen
 {
     public static final Identifier LOGO_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/neep.png");
 
@@ -42,12 +42,19 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
     protected ContentPane leftPane;
     protected ContentPane rightPane;
 
+    private final GuideScreenHandler handler;
+
     // Current location within the entry tree
     protected final Deque<GuideNode> path = new LinkedList<>();
+    private int x;
+    private int y;
+    private int backgroundWidth;
+    private int backgroundHeight;
 
     public GuideMainScreen(GuideScreenHandler handler, PlayerInventory inventory, Text title)
     {
-        super(handler, inventory.player.getInventory(), Text.translatable(""));
+        super(title);
+        this.handler = handler;
         this.leftPane = new GuideListPane(this);
         this.rightPane = new GuideArticlePane(this, Article.EMPTY);
         this.start = true;
@@ -108,7 +115,6 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
-        this.drawForeground(matrices, mouseX, mouseY);
 
         // Initial animation
         matrices.push();
@@ -118,7 +124,7 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
         if (animationTicks > 10)
         {
             super.render(matrices, mouseX, mouseY, delta);
-            this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+//            this.drawMouseoverTooltip(matrices, mouseX, mouseY);
             this.drawLogo(matrices, delta);
         }
 
@@ -185,11 +191,6 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
         }
     }
 
-    @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
-    {
-    }
-
     protected void drawLogo(MatrixStack matrices, float delta)
     {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
@@ -198,13 +199,6 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
         int logoHeight = 24;
         int logoWidth = 60;
         drawTexture(matrices, x, y + contentHeight - logoHeight + 1, 0, 0, logoWidth, logoHeight, logoWidth, 26);
-    }
-
-    @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
-    {
-//        super.drawForeground(matrices, mouseX, mouseY);
-
     }
 
     @Override
@@ -222,10 +216,9 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
     }
 
     @Override
-    protected void handledScreenTick()
+    public void tick()
     {
         ++animationTicks;
-        super.handledScreenTick();
         leftPane.tick();
         rightPane.tick();
     }
@@ -314,5 +307,18 @@ public class GuideMainScreen extends HandledScreen<GuideScreenHandler> implement
             r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
         }
         this.itemRenderer.zOffset = f;
+    }
+
+    @Override
+    public GuideScreenHandler getScreenHandler()
+    {
+        return handler;
+    }
+
+    @Override
+    public void close()
+    {
+        client.player.closeHandledScreen();
+        super.close();
     }
 }
