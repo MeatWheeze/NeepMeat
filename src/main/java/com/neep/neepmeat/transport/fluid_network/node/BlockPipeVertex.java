@@ -201,28 +201,17 @@ public class BlockPipeVertex extends SimplePipeVertex
     }
 
     @Override
-    public void setHeight(float height)
-    {
-        this.height = height;
-//        for (NodeSupplier nodeSupplier : nodes)
-//        {
-//            if (nodeSupplier == null || !nodeSupplier.exists()) continue;
-//            FluidNode node = nodeSupplier.get();
-//
-//            node.setPressureHeight(pressureHeight - Math.signum(height) * 1);
-//        }
-
-    }
-
-    @Override
     public void addHead(int h)
     {
         pressureHeight += h;
+
         for (NodeSupplier nodeSupplier : nodes)
         {
             if (nodeSupplier == null || !nodeSupplier.exists()) continue;
             FluidNode node = nodeSupplier.get();
 
+            // Simulate an extra level of depth for each attached node.
+            // If the effective height at this position is -14, all attached nodes will have an effective height of -13.
             node.setPressureHeight(pressureHeight - Math.signum(h) * 1);
         }
     }
@@ -230,13 +219,14 @@ public class BlockPipeVertex extends SimplePipeVertex
     @Override
     public void setSaveState(SaveState saveState)
     {
-        parent.setSaveState(saveState);
+//        parent.setSaveState(saveState);
     }
 
     @Override
     public SaveState getState()
     {
-        return parent.state;
+        return SaveState.LOADED;
+//        return parent.state;
     }
 
     @Override

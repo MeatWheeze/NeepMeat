@@ -114,12 +114,12 @@ public class PipeNetworkImpl implements PipeNetwork
             PipeNetwork.storeNetwork(world, this);
         }
 
-        boolean unloaded = graph.getVertices().long2ObjectEntrySet().stream().anyMatch(e -> e.getValue().getState() == PipeVertex.SaveState.PENDING_LOAD);
-        if (unloaded)
-        {
-            PipeNetwork.stopTickingNetwork(this);
-            return;
-        }
+//        boolean unloaded = graph.getVertices().long2ObjectEntrySet().stream().anyMatch(e -> e.getValue().getState() == PipeVertex.SaveState.PENDING_LOAD);
+//        if (unloaded)
+//        {
+//            PipeNetwork.stopTickingNetwork(this);
+//            return;
+//        }
 
         validate();
         graph.getVertices().long2ObjectEntrySet().fastForEach(e -> e.getValue().preTick());
