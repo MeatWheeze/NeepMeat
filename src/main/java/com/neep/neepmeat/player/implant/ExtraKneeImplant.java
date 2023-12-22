@@ -1,19 +1,20 @@
 package com.neep.neepmeat.player.implant;
 
 import com.neep.neepmeat.NeepMeat;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-public class ExtraKneeImplant implements PlayerImplant
+public class ExtraKneeImplant implements EntityImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "extra_knee");
 
     protected final PlayerEntity player;
 
-    public ExtraKneeImplant(PlayerEntity player)
+    public ExtraKneeImplant(Entity player)
     {
-        this.player = player;
+        this.player = (PlayerEntity) player;
     }
 
     @Override

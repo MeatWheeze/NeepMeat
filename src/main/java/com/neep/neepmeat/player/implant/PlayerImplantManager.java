@@ -29,7 +29,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
 {
     public static final String ID = "neepmeat:upgrades";
     protected PlayerEntity player;
-    protected Map<Identifier, PlayerImplant> implants = Maps.newHashMap();
+    protected Map<Identifier, EntityImplant> implants = Maps.newHashMap();
 
     protected static final String KEY_ROOT = "neepmeat:upgrades";
 
@@ -48,7 +48,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
     public void installImplant(Identifier id)
     {
 
-        if (PlayerImplantRegistry.REGISTRY.containsId(id))
+        if (ImplantRegistry.REGISTRY.containsId(id))
         {
             if (!player.getWorld().isClient())
             {
@@ -64,15 +64,16 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
         }
     }
 
-    protected void addImplant(Identifier id)
+    protected EntityImplant addImplant(Identifier id)
     {
-        PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(id);;
+        ImplantRegistry.Constructor constructor = ImplantRegistry.REGISTRY.get(id);;
 
         if (constructor == null) throw new IllegalArgumentException("Tried to add an unregistered implant to player " + player.getEntityName());
 
-        PlayerImplant upgrade = constructor.create(player);
-        implants.put(id, constructor.create(player));
-        upgrade.onInstall();
+        EntityImplant implant = constructor.create(player);
+        implants.put(id, implant);
+        implant.onInstall();
+        return implant;
     }
 
     public void sync(NbtCompound fullNbt)
@@ -82,7 +83,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
 
     public void removeImplant(Identifier id)
     {
-        PlayerImplantRegistry.PlayerUpgradeConstructor constructor = PlayerImplantRegistry.REGISTRY.get(id);
+        ImplantRegistry.Constructor constructor = ImplantRegistry.REGISTRY.get(id);
         if (constructor != null)
         {
             if (!player.getWorld().isClient())
@@ -90,7 +91,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
                 PlayerImplantStatusS2CPacket.send((ServerPlayerEntity) player, id, PlayerImplantStatusS2CPacket.Status.REMOVE);
             }
 
-            PlayerImplant upgrade = implants.get(id);
+            EntityImplant upgrade = implants.get(id);
             upgrade.onUninstall();
             implants.remove(id);
         }
@@ -103,7 +104,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
     @Override
     public void tickAttachment()
     {
-        implants.values().forEach(PlayerImplant::tick);
+        implants.values().forEach(EntityImplant::tick);
     }
 
     public float getProtectionAmount(DamageSource source, float amount)
@@ -145,9 +146,10 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
         NbtList list = nbt.getList("upgrades", NbtType.COMPOUND);
         list.forEach(nbt1 ->
         {
-            NbtCompound upgradeNbt = (NbtCompound) nbt1;
-            Identifier id = Identifier.tryParse(upgradeNbt.getString("id"));
-            addImplant(id);
+            NbtCompound implantNbt = (NbtCompound) nbt1;
+            Identifier id = Identifier.tryParse(implantNbt.getString("id"));
+            EntityImplant implant = addImplant(id);
+            implant.readNbt(implantNbt);
         });
     }
 
@@ -160,7 +162,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
     {
         ServerPlayConnectionEvents.INIT.register((handler, server) ->
         {
-            get(handler.getPlayer()).implants.values().forEach(PlayerImplant::onPlayerInit);
+            get(handler.getPlayer()).implants.values().forEach(EntityImplant::onPlayerInit);
         });
 
         ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) ->
@@ -176,7 +178,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
         {
             PlayerImplantManager manager = get(handler.getPlayer());
-            manager.implants.values().forEach(PlayerImplant::onPlayerRemove);
+            manager.implants.values().forEach(EntityImplant::onPlayerRemove);
         });
 
 
@@ -216,7 +218,7 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
     }
 
     @Nullable
-    public PlayerImplant getImplant(Identifier id)
+    public EntityImplant getImplant(Identifier id)
     {
         return implants.get(id);
     }
@@ -229,13 +231,13 @@ public class PlayerImplantManager implements PlayerAttachment, NbtSerialisable
             ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
             {
                 if (client.player != null)
-                    get(client.player).implants.values().forEach(PlayerImplant::onPlayerRemove);
+                    get(client.player).implants.values().forEach(EntityImplant::onPlayerRemove);
             });
 
             ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
             {
                 if (client.player != null)
-                    get(client.player).implants.values().forEach(PlayerImplant::onPlayerInit);
+                    get(client.player).implants.values().forEach(EntityImplant::onPlayerInit);
             });
         }
     }

@@ -1,15 +1,15 @@
 package com.neep.neepmeat.player.implant;
 
 import com.neep.neepmeat.NeepMeat;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-public class PinealEyeImplant implements PlayerImplant
+public class PinealEyeImplant implements EntityImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "pineal_eye");
 
-    public PinealEyeImplant(PlayerEntity player)
+    public PinealEyeImplant(Entity entity)
     {
 
     }

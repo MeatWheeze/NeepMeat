@@ -6,7 +6,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 
-public class SkeltalImplant implements PlayerImplant
+public class SkeltalImplant implements EntityImplant
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "skeltal");
 
