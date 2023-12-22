@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "assembly:block/anchor",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "assembly:block/anchor",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "assembly:block/anchor",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "assembly:block/anchor",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up": {
+      "model": "assembly:block/anchor",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "assembly:block/anchor",
+      "x": 90
+    }
+  }
+}

@@ -1,7 +1,9 @@
 package com.neep.assembly;
 
+import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.client.renderer.AssemblyRenderer;
 import com.neep.neepmeat.NMItemGroups;
+import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -25,7 +27,11 @@ public class Assembly implements ModInitializer, ClientModInitializer
 
     public static EntityType<AssemblyEntity> ASSEMBLY_ENTITY;
 
-    public static final Block PLATFORM = new Block(FabricBlockSettings.of(Material.METAL).strength(4.0f));
+    public static Block PLATFORM = new Block(FabricBlockSettings.of(Material.METAL).strength(4.0f));
+    public static Item PLATFORM_ITEM;
+
+    public static Block ANCHOR = new AnchorBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f));
+    public static Item ANCHOR_ITEM;
 
     public <T extends Entity> EntityType<T> registerEntity(String id, EntityType.EntityFactory<T> factory)
     {
@@ -38,8 +44,12 @@ public class Assembly implements ModInitializer, ClientModInitializer
     {
         ASSEMBLY_ENTITY = registerEntity("assembly", AssemblyEntity::new);
 
-        Registry.register(Registry.BLOCK, new Identifier(NAMESPACE, "platform"), PLATFORM);
-        Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "platform"), new BlockItem(PLATFORM,
+        PLATFORM = Registry.register(Registry.BLOCK, new Identifier(NAMESPACE, "platform"), PLATFORM);
+        PLATFORM_ITEM = Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "platform"), new BlockItem(PLATFORM,
+                new FabricItemSettings().group(NMItemGroups.GENERAL)));
+
+        ANCHOR = Registry.register(Registry.BLOCK, new Identifier(NAMESPACE, "anchor"), ANCHOR);
+        ANCHOR_ITEM = Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "anchor"), new BlockItem(ANCHOR,
                 new FabricItemSettings().group(NMItemGroups.GENERAL)));
 
         Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "assembly_debug"), new DebugItem(
