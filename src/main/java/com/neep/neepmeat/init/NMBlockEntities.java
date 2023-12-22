@@ -14,6 +14,7 @@ import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
+import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -52,6 +53,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -121,6 +123,7 @@ public class NMBlockEntities
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
     public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
     public static BlockEntityType<PylonBlockEntity> PYLON;
+    public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -198,6 +201,9 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(HydraulicPressBlockEntity::getStorage, HYDRAULIC_PRESS);
 
         PYLON = registerBlockEntity("pylon", PylonBlockEntity::new, NMBlocks.PYLON);
+
+        TABLE_CONTROLLER = registerBlockEntity("surgery_controller", TableControllerBlockEntity::new, NMBlocks.SURGERY_CONTROLLER);
+        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, TABLE_CONTROLLER);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
