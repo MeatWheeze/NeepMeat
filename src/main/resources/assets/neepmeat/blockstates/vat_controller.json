@@ -1,22 +1,42 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "neepmeat:block/vat_controller",
+    "facing=east,assembled=false": {
+      "model": "neepmeat:block/vat_controller/off",
       "y": 90,
       "x": 0
     },
-    "facing=north": {
-      "model": "neepmeat:block/vat_controller",
+    "facing=north,assembled=false": {
+      "model": "neepmeat:block/vat_controller/off",
       "y": 0,
       "x": 0
     },
-    "facing=south": {
-      "model": "neepmeat:block/vat_controller",
+    "facing=south,assembled=false": {
+      "model": "neepmeat:block/vat_controller/off",
       "y": 180,
       "x": 0
     },
-    "facing=west": {
-      "model": "neepmeat:block/vat_controller",
+    "facing=west,assembled=false": {
+      "model": "neepmeat:block/vat_controller/off",
+      "y": -90,
+      "x": 0
+    },
+    "facing=east,assembled=true": {
+      "model": "neepmeat:block/vat_controller/on",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,assembled=true": {
+      "model": "neepmeat:block/vat_controller/on",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,assembled=true": {
+      "model": "neepmeat:block/vat_controller/on",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,assembled=true": {
+      "model": "neepmeat:block/vat_controller/on",
       "y": -90,
       "x": 0
     }

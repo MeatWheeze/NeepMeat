@@ -3,7 +3,9 @@ package com.neep.neepmeat.blockentity.machine;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.block.multiblock.IMultiBlock;
+import com.neep.neepmeat.block.multiblock.IPortBlock;
 import com.neep.neepmeat.block.vat.IVatComponent;
+import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -11,9 +13,13 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -23,11 +29,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class VatControllerBlockEntity extends BlockEntity implements IControllerBlockEntity
 {
     protected boolean assembled;
-    protected List<IMultiBlock.Entity> entities;
+    public List<BlockPos> blocks;
+    public List<BlockPos> ports;
 
     public VatControllerBlockEntity(BlockPos pos, BlockState state)
     {
@@ -37,7 +45,37 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.entities = new ArrayList<>();
+        blocks = new ArrayList<>();
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        NbtList list = (NbtList) nbt.get("blocks");
+        if (list != null)
+            blocks.addAll(list.stream().map(element -> NbtHelper.toBlockPos((NbtCompound) element)).collect(Collectors.toList()));
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        NbtList list = new NbtList();
+        if (blocks != null)
+            list.addAll(blocks.stream().map(NbtHelper::fromBlockPos).collect(Collectors.toList()));
+        nbt.put("blocks", list);
+        return nbt;
+    }
+
+    @Override
+    public void setWorld(World world)
+    {
+        super.setWorld(world);
+//        if (world instanceof ServerWorld serverWorld && world.getServer().isOnThread())
+//        {
+//            tryAssemble(serverWorld);
+//        }
     }
 
     public boolean tryAssemble(ServerWorld world)
@@ -47,26 +85,30 @@ public class VatControllerBlockEntity extends BlockEntity implements IController
 
         BlockPos centre = origin.offset(facing.getOpposite());
 
-        List<BlockPos> blocks = checkValid(world, centre);
+        this.blocks = checkValid(world, centre);
 
         if (blocks == null)
             return false;
 
+        blocks.remove(this.getPos());
+
         blocks.stream()
-//                .filter(pos1 -> world.getBlockState(pos1).getBlock() instanceof IPortBlock<?>)
                 .map(pos1 -> world.getBlockEntity(pos1) instanceof IMultiBlock.Entity entity ? entity : null)
                 .filter(Objects::nonNull)
-                .forEach(be -> {be.setController(getPos()); entities.add(be);});
+                .forEach(be -> {be.setController(getPos());});
 
-        System.out.println(entities);
+        world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, true), Block.NOTIFY_LISTENERS);
+        markDirty();
         return true;
     }
 
     public boolean disassemble(ServerWorld world)
     {
-        entities.forEach(be -> be.setController(null));
-        entities.clear();
-        System.out.println("diaadsajdnsa");
+        blocks.stream().map(world::getBlockEntity).filter(Objects::nonNull).forEach(be -> ((IMultiBlock.Entity) be).setController(null));
+        world.setBlockState(getPos(), getCachedState().with(VatControllerBlock.ASSEMBLED, false), Block.NOTIFY_LISTENERS);
+        blocks.clear();
+        markDirty();
+        System.out.println("Disassemble");
         return true;
     }
 
