@@ -6,6 +6,7 @@ import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.FluidNetwork2;
 import com.neep.neepmeat.fluid_util.FluidNode;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
