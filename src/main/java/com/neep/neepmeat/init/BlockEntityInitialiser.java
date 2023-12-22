@@ -4,6 +4,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.Item;
@@ -14,6 +15,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<?> NODE_BLOCK_ENTITY;
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
+    public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
 
@@ -45,7 +47,12 @@ public class BlockEntityInitialiser
                 FabricBlockEntityTypeBuilder.create(ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT)
                         .build());
 
-//        FluidStorage.SIDED.registerSelf(PUMP_BLOCK_ENTITY);
+        ITEM_BUFFER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                NeepMeat.NAMESPACE + "item_buffer_block_entity",
+                FabricBlockEntityTypeBuilder.create(ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER)
+                        .build());
+
+        ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
