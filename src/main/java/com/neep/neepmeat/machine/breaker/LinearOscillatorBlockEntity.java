@@ -80,10 +80,10 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
 
     public void extend()
     {
-        if (getWorld().getReceivedRedstonePower(getPos()) <= 0)
-        {
-            return;
-        }
+//        if (getWorld().getReceivedRedstonePower(getPos()) <= 0)
+//        {
+//            return;
+//        }
 
         this.cooldown = this.cooldownTicks;
         this.extended = true;
