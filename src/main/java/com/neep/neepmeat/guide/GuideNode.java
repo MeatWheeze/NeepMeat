@@ -3,11 +3,13 @@ package com.neep.neepmeat.guide;
 import com.neep.neepmeat.client.screen.tablet.GuideArticlePane;
 import com.neep.neepmeat.client.screen.tablet.IGuideScreen;
 import com.neep.neepmeat.guide.article.Article;
+import me.shedaniel.autoconfig.annotation.Config;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public interface GuideNode
 {
@@ -17,6 +19,7 @@ public interface GuideNode
     Identifier getIcon();
     Text getText();
     void visitScreen(IGuideScreen screen);
+
 
     GuideNode BACK = new GuideNode()
     {
@@ -83,6 +86,22 @@ public interface GuideNode
         public Text getText()
         {
             return text;
+        }
+
+        @Override
+        public boolean equals(Object other)
+        {
+            if (other instanceof GuideNode node)
+            {
+                return Objects.equals(node.getId(), getId());
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return id.hashCode();
         }
     }
 

@@ -170,14 +170,15 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
     protected void updateSearch()
     {
         entries.clear();
-        Set<GuideNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().filter(
-                a -> a.getText().asString().toLowerCase().contains(searchString))
-                .collect(Collectors.toSet());
 
-        Iterator<GuideNode> it = filtered.iterator();
-        for (int i = 0; i < filtered.size() && it.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)
+        // Create a de-duplicated set of matching entries.
+        // GuideNode.GuideNodeImpl::equals() only checks the ID string since there is no reason for multiple entries to share an ID but have different contents.
+        Iterator<GuideNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().distinct().filter(
+                a -> a.getText().asString().toLowerCase().contains(searchString)).iterator();
+
+        for (int i = 0; filtered.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)
         {
-            GuideNode node = it.next();
+            GuideNode node = filtered.next();
             ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
             entries.add(new EntryWidget(i,
                     screenOffsetX + this.x,
