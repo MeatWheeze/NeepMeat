@@ -1,0 +1,42 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.light_machine_gun.fire": {
+			"animation_length": 0.04,
+			"bones": {
+				"body": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [-2.5, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [0, 0, 2]
+						}
+					}
+				},
+				"flash": {
+					"position": {
+						"vector": [0, 0, -1.5]
+					},
+					"scale": {
+						"0.0": {
+							"vector": [13, 13, 1]
+						},
+						"0.04": {
+							"vector": [6, 6, 1]
+						}
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}
