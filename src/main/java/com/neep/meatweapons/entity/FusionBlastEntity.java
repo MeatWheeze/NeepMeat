@@ -45,7 +45,7 @@ public class FusionBlastEntity extends PersistentProjectileEntity
         this(MeatWeapons.FUSION_BLAST, world);
         this.setPosition(x, y, z);
         this.setVelocity(vx, vy, vz);
-        setDamage(power / MAX_POWER * 5);
+        setDamage(power / MAX_POWER * 10);
     }
 
     @Override
@@ -184,13 +184,13 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     protected void explode()
     {
         float r = 2.5f;
-        Vec3d pos = getPos();
-        Box box = Box.of(pos, r, r ,r);
+        Box box = getBoundingBox().expand(r);
+        Vec3d centre = box.getCenter();
         List<Entity> entities = world.getOtherEntities(null, box);
         entities.forEach(e ->
         {
             // Damage reduces linearly with distance
-            double d = getDamage() * (pos.distanceTo(e.getPos()) / r);
+            double d = getDamage() * (centre.distanceTo(e.getPos()) / r);
             e.damage(DamageSource.mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
         });
     }
