@@ -65,7 +65,6 @@ public class BlockInitialiser
     public static Block TANK = queueBlock(new TankBlock("basic_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block GLASS_TANK = queueBlock(new GlassTankBlock("basic_glass_tank", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block ITEM_BUFFER = queueBlock(new ItemBufferBlock("item_buffer", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
-    public static Block BUFFER = queueBlock(new BufferBlock("buffer", 64, true, FabricBlockSettings.of(Material.WOOD).strength(4.0f).sounds(BlockSoundGroup.WOOD)));
     public static Block FLUID_METER = queueBlock(new FluidMeter("fluid_meter", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block PRESSURE_GAUGE = queueBlock(new PressureGauge("pressure_gauge", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
     public static Block FLUID_PORT = queueBlock(new FluidPortBlock("fluid_port", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
@@ -76,6 +75,8 @@ public class BlockInitialiser
     public static Block ITEM_DUCT = queueBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
     public static Block PNEUMATIC_TUBE = queueBlock(new PneumaticTubeBlock("pneumatic_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
     public static Block ITEM_PUMP = queueBlock(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block BUFFER = queueBlock(new BufferBlock("buffer", 64, true, FabricBlockSettings.copy(Blocks.CHEST)));
+    public static Block CONTENT_DETECTOR = queueBlock(new ContentDetectorBlock("content_detector", 64, true, FabricBlockSettings.copy(Blocks.OBSERVER)));
 
     // --- Assembly ---
     public static Block LINEAR_RAIL = queueBlock(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

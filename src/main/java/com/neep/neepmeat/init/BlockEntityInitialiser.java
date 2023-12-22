@@ -26,6 +26,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<TankBlockEntity> TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<BufferBlockEntity> BUFFER;
+    public static BlockEntityType<ContentDetectorBlockEntity> CONTENT_DETECTOR;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
@@ -53,6 +54,7 @@ public class BlockEntityInitialiser
         ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, BlockInitialiser.BUFFER);
+        CONTENT_DETECTOR = registerBlockEntity("content_detector", ContentDetectorBlockEntity::new, BlockInitialiser.CONTENT_DETECTOR);
         TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, BlockInitialiser.TROMMEL);
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN);
         FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT);
