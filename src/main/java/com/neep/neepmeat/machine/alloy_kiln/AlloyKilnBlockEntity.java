@@ -268,13 +268,13 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     }
 
     @Override
-    public void setHeatMultiplier(float multiplier)
+    public void setHeat(float heat)
     {
-        this.heatMultiplier = multiplier;
+        this.heatMultiplier = heat;
     }
 
     @Override
-    public float getHeatMultiplier()
+    public float getHeat()
     {
         return heatMultiplier;
     }

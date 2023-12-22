@@ -1,11 +1,14 @@
 package com.neep.neepmeat.machine.multitank;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.network.TankMessagePacket;
+import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.IHeatable;
+import com.neep.neepmeat.recipe.FluidHeatingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -13,15 +16,19 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class MultiTankBlockEntity extends SyncableBlockEntity
+public class MultiTankBlockEntity extends SyncableBlockEntity implements IHeatable
 {
     protected MultiFluidBuffer buffer;
+    protected float heat;
+    protected Identifier currentRecipeId;
+    protected float recipeProgress;
+    protected float increment;
 
     public MultiTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -72,4 +79,56 @@ public class MultiTankBlockEntity extends SyncableBlockEntity
         buffer.readNbt(nbt);
     }
 
+    @Override
+    public void setBurning()
+    {
+
+    }
+
+    @Override
+    public void setHeat(float heat)
+    {
+        this.heat = heat;
+        this.increment = heat;
+    }
+
+    @Override
+    public float getHeat()
+    {
+        return heat;
+    }
+
+    public static void serverTick(World world, BlockPos pos, BlockState state, MultiTankBlockEntity be)
+    {
+        if (be.currentRecipeId != null)
+        {
+            be.recipeProgress = Math.max(0, be.recipeProgress - be.increment);
+            if (be.recipeProgress == 0)
+            {
+                MeatRecipeManager.getInstance().get(NMrecipeTypes.HEATING, be.currentRecipeId).ifPresent(recipe ->
+                {
+                    try (Transaction transaction = Transaction.openOuter())
+                    {
+                        if (recipe.takeInputs(be, transaction) && recipe.ejectOutputs(be, transaction))
+                        {
+                            transaction.commit();
+                            be.currentRecipeId = null;
+                            return;
+                        }
+                        transaction.abort();
+                    }
+                });
+            }
+        }
+
+        if (be.heat > 0 && be.currentRecipeId == null)
+        {
+            FluidHeatingRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.HEATING, be).orElse(null);
+            if (recipe != null)
+            {
+                be.currentRecipeId = recipe.getId();
+                be.recipeProgress = recipe.getTime();
+            }
+        }
+    }
 }

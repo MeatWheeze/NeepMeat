@@ -79,7 +79,13 @@ public class NMFluids
     public static FlowableFluid FLOWING_MILK;
     public static FlowableFluid STILL_MILK;
     public static Block MILK;
-    public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 2).withBucketItem(Items.MILK_BUCKET);
+    public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 1).withBucketItem(Items.MILK_BUCKET);
+
+    public static FlowableFluid FLOWING_P_MILK;
+    public static FlowableFluid STILL_P_MILK;
+    public static Item P_MILK_BUCKET;
+    public static Block P_MILK;
+    public static FluidFactory P_MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pasteurised_milk", false, 5, 1);
 
     public static FlowableFluid FLOWING_FEED;
     public static FlowableFluid STILL_FEED;
@@ -149,6 +155,11 @@ public class NMFluids
         STILL_MILK = MILK_FACTORY.registerStill();
         FLOWING_MILK = MILK_FACTORY.registerFlowing();
         MILK = MILK_FACTORY.registerBlock();
+
+        STILL_P_MILK = P_MILK_FACTORY.registerStill();
+        FLOWING_P_MILK = P_MILK_FACTORY.registerFlowing();
+        P_MILK_BUCKET = P_MILK_FACTORY.registerItem();
+        P_MILK = P_MILK_FACTORY.registerBlock();
 
         STILL_FEED = FEED_FACTORY.registerStill();
         FLOWING_FEED = FEED_FACTORY.registerFlowing();

@@ -8,15 +8,15 @@ public interface IHeatable
 {
     void setBurning();
 
-    int getCookTimeTotal();
+    default int getCookTimeTotal() {return 0;}
 
-    int getCookTime();
+    default int getCookTime() {return 0;}
 
-    void setCookTime(int time);
+    default void setCookTime(int time) {}
 
-    void updateState(World world, BlockPos pos, BlockState oldState);
+    default void updateState(World world, BlockPos pos, BlockState oldState) {};
 
-    void setHeatMultiplier(float multiplier);
-    float getHeatMultiplier();
+    void setHeat(float heat);
+    float getHeat();
 
 }

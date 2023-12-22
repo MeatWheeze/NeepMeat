@@ -50,13 +50,13 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
     }
 
     @Override
-    public void setHeatMultiplier(float multiplier)
+    public void setHeat(float heat)
     {
-        this.heatMultiplier = multiplier;
+        this.heatMultiplier = heat;
     }
 
     @Override
-    public float getHeatMultiplier()
+    public float getHeat()
     {
         return heatMultiplier;
     }
@@ -107,7 +107,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
     private static void tick(World world, BlockPos pos, BlockState state, AbstractFurnaceBlockEntity blockEntity, CallbackInfo ci)
     {
         // Increment cookTime twice per tick if the heat multiplier rises above a certain value.
-        float multiplier = blockEntity.getHeatMultiplier();
+        float multiplier = blockEntity.getHeat();
         if (blockEntity.isCooking())
         {
             int cookTime = blockEntity.getCookTime();

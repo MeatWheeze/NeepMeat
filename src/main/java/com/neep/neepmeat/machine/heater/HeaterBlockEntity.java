@@ -79,7 +79,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
             if (this.getRunningRate() > 0.05)
             {
                 heatable.setBurning();
-                heatable.setHeatMultiplier(runningRate);
+                heatable.setHeat(runningRate);
                 heatBlock();
             }
 
@@ -99,7 +99,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
     public void markRemoved()
     {
         if (this.heatable != null)
-            heatable.setHeatMultiplier(0);
+            heatable.setHeat(0);
 
         super.markRemoved();
     }

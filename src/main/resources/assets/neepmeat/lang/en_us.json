@@ -135,6 +135,7 @@
   "block.neepmeat.basic_tank.filled": "Basic Tank (%s)",
   "block.neepmeat.basic_glass_tank": "Glass Tank",
   "block.neepmeat.basic_glass_tank.filled": "Glass Tank (%s)",
+  "block.neepmeat.multi_tank": "Multi Tank",
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
   "block.neepmeat.fluid_buffer.lore_0": "Holds a bucket's worth of fluid.",
   "block.neepmeat.fluid_drain": "Fluid Drain",
@@ -321,6 +322,8 @@
   "block.neepmeat.ore_fat": "Dirty %s Fat",
 
   "block.neepmeat.milk": "Milk",
+  "block.neepmeat.pasteurised_milk": "Pasteurised Milk",
+  "item.neepmeat.pasteurised_milk_bucket": "Pasteurised Milk Bucket",
 
   "block.neepmeat.animal_feed": "Animal Feed",
   "item.neepmeat.animal_feed_bucket": "Animal Feed Bucket",

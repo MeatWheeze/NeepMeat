@@ -30,10 +30,10 @@ public interface HeatableFurnace extends IHeatable
     default void setCookTime(int time) {}
 
     @Override
-    default void setHeatMultiplier(float multiplier) {}
+    default void setHeat(float heat) {}
 
     @Override
-    default float getHeatMultiplier() { return 0; }
+    default float getHeat() { return 0; }
 
     default boolean isCooking() { return false; }
 }
