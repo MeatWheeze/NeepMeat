@@ -1,6 +1,10 @@
 package com.neep.neepmeat.init;
 
+import com.neep.meatlib.registry.BlockRegistry;
 import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
+import net.fabricmc.fabric.api.loot.v2.LootTableEvents;
+import net.minecraft.block.Block;
+import net.minecraft.data.server.BlockLootTableGenerator;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootPool;
@@ -17,6 +21,8 @@ import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.loot.provider.number.UniformLootNumberProvider;
 import net.minecraft.util.Identifier;
 
+import java.util.Map;
+
 public class NMLootTables
 {
     private static final Identifier ZOMBIE = EntityType.ZOMBIE.getLootTableId();
@@ -29,7 +35,7 @@ public class NMLootTables
 
     static
     {
-        LootTableLoadingCallback.EVENT.register((resourceManager, lootManager, id, tableBuilder, source) ->
+        LootTableEvents.MODIFY.register((resourceManager, lootManager, id, tableBuilder, source) ->
         {
             if (ZOMBIE.equals(id))
             {
