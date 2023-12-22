@@ -139,8 +139,8 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             textRenderer.drawWithShadow(matrices, name, originX, originY, borderCol());
-            GUIUtil.renderBorder(matrices, slotOriginX - 1, slotOriginY - 1, 17, 17, borderCol(), 0);
-            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 15, 15, PLCCols.TRANSPARENT.col, 0);
+            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 17, 17, borderCol(), 0);
+            GUIUtil.renderBorder(matrices, slotOriginX + 1, slotOriginY + 1, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }
     }
 
@@ -188,17 +188,18 @@ public class ManufactureEmiRecipe implements EmiRecipe {
     static void drawThing(int x, int y, ManufactureStep<?> step, WidgetHolder widgets) {
         if (step instanceof CombineStep combineStep)
         {
-            widgets.addSlot(EmiStack.of(combineStep.getItem()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(combineStep.getItem()), x - 1, y + 1).drawBack(false);
         }
         else if (step instanceof InjectStep injectStep)
         {
-            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x - 1, y + 1).drawBack(false);
         }
         else if (step instanceof ImplantStep implantStep)
         {
-            widgets.addSlot(EmiStack.of(implantStep.getItem()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(implantStep.getItem()), x - 1, y + 1).drawBack(false);
         }
-        widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
+        else
+            widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
     }
 
     static class OutlineWidget extends Widget {
