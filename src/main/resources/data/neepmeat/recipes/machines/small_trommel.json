@@ -16,7 +16,7 @@
       "item": "minecraft:iron_ingot"
     },
     "p": {
-      "item": "neepmeat:pipe"
+      "item": "neepmeat:fluid_pipe"
     }
   },
   "result": {

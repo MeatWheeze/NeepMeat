@@ -76,7 +76,7 @@ public class NMBlocks
 
     // --- Building Blocks ---
     public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
-    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
+    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_grate", 64, false, FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
@@ -89,7 +89,7 @@ public class NMBlocks
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
     // --- Fluid Pipes ---
-    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
+    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
 //    public static Block IRON_PIPE = BlockRegistry.queue(new FluidPipeBlock("iron_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", 64, true, FluidComponentItem::new, FLUID_PIPE_SETTINGS));
     public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", 64, true, FLUID_PIPE_SETTINGS));
@@ -110,7 +110,7 @@ public class NMBlocks
     public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", 64, false, FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", 64, false, FLUID_PIPE_SETTINGS));
-    public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("alembic", 64, false, FLUID_PIPE_SETTINGS));
+    public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("collector", 64, false, FLUID_PIPE_SETTINGS));
     public static Block ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", 64, false, BRASS_BLOCKS));
     public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 

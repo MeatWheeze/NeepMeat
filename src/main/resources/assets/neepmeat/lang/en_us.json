@@ -85,7 +85,7 @@
   "block.neepmeat.smooth_tile_orange": "Orange Smooth Tile",
   "block.neepmeat.smooth_tile_white": "White Smooth Tile",
 
-  "block.neepmeat.pipe": "Fluid Pipe",
+  "block.neepmeat.fluid_pipe": "Fluid Pipe",
   "block.neepmeat.copper_pipe": "Copper Pipe",
   "block.neepmeat.stop_valve": "Stop Valve",
   "block.neepmeat.check_valve": "Check Valve",
@@ -122,7 +122,7 @@
   "block.neepmeat.router": "Item Router",
   "block.neepmeat.grinder": "Grinder",
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
-  "block.neepmeat.alembic": "Fat Collector",
+  "block.neepmeat.collector": "Fat Collector",
   "block.neepmeat.crucible": "Rendering Basin",
   "block.neepmeat.casting_basin": "Casting Basin",
   "block.neepmeat.hydraulic_press": "Hydraulic Press",
@@ -202,9 +202,9 @@
 
   "item.neepmeat.flywheel": "Flywheel",
 
-  "item.neepmeat.whisper_brass": "Whispering Brass",
+  "item.neepmeat.whisper_brass_ingot": "Whispering Brass",
 
-  "item.neepmeat.meat_steel": "Meat Steel",
+  "item.neepmeat.meat_steel_ingot": "Meat Steel",
   "item.neepmeat.meat_steel_component": "Meat Steel Component",
 
   "item.neepmeat.meat_scrap": "Meat Scrap",

@@ -62,7 +62,8 @@
 - [done] Make Assembler require power
 - [done] Fix motors retaining BE reference
 - [done] Merge GrinderBlockEntity::storageToWorld
-- Test on server
+- [done] Test on server
+- Scaffolding recipes
 
 
 ## Later
@@ -319,12 +320,42 @@ Grant us eyes!
 
 # Mod Page Text
 
-Welcome to the world of NeepMeat, a 
+Welcome to the world of NeepMeat, a Minecraft mod concerning automation, logistics and cosmic horror (WIP). 
+
+
+## Features
+
+- Fluid pipes
+- Prety item pipes
+- Block breakers and placers
+- Advanced ore processing
+- Building blocks
+- Meat [zalgo pls]
+
+## Future Features
+
+- Automatic farming
+- 
+
+## Dependencies
+
+- Geckolib ??? (Hard dependency)
+- JEP ??? (Optional but highly recommended for recipe )
 
 tldr: cosmic-horror-cyber-gore-punk cheerful spooky meat RedPower ripoff
+
+## Fluid Pipes
 
 Fluids obey gravity, negating the need for pumps in well-designed systems.
 
 Flow calculations are performed in a separate thread
 
+## Building Blocks
+
+We have provided an exciting array of rusty and bloody textures that are just perfect for hospitals, mental hospitals, abattoirs, cathedrals and more!
+
 Since this is version 0.1, there will likely be many issues with varying levels of seriousness. I haven't encountered anything that has permanently damaged a world, but for the love of Azathoth, DO NOT USE THIS VERSION IN A WORLD YOU CARE ABOUT WITHOUT BACKING UP.
+
+# Forge Port
+
+Nope. This is a hobby project and a port would be a massive amount of non-fun work. However, this is Free software so you are more than welcome to port it yourself.
