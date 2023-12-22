@@ -192,9 +192,9 @@ public class HomogeniserBlockEntity extends SyncableBlockEntity implements Motor
             double px = cx + Math.sin(angle) * radius;
             double pz = cz + Math.cos(angle) * radius;
 
-            double vx = px - cx;
+            double vx = (px - cx) * 0.5;
             double vy = 0.35;
-            double vz = pz - cz;
+            double vz = (pz - cz) * 0.5;
 
             world.addParticle(
                     new ItemStackParticleEffect(ParticleTypes.ITEM, storage.itemStorage.getAsStack()),

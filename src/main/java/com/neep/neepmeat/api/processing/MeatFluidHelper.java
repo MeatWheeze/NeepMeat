@@ -75,7 +75,7 @@ public class MeatFluidHelper
 
 
     @Nullable
-    public static NbtCompound getRoot(final FluidVariant variant)
+    public static NbtCompound getRoot(@NotNull FluidVariant variant)
     {
         if (variant.hasNbt())
             return variant.getNbt().getCompound(KEY_ROOT);
@@ -83,7 +83,7 @@ public class MeatFluidHelper
     }
 
     @Nullable
-    public static NbtCompound getRoot(final NbtCompound nbt)
+    public static NbtCompound getRoot(@NotNull NbtCompound nbt)
     {
         if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE))
         {
@@ -163,6 +163,10 @@ public class MeatFluidHelper
         if (root != null)
         {
             to.put(KEY_ROOT, root.copy());
+        }
+        else
+        {
+            to.put(KEY_ROOT, new NbtCompound());
         }
     }
 }
