@@ -13,10 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -106,6 +103,16 @@ public class BloodNetworkImpl implements BloodNetwork
     }
 
     @Override
+    public void insert(Collection<VascularConduitEntity> pipes)
+    {
+        // TOOD: more efficient acceptor discovery
+        pipes.forEach(p ->
+        {
+            conduits.insert(p.getPos().asLong(), p);
+            p.setNetwork(this);
+        });
+    }
+
     public void insert(long pos, VascularConduitEntity newPart)
     {
         conduits.insert(pos, newPart); // Acceptors will be detected automatically
@@ -188,6 +195,7 @@ public class BloodNetworkImpl implements BloodNetwork
     {
         dirty = false;
     }
+
 
     @Override
     public UUID getUUID()

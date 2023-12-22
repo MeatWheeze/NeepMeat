@@ -1,27 +1,30 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Queue;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class BloodNetworkChunkComponent implements Component, ServerTickingComponent
 {
     private final Chunk chunk;
-    private final Set<BloodNetwork> activeNetworks = Sets.newHashSet();
-    private final Queue<NbtCompound> stagedNetworks = Queues.newArrayDeque();
+
+    // We do not want to prevent GC of block entities that have been removed from the world.
+    private final Set<VascularConduitEntity> pipes = Collections.newSetFromMap(new WeakHashMap<>());
+    private final Multimap<UUID, VascularConduitEntity> loadedPipes = Multimaps.newSetMultimap(Maps.newHashMap(), Sets::newHashSet);
+    private final Queue<Pair<UUID, BlockPos>> pipesToLoad = Queues.newArrayDeque();
 
     public BloodNetworkChunkComponent(Chunk chunk)
     {
@@ -29,47 +32,33 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
 //        this.world = (ServerWorld) ((WorldChunk) chunk).getWorld();
     }
 
+
     public void addNetwork(BloodNetwork network)
     {
-        activeNetworks.add(network);
     }
 
     @Override
     public void serverTick()
     {
-        while (!stagedNetworks.isEmpty())
-        {
-            NbtCompound nbt = stagedNetworks.poll();
-            activeNetworks.add(BloodNetworkImpl.fromNbt(getWorld(), UUID.randomUUID(), nbt));
-        }
-
-        var tickIt = activeNetworks.iterator();
-        while (tickIt.hasNext())
-        {
-            var network = tickIt.next();
-            if (network.isRemoved())
-            {
-                tickIt.remove();
-            }
-            else
-            {
-                network.tick();
-            }
-        }
     }
 
     @Override
     public void readFromNbt(@NotNull NbtCompound nbt)
     {
-        activeNetworks.clear();
-        stagedNetworks.clear();
 
-        NbtList list = nbt.getList("networks", NbtElement.COMPOUND_TYPE);
+        NbtList list = nbt.getList("pipes", NbtElement.COMPOUND_TYPE);
         for (var element : list)
         {
             if (element instanceof NbtCompound compound)
             {
-                stagedNetworks.add(compound);
+                UUID uuid = compound.getUuid("uuid");
+                BlockPos pos = BlockPos.fromLong(compound.getLong("pos"));
+
+                // TODO: remove cast
+//                VascularConduitEntity entity = (VascularConduitEntity) chunk.getBlockEntity(pos);
+//                pipes.add(entity);
+//                loadedPipes.put(uuid, entity);
+                pipesToLoad.add(Pair.of(uuid, pos));
             }
         }
     }
@@ -78,11 +67,22 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
     public void writeToNbt(@NotNull NbtCompound nbt)
     {
         NbtList list = new NbtList();
-        for (var network : activeNetworks)
+        for (var pipe : pipes)
         {
-            list.add(network.toNbt());
+            var network = pipe.getNetwork();
+
+            // There is no way of distinguishing between unloading and removal of BlockEntities.
+            // Dead BEs will stay in the set but will not be saved.
+            if (chunk.getBlockEntityPositions().contains(pipe.getPos()) && network != null)
+            {
+                UUID uuid = network.getUUID();;
+                NbtCompound entry = new NbtCompound();
+                entry.putLong("pos", pipe.getPos().asLong());
+                entry.putUuid("uuid", uuid);
+                list.add(entry);
+            }
         }
-        nbt.put("networks", list);
+        nbt.put("pipes", list);
     }
 
     @Override
@@ -99,4 +99,30 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
         throw new IllegalStateException("BloodNetworkChunkComponent created on client or on ");
     }
 
+    public Multimap<UUID, VascularConduitEntity> getPipes()
+    {
+        if (!pipesToLoad.isEmpty())
+        {
+            pipes.clear();
+
+            while (!pipesToLoad.isEmpty())
+            {
+                var pair = pipesToLoad.poll();
+                var entity = (VascularConduitEntity) chunk.getBlockEntity(pair.second());
+
+                // Invalid NBT or saving weirdness can cause this.
+                if (entity == null)
+                    continue;
+
+                loadedPipes.put(pair.first(), entity);
+                pipes.add(entity);
+            }
+        }
+        return loadedPipes;
+    }
+
+    public void register(VascularConduitEntity vascularConduitEntity)
+    {
+        pipes.add(vascularConduitEntity);
+    }
 }

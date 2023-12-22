@@ -1,22 +1,21 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Queues;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.TransportComponents;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,11 +23,8 @@ public class BloodNetworkManager extends PersistentState
 {
     public static final String NAME = NeepMeat.NAMESPACE + "blood_networks";
 
-    // Just the loaded networks.
-    private final ArrayList<NetworkEntry> tickingNetworks = Lists.newArrayList();
-
-    // All networks, loaded or unloaded.
-    private final Map<UUID, NbtCompound> savedNetworks = Maps.newHashMap();
+    private final Object2ObjectMap<UUID, BloodNetwork> tickingNetworks = new Object2ObjectOpenHashMap<>();
+//    private final ArrayList<NetworkEntry> tickingNetworks = Lists.newArrayList();
 
     private final ServerWorld world;
 
@@ -47,7 +43,8 @@ public class BloodNetworkManager extends PersistentState
     {
         var network = new BloodNetworkImpl(UUID.randomUUID(), world);
 
-        TransportComponents.BLOOD_NETWORK.get(world.getChunk(pos)).addNetwork(network);
+//        TransportComponents.BLOOD_NETWORK.get(world.getChunk(pos)).addNetwork(network);
+        tickingNetworks.put(network.getUUID(), network);
 
 
 //        long chunk = ChunkPos.toLong(pos);
@@ -62,28 +59,27 @@ public class BloodNetworkManager extends PersistentState
 
     private void tick()
     {
-//        var it = tickingNetworks.iterator();
-//        while (it.hasNext())
-//        {
-//            var entry = it.next();
-//            var network = entry.network();
-//
-//            if (network.isRemoved())
-//            {
-//                it.remove();
-//                remove(entry);
-//            }
-//            else
-//            {
-//                network.tick();
-//
-//                if (network.isDirty())
-//                {
+        var it = tickingNetworks.entrySet().iterator();
+        while (it.hasNext())
+        {
+            var network = it.next().getValue();
+//            var network = entrynetwork();
+
+            if (network.isRemoved())
+            {
+                it.remove();
+            }
+            else
+            {
+                network.tick();
+
+                if (network.isDirty())
+                {
 //                    savedNetworks.put(network.getUUID(), network.toNbt());
-//                    network.resetDirty();
-//                }
-//            }
-//        }
+                    network.resetDirty();
+                }
+            }
+        }
     }
 
     public static BloodNetworkManager get(World world)
@@ -95,81 +91,53 @@ public class BloodNetworkManager extends PersistentState
         throw new IllegalArgumentException("Blood network manager must only be used on the logical server.");
     }
 
-    public NbtCompound getNetwork(UUID uuid)
-    {
-        return savedNetworks.get(uuid);
-    }
-
     protected void readNbt(NbtCompound nbt)
     {
-        NbtList list = nbt.getList("networks", NbtCompound.COMPOUND_TYPE);
 
-        for (var entry : list)
-        {
-            if (entry instanceof NbtCompound compound)
-            {
-                var uuid = compound.getUuid("uuid");
-                savedNetworks.put(uuid, compound);
-            }
-            else throw new IllegalArgumentException();
-        }
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        NbtList list = new NbtList();
-        savedNetworks.forEach(((uuid, compound) ->
-        {
-            list.add(compound);
-            compound.putUuid("uuid", uuid);
-        }));
-
-        nbt.put("networks", list);
         return nbt;
     }
 
+    private static final Queue<Runnable> STAGED_EVENTS = Queues.newArrayDeque();
 
-    Long2ObjectOpenHashMap<Set<UUID>> chonks = new Long2ObjectOpenHashMap<>();
-
-    Set<UUID> getOrCreateEntry(long chunk)
+    public static void stageEvent(Runnable runnable)
     {
-        return chonks.computeIfAbsent(chunk, l -> Sets.newHashSet());
+        STAGED_EVENTS.add(runnable);
     }
 
     static
     {
-//        ServerTickEvents.END_WORLD_TICK.register(world ->
-//        {
-//            ((IServerWorld) world).getBloodNetworkManager().tick();
-//        });
-//
-//        ServerChunkEvents.CHUNK_UNLOAD.register((world, chunk) ->
-//        {
-//            var manager = get(world);
-//            var set = manager.chonks.get(chunk.getPos().toLong());
-//            if (set != null) set.forEach(uuid ->
-//            {
-////                manager.tickingNetworks.remove
-//            });
-//        });
-//
-//        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) ->
-//        {
-//            var manager = get(world);
-//            var set = manager.chonks.get(chunk.getPos().toLong());
-//
-//            if (set != null) set.forEach(uuid ->
-//            {
-//                var nbt = manager.savedNetworks.get(uuid);
-//
-//                if (nbt == null) return;
-//
-//                var network = BloodNetworkImpl.fromNbt(world, uuid, nbt);
-//                manager.tickingNetworks.add(new NetworkEntry(network, set));
-//                set.add(uuid);
-//            });
-//        });
+        ServerTickEvents.START_SERVER_TICK.register(server ->
+        {
+            while (!STAGED_EVENTS.isEmpty())
+            {
+                var event = STAGED_EVENTS.poll();
+                event.run();
+            }
+        });
+
+        ServerTickEvents.END_WORLD_TICK.register(world ->
+        {
+            get(world).tick();
+        });
+
+        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) ->
+        {
+            var manager = get(world);
+            var map = TransportComponents.BLOOD_NETWORK.get(chunk).getPipes().asMap();
+            map.forEach((uuid, pipes) ->
+            {
+                stageEvent(() ->
+                {
+                    manager.tickingNetworks.computeIfAbsent(uuid, u -> new BloodNetworkImpl(uuid, world))
+                            .insert(pipes);
+                });
+            });
+        });
     }
 
     record NetworkEntry(BloodNetwork network, Set<UUID> container)
