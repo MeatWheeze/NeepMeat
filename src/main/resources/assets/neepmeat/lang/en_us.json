@@ -100,5 +100,8 @@
   "item.neepmeat.integration_charge_crude": "Crude Integration Charge",
   "item.neepmeat.integration_charge_crude.lore": "Brings life, but in what state?",
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
-  "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive."
+  "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
+
+  "item.neepmeat.blood_bucket": "Blood Bucket",
+  "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket"
 }

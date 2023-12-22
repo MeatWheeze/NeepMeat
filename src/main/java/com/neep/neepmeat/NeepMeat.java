@@ -4,6 +4,7 @@ import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.FluidInitialiser;
 import com.neep.neepmeat.init.ItemInit;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
@@ -25,6 +26,7 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 		GeckoLib.initialize();
 
 		BlockInitialiser.registerBlocks();
+		FluidInitialiser.initialiseFluids();
 		ItemInit.registerItems();
 		BlockEntityInitialiser.initialiseBlockEntities();
 		FluidNetwork.registerEvents();

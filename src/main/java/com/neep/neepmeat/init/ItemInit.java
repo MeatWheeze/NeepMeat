@@ -19,7 +19,6 @@ public class ItemInit
 {
     public static Map<String, NMItem> ITEMS = new LinkedHashMap<>();
 
-
     public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
     public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
 

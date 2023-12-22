@@ -9,7 +9,6 @@ import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.item.FluidHoseItem;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
-import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
@@ -66,10 +65,6 @@ public class BlockInitialiser
     public static Block INTEGRATOR_EGG;
     public static Block TANK_WALL;
 
-    public static FlowableFluid FLOWING_BLOOD;
-    public static FlowableFluid STILL_BLOOD;
-    public static Item BLOOD_BUCKET;
-
     public static Block registerBlock(String id, Block block)
     {
         return Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, id), block);
@@ -118,17 +113,7 @@ public class BlockInitialiser
 
         // --- Integrator ---
         INTEGRATOR_EGG = registerBlock(new IntegratorEggBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.SLIME)));
-//        TANK_WALL = registerBlock(new TankWallBlock("clear_tank_wall", 64, true, FabricBlockSettings.copyOf(Blocks.GLASS).strength(4.0f).sounds(BlockSoundGroup.GLASS)));
         TANK_WALL = registerBlock(new TankWallBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
-//        TANK_WALL = registerBlock("clear_tank_wall", new GlassBlock(AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(TankWallBlock::never).solidBlock(TankWallBlock::never).suffocates(TankWallBlock::never).blockVision(TankWallBlock::never)));
-
-        // --- Fluids ---
-        STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
-        FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());
-        BLOOD_BUCKET = Registry.register(Registry.ITEM, new Identifier(NeepMeat.NAMESPACE, "fluid_hose"),
-                new FluidHoseItem(STILL_BLOOD, new Item.Settings().maxCount(1).maxDamage(16).maxDamageIfAbsent(16)));
-
-        TEST = Registry.register(Registry.BLOCK, new Identifier(NeepMeat.NAMESPACE, "acid"), new FluidBlock(STILL_BLOOD, FabricBlockSettings.copy(Blocks.WATER)){});
 
         for (NMBlock block : BLOCKS.values())
         {

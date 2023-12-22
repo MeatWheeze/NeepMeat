@@ -8,6 +8,7 @@ import com.neep.neepmeat.client.renderer.ItemBufferRenderer;
 import com.neep.neepmeat.client.renderer.TrommelRenderer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.FluidInitialiser;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -26,28 +27,31 @@ public class NeepMeatClient
     public static void registerRenderers()
     {
 
+        // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
 
-//        this.registerItemModel(ItemOs.REDSTONE);
-//        this.blockStateCollector.accept(MultipartBlockStateSupplier.create(Blocks.REDSTONE_WIRE).with(When.anyOf(When.create().set(Properties.NORTH_WIRE_CONNECTION, WireConnection.NONE).set(Properties.EAST_WIRE_CONNECTION, WireConnection.NONE).set(Properties.SOUTH_WIRE_CONNECTION, WireConnection.NONE).set(Properties.WEST_WIRE_CONNECTION, WireConnection.NONE), When.create().set(Properties.NORTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}).set(Properties.EAST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), When.create().set(Properties.EAST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}).set(Properties.SOUTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), When.create().set(Properties.SOUTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}).set(Properties.WEST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), When.create().set(Properties.WEST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}).set(Properties.NORTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP})), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_dot"))).with((When)When.create().set(Properties.NORTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_side0"))).with((When)When.create().set(Properties.SOUTH_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_side_alt0"))).with((When)When.create().set(Properties.EAST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_side_alt1")).put(VariantSettings.Y, VariantSettings.Rotation.R270)).with((When)When.create().set(Properties.WEST_WIRE_CONNECTION, (Comparable)((Object)WireConnection.SIDE), (Comparable[])new WireConnection[]{WireConnection.UP}), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_side1")).put(VariantSettings.Y, VariantSettings.Rotation.R270)).with((When)When.create().set(Properties.NORTH_WIRE_CONNECTION, WireConnection.UP), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_up"))).with((When)When.create().set(Properties.EAST_WIRE_CONNECTION, WireConnection.UP), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_up")).put(VariantSettings.Y, VariantSettings.Rotation.R90)).with((When)When.create().set(Properties.SOUTH_WIRE_CONNECTION, WireConnection.UP), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_up")).put(VariantSettings.Y, VariantSettings.Rotation.R180)).with((When)When.create().set(Properties.WEST_WIRE_CONNECTION, WireConnection.UP), BlockStateVariant.create().put(VariantSettings.MODEL, ModelIds.getMinecraftNamespacedBlock("redstone_dust_up")).put(VariantSettings.Y, VariantSettings.Rotation.R270)));
-
+        // BlockEntity renderers
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
-
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
-
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
-
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
 
-        FluidRenderHandlerRegistry.INSTANCE.register(BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
+        // Fluid textures
+        FluidRenderHandlerRegistry.INSTANCE.register(FluidInitialiser.STILL_BLOOD, FluidInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
                 new Identifier("minecraft:block/water_still"),
-                new Identifier("minecraft:block/water_flow"),
+                new Identifier("minecraft:block/water_still"),
+                0x440d0e
+        ));
+
+        FluidRenderHandlerRegistry.INSTANCE.register(FluidInitialiser.STILL_ENRICHED_BLOOD, FluidInitialiser.FLOWING_ENRICHED_BLOOD, new SimpleFluidRenderHandler(
+                new Identifier("minecraft:block/water_still"),
+                new Identifier("minecraft:block/water_still"),
                 0xbb1d1d
         ));
 
-        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD);
-
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_BLOOD, FluidInitialiser.FLOWING_BLOOD);
+        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_ENRICHED_BLOOD, FluidInitialiser.FLOWING_ENRICHED_BLOOD);
 
         //if you want to use custom textures they needs to be registered.
         //In this example this is unnecessary because the vanilla water textures are already registered.
@@ -57,6 +61,7 @@ public class NeepMeatClient
         //    registry.register(new Identifier("modid:block/custom_fluid_flowing"));
         //});
 
+        // Block cutouts
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.GLASS_TANK);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.MESH_PANE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.PUMP);
