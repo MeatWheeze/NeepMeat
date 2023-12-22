@@ -20,6 +20,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -52,25 +53,24 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
         this.cooldown = Math.min(MAX_COOLDOWN, cooldown + increment);
 
         this.angularSpeed = multiplier * 20;
-        this.angle += angularSpeed;
+        this.angle = MathHelper.wrapDegrees(this.angle + angularSpeed);
         sync();
 
-        if (cooldown >= MAX_COOLDOWN)
+        if (cooldown >= MAX_COOLDOWN && angularSpeed > 0)
         {
             cooldown = 0;
 
-            Vec3d centre = Vec3d.ofCenter(pos);
-            Vec3d bladeEnd = new Vec3d(Math.cos(angle * Math.PI / 180) * 1.5, 0, Math.sin(angle * Math.PI / 180) * 1.5);
-            Vec3d startPos = centre.subtract(bladeEnd);
-            Vec3d endPos = centre.add(bladeEnd);
+//            Vec3d centre = Vec3d.ofCenter(pos);
+//            Vec3d bladeEnd = new Vec3d(Math.cos(angle * Math.PI / 180) * 1.5, 0, Math.sin(angle * Math.PI / 180) * 1.5);
+//            Vec3d startPos = centre.subtract(bladeEnd);
+//            Vec3d endPos = centre.add(bladeEnd);
 
-            Box box;
+            Box box = new Box(0, 0, 0, 0, 0, 0);
             switch (getCachedState().get(DeathBladesBlock.FACING))
             {
                 case UP, DOWN -> box = new Box(pos.add(-1, 0, -1), pos.add(2, 1, 2));
                 case NORTH, SOUTH -> box = new Box(pos.add(-1, -1, 0), pos.add(2, 2, 1));
                 case EAST, WEST -> box = new Box(pos.add(0, -1, -1), pos.add(1, 2, 2));
-                default -> throw new IllegalStateException("Unexpected value: " + getCachedState().get(DeathBladesBlock.FACING));
             }
 
             int damageAmount = (int) (4 * multiplier);

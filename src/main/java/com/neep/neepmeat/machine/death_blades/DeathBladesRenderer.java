@@ -24,7 +24,7 @@ public class DeathBladesRenderer implements BlockEntityRenderer<DeathBladesBlock
 
         matrices.push();
         Direction facing = be.getCachedState().get(DeathBladesBlock.FACING);
-        be.clientAngle = MathHelper.lerp(0.5f, be.clientAngle, be.angle);
+        be.clientAngle = MathHelper.lerpAngleDegrees(0.5f, be.clientAngle, be.angle);
         renderBlade(be, matrices, facing, vertexConsumers, be.clientAngle, 0);
         renderBlade(be, matrices, facing, vertexConsumers, 360 - be.clientAngle, 2);
         matrices.pop();
