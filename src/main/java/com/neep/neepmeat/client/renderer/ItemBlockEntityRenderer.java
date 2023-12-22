@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
