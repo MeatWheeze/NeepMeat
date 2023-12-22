@@ -23,18 +23,20 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
 {
 
     protected int explosionPower = 1;
+    protected boolean destructive;
 
     public ExplodingShellEntity(EntityType<? extends PersistentProjectileEntity> entityType, World world)
     {
         super(entityType, world);
     }
 
-    public ExplodingShellEntity(World world, int explosionPower, double x, double y, double z, double vx, double vy, double vz)
+    public ExplodingShellEntity(World world, int explosionPower, boolean destructive, double x, double y, double z, double vx, double vy, double vz)
     {
         super(MeatWeapons.EXPLODING_SHELL, x, y, z, world);
         this.setVelocity(vx, vy, vz);
         this.setNoGravity(false);
         this.explosionPower = explosionPower;
+        this.destructive = destructive;
     }
 
     @Override
@@ -107,7 +109,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
 
     protected void explode()
     {
-        boolean mobGriefing = world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING);
+        boolean mobGriefing = world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) && destructive;
         this.world.createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, mobGriefing ? Explosion.DestructionType.DESTROY : Explosion.DestructionType.NONE);
     }
 

@@ -30,9 +30,11 @@ public interface PipeNetwork
         if (network.isValid())
         {
             startTickingNetwork(network);
-            return;
         }
-        System.out.println("fluid network failed");
+        else
+        {
+//        System.out.println("fluid network failed");
+        }
     }
 
 
