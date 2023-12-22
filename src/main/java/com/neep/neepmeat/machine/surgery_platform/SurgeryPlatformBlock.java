@@ -18,6 +18,6 @@ public class SurgeryPlatformBlock extends BaseBlock implements IDataCable
     @Override
     public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
-        return IDataCable.super.connectInDirection(world, pos, state, direction);
+        return direction != Direction.UP;
     }
 }

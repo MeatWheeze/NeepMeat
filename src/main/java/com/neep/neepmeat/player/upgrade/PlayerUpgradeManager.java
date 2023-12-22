@@ -6,6 +6,7 @@ import com.neep.meatlib.util.NbtSerialisable;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
@@ -21,6 +22,7 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
     public PlayerUpgradeManager(PlayerEntity player)
     {
         this.player = player;
+//        put(SkeltalUpgrade.ID);
     }
 
     public void put(Identifier id)
@@ -40,6 +42,11 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
     public void tickAttachment()
     {
         UPGRADES.values().forEach(PlayerUpgrade::tick);
+    }
+
+    public float getProtectionAmount(DamageSource source, float amount)
+    {
+        return (float) UPGRADES.values().stream().mapToDouble(u -> u.getProtectionAmount(source, amount)).sum();
     }
 
     @Override
@@ -88,4 +95,5 @@ public class PlayerUpgradeManager implements PlayerAttachment, NbtSerialisable
                 get(client.player).UPGRADES.values().forEach(PlayerUpgrade::onPlayerRemove);
         });
     }
+
 }

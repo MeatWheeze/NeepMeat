@@ -4,8 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.neepmeat.api.Burner;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
-import com.neep.neepmeat.player.upgrade.ExtraMouthUpgrade;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeManager;
+import com.neep.neepmeat.player.upgrade.*;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.guide.GuideReloadListener;
@@ -16,8 +15,6 @@ import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.ToolTransformPacket;
-import com.neep.neepmeat.player.upgrade.PlayerUpgradeRegistry;
-import com.neep.neepmeat.player.upgrade.ExtraKneeUpgrade;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
@@ -106,7 +103,8 @@ public class NeepMeat implements ModInitializer
 		MeatLib.flush();
 
 		PlayerAttachmentManager.registerAttachment(PlayerUpgradeManager.ID, PlayerUpgradeManager::new);
-		Registry.register(PlayerUpgradeRegistry.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "extra_mouth"), ExtraMouthUpgrade::new);
-		Registry.register(PlayerUpgradeRegistry.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "extra_knee"), ExtraKneeUpgrade::new);
+		Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraMouthUpgrade.ID, ExtraMouthUpgrade::new);
+		Registry.register(PlayerUpgradeRegistry.REGISTRY, ExtraKneeUpgrade.ID, ExtraKneeUpgrade::new);
+		Registry.register(PlayerUpgradeRegistry.REGISTRY, SkeltalUpgrade.ID, SkeltalUpgrade::new);
 	}
 }
