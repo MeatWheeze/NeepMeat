@@ -5,6 +5,7 @@ import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.RouterBlockEntity;
 import com.neep.neepmeat.transport.util.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -51,14 +52,14 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, IItem
     }
 
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction)
     {
         if (world.getBlockEntity(pos) instanceof RouterBlockEntity be)
         {
             Direction output = be.getOutputDirection(item);
             if (direction != output && output != null)
             {
-                long transferred = TubeUtils.pipeToAny(item, pos, state, output, world, null, false);
+                long transferred = TubeUtils.pipeToAny(item, pos, state, output, world, transaction, false);
                 return transferred;
             }
         }

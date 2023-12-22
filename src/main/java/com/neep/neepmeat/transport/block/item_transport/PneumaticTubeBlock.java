@@ -11,6 +11,7 @@ import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -167,7 +168,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     }
 
     @Override
-    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item)
+    public long insert(World world, BlockPos pos, BlockState state, Direction direction, ItemInPipe item, TransactionContext transaction)
     {
         if (world.getBlockEntity(pos) instanceof PneumaticPipeBlockEntity be)
         {

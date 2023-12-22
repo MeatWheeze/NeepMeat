@@ -257,7 +257,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
                 else if (state.getBlock() instanceof IItemPipe pipe && pipe.getConnections(state, d -> true).contains(direction))
                 {
 //                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime())) == -1 ? maxAmount : 0;
-                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime()));
+                    transferred = pipe.insert(world, toPos, state, direction, new ItemInPipe(stack, world.getTime()), transaction);
                 }
                 else
                 {
