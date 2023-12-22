@@ -48,6 +48,12 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
+    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack)
+    {
+        return false;
+    }
+
+    @Override
     public void registerControllers(AnimationData animationData)
     {
         animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));

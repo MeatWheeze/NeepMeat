@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
+import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.fluid.OreFatAttributeHandler;
 import com.neep.neepmeat.client.fluid.OreFatFluidVariantRenderHandler;
@@ -96,6 +97,7 @@ public class NeepMeatClient implements ClientModInitializer
         TankMessagePacket.Client.registerReceiver();
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
+        AirtruckSoundInstance.initEvent();
     }
 
     public static void registerRenderers()

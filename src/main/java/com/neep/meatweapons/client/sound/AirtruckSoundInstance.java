@@ -4,6 +4,8 @@ import com.neep.meatweapons.entity.AirtruckEntity;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientEntityEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.MathHelper;
@@ -65,5 +67,17 @@ public class AirtruckSoundInstance extends MovingSoundInstance
             this.volume = 0.0f;
         }
 
+    }
+
+    public static void initEvent()
+    {
+        ClientEntityEvents.ENTITY_LOAD.register((entity1, world) ->
+        {
+            // If Mojang is allowed to get away with the abomination that is ClientPlayNetworkHandler then I can do this.
+            if (entity1 instanceof AirtruckEntity airtruck)
+            {
+                MinecraftClient.getInstance().getSoundManager().play(new AirtruckSoundInstance(airtruck));
+            }
+        });
     }
 }
