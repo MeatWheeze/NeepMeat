@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.fluid_rationer;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.FluidPump;
-import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.screen_handler.FluidRationerScreenHandler;

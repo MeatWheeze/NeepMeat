@@ -2,11 +2,10 @@ package com.neep.neepmeat.machine.charnel_compactor;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.api.pipe.IDataCable;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.transport.api.pipe.IDataCable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -23,18 +22,15 @@ import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.TagKey;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
-import java.util.*;
+import java.util.Random;
 
 public class CharnelCompactorBlock extends BaseBlock implements IDataCable
 {
