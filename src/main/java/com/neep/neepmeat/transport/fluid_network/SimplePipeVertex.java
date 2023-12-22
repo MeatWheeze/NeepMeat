@@ -1,6 +1,8 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 
 import java.util.Arrays;
@@ -13,6 +15,7 @@ public class SimplePipeVertex implements PipeVertex
     protected float elevationHead;
 
     protected long amount;
+    protected long oldAmount;
     private PipeNetwork network;
 
     public SimplePipeVertex()
@@ -21,25 +24,19 @@ public class SimplePipeVertex implements PipeVertex
 
     public void tick()
     {
-        for (Direction direction : Direction.values())
-        {
-            PipeVertex adjacent = adjacentVertices[direction.ordinal()];
-            if (adjacent != null)
-            {
-                float difference = adjacent.getTotalHead() - this.getTotalHead();
-                if (difference >= 0) continue;
-
-                long transfer = (long) Math.floor(Math.min(amount, difference * 100));
-//                long received = adjacent.insert(0, 0, transfer, transaction);
-                amount -= transfer;
-            }
-        }
     }
 
-    public long insert(int fromDir, int toDir, long amount, TransactionContext transaction)
+    @Override
+    public void preTick()
     {
-        this.amount += amount;
-        return amount;
+        PipeVertex.super.preTick();
+        oldAmount = amount;
+    }
+
+    public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant variant, TransactionContext transaction)
+    {
+        this.amount += maxAmount;
+        return maxAmount;
     }
 
     @Override
@@ -136,6 +133,7 @@ public class SimplePipeVertex implements PipeVertex
         pressureHead = 0;
         elevationHead = 0;
         amount = 0;
+        oldAmount = 0;
         network = null;
         clearEdges();
     }
@@ -183,6 +181,12 @@ public class SimplePipeVertex implements PipeVertex
         }
 
         return false;
+    }
+
+    @Override
+    public long[] getVelocity()
+    {
+        return null;
     }
 
     protected void clearEdges()

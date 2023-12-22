@@ -2,11 +2,11 @@ package com.neep.neepmeat.transport.fluid_network;
 
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 
-public interface PipeVertex
+public interface PipeVertex extends PipeFlowComponent
 {
     void tick();
 
-    long insert(int fromDir, int toDir, long amount, TransactionContext transaction);
+    default void preTick() {}
 
     PipeVertex[] getAdjVertices();
 
@@ -20,17 +20,19 @@ public interface PipeVertex
         getAdjVertices()[dir] = vertex;
     }
 
-    float getTotalHead();
-
     void setNetwork(PipeNetwork network);
 
     PipeNetwork getNetwork();
 
-    void setElevationHead(float value);
 
     boolean canSimplify();
 
     void reset();
 
     boolean collapseEdges();
+
+    long[] getVelocity();
+
+    float getTotalHead();
+    void setElevationHead(float value);
 }
