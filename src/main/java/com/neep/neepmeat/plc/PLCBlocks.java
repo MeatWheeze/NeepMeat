@@ -6,6 +6,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlock;
 import com.neep.neepmeat.plc.arm.RoboticArmBlock;
 import com.neep.neepmeat.plc.arm.RoboticArmBlockEntity;
+import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -21,5 +22,7 @@ public class PLCBlocks
     public static void init()
     {
         ROBOTIC_ARM_ENTITY = NMBlockEntities.register("robotic_arm", (pos, state) -> new RoboticArmBlockEntity(ROBOTIC_ARM_ENTITY, pos, state), ROBOTIC_ARM);
+
+        InstructionAttributes.init();
     }
 }

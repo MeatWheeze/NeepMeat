@@ -8,6 +8,7 @@ import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
@@ -20,6 +21,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -172,6 +174,24 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
             super.render(matrices, mouseX, mouseY, delta);
+            if (isMouseOver(mouseX, mouseY))
+            {
+                renderTooltip(matrices, mouseX, mouseY);
+            }
+        }
+
+        @Override
+        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+        {
+            InstructionAttributes.InstructionTooltip tooltip = InstructionAttributes.get(provider);
+            int width = 100;
+            int tx = x - width - 5;
+            int ty = y;
+            if (tooltip != InstructionAttributes.InstructionTooltip.EMPTY)
+            {
+                List<OrderedText> wrapped = textRenderer.wrapLines(tooltip.description(), width);
+                parent.renderTooltipOrderedText(matrices, wrapped, false, tx, ty, width, PLCCols.TEXT.col);
+            }
         }
 
         @Override
