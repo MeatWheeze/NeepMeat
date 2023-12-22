@@ -26,6 +26,8 @@ public class SoundInitialiser
     public static SoundEvent HAND_CANNON_HIT = registerSound(MeatWeapons.NAMESPACE, "fusion_hit");
     public static SoundEvent HAND_CANNON_RELOAD = registerSound(MeatWeapons.NAMESPACE, "fusion_reload");
 
+    public static SoundEvent LMG_FIRE = registerSound(MeatWeapons.NAMESPACE, "light_machine_gun_fire");
+
     public static SoundEvent registerSound(String namespace, String path)
     {
         Identifier id = new Identifier(namespace, path);
