@@ -36,7 +36,6 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
-import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
@@ -56,7 +55,6 @@ import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
@@ -127,7 +125,6 @@ public class NMBlockEntities
     public static BlockEntityType<RouterBlockEntity> ROUTER;
 
     public static BlockEntityType<MixerBlockEntity> MIXER;
-    public static BlockEntityType<MixerTopBlockEntity> MIXER_TOP;
     public static BlockEntityType<GrinderBlockEntity> GRINDER;
     public static BlockEntityType<StirlingEngineBlockEntity> STIRLING_ENGINE;
     public static BlockEntityType<AlloyKilnBlockEntity> ALLOY_KILN;
@@ -276,7 +273,11 @@ public class NMBlockEntities
         FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
-        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
+//        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
+        FluidStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getFluidStorage, MIXER);
+        FluidStorage.SIDED.registerForBlocks(MixerBlockEntity::getFluidStorageFromTop, NMBlocks.MIXER.getStructureBlock());
+        ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
+        ItemStorage.SIDED.registerForBlocks(MixerBlockEntity::getItemStorageFromTop, NMBlocks.MIXER.getStructureBlock());
 
         TRANSDUCER = registerBlockEntity("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
@@ -329,10 +330,6 @@ public class NMBlockEntities
 
 
         FluidStorage.SIDED.registerForBlockEntity(PumpBlockEntity::getBuffer, PUMP);
-
-        FluidStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getFluidStorage, MIXER);
-        ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
-        FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
 
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);

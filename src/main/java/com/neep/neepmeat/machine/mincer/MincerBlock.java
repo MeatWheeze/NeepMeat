@@ -38,7 +38,7 @@ public class MincerBlock extends TallBlock implements BlockEntityProvider
     }
 
     @Override
-    protected Structure getStructure()
+    protected Structure createStructure()
     {
         return (Structure) BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
     }
