@@ -1,9 +1,9 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidDrainBlockEntity;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -56,6 +56,6 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.FLUID_DRAIN, FluidDrainBlockEntity::serverTick, world);
+        return checkType(type, NMBlockEntities.FLUID_DRAIN, FluidDrainBlockEntity::serverTick, world);
     }
 }

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.neepmeat.item.base.BaseBlockItem;
+import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.Block;
 
 public class IntegratorEggItem extends BaseBlockItem

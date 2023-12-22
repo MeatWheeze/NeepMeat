@@ -1,8 +1,8 @@
 package com.neep.neepmeat.item;
 
 import com.neep.neepmeat.fluid.RealisticFluid;
-import com.neep.neepmeat.init.FluidInitialiser;
-import com.neep.neepmeat.item.base.BaseSwordItem;
+import com.neep.neepmeat.init.NMFluids;
+import com.neep.meatlib.item.BaseSwordItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
@@ -26,7 +26,7 @@ public class DaggerItem extends BaseSwordItem
         {
             BlockPos pos = target.getBlockPos();
 //                world.setBlockState(target.getBlockPos(), BlockInitialiser.STILL_BLOOD.getFlowing(1, false).getBlockState(), Block.NOTIFY_ALL);
-            RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), FluidInitialiser.FLOWING_BLOOD);
+            RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), NMFluids.FLOWING_BLOOD);
         }
         return true;
     }

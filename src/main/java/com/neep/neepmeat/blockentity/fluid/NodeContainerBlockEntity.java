@@ -1,7 +1,7 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -15,7 +15,7 @@ public class NodeContainerBlockEntity extends BlockEntity
 
     public NodeContainerBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.NODE_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.NODE_BLOCK_ENTITY, pos, state);
     }
 
     @Override

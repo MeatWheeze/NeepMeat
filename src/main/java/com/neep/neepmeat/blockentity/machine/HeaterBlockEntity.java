@@ -1,8 +1,8 @@
 package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.neepmeat.block.machine.HeaterBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.FluidInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.mixin.FurnaceAccessor;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -25,7 +25,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
 
     public HeaterBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.HEATER, pos, state);
+        super(NMBlockEntities.HEATER, pos, state);
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, HeaterBlockEntity blockEntity)
@@ -61,8 +61,8 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
         if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
         {
             Transaction transaction = Transaction.openOuter();
-            long transferred = inputBuffer.extractDirect(FluidVariant.of(FluidInitialiser.STILL_ENRICHED_BLOOD), transfer, transaction);
-            long inserted = outputBuffer.insertDirect(FluidVariant.of(FluidInitialiser.STILL_BLOOD), transferred, transaction);
+            long transferred = inputBuffer.extractDirect(FluidVariant.of(NMFluids.STILL_ENRICHED_BLOOD), transfer, transaction);
+            long inserted = outputBuffer.insertDirect(FluidVariant.of(NMFluids.STILL_BLOOD), transferred, transaction);
 //            System.out.println("furnace");
             if (transferred >= transfer)
             {

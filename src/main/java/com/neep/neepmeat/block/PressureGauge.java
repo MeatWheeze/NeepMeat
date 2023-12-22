@@ -2,7 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;

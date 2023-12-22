@@ -20,7 +20,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class BlockEntityInitialiser
+public class NMBlockEntities
 {
     public static BlockEntityType<?> NODE_BLOCK_ENTITY;
     public static BlockEntityType<PumpBlockEntity> PUMP_BLOCK_ENTITY;
@@ -52,24 +52,24 @@ public class BlockEntityInitialiser
 
     public static void initialiseBlockEntities()
     {
-        PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, BlockInitialiser.PUMP);
-        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, BlockInitialiser.TANK);
-        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, BlockInitialiser.GLASS_TANK);
-        NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, BlockInitialiser.PIPE);
-        ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, BlockInitialiser.ITEM_DUCT);
-        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER);
-        BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, BlockInitialiser.BUFFER);
-        CONTENT_DETECTOR = registerBlockEntity("content_detector", ContentDetectorBlockEntity::new, BlockInitialiser.CONTENT_DETECTOR);
-        TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, BlockInitialiser.TROMMEL);
-        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN);
-        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT);
-        INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
-        HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, BlockInitialiser.HEATER);
-        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, BlockInitialiser.SPIGOT);
-        BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, BlockInitialiser.BIG_LEVER);
-        PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, BlockInitialiser.PNEUMATIC_TUBE);
-        ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, BlockInitialiser.ITEM_PUMP);
-        EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, BlockInitialiser.EJECTOR);
+        PUMP_BLOCK_ENTITY = registerBlockEntity("pump_block_entity", PumpBlockEntity::new, NMBlocks.PUMP);
+        TANK_BLOCK_ENTITY = registerBlockEntity("tank_block_entity", TankBlockEntity::new, NMBlocks.TANK);
+        GLASS_TANK_BLOCK_ENTITY = registerBlockEntity("glass_tank_block_entity", GlassTankBlockEntity::new, NMBlocks.GLASS_TANK);
+        NODE_BLOCK_ENTITY = registerBlockEntity("node_storage", NodeContainerBlockEntity::new, NMBlocks.PIPE);
+        ITEM_DUCT_BLOCK_ENTITY = registerBlockEntity("item_duct", ItemDuctBlockEntity::new, NMBlocks.ITEM_DUCT);
+        ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", ItemBufferBlockEntity::new, NMBlocks.ITEM_BUFFER);
+        BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
+        CONTENT_DETECTOR = registerBlockEntity("content_detector", ContentDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
+        TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
+        FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, NMBlocks.FLUID_DRAIN);
+        FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, NMBlocks.FLUID_PORT);
+        INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
+        HEATER = registerBlockEntity("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
+        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
+        BIG_LEVER = registerBlockEntity("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
+        PNEUMATIC_PIPE = registerBlockEntity("pneumatic_pipe", PneumaticPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
+        ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
+        EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);

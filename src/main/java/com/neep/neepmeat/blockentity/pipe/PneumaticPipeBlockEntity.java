@@ -3,7 +3,7 @@ package com.neep.neepmeat.blockentity.pipe;
 import com.neep.neepmeat.block.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -34,7 +34,7 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
     public PneumaticPipeBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.PNEUMATIC_PIPE, pos, state);
+        super(NMBlockEntities.PNEUMATIC_PIPE, pos, state);
     }
 
     public PneumaticPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)

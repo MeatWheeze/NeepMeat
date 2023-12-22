@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.model.block;
 
 import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.block.BaseStairsBlock;
+import com.neep.meatlib.block.BaseStairsBlock;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

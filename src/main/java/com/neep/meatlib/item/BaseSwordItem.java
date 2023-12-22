@@ -1,10 +1,8 @@
-package com.neep.neepmeat.item.base;
+package com.neep.meatlib.item;
 
-import com.neep.neepmeat.init.ItemInit;
-import com.neep.neepmeat.item.NMItem;
+import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.ToolMaterials;
 
 public class BaseSwordItem extends SwordItem implements NMItem
 {
@@ -14,7 +12,7 @@ public class BaseSwordItem extends SwordItem implements NMItem
     {
         super(material, attackDamage, speed, settings);
         this.registryName = registryName;
-        ItemInit.putItem(getRegistryName(), this);
+        ItemRegistry.queueItem(getRegistryName(), this);
     }
 
     @Override

@@ -1,10 +1,10 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseBlock;
-import com.neep.neepmeat.api.block.BaseSlabBlock;
-import com.neep.neepmeat.api.block.BaseStairsBlock;
-import com.neep.neepmeat.api.block.NMBlock;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.block.BaseSlabBlock;
+import com.neep.meatlib.block.BaseStairsBlock;
+import com.neep.meatlib.block.NMBlock;
+import com.neep.meatlib.registry.BlockRegistry;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
@@ -32,14 +32,14 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
         super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
 
         stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
-        BlockInitialiser.queueBlock(stairs);
+        BlockRegistry.queueBlock(stairs);
 
         slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
-        BlockInitialiser.queueBlock(slab);
+        BlockRegistry.queueBlock(slab);
 
         this.registryName = registryName;
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
-        BlockInitialiser.queueBlock(this);
+        BlockRegistry.queueBlock(this);
     }
 
     public BlockItem getBlockItem()

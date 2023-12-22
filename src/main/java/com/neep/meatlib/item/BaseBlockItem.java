@@ -1,9 +1,8 @@
-package com.neep.neepmeat.item.base;
+package com.neep.meatlib.item;
 
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.init.ItemInit;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.item.NMItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;
@@ -26,7 +25,7 @@ public class BaseBlockItem extends BlockItem implements NMItem
         super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
         this.name = itemName;
         this.hasLore = hasLore;
-        ItemInit.putItem(getRegistryName(), this);
+        ItemRegistry.queueItem(getRegistryName(), this);
     }
 
     @Override

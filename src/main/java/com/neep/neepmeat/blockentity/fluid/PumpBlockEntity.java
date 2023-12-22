@@ -6,7 +6,7 @@ import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -33,7 +33,7 @@ public class PumpBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.PUMP_BLOCK_ENTITY, pos, state);
+        super(NMBlockEntities.PUMP_BLOCK_ENTITY, pos, state);
 
         buffer = new WritableFluidBuffer(this, FluidConstants.BLOCK);
 

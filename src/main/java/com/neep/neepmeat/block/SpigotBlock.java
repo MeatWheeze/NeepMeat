@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseHorFacingBlock;
+import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.blockentity.fluid.SpigotBlockEntity;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

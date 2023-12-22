@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.BufferBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;

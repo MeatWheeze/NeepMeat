@@ -1,11 +1,11 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.IItemPipe;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.blockentity.machine.EjectorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -40,13 +40,13 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return BlockEntityInitialiser.EJECTOR.instantiate(pos, state);
+        return NMBlockEntities.EJECTOR.instantiate(pos, state);
     }
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, BlockEntityInitialiser.EJECTOR, EjectorBlockEntity::serverTick, world);
+        return MiscUitls.checkType(type, NMBlockEntities.EJECTOR, EjectorBlockEntity::serverTick, world);
     }
 
     @Override

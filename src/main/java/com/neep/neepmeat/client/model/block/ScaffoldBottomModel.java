@@ -1,8 +1,6 @@
 package com.neep.neepmeat.client.model.block;
 
 import com.mojang.datafixers.util.Pair;
-import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
@@ -23,7 +21,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
-import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;

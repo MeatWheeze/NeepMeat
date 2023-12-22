@@ -3,7 +3,7 @@ package com.neep.assembly;
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.block.IRail;
 import com.neep.assembly.storage.AssemblyContainer;
-import com.neep.neepmeat.init.BlockInitialiser;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.LinearDirection;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -77,7 +77,7 @@ public class AssemblyEntity extends Entity
     public static boolean canAssemble(BlockState state)
     {
         return state.isOf(Assembly.PLATFORM) || state.isOf(Assembly.ANCHOR) ||
-                state.isOf(BlockInitialiser.RUSTED_IRON_BLOCK);
+                state.isOf(NMBlocks.RUSTED_IRON_BLOCK);
 //                state.isOf(BlockInitialiser.RUSTED_IRON_BLOCK.stairs);
     }
 

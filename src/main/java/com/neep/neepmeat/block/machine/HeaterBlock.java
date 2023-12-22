@@ -1,8 +1,8 @@
 package com.neep.neepmeat.block.machine;
 
-import com.neep.neepmeat.api.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.machine.HeaterBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.Block;
@@ -31,7 +31,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return BlockEntityInitialiser.HEATER.instantiate(pos, state);
+        return NMBlockEntities.HEATER.instantiate(pos, state);
     }
 
     @Nullable
@@ -45,7 +45,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
 //        System.out.println(type.supports(state));
-        return checkType(type, BlockEntityInitialiser.HEATER, HeaterBlockEntity::serverTick, world);
+        return checkType(type, NMBlockEntities.HEATER, HeaterBlockEntity::serverTick, world);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.neep.neepmeat.blockentity;
 import com.neep.neepmeat.block.BufferBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.ContentDetectorInventory;
 import com.neep.neepmeat.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
@@ -90,7 +90,7 @@ public class ContentDetectorBlockEntity extends BlockEntity implements
 
     public ContentDetectorBlockEntity(BlockPos pos, BlockState state)
     {
-        super(BlockEntityInitialiser.CONTENT_DETECTOR, pos, state);
+        super(NMBlockEntities.CONTENT_DETECTOR, pos, state);
     }
 
     public ContentDetectorBlockEntity(BlockEntityType<ContentDetectorBlockEntity> type, BlockPos pos, BlockState state)

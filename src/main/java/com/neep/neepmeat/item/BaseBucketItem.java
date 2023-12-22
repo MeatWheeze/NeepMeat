@@ -1,6 +1,7 @@
 package com.neep.neepmeat.item;
 
-import com.neep.neepmeat.init.ItemInit;
+import com.neep.meatlib.item.NMItem;
+import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.BucketItem;
@@ -17,7 +18,7 @@ private final String registryName;
     {
         super(fluid, settings);
         this.registryName=registryName;
-        ItemInit.putItem(registryName, this);
+        ItemRegistry.queueItem(registryName, this);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseTrapdoorBlock;
+import com.neep.meatlib.block.BaseTrapdoorBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;

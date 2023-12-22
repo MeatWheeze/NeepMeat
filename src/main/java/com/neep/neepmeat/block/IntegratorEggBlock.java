@@ -1,8 +1,8 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.api.block.BaseBlock;
+import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
@@ -49,7 +49,7 @@ public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.INTEGRATOR, IntegratorBlockEntity::serverTick, world);
+        return checkType(type, NMBlockEntities.INTEGRATOR, IntegratorBlockEntity::serverTick, world);
     }
 
     @Override

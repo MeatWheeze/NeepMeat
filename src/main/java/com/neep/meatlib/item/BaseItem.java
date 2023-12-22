@@ -1,7 +1,6 @@
-package com.neep.neepmeat.item.base;
+package com.neep.meatlib.item;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.item.NMItem;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

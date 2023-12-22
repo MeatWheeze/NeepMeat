@@ -1,9 +1,6 @@
-package com.neep.neepmeat.item.base;
+package com.neep.meatlib.item;
 
-import com.neep.neepmeat.init.ItemInit;
-import com.neep.neepmeat.item.NMItem;
-import net.minecraft.item.Item;
-import net.minecraft.structure.OceanMonumentGenerator;
+import com.neep.meatlib.registry.ItemRegistry;
 
 public class BaseCraftingItem extends BaseItem implements NMItem
 {
@@ -13,7 +10,7 @@ public class BaseCraftingItem extends BaseItem implements NMItem
     {
         super(registryName, hasLore, settings);
         this.registryName = registryName;
-        ItemInit.putItem(registryName, this);
+        ItemRegistry.queueItem(registryName, this);
     }
 
     @Override
