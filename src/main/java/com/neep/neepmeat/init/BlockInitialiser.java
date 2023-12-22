@@ -31,6 +31,7 @@ public class BlockInitialiser
     public static Block RUSTY_VENT;
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
+    public static Block RUSTED_IRON_BLOCK = new BaseBuildingBlock("rusted_iron_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
     public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
 
     public static Block TEST;

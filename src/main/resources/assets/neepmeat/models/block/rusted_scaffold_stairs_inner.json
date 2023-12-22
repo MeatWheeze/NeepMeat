@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/inner_stairs",
+  "textures": {
+    "bottom": "neepmeat:block/rusted_scaffold",
+    "top": "neepmeat:block/rusted_scaffold",
+    "side": "neepmeat:block/rusted_scaffold"
+  }
+}
