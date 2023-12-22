@@ -3,7 +3,7 @@
   "fluid_input": {
     "resource": "neepmeat:clean_ore_fat",
     "amount": 9000,
-    "fat_item": "minecraft:raw_copper"
+    "fat_item": "minecraft:copper_ingot"
   },
   "output": {
     "resource": "minecraft:copper_ingot",

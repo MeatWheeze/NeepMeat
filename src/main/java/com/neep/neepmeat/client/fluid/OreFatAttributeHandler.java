@@ -15,8 +15,7 @@ public class OreFatAttributeHandler implements FluidVariantAttributeHandler
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(fluidVariant);
         if (entry != null)
         {
-            // Hopefully getName will always give MutableText
-            return ((MutableText) entry.source().getName()).append(" ").append(fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName());
+            return (entry.name().copy()).append(" ").append(fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName());
         }
         return fluidVariant.getFluid().getDefaultState().getBlockState().getBlock().getName();
     }
