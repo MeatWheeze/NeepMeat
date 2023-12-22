@@ -49,18 +49,20 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
             Storage<FluidVariant> downStorage = downCache.find(Direction.DOWN);
             if (downStorage != null)
             {
+                // There is a lot of nasty floating-point arithmetic here which may (does) result in imprecision.
+                // I would like to exclusively use integers, but that would mean major architecture changes elsewhere (I think).
                 try (Transaction inner = transaction.openNested())
                 {
                     double baseEnergy1 = FluidEnegyRegistry.getInstance().getOrEmpty(insertedVariant.getFluid()).baseEnergy() * 1.5;
                     double baseEnergy2 = FluidEnegyRegistry.getInstance().getOrEmpty(NMFluids.STILL_CHARGED_WORK_FLUID).baseEnergy();
 
                     // Find amount of work fluid with equivalent energy
-                    long downAmount = (long) ((baseEnergy1 * maxAmount) / baseEnergy2);
+                    long downAmount = Math.round((baseEnergy1 * maxAmount) / baseEnergy2);
 
                     long downExtracted = downStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), downAmount, inner);
                     long upInserted = outputStorage.insert(FluidVariant.of(NMFluids.STILL_CHARGED_WORK_FLUID), downExtracted, inner);
 
-                    long newAmount = (long) (downExtracted * baseEnergy2 / baseEnergy1);
+                    long newAmount = Math.round(downExtracted * baseEnergy2 / baseEnergy1);
 
                     if (upInserted == downExtracted)
                     {
