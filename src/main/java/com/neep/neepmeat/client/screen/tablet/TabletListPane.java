@@ -64,6 +64,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         super.render(matrices, mouseX, mouseY, delta);
+        GUIUtil.renderBorder(matrices, x, y, width, height, 0xFF888800, 0);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class TabletListPane extends ContentPane implements Drawable, Element, Se
         {
             GuideNode node = nodes.get(i);
             ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
-            entries.add(new EntryWidget(screenOffsetX + this.x, screenOffsetY + this.y + i * entryHeight, screenWidth, entryHeight, icon, node.getText(), node));
+            entries.add(new EntryWidget(screenOffsetX + this.x, screenOffsetY + this.y + i * entryHeight, width - 2 * screenOffsetX, entryHeight, icon, node.getText(), node));
         }
         entries.forEach(this::addDrawableChild);
     }

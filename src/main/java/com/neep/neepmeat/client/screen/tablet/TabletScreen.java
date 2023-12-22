@@ -5,7 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -37,6 +37,8 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     protected int screenOffsetY = 17;
     protected int backgroundWidth = 255;
     protected int backgroundHeight = 194;
+    protected int contentWidth = 340;
+    protected int contentHeight = 280;
     protected int screenWidth = 156;
     protected int screenHeight = 145;
     protected PlayerEntity player;
@@ -52,25 +54,28 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     {
         super(handler, player.getInventory(), new TranslatableText(""));
         this.player = player;
-        this.setLeftPane(new TabletListPane(player, this));
+        this.leftPane = new TabletListPane(player, this);
+        this.rightPane = new TabletArticlePane(this, Text.of("ooer"));
     }
 
     @Override
     public void setLeftPane(ContentPane element)
     {
         remove(leftPane);
-        addDrawableChild(element);
+//        addDrawableChild(element);
         this.leftPane = element;
-        if (client != null) leftPane.init(client, width, height);
+//        if (client != null) leftPane.init(client, width, height);
+        init();
     }
 
     @Override
     public void setRightPane(ContentPane element)
     {
         remove(rightPane);
-        addDrawableChild(element);
+//        addDrawableChild(element);
         this.rightPane = element;
-        if (client != null) rightPane.init(client, width, height);
+//        if (client != null) rightPane.init(client, width, height);
+        init();
     }
 
     @Override
@@ -93,13 +98,12 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         this.drawMouseoverTooltip(matrices, mouseX, mouseY);
         this.mouseX = mouseX;
         this.mouseY = mouseY;
+
+        int borderCol = 0xFF008800;
+        int offset = 3;
+        GUIUtil.renderBorder(matrices, x, y, contentWidth, contentHeight, borderCol, offset);
     }
 
-    public void switchScreen(TabletScreenFactory factory)
-    {
-        player.currentScreenHandler = factory.getHandler();
-        MinecraftClient.getInstance().setScreen(factory.getScreen(player));
-    }
 
     protected void enterNode(GuideNode node)
     {
@@ -111,12 +115,30 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     @Override
     protected void init()
     {
+
         super.init();
         addDrawableChild(leftPane);
-        this.x = (this.width - backgroundWidth) / 2;
-        this.y = (this.height - backgroundHeight) / 2;
-        leftPane.setDimensions(x, y, 120, 120);
-        leftPane.init(client);
+        addDrawableChild(rightPane);
+        contentWidth = (int) (this.width * 0.7);
+        contentHeight = (int) (this.height * 0.7);
+        this.x = (this.width - contentWidth) / 2;
+        this.y = (this.height - contentHeight) / 2;
+
+        float ratio = 0.4f;
+        int leftWidth = (int) (ratio * contentWidth);
+        int rightWidth = (int) ((1 - ratio) * contentWidth);
+        int rightStart = this.x + leftWidth;
+
+        if (leftPane != null)
+        {
+            leftPane.setDimensions(x, y, leftWidth, 120);
+            leftPane.init(client);
+        }
+        if (rightPane != null)
+        {
+            rightPane.setDimensions(rightStart, y, rightWidth, 120);
+            rightPane.init(client);
+        }
     }
 
     @Override

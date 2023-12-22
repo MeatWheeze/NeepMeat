@@ -1,7 +1,7 @@
 package com.neep.neepmeat.guide;
 
 import com.neep.neepmeat.client.screen.tablet.ITabletScreen;
-import com.neep.neepmeat.client.screen.tablet.TabletScreen;
+import com.neep.neepmeat.client.screen.tablet.TabletArticlePane;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -100,6 +100,7 @@ public interface GuideNode
         @Override
         public void visitScreen(ITabletScreen screen)
         {
+            screen.setRightPane(new TabletArticlePane(screen, Text.of("eoooooooooooooooooo")));
         }
     }
 }
