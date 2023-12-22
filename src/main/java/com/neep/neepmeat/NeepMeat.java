@@ -1,6 +1,7 @@
 package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
+import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.CharnelCompactorStorage;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.datagen.NMRecipes;
@@ -8,6 +9,8 @@ import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import org.apache.logging.log4j.LogManager;
@@ -40,6 +43,7 @@ public class NeepMeat implements ModInitializer
 		SoundInitialiser.initialise();
 		NMBlockEntities.initialise();
 		NMEntities.initialise();
+		OreFatRegistry.init();
 
 		ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
 		FluidStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> blockEntity instanceof IntegratorBlockEntity be ? be.getStorage(world, pos, state, direction) : null, NMBlocks.INTEGRATOR_EGG);

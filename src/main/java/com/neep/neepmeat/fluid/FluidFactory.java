@@ -44,11 +44,6 @@ public class FluidFactory
         this.stillName = baseName;
         this.bucketName = baseName + "_bucket";
 
-//        this.still = still;
-//        this.flowing = flowing;
-//        this.block = block;
-//        this.item = bucketItem;
-
         this.isInfinite = isInfinite;
         this.flowSpeed = flowSpeed;
         this.tickRate = tickRate;

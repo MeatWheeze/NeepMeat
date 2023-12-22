@@ -1,5 +1,6 @@
 package com.neep.neepmeat.init;
 
+import com.mojang.brigadier.arguments.FloatArgumentType;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.*;
@@ -58,6 +59,12 @@ public class NMFluids
     public static Block ELDRITCH_ENZYMES;
     public static FluidFactory ENZYMES_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "eldritch_enzymes", false, 10, 5, 2);
 
+    public static FlowableFluid FLOWING_ORE_FAT;
+    public static FlowableFluid STILL_ORE_FAT;
+    public static Item ORE_FAT_BUCKET;
+    public static Block ORE_FAT;
+    public static FluidFactory ORE_FAT_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "ore_fat", false, 10, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -102,6 +109,10 @@ public class NMFluids
         FLOWING_ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerFlowing();
         ELDRITCH_ENZYMES_BUCKET = ENZYMES_FACTORY.registerItem();
         ELDRITCH_ENZYMES = ENZYMES_FACTORY.registerBlock();
+
+        STILL_ORE_FAT = ORE_FAT_FACTORY.registerStill();
+        FLOWING_ORE_FAT = ORE_FAT_FACTORY.registerFlowing();
+        ORE_FAT = ORE_FAT_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
