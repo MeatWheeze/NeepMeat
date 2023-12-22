@@ -283,9 +283,11 @@ public class PipeNetGraph implements NbtSerialisable
         BlockState state = world.getBlockState(pos);
         IFluidPipe pipe = IFluidPipe.findFluidPipe(world, pos, state).orElse(null);
 
+        BlockPos.Mutable mutable = pos.mutableCopy();
         for (Direction direction : Direction.values())
         {
-            findFluidPump(pos, direction);
+            mutable.set(pos, direction);
+            findFluidPump(mutable, direction.getOpposite());
         }
 
         PipeVertex vertex = pipe.getPipeVertex(world, pos, state);
