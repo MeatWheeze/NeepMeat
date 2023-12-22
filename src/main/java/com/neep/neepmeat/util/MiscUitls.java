@@ -31,7 +31,7 @@ public class MiscUitls
         return expectedType == givenType && !world.isClient ? (BlockEntityTicker<A>) ticker : null;
     }
 
-    public static List<RetrievalTarget<ItemVariant>> floodSearch(BlockPos startPos, Direction face, World world, Predicate<Pair<BlockPos, Direction>> callback, int depth)
+    public static List<RetrievalTarget<ItemVariant>> floodSearch(BlockPos startPos, Direction face, World world, Predicate<Pair<BlockPos, Direction>> predicate, int depth)
     {
         List<BlockPos> pipeQueue = new ArrayList<>();
         List<BlockPos> nextSet = new ArrayList<>();
@@ -67,7 +67,7 @@ public class MiscUitls
                                 nextSet.add(next);
                             }
                         }
-                        if (callback.test(new Pair<>(next, direction)))
+                        if (predicate.test(new Pair<>(next, direction)))
                         {
                             BlockApiCache<Storage<ItemVariant>, Direction> cache = BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) world, next);
                             output.add(new RetrievalTarget(cache, direction.getOpposite()));

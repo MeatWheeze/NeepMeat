@@ -3,8 +3,6 @@ package com.neep.neepmeat.fluid_transfer;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.Blocks;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +21,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         {
             System.out.println("Yes!");
             List<Supplier<FluidNode>> list = nodes.stream().sequential().collect(Collectors.toList());
-            IndexedHashMap<BlockPos, PipeState> clearRoutes = findDeadEnds(world, pipes);
+            IndexedHashMap<BlockPos, PipeState> clearRoutes = removeDeadEnds(world, pipes);
 //            System.out.println(clearRoutes);
             for (BlockPos pos : clearRoutes.keySet())
             {
@@ -37,7 +35,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static IndexedHashMap<BlockPos, PipeState> findDeadEnds(ServerWorld world, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static IndexedHashMap<BlockPos, PipeState> removeDeadEnds(ServerWorld world, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         List<BlockPos> deadEnds = new ArrayList<>();
         IndexedHashMap<BlockPos, PipeState> clearRoutes = pipes.clone();
@@ -57,7 +55,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
         for (BlockPos end : deadEnds)
         {
-            System.out.println(end);
             visited.clear();
 
             visited.add(end);
@@ -89,23 +86,50 @@ public class PipeBranches extends HashMap<Long, PipeState>
         return clearRoutes;
     }
 
-    public static void findRoute(NodePos fromPos, NodePos toPos, Map<BlockPos, PipeState> pipes)
+    public static void enumeratePositions(BlockPos start, BlockPos end, IndexedHashMap<BlockPos, PipeState> pipes)
+    {
+
+    }
+
+    public static void doThings(IndexedHashMap<BlockPos, PipeState> pipes)
+    {
+       for (int i = 0; i < pipes.size(); ++i)
+       {
+           PipeState.ISpecialPipe specialPipe;
+           if ((specialPipe = pipes.get(i).getSpecial()) != null)
+           {
+           }
+       }
+    }
+
+    public static void findRoute(NodePos fromPos, NodePos toPos, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         List<BlockPos> frontier = new ArrayList<>();
+        List<BlockPos> nextFrontier = new ArrayList<>();
 
         frontier.add(fromPos.pos);
 
-        for (ListIterator<BlockPos> it = frontier.listIterator(); it.hasNext();)
+        int depth = 100;
+        for (int i = 0; i < depth; ++i)
         {
-            BlockPos current = it.next();
-            for (Direction direction : pipes.get(current).connections)
+            for (BlockPos current : frontier)
             {
-                BlockPos offset = current.offset(direction);
-                if (pipes.get(offset) != null)
+                PipeState currentPipe = pipes.get(current);
+
+                if (currentPipe.isSpecial())
                 {
-                    it.add(offset);
+                }
+
+                for (Direction direction : currentPipe.connections)
+                {
+                    BlockPos offset = current.offset(direction);
+                    if (pipes.get(offset) != null)
+                    {
+                        nextFrontier.add(offset);
+                    }
                 }
             }
+            frontier.addAll(nextFrontier);
         }
     }
 }
