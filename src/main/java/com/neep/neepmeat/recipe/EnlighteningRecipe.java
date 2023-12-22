@@ -5,7 +5,7 @@ import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.meatlib.recipe.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.cosmic_pylon.PylonBlockEntity;
+import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -21,7 +21,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
-public class EnlighteningRecipe extends ImplementedRecipe<PylonBlockEntity.RecipeBehaviour>
+public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.RecipeBehaviour>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
@@ -35,7 +35,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PylonBlockEntity.Recip
     }
 
     @Override
-    public boolean matches(PylonBlockEntity.RecipeBehaviour inventory, World world)
+    public boolean matches(PedestalBlockEntity.RecipeBehaviour inventory, World world)
     {
         return itemInput.test(inventory.getStorage());
     }
@@ -63,7 +63,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PylonBlockEntity.Recip
         return NMrecipeTypes.ENLIGHTENING;
     }
 
-    public FluidVariant craft(PylonBlockEntity.RecipeBehaviour storage, TransactionContext transaction)
+    public FluidVariant craft(PedestalBlockEntity.RecipeBehaviour storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {

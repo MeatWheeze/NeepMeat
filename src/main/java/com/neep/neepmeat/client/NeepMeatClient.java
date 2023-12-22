@@ -17,6 +17,7 @@ import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.motor.MotorRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
+import com.neep.neepmeat.machine.pedestal.PedestalRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
@@ -82,7 +83,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
         BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, DisplayPlatformRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
@@ -106,6 +107,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.ALEMBIC, AlembicRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.HYDRAULIC_PRESS, HydraulicPressRenderer::new);
+
+        BlockEntityRendererRegistry.register(NMBlockEntities.PEDESTAL, PedestalRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);

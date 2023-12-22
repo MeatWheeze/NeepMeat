@@ -33,48 +33,32 @@ import java.util.Random;
 
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
-    protected int playerSearch = 0;
-
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
         super(new IntegratorEggModel<IntegratorBlockEntity>());
     }
 
     @Override
-    public void render(IntegratorBlockEntity blockEntity, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
+    public void render(IntegratorBlockEntity be, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
     {
-        if (!blockEntity.isMature)
+        if (!be.isMature)
         {
-            renderEgg(matrices, blockEntity, vertexConsumers);
+            renderEgg(matrices, be, vertexConsumers);
         }
         else
         {
-            if (playerSearch == 0)
-            {
-                playerSearch = 15;
-                BlockPos pos = blockEntity.getPos();
-                Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
-                List<Entity> players = blockEntity.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
-                if (players.size() > 0)
-                {
-                    Vec2f vec = NMMaths.flatten(players.get(0).getPos().subtract(Vec3d.ofCenter(blockEntity.getPos())));
-                    blockEntity.targetFacing = NMMaths.getAngle(vec);
-                }
-            }
-            else
-            {
-                --playerSearch;
-            }
+            Vec2f vec = NMMaths.flatten(be.getLookTarget().subtract(Vec3d.ofCenter(be.getPos())));
+            be.targetFacing = NMMaths.getAngle(vec);
 
-            blockEntity.facing = NMMaths.angleLerp(0.03f, blockEntity.facing, blockEntity.targetFacing);
+            be.facing = NMMaths.angleLerp(0.03f, be.facing, be.targetFacing);
 
-            renderBase(matrices, blockEntity, vertexConsumers);
+            renderBase(matrices, be, vertexConsumers);
             matrices.push();
             matrices.translate(0.5d, 0d, 0.5d);
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(blockEntity.facing));
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
-            matrices.translate(0, 1.8 + Math.sin((blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
-            super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
+            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + partialTicks) / 20) / 15, 0);
+            super.render(be, partialTicks, matrices, vertexConsumers, packedLightIn);
             matrices.pop();
         }
     }

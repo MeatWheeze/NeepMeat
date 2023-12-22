@@ -11,6 +11,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
@@ -18,6 +19,8 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Matrix3f;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -39,10 +42,11 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     protected int growthTimeRemaining = 1000;
     protected final IntegratorStorage storage;
 
-    int totalTime = 10;
+    protected BlockPos lookTarget = new BlockPos(0, 0, 0);
     public boolean isMature = false;
     public float facing = 0f;
     public float targetFacing = 0f;
+    public int playerSearch;
 
     private final AnimationFactory factory = new AnimationFactory(this);
     private boolean hatching;
@@ -102,6 +106,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         super.writeNbt(tag);
         tag.putInt("growth_remaining", growthTimeRemaining);
         tag.putBoolean("fully_grown", isMature);
+        tag.put("lookTarget", NbtHelper.fromBlockPos(lookTarget));
         storage.writeNbt(tag);
     }
 
@@ -111,6 +116,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         super.readNbt(tag);
         growthTimeRemaining = tag.getInt("growth_remaining");
         isMature = tag.getBoolean("fully_grown");
+        this.lookTarget = NbtHelper.toBlockPos(tag.getCompound("lookTarget"));
         storage.readNbt(tag);
     }
 
@@ -123,7 +129,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         }
         if (be.isMature)
         {
-            be.process();
         }
     }
 
@@ -147,20 +152,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
 
     public void grow()
     {
-        long decrement = FluidConstants.BUCKET / (totalTime * 20L);
-//        try (Transaction transaction = Transaction.openOuter())
-//        {
-//            long extracted = storage.immatureStorage.grow(decrement, transaction);
-//            if (extracted == decrement)
-//            {
-//                --growthTimeRemaining;
-//                transaction.commit();
-//            }
-//            else
-//            {
-//                transaction.abort();
-//            }
-
         if (storage.immatureStorage.getAmount() >= storage.immatureStorage.getCapacity())
             --growthTimeRemaining;
 
@@ -169,7 +160,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
             isMature = true;
             hatch();
         }
-//        }
     }
 
     public void hatch()
@@ -177,18 +167,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         for (PlayerEntity otherPlayer : PlayerLookup.tracking(this))
         {
         }
-    }
-
-    public void process()
-    {
-//        long conversionAmount = 900;
-//        Transaction transaction = Transaction.openOuter();
-//        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= conversionAmount)
-//        {
-//            long extracted = inputBuffer.extractDirect(FluidVariant.of(NMFluids.STILL_BLOOD), conversionAmount, transaction);
-//            long inserted = outputBuffer.insertDirect(FluidVariant.of(NMFluids.STILL_ENRICHED_BLOOD), extracted, transaction);
-//        }
-//        transaction.commit();
     }
 
     public void showContents(ServerPlayerEntity player)
@@ -221,5 +199,16 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public boolean isMature()
     {
         return isMature;
+    }
+
+    public void setLookPos(BlockPos pos)
+    {
+        this.lookTarget = pos;
+        sync();
+    }
+
+    public Vec3d getLookTarget()
+    {
+        return Vec3d.ofCenter(lookTarget);
     }
 }
