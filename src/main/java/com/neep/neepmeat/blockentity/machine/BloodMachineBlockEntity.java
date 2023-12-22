@@ -188,7 +188,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
 
     public float getRunningRate()
     {
-        return MathHelper.clamp((this.runningRate / (float) this.maxRunningRate) * fluidMultiplier, 0, maxRunningRate);
+        return MathHelper.clamp((this.runningRate / (float) this.maxRunningRate) * fluidMultiplier, 0, 1);
     }
 
     @Override

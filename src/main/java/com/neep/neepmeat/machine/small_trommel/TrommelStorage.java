@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -24,7 +25,15 @@ public class TrommelStorage implements NbtSerialisable, ImplementedRecipe.DummyI
     public TrommelStorage(SmallTrommelBlockEntity parent)
     {
         this.parent = parent;
-        this.fluidInput = new WritableSingleFluidStorage(FluidConstants.BUCKET, parent::markDirty);
+        this.fluidInput = new WritableSingleFluidStorage(FluidConstants.BUCKET, parent::markDirty)
+        {
+            @Override
+            protected boolean canInsert(FluidVariant variant)
+            {
+                return OreFatRegistry.getFromVariant(variant) != null;
+            }
+        };
+
         this.fluidOutput = new WritableSingleFluidStorage(FluidConstants.BUCKET, parent::markDirty);
         this.itemOutput = new WritableStackStorage(parent::markDirty, 16);
     }

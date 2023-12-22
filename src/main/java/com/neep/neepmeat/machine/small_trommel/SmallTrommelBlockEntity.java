@@ -89,7 +89,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
             long extractable = storage.fluidInput.simulateExtract(inputVariant, inputAmount, null);
-            long outputAmount = random.nextInt(101) < 15 ? extractable : extractable + extractable;
+            long outputAmount = random.nextInt(101) > 10 ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)
                 return;
