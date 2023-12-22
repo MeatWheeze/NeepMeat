@@ -1,7 +1,9 @@
 package com.neep.neepmeat.client;
 
 import com.neep.meatlib.block.BasePaintedBlock;
+import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GlassTankModel;
@@ -70,6 +72,8 @@ public class NeepMeatClient implements ClientModInitializer
         ParticleSpawnPacket.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
         NMKeys.registerKeybindings();
+
+        GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
     }
 
     public static void registerRenderers()

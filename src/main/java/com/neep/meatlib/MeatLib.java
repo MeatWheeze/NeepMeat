@@ -1,5 +1,6 @@
 package com.neep.meatlib;
 
+import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
@@ -51,7 +52,7 @@ public class MeatLib implements ModInitializer
     public void onInitialize()
     {
         SoundRegistry.init();
-
+        GraphicsEffects.init();
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());
     }
 }

@@ -1,13 +1,9 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
-import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.GraphicsEffect;
+import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -15,10 +11,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.stat.Stats;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -156,12 +150,12 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, GraphicsEffect.Factory type, double showRadius)
+    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, pos, end, velocity, 0.5f, 5, MWNetwork.EFFECT_ID);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+            MWGraphicsEffects.syncBeamEffect(player, MWGraphicsEffects.BEAM, world, pos, end, velocity, 0.5f, 5);
+//            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
 

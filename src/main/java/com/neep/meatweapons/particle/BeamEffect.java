@@ -6,21 +6,24 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Random;
+import java.util.UUID;
 import java.util.function.Function;
 
 import static net.minecraft.client.render.RenderPhase.BEACON_BEAM_SHADER;
 
-public class BeamEffect extends GraphicsEffect
+public class BeamEffect extends BeamGraphicsEffect
 {
-    public BeamEffect(World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
+    public BeamEffect(World world, UUID uuid, PacketByteBuf buf)
     {
-        super(world, start, end, velocity, scale, maxTime);
+        super(world, uuid, buf);
+//        super(world, start, end, velocity, scale, maxTime);
     }
 
     @Environment(value= EnvType.CLIENT)

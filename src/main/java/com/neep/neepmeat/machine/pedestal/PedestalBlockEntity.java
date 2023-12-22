@@ -3,9 +3,8 @@ package com.neep.neepmeat.machine.pedestal;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
+import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -16,7 +15,6 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -107,8 +105,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         Vec3d end = Vec3d.ofCenter(endPos, 0.8f);
         for (ServerPlayerEntity player : PlayerLookup.around(world, start, 32d))
         {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BEAM, start, end, new Vec3d(0, 0, 0), 0.5f, 50, MWNetwork.EFFECT_ID);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+            MWGraphicsEffects.syncBeamEffect(player, MWGraphicsEffects.BEAM, world, start, end, new Vec3d(0, 0, 0), 0.5f, 50);
         }
     }
 

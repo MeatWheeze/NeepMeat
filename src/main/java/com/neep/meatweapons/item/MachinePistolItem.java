@@ -1,16 +1,14 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
-import com.neep.meatweapons.init.GraphicsEffects;
-import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.particle.GraphicsEffect;
+import com.neep.meatweapons.particle.BeamGraphicsEffect;
+import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -145,16 +143,6 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
                     }
                 }
             }
-        }
-    }
-
-    @Override
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, GraphicsEffect.Factory type, double showRadius)
-    {
-        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
-        {
-            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BULLET_TRAIL, pos, end, velocity, 0.1f, 1, MWNetwork.EFFECT_ID);
-            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
 

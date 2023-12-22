@@ -1,14 +1,20 @@
 package com.neep.neepmeat.api.enlightenment;
 
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.DefaultedRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class EnlightenmentEventManager
 {
@@ -16,9 +22,11 @@ public class EnlightenmentEventManager
     private final Random random;
     protected final List<EnlightenmentEvent> tickingEvents = new ArrayList<>(16);
 
-    protected static final List<EnlightenmentEvent.Factory> FACTORIES = new ArrayList<>();
+    public static DefaultedRegistry<EnlightenmentEvent.Factory> EVENTS = FabricRegistryBuilder.createDefaulted(EnlightenmentEvent.Factory.class,
+            new Identifier(NeepMeat.NAMESPACE, "enlightenment_event"),
+            new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
 
-    public static final EnlightenmentEvent.Factory TEST_EVENT = register(new TestEnlightenmentEvent.Factory());
+//    public static final EnlightenmentEvent.Factory TEST_EVENT = register(new TickingEnlightenmentEvent.Factory());
 
     public static void init()
     {
@@ -26,12 +34,6 @@ public class EnlightenmentEventManager
         {
             ((IServerWorld) world).getEnlightenmentEventManager().tick(world);
         });
-    }
-
-    public static EnlightenmentEvent.Factory register(EnlightenmentEvent.Factory factory)
-    {
-        FACTORIES.add(factory);
-        return factory;
     }
 
     public EnlightenmentEventManager()
@@ -65,17 +67,18 @@ public class EnlightenmentEventManager
             random.setSeed(world.getTime());
             if (random.nextDouble() < p)
             {
-                if (FACTORIES.isEmpty()) return;
+                if (EVENTS.isEmpty()) return;
 
                 // Choose a random factory. If it can't spawn, find one that does.
-                Collections.shuffle(FACTORIES);
+                List<EnlightenmentEvent.Factory> factories = EVENTS.stream().collect(Collectors.toList());
+                Collections.shuffle(factories);
                 int i = 0;
-                while (!FACTORIES.get(i).willSpawn(this, world, player))
+                while (!factories.get(i).willSpawn(world, player))
                 {
                     ++i;
-                    if (i >= FACTORIES.size()) return;
+                    if (i >= factories.size()) return;
                 }
-                EnlightenmentEvent.Factory factory = FACTORIES.get(i);
+                EnlightenmentEvent.Factory factory = factories.get(i);
                 spawnFactory(world, player, factory);
             }
         }
@@ -83,7 +86,8 @@ public class EnlightenmentEventManager
 
     protected void spawnFactory(ServerWorld world, ServerPlayerEntity player, EnlightenmentEvent.Factory factory)
     {
-        EnlightenmentEvent event = factory.create(this, world, player);
+        EnlightenmentEvent event = factory.create(world, player);
+        EnlightenmentEventPacket.send(factory, world, player);
         tickingEvents.add(event);
         event.spawn();
     }
