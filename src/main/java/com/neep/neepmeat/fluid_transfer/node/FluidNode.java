@@ -42,7 +42,6 @@ public class FluidNode
 
     public FluidNode(BlockPos pos, Direction face, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
-        // TODO: remove redundant fields
         this.face = face;
         this.pos = pos;
         this.nodePos = new NodePos(pos, face);
@@ -54,7 +53,6 @@ public class FluidNode
 
     public FluidNode(NodePos nodePos, Storage<FluidVariant> storage, AcceptorModes mode, float flowMultiplier)
     {
-        // TODO: remove redundant fields
         this.pos = nodePos.pos;
         this.face = nodePos.face;
         this.nodePos = nodePos;
@@ -65,11 +63,11 @@ public class FluidNode
     }
 
     // For deferred loading only.
-    protected FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world)
+    protected FluidNode(NodePos pos, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world)
     {
-        this.face = face;
-        this.pos = pos;
-        this.nodePos = new NodePos(pos, face);
+        this.face = pos.face;
+        this.pos = pos.pos;
+        this.nodePos = pos;
         this.mode = mode;
         this.flowMultiplier = flowMultiplier;
         this.flow = mode.getFlow() * flowMultiplier;
@@ -89,20 +87,18 @@ public class FluidNode
     // Load a node from NBT data
     public static FluidNode fromNbt(NbtCompound nbt, ServerWorld world)
     {
-        BlockPos pos = BlockPos.fromLong(nbt.getLong("position"));
-        Direction face = Direction.byId(nbt.getInt("direction"));
+        NbtCompound posNbt = nbt.getCompound("pos");
+        NodePos pos = NodePos.fromNbt(posNbt);
         AcceptorModes mode = AcceptorModes.byId(nbt.getInt("mode"));
         long networkId = nbt.getLong("network_id");
         float flowMultiplier = nbt.getFloat("multiplier");
 
-       FluidNode node = new FluidNode(pos, face, mode, flowMultiplier, networkId, world);
-       return node;
+        return new FluidNode(pos, mode, flowMultiplier, networkId, world);
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.putInt("direction", face.getId());
-        nbt.putLong("position", pos.asLong());
+        nbt.put("pos", nodePos.toNbt(new NbtCompound()));
         nbt.putInt("mode", mode.getId());
         nbt.putLong("network_id", networkId);
         nbt.putFloat("multiplier", flowMultiplier);
