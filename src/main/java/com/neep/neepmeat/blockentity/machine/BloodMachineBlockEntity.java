@@ -210,6 +210,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         nbt.putLong("runningRate", runningRate);
         nbt.putLong("lastInput", inputStorage.lastInput);
         nbt.putFloat("fluidMultiplier", fluidMultiplier);
+        nbt.putBoolean("enabled", enabled);
     }
 
     @Override
@@ -219,6 +220,7 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         this.inputStorage.lastInput = nbt.getLong("lastInput");
         this.runningRate = nbt.getLong("runningRate");
         this.fluidMultiplier = nbt.getFloat("fluidMultiplier");
+        this.enabled = nbt.getBoolean("enabled");
     }
 
     public void onUse(PlayerEntity player, Hand hand)

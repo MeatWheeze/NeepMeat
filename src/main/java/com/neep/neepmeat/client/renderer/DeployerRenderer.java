@@ -27,10 +27,8 @@ public class DeployerRenderer implements BlockEntityRenderer<DeployerBlockEntity
 
         ItemStack stack = be.getResource().toStack((int) be.getAmount());
 
-//        be.stackRenderDelta = MathHelper.lerp(delta, be.stackRenderDelta, be.getAmount() <= 0 ? 0.3f : 0f);
-//        matrices.translate(0.5, 0.25f + be.stackRenderDelta, 0.5);
-        long time = be.getWorld().getTime();
-        be.shuttleOffset = (float) MathHelper.lerp(0.3, be.shuttleOffset, be.shuttleTime - time + 5 > 0 ? (float) 0.1 : 0);
+        // Offset shuttle while powered
+        be.shuttleOffset = (float) MathHelper.lerp(0.3, be.shuttleOffset, be.powered ? (float) 0.1 : 0);
 
         matrices.push();
         Direction facing = be.getCachedState().get(BaseFacingBlock.FACING);

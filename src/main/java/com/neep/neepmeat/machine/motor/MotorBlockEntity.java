@@ -7,11 +7,11 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorBlockEntity
 {
-    public boolean running;
     public boolean starting;
     public float rotorSpeed = 1f; // rad per tick
     public float currentSpeed = 0;
@@ -42,7 +42,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
 
         if (cache != null)
         {
-            float mult = (this.runningRate / (float) this.maxRunningRate);
+            float mult = getRunningRate();
             cache.setWorkMultiplier(mult);
             cache.tick(this);
         }
@@ -58,6 +58,13 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     public float getRotorAngle()
     {
         return angle;
+    }
+
+    @Override
+    public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
+    {
+        IMotorBlockEntity.super.update(world, pos, fromPos, state);
+        enabled = (!world.isReceivingRedstonePower(pos));
     }
 
     @Override
