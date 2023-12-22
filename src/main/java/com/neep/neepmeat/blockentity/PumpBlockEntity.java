@@ -39,7 +39,7 @@ public class PumpBlockEntity extends BlockEntity implements Storage<FluidVariant
                 FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
                 if (nodeProvider.connectInDirection(state, direction))
                 {
-                    sides.put(direction, new FluidNode(pos, direction, this, nodeProvider.getDirectionMode(state, direction)));
+                    sides.put(direction, new FluidNode(pos, direction, this, nodeProvider.getDirectionMode(state, direction), 5));
                 }
             }
         }

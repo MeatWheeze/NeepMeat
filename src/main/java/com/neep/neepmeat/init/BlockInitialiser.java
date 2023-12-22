@@ -12,6 +12,7 @@ import net.minecraft.block.FluidBlock;
 import net.minecraft.block.Material;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.Item;
+import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -34,8 +35,8 @@ public class BlockInitialiser
     {
 //        FLOWING_TEST = registerBlock("fluid_test", new FluidTestBlock(FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
-        PIPE = registerBlock("pipe", new PipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
-        PUMP = registerBlock("pump", new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+        PIPE = registerBlock("pipe", new PipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        PUMP = registerBlock("pump", new PumpBlock("pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
 
         STILL_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "blood"), new BloodFluid.Still());
         FLOWING_BLOOD = Registry.register(Registry.FLUID, new Identifier(NeepMeat.NAMESPACE, "flowing_blood"), new BloodFluid.Flowing());
