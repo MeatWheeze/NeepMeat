@@ -123,7 +123,8 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
 
     protected void stopRecipe()
     {
-        stopPressRecipe(null);
+        CastingBasinStorage storage = world.getBlockEntity(pos.down()) instanceof CastingBasinBlockEntity be ? be.getStorage() : null;
+        stopPressRecipe(storage);
         behaviour.interrupt();
     }
 
