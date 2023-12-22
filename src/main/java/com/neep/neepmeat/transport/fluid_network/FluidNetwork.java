@@ -4,6 +4,7 @@ import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.thread.NetworkRebuilding;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -85,10 +86,14 @@ public class FluidNetwork
 
         if (shouldTick(world.getTime()))
         {
-            for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
+            Runnable runnable = () ->
             {
-                if (network.getWorld().equals(world)) network.tick();
-            }
+                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
+                {
+                    if (network.getWorld().equals(world)) network.tick();
+                }
+            };
+            StagedTransactions.getExecutor().execute(runnable);
         }
     }
 

@@ -8,6 +8,7 @@ import com.neep.neepmeat.datagen.NMRecipes;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -52,5 +53,6 @@ public class NeepMeat implements ModInitializer
 
 		FluidNetwork.registerEvents();
 //		NetworkRebuilding.init();
+		StagedTransactions.init();
 	}
 }

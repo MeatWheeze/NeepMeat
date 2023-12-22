@@ -125,6 +125,8 @@ public class FluidNode
         {
             return;
         }
+        boolean bl1 = findStorage(world);
+        boolean bl2 = findPump(world);
         Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
     }
 
@@ -246,10 +248,10 @@ public class FluidNode
 
     public Storage<FluidVariant> getStorage(ServerWorld world)
     {
-        if (!world.getServer().isOnThread() || !isStorage)
-        {
-            return null;
-        }
+//        if (!world.getServer().isOnThread() || !isStorage)
+//        {
+//            return null;
+//        }
         if (storage == null)
         {
             load(world);

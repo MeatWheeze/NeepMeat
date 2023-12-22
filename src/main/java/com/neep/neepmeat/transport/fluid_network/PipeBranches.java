@@ -86,10 +86,9 @@ public class PipeBranches extends HashMap<Long, PipeState>
                     PipeState.FilterFunction filterFunction;
                     if ((filterFunction = shortestPath(world, start, end, pipes)) != null)
                     {
-//                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
                         matrix[i][j] = filterFunction;
-//                    matrix[i][j] = PipeState::identity;
-                    } else
+                    }
+                    else
                     {
                         matrix[i][j] = PipeState::zero;
                     }
