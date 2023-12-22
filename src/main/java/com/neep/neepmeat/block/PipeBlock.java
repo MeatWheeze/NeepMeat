@@ -299,7 +299,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         {
             if (player.isSneaking())
             {
-                System.out.println("eee");
                 System.out.println(FluidNetwork.INSTANCE.getNodes(pos));
                 System.out.println("block entity: " + world.getBlockEntity(pos));
                 return ActionResult.SUCCESS;

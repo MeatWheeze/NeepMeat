@@ -102,14 +102,16 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
 //                be.update(state, world);
                 HashSet<Supplier<FluidNode>> test = new HashSet<>();
 
-                NodePos pos1 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
-                NodePos pos2 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
-                FluidNetwork.NodeSupplier supplier1 = new FluidNetwork.NodeSupplier(pos1);
-                FluidNetwork.NodeSupplier supplier2 = new FluidNetwork.NodeSupplier(pos2);
+//                NodePos pos1 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
+//                NodePos pos2 = new NodePos(new BlockPos(1, 2, 3), Direction.NORTH);
+//                FluidNetwork.NodeSupplier supplier1 = new FluidNetwork.NodeSupplier(pos1);
+//                FluidNetwork.NodeSupplier supplier2 = new FluidNetwork.NodeSupplier(pos2);
+//
+//                test.add(supplier1);
+//
+//                System.out.println(test.contains(supplier2));
 
-                test.add(supplier1);
-
-                System.out.println(test.contains(supplier2));
+//                NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
             }
             else
             {
