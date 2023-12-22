@@ -20,21 +20,25 @@ import net.minecraft.util.registry.Registry;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class ManufactureRecipe implements MeatRecipe<MutateInPlace<ItemStack>>
 {
     protected final Identifier id;
     protected final Item base;
     protected final Item output;
-    protected List<ManufactureStep<ItemStack>> steps;
+    protected List<ManufactureStep<?>> steps;
 
-    public ManufactureRecipe(Identifier id, Item base, Item output, List<ManufactureStep<ItemStack>> steps)
+    public ManufactureRecipe(Identifier id, Item base, Item output, List<ManufactureStep<?>> steps)
     {
         this.id = id;
         this.base = base;
         this.output = output;
         this.steps = steps;
+    }
+
+    public List<ManufactureStep<?>> getSteps()
+    {
+        return steps;
     }
 
     @Override
@@ -111,7 +115,7 @@ public class ManufactureRecipe implements MeatRecipe<MutateInPlace<ItemStack>>
 
             JsonArray stepElement = JsonHelper.getArray(json, "steps");
 
-            List<ManufactureStep<ItemStack>> steps = Lists.newArrayList();
+            List<ManufactureStep<?>> steps = Lists.newArrayList();
             for (var element : stepElement)
             {
                 JsonObject object = JsonHelper.asObject(element, element.toString());
@@ -127,7 +131,7 @@ public class ManufactureRecipe implements MeatRecipe<MutateInPlace<ItemStack>>
                     throw new JsonParseException("Unknown step ID: " + stepIdString);
 
                 // TODO: possibly check types
-                ManufactureStep<ItemStack> step = (ManufactureStep<ItemStack>) provider.create(object);
+                ManufactureStep<?> step = provider.create(object);
 
                 steps.add(step);
             }

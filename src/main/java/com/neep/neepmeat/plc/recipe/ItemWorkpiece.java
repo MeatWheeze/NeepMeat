@@ -3,6 +3,8 @@ package com.neep.neepmeat.plc.recipe;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
+import dev.onyxstudios.cca.api.v3.item.ItemTagInvalidationListener;
+import net.fabricmc.fabric.api.client.rendering.v1.InvalidateRenderStateCallback;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
@@ -14,10 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ItemWorkpiece extends ItemComponent implements Workpiece
+public class ItemWorkpiece extends ItemComponent implements Workpiece, ItemTagInvalidationListener
 {
     // TODO: remove
     private static final String KEY = NeepMeat.NAMESPACE + ":work_piece";
+
+    private List<ManufactureStep<?>> stepsCache = null;
+    private boolean invalidated;
 
     public ItemWorkpiece(ItemStack stack)
     {
@@ -59,6 +64,11 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece
     @Override
     public List<ManufactureStep<?>> getSteps()
     {
+        if (stepsCache != null)
+        {
+            return stepsCache;
+        }
+
         var nbt = getSubNbt(KEY);
         if (nbt == null)
             return Collections.emptyList();
@@ -79,6 +89,7 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece
             }
         }
 
+        stepsCache = steps;
         return steps;
     }
 
@@ -89,6 +100,12 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece
             return null;
         }
         return getCompound(key);
+    }
 
+    @Override
+    public void onTagInvalidated()
+    {
+        super.onTagInvalidated();
+        stepsCache = null;
     }
 }
