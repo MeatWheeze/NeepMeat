@@ -101,6 +101,11 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return amount;
     }
 
+    public boolean isEmpty()
+    {
+        return this.amount == 0 || this == RecipeInputs.EMPTY;
+    }
+
     public void cacheMatching()
     {
         if (this.matchingStacks == null)

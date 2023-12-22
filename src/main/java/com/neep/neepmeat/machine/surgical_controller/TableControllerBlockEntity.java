@@ -2,30 +2,32 @@ package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class TableControllerBlockEntity extends BloodMachineBlockEntity
 {
-    private SurgeryTableContext context = new SurgeryTableContext();
+    protected int recipeProgress = 0;
+
+    protected final SurgeryTableContext context = new SurgeryTableContext();
+    protected final SurgicalRobot robot = new SurgicalRobot(getPos());
+
+    protected Identifier currentRecipe;
 
     public TableControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -35,6 +37,20 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
     public TableControllerBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.TABLE_CONTROLLER, pos, state);
+    }
+
+    public void tick()
+    {
+        robot.tick();
+        Vec3d robotPos = robot.getPos();
+        ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, robotPos.x, robotPos.y, robotPos.z, 5, 0, 0, 0, 0);
+
+        if (robot.isActive() && robot.reachedTarget())
+        {
+            MeatRecipeManager.getInstance().get(NMrecipeTypes.SURGERY, currentRecipe).ifPresent(this::nextIngredient);
+        }
+
+        sync();
     }
 
     public void assemble()
@@ -55,8 +71,6 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
                 mutable.set(corner, xVec);
                 mutable.set(mutable, zVec);
                 context.add((ServerWorld) world, mutable);
-//                if (caches.get(caches.size() - 1).find(null) != null)
-//                    ((ServerWorld) world).spawnParticles(ParticleTypes.COMPOSTER, mutable.getX() + 0.5, mutable.getY() + 0.5, mutable.getZ() + 0.5, 5, 0, 0, 0, 0);
             }
         }
     }
@@ -67,11 +81,48 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
         NeepMeat.LOGGER.info("Recipe: " + recipe);
         if (recipe != null)
         {
-            try (Transaction transaction = Transaction.openOuter())
-            {
-                recipe.takeInputs(context, transaction);
-                transaction.abort();
-            }
+            this.recipeProgress = 0;
+            this.currentRecipe = recipe.getId();
+            nextIngredient(recipe);
         }
+    }
+
+    private void nextIngredient(SurgeryRecipe recipe)
+    {
+        while (true)
+        {
+            if (recipeProgress >= context.getSize())
+            {
+                recipeProgress = 0;
+                robot.returnToBase();
+                return;
+            }
+            RecipeInput<?> input = recipe.getInputs().get(recipeProgress);
+            if (!input.isEmpty())
+            {
+                robot.setTarget(context.getPos(recipeProgress));
+                ++recipeProgress;
+                return;
+            }
+            ++recipeProgress;
+        }
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.putInt("recipeProgress", recipeProgress);
+        nbt.putString("currentRecipe", currentRecipe != null ? currentRecipe.toString() : "null");
+        robot.writeNbt(nbt);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        this.recipeProgress = nbt.getInt("recipeProgress");
+        this.currentRecipe = new Identifier(nbt.getString("currentRecipe"));
+        robot.readNbt(nbt);
     }
 }

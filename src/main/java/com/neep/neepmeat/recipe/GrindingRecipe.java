@@ -45,7 +45,7 @@ public class GrindingRecipe implements MeatRecipe<GrinderStorage>
     @Override
     public boolean matches(GrinderStorage inventory)
     {
-        itemInput.cacheMatching();
+        itemInput.cacheMatching(); // TODO: Make this automatic and make the method private
         Collection<Item> i = itemInput.getAll();
         boolean bl = itemInput.test(inventory.getInputStorage());
         return bl;
