@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.screen.tablet.TabletMenuScreen;
+import com.neep.neepmeat.client.screen.tablet.TabletScreen;
 import com.neep.neepmeat.screen_handler.TerminalScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,7 +31,7 @@ public class TabletItem extends BaseItem implements NamedScreenHandlerFactory
         {
             ScreenHandler handler = new TerminalScreenHandler();
             user.currentScreenHandler = handler;
-            MinecraftClient.getInstance().setScreen(new TabletMenuScreen(user));
+            MinecraftClient.getInstance().setScreen(new TabletScreen(user, handler));
         }
         return TypedActionResult.success(user.getStackInHand(hand));
     }

@@ -5,10 +5,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.GuideNode;
 import com.neep.neepmeat.guide.GuideReloadListener;
-import com.neep.neepmeat.screen_handler.TerminalScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.Drawable;
+import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.*;
@@ -17,62 +19,51 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Environment(value= EnvType.CLIENT)
-public class TabletMenuScreen extends TabletScreen
+public class TabletListPane extends ContentPane implements Drawable, Element, Selectable
 {
     public static final Identifier TERMINAL_ICON = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/widgets/terminal.png");
-
-    // Current location within the entry tree
-    protected final Deque<GuideNode> path = new LinkedList<>();
 
     // Currently available entries
     protected final List<EntryWidget> entries = new ArrayList<>();
 
     private int menuPage;
     protected int entryHeight = 11;
-    protected int screenWidth = 156;
-    protected int screenHeight = 145;
 
-    public TabletMenuScreen(PlayerEntity player)
+    public TabletListPane(PlayerEntity player, ITabletScreen parent)
     {
-        super(player, player.currentScreenHandler);
+        super(Text.of("eeeee"), parent);
         this.textRenderer = MinecraftClient.getInstance().textRenderer;
         GuideNode root = GuideReloadListener.getInstance().getRootNode();
         if (root == null)
         {
-            throw new IllegalStateException("Guide tablet tree is not loaded. Report this to mod author.");
+            throw new IllegalStateException("Guide tablet tree failed to load.");
         }
-        path.push(root);
-    }
-
-    public static TabletScreenFactory getFactory(PlayerEntity player)
-    {
-        return new TabletScreenFactory(TERMINAL_ICON, () -> new TabletMenuScreen(player), TerminalScreenHandler::new);
+        parent.push(root);
     }
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         super.render(matrices, mouseX, mouseY, delta);
-    }
-
-    @Override
-    public void handledScreenTick()
-    {
-        super.handledScreenTick();
     }
 
     @Override
@@ -100,15 +91,15 @@ public class TabletMenuScreen extends TabletScreen
     public void init()
     {
         super.init();
+        clearChildren();
         generateMenu();
     }
 
     protected void generateMenu()
     {
-        entries.forEach(this::remove);
         entries.clear();
 
-        List<GuideNode> nodes = path.peek().getChildren();
+        List<GuideNode> nodes = parent.getPath().peek().getChildren();
         // TODO: pages
         for (int i = 0; i < nodes.size(); ++i)
         {
@@ -124,6 +115,18 @@ public class TabletMenuScreen extends TabletScreen
         return 10;
     }
 
+    @Override
+    public void appendNarrations(NarrationMessageBuilder builder)
+    {
+
+    }
+
+    @Override
+    public SelectionType getType()
+    {
+        return SelectionType.FOCUSED;
+    }
+
     public class EntryWidget extends ClickableWidget
     {
         private final GuideNode node;
@@ -137,6 +140,12 @@ public class TabletMenuScreen extends TabletScreen
         }
 
         @Override
+        public void playDownSound(SoundManager soundManager)
+        {
+            soundManager.play(PositionedSoundInstance.master(SoundEvents.BLOCK_WOODEN_TRAPDOOR_CLOSE, 1.0f));
+        }
+
+        @Override
         public void onClick(double mouseX, double mouseY)
         {
             this.onPress();
@@ -144,8 +153,7 @@ public class TabletMenuScreen extends TabletScreen
 
         protected void onPress()
         {
-            path.push(node);
-            init();
+            node.visitScreen(parent);
         }
 
         @Override
@@ -167,8 +175,6 @@ public class TabletMenuScreen extends TabletScreen
 //            int j = this.active ? 0xFFFFFF : 0xA0A0A0;
             textRenderer.draw(matrices, this.getMessage(), this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
             renderItemIcon(this.x + width - 16, this.y - 1, itemRenderer, getZOffset(), icon, matrices, vertexConsumers, 15, 0);
-//            itemRenderer.renderInGuiWithOverrides(icon, this.x, this.y);
-//            ClickableWidget.drawCenteredText(matrices, textRenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0f) << 24);
         }
     }
 
@@ -240,12 +246,12 @@ public class TabletMenuScreen extends TabletScreen
         for (BakedQuad bakedQuad : quads)
         {
 
-            int i = 0x00FF00;
-            float f = (float)(i >> 16 & 0xFF) / 255.0f;
+            int i = 0x77FF77;
+            float r = (float)(i >> 16 & 0xFF) / 255.0f;
             float g = (float)(i >> 8 & 0xFF) / 255.0f;
-            float h = (float)(i & 0xFF) / 255.0f;
-//            f = 0;
-            vertices.quad(entry, bakedQuad, f, g, h, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
+            float b = (float)(i & 0xFF) / 255.0f;
+
+            vertices.quad(entry, bakedQuad, r, g, b, LightmapTextureManager.MAX_LIGHT_COORDINATE, OverlayTexture.DEFAULT_UV);
         }
     }
 }

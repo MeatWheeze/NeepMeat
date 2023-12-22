@@ -1,5 +1,7 @@
 package com.neep.neepmeat.guide;
 
+import com.neep.neepmeat.client.screen.tablet.ITabletScreen;
+import com.neep.neepmeat.client.screen.tablet.TabletScreen;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -13,6 +15,7 @@ public interface GuideNode
     String getId();
     Identifier getIcon();
     Text getText();
+    void visitScreen(ITabletScreen screen);
 
     abstract class GuideNodeImpl implements GuideNode
     {
@@ -67,6 +70,12 @@ public interface GuideNode
         {
             children.add(node);
         }
+
+        @Override
+        public void visitScreen(ITabletScreen screen)
+        {
+
+        }
     }
 
     class PageNode extends GuideNodeImpl
@@ -86,6 +95,11 @@ public interface GuideNode
         public void addChild(GuideNode node)
         {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void visitScreen(ITabletScreen screen)
+        {
         }
     }
 }
