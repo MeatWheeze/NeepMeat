@@ -1,0 +1,119 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre",
+        "x": 90,
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre",
+        "x": 180
+      }
+    },
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/centre"
+      }
+    },
+
+    {
+      "when": {
+        "north": "true",
+        "facing": "east|west|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side"
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "facing": "north|south|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "facing": "east|west|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "facing": "north|south|up|down"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true",
+        "facing": "north|south|east|west"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side",
+        "x": -90
+      }
+    },
+    {
+      "when": {
+        "down": "true",
+        "facing": "north|south|east|west"
+      },
+      "apply": {
+        "model": "neepmeat:block/fluid_buffer/side",
+        "x": 90
+      }
+    }
+    ]
+}
