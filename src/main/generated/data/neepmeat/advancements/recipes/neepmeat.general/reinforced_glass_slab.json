@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:reinforced_glass_slab"
+    ]
+  },
+  "criteria": {
+    "has_reinforced_glass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:reinforced_glass"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:reinforced_glass_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_reinforced_glass",
+      "has_the_recipe"
+    ]
+  ]
+}
