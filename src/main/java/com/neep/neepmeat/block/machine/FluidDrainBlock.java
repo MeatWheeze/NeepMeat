@@ -4,7 +4,6 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.blockentity.fluid.FluidDrainBlockEntity;
 import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,7 +11,6 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -41,7 +39,7 @@ public class FluidDrainBlock extends BaseBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof TankBlockEntity be)
             {
-                TankBlockEntity.showContents((ServerPlayerEntity) player, pos, be.getBuffer(null));
+                TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
             }
         }
         return ActionResult.SUCCESS;

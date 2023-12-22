@@ -24,11 +24,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import org.apache.logging.log4j.core.jmx.Server;
 import org.jetbrains.annotations.Nullable;
 
@@ -84,14 +87,15 @@ public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fl
 
         else if (!world.isClient())
         {
-            showContents((ServerPlayerEntity) player, getPos(), getBuffer(null));
+            showContents((ServerPlayerEntity) player, world, getPos(), getBuffer(null));
             return true;
         }
         return true;
     }
 
-    public static void showContents(ServerPlayerEntity player, BlockPos pos, FluidBuffer buffer)
+    public static void showContents(ServerPlayerEntity player, World world, BlockPos pos, FluidBuffer buffer)
     {
+        world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
         TankMessagePacket.send(player, pos, buffer.getAmount(), buffer.getResource());
     }
 }
