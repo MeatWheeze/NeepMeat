@@ -15,12 +15,9 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
-import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -35,7 +32,6 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
 {
     protected BlockApiCache<RoutingNetwork, Void> controller;
     protected final List<RetrievalTarget<ItemVariant>> targets = new ArrayList<>(6);
-    protected final List<Pair<BlockPos, Direction>> storageFaces = new ArrayList<>(6);
     protected boolean needsUpdate = true;
 
     public StorageBusBlockEntity(BlockPos pos, BlockState state)
@@ -79,29 +75,20 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        NbtList posList = new NbtList();
-        targets.forEach(t ->
-        {
-            NbtCompound compound = NbtHelper.fromBlockPos(t.getPos());
-            compound.putInt("direction", t.getFace().ordinal());
-            posList.add(compound);
-        });
-        nbt.put("storage_pos", posList);
+//        NbtList posList = new NbtList();
+//        targets.forEach(t ->
+//        {
+//            NbtCompound compound = NbtHelper.fromBlockPos(t.getPos());
+//            compound.putInt("direction", t.getFace().ordinal());
+//            posList.add(compound);
+//        });
+//        nbt.put("storage_pos", posList);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        NbtList posList = nbt.getList("storage_pos", NbtType.COMPOUND);
-//        posList.forEach(c ->
-//        {
-//            NbtCompound compound = (NbtCompound) c;
-//            BlockPos pos = NbtHelper.toBlockPos(compound);
-//            Direction direction = Direction.values()[compound.getInt("direction")];
-//            storageFaces.add(Pair.of(pos, direction));
-//        });
-//        needsUpdate = true;
     }
 
     @Override
@@ -124,12 +111,12 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
         if (needsUpdate)
         {
             updateTargets();
-            if (getWorld() != null && getWorld() instanceof ServerWorld)
-            {
-                targets.clear();
-                storageFaces.forEach(p -> targets.add(new RetrievalTarget<>(BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) getWorld(), p.first()), p.second())));
+//            if (getWorld() != null && getWorld() instanceof ServerWorld)
+//            {
+//                targets.clear();
+//                storageFaces.forEach(p -> targets.add(new RetrievalTarget<>(BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) getWorld(), p.first()), p.second())));
                 needsUpdate = false;
-            }
+//            }
         }
         return targets;
     }
