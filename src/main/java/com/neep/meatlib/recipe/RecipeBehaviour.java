@@ -1,9 +1,11 @@
 package com.neep.meatlib.recipe;
 
-import com.neep.neepmeat.recipe.EnlighteningRecipe;
+import com.neep.meatlib.util.NbtSerialisable;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
-public abstract class RecipeBehaviour<T extends ImplementedRecipe<? extends ImplementedRecipe.DummyInventory>>
+public abstract class RecipeBehaviour<T extends ImplementedRecipe<? extends ImplementedRecipe.DummyInventory>> implements NbtSerialisable
 {
     protected Identifier recipeId;
     protected T currentRecipe;
@@ -30,4 +32,33 @@ public abstract class RecipeBehaviour<T extends ImplementedRecipe<? extends Impl
     public abstract void interrupt();
 
     public abstract void finishRecipe();
+
+    public void load(World world)
+    {
+        if (currentRecipe == null && recipeId != null)
+        {
+            currentRecipe = (T) world.getRecipeManager().get(recipeId).orElse(null);
+        }
+        recipeId = null;
+    }
+
+    @Override
+    public void writeNbt(NbtCompound tag)
+    {
+        if (currentRecipe != null)
+        {
+            tag.putString("recipe", currentRecipe.getId().toString());
+        }
+    }
+
+    @Override
+    public void readNbt(NbtCompound tag)
+    {
+        String id = tag.getString("recipe");
+        if (id != null)
+        {
+            this.recipeId = new Identifier(id);
+        }
+        else this.recipeId = null;
+    }
 }

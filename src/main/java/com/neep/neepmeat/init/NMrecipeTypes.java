@@ -35,6 +35,8 @@ public class NMrecipeTypes
     public static final RecipeSerializer<PressingRecipe> PRESSING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "pressing", new PressingRecipe.Serializer(PressingRecipe::new));
     public static final RecipeType<PressingRecipe> PRESSING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "pressing");
 
+    public static final RecipeSerializer<MobSqueezingRecipe> MOB_SQUEEZING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "mob_squeezing", new MobSqueezingRecipe.Serializer(MobSqueezingRecipe::new));
+    public static final RecipeType<MobSqueezingRecipe> MOB_SQUEEZING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "mob_squeezing");
 
     public static final RecipeSerializer<EnlighteningRecipe> ENLIGHTENING_SERIALIZER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "enlightening", new EnlighteningRecipe.Serializer(EnlighteningRecipe::new));
     public static final RecipeType<EnlighteningRecipe> ENLIGHTENING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "enlightening");

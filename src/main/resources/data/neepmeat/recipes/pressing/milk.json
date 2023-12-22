@@ -1,0 +1,10 @@
+{
+  "type": "neepmeat:mob_squeezing",
+  "entity": {
+    "id": "minecraft:cow"
+  },
+  "output": {
+    "resource": "neepmeat:milk",
+    "amount": 81000
+  }
+}
