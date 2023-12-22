@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.death_blades;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
@@ -22,22 +21,18 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class DeathBladesBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class DeathBladesBlockEntity extends MotorisedMachineBlockEntity
 {
     protected static final int MAX_COOLDOWN = 10;
-    public static final float MIN_INCREMENT = 0.2f;
-    public static final float MAX_INCREMENT = 1.5f;
 
     protected float angularSpeed;
-    protected float multiplier;
     protected float angle;
     protected float clientAngle;
     protected float cooldown;
-    protected float increment = 1;
 
     public DeathBladesBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state);
+        super(type, pos, state, 0.1f, 0.2f, 1.5f);
     }
 
     public DeathBladesBlockEntity(BlockPos pos, BlockState state)
@@ -48,18 +43,13 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements Motor
     @Override
     public boolean tick(MotorEntity motor)
     {
-        this.cooldown = Math.min(MAX_COOLDOWN, cooldown + increment);
+        this.cooldown = Math.min(MAX_COOLDOWN, cooldown + progressIncrement);
 
         this.angle = MathHelper.wrapDegrees(this.angle + angularSpeed);
 
         if (cooldown >= MAX_COOLDOWN && angularSpeed > 0)
         {
             cooldown = 0;
-
-//            Vec3d centre = Vec3d.ofCenter(pos);
-//            Vec3d bladeEnd = new Vec3d(Math.cos(angle * Math.PI / 180) * 1.5, 0, Math.sin(angle * Math.PI / 180) * 1.5);
-//            Vec3d startPos = centre.subtract(bladeEnd);
-//            Vec3d endPos = centre.add(bladeEnd);
 
             Box box = new Box(0, 0, 0, 0, 0, 0);
             switch (getCachedState().get(DeathBladesBlock.FACING))
@@ -69,7 +59,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements Motor
                 case EAST, WEST -> box = new Box(pos.add(0, -1, -1), pos.add(1, 2, 2));
             }
 
-            int damageAmount = (int) (4 * multiplier);
+            int damageAmount = (int) Math.max(4 * power, 2);
             world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true).stream()
                     .filter(e -> e.hurtTime == 0 && !e.isDead()).forEach(e ->
                     {
@@ -110,16 +100,21 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements Motor
     @Override
     public void setInputPower(float power)
     {
-        this.multiplier = power;
-        this.angularSpeed = power * 20;
-        sync();
+        if (power < minPower)
+        {
+            this.angularSpeed = 0;
+        }
+        else
+        {
+            this.angularSpeed = power * 20;
+        }
+        super.setInputPower(power);
     }
 
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-//        nbt.putFloat("angle", angle);
         nbt.putFloat("angularSpeed", angularSpeed);
     }
 
@@ -127,12 +122,12 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements Motor
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-//        this.angle = nbt.getFloat("angle");
         this.angularSpeed = nbt.getFloat("angularSpeed");
     }
 
     public static void clientTick(World world, BlockPos pos, BlockState state, DeathBladesBlockEntity be)
     {
+        be.clientAngle = be.angle;;
         be.angle = MathHelper.wrapDegrees(be.angle + be.angularSpeed);
     }
 }
