@@ -1,12 +1,12 @@
-package com.neep.neepmeat.plc.program;
+package com.neep.neepmeat.plc.instruction;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLC;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.program.PlcProgram;
 import net.minecraft.nbt.NbtCompound;
 
-public interface PLCInstruction extends NbtSerialisable
+public interface Instruction extends NbtSerialisable
 {
     boolean canStart(PLC plc);
 
@@ -14,11 +14,11 @@ public interface PLCInstruction extends NbtSerialisable
 
     InstructionProvider getProvider();
 
-    PLCInstruction EMPTY = new EmptyInstruction();
+    Instruction EMPTY = new EmptyInstruction();
 
-    static PLCInstruction end() { return EMPTY; }
+    static Instruction end() { return EMPTY; }
 
-    class EmptyInstruction implements PLCInstruction
+    class EmptyInstruction implements Instruction
     {
         @Override
         public NbtCompound writeNbt(NbtCompound nbt)

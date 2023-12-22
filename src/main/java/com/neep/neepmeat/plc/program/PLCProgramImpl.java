@@ -2,7 +2,8 @@ package com.neep.neepmeat.plc.program;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
@@ -15,27 +16,26 @@ import java.util.function.Supplier;
 public class PLCProgramImpl implements MutableProgram
 {
     private final Supplier<World> worldSupplier;
-    protected ArrayList<PLCInstruction> instructions = Lists.newArrayList();
+    protected ArrayList<Instruction> instructions = Lists.newArrayList();
 
     public PLCProgramImpl(Supplier<World> worldSupplier)
     {
-
         this.worldSupplier = worldSupplier;
     }
 
-    public void add(PLCInstruction instruction)
+    public void add(Instruction instruction)
     {
         instructions.add(instruction);
     }
 
     @Override
-    public PLCInstruction get(int index)
+    public Instruction get(int index)
     {
         if (index < instructions.size())
         {
             return instructions.get(index);
         }
-        return PLCInstruction.end();
+        return Instruction.end();
     }
 
     @Override
@@ -45,13 +45,13 @@ public class PLCProgramImpl implements MutableProgram
     }
 
     @Override
-    public void addBack(PLCInstruction instruction)
+    public void addBack(Instruction instruction)
     {
         instructions.add(instruction);
     }
 
     @Override
-    public void insert(int index, PLCInstruction instruction)
+    public void insert(int index, Instruction instruction)
     {
         instructions.add(index, instruction);
     }
@@ -67,7 +67,7 @@ public class PLCProgramImpl implements MutableProgram
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtList list = new NbtList();
-        for (PLCInstruction instruction : instructions)
+        for (Instruction instruction : instructions)
         {
             NbtCompound instructionNbt = new NbtCompound();
             instruction.writeNbt(instructionNbt);

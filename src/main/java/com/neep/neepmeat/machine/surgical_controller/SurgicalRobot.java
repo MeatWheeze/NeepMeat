@@ -42,9 +42,9 @@ public class SurgicalRobot implements NbtSerialisable
     private double vy;
     private double vz;
 
-    private Vec3d targetPos;
+    @Nullable private Vec3d targetPos;
+    @Nullable private BlockPos target;
 
-    private BlockPos target;
     private final BlockPos basePos;
     private final Vec3d dockingPos;
     private final Vec3d attachPos;

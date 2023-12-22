@@ -6,8 +6,8 @@ import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
-import com.neep.neepmeat.plc.program.PLCInstruction;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -40,6 +40,8 @@ public class PLCProgramScreen extends Screen
 
     protected final PLCBlockEntity plc;
 
+    public RecordMode mode = RecordMode.IMMEDIATE;
+
     public PLCProgramScreen(PLCBlockEntity plc)
     {
         super(Text.empty());
@@ -66,8 +68,9 @@ public class PLCProgramScreen extends Screen
         outline.init(client, width, height);
         outline.setDimensions(width, height);
 
-        addDrawableChild(new SaveButton(104, 2, 16, 16, Text.of("Save")));
-        addDrawableChild(new RunButton(104 + 17, 2, 16, 16, Text.of("Run")));
+        addDrawableChild(new SaveButton(width - 17, 2, 16, 16, Text.of("Save")));
+        addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
+        addDrawableChild(new ImmediateRecordButton(width - 3 * 17, 2, 16, 16, Text.of("")));
     }
 
     @Override
@@ -154,26 +157,19 @@ public class PLCProgramScreen extends Screen
 
     public void updateInstruction(InstructionProvider provider)
     {
-//        this.instructionProvider = provider;
-//        this.instructionBuilder = provider.start(client.world, this::emitInstruction);
-        PLCSyncProgram.Client.switchOperation(provider, plc);
+        if (mode == RecordMode.IMMEDIATE)
+        {
+            PLCSyncProgram.Client.switchOperationImmediate((InstructionProvider.Immediate) provider, plc);
+        }
+        else
+        {
+            PLCSyncProgram.Client.switchOperation(provider, plc);
+        }
     }
 
     protected void addArgument(BlockHitResult result)
     {
-        PLCSyncProgram.Client.sendArgument(new InstructionProvider.Argument(result.getBlockPos(), result.getSide()), plc);
-
-//        if (instructionBuilder == null)
-//            return;
-//
-//        instructionBuilder.argument(result.getBlockPos(), result.getSide());
-    }
-
-    protected void emitInstruction(PLCInstruction instruction)
-    {
-        client.player.sendMessage(Text.of(instruction.toString()));
-        plc.getEditProgram().addBack(instruction);
-        outline.update();
+        PLCSyncProgram.Client.sendArgument(new Argument(result.getBlockPos(), result.getSide()), plc);
     }
 
     protected BlockHitResult raycastClick(double mouseX, double mouseY)
@@ -321,7 +317,7 @@ public class PLCProgramScreen extends Screen
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             int thingHeight = 16;
-            this.drawTexture(matrices, this.x, this.y, getU(), getV() + i * thingHeight, this.width, this.height);
+            drawTexture(matrices, this.x, this.y, 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
             this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
 
             if (isMouseOver(mouseX, mouseY))
@@ -329,6 +325,7 @@ public class PLCProgramScreen extends Screen
                 renderTooltip(matrices, mouseX, mouseY);
             }
         }
+
 
         protected int getU()
         {
@@ -364,6 +361,50 @@ public class PLCProgramScreen extends Screen
         protected int getU()
         {
             return 16;
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            PLCSyncProgram.Client.sendRun(plc);
+        }
+    }
+
+    class ImmediateRecordButton extends SaveButton
+    {
+        public ImmediateRecordButton(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            mode = RecordMode.cycle(mode);
+        }
+
+        @Override
+        protected int getU()
+        {
+            return switch(mode)
+            {
+                case RECORD -> 64;
+                case IMMEDIATE -> 48;
+            };
+        }
+    }
+
+    public enum RecordMode
+    {
+        IMMEDIATE,
+        RECORD;
+
+        public static RecordMode cycle(RecordMode mode)
+        {
+            if (mode == IMMEDIATE)
+                return RECORD;
+            else
+                return IMMEDIATE;
         }
     }
 

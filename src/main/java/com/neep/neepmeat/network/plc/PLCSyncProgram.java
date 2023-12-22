@@ -4,7 +4,8 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLCBlockEntity;
-import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PlcProgram;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -52,9 +53,17 @@ public class PLCSyncProgram
             {
                 case ARGUMENT -> applyArgument(copy, player.world);
                 case OPERATION -> applyInstruction(copy, player.world);
+                case OPERATION_IMMEDIATE -> applyInstructionImmediate(copy, player.world);
                 case DELETE -> applyDelete(copy, player.world);
+                case RUN -> applyRun(copy, player.world);
             }
         });
+    }
+
+    private static void applyRun(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+        plc.runProgram(plc.getEditProgram());
     }
 
     private static void applyDelete(PacketByteBuf buf, World world)
@@ -76,11 +85,24 @@ public class PLCSyncProgram
         }
     }
 
+    private static void applyInstructionImmediate(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        Identifier id = Identifier.tryParse(buf.readString());
+
+        InstructionProvider provider = Instructions.IMMEDIATE.get(id);
+        if (provider != null)
+        {
+            plc.getEditor().setInstructionBuilder(provider);
+        }
+    }
+
     private static void applyArgument(PacketByteBuf buf, World world)
     {
         PLCBlockEntity plc = getPlc(buf, world);
 
-        InstructionProvider.Argument argument = InstructionProvider.Argument.fromBuf(buf);
+        Argument argument = Argument.fromBuf(buf);
         plc.getEditor().argument(argument);
     }
 
@@ -98,8 +120,10 @@ public class PLCSyncProgram
     {
         ARGUMENT,
         OPERATION,
+        OPERATION_IMMEDIATE,
         PROGRAM,
         DELETE,
+        RUN
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -132,7 +156,7 @@ public class PLCSyncProgram
             plc.getEditor().receiveProgram(nbt);
         }
 
-        public static void sendArgument(InstructionProvider.Argument argument, PLCBlockEntity plc)
+        public static void sendArgument(Argument argument, PLCBlockEntity plc)
         {
             PacketByteBuf buf = PacketByteBufs.create();
 
@@ -140,6 +164,19 @@ public class PLCSyncProgram
             putPlc(buf, plc);
 
             argument.writeBuf(buf);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void switchOperationImmediate(InstructionProvider.Immediate provider, PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            buf.writeInt(Action.OPERATION_IMMEDIATE.ordinal());
+            putPlc(buf, plc);
+
+            String id = Instructions.IMMEDIATE.getId(provider).toString();
+            buf.writeString(id);
 
             ClientPlayNetworking.send(ID, buf);
         }
@@ -164,6 +201,15 @@ public class PLCSyncProgram
             putPlc(buf, plc);
 
             buf.writeInt(index);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendRun(PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.RUN.ordinal());
+            putPlc(buf, plc);
 
             ClientPlayNetworking.send(ID, buf);
         }

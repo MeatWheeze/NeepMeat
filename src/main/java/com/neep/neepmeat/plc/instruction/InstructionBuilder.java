@@ -1,10 +1,7 @@
-package com.neep.neepmeat.plc.opcode;
+package com.neep.neepmeat.plc.instruction;
 
 import com.google.common.collect.Lists;
-import com.neep.neepmeat.plc.program.PLCInstruction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -12,11 +9,11 @@ import java.util.function.Consumer;
 public class InstructionBuilder
 {
     private final InstructionProvider provider;
-    private final List<InstructionProvider.Argument> arguments = Lists.newArrayList();
-    private final World world;
-    private final Consumer<PLCInstruction> finished;
+    private final List<Argument> arguments = Lists.newArrayList();
+    private final ServerWorld world;
+    private final Consumer<Instruction> finished;
 
-    public InstructionBuilder(InstructionProvider provider, World world, Consumer<PLCInstruction> finished)
+    public InstructionBuilder(InstructionProvider provider, ServerWorld world, Consumer<Instruction> finished)
     {
         this.provider = provider;
         this.world = world;
@@ -28,7 +25,7 @@ public class InstructionBuilder
         }
     }
 
-    public InstructionBuilder argument(InstructionProvider.Argument argument)
+    public InstructionBuilder argument(Argument argument)
     {
         arguments.add(argument);
         if (isComplete())
@@ -44,7 +41,7 @@ public class InstructionBuilder
         return arguments.size() >= provider.argumentCount();
     }
 
-    public PLCInstruction build()
+    public Instruction build()
     {
         return provider.create(world, arguments);
     }
