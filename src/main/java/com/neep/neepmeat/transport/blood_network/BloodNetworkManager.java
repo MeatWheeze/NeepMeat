@@ -12,7 +12,6 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -119,7 +118,7 @@ public class BloodNetworkManager extends PersistentState
         stagedEvents.add(runnable);
     }
 
-    static
+    public static void init()
     {
         WorldChunkEvents.BE_SET_WORLD.register((chunk, be) ->
         {
