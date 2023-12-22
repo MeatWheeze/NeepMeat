@@ -51,7 +51,7 @@ public class MergePipeBlock extends PneumaticTubeBlock
             }
         }
         shape = VoxelShapes.union(shape, DIR_SHAPES.get(facing));
-        shape = VoxelShapes.union(shape, DIR_SHAPES.get(facing.getOpposite()));
+//        shape = VoxelShapes.union(shape, DIR_SHAPES.get(facing.getOpposite()));
         return shape;
     }
 
@@ -135,7 +135,8 @@ public class MergePipeBlock extends PneumaticTubeBlock
     @Override
     public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
-        return direction != state.get(FACING).getOpposite();
+//        return direction != state.get(FACING).getOpposite();
+        return true;
     }
 
     @Override
