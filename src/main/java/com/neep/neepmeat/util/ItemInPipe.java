@@ -185,7 +185,8 @@ public class ItemInPipe
     public ItemInPipe copyWith(int amount)
     {
         ItemInPipe newItem = new ItemInPipe(in, out, variant, amount, tickStart);
-        newItem.setRoute((Stack<Direction>) route.clone());
+        if (route != null)
+            newItem.setRoute((Stack<Direction>) route.clone());
         return newItem;
     }
 }

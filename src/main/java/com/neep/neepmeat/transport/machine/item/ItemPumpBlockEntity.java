@@ -5,6 +5,7 @@ import com.neep.meatlib.util.MeatStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.util.TubeUtils;
 import com.neep.neepmeat.util.ItemInPipe;
 import com.neep.neepmeat.util.MiscUtils;
@@ -218,7 +219,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             nested.commit();
             return transferred;
         }
-        return TubeUtils.pipeToAny(item, getPos(), getCachedState(), facing, getWorld(), transaction, true);
+        return TubeUtils.pipeToAny(item, getPos(), facing, getWorld(), transaction, true);
 //        if (state.getBlock() instanceof IItemPipe pipe)
 //        {
 //            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
@@ -227,13 +228,14 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
     public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target, TransactionContext transaction)
     {
-        BlockPos newPos = target.getPos().offset(target.getFace());
-        BlockState state = world.getBlockState(newPos);
-        if (state.getBlock() instanceof IItemPipe pipe)
-        {
-            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()), transaction);
-        }
-        return 0;
+//        BlockPos newPos = target.getPos().offset(target.getFace());
+//        BlockState state = world.getBlockState(newPos);
+        Direction facing = getCachedState().get(ItemPumpBlock.FACING);
+        return ((IServerWorld) world).getItemNetwork().route(target.getPos(), target.getFace(), pos, facing, amount.resource(), (int) amount.amount(), transaction);
+//        if (state.getBlock() instanceof IItemPipe pipe)
+//        {
+//            return pipe.insert(world, newPos, state, target.getFace().getOpposite(), new ItemInPipe(amount, world.getTime()), transaction);
+//        }
     }
 
     public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
