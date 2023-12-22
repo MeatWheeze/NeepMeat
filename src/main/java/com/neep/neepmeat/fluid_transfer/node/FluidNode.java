@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
@@ -228,6 +229,18 @@ public class FluidNode
         return storage;
     }
 
+    public long firstAmount(ServerWorld world, Transaction transaction)
+    {
+        Transaction inner = transaction.openNested();
+        for (StorageView<FluidVariant> view : getStorage(world).iterable(inner))
+        {
+            inner.abort();
+            return view.getAmount();
+        }
+        inner.abort();
+        return 0;
+    }
+
     public AcceptorModes getMode(ServerWorld world)
     {
         BlockPos target = nodePos.facingBlock();
@@ -252,6 +265,8 @@ public class FluidNode
             return;
         }
 
+
+
         AcceptorModes mode = this.getMode(world);
         float flow = mode.getFlow() * flowMultiplier;
 
@@ -265,9 +280,6 @@ public class FluidNode
         // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
 
         float r = 0.5f;
-
-        float sumIn = 0;
-        float sumOut = 0;
 
         // Calculate sum(r^4 / L_i), discounting full containers.
         for (FluidNode distanceNode : distances.keySet())
@@ -300,11 +312,11 @@ public class FluidNode
 
             if (notFull)
             {
-                sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
+//                sumIn += Math.pow(r, 4) / (float) distances.get(distanceNode);
             }
             if (notEmpty)
             {
-                sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
+//                sumOut += Math.pow(r, 4) / (float) distances.get(distanceNode);
             }
         }
 
@@ -323,7 +335,7 @@ public class FluidNode
         long baseFlow = moved;
 //        float insertBranchFlow = (float) (((float) baseFlow * (Q + gravityFlowIn)) / distances.size());
         long insertBranchFlow = (long) (baseFlow * (Q + Math.ceil(gravityFlowIn)) / (distances.size()));
-        System.out.println(Math.ceil(gravityFlowIn));
+//        System.out.println(Math.ceil(gravityFlowIn));
 //        float insertBranchFlow = (float) (baseFlow * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
 //        float extractBranchFlow = (float) (baseFlow * (Q + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
 
