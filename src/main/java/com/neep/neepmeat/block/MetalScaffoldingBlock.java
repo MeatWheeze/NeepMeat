@@ -1,6 +1,8 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseBlock;
+import com.neep.neepmeat.block.base.BaseSlabBlock;
+import com.neep.neepmeat.block.base.BaseStairsBlock;
 import com.neep.neepmeat.block.base.NMBlock;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
@@ -37,13 +39,21 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
 
     public static final BooleanProperty WATERLOGGED = Properties.WATERLOGGED;
     public static final BooleanProperty BOTTOM = Properties.BOTTOM;
+    public final NMBlock stairs;
 
-    public MetalScaffoldingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public MetalScaffoldingBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
-        registryName = itemName;
+        super(registryName, itemMaxStack, hasLore, settings.nonOpaque());
 
+        stairs = new BaseStairsBlock(this.getDefaultState(),registryName + "_stairs", itemMaxStack, settings);
+        BlockInitialiser.BLOCKS.put(stairs.getRegistryName(), stairs);
+
+        BaseSlabBlock slab = new BaseSlabBlock(this.getDefaultState(),registryName + "_slab", itemMaxStack, settings);
+        BlockInitialiser.BLOCKS.put(slab.getRegistryName(), slab);
+
+        this.registryName = registryName;
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
+        BlockInitialiser.BLOCKS.put(getRegistryName(), this);
     }
 
     public BlockItem getBlockItem()
