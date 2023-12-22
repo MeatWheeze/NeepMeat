@@ -9,13 +9,18 @@ import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.HopperBlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -71,5 +76,23 @@ public class ItemBufferBlock extends BaseBlock implements BlockEntityProvider
         }
 
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+    {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (blockEntity instanceof ItemBufferBlockEntity be)
+        {
+            onEntityCollided(world, pos, state, entity, be);
+        }
+    }
+
+    public static void onEntityCollided(World world, BlockPos pos, BlockState state, Entity entity, ItemBufferBlockEntity be)
+    {
+        if (!world.isClient && entity instanceof ItemEntity item)
+        {
+            be.extractFromItem(item);
+        }
     }
 }

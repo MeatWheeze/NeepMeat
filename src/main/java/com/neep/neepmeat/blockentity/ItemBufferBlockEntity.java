@@ -9,10 +9,16 @@ import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleViewIterator;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.HopperBlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
@@ -115,6 +121,27 @@ public class ItemBufferBlockEntity extends BlockEntity implements
     public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
         return SingleViewIterator.create(this, transaction);
+    }
+
+    public boolean extractFromItem(ItemEntity itemEntity)
+    {
+        boolean success = false;
+        ItemStack itemStack = itemEntity.getStack();
+
+        Transaction transaction = Transaction.openOuter();
+
+        int transferred = (int) insert(ItemVariant.of(itemStack), itemStack.getCount(), transaction);
+        itemStack.decrement(transferred);
+        System.out.println(itemStack.getCount());
+        if (itemStack.getCount() <= 0)
+        {
+//            itemEntity.remove(Entity.RemovalReason.DISCARDED);
+            itemEntity.discard();
+        }
+
+        transaction.commit();
+
+        return success;
     }
 
     public ItemVariant getResource()
