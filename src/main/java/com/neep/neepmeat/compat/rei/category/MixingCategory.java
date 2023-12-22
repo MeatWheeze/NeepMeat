@@ -64,7 +64,7 @@ public class MixingCategory implements DisplayCategory<MixingDisplay>
             widgets.add(Widgets.createSlot(new Point(startPoint.x + 1, startPoint.y + 9)).entries(display.getInputEntries().get(0)).markInput());
         }
 
-        if (!display.getRecipe().getItemIngredient().isEmpty())
+        if (display.getRecipe().getItemIngredient().amount() != 0)
         {
             widgets.add(Widgets.createSlot(new Point(startPoint.x - 20, startPoint.y + 9)).entries(display.getInputEntries().get(2)).markInput());
         }
