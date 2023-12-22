@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#  ",
+    "## ",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "neepmeat:yellow_tiles"
+    }
+  },
+  "result": {
+    "item": "neepmeat:yellow_tiles_stairs",
+    "count": 4
+  }
+}

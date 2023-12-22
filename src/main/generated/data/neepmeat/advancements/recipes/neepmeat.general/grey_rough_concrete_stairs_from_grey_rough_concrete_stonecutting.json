@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "minecraft:grey_rough_concrete_stairs_from_grey_rough_concrete_stonecutting"
+    ]
+  },
+  "criteria": {
+    "has_grey_rough_concrete": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:grey_rough_concrete"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "minecraft:grey_rough_concrete_stairs_from_grey_rough_concrete_stonecutting"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_grey_rough_concrete",
+      "has_the_recipe"
+    ]
+  ]
+}
