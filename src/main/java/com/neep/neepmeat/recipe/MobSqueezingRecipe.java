@@ -3,6 +3,7 @@ package com.neep.neepmeat.recipe;
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
+import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.hydraulic_press.MobSqueezeContext;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
@@ -12,8 +13,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -86,6 +89,13 @@ public class MobSqueezingRecipe extends ImplementedRecipe<MobSqueezeContext>
                 SoundEvents.ENTITY_COW_HURT,
                 SoundCategory.AMBIENT,
                 1, 1);
+
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(NMParticles.MILK_SPLASH,
+                    context.getPos().getX() + 0.5, context.getPos().getY() + 0.5, context.getPos().getZ() + 0.5,
+                    10, 0.25, 0.25, 0.25, 0.0001);
+        }
     }
 
     public static class Serializer implements RecipeSerializer<MobSqueezingRecipe>

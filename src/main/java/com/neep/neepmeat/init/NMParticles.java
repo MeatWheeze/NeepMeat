@@ -25,6 +25,7 @@ public class NMParticles
     public static DefaultParticleType MEAT_SPLASH = FabricParticleTypes.simple();
     public static DefaultParticleType MEAT_FOUNTAIN = FabricParticleTypes.simple();
     public static DefaultParticleType MEAT_BIT = FabricParticleTypes.simple();
+    public static DefaultParticleType MILK_SPLASH = FabricParticleTypes.simple();
 //    public static DefaultParticleType MEAT_DROP = FabricParticleTypes.simple();
 
     public static void init()
@@ -32,6 +33,7 @@ public class NMParticles
         MEAT_SPLASH = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_splash", MEAT_SPLASH);
         MEAT_FOUNTAIN = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_fountain", MEAT_FOUNTAIN);
         MEAT_BIT = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_bit", MEAT_BIT);
+        MILK_SPLASH = ParticleRegistry.register(NeepMeat.NAMESPACE, "milk_splash", MILK_SPLASH);
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -55,6 +57,7 @@ public class NMParticles
             ParticleFactoryRegistry.getInstance().register(MEAT_SPLASH, FlameParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(MEAT_FOUNTAIN, LavaEmberParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(MEAT_BIT, PortalParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(MILK_SPLASH, WaterSplashParticle.Factory::new);
 //            ParticleFactoryRegistry.getInstance().register(MEAT_DROP, FlameParticle.Factory::new);
         }
 
