@@ -7,10 +7,13 @@ import com.neep.neepmeat.api.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
+import com.neep.neepmeat.api.plc.robot.DelayAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
-import com.neep.neepmeat.api.plc.robot.SingleAction;
+import com.neep.neepmeat.api.plc.robot.RobotAction;
+import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.recipe.EntityManufactureRecipe;
@@ -23,6 +26,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -39,6 +43,8 @@ public class ImplantInstruction implements Instruction
     private final Argument to;
     private ResourceAmount<ItemVariant> stored;
 
+    private final GroupedRobotAction group;
+
     public ImplantInstruction(Supplier<ServerWorld> world, List<Argument> arguments)
     {
         this.world = world::get;
@@ -46,15 +52,30 @@ public class ImplantInstruction implements Instruction
         this.to = arguments.get(1);
         this.fromCache = LazyBlockApiCache.itemSided(from, world);
         this.toCache = LazyBlockApiCache.of(MutateInPlace.ENTITY, to.pos(), world, () -> null);
+
+        group = GroupedRobotAction.of(
+                new RobotMoveToAction(from.pos()),
+                AtomicAction.of(this::takeFrom),
+                new Glue(),
+                AtomicAction.of(this::playSound),
+                new DelayAction(40),
+                AtomicAction.of(this::install)
+        );
+    }
+
+    private void playSound(PLC plc)
+    {
+        var robot = plc.getRobot();
+        world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.IMPLANT_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
     }
 
     public ImplantInstruction(Supplier<World> world, NbtCompound compound)
     {
-        this.world = world;
-        this.from = Argument.fromNbt(compound.getCompound("from"));
-        this.to = Argument.fromNbt(compound.getCompound("to"));
-        this.fromCache = LazyBlockApiCache.itemSided(from, () -> (ServerWorld) world.get());
-        this.toCache = LazyBlockApiCache.of(MutateInPlace.ENTITY, to.pos(), () -> (ServerWorld) world.get(), () -> null);
+        this(() -> (ServerWorld) world.get(), List.of(
+                Argument.fromNbt(compound.getCompound("from")),
+                Argument.fromNbt(compound.getCompound("to"))
+        ));
+        group.readNbt(compound.getCompound("action"));
     }
 
     @Override
@@ -62,6 +83,7 @@ public class ImplantInstruction implements Instruction
     {
         nbt.put("from", from.toNbt());
         nbt.put("to", to.toNbt());
+        nbt.put("action", group.writeNbt(new NbtCompound()));
         return nbt;
     }
 
@@ -77,15 +99,11 @@ public class ImplantInstruction implements Instruction
         return true;
     }
 
+
     @Override
     public void start(PlcProgram program, PLC plc)
     {
-        plc.addRobotAction(GroupedRobotAction.of(
-                new RobotMoveToAction(plc.getRobot(), from.pos()),
-                SingleAction.of(() -> this.takeFrom(plc)),
-                new RobotMoveToAction(plc.getRobot(), getEntityPos(plc)),
-                SingleAction.of(() -> this.install(plc))
-        ), this::finish);
+        plc.addRobotAction(group, this::finish);
     }
 
     private void takeFrom(PLC plc)
@@ -151,5 +169,25 @@ public class ImplantInstruction implements Instruction
     public InstructionProvider getProvider()
     {
         return Instructions.IMPLANT;
+    }
+
+    class Glue implements RobotAction
+    {
+        @Override
+        public boolean finished(PLC plc)
+        {
+            return plc.getRobot().reachedTarget();
+        }
+
+        @Override
+        public void start(PLC plc)
+        {
+            plc.getRobot().setTarget(getEntityPos(plc));
+        }
+
+        @Override
+        public void tick(PLC plc)
+        {
+        }
     }
 }

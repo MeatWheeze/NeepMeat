@@ -7,7 +7,6 @@ import com.neep.neepmeat.api.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
-import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
@@ -60,7 +59,7 @@ public class RemoveInstruction implements Instruction
     public void start(PlcProgram program, PLC plc)
     {
         plc.addRobotAction(GroupedRobotAction.of(
-                new RobotMoveToAction(plc.getRobot(), from.pos())
+                new RobotMoveToAction(from.pos())
         ), this::finish);
     }
 

@@ -1,14 +1,22 @@
 package com.neep.neepmeat.api.plc.robot;
 
+import com.neep.neepmeat.api.plc.PLC;
+
 public interface RobotAction
 {
-    boolean finished();
+    boolean finished(PLC plc);
 
-    void start();
+    void start(PLC plc);
 
-    void tick();
+    void tick(PLC plc);
 
     default boolean blocksController() { return true; }
 
-    default void cancel() {};
+    default void cancel(PLC plc) {};
+
+//    @Override
+//    default NbtCompound writeNbt(NbtCompound nbt) { return nbt; }
+//
+//    @Override
+//    default void readNbt(NbtCompound nbt) {}
 }
