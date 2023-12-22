@@ -82,7 +82,7 @@ public class PLCSyncProgram
         InstructionProvider provider = Instructions.REGISTRY.get(id);
         if (provider != null)
         {
-            plc.getEditor().setInstructionBuilder(provider);
+            plc.getState().setInstructionBuilder(provider);
         }
     }
 

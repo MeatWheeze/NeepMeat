@@ -95,6 +95,7 @@ public class PLCRobotC2S
                 if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
                 {
                     be.getRobot().setPos(x, y, z);
+//                    var robot = be.ger
                 }
             });
         }

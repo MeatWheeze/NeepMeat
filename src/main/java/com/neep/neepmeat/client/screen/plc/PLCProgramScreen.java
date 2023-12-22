@@ -158,14 +158,14 @@ public class PLCProgramScreen extends Screen
 
     public void updateInstruction(InstructionProvider provider)
     {
-        if (mode == RecordMode.IMMEDIATE)
-        {
-            PLCSyncProgram.Client.switchOperationImmediate((ImmediateInstructionProvider) provider, plc);
-        }
-        else
-        {
-            PLCSyncProgram.Client.switchOperation(provider, plc);
-        }
+//        if (mode == RecordMode.IMMEDIATE)
+//        {
+//            PLCSyncProgram.Client.switchOperationImmediate((ImmediateInstructionProvider) provider, plc);
+//        }
+//        else
+//        {
+//        }
+        PLCSyncProgram.Client.switchOperation(provider, plc);
     }
 
     protected void addArgument(BlockHitResult result)

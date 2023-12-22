@@ -194,7 +194,7 @@ public class SurgicalRobot implements NbtSerialisable
 
     public double getSpeed()
     {
-        return SPEED;
+        return 0.1;
     }
 
     public Vec3d getPos()
@@ -274,12 +274,24 @@ public class SurgicalRobot implements NbtSerialisable
 
     public void setPos(double x, double y, double z)
     {
+        // Do not accept update packets from the client when overriding the controller
+        if (!parent.getWorld().isClient() && shouldUpdatePosition(parent.getWorld()))
+            return;
+
+        prevX = this.x;
+        prevY = this.y;
+        prevZ = this.z;
+
         this.x = x;
         this.y = y;
         this.z = z;
         parent.markDirty();
     }
 
+    public void stay()
+    {
+        this.setTarget(new BlockPos(x, y, z));
+    }
 
     @Environment(value = EnvType.CLIENT)
     public static class Client
@@ -306,53 +318,76 @@ public class SurgicalRobot implements NbtSerialisable
 
         public void motion()
         {
-            robot.prevX = robot.x;
-            robot.prevY = robot.y;
-            robot.prevZ = robot.z;
-
-            Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
-
-            double speed = 0.2;
-            float pitch = camera.getPitch();
-            float yaw = camera.getYaw();
-            double vx = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-//            double vy = speed * -Math.sin(Math.toRadians(pitch));
-            double vz = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
-
-            double l = Math.sqrt(vx * vx + vz * vz);
-            if (l != 0)
+            if (!robot.parent.overrideController())
             {
-                vx = vx / l * speed;
-                vz = vz / l * speed;
-            }
+                robot.prevX = robot.x;
+                robot.prevY = robot.y;
+                robot.prevZ = robot.z;
 
-            if (robot.pressingForward)
-            {
-                robot.vx = vx;
-                robot.vz = vz;
-            }
-            if (robot.pressingBack)
-            {
-                robot.vx = -vx;
-                robot.vz = -vz;
-            }
+                Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 
-            if (robot.pressingUp)
-            {
-                robot.vy = speed;
-            }
-            if (robot.pressingDown)
-            {
-                robot.vy = -speed;
-            }
+                double speed = 0.2;
+                float pitch = camera.getPitch();
+                float yaw = camera.getYaw();
+                double vx = -Math.sin(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+                double vz = Math.cos(Math.toRadians(yaw)) * Math.cos(Math.toRadians(pitch));
+                Vec3d normal = new Vec3d(-vz, 0, vx);
 
-            robot.x += robot.vx;
-            robot.y += robot.vy;
-            robot.z += robot.vz;
+                double fvx = 0;
+                double fvy = 0;
+                double fvz = 0;
 
-            robot.vx *= 0.4;
-            robot.vy *= 0.4;
-            robot.vz *= 0.4;
+                if (robot.pressingForward)
+                {
+                    fvx += vx;
+                    fvz += vz;
+                }
+                if (robot.pressingBack)
+                {
+                    fvx -= vx;
+                    fvz -= vz;
+                }
+
+                if (robot.pressingLeft)
+                {
+                    fvx -= normal.x;
+                    fvz -= normal.z;
+                }
+                if (robot.pressingRight)
+                {
+                    fvx += normal.x;
+                    fvz += normal.z;
+                }
+
+                if (robot.pressingUp)
+                {
+                    fvy += speed;
+                }
+                if (robot.pressingDown)
+                {
+                    fvy -= speed;
+                }
+
+                double l = Math.sqrt(fvx * fvx + fvz * fvz);
+                if (l != 0)
+                {
+                    fvx = fvx / l * speed;
+//                    fvy = fvy * speed;
+                    fvz = fvz / l * speed;
+
+                    robot.vz = fvx;
+                    robot.vy = fvy;
+                    robot.vx = fvz;
+                }
+
+                robot.x += fvx;
+                robot.y += fvy;
+                robot.z += fvz;
+
+                robot.vz *= 0.4;
+                robot.vy *= 0.4;
+                robot.vx *= 0.4;
+            }
         }
 
         public void updateKeys()

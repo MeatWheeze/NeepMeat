@@ -57,14 +57,14 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
     protected void addEntries()
     {
         List<? extends InstructionProvider> instructions;
-        if (parent.mode == PLCProgramScreen.RecordMode.IMMEDIATE)
-        {
-            instructions = Instructions.IMMEDIATE.stream().toList();
-        }
-        else
-        {
+//        if (parent.mode == PLCProgramScreen.RecordMode.IMMEDIATE)
+//        {
+//            instructions = Instructions.IMMEDIATE.stream().toList();
+//        }
+//        else
+//        {
             instructions = List.of(Instructions.COMBINE, Instructions.COMBINE, Instructions.END);
-        }
+//        }
 
         int entryHeight = 20;
         int gap = 1;

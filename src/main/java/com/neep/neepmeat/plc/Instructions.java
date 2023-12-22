@@ -20,7 +20,7 @@ public class Instructions
 
 
     public static final InstructionProvider END = register("end", new InstructionProviderImpl((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
-    public static final InstructionProvider COMBINE = register("combine", new ImmediateInstructionProviderImpl(CombineInstruction::new, CombineInstruction::new, w -> new CombineInstruction.Immediate(w.get()), 2, Text.of("COMBINE")));
+    public static final InstructionProvider COMBINE = register("combine", new InstructionProviderImpl(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE")));
 
     private static InstructionProvider register(String path, InstructionProvider provider)
     {
