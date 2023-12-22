@@ -20,7 +20,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier LO_ARMATURE = new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature");
     public static Identifier MOTOR_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor");
     public static Identifier DEPLOYER_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/deployer/shuttle");
-    public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/blades");
+    public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/agitator_blades");
 
     @Override
     public void provideExtraModels(ResourceManager manager, Consumer<Identifier> out)
