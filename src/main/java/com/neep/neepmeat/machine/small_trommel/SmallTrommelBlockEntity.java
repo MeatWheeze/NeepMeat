@@ -2,8 +2,8 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipeManager;
-import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
+import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -29,7 +29,6 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public static final float INCREMENT_MAX = 1;
     public static long CONVERT_MIN = 100;
     public static long BASE_AMOUNT = 9000;
-    public static long BONUS_CHANCE = 5;
 
     public TrommelStorage storage;
     public FluidVariant currentFluid;
@@ -91,6 +90,12 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         TrommelRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
         if (recipe != null)
         {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                if (recipe.takeInputs(storage, transaction))
+                    recipe.ejectOutputs(storage, transaction);
+                transaction.commit();
+            }
             return;
         }
 
