@@ -5,13 +5,17 @@ import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.util.MiscUitls;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -52,6 +56,24 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
     @Override
     public void onSteppedOn(World world, BlockPos pos, BlockState state, Entity entity)
     {
+    }
+
+    @Override
+    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    {
+        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && !world.isClient())
+        {
+            be.update((ServerWorld) world, pos, pos, state);
+        }
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be && !world.isClient())
+        {
+            be.update((ServerWorld) world, pos, fromPos, state);
+        }
     }
 
     @Override
