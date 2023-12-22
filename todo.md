@@ -32,7 +32,11 @@
 - [done] Stop duplication glitch when items enter rotuers
 - [done] Standardise router inventory background
 - [done] Make all machines change speed depending on rate of fluid input
-- Make Stirling Engine properly interface with motorised blocks
+- [done] Make grinder produce particles
+- [done] Make Stirling Engine properly interface with motorised blocks
+- Make Mixer require a motor
+- Make Deployer run with a motor
+- Add Etherial Fuel Transducer block
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
@@ -137,8 +141,8 @@ Body Hammer
 A Different God
 - Obtain Divine Flesh
 
-Tanks Not Included
-- Craft a Fuel Transducer
+Heart Machine
+- Place a Fuel Transducer
 
 
 # Bespoke Energy System vs Work Fluid

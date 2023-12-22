@@ -2,9 +2,11 @@ package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.FluidIngredient;
+import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -15,7 +17,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
@@ -23,24 +24,25 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MixerBlockEntity extends SyncableBlockEntity
+public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     protected MixerStorage storage = new MixerStorage(this);
     protected MixingRecipe currentRecipe;
     protected Identifier currentRecipeId;
-    protected long processStart;
     protected int processLength;
-    protected int progress;
+    protected float progress;
     protected int cooldownTicks;
+
+    public static float INCREMENT_MAX = 2;
+    public static float INCREMENT_MIN = 0.1f;
+    protected float progressIncrement;
+    protected long processStart;
 
     public float bladeAngle;
 
@@ -101,13 +103,6 @@ public class MixerBlockEntity extends SyncableBlockEntity
 
     public Storage<FluidVariant> getOutputStorage()
     {
-//        BlockPos offset = getPos().down();
-//        Storage<FluidVariant> storage;
-//        if ((storage = FluidStorage.SIDED.find(getWorld(), offset, Direction.UP)) != null)
-//        {
-//            return storage;
-//        }
-//        return null;
         return storage.getFluidOutput();
     }
 
@@ -117,7 +112,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
-            if (recipe != null && getOutputStorage().simulateInsert((FluidVariant) recipe.fluidOutput.resource(),
+            if (recipe != null && getOutputStorage().simulateInsert(recipe.fluidOutput.resource(),
                         recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())
@@ -162,7 +157,8 @@ public class MixerBlockEntity extends SyncableBlockEntity
         if (currentRecipe != null)
             nbt.putString("current_recipe", currentRecipe.getId().toString());
 
-        nbt.putInt("progress", progress);
+        nbt.putFloat("progress", progress);
+        nbt.putFloat("increment", progressIncrement);
         nbt.putInt("process_time", processLength);
         nbt.putLong("process_start", processStart);
         storage.writeNbt(nbt);
@@ -175,7 +171,8 @@ public class MixerBlockEntity extends SyncableBlockEntity
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
         readCurrentRecipe();
 
-        this.progress = nbt.getInt("progress");
+        this.progress = nbt.getFloat("progress");
+        this.progressIncrement = nbt.getFloat("increment");
         this.processLength = nbt.getInt("process_time");
         this.processStart = nbt.getLong("process_start");
         storage.readNbt(nbt);
@@ -185,15 +182,10 @@ public class MixerBlockEntity extends SyncableBlockEntity
     {
         if (world != null)
         {
-            Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(currentRecipeId);
+            Optional<? extends Recipe<?>> optional = Objects.requireNonNull(getWorld()).getRecipeManager().get(currentRecipeId);
             optional.ifPresentOrElse(recipe -> this.currentRecipe = (MixingRecipe) recipe,
                     () -> this.currentRecipe = null);
         }
-    }
-
-    public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, MixerBlockEntity be)
-    {
-        be.tick();
     }
 
     public void tick()
@@ -201,12 +193,13 @@ public class MixerBlockEntity extends SyncableBlockEntity
         readCurrentRecipe();
         if (currentRecipe != null)
         {
-            ++progress;
+            progress = Math.min(processLength, progress + progressIncrement);
             if (progress >= this.processLength)
             {
                 endDutyCycle();
                 this.progress = 0;
             }
+            sync();
         }
         else
         {
@@ -243,7 +236,20 @@ public class MixerBlockEntity extends SyncableBlockEntity
         if (world instanceof ServerWorld serverWorld)
         {
             serverWorld.spawnParticles(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,
-                    ((Fluid) ingredient.resource().getObject()).getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5 + 1, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
+                    ingredient.resource().getObject().getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5 + 1, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
         }
+    }
+
+    @Override
+    public boolean tick(IMotorBlockEntity motor)
+    {
+        tick();
+        return true;
+    }
+
+    @Override
+    public void setWorkMultiplier(float multiplier)
+    {
+        this.progressIncrement = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
     }
 }

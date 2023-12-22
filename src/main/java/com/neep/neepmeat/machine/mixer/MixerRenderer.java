@@ -34,7 +34,8 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         float nextOutput = 0;
         if (be.getCurrentRecipe() != null)
         {
-            progress = (be.getWorld().getTime() + tickDelta - be.processStart) / (float) be.processLength;
+//            progress = (be.getWorld().getTime() + tickDelta - be.processStart) / (float) be.processLength;
+            progress = (be.progress) / be.processLength;
             nextOutput = progress * be.getCurrentRecipe().fluidOutput.amount();
         }
 
@@ -51,20 +52,13 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
 
         if (be.getCurrentRecipe() != null)
         {
-            FluidVariant var1 = (FluidVariant) be.getCurrentRecipe().fluidInput1.resource();
-            FluidVariant var2 = (FluidVariant) be.getCurrentRecipe().fluidInput2.resource();
-            FluidVariant var3 = (FluidVariant) be.getCurrentRecipe().fluidOutput.resource();
+            FluidVariant var1 = be.getCurrentRecipe().fluidInput1.resource();
+            FluidVariant var2 = be.getCurrentRecipe().fluidInput2.resource();
 
             float scale = (-Math.abs(2 * progress - 1) + 1) * 0.1f;
 
             MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var1, outputEnd, outputEnd + scale, outputEnd + scale, 1);
             MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var2, outputEnd + scale, outputEnd + scale * 2, outputEnd + scale * 2, 1);
-
-            if (progress > 0.5f)
-            {
-                float offset = 0.5f - scale;
-//                MultiFluidRenderer.renderFluidCuboid(vertexConsumers, matrices, var3, outputEnd + scale * 2, outputEnd + 0.5f, outputEnd + 0.5f, 1);
-            }
         }
         matrices.pop();
         matrices.pop();
@@ -88,10 +82,8 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         {
             matrices.push();
             matrices.multiply(Quaternion.fromEulerXyz(0, (angle * angleOffset * 2) / 20, 0));
-//            float height = (float) ((Math.sin(angle / 20 + angleOffset) + 0.4) / 2 * fluidHeight) + 0.2f;
             matrices.translate(0.5, fluidHeight, offset);
 
-            ItemVariant var = view.getResource();
             MinecraftClient.getInstance().getItemRenderer()
                     .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
             angleOffset += Math.PI / 3;
