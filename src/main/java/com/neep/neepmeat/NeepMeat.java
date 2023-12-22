@@ -1,7 +1,7 @@
 package com.neep.neepmeat;
 
-import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.init.ItemInit;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -17,8 +17,9 @@ public class NeepMeat implements ModInitializer
 	public void onInitialize() {
 
 		LOGGER.info("Hello Fabric world!");
-//		BlockEntityInitialiser.initialiseBlockEntities();
+//		FluidStorage.SIDED.registerSelf(BlockEntityInitialiser.PUMP_BLOCK_ENTITY);
 		BlockInitialiser.registerBlocks();
 		ItemInit.registerItems();
+		BlockEntityInitialiser.initialiseBlockEntities();
 	}
 }

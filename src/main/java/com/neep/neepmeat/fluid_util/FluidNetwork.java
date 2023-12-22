@@ -2,18 +2,21 @@ package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.security.cert.Extension;
 import java.util.*;
 
 public class FluidNetwork
 {
     private World world;
-
     private HashSet<FluidNode> connectedNodes = new HashSet<>();
 //    private List<PipeSegment> networkPipes = new ArrayList<>();
     private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
@@ -26,9 +29,12 @@ public class FluidNetwork
 
     public void rebuild(BlockPos startPos, Direction face)
     {
-        discoverNodes(startPos, face);
-        buildPressures();
+        if (!world.isClient)
+        {
+            discoverNodes(startPos, face);
+            buildPressures();
 //        tick();
+        }
     }
 
     public void tick()
@@ -162,13 +168,23 @@ public class FluidNetwork
                                 networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
                             }
                         }
-                        else if (state2.getBlock() instanceof FluidNodeProvider)
+//                        else if (state2.getBlock() instanceof FluidNodeProvider)
+//                        {
+//                            FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
+//                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
+//                            {
+////                                System.out.println("target: " + next.toString());
+//                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
+//                            }
+//                        }
+                        else if (state2.hasBlockEntity())
                         {
-                            FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
-                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
+                            System.out.println(next);
                             {
-//                                System.out.println("target: " + next.toString());
-                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
+                                BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
+                                Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
+//                                Storage<FluidVariant> storage = cache.find(direction.getOpposite());
+                                System.out.println(storage);
                             }
                         }
                     }
