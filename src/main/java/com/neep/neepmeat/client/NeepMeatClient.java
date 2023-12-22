@@ -37,7 +37,6 @@ import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
-import com.neep.neepmeat.mixin.InGameHudMixin;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -88,9 +87,9 @@ public class NeepMeatClient implements ClientModInitializer
         TransportClient.init();
 
         TankMessagePacket.Client.registerReceiver();
-        ParticleSpawnPacket.Client.registerReceiver();
+        ParticleSpawnS2C.Client.registerReceiver();
         BlockSoundPacket.Client.registerReceiver();
-        ParticleSpawnPacket.Client.registerReceiver();
+        ParticleSpawnS2C.Client.registerReceiver();
         PlayerImplantStatusS2CPacket.Client.registerReceiver();
         EntityAnimationS2C.Client.registerReceiver();
         MachineDiagnosticsRequest.Client.registerReceiver();

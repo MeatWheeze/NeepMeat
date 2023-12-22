@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc.program;
 
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
+import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLC;
 import com.neep.neepmeat.plc.component.MutateInPlace;
@@ -20,9 +21,11 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -87,6 +90,12 @@ public class CombineInstruction implements Instruction
         if (stored == null)
         {
             plc.raiseError(new PLC.Error(Text.of("Oh noes!")));
+        }
+
+        if (worldSupplier.get() instanceof ServerWorld serverWorld)
+        {
+            ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), ParticleTypes.CLOUD,
+                    Vec3d.ofCenter(from.pos()), new Vec3d(0, 0.2, 0), new Vec3d(0.1, 0.1, 0.1), 3);
         }
     }
 

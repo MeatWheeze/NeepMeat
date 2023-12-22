@@ -5,7 +5,6 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.Heatable;
-import com.neep.neepmeat.network.ParticleSpawnPacket;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
