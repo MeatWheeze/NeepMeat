@@ -192,6 +192,9 @@ public class FluidNode
 
     public float getPressureHeight()
     {
-        return pressureHeight;
+        if (!hasPump || !getPump().getMode().isDriving())
+            return pressureHeight;
+
+        return getPump().getMode() == AcceptorModes.PUSH ? 15 : -15;
     }
 }

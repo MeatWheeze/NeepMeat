@@ -2,12 +2,14 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -15,6 +17,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -66,13 +70,17 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
         world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
 
-//        if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
-        if (FluidPipe.findFluidPipe(world, fromPos, world.getBlockState(fromPos)).isEmpty())
+        BlockState fromState = world.getBlockState(fromPos);
+        boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState).isPresent();
+        if (!foundPipe)
         {
-            if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, nextState, PipeNetwork.UpdateReason.NODE_CHANGED);
+            createStorageNodes(world, pos, nextState);
         }
 
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+        {
+            be.updateAdjacent(Direction.fromVector(fromPos.subtract(pos)));
+        }
     }
 
     @Override
@@ -84,6 +92,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         {
             createStorageNodes(world, pos, updatedState);
             updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
+
+            if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+            {
+                be.updateAdjacent();
+            }
         }
     }
 
@@ -115,10 +128,8 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                         forced ? PipeConnectionType.FORCED
                                 : canConnect ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
-        BlockState finalState = state.with(DIR_TO_CONNECTION.get(direction), finalConnection);
 
-
-        return finalState;
+        return state.with(DIR_TO_CONNECTION.get(direction), finalConnection);
     }
 
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
@@ -127,10 +138,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         {
             if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
             {
-                if (be.getPipeVertex() instanceof BlockPipeVertex vertex)
+                if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
                 {
-//                    System.out.println(vertex.getAmount());
-//                    System.out.println(vertex.getVariant());
+                    System.out.println(vertex.getAmount());
+                    System.out.println(vertex.getVariant());
+                    System.out.println(vertex.getPumpHead());
                 }
             }
             return ActionResult.SUCCESS;
@@ -188,5 +200,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     {
         Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
         return storage != null;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.FLUID_PIPE, ((world1, pos, state1, blockEntity) -> blockEntity.tick()), null, world);
     }
 }

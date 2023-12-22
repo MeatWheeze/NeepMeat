@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.api.pipe;
 
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
@@ -19,6 +20,7 @@ import org.apache.commons.compress.utils.Lists;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface FluidPipe
 {
@@ -57,11 +59,9 @@ public interface FluidPipe
         if (!world.isClient)
         {
             boolean changed = false;
-            List<Direction> connections = getConnections(state, dir -> true);
             for (Direction direction : Direction.values())
             {
-//                if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
-                if (connections.contains(direction))
+                if (isConnectedIn(world, pos, state, direction))
                 {
                     if (FluidNodeManager.getInstance(world).updatePosition(world, new NodePos(pos, direction)))
                         changed = true;
@@ -77,95 +77,100 @@ public interface FluidPipe
         return false;
     }
 
-    default List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    default Iterable<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
         {
-            // Streams are good, aren't they?
-            return Arrays.stream(Direction.values())
-                    .filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).filter(forbidden)
-                    .collect(Collectors.toList());
+            return () -> Arrays.stream(Direction.values())
+                    .filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected())
+                    .filter(forbidden)
+                    .iterator();
         }
         else if (state.getBlock() instanceof AbstractAxialFluidPipe)
         {
             Direction facing = state.get(AbstractAxialFluidPipe.FACING);
-            return List.of(facing, facing.getOpposite()).stream().filter(forbidden).collect(Collectors.toList());
+            return () -> Stream.of(facing, facing.getOpposite())
+                    .filter(forbidden)
+                    .iterator();
         }
         else
         {
-            return List.of();
+            return Collections.emptyList();
         }
     }
 
-    static List<Direction> getConnections(World world, BlockPos pos)
-    {
-        BlockState state = world.getBlockState(pos);
-        if (world.getBlockState(pos).getBlock() instanceof FluidPipe pipe)
-        {
-            return pipe.getConnections(state, d -> true);
-        }
-        return Collections.emptyList();
-    }
+//    static List<Direction> getConnections(World world, BlockPos pos)
+//    {
+//        BlockState state = world.getBlockState(pos);
+//        if (world.getBlockState(pos).getBlock() instanceof FluidPipe pipe)
+//        {
+//            return pipe.getConnections(state, d -> true);
+//        }
+//        return Collections.emptyList();
+//    }
 
     default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetwork.UpdateReason reason)
     {
-        PipeNetwork net = PipeNetwork.LOOKUP.find(world, pos, null);
-        if (net != null)
-        {
-            net.update(pos, null, reason);
-            return;
-        }
-        else if (reason.isRemoved())
-        {
+//        PipeVertex vertex =  PipeVertex.LOOKUP.find(world, pos, null);
+//        vertex.setAdjVertex();
 
-            // Look for adjacent networks and add this pipe to the first one.
-            Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
-            BlockPos.Mutable mutable = pos.mutableCopy();
-            for (Direction direction : this.getConnections(state, d -> true))
-            {
-                mutable.set(pos, direction);
-                net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                if (net != null)
-                {
-                    if (!updatedNetworks.contains(net))
-                    {
-                        net.update(mutable.toImmutable(), null, reason);
-                        updatedNetworks.add(net);
-                    }
-                }
-                else
-                {
-                    PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
-                }
-            }
-            return;
-        }
-        else if (reason.isNewPart())
-        {
-            List<PipeNetwork> mergeNetworks = Lists.newArrayList();
-            BlockPos.Mutable mutable = pos.mutableCopy();
-            boolean merged = false;
-            for (Direction direction : this.getConnections(state, d -> true))
-            {
-                mutable.set(pos, direction);
-                net = PipeNetwork.LOOKUP.find(world, mutable, null);
-                if (net != null)
-                {
-                    mergeNetworks.add(net);
-                }
-            }
-            for (PipeNetwork network : mergeNetworks)
-            {
-                mergeNetworks.get(0).merge(pos, network);
-                merged = true;
-            }
-            if (merged) return;
-        }
-
-        {
-            // If there are no adjacent networks, try to create one here.
-            PipeNetwork.tryCreateNetwork(world, pos);
-        }
+//        PipeNetwork net = PipeNetwork.LOOKUP.find(world, pos, null);
+//        if (net != null)
+//        {
+//            net.update(pos, null, reason);
+//            return;
+//        }
+//        else if (reason.isRemoved())
+//        {
+//
+//            // Look for adjacent networks and add this pipe to the first one.
+//            Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
+//            BlockPos.Mutable mutable = pos.mutableCopy();
+//            for (Direction direction : this.getConnections(state, d -> true))
+//            {
+//                mutable.set(pos, direction);
+//                net = PipeNetwork.LOOKUP.find(world, mutable, null);
+//                if (net != null)
+//                {
+//                    if (!updatedNetworks.contains(net))
+//                    {
+//                        net.update(mutable.toImmutable(), null, reason);
+//                        updatedNetworks.add(net);
+//                    }
+//                }
+//                else
+//                {
+//                    PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
+//                }
+//            }
+//            return;
+//        }
+//        else if (reason.isNewPart())
+//        {
+//            List<PipeNetwork> mergeNetworks = Lists.newArrayList();
+//            BlockPos.Mutable mutable = pos.mutableCopy();
+//            boolean merged = false;
+//            for (Direction direction : this.getConnections(state, d -> true))
+//            {
+//                mutable.set(pos, direction);
+//                net = PipeNetwork.LOOKUP.find(world, mutable, null);
+//                if (net != null)
+//                {
+//                    mergeNetworks.add(net);
+//                }
+//            }
+//            for (PipeNetwork network : mergeNetworks)
+//            {
+//                mergeNetworks.get(0).merge(pos, network);
+//                merged = true;
+//            }
+//            if (merged) return;
+//        }
+//
+//        {
+//            // If there are no adjacent networks, try to create one here.
+//            PipeNetwork.tryCreateNetwork(world, pos);
+//        }
     }
 
     default void addPipe(ServerWorld world, BlockState state, BlockPos pos)
@@ -203,5 +208,10 @@ public interface FluidPipe
             return be.getPipeVertex();
         }
         return null;
+    }
+
+    default int countConnections(BlockState blockState)
+    {
+        return Iterables.size(getConnections(blockState, d -> true));
     }
 }

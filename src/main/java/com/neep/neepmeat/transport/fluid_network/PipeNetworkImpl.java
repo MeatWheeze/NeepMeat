@@ -39,7 +39,7 @@ public class PipeNetworkImpl implements PipeNetwork
 
         graph.allVertices.values().forEach(v ->
         {
-            v.setNetwork(this);
+//            v.setNetwork(this);
             v.setSaveState(PipeVertex.SaveState.LOADED);
         });
         graph.calculateHead();
@@ -95,7 +95,7 @@ public class PipeNetworkImpl implements PipeNetwork
 
         graph.allVertices.long2ObjectEntrySet().fastForEach(e ->
         {
-            e.getValue().setNetwork(this);
+//            e.getValue().setNetwork(this);
             e.getValue().setSaveState(PipeVertex.SaveState.LOADED);
         });
         graph.minimiseGraph();
@@ -218,7 +218,7 @@ public class PipeNetworkImpl implements PipeNetwork
     public void remove()
     {
         removed = true;
-        graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().setNetwork(null));
+//        graph.allVertices.long2ObjectEntrySet().fastForEach(e -> e.getValue().setNetwork(null));
         PipeNetwork.discardNetwork(world, this);
     }
 

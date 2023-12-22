@@ -1,5 +1,12 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.NeepMeat;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
+import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.math.BlockPos;
+
 public interface PipeVertex extends PipeFlowComponent
 {
     void tick();
@@ -18,10 +25,6 @@ public interface PipeVertex extends PipeFlowComponent
         getAdjVertices()[dir] = vertex;
     }
 
-    void setNetwork(PipeNetwork network);
-
-    PipeNetwork getNetwork();
-
     boolean canSimplify();
 
     void reset();
@@ -29,6 +32,8 @@ public interface PipeVertex extends PipeFlowComponent
     boolean collapseEdges();
 
     default boolean keepNetworkValid() {return false;}
+
+    void updateNodes(ServerWorld world, BlockPos pos, BlockState state);
 
     float getTotalHead();
     void setHeight(float value);
@@ -41,10 +46,17 @@ public interface PipeVertex extends PipeFlowComponent
 
     SaveState getState();
 
+    float getPumpHead();
+
     enum SaveState
     {
         PENDING_LOAD,
         LOADED,
         NEW
     }
+
+    BlockApiLookup<PipeVertex, Void> LOOKUP = BlockApiLookup.get(
+            new Identifier(NeepMeat.NAMESPACE, "pipe_vertex"),
+            PipeVertex.class, Void.class
+    );
 }
