@@ -15,9 +15,9 @@ import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
+import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
-import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import com.neep.neepmeat.transport.FluidTransport;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -53,7 +53,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
         registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
-        registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
+//        registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
+        registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);
@@ -95,7 +96,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
 //        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
-        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
+//        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));

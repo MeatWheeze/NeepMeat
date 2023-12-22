@@ -137,7 +137,7 @@ public class ItemManufactureCategory implements DisplayCategory<ManufactureDispl
         }
     }
 
-    static class EntryWidget extends Widget
+    public static class EntryWidget extends Widget
     {
         private final Point origin;
         private final ManufactureStep<?> step;
