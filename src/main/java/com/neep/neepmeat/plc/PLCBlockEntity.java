@@ -205,7 +205,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         {
             if (robot.shouldUpdatePosition(serverWorld))
             {
-                PLCRobotC2S.send(this, serverWorld);
+                robot.syncPosition(serverWorld);
             }
         }
 

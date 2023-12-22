@@ -12,6 +12,7 @@ import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.render.Camera;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -71,6 +72,7 @@ public class SurgicalRobot implements NbtSerialisable
 
     // I can't be bothered to do this properly
     public ResourceAmount<ItemVariant> stored;
+    private boolean moved = true;
 
     public SurgicalRobot(PLCBlockEntity parent)
     {
@@ -109,7 +111,7 @@ public class SurgicalRobot implements NbtSerialisable
     {
         if (!world.isClient())
         {
-            return getController() == null || parent.actionBlocksController();
+            return (getController() == null || parent.actionBlocksController());
         }
         else
         {
@@ -182,6 +184,7 @@ public class SurgicalRobot implements NbtSerialisable
             x += vx;
             y += vy;
             z += vz;
+            moved = true;
             return false;
         }
         else return true;
@@ -358,6 +361,15 @@ public class SurgicalRobot implements NbtSerialisable
             spawnItem(stored);
             stored = null;
         }
+    }
+
+    public void syncPosition(ServerWorld serverWorld)
+    {
+        if (!moved)
+            return;
+
+        PLCRobotC2S.send(parent, serverWorld);
+        moved = false;
     }
 
     @Environment(value = EnvType.CLIENT)
