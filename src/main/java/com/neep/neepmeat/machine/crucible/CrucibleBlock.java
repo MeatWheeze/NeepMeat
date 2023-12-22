@@ -2,7 +2,6 @@ package com.neep.neepmeat.machine.crucible;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.api.storage.WritableFluidBuffer;
-import com.neep.neepmeat.blockentity.ItemBufferBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -48,7 +47,7 @@ public class CrucibleBlock extends BaseBlock implements BlockEntityProvider
     {
         if (entity instanceof ItemEntity && world.getBlockEntity(pos) instanceof CrucibleBlockEntity be && !world.isClient())
         {
-            be.receiveItem((ItemEntity) entity);
+            be.receiveItemEntity((ItemEntity) entity);
         }
     }
 }

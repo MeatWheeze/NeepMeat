@@ -139,9 +139,10 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         public long insertFromFuel(FluidVariant fuelResource, long maxAmount, TransactionContext transaction)
         {
             FluidFuelRegistry.Entry entry = FluidFuelRegistry.getInstance().get(fuelResource.getFluid());
-            if (entry != null  && entry.hasExhaust())
+            if (entry != null)
             {
-                return insert(entry.getExhaustVariant(), maxAmount, transaction);
+                if (entry.hasExhaust()) return insert(entry.getExhaustVariant(), maxAmount, transaction);
+                else return maxAmount;
             }
             return 0;
         }
