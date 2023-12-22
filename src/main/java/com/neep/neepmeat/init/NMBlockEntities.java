@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.CheckValveBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.StopValveBlockEntity;
@@ -117,6 +118,7 @@ public class NMBlockEntities
     public static BlockEntityType<WorkstationBlockEntity> WORKSTATION;
     public static BlockEntityType<DeathBladesBlockEntity> DEATH_BLADES;
     public static BlockEntityType<BottlerBlockEntity> BOTTLER;
+    public static BlockEntityType<TroughBlockEntity> FEEDING_TROUGH;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -220,6 +222,9 @@ public class NMBlockEntities
         DEATH_BLADES = registerBlockEntity("death_blades", DeathBladesBlockEntity::new, NMBlocks.DEATH_BLADES);
 
         BOTTLER = registerBlockEntity("bottler", BottlerBlockEntity::new, NMBlocks.BOTTLER);
+
+        FEEDING_TROUGH = registerBlockEntity("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
+        FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
