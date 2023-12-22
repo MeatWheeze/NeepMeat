@@ -345,7 +345,7 @@ tldr: cosmic-horror-cyber-gore-punk cheerful spooky meat RedPower ripoff
 ## Getting Started
 
 - Obtaining an Integrator:
-Integrator Eggs can be found in dungeon loot. To hatch one, you must obtain blood by slaughtering a mob over a Drain with the Sacrificial Dagger. This blood can then be pumped into the egg using fluid pipes. A fully-grown Integrator has an internal buffer of 'Enlightenment' that is used by workstations that are connected by Data Cables.
+Integrator Eggs can be found in dungeon loot. To hatch one, you must obtain blood by slaughtering a mob over a Drain with the Sacrificial Dagger. This blood can then be pumped into the egg using fluid pipes. A fully-grown Integrator has an internal buffer of 'Enlightenment' that is used by workstations that are connected by Data Cables. This buffer fills up slowly over time and can be boosted by inserting Whisper Wheat.
 
 - Obtaining Body Compound
 Body compound is a common crafting item in NeepMeat. To produce it, connect a Charnel Compactor to a fully-grown Integrator with Data Cables. The Charnel Compactor fuunctions much like a Composter, except it requires flesh. We hope that you have a burgeoning meat industrial complex.
@@ -353,8 +353,11 @@ Body compound is a common crafting item in NeepMeat. To produce it, connect a Ch
 - Crops
 NeepMeat provides two major crops. Gland Potatoes can be processed into Eldritch Enzymes in a mixer. Whisper Wheat can be ground into Whisper Flour which can be fed to an Integrator to increase its Enlightenment.
 
-- Obtaining Meat Steel
-Meat steel is required for mid-tier machinery. It is made by combining an Iron Ingot and a Raw Meat Brick in an alloy furnace.
+- Enlightening
+This is a recipe type where items are transmuted to special forms. To enlighten an item, connect a Pedestal that containing the item to a mature Integrator via Data Cables. Converting an item takes quantity of Enlightenment from the Integrator.
+
+- Meat Steel
+Meat steel is required for mid-tier machinery. It is made by combining an Iron Ingot and a Raw Meat Brick in an alloy furnace. 
 
 ## Potential Future Features
 

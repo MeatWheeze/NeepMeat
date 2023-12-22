@@ -208,7 +208,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     public long forwardItem(ItemInPipe item, TransactionContext transaction)
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
-        BlockPos newPos = pos.offset(facing);
 
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)

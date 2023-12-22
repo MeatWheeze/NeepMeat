@@ -46,7 +46,7 @@ public class ItemNetwork implements IItemNetwork
         ItemInPipe item = new ItemInPipe(null, null, variant, amount, world.getTime());
         Stack<Direction> route = findPath(from, in, to, out, variant, amount);
         item.setRoute(route);
-        return ItemPipeUtil.pipeToAny(item, from, Direction.NORTH, world, transaction, false);
+        return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);
     }
 
     public ItemPipeState getPipe(BlockPos pos)
@@ -102,8 +102,7 @@ public class ItemNetwork implements IItemNetwork
         removePipe(pos);
     }
 
-    public static final int MAX_DEPTH = 10;
-
+    // TODO: Account for item filters
     public Stack<Direction> findPath(BlockPos startPos, Direction startDir, BlockPos endPos, Direction endDir, ItemVariant variant, long amount)
     {
         HashSet<Long> visited = new HashSet<>();
@@ -148,7 +147,7 @@ public class ItemNetwork implements IItemNetwork
 
         posRoute.push(endPos);
         route.push(endDir);
-        System.out.println(route);
+//        System.out.println(route);
 
         return route;
     }
