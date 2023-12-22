@@ -14,7 +14,7 @@ import net.minecraft.util.math.Direction;
 
 public class TroughBlockEntity extends SyncableBlockEntity
 {
-    public static final FluidVariant RESOURCE = FluidVariant.of(NMFluids.STILL_MEAT);
+    public static final FluidVariant RESOURCE = FluidVariant.of(NMFluids.STILL_FEED);
     public static final long USE_AMOUNT = FluidConstants.BUCKET / 4;
 
     private WritableSingleFluidStorage storage = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, this::sync);

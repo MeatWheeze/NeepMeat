@@ -288,6 +288,9 @@
 
   "block.neepmeat.milk": "Milk",
 
+  "block.neepmeat.animal_feed": "Animal Feed",
+  "item.neepmeat.animal_feed_bucket": "Animal Feed Bucket",
+
   "item.neepmeat.tank_minecart": "Tank Minecart",
 
 

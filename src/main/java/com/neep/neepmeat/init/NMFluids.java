@@ -1,11 +1,10 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.fluid.*;
-import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.api.processing.FluidFuelRegistry;
+import com.neep.neepmeat.fluid.FluidFactory;
+import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
-import net.fabricmc.fabric.mixin.resource.loader.client.FontManagerResourceReloadListenerMixin;
 import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
@@ -77,6 +76,12 @@ public class NMFluids
     public static Block MILK;
     public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 2).withBucketItem(Items.MILK_BUCKET);
 
+    public static FlowableFluid FLOWING_FEED;
+    public static FlowableFluid STILL_FEED;
+    public static Item FEED_BUCKET;
+    public static Block FEED;
+    public static FluidFactory FEED_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "animal_feed", false, 5, 2);
+
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;
 
@@ -132,8 +137,12 @@ public class NMFluids
 
         STILL_MILK = MILK_FACTORY.registerStill();
         FLOWING_MILK = MILK_FACTORY.registerFlowing();
-//        MILK_BUCKET = MILK_FACTORY.registerItem();
         MILK = MILK_FACTORY.registerBlock();
+
+        STILL_FEED = FEED_FACTORY.registerStill();
+        FLOWING_FEED = FEED_FACTORY.registerFlowing();
+        FEED_BUCKET = FEED_FACTORY.registerItem();
+        FEED = FEED_FACTORY.registerBlock();
 
         FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 3, true, null);
         FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
