@@ -33,8 +33,7 @@ public class AdvancedIntegratorRenderer implements BlockEntityRenderer<AdvancedI
                 entity.getWorld(),
                 entity.getPos().up(2),
                 entity.getCachedState(),
-                vertexConsumers,
-                entity.getWorld().random
+                vertexConsumers
         );
         matrices.pop();
 
@@ -48,8 +47,7 @@ public class AdvancedIntegratorRenderer implements BlockEntityRenderer<AdvancedI
                 entity.getWorld(),
                 entity.getPos().up(2),
                 entity.getCachedState(),
-                vertexConsumers,
-                entity.getWorld().random
+                vertexConsumers
         );
     }
 }

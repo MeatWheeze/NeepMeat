@@ -28,6 +28,7 @@ import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
     private static final Identifier LAYER = new Identifier(NeepMeat.NAMESPACE, "textures/entity/integrator_basic_overlay.png");
+    private final Random random = Random.create();
 
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
@@ -82,9 +83,9 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         }
     }
 
-    public static void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
+    public void renderBase(MatrixStack matrices, IntegratorBlockEntity be, VertexConsumerProvider vertexConsumers)
     {
-        BERenderUtils.renderModelSmooth(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers, be.getWorld().getRandom());
+        BERenderUtils.renderModelSmooth(NMExtraModels.INTEGRATOR_BASE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
     }
 
     public static void renderEgg(MatrixStack matrices, IntegratorBlockEntity blockEntity, VertexConsumerProvider vertexConsumers)
