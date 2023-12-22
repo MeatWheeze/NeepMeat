@@ -6,10 +6,7 @@ import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
 import com.neep.neepmeat.block.fluid_transport.*;
-import com.neep.neepmeat.block.item_transport.BufferBlock;
-import com.neep.neepmeat.block.item_transport.ItemBufferBlock;
-import com.neep.neepmeat.block.item_transport.ItemDuctBlock;
-import com.neep.neepmeat.block.item_transport.PneumaticTubeBlock;
+import com.neep.neepmeat.block.item_transport.*;
 import com.neep.neepmeat.block.machine.*;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.vat.*;
@@ -96,6 +93,7 @@ public class NMBlocks
     public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("pneumatic_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
     public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+    public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", 64, true, FabricBlockSettings.copy(Blocks.CHEST)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new ContentDetectorBlock("content_detector", 64, true, FabricBlockSettings.copy(Blocks.OBSERVER)));
 

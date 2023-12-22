@@ -9,6 +9,7 @@ import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
+import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -58,6 +59,7 @@ public class NMBlockEntities
     public static BlockEntityType<BufferBlockEntity> BUFFER;
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
+    public static BlockEntityType<RouterBlockEntity> ROUTER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -88,6 +90,7 @@ public class NMBlockEntities
         CONTENT_DETECTOR = registerBlockEntity("content_detector", ContentDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);
+        ROUTER = registerBlockEntity("router", RouterBlockEntity::new, NMBlocks.ROUTER);
 
         // --- Machines ---
         INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, NMBlocks.INTEGRATOR_EGG);
