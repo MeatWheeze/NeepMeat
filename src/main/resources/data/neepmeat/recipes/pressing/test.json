@@ -1,0 +1,11 @@
+{
+  "type": "neepmeat:pressing",
+  "fluid_input": {
+    "resource": "minecraft:water",
+    "amount": 9000
+  },
+  "output": {
+    "resource": "minecraft:dirt",
+    "amount": 1
+  }
+}

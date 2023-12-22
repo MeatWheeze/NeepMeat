@@ -17,12 +17,34 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
     protected WritableStackStorage outputStorage;
     protected WritableSingleFluidStorage inputStorage;
     protected CastingBasinBlockEntity parent;
+    protected boolean locked;
 
     public CastingBasinStorage(CastingBasinBlockEntity parent)
     {
         this.parent = parent;
-        this.outputStorage = new WritableStackStorage(parent::sync, 1);
-        this.inputStorage = new WritableSingleFluidStorage(FluidConstants.INGOT, parent::sync);
+        this.outputStorage = new WritableStackStorage(parent::sync, 1)
+        {
+            @Override
+            public boolean supportsInsertion()
+            {
+                return false;
+            }
+        };
+
+        this.inputStorage = new WritableSingleFluidStorage(FluidConstants.INGOT, parent::sync)
+        {
+            @Override
+            protected boolean canInsert(FluidVariant variant)
+            {
+                return super.canInsert(variant) && !locked;
+            }
+
+            @Override
+            protected boolean canExtract(FluidVariant variant)
+            {
+                return super.canExtract(variant) && !locked;
+            }
+        };
     }
 
     @Override
@@ -44,12 +66,32 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
         outputStorage.readNbt((NbtCompound) nbt.get("output"));
     }
 
-    public Storage<FluidVariant> fluid(Direction dir)
+    public boolean lock()
+    {
+        if (!locked)
+        {
+            locked = true;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean unlock()
+    {
+        if (locked)
+        {
+            locked = false;
+            return true;
+        }
+        return false;
+    }
+
+    public WritableSingleFluidStorage fluid(Direction dir)
     {
         return inputStorage;
     }
 
-    public Storage<ItemVariant> item(Direction dir)
+    public WritableStackStorage item(Direction dir)
     {
         return dir != Direction.UP ? outputStorage : null;
     }

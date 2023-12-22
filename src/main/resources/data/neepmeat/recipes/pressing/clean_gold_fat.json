@@ -1,0 +1,12 @@
+{
+  "type": "neepmeat:pressing",
+  "fluid_input": {
+    "resource": "neepmeat:clean_ore_fat",
+    "amount": 9000,
+    "fat_item": "minecraft:raw_gold"
+  },
+  "output": {
+    "resource": "minecraft:gold_ingot",
+    "amount": 1
+  }
+}
