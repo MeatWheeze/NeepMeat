@@ -38,6 +38,7 @@ public class VatCasingBlock extends BaseBlock implements IVatComponent, BlockEnt
         {
             be.onParentBreak((ServerWorld) world);
         }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Nullable
