@@ -10,9 +10,6 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implements BlockEntityRenderer<T>
@@ -37,7 +34,7 @@ public class PneumaticPipeRenderer<T extends PneumaticPipeBlockEntity> implement
 
             long diff = be.getWorld().getTime() - item.tickStart;
             float progress = (diff + tickDelta) * item.speed;
-            item.set(item.update(progress));
+            item.set(item.getPosition(progress));
 
             matrices.translate(item.x, item.y, item.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
