@@ -1,31 +1,31 @@
 {
   "variants": {
     "facing=east": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "y": 90,
       "x": 0
     },
     "facing=north": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "y": 0,
       "x": 0
     },
     "facing=south": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "y": 180,
       "x": 0
     },
     "facing=west": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "y": -90,
       "x": 0
     },
     "facing=up": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "x": -90
     },
     "facing=down": {
-      "model": "neepmeat:block/pump",
+      "model": "neepmeat:block/fluid_meter",
       "x": 90
     }
   }
