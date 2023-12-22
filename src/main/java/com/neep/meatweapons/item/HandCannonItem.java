@@ -1,16 +1,9 @@
 package com.neep.meatweapons.item;
 
-import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.CannonBulletEntity;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.fabricmc.fabric.api.renderer.v1.Renderer;
-import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
-import net.fabricmc.fabric.api.renderer.v1.mesh.Mesh;
-import net.fabricmc.fabric.api.renderer.v1.mesh.MeshBuilder;
-import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,7 +12,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -85,6 +77,14 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, WeakTwoH
         return new Vec3f(0.46f, 0, 0);
     }
 
+    @Override
+    public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
+    {
+        return new Vec3d(player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                player.isSneaking() ? -0.15 : 0.1,
+                0);
+    }
+
     public void fire(World world, PlayerEntity player, ItemStack stack)
     {
         {
@@ -107,10 +107,7 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, WeakTwoH
                         Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
                         if (!player.isSneaking())
                         {
-                            Vec3d transform = new Vec3d(
-                                    player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-                                    player.isSneaking() ? -0.15 : 0.1,
-                                    0).rotateY((float) -yaw);
+                            Vec3d transform = getMuzzleOffset(player, stack).rotateY((float) -yaw);
                             pos = pos.add(transform);
                         }
 
