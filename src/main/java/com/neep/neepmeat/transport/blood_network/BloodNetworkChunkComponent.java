@@ -61,11 +61,11 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
 
             // There is no way of distinguishing between unloading and removal of BlockEntities.
             // Dead BEs will stay in the set but will not be saved.
-            if (chunk.getBlockEntityPositions().contains(pipe.getPos()) && network != null)
+            if (chunk.getBlockEntityPositions().contains(pipe.getBlockPos()) && network != null)
             {
                 UUID uuid = network.getUUID();;
                 NbtCompound entry = new NbtCompound();
-                entry.putLong("pos", pipe.getPos().asLong());
+                entry.putLong("pos", pipe.getBlockPos().asLong());
                 entry.putUuid("uuid", uuid);
                 list.add(entry);
             }
