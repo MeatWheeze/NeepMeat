@@ -37,7 +37,7 @@ import java.util.Optional;
 
 public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAimable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public MachinePistolItem()
@@ -169,13 +169,13 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAima
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.fire", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.fire"));
         }
         else if (state == ANIM_RELOAD)
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r", false));
+            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
         }
     }
 }

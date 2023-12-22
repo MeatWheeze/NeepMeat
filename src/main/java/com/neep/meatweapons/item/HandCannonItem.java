@@ -27,7 +27,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public HandCannonItem()
@@ -150,13 +150,13 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.hand_cannon.fire", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.hand_cannon.fire"));
         }
         else if (state == ANIM_RELOAD)
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.hand_cannon.reload_r", false));
+            controller.setAnimation(new AnimationBuilder().addAnimation("animation.hand_cannon.reload_r"));
         }
     }
 }

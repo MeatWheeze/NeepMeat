@@ -53,7 +53,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 
             AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
             GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(be));
-            modelProvider.setLivingAnimations(be, this.getUniqueID(be));
+            modelProvider.setCustomAnimations(be, this.getInstanceId(be));
             matrices.push();
             matrices.translate(0, 0.01f, 0);
             matrices.translate(0.5, 0, 0.5);

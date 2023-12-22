@@ -40,6 +40,7 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
+import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.*;
 
@@ -78,7 +79,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         }
     };
 
-    private final AnimationFactory factory = new AnimationFactory(this);
+    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
     private boolean hatching;
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
@@ -250,12 +251,12 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         event.getController().transitionLengthTicks = 20;
         if (this.hatching)
         {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch"));
             hatching = false;
         }
         else
         {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.idle", true));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.idle"));
         }
 
         return PlayState.CONTINUE;

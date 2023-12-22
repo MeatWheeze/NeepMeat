@@ -26,7 +26,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 {
-    public AnimationFactory factory = new AnimationFactory(this);
+    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public HeavyCannonItem()
@@ -138,13 +138,13 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.fire", false));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.fire"));
         }
         else if (state == ANIM_RELOAD)
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
             controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.reload", false));
+            controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.reload"));
         }
     }
 }
