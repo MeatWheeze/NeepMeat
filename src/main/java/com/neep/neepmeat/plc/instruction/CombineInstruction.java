@@ -103,7 +103,7 @@ public class CombineInstruction implements Instruction
         {
             ItemStack stack = mip.get();
 
-            var step = new CombineStep(stored.resource().toStack((int) stored.amount()));
+            var step = CombineStep.get(stored.resource().toStack((int) stored.amount()));
 
             var workpiece = NMComponents.WORKPIECE.maybeGet(stack).orElse(null);
             if (workpiece != null && PLCRecipes.isValidStep(PLCRecipes.MANUFACTURE, workpiece, step, stack.getItem()))

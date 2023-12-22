@@ -21,7 +21,7 @@ public class PLCRecipes
     public static final MeatRecipeSerialiser<EntityManufactureRecipe> ENTITY_MANUFACTURE_SERIALISER = RecipeRegistry.registerSerializer(NeepMeat.NAMESPACE, "entity_manufacture", new EntityManufactureRecipe.Serialiser());
     public static final MeatRecipeType<EntityManufactureRecipe> ENTITY_MANUFACTURE = RecipeRegistry.registerSpecialType(NeepMeat.NAMESPACE, "entity_manufacture");
 
-    public static final ManufactureStep.Provider<?> COMBINE = ManufactureStep.register(CombineStep.ID, ManufactureStep.Provider.of(CombineStep::new, CombineStep::new));
+    public static final ManufactureStep.Provider<?> COMBINE = ManufactureStep.register(CombineStep.ID, ManufactureStep.Provider.of(CombineStep::get, CombineStep::get));
     public static final ManufactureStep.Provider<?> INJECT = ManufactureStep.register(InjectStep.ID, ManufactureStep.Provider.of(InjectStep::new, InjectStep::new));
     public static final ManufactureStep.Provider<?> IMPLANT = ManufactureStep.register(ImplantStep.ID, ManufactureStep.Provider.of(ImplantStep::new, ImplantStep::new));
 
