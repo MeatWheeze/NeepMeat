@@ -45,6 +45,8 @@ public interface PipeNetwork
         });
     }
 
+    boolean merge(BlockPos pos, PipeNetwork other);
+
     boolean isValid();
     UUID getUUID();
     boolean canTick(ServerWorld world);

@@ -26,7 +26,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.CallbackI;
 
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe
 {
@@ -55,12 +54,12 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         BlockState nextState = getStateForNeighborUpdate(state, direction, world.getBlockState(fromPos), world, pos, fromPos);
 
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up
-        world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
-//
+//        world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
+
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
             if (createStorageNodes(world, pos, nextState))
-                updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.NODE_CHANGED);
+                updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.NODE_CHANGED);
         }
 
     }
@@ -73,7 +72,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
-            updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.PIPE_ADDED);
+            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
         }
     }
 
@@ -123,7 +122,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return;
 
         createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
+        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
     }
 
     @Nullable

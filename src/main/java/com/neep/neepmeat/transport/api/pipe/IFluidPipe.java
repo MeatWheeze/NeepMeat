@@ -8,11 +8,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -75,7 +75,7 @@ public interface IFluidPipe
         }
     }
 
-    default void updateNetwork(ServerWorld world, BlockPos pos, PipeNetworkImpl1.UpdateReason reason)
+    default void updateNetwork(ServerWorld world, BlockPos pos, BlockState state, PipeNetworkImpl1.UpdateReason reason)
     {
         try
         {
@@ -84,21 +84,44 @@ public interface IFluidPipe
             {
                 net.update(pos, null, reason);
             }
-            else
+            else if (reason.isRemoved())
             {
                 // Look for adjacent networks and add this pipe to the first one.
                 BlockPos.Mutable mutable = pos.mutableCopy();
-                for (Direction direction : Direction.values())
+                for (Direction direction : this.getConnections(state, d -> true))
                 {
                     mutable.set(pos, direction);
                     net = PipeNetwork.LOOKUP.find(world, mutable, null);
                     if (net != null)
                     {
-                        net.update(pos, null, reason);
-                        return;
+                        net.update(mutable.toImmutable(), null, reason);
+                    }
+                    else
+                    {
+                        PipeNetwork.tryCreateNetwork(world, mutable.toImmutable());
                     }
                 }
-
+            }
+            else if (reason.isNewPart())
+            {
+                List<PipeNetwork> mergeNetworks = Lists.newArrayList();
+                BlockPos.Mutable mutable = pos.mutableCopy();
+                for (Direction direction : this.getConnections(state, d -> true))
+                {
+                    mutable.set(pos, direction);
+                    net = PipeNetwork.LOOKUP.find(world, mutable, null);
+                    if (net != null)
+                    {
+                        mergeNetworks.add(net);
+                    }
+                }
+                for (PipeNetwork network : mergeNetworks)
+                {
+                    mergeNetworks.get(0).merge(mutable.toImmutable(), network);
+                }
+            }
+            else
+            {
                 // If there are no adjacent networks, try to create one here.
                 PipeNetwork.tryCreateNetwork(world, pos);
             }
@@ -123,7 +146,7 @@ public interface IFluidPipe
 //        {
 //            updateNetwork(world, pos.offset(direction), PipeNetwork.UpdateReason.PIPE_REMOVED);
 //        }
-        updateNetwork(world, pos, PipeNetwork.UpdateReason.PIPE_REMOVED);
+        updateNetwork(world, pos, state, PipeNetwork.UpdateReason.PIPE_REMOVED);
     }
 
     default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)

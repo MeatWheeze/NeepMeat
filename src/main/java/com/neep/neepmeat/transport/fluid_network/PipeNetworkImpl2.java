@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.fluid_network;
 
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -41,6 +40,27 @@ public class PipeNetworkImpl2 implements PipeNetwork
 
         validate();
         graph.getVertices().long2ObjectEntrySet().fastForEach(e -> e.getValue().tick());
+    }
+
+    @Override
+    public boolean merge(BlockPos pos, PipeNetwork other)
+    {
+        if (other == this)
+        {
+            rebuild(pos);
+            return true;
+        }
+
+        if (other instanceof PipeNetworkImpl2 impl2)
+        {
+            impl2.remove();
+
+            rebuild(pos);
+
+            return true;
+        }
+
+        return false;
     }
 
     protected void validate()
