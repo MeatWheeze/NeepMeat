@@ -33,7 +33,7 @@ public class PowerUtils
 
     public static double perUnitToAbsolute(double perUnit)
     {
-        return Math.floor(perUnit * BASE_POWER);
+        return Math.round(perUnit * BASE_POWER);
     }
 
     public static double absoluteToPerUnit(long abs)

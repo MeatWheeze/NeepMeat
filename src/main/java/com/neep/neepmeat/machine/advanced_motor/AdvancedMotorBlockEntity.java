@@ -28,7 +28,7 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
     {
         @Override
-        public float getRate()
+        public long getOutput()
         {
             return 0;
         }

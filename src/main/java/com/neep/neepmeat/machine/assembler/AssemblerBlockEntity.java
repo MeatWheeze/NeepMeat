@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -58,6 +59,20 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
     protected int targetSize;
 
+    protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    {
+        @Override
+        public void updateInflux(float influx)
+        {
+        }
+
+        @Override
+        public Mode getMode()
+        {
+            return Mode.IN;
+        }
+    };
+
     protected PropertyDelegate delegate = new PropertyDelegate()
     {
         @Override
@@ -104,8 +119,6 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
     public void test()
     {
-        BlockPos down = pos.down();
-
         if (!(world instanceof ServerWorld serverWorld))
             return;
 
