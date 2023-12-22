@@ -325,11 +325,11 @@ public class PipeNetwork
 
                     if (IFluidPipe.isConnectedIn(world, current, state1, direction) && !visited.contains(next))
                     {
-                        visited.add(next);
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof IFluidPipe
                                 && !(state2.getBlock() instanceof IFluidNodeProvider))
                         {
+                            visited.add(next);
                             // Next block is connected in opposite direction
                             if (IFluidPipe.isConnectedIn(world, next, state2, direction.getOpposite()))
                             {
