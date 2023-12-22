@@ -137,12 +137,6 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, IAimable
         }
     }
 
-    private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-//        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.blaster.fire", false));
-        return PlayState.CONTINUE;
-    }
-
     @Override
     public void onAnimationSync(int id, int state)
     {

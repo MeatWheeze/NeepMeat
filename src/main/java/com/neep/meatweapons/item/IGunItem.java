@@ -28,7 +28,7 @@ public interface IGunItem
 
     Random getRandom();
 
-    boolean isLoaded(ItemStack stack, int trigger);
+    int getShots(ItemStack stack, int trigger);
 
     // Removes ammunition from inventory. Returns null if none present.
     static ItemStack removeStack(Item type, PlayerEntity player)

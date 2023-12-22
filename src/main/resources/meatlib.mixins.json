@@ -4,7 +4,9 @@
   "package": "com.neep.meatlib.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "DataPackContentsMixin"
+  ],
+  "client": [
+    "ItemRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

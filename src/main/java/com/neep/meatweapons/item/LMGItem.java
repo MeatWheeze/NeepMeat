@@ -132,11 +132,6 @@ public class LMGItem extends BaseGunItem implements IAnimatable
         }
     }
 
-    private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
-    {
-        return PlayState.CONTINUE;
-    }
-
     @Override
     public void onAnimationSync(int id, int state)
     {

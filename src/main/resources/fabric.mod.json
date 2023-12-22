@@ -40,7 +40,8 @@
   },
   "mixins": [
     "neepmeat.mixins.json",
-    "meatweapons.mixins.json"
+    "meatweapons.mixins.json",
+    "meatlib.mixins.json"
   ],
 
   "depends": {
