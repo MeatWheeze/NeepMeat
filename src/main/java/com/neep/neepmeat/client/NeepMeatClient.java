@@ -23,7 +23,6 @@ import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.motor.MotorRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
-import com.neep.neepmeat.machine.pedestal.PedestalRenderer;
 import com.neep.neepmeat.machine.pylon.PylonRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
@@ -50,6 +49,7 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 public class NeepMeatClient implements ClientModInitializer
@@ -105,7 +105,12 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
         BlockEntityRendererRegistry.register(NMBlockEntities.FLUID_BUFFER, FluidBufferRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, DisplayPlatformRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_BUFFER_BLOCK_ENTITY, c -> new ItemBlockEntityRenderer<>(
+                c, be -> be.getStorage(null).getAsStack(), be ->
+        {
+            be.stackRenderDelta = MathHelper.lerp(0.1f, be.stackRenderDelta, be.getStorage(null).getAmount() <= 0 ? 0.3f : 0f);
+            return 0.25f + be.stackRenderDelta;
+        }));
         BlockEntityRendererRegistry.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
@@ -130,7 +135,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.HYDRAULIC_PRESS, HydraulicPressRenderer::new);
 
-        BlockEntityRendererRegistry.register(NMBlockEntities.PEDESTAL, PedestalRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.PEDESTAL, c -> new ItemBlockEntityRenderer<>(
+                c, be -> be.getStorage(null).getResource().toStack(), be -> 0.67f));
         BlockEntityRendererRegistry.register(NMBlockEntities.ASSEMBLER, AssemblerRenderer::new);
 
         BlockEntityRendererRegistry.register(NMBlockEntities.DEATH_BLADES, DeathBladesRenderer::new);
