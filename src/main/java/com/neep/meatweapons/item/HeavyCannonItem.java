@@ -63,12 +63,11 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
         return TypedActionResult.fail(itemStack);
     }
 
-    @Override
-    public Vec3f getAimOffset()
-    {
-        return new Vec3f(0.46f, 0, 0);
-    }
-
+//    @Override
+//    public Vec3f getAimOffset()
+//    {
+//        return new Vec3f(0.46f, 0, 0);
+//    }
     @Override
     public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
     {

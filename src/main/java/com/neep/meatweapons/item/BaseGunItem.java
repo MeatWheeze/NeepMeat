@@ -3,6 +3,7 @@ package com.neep.meatweapons.item;
 import com.neep.meatlib.item.IMeatItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.Util;
 import com.neep.meatweapons.init.GraphicsEffects;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.MWNetwork;
@@ -29,9 +30,7 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.*;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -118,8 +117,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
 
     public abstract void fire(World world, PlayerEntity user, ItemStack stack);
 
-    public abstract Vec3f getAimOffset();
-
     public abstract Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack);
 
     // Should only be called on server.
@@ -143,24 +140,6 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
         }
     }
 
-    public List<EntityHitResult> getRayTargets(PlayerEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
-    {
-        World world = caster.world;
-
-
-        Box box = caster.getBoundingBox().stretch(endPos.subtract(startPos)).expand(1.0, 1.0, 1.0);
-
-        // Remove entities not intersecting with the ray
-        List<EntityHitResult> list = new ArrayList<>();
-        world.getOtherEntities(caster, box, predicate).forEach(entity ->
-        {
-            Optional<Vec3d> optional = entity.getBoundingBox().expand(entity.getTargetingMargin() + margin).raycast(startPos, endPos);
-            optional.ifPresent(vec3d -> list.add(new EntityHitResult(entity, vec3d)));
-        });
-
-        return list;
-    }
-
     public Optional<LivingEntity> hitScan(PlayerEntity caster, Vec3d start, Vec3d end, double distance)
     {
         World world = caster.world;
@@ -175,7 +154,7 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             double minDistance = distance;
             Entity entity = null;
             EntityHitResult entityResult = null;
-            for (EntityHitResult result : getRayTargets(caster, start, blockResult.getPos(), entityFilter, 0.1))
+            for (EntityHitResult result : Util.getRayTargets(caster, start, blockResult.getPos(), entityFilter, 0.1))
             {
                 if (result.getPos().distanceTo(start) < minDistance)
                 {

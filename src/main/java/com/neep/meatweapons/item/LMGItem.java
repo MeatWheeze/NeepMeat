@@ -87,11 +87,11 @@ public class LMGItem extends BaseGunItem implements IAnimatable
         fire(world, (PlayerEntity) user, itemStack);
     }
 
-    @Override
-    public Vec3f getAimOffset()
-    {
-        return new Vec3f(0.0f, 0, 0);
-    }
+//    @Override
+//    public Vec3f getAimOffset()
+//    {
+//        return new Vec3f(0.0f, 0, 0);
+//    }
 
     @Override
     public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)

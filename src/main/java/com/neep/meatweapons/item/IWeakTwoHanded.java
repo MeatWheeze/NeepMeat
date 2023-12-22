@@ -1,5 +1,5 @@
 package com.neep.meatweapons.item;
 
-public interface WeakTwoHanded
+public interface IWeakTwoHanded
 {
 }

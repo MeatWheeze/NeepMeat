@@ -1,6 +1,7 @@
 package com.neep.meatweapons.client.renderer;
 
 import com.neep.meatweapons.item.BaseGunItem;
+import com.neep.meatweapons.item.IAimable;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -8,6 +9,7 @@ import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
@@ -40,7 +42,8 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
         boolean isAiming = player.isSneaking();
         if (mode.isFirstPerson())
         {
-            Vec3f transform = ((BaseGunItem) itemStack.getItem()).getAimOffset();
+            Item item = itemStack.getItem();
+            Vec3f transform = item instanceof IAimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
             float delta = 0.2f;
             currentTransform.lerp(isAiming ? transform : new Vec3f(0, 0, 0), delta);
             matrices.translate(player.getStackInHand(

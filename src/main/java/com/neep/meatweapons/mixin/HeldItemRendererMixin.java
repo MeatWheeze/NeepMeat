@@ -1,16 +1,14 @@
 package com.neep.meatweapons.mixin;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.HeavyCannonItem;
-import com.neep.meatweapons.item.WeakTwoHanded;
+import com.neep.meatweapons.item.IWeakTwoHanded;
 import com.neep.neepmeat.item.AnimatedSword;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderDispatcher;
-import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
@@ -81,7 +79,7 @@ public class HeldItemRendererMixin
     public void renderItemHead(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
     {
         isAiming = player.isSneaking();
-        if (item.getItem() instanceof WeakTwoHanded || item.getItem() instanceof AnimatedSword)
+        if (item.getItem() instanceof IWeakTwoHanded || item.getItem() instanceof AnimatedSword)
         {
             // Offhand will only be rendered if empty and not swinging.
             if (hand == Hand.MAIN_HAND && player.getOffHandStack().isEmpty() && !player.handSwinging && !isAiming)

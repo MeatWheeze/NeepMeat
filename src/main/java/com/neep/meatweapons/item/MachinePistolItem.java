@@ -39,7 +39,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.Optional;
 
-public class MachinePistolItem extends BaseGunItem implements IAnimatable
+public class MachinePistolItem extends BaseGunItem implements IAnimatable, IAimable
 {
     public AnimationFactory factory = new AnimationFactory(this);
     public String controllerName = "controller";
