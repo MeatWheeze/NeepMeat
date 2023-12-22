@@ -10,6 +10,7 @@ import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.entity.worm.WormActions;
 import com.neep.neepmeat.guide.GuideReloadListener;
+import com.neep.neepmeat.implant.player.*;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.homogeniser.MeatAdditives;
@@ -18,7 +19,6 @@ import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
-import com.neep.neepmeat.player.implant.*;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.potion.NMPotions;
@@ -133,9 +133,9 @@ public class NeepMeat implements ModInitializer
 			Registry.register(ImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
 			Registry.register(ImplantRegistry.REGISTRY, PinealEyeImplant.ID, PinealEyeImplant::new);
 
-			Registry.register(ImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
-			Registry.register(ImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
-			Registry.register(ImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
+			Registry.register(EntityImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
+			Registry.register(EntityImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
+			Registry.register(EntityImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
 
 			NMCommonNetwork.init();
 		}

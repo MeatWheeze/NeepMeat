@@ -299,7 +299,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         @Override
         public void playDownSound(SoundManager soundManager)
         {
-            soundManager.play(PositionedSoundInstance.master(NMSounds.BEEP, 1.0f));
+            soundManager.play(PositionedSoundInstance.master(NMSounds.MARATHON_BEEP, 1.0f));
         }
 
         @Override

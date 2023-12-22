@@ -1,8 +1,8 @@
 package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.init.NMItems;
-import com.neep.neepmeat.player.implant.PinealEyeImplant;
-import com.neep.neepmeat.player.implant.PlayerImplantManager;
+import com.neep.neepmeat.implant.player.PinealEyeImplant;
+import com.neep.neepmeat.implant.player.PlayerImplantManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 

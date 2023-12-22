@@ -1,4 +1,4 @@
-package com.neep.neepmeat.player.implant;
+package com.neep.neepmeat.implant.player;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.entity.damage.DamageSource;

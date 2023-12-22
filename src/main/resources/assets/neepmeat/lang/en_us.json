@@ -532,6 +532,9 @@
   "screen.neepmeat.limiter_valve.text.mb": "mb / t",
   "screen.neepmeat.limiter_valve.text.mb_info": "Millibuckets per tick (one bucket = 1000mb)",
 
+  "screen.neepmeat.upgrade_manager": "Upgrade Manager",
+  "screen.neepmeat.upgrade_manager.remove": "Remove",
+
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.compacting": "Charnel Compacting",

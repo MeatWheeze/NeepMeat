@@ -4,13 +4,13 @@ import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.init.NMEntities;
-import com.neep.neepmeat.player.implant.ImplantInstaller;
+import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.util.Rarity;
 import net.minecraft.world.World;
 
-public class ChrysalisItem extends BaseItem implements ImplantInstaller
+public class ChrysalisItem extends BaseItem implements EntityImplantInstaller
 {
     public ChrysalisItem(String registryName, TooltipSupplier tooltipSupplier, Settings settings)
     {

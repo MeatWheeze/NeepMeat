@@ -1,4 +1,4 @@
-package com.neep.neepmeat.player.implant;
+package com.neep.neepmeat.implant.player;
 
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.entity.Entity;
