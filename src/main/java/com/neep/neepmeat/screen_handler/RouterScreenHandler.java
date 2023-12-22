@@ -1,6 +1,7 @@
 package com.neep.neepmeat.screen_handler;
 
 import com.neep.neepmeat.init.ScreenHandlerInit;
+import com.neep.neepmeat.screen_handler.slot.PatternSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.Inventory;
@@ -24,12 +25,7 @@ public class RouterScreenHandler extends BasicScreenHandler
         super(ScreenHandlerInit.ROUTER, playerInventory, inventory, syncId, null);
         checkSize(inventory, 18);
 
-
-        int m;
-        int l;
-        //Our inventory
         createSlots();
-        //The player inventory
         createPlayerSlots(8, 95, playerInventory);
     }
 
@@ -40,7 +36,7 @@ public class RouterScreenHandler extends BasicScreenHandler
         {
             for (l = 0; l < 3; ++l)
             {
-                this.addSlot(new Slot(inventory, l + m * 3, 13 + m * (18 + 9), 19 + l * 18));
+                this.addSlot(new PatternSlot(inventory, l + m * 3, 13 + m * (18 + 9), 19 + l * 18));
             }
         }
     }
@@ -53,45 +49,13 @@ public class RouterScreenHandler extends BasicScreenHandler
 
     public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player)
     {
-//        System.out.println(slotIndex);
         super.onSlotClick(slotIndex, button, actionType, player);
     }
 
-    // Shift + Player Inv Slot
     @Override
     public ItemStack transferSlot(PlayerEntity player, int invSlot)
     {
         return ItemStack.EMPTY;
-//        ItemStack newStack = ItemStack.EMPTY;
-//        Slot slot = this.slots.get(invSlot);
-//        if (slot != null && slot.hasStack())
-//        {
-//            ItemStack originalStack = slot.getStack();
-//            newStack = originalStack.copy();
-//            if (invSlot < this.inventory.size())
-//            {
-//                if (!this.insertItem(originalStack, this.inventory.size(), this.slots.size(), true))
-//                {
-//                    return ItemStack.EMPTY;
-//                }
-//            }
-//            else if (!this.insertItem(originalStack, 0, this.inventory.size(), false))
-//            {
-//                return ItemStack.EMPTY;
-//            }
-//
-//            if (originalStack.isEmpty())
-//            {
-//                slot.setStack(ItemStack.EMPTY);
-//            }
-//            else
-//            {
-//                slot.markDirty();
-//                System.out.println("oooooooo");
-//            }
-//        }
-//
-//        return newStack;
     }
 }
 
