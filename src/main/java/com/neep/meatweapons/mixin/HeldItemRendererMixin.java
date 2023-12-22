@@ -1,6 +1,7 @@
 package com.neep.meatweapons.mixin;
 
 import com.neep.meatweapons.item.BaseGunItem;
+import com.neep.meatweapons.item.FusionCannonItem;
 import com.neep.meatweapons.item.HeavyCannonItem;
 import com.neep.meatweapons.item.IWeakTwoHanded;
 import com.neep.neepmeat.item.AnimatedSword;
@@ -96,50 +97,5 @@ public class HeldItemRendererMixin
                 matrices.pop();
             }
         }
-        if (item.getItem() instanceof HeavyCannonItem)
-        {
-            matrices.push();
-
-//            boolean bl = true;
-//            float side = bl ? 1.0f : -1.0f;
-//            float g = MathHelper.sqrt(swingProgress);
-//            ClientPlayerEntity abstractClientPlayerEntity = this.client.player;
-//            RenderSystem.setShaderTexture(0, abstractClientPlayerEntity.getSkinTexture());
-//
-//            matrices.translate(side * -1.0f, 3.6f, 0);
-//            matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(side * 120.0f));
-//            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(200.0f));
-//            matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(side * -135.0f));
-//            matrices.translate(side * 5.6f, 0.5, 0.0);
-//
-//            ClientPlayerEntity clientPlayer = this.client.player;
-//            PlayerEntityRenderer playerRenderer = (PlayerEntityRenderer) renderManager.getRenderer(clientPlayer);
-//            playerRenderer.renderRightArm(matrices, vertexConsumers, light, clientPlayer);
-            matrices.pop();
-        }
     }
-
-    @Inject(method = "renderFirstPersonItem", at = @At(value = "TAIL"))
-    public void renderItemTail(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
-    {
-    }
-
-    @Inject(method = "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformation$Mode;ZLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V", at = @At("HEAD"))
-    public void renderFirstPersonItem(LivingEntity entity, ItemStack stack, ModelTransformation.Mode renderMode, boolean leftHanded, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
-    {
-        ItemStack itemStack = entity.getStackInHand(Hand.MAIN_HAND);
-//        boolean leftHanded = entity.preferredHand == Hand.OFF_HAND;
-        if (itemStack.getItem() instanceof BaseGunItem && isAiming)
-        {
-            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, -0.34);
-            Vec3f translation = new Vec3f(leftHanded ? -itemXOffset : itemXOffset, 0, 0);
-//            translation.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getYaw()));
-//            matrices.translate(translation.getX(), translation.getY(), translation.getZ());
-        }
-        else
-        {
-            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, 0);
-        }
-    }
-
 }

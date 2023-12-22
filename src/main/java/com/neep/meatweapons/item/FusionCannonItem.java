@@ -18,9 +18,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
@@ -105,7 +107,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     {
         boolean sneak = player.isSneaking();
         return new Vec3d(
-                sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
+                sneak ? 0 : player.getMainHandStack().equals(stack) == (player.getMainArm() == Arm.RIGHT) ? -0.2 : 0.2,
                 sneak ? -0.25 : 0.1,
                 .5);
     }
@@ -182,5 +184,19 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             controller.markNeedsReload();
             controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
         }
+    }
+
+    public static float transformWeapon(LivingEntity entity, ItemStack itemStack, boolean isAiming, float itemXOffset)
+    {
+        boolean left = entity.getMainArm() == Arm.RIGHT;
+        if (itemStack.getItem() instanceof BaseGunItem && isAiming)
+        {
+            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, (left ? -1 : 1) * -0.34);
+        }
+        else
+        {
+            itemXOffset = (float) MathHelper.lerp(0.3, itemXOffset, 0);
+        }
+        return 0;
     }
 }
