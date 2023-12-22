@@ -282,6 +282,7 @@ public class AssemblyEntity extends Entity
         }
 
         this.world.getProfiler().pop();
+//        System.out.println(getPos());
     }
 
     private Vec3d adjustMovementForCollisions(Vec3d movement)
