@@ -86,6 +86,7 @@
     "neepmeat:deployer",
     "neepmeat:agitator",
     "neepmeat:grinder",
+    "neepmeat:alloy_kiln",
     "neepmeat:converter",
     "neepmeat:converter_base",
     "neepmeat:charnel_compactor",

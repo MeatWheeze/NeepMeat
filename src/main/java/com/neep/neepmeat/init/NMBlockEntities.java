@@ -8,6 +8,8 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
+import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
+import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
@@ -74,6 +76,7 @@ public class NMBlockEntities
     public static BlockEntityType<MixerTopBlockEntity> MIXER_TOP;
     public static BlockEntityType<GrinderBlockEntity> GRINDER;
     public static BlockEntityType<StirlingEngineBlockEntity> STIRLING_ENGINE;
+    public static BlockEntityType<AlloyKilnBlockEntity> ALLOY_KILN;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -120,6 +123,7 @@ public class NMBlockEntities
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
         GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
+        ALLOY_KILN = registerBlockEntity("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
 
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
