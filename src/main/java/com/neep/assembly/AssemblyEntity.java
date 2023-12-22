@@ -3,8 +3,11 @@ package com.neep.assembly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.MovementType;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
@@ -14,15 +17,26 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.TypeFilter;
+import net.minecraft.util.collection.ReusableStream;
+import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public class AssemblyEntity extends Entity
 {
@@ -121,6 +135,93 @@ public class AssemblyEntity extends Entity
             this.setBoundingBox(calculateBoundingBox());
             this.needsBoxUpdate = false;
         }
+
+        setVelocity(0.0, 0.0, 0);
+//        this.movementMultiplier = new Vec3d(1, 1, 1);
+//        setPos(getX(), getY() + 0.05, getZ());
+        this.move(MovementType.SELF, (getVelocity()));
+    }
+
+    @Override
+    public void move(MovementType movementType, Vec3d movement)
+    {
+        Vec3d vec3d;
+
+        this.world.getProfiler().push("move");
+        if (this.movementMultiplier.lengthSquared() > 1.0E-7)
+        {
+            movement = movement.multiply(this.movementMultiplier);
+            this.movementMultiplier = Vec3d.ZERO;
+            this.setVelocity(Vec3d.ZERO);
+        }
+
+        if ((vec3d = this.adjustMovementForCollisions(movement)).lengthSquared() > 1.0E-7)
+        {
+            this.setPosition(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
+            Vec3d finalMovement = movement;
+//            if (false)
+            {
+            world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.1, 0), (t) -> true).forEach(
+                    entity -> {
+//                        entity.move(MovementType.PISTON, finalMovement);
+//                        entity.set(finalMovement.x, finalMovement.y, finalMovement.z);
+//                        entity.setVelocity(finalMovement.add(entity.getVelocity().x, 0, entity.getVelocity().z));
+                        if (false)
+                            entity.setPosition(getPos().add(0.5, 0.5, 0));
+                        if (true)
+                        {
+                            entity.setOnGround(true);
+                            entity.setVelocity(finalMovement);
+                        }
+//                        System.out.println(entity);
+                    }
+            );
+            }
+        }
+
+        this.world.getProfiler().pop();
+        this.world.getProfiler().push("rest");
+        this.horizontalCollision = !MathHelper.approximatelyEquals(movement.x, vec3d.x) || !MathHelper.approximatelyEquals(movement.z, vec3d.z);
+        this.verticalCollision = movement.y != vec3d.y;
+
+        this.onGround = this.verticalCollision && movement.y < 0.0;
+
+        if (this.isRemoved())
+        {
+            this.world.getProfiler().pop();
+            return;
+        }
+        Vec3d vec3d2 = this.getVelocity();
+        if (movement.x != vec3d.x)
+        {
+            this.setVelocity(0.0, vec3d2.y, vec3d2.z);
+        }
+        if (movement.z != vec3d.z)
+        {
+            this.setVelocity(vec3d2.x, vec3d2.y, 0.0);
+        }
+
+        this.tryCheckBlockCollision();
+        float d = this.getVelocityMultiplier();
+        this.setVelocity(this.getVelocity().multiply(d, 1.0, d));
+
+        this.world.getProfiler().pop();
+    }
+
+    private Vec3d adjustMovementForCollisions(Vec3d movement)
+    {
+        Box box = this.getBoundingBox();
+        ShapeContext shapeContext = ShapeContext.of(this);
+        VoxelShape voxelShape = this.world.getWorldBorder().asVoxelShape();
+
+        Stream<VoxelShape> stream = VoxelShapes.matchesAnywhere(voxelShape, VoxelShapes.cuboid(box.contract(1.0E-7)), BooleanBiFunction.AND) ? Stream.empty() : Stream.of(voxelShape);
+//        Stream<VoxelShape> stream2 = this.world.getEntityCollisions(this, box.stretch(movement), entity -> true);
+//        ReusableStream<VoxelShape> reusableStream = new ReusableStream<>(Stream.concat(stream2, stream));
+        ReusableStream<VoxelShape> reusableStream = new ReusableStream<>(stream);
+
+        Vec3d vec3d = movement.lengthSquared() == 0.0 ? movement : Entity.adjustMovementForCollisions(this, movement, box, this.world, shapeContext, reusableStream);
+
+        return vec3d;
     }
 
     @Override
