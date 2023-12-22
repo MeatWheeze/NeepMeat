@@ -33,7 +33,8 @@ public class AssemblyRenderer extends EntityRenderer<AssemblyEntity>
 
         MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
 //                entity.getState(),
-                Blocks.STONE.getDefaultState(),
+//                Blocks.STONE.getDefaultState(),
+                entity.getPalette().get(0, 0, 0),
                 entity.getBlockPos(),
                 entity.world, matrices,
                 vertexConsumers.getBuffer(RenderLayer.getTranslucent()),

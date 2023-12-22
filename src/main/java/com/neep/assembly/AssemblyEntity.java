@@ -1,5 +1,6 @@
 package com.neep.assembly;
 
+import com.sun.jna.platform.mac.SystemB;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -25,29 +26,33 @@ import java.util.Optional;
 public class AssemblyEntity extends Entity
 {
     private static final Palette<BlockState> FALLBACK_PALETTE = new IdListPalette<>(Block.STATE_IDS, Blocks.AIR.getDefaultState());
-    public PalettedContainer<BlockState> blocks = new PalettedContainer<>(FALLBACK_PALETTE,
-            Block.STATE_IDS,
-            NbtHelper::toBlockState,
-            NbtHelper::fromBlockState,
-            Blocks.AIR.getDefaultState());
-
     private static final TrackedData<Optional<BlockState>> BLOCK = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.OPTIONAL_BLOCK_STATE);
     private static final TrackedData<NbtCompound> PALETTE = DataTracker.registerData(AssemblyEntity.class, TrackedDataHandlerRegistry.TAG_COMPOUND);
 
     public BlockState state;
+    public PalettedContainer<BlockState> blocks;
 
     public AssemblyEntity(EntityType<?> type, World world)
     {
         super(type, world);
+
         this.state = Blocks.STONE.getDefaultState();
+//        this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+//                Block.STATE_IDS,
+//                NbtHelper::toBlockState,
+//                NbtHelper::fromBlockState,
+//                Blocks.AIR.getDefaultState());
+
         this.setBoundingBox(getBounds());
 
         blocks.set(0, 0, 0, Blocks.DIRT.getDefaultState());
+        updatePalette();
+
     }
 
     public AssemblyEntity(World world)
     {
-        super(Assembly.ASSEMBLY_ENTITY, world);
+        this(Assembly.ASSEMBLY_ENTITY, world);
     }
 
     @Override
@@ -55,6 +60,7 @@ public class AssemblyEntity extends Entity
     {
 //        this.dataTracker.startTracking(SLEEPING_POSITION, Optional.empty());
         this.dataTracker.startTracking(BLOCK, Optional.empty());
+        this.dataTracker.startTracking(PALETTE, writePalette(new NbtCompound()));
     }
 
     @Override
@@ -71,7 +77,7 @@ public class AssemblyEntity extends Entity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        blocks.write(nbt, "Palette", "BlockStates");
+        writePalette(nbt);
         return nbt;
     }
 
@@ -79,10 +85,36 @@ public class AssemblyEntity extends Entity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        readPalette(nbt);
+   }
+
+    public NbtCompound writePalette(NbtCompound nbt)
+    {
+        if (blocks == null)
+        {
+            this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+                    Block.STATE_IDS,
+                    NbtHelper::toBlockState,
+                    NbtHelper::fromBlockState,
+                    Blocks.AIR.getDefaultState());
+        }
+
+
+        blocks.write(nbt, "Palette", "BlockStates");
+        return nbt;
+    }
+
+    public void readPalette(NbtCompound nbt)
+    {
         if (nbt.contains("Palette", 9) && nbt.contains("BlockStates", 12))
         {
             blocks.read(nbt.getList("Palette", 10), nbt.getLongArray("BlockStates"));
         }
+    }
+
+    public void updatePalette()
+    {
+        dataTracker.set(PALETTE, writePalette(new NbtCompound()));
     }
 
     @Override
@@ -137,6 +169,12 @@ public class AssemblyEntity extends Entity
     }
 
     @Override
+    public boolean isPushable()
+    {
+        return true;
+    }
+
+    @Override
     public boolean collidesWith(Entity other)
     {
         return BoatEntity.canCollide(this, other);
@@ -145,5 +183,11 @@ public class AssemblyEntity extends Entity
     public BlockState getState()
     {
         return dataTracker.get(BLOCK).orElseGet(Blocks.COAL_ORE::getDefaultState);
+    }
+
+    public PalettedContainer<BlockState> getPalette()
+    {
+        readPalette(dataTracker.get(PALETTE));
+        return this.blocks;
     }
 }

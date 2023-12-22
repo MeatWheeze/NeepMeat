@@ -21,7 +21,7 @@ public class Assembly implements ModInitializer, ClientModInitializer
 
     public <T extends Entity> EntityType<T> registerEntity(String id, EntityType.EntityFactory<T> factory)
     {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                 FabricEntityTypeBuilder.create(SpawnGroup.MISC, factory).build());
     }
 
