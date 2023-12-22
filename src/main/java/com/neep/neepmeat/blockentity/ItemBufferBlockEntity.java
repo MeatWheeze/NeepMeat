@@ -3,6 +3,7 @@ package com.neep.neepmeat.blockentity;
 import com.neep.neepmeat.fluid_util.ResourceSnapshotParticipant;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
@@ -23,11 +24,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ItemBufferBlockEntity extends BlockEntity implements
         BlockEntityClientSerializable,
-        Storage<ItemVariant>,
+//        Storage<ItemVariant>,
+        InventoryStorage,
         SingleSlotStorage<ItemVariant>
 {
     private ItemVariant resource = ItemVariant.blank();
@@ -132,7 +135,6 @@ public class ItemBufferBlockEntity extends BlockEntity implements
 
         int transferred = (int) insert(ItemVariant.of(itemStack), itemStack.getCount(), transaction);
         itemStack.decrement(transferred);
-        System.out.println(itemStack.getCount());
         if (itemStack.getCount() <= 0)
         {
 //            itemEntity.remove(Entity.RemovalReason.DISCARDED);
@@ -180,5 +182,11 @@ public class ItemBufferBlockEntity extends BlockEntity implements
     public NbtCompound toClientTag(NbtCompound tag)
     {
         return writeNbt(tag);
+    }
+
+    @Override
+    public List<SingleSlotStorage<ItemVariant>> getSlots()
+    {
+        return List.of(this);
     }
 }
