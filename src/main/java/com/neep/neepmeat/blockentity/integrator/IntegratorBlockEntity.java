@@ -1,7 +1,6 @@
 package com.neep.neepmeat.blockentity.integrator;
 
 import com.neep.neepmeat.fluid_util.FluidBuffer;
-import com.neep.neepmeat.fluid.BloodFluid;
 import com.neep.neepmeat.fluid_util.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_util.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
@@ -13,12 +12,15 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib3.core.PlayState;
+import software.bernie.geckolib3.core.builder.AnimationBuilder;
+import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 
@@ -37,6 +39,8 @@ public class IntegratorBlockEntity extends BlockEntity implements
     protected TypedFluidBuffer outputBuffer;
     public float facing = 0f;
     public float targetFacing = 0f;
+
+    private final AnimationFactory factory = new AnimationFactory(this);
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
     {
@@ -90,15 +94,16 @@ public class IntegratorBlockEntity extends BlockEntity implements
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
+    public void registerControllers(AnimationData data)
     {
-
+        data.addAnimationController(
+            new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
     public AnimationFactory getFactory()
     {
-        return null;
+        return factory;
     }
 
     public TypedFluidBuffer getInputBuffer()
@@ -159,5 +164,12 @@ public class IntegratorBlockEntity extends BlockEntity implements
     public void setNeedsUpdate(boolean needsUpdate)
     {
 
+    }
+
+    private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    {
+        event.getController().transitionLengthTicks = 20;
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch", true));
+        return PlayState.CONTINUE;
     }
 }
