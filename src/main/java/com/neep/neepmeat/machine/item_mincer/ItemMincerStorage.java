@@ -4,11 +4,9 @@ import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.math.Direction;
 
 public class ItemMincerStorage implements NbtSerialisable
 {
@@ -38,10 +36,12 @@ public class ItemMincerStorage implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put("output", outputStorage.writeNbt(new NbtCompound()));
         nbt.put("input", inputStorage.writeNbt(new NbtCompound()));
+
+        return nbt;
     }
 
     @Override

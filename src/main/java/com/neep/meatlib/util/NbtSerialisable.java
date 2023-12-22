@@ -4,7 +4,7 @@ import net.minecraft.nbt.NbtCompound;
 
 public interface NbtSerialisable
 {
-    void writeNbt(NbtCompound nbt);
+    NbtCompound writeNbt(NbtCompound nbt);
 
     void readNbt(NbtCompound nbt);
 }

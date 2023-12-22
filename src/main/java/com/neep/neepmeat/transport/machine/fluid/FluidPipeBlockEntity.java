@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.meatlib.api.event.InitialTicks;
+import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
@@ -16,7 +17,7 @@ import net.minecraft.world.World;
 
 import java.util.UUID;
 
-public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
+public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends BlockEntity
 {
     public NbtCompound queuedNbt;
     protected PipeNetwork network;
@@ -171,7 +172,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex> extends BlockEntity
     }
 
     @FunctionalInterface
-    public interface PipeConstructor<T extends PipeVertex>
+    public interface PipeConstructor<T extends PipeVertex & NbtSerialisable>
     {
         T create(FluidPipeBlockEntity<T> parent);
     }

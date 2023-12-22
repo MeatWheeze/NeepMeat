@@ -1,8 +1,6 @@
 package com.neep.neepmeat.machine.small_trommel;
 
-import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -37,7 +35,7 @@ public class TrommelStorage implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         NbtCompound inputNbt = new NbtCompound();
         fluidInput.writeNbt(inputNbt);
@@ -50,6 +48,8 @@ public class TrommelStorage implements NbtSerialisable
         NbtCompound itemOutputNbt = new NbtCompound();
         itemOutput.writeNbt(itemOutputNbt);
         nbt.put("itemOutput", itemOutputNbt);
+
+        return nbt;
     }
 
     @Override

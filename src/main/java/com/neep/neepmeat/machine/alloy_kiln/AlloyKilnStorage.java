@@ -102,9 +102,10 @@ public class AlloyKilnStorage extends SimpleInventory implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         Inventories.writeNbt(nbt, inventory.getItems());
+        return nbt;
     }
 
     @Override

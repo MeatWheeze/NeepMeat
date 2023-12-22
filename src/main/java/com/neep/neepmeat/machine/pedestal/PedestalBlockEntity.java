@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.pedestal;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
@@ -12,7 +11,6 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -22,7 +20,6 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
-import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -189,13 +186,14 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         }
 
         @Override
-        public void writeNbt(NbtCompound tag)
+        public NbtCompound writeNbt(NbtCompound nbt)
         {
-            tag.put("integrator", NbtHelper.fromBlockPos(integrator));
+            nbt.put("integrator", NbtHelper.fromBlockPos(integrator));
             if (currentRecipe != null)
             {
-                tag.putString("recipe", currentRecipe.getId().toString());
+                nbt.putString("recipe", currentRecipe.getId().toString());
             }
+            return nbt;
         }
 
         @Override

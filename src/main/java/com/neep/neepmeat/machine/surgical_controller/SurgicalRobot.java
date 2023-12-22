@@ -163,13 +163,15 @@ public class SurgicalRobot implements NbtSerialisable
     private static final String NBT_NEXT_TYPE = "nextType";
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putByte(NBT_MOVEMENT_STATE, movementState);
         nbt.putByte(NBT_NEXT_TYPE, nextType);
         nbt.putDouble("rx", x);
         nbt.putDouble("ry", y);
         nbt.putDouble("rz", z);
+
+        return nbt;
     }
 
     @Override

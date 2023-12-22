@@ -59,9 +59,11 @@ public class SurgeryTableContext implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         storage.writeNbt(nbt);
+
+        return nbt;
     }
 
     @Override

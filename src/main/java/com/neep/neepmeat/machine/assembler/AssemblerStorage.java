@@ -81,11 +81,13 @@ public class AssemblerStorage implements NbtSerialisable
     }
 
     @Override
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putInt("outputSlots", outputSlots);
         NbtList invNbt = inventory.toNbtList();
         nbt.put("inventory", invNbt);
+
+        return nbt;
     }
 
     @Override
