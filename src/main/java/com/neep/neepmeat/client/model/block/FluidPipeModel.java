@@ -38,8 +38,9 @@ import java.util.function.Supplier;
 public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedModel
 {
     private static final Identifier SIDE_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_side_up");
-    private BakedModel side;
-    private ModelBakeSettings settings;
+    private static final Identifier STRAIGHT_ID = new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_straight_up");
+    private final BlockPos.Mutable mutable = new BlockPos.Mutable();
+
 //    private static final Identifier[] CONNECTOR_IDS = new Identifier[]
 //            {
 //                    new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_side"),
@@ -73,20 +74,20 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
 
     private final Map<BlockState, BitSet> stateCache = new Object2ObjectOpenCustomHashMap<>(Util.identityHashStrategy());
 
-    private final Triple<BakedModel, Float, Float>[] parts = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
+    private final Triple<BakedModel, Float, Float>[] straight = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
     private final Triple<BakedModel, Float, Float>[] connectors = (Triple<BakedModel, Float, Float>[]) Array.newInstance(Triple.class, 6);
 
     /* UnbakedModel */
     @Override
     public Collection<Identifier> getModelDependencies()
     {
-        return Arrays.asList(SIDE_ID);
+        return List.of(SIDE_ID, STRAIGHT_ID);
     }
 
     @Override
     public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
     {
-        return Collections.singletonList(PARTICLE_SPRITE_ID);
+        return List.of(PARTICLE_SPRITE_ID, new SpriteIdentifier(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/rusty_pipe_straight")));
     }
 
     @Nullable
@@ -110,9 +111,14 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
             addPart(connectors, Direction.UP, SIDE_ID, 270f, 270f, loader, textureGetter, modelId);
             addPart(connectors, Direction.DOWN, SIDE_ID, 270f, 270f, loader, textureGetter, modelId);
 
+            addPart(straight, Direction.NORTH, STRAIGHT_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.SOUTH, STRAIGHT_ID, 0f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.EAST, STRAIGHT_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.WEST, STRAIGHT_ID, 270f, 0f, loader, textureGetter, modelId);
+            addPart(straight, Direction.UP, STRAIGHT_ID, 270f, 270f, loader, textureGetter, modelId);
+            addPart(straight, Direction.DOWN, STRAIGHT_ID, 270f, 270f, loader, textureGetter, modelId);
+
             UnbakedModel unbaked = loader.getOrLoadModel(SIDE_ID);
-            side = unbaked.bake(loader, textureGetter, rotationContainer, modelId);
-            this.settings = rotationContainer;
         }
         catch (Exception e)
         {
@@ -138,9 +144,20 @@ public class FluidPipeModel implements UnbakedModel, BakedModel, FabricBakedMode
 //        ((FabricBakedModel) connectors[Direction.NORTH.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
         for (Direction direction : Direction.values())
         {
+            mutable.set(pos);
             EnumProperty<PipeConnectionType> property = FluidPipeBlock.DIR_TO_CONNECTION.get(direction);
+            EnumProperty<PipeConnectionType> backProperty = FluidPipeBlock.DIR_TO_CONNECTION.get(direction.getOpposite());
             if (!state.get(property).isConnected()) continue;
-            ((FabricBakedModel) connectors[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+
+            BlockState offsetState = blockView.getBlockState(pos.offset(direction));
+            if (!state.get(backProperty).isConnected() || !offsetState.isOf(NMBlocks.PIPE) || !offsetState.get(property).isConnected())
+            {
+                ((FabricBakedModel) connectors[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            }
+            else if (offsetState.get(property).isConnected())
+            {
+                ((FabricBakedModel) straight[direction.getId()].getLeft()).emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            }
         }
     }
 
