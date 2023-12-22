@@ -2,34 +2,21 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
-import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.Random;
 
 public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvider

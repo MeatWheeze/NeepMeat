@@ -5,7 +5,7 @@ import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -155,6 +155,6 @@ public class MergePipeBlock extends PneumaticTubeBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, PneumaticPipeBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, PneumaticPipeBlockEntity::serverTick, world);
     }
 }

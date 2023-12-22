@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.dumper;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -105,6 +105,6 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.DUMPER, DumperBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.DUMPER, DumperBlockEntity::serverTick, world);
     }
 }

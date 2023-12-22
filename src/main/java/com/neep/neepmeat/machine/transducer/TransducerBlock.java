@@ -1,9 +1,8 @@
 package com.neep.neepmeat.machine.transducer;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.blockentity.ConverterBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,6 +29,6 @@ public class TransducerBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.TRANSDUCER, TransducerBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.TRANSDUCER, TransducerBlockEntity::serverTick, world);
     }
 }

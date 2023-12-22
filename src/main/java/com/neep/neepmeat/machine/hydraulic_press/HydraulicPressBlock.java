@@ -2,8 +2,7 @@ package com.neep.neepmeat.machine.hydraulic_press;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -49,6 +48,6 @@ public class HydraulicPressBlock extends BaseHorFacingBlock implements BlockEnti
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.HYDRAULIC_PRESS, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
+        return MiscUtils.checkType(type, NMBlockEntities.HYDRAULIC_PRESS, (world1, pos, state1, blockEntity) -> blockEntity.tick(), world);
     }
 }

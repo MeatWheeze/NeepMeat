@@ -159,7 +159,8 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
 
     public void showContents(ServerPlayerEntity player)
     {
-        player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET / 1000)), true);
+        if (!isMature())
+            player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET) * 100 + "%"), true);
     }
 
     private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
@@ -181,5 +182,10 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     public Storage<FluidVariant> getStorage(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return storage.getFluidStorage(world, pos, state, direction);
+    }
+
+    public boolean isMature()
+    {
+        return isMature;
     }
 }

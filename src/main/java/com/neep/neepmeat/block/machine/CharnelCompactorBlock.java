@@ -1,8 +1,12 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.block.pipe.IDataCable;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,13 +19,15 @@ import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-import java.util.Random;
+import java.util.*;
 
 public class CharnelCompactorBlock extends BaseBlock implements IDataCable
 {
@@ -43,20 +49,33 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
         int i = state.get(LEVEL);
         ItemStack itemStack = player.getStackInHand(hand);
         float chance = getIncreaseChance(itemStack.getItem());
+        IntegratorBlockEntity integrator = findIntegrator(world, pos, 10);
         if (i < 8 && chance > 0)
         {
-            if (i < 7 && !world.isClient)
+            if (integrator != null && integrator.isMature())
             {
-                CharnelCompactorStorage.addLevel(new CharnelCompactorStorage.WorldLocation(world, pos));
-
-                player.incrementStat(Stats.USED.getOrCreateStat(itemStack.getItem()));
-                if (!player.getAbilities().creativeMode)
+                if (i < 7 && !world.isClient)
                 {
-                    itemStack.decrement(1);
+                    CharnelCompactorStorage.addLevel(new CharnelCompactorStorage.WorldLocation(world, pos));
+
+                    player.incrementStat(Stats.USED.getOrCreateStat(itemStack.getItem()));
+                    if (!player.getAbilities().creativeMode)
+                    {
+                        itemStack.decrement(1);
+                    }
                 }
+                return ActionResult.success(world.isClient);
             }
-            return ActionResult.success(world.isClient);
+            else if (integrator == null)
+            {
+                player.sendMessage(new TranslatableText("message." + NeepMeat.NAMESPACE + ".compactor.not_found"), true);
+            }
+            else if (!integrator.isMature())
+            {
+                player.sendMessage(new TranslatableText("message." + NeepMeat.NAMESPACE + ".compactor.immature"), true);
+            }
         }
+
         if (i == 8)
         {
             CharnelCompactorStorage.extractOutput(new CharnelCompactorStorage.WorldLocation(world, pos), true);
@@ -100,5 +119,33 @@ public class CharnelCompactorBlock extends BaseBlock implements IDataCable
     public int getComparatorOutput(BlockState state, World world, BlockPos pos)
     {
         return state.get(LEVEL);
+    }
+
+    public static IntegratorBlockEntity findIntegrator(World world, BlockPos pos, int maxDist)
+    {
+        Queue<BlockPos> queue = new LinkedList<>();
+        List<BlockPos> visited = new ArrayList<>();
+        queue.add(pos);
+        while (!queue.isEmpty())
+        {
+            BlockPos current = queue.poll();
+            for (Direction direction : Direction.values())
+            {
+                BlockPos offset = current.offset(direction);
+
+                if (pos.getManhattanDistance(offset) > maxDist || visited.contains(offset)) continue;
+
+                if (world.getBlockState(offset).isOf(NMBlocks.DATA_CABLE))
+                {
+                    queue.add(offset);
+                    visited.add(offset);
+                }
+                else if (world.getBlockEntity(offset) instanceof IntegratorBlockEntity integrator)
+                {
+                    return integrator;
+                }
+            }
+        }
+        return null;
     }
 }

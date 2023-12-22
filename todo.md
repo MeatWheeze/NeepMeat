@@ -44,12 +44,13 @@
 - Balance Transducer and Stirling Engine
 - [done] Add minimum fuel influx for heater activation
 - [done] Remove 'realistic fluids'
-- Add cutting recipes for building blocks
+- [done] Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks
 - Add coloured fluid pipes
 - [done] Create REI plugin
 - [done] Add recipes for Hydraulic Press, Transducer, Casting Basin, Trommel, Mixer
 - [done] Add recipe for biomechanical components
+- Add Meat Grinder
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank
@@ -67,6 +68,17 @@
 - [done] Add dynamic creation of Raw Ore Fat
 - [done] Add Trommel
 - [done] Add casting basin and hydraulic press
+
+## MEAT Production
+
+We need to differentiate ourselves from MineFactory.
+
+- Add Biomass Reprocessor
+- Add Meat fluid
+- Add Enlightened Meat fluid
+- 
+
+- Add casts for Casting Basin?
 
 ## Alloys
 - [done] Add Meat Potato farming
@@ -94,6 +106,8 @@
 # Insane Ramblings
 
 Blood bubble trees!
+
+All are made one in the maw of the Biomass Reprocesor.
 
 An Integrator is a biomechanical intelligence construct whose function is to ease the production of machines.
 

@@ -6,7 +6,7 @@ import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.machine.ItemPumpBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemInPipe;
-import com.neep.neepmeat.util.MiscUitls;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -46,7 +46,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUitls.checkType(type, NMBlockEntities.ITEM_PUMP, ItemPumpBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.ITEM_PUMP, ItemPumpBlockEntity::serverTick, world);
     }
 
     @Override
