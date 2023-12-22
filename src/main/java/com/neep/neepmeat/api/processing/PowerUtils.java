@@ -17,7 +17,7 @@ public class PowerUtils
     /**
      * Simulates friction and windage losses in an *unloaded* motor. It's here to avoid divide-by-zero issues when calculating rotor speed.
      */
-    public static final float MOTOR_TORQUE_LOSS = 100f;
+    public static final float MOTOR_TORQUE_LOSS = 300f;
 
     /**
      * The number of energy units that corresponds to one tick of progress through a recipe. This means that

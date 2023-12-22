@@ -21,6 +21,6 @@ public interface IHeatable
 
     static int getFurnaceTickIncrement(float heat)
     {
-        return  (int) Math.floor(heat * 3) + 1;
+        return (int) Math.floor(heat * 3) + 1;
     }
 }
