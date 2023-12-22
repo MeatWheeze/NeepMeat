@@ -286,6 +286,9 @@
   "item.neepmeat.can": "Can",
   "item.neepmeat.carton": "Carton",
   "item.neepmeat.milk_carton": "Milk Carton",
+  "item.neepmeat.meat_carton": "Meat Carton",
+  "item.neepmeat.meat_carton.hunger": "Hunger: %s",
+  "item.neepmeat.meat_carton.saturation": "Saturation: %s",
 
   "block.neepmeat.cronencake": "Cronencake",
   "block.neepmeat.cronencake.lore_0": "Ignore the screams. It's probably not sentient.",

@@ -21,7 +21,8 @@ public class ItemRegistry
         {
             throw new IllegalArgumentException("tried to queue a non-item for item registration");
         }
-        return ITEMS.put(new Identifier(namespace, item.getRegistryName()), (Item) item);
+        ITEMS.put(new Identifier(namespace, item.getRegistryName()), (Item) item);
+        return (Item) item;
     }
 
     public static Item queueItem(IMeatItem item)
@@ -31,13 +32,15 @@ public class ItemRegistry
         {
             throw new IllegalArgumentException("tried to queue a non-item for item registration");
         }
-        return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), (Item) item);
+        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), (Item) item);
+        return (Item) item;
     }
 
     public static Item queueItem(String path, Item item)
     {
         MeatLib.assertActive(item);
-        return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
+        ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
+        return item;
     }
 
     public static void flush()

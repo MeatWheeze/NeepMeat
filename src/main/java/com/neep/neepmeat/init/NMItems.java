@@ -67,6 +67,7 @@ public class NMItems
     public static Item CAN = new BaseCraftingItem("can", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item CARTON = new BaseCraftingItem("carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD));
     public static Item MILK_CARTON = new BaseCraftingItem("milk_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MILK_BOTTLE));
+    public static Item MEAT_CARTON = ItemRegistry.queueItem(new MeatCartonItem("meat_carton", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_CARTON)));
 
     // Mob cloning
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());
