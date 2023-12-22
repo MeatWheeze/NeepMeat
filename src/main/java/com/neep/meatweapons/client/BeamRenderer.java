@@ -6,10 +6,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Matrix3f;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.*;
 
 import java.nio.FloatBuffer;
 
@@ -25,12 +22,17 @@ public class BeamRenderer
         matrices.translate(offset.x, offset.y, offset.z);
 
         // Transform from world to local space
-        Matrix4f transform = new Matrix4f();
-        transform.loadIdentity();
-        beam.normalize();
-        transform.multiply(rotationMatrix((float) Math.atan2(beam.getX(), beam.getZ()), 0, (float) Math.asin(-beam.getY() / beam.length())));
+//        Matrix4f transform = new Matrix4f();
+//        transform.loadIdentity();
+//        beam.normalize();
+//        transform.multiply(rotationMatrix((float) Math.atan2(beam.getX(), beam.getZ()), 0, (float) Math.asin(-beam.getY() / beam.length())));
+//        matrices.multiplyPositionMatrix(transform);
 
-        matrices.multiplyPositionMatrix(transform);
+        double pitch = Math.atan2(beam.getX(), beam.getZ());
+        double yaw = Math.asin(-beam.getY() / beam.length());
+
+        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
+        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) yaw));
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f model = entry.getPositionMatrix();
