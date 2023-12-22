@@ -9,8 +9,11 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -107,5 +110,40 @@ public class TubeUtils
         }
 
         item.reset(in, out, world.getTime());
+    }
+
+    /** Handles ejection of an ItemStack into the world, taking into account pipes and storage implementations.
+     */
+    public static int ejectStack(ServerWorld world, BlockPos pos, Direction facing, ItemStack stack)
+    {
+        if (stack.isEmpty()) return 0;
+
+        BlockPos offset = pos.offset(facing);
+        BlockState facingState = world.getBlockState(offset);
+        Storage<ItemVariant> storage;
+        if (facingState.isAir())
+        {
+            double x = pos.getX() + facing.getOffsetX() * 0.5 + 0.5;
+            double y = pos.getY() + 0.5;
+            double z = pos.getZ() + facing.getOffsetZ() * 0.5 + 0.5;
+            ItemEntity entity = new ItemEntity(world, x, y, z, stack, facing.getOffsetX() * 0.05, 0, facing.getOffsetZ() * 0.05);
+            world.spawnEntity(entity);
+            return stack.getCount();
+        }
+        else if (facingState.getBlock() instanceof IItemPipe itemPipe)
+        {
+            return (int) itemPipe.insert(world, offset, facingState, facing, new ItemInPipe(stack, world.getTime()));
+        }
+        else if ((storage = ItemStorage.SIDED.find(world, offset, facing)) != null)
+        {
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                long amount = stack.getCount();
+                long inserted = storage.insert(ItemVariant.of(stack), amount, transaction);
+                transaction.commit();
+                return (int) inserted;
+            }
+        }
+        return 0;
     }
 }

@@ -5,7 +5,7 @@ import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.transport.util.TubeUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -23,6 +23,8 @@ import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
@@ -96,7 +98,6 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
 
     public void test()
     {
-
         BlockPos down = pos.down();
 
         if (!(world instanceof ServerWorld serverWorld))
@@ -144,11 +145,23 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     {
         for (int i = 0; i < target.size() && i < PATTERN_SLOTS; ++i)
         {
-//            if (((delegate.get(0) >> i) & 1) == 1)
             if (storage.isOutput(delegate, i))
             {
-                if (ItemUtils.insertItem(target.getStack(i), storage.getInventory(), 24, 28, false))
+                ItemStack stack = target.getStack(i).copy();
+
+                if (target instanceof SidedInventory sided)
+                {
+                    // May need to account for direction in order to automate water production from sponge furnaces (why?)
+                    if (!sided.canExtract(i, stack, null)) return false;
+                }
+
+                int ejected = TubeUtils.ejectStack((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), target.getStack(i).copy());
+                if (ejected > 0)
+                {
+                    target.getStack(i).decrement(ejected);
+                    spawnSmoke((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), stack);
                     return true;
+                }
             }
         }
         return false;
@@ -233,5 +246,15 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
     public Storage<FluidVariant> getBuffer(Direction direction)
     {
         return null;
+    }
+
+    public static void spawnSmoke(ServerWorld world, BlockPos pos, Direction facing, ItemStack item)
+    {
+        world.spawnParticles(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, 10, 0.04, 0, 0.04, 0.01);
+        world.spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, item),
+                pos.getX() + facing.getOffsetX() * 0.5 + 0.5,
+                pos.getY() + 0.5,
+                pos.getZ() + facing.getOffsetZ() * 0.5 + 0.5,
+                20, 0.06, 0.06, 0.06, 0.01);
     }
 }
