@@ -13,7 +13,6 @@ import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.Bounds;
-import dev.emi.emi.api.widget.SlotWidget;
 import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.client.MinecraftClient;
@@ -82,16 +81,16 @@ public class ManufactureEmiRecipe implements EmiRecipe {
 
         widgets.add(new OutlineWidget(new Bounds(0, 0, getDisplayWidth(), getDisplayHeight())));
 
-        var widgetBase = new LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base));
+        var widgetBase = new LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base), widgets);
         widgets.add(widgetBase);
 
-        var widgetOutput = new LabelledSlot(startX + 20 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), this);
+        var widgetOutput = new LabelledSlot(startX + 20 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), widgets, this);
         widgets.add(widgetOutput);
 
         int entryX = startX + 1;
         int entryY = startY + 22;
         for (var step : steps) {
-            var widget = new EntryWidget(entryX, entryY, step, getDisplayWidth() - 20);
+            var widget = new EntryWidget(entryX, entryY, step, getDisplayWidth() - 20, widgets);
             widgets.add(widget);
             entryY += widget.height() + 2;
         }
@@ -103,7 +102,6 @@ public class ManufactureEmiRecipe implements EmiRecipe {
     }
 
     static class LabelledSlot extends Widget {
-        private final SlotWidget slot;
         private final int originX;
         private final int originY;
         private final Text name;
@@ -111,17 +109,18 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         private final int slotOriginY;
         private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
 
-        public LabelledSlot(int originX, int originY, Text name, EmiStack stack) {
-            this(originX, originY, name, stack, null);
+        public LabelledSlot(int originX, int originY, Text name, EmiStack stack, WidgetHolder widgets) {
+            this(originX, originY, name, stack, widgets, null);
         }
 
-        public LabelledSlot(int originX, int originY, Text name, EmiStack stack, EmiRecipe recipe) {
+        public LabelledSlot(int originX, int originY, Text name, EmiStack stack, WidgetHolder widgets, EmiRecipe recipe) {
             this.name = name;
             this.originX = originX;
             this.originY = originY;
             this.slotOriginX = originX + textRenderer.getWidth(name) + 2;
             this.slotOriginY = originY;
-            this.slot = new SlotWidget(stack, slotOriginX, slotOriginY).drawBack(false).recipeContext(recipe);
+
+            widgets.addSlot(stack, slotOriginX, slotOriginY).drawBack(false).recipeContext(recipe);
         }
 
         public int height() {
@@ -140,7 +139,6 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
             textRenderer.drawWithShadow(matrices, name, originX, originY, borderCol());
-            slot.render(matrices, mouseX, mouseY, delta);
             GUIUtil.renderBorder(matrices, slotOriginX - 1, slotOriginY - 1, 17, 17, borderCol(), 0);
             GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 15, 15, PLCCols.TRANSPARENT.col, 0);
         }
@@ -150,19 +148,18 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         private final int originX;
         private final int originY;
         private final ManufactureStep<?> step;
-        private final Widget widget;
         private final Text name;
         private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
         private final int width;
 
-        public EntryWidget(int originX, int originY, ManufactureStep<?> step, int width) {
+        public EntryWidget(int originX, int originY, ManufactureStep<?> step, int width, WidgetHolder widgets) {
             this.originX = originX;
             this.originY = originY;
             this.step = step;
             this.name = step.getName();
             this.width = width;
 
-            this.widget = getThing(originX + width() - 14, originY, step);
+            drawThing(originX + width() - 14, originY, step, widgets);
         }
 
         public int height() {
@@ -184,26 +181,24 @@ public class ManufactureEmiRecipe implements EmiRecipe {
             int y = originY + 2;
 
             textRenderer.drawWithShadow(matrices, name, x, y, borderCol());
-
             GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), borderCol(), 0);
-            widget.render(matrices, mouseX, mouseY, delta);
         }
     }
 
-    static Widget getThing(int x, int y, ManufactureStep<?> step) {
+    static void drawThing(int x, int y, ManufactureStep<?> step, WidgetHolder widgets) {
         if (step instanceof CombineStep combineStep)
         {
-            return new SlotWidget(EmiStack.of(combineStep.getItem()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(combineStep.getItem()), x, y + 2).drawBack(false);
         }
         else if (step instanceof InjectStep injectStep)
         {
-            return new SlotWidget(EmiStack.of(injectStep.getFluid()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(injectStep.getFluid()), x, y + 2).drawBack(false);
         }
         else if (step instanceof ImplantStep implantStep)
         {
-            return new SlotWidget(EmiStack.of(implantStep.getItem()), x, y + 2).drawBack(false);
+            widgets.addSlot(EmiStack.of(implantStep.getItem()), x, y + 2).drawBack(false);
         }
-        return new SlotWidget(EmiStack.EMPTY, x, y + 2).drawBack(false);
+        widgets.addSlot(EmiStack.EMPTY, x, y + 2).drawBack(false);
     }
 
     static class OutlineWidget extends Widget {
