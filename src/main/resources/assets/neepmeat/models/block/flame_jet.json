@@ -1,0 +1,12 @@
+{
+    "parent": "block/cube_directional",
+    "textures": {
+        "particle": "neepmeat:block/flame_jet/side",
+        "down": "neepmeat:/block/flame_jet/side",
+        "up": "neepmeat:/block/flame_jet/side",
+        "north": "neepmeat:block/flame_jet/front",
+        "east": "neepmeat:/block/flame_jet/side",
+        "south": "neepmeat:block/flame_jet/back",
+        "west": "neepmeat:/block/flame_jet/side"
+    }
+}

@@ -130,6 +130,7 @@ public class NMBlockEntities
     public static BlockEntityType<TableControllerBlockEntity> TABLE_CONTROLLER;
     public static BlockEntityType<SynthesiserBlockEntity> SYNTHESISER;
     public static BlockEntityType<MincerBlockEnity> MINCER;
+    public static BlockEntityType<FlameJetBlockEntity> FLAME_JET;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -252,6 +253,9 @@ public class NMBlockEntities
 
         MINCER = registerBlockEntity("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
         FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
+
+        FLAME_JET = registerBlockEntity("flame_jet", FlameJetBlockEntity::new, NMBlocks.FLAME_JET);
+        FluidStorage.SIDED.registerForBlockEntity(FlameJetBlockEntity::getFluidStorage, FLAME_JET);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

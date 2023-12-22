@@ -161,6 +161,8 @@ public class NMBlocks
     public static Block VAT_FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("vat_fluid_port", 64, false, VAT_SETTINGS));
     public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", 64, false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
 
+    public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", 64, false, MACHINE_SETTINGS));
+
     // --- Fluid Transfer ---
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", 64, true, FLUID_MACHINE_SETTINGS));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", 64, false, FLUID_MACHINE_SETTINGS));
@@ -212,6 +214,7 @@ public class NMBlocks
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", 64, true, FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
 
     public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", 64, false, FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
+
 
     public static Block CRONENCAKE = BlockRegistry.queue(new CronenCakeBlock("cronencake", FabricBlockSettings.copyOf(Blocks.CAKE).sounds(BlockSoundGroup.SLIME)));
     public static Block CANDLE_CRONENCAKE = BlockRegistry.queue(new CandleCronenCakeBlock("candle_cronencake", FabricBlockSettings.copyOf(Blocks.CANDLE_CAKE).sounds(BlockSoundGroup.SLIME)));

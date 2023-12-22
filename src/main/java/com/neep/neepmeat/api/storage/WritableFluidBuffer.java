@@ -80,6 +80,7 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
                     StorageView<FluidVariant> view = storage.iterator(transaction).next();
                     if (!view.isResourceBlank())
                     {
+                        world.playSound(null, player.getBlockPos(), fill, SoundCategory.BLOCKS, 1f, 1.5f);
                         buffer.insert(view.getResource(), view.getAmount(), transaction);
                         transaction.commit();
                         return true;

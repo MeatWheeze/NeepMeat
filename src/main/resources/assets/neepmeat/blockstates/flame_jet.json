@@ -1,0 +1,60 @@
+{
+    "variants": {
+        "running=false,facing=east": {
+            "model": "neepmeat:block/flame_jet",
+            "y": 90,
+            "x": 0
+        },
+        "running=false,facing=north": {
+            "model": "neepmeat:block/flame_jet",
+            "y": 0,
+            "x": 0
+        },
+        "running=false,facing=south": {
+            "model": "neepmeat:block/flame_jet",
+            "y": 180,
+            "x": 0
+        },
+        "running=false,facing=west": {
+            "model": "neepmeat:block/flame_jet",
+            "y": -90,
+            "x": 0
+        },
+        "running=false,facing=up": {
+            "model": "neepmeat:block/flame_jet",
+            "x": -90
+        },
+        "running=false,facing=down": {
+            "model": "neepmeat:block/flame_jet",
+            "x": 90
+        },
+        "running=true,facing=east": {
+            "model": "neepmeat:block/flame_jet_running",
+            "y": 90,
+            "x": 0
+        },
+        "running=true,facing=north": {
+            "model": "neepmeat:block/flame_jet_running",
+            "y": 0,
+            "x": 0
+        },
+        "running=true,facing=south": {
+            "model": "neepmeat:block/flame_jet_running",
+            "y": 180,
+            "x": 0
+        },
+        "running=true,facing=west": {
+            "model": "neepmeat:block/flame_jet_running",
+            "y": -90,
+            "x": 0
+        },
+        "running=true,facing=up": {
+            "model": "neepmeat:block/flame_jet_running",
+            "x": -90
+        },
+        "running=true,facing=down": {
+            "model": "neepmeat:block/flame_jet_running",
+            "x": 90
+        }
+    }
+}
