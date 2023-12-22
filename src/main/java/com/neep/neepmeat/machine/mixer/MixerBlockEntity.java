@@ -21,6 +21,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
 {
     protected MixerStorage storage = new MixerStorage(this);
     protected MixingRecipe currentRecipe;
+    protected Identifier currentRecipeId;
     protected long processStart;
     protected int processTime;
 
@@ -49,9 +51,10 @@ public class MixerBlockEntity extends SyncableBlockEntity
         return null;
     }
 
-    public void setCurrentRecipe(MixingRecipe recipe)
+    public void setCurrentRecipe(@Nullable MixingRecipe recipe)
     {
         this.currentRecipe = recipe;
+        this.currentRecipeId = recipe != null ? recipe.id : null;
     }
 
     public MixingRecipe getCurrentRecipe()
@@ -70,7 +73,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
             if (direction == Direction.DOWN || direction == Direction.UP)
                 continue;
 
-            BlockPos offset = getPos().up().offset(direction);
+            BlockPos offset = getPos().offset(direction);
             BlockState state = getWorld().getBlockState(offset);
             BlockEntity be = getWorld().getBlockEntity(offset);
             Storage<FluidVariant> storage;
@@ -132,7 +135,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
                 else
                     transaction.abort();
             }
-            this.currentRecipe = null;
+            this.setCurrentRecipe(null);
         }
         sync();
     }
@@ -152,14 +155,22 @@ public class MixerBlockEntity extends SyncableBlockEntity
     @Override
     public void readNbt(NbtCompound nbt)
     {
-//        storage.readNbt(nbt);
-        Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(new Identifier(nbt.getString("current_recipe")));
-        optional.ifPresentOrElse(recipe -> this.currentRecipe = (MixingRecipe) recipe,
-                () -> this.currentRecipe = null);
+        this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
+        readCurrentRecipe();
 
         this.processTime = nbt.getInt("process_time");
         this.processStart = nbt.getLong("process_start");
         storage.readNbt(nbt);
+    }
+
+    public void readCurrentRecipe()
+    {
+        if (world != null)
+        {
+            Optional<? extends Recipe<?>> optional = getWorld().getRecipeManager().get(currentRecipeId);
+            optional.ifPresentOrElse(recipe -> this.currentRecipe = (MixingRecipe) recipe,
+                    () -> this.currentRecipe = null);
+        }
     }
 
     public static <E extends BlockEntity> void serverTick(World world, BlockPos pos, BlockState state, MixerBlockEntity be)
@@ -169,6 +180,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
 
     public void tick()
     {
+        readCurrentRecipe();
         if (currentRecipe != null)
         {
             spawnMixingParticles(currentRecipe.fluidInput1, 2, 0.2, 0.5);
@@ -182,7 +194,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
         if (world instanceof ServerWorld serverWorld)
         {
             serverWorld.spawnParticles(new SwirlingParticleEffect(NMParticles.BLOCK_SWIRL,
-                    ((Fluid) ingredient.resource().getObject()).getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
+                    ((Fluid) ingredient.resource().getObject()).getDefaultState().getBlockState(), 0.4, speed), pos.getX() + 0.5, pos.getY() + 0.5 + 1, pos.getZ() + 0.5, count, 0, dy, 0, 0.1);
         }
     }
 }
