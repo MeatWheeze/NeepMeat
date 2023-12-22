@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.hud.InGameOverlayRenderer;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;

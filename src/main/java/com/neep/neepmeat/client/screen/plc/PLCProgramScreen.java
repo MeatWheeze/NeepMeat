@@ -15,6 +15,8 @@ import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
@@ -24,6 +26,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -32,11 +35,9 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vector4f;
+import net.minecraft.util.math.*;
 import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
@@ -105,26 +106,19 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
-        float x0 = 0;
-        float y0 = 0;
-        float x1 = width;
-        float y1 = height;
-        float z = 0;
-        float u0 = 0;
-        float v0 = 0;
-        float u1 = 1;
-        float v1 = 1;
-        var matrix = matrices.peek().getPositionMatrix();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderTexture(0, VIGNETTE);
-        RenderSystem.enableBlend();
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
-        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
-        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
-        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BlockState wallState = getWallState(client.world, client.gameRenderer.getCamera());
+        if (wallState != null)
+        {
+            // Fill screen with the block's particle sprite to prevent xray vision
+            Sprite sprite = client.getBlockRenderManager().getModels().getModelParticleSprite(wallState);
+//            drawScreenTexture(matrices, sprite.getAtlas().getId(), sprite.getMinU(), sprite.getMinV(), sprite.getMaxU(), sprite.getMaxV(), 0.1f);
+            renderInWallOverlay(sprite, matrices);
+        }
+        else
+        {
+            // Red fleshy vignette
+            drawScreenTexture(matrices, VIGNETTE, 0, 0, 1, 1, 0.9f);
+        }
 
         if (!tooltipText.isEmpty())
         {
@@ -137,6 +131,60 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         super.render(matrices, mouseX, mouseY, delta);
     }
 
+    @Nullable
+    private static BlockState getWallState(World world, Camera camera)
+    {
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        float width = 0.8f;
+        for (int i = 0; i < 8; ++i)
+        {
+            Vec3d camPos = camera.getPos();
+            double d = camPos.x + (((i >> 0) % 2) - 0.5f) * width * 0.8f;
+            double e = camPos.y + (((i >> 1) % 2) - 0.5f) * 0.1f;
+            double f = camPos.z + (((i >> 2) % 2) - 0.5f) * width * 0.8f;
+            mutable.set(d, e, f);
+
+            BlockState blockState = world.getBlockState(mutable);
+            if (blockState.getRenderType() == BlockRenderType.INVISIBLE || !blockState.shouldBlockVision(world, mutable)) continue;
+            return blockState;
+        }
+        return null;
+    }
+
+    private void drawScreenTexture(MatrixStack matrices, Identifier texture, float u0, float v0, float u1, float v1, float light)
+    {
+        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        var matrix = matrices.peek().getPositionMatrix();
+        RenderSystem.setShaderTexture(0, texture);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.enableBlend();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix, x0, y1, z).color(light, light, light, 1).texture(u0, v1).next();
+        bufferBuilder.vertex(matrix, x1, y1, z).color(light, light, light, 1).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix, x1, y0, z).color(light, light, light, 1).texture(u1, v0).next();
+        bufferBuilder.vertex(matrix, x0, y0, z).color(light, light, light, 1).texture(u0, v0).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
+    }
+
+    private void renderInWallOverlay(Sprite sprite, MatrixStack matrices)
+    {
+        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
+        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        float l = sprite.getMinU();
+        float m = sprite.getMaxU();
+        float n = sprite.getMinV();
+        float o = sprite.getMaxV();
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR_TEXTURE);
+        bufferBuilder.vertex(matrix4f, x0, y1, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(m, o).next();
+        bufferBuilder.vertex(matrix4f, x1, y1, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, o).next();
+        bufferBuilder.vertex(matrix4f, x1, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, n).next();
+        bufferBuilder.vertex(matrix4f, x0, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(m, n).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
+    }
 
     private void tickTooltip(double mouseX, double mouseY)
     {
