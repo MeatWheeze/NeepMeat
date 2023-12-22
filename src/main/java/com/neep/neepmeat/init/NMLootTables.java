@@ -20,6 +20,7 @@ import net.minecraft.util.Identifier;
 public class NMLootTables
 {
     private static final Identifier ZOMBIE = EntityType.ZOMBIE.getLootTableId();
+    private static final Identifier ELDER_GUARDIAN = EntityType.ELDER_GUARDIAN.getLootTableId();
     private static final Identifier DUNGEON = LootTables.SIMPLE_DUNGEON_CHEST;
     private static final Identifier GRASS = Blocks.GRASS.getLootTableId();
     private static final Identifier TALL_GRASS = Blocks.TALL_GRASS.getLootTableId();
@@ -45,7 +46,18 @@ public class NMLootTables
 
                 tableBuilder.pool(poolBuilder);
             }
-            if (DUNGEON.equals(id))
+            else if (ELDER_GUARDIAN.equals(id))
+            {
+                LootPool.Builder poolBuilder = LootPool.builder()
+                        .rolls(ConstantLootNumberProvider.create(1.0f))
+                        .with((LootPoolEntry.Builder<?>)((LeafEntry.Builder)ItemEntry.builder(NMBlocks.STATUE.asItem())
+                                .apply(SetCountLootFunction.builder(UniformLootNumberProvider.create(0.0f, 1.0f))))
+                                .apply(LootingEnchantLootFunction.builder(UniformLootNumberProvider.create(0.0f, 1.0f))))
+                        .conditionally(KilledByPlayerLootCondition.builder());
+
+                tableBuilder.pool(poolBuilder);
+            }
+            else if (DUNGEON.equals(id))
             {
                 LootPool.Builder builder = LootPool.builder()
                     .rolls(UniformLootNumberProvider.create(0.0f, 1.0f))
@@ -53,7 +65,7 @@ public class NMLootTables
 
                 tableBuilder.pool(builder);
             }
-            if (GRASS.equals(id))
+            else if (GRASS.equals(id))
             {
                 LootPool.Builder builder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
@@ -62,7 +74,7 @@ public class NMLootTables
 
                 tableBuilder.pool(builder);
             }
-            if (TALL_GRASS.equals(id))
+            else if (TALL_GRASS.equals(id))
             {
                 LootPool.Builder builder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
@@ -71,7 +83,7 @@ public class NMLootTables
 
                 tableBuilder.pool(builder);
             }
-            if (POTATOES.equals(id))
+            else if (POTATOES.equals(id))
             {
                 LootPool.Builder builder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
