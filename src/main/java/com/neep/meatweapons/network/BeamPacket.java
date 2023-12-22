@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class BeamPacket
 {
-    public static Packet<?> create(ServerWorld world, BeamEffect.Factory factory, Vec3d start, Vec3d end, Vec3d velocity, int maxTime, Identifier packetID)
+    public static Packet<?> create(ServerWorld world, BeamEffect.Factory factory, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime, Identifier packetID)
     {
         if (world.isClient)
             throw new IllegalStateException("packet create called on the client!");
@@ -29,6 +29,7 @@ public class BeamPacket
         PacketBufUtil.writeVec3d(byteBuf, start);
         PacketBufUtil.writeVec3d(byteBuf, end);
         PacketBufUtil.writeVec3d(byteBuf, velocity);
+        byteBuf.writeFloat(scale);
         byteBuf.writeInt(maxTime);
         byteBuf.writeIdentifier(world.getRegistryKey().getValue());
         return ServerSidePacketRegistry.INSTANCE.toPacket(packetID, byteBuf);
@@ -43,6 +44,7 @@ public class BeamPacket
             Vec3d start = PacketBufUtil.readVec3d(byteBuf);
             Vec3d end = PacketBufUtil.readVec3d(byteBuf);
             Vec3d velocity = PacketBufUtil.readVec3d(byteBuf);
+            float scale = byteBuf.readFloat();
             int maxTime = byteBuf.readInt();
             Identifier worldId = byteBuf.readIdentifier();
 
@@ -54,7 +56,7 @@ public class BeamPacket
 
                 if (world.getRegistryKey().getValue().equals(worldId))
                 {
-                    GraphicsEffect effect = factory.create(world, start, end, velocity, maxTime);
+                    GraphicsEffect effect = factory.create(world, start, end, velocity, scale, maxTime);
                     GraphicsEffect.addEffect(effect);
                 }
             });

@@ -2,10 +2,14 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
+import com.neep.meatweapons.init.GraphicsEffects;
+import com.neep.meatweapons.network.BeamPacket;
+import com.neep.meatweapons.network.MWNetwork;
 import com.neep.meatweapons.particle.BeamEffect;
 import com.neep.meatweapons.particle.GraphicsEffect;
 import com.neep.neepmeat.init.SoundInitialiser;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
@@ -14,6 +18,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.network.Packet;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -40,7 +46,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
 
     public MachinePistolItem()
     {
-        super("machine_pistol", Items.DIRT, 24, 10, false, new FabricItemSettings());
+        super("machine_pistol", MeatWeapons.BALLISTIC_CARTRIDGE, 24, 10, false, new FabricItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, SoundInitialiser.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, SoundInitialiser.HAND_CANNON_RELOAD);
     }
@@ -88,8 +94,8 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
         boolean sneak = player.isSneaking();
         return new Vec3d(
                 sneak ? 0 : player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-                sneak ? -1.15 : 1.5,
-                .5);
+                sneak ? -0.25 : 0.1,
+                .2);
     }
 
     public void fire(World world, PlayerEntity player, ItemStack stack)
@@ -104,25 +110,18 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
                     if (!world.isClient)
                     {
                         double yaw = Math.toRadians(player.getHeadYaw()) + 0.1 * (rand.nextFloat() - 0.5);
-                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.4, player.getZ());
-                        if (!player.isSneaking())
-                        {
-                            Vec3d transform = new Vec3d(
-                                    player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
-                                    player.isSneaking() ? -0.15 : 0.1,
-                                    0).rotateY((float) -yaw);
-                            pos = pos.add(transform);
-                        }
+                        double pitch = Math.toRadians(player.getPitch(0.1f)) + 0.1 * (rand.nextFloat() - 0.5);
+
+                        Vec3d pos = new Vec3d(player.getX(), player.getY() + 1.5, player.getZ());
+                        Vec3d transform = getMuzzleOffset(player, stack).rotateX((float) -pitch).rotateY((float) -yaw);
+                        pos = pos.add(transform);
 
                         Vec3d end = pos.add(player.getRotationVec(1).multiply(20));
                         Optional<LivingEntity> target = this.hitScan(player, pos, end, 100);
                         if (target.isPresent())
                         {
-//                            target.get().maxHurtTime = 1;
-//                            target.get().hurtTime = 20;
                             LivingEntity entity = target.get();
                             target.get().damage(DamageSource.player(player), 2);
-//                            entity.hurtTime = entity.maxHurtTime = 0;
                             entity.timeUntilRegen = 0;
                         }
 
@@ -152,9 +151,18 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable
         }
     }
 
+    @Override
+    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, GraphicsEffect.Factory type, double showRadius)
+    {
+        for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
+        {
+            Packet<?> packet = BeamPacket.create(world, GraphicsEffects.BULLET_TRAIL, pos, end, velocity, 0.2f, 1, MWNetwork.EFFECT_ID);
+            ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
+        }
+    }
+
     private <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
     {
-//        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.blaster.fire", false));
         return PlayState.CONTINUE;
     }
 

@@ -32,14 +32,16 @@ public abstract class GraphicsEffect
     protected Vec3d end;
     protected Vec3d velocity;
     protected int maxTime;
+    protected float scale;
 
-    public GraphicsEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, int maxTime)
+    public GraphicsEffect(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
         this.world = world;
         this.start = start;
         this.end = end;
         this.velocity = velocity;
         this.maxTime = maxTime;
+        this.scale = scale;
     }
 
     public ClientWorld getWorld()
@@ -68,7 +70,6 @@ public abstract class GraphicsEffect
         ClientTickEvents.END_WORLD_TICK.register(ctx ->
         {
             ClientWorld world = MinecraftClient.getInstance().world;
-//            List<GraphicsEffect> effects = getOrCreate(world);
             EFFECTS.removeIf(effect -> effect.isDead() || effect.getWorld() != world);
             EFFECTS.forEach(GraphicsEffect::tick);
         });
@@ -78,8 +79,6 @@ public abstract class GraphicsEffect
             MatrixStack matrices = ctx.matrixStack();
             VertexConsumerProvider consumers = ctx.consumers();
 
-//            RenderSystem.enableBlend();
-//            RenderSystem.enableDepthTest();
             EFFECTS.forEach(((effect) -> effect.render(ctx.camera(), matrices, consumers, ctx.tickDelta())));
         });
     }
@@ -87,6 +86,6 @@ public abstract class GraphicsEffect
     @FunctionalInterface
     public interface Factory
     {
-        GraphicsEffect create(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, int maxTime);
+        GraphicsEffect create(ClientWorld world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime);
     }
 }

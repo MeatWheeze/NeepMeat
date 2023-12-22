@@ -186,18 +186,18 @@ public abstract class BaseGunItem extends Item implements IMeatItem, IAnimatable
             }
 
             Vec3d hitPos = Objects.requireNonNullElse(entityResult, blockResult).getPos();
-            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 9, GraphicsEffects.BEAM, 100);
+            syncBeamEffect((ServerWorld) world, start, hitPos, new Vec3d(0, 0, 0), 0.2f, 9, GraphicsEffects.BEAM, 100);
 
             return Optional.ofNullable((LivingEntity) entity);
         }
         return Optional.empty();
     }
 
-    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, int maxTime, GraphicsEffect.Factory type, double showRadius)
+    public void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, GraphicsEffect.Factory type, double showRadius)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, showRadius))
         {
-            Packet<?> packet = BeamPacket.create(world, type, pos, end,velocity, maxTime, MWNetwork.EFFECT_ID);
+            Packet<?> packet = BeamPacket.create(world, type, pos, end, velocity, width, maxTime, MWNetwork.EFFECT_ID);
             ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, packet);
         }
     }
