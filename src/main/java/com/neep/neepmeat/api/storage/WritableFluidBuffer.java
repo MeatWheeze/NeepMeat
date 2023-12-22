@@ -7,11 +7,9 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
@@ -36,16 +34,18 @@ public class WritableFluidBuffer extends WritableSingleFluidStorage implements F
         this.parent = parent;
     }
 
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putLong("amount", amount);
         nbt.put("resource", variant.toNbt());
+        return nbt;
     }
 
-    public void readNbt(NbtCompound nbt)
+    public NbtCompound readNbt(NbtCompound nbt)
     {
         this.amount = nbt.getLong("amount");
         this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get("resource"));
+        return nbt;
     }
 
     @Override

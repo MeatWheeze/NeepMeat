@@ -2,16 +2,21 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.mixin.BlockModelRendererAccessor;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
+import net.fabricmc.fabric.api.renderer.v1.Renderer;
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
+import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
+import net.fabricmc.fabric.api.transfer.v1.client.fluid.FluidVariantRendering;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.WorldRenderer;
+import net.minecraft.client.render.*;
 import net.minecraft.client.render.block.BlockModelRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedModelManager;
 import net.minecraft.client.render.model.BakedQuad;
+import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.*;
@@ -24,6 +29,77 @@ import java.util.Random;
 
 public class BERenderUtils
 {
+    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float offset, float endY, float scaleY)
+    {
+        Sprite sprite = FluidVariantRendering.getSprite(fluid);
+        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
+        Renderer renderer = RendererAccess.INSTANCE.getRenderer();
+
+        int col = FluidVariantRendering.getColor(fluid);
+
+        float r = ((col >> 16) & 0xFF) / 256f;
+        float g = ((col >> 8) & 0xFF) / 256f;
+        float b = (col & 255) / 255f;
+
+        if (fluid.isBlank() || scaleY == 0)
+        {
+            return;
+        }
+
+        float startY = offset;
+        float dist = startY + (endY - startY) * scaleY;
+        if (FluidVariantAttributes.isLighterThanAir(fluid))
+        {
+            matrices.translate(1, 1, 0);
+            matrices.scale(-1, -1, 1);
+        }
+
+        float depth = 0.3f;
+
+        QuadEmitter emitter = renderer.meshBuilder().getEmitter();
+
+        for (Direction direction : Direction.values())
+        {
+            if (direction == Direction.UP)
+            {
+                emitter.square(Direction.UP, depth, depth, 1 - depth, 1 - depth, 1 - dist);
+            }
+            else if (direction != Direction.DOWN)
+            {
+                emitter.square(direction, depth, startY, 1 - depth, dist, depth);
+            }
+
+            emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+            emitter.spriteColor(0, -1, -1, -1, -1);
+            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+        }
+
+//        emitter.square(Direction.NORTH, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
+//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+//        emitter.spriteColor(0, -1, -1, -1, -1);
+//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+//
+//        emitter.square(Direction.SOUTH, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
+//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+//        emitter.spriteColor(0, -1, -1, -1, -1);
+//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+//
+//        emitter.square(Direction.EAST, 0.3f, 0.1f, 1 - 0.3f, dist, depth);
+//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+//        emitter.spriteColor(0, -1, -1, -1, -1);
+//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+//
+//        emitter.square(Direction.WEST, 0.3f, 0.1f, 1 - 0.3f, dist, 0.3f);
+//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+//        emitter.spriteColor(0, -1, -1, -1, -1);
+//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+//
+//        emitter.square(Direction.UP, 0.3f, 0.3f, 0.3f, 0.3f, 1 - dist);
+//        emitter.spriteBake(0, sprite, MutableQuadView.BAKE_LOCK_UV);
+//        emitter.spriteColor(0, -1, -1, -1, -1);
+//        consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+    }
+
     public static void renderModel(Identifier model, MatrixStack matrices, World world, BlockPos pos, BlockState state, VertexConsumerProvider vertexConsumers)
     {
         BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
@@ -45,7 +121,7 @@ public class BERenderUtils
         );
     }
 
-    public static void renderFlat(BlockModelRenderer renderer, BlockRenderView world, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, long seed, int overlay)
+    private static void renderFlat(BlockModelRenderer renderer, BlockRenderView world, BakedModel model, BlockState state, BlockPos pos, MatrixStack matrices, VertexConsumer vertexConsumer, boolean cull, Random random, long seed, int overlay)
     {
         BitSet bitSet = new BitSet(3);
         random.setSeed(seed);
@@ -55,7 +131,7 @@ public class BERenderUtils
         }
     }
 
-    public static void renderQuadsFlat(BlockModelRenderer renderer, BlockRenderView world, BlockState state, BlockPos pos, int light, int overlay, boolean useWorldLight, MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, BitSet flags) {
+    private static void renderQuadsFlat(BlockModelRenderer renderer, BlockRenderView world, BlockState state, BlockPos pos, int light, int overlay, boolean useWorldLight, MatrixStack matrices, VertexConsumer vertexConsumer, List<BakedQuad> quads, BitSet flags) {
         BlockModelRendererAccessor accessor = (BlockModelRendererAccessor) renderer;
         for (BakedQuad bakedQuad : quads) {
             if (useWorldLight) {
@@ -91,7 +167,7 @@ public class BERenderUtils
         return Direction.UP;
     }
 
-    public static float length(Vec3f vec)
+    private static float length(Vec3f vec)
     {
         float u = vec.getX();
         float v = vec.getY();
@@ -141,6 +217,7 @@ public class BERenderUtils
         matrices.translate(-0.5, -0.5, -0.5);
     }
 
+    // For models that are facing the wrong direction
     public static void rotateFacingSouth(Direction facing, MatrixStack matrices)
     {
         matrices.translate(0.5, 0.5, 0.5);

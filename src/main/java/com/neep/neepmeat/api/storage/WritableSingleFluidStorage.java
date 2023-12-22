@@ -44,15 +44,17 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
             finalCallback.run();
     }
 
-    public void writeNbt(NbtCompound nbt)
+    public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.put(KEY_RESOURCE, getResource().toNbt());
         nbt.putLong(KEY_AMOUNT, amount);
+        return nbt;
     }
 
-    public void readNbt(NbtCompound nbt)
+    public NbtCompound readNbt(NbtCompound nbt)
     {
         this.variant = FluidVariant.fromNbt((NbtCompound) nbt.get(KEY_RESOURCE));
         this.amount = nbt.getLong(KEY_AMOUNT);
+        return nbt;
     }
 }
