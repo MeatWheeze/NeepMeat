@@ -1,6 +1,8 @@
 package com.neep.meatweapons.item;
 
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Multimap;
 import com.neep.meatlib.api.event.InputEvents;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
@@ -10,6 +12,8 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.implant.item.ShieldUpgrade;
+import com.neep.neepmeat.init.NMComponents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -28,7 +32,11 @@ import net.minecraft.client.item.TooltipData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttribute;
+import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -102,7 +110,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
         tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".lore"));
-        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null)).formatted(Formatting.BLUE));
+        tooltip.add(Text.translatable("item." + MeatWeapons.NAMESPACE + "." + registryName + ".damage_per_tick", getDamage(itemStack, null) / 2f).formatted(Formatting.BLUE));
     }
 
     @Override
@@ -149,6 +157,19 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         }
 
         return TypedActionResult.fail(itemStack);
+    }
+
+    private final EntityAttributeModifier eam = new EntityAttributeModifier("aa", 8, EntityAttributeModifier.Operation.ADDITION);
+
+    @Override
+    public Multimap<EntityAttribute, EntityAttributeModifier> getAttributeModifiers(ItemStack stack, EquipmentSlot slot)
+    {
+        var manager = NMComponents.IMPLANT_MANAGER.get(stack);
+        if (manager.getInstalled().contains(ShieldUpgrade.ID) && stack.getOrCreateNbt().getBoolean("using"))
+        {
+            return ImmutableMultimap.of(EntityAttributes.GENERIC_ARMOR, eam);
+        }
+        return super.getAttributeModifiers(stack, slot);
     }
 
     @Override
@@ -199,17 +220,9 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         super.usageTick(world, user, stack, remainingUseTicks);
     }
 
-//    @Override
-//    public boolean postHit(ItemStack stack, LivingEntity target, LivingEntity attacker)
-//    {
-//        System.out.println("aaaaaaaaaaaaaaaaafter");
-//        return true;
-//    }
-
     @Override
     public boolean postMine(ItemStack stack, World world, BlockState state, BlockPos pos, LivingEntity miner)
     {
-//        System.out.println("aaaaaaaaaaaaaaaaafter");
         return true;
     }
 
