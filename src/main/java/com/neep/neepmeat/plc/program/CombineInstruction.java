@@ -11,8 +11,8 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.recipe.CombineStep;
 import com.neep.neepmeat.plc.robot.GroupedRobotAction;
-import com.neep.neepmeat.plc.robot.RobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
+import com.neep.neepmeat.plc.robot.SingleAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -38,7 +38,7 @@ public class CombineInstruction implements Instruction
 
     public CombineInstruction(Supplier<ServerWorld> worldSupplier, List<Argument> arguments)
     {
-        this.worldSupplier = () -> (ServerWorld) worldSupplier.get();
+        this.worldSupplier = worldSupplier::get;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
     }
@@ -82,8 +82,8 @@ public class CombineInstruction implements Instruction
 
     private void takeFirst(PLC plc)
     {
-        System.out.println("Take first");
-        this.stored = receiveItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));
+//        System.out.println("Take first");
+        this.stored = takeItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));
         if (stored == null)
         {
             plc.raiseError(new PLC.Error(Text.of("Oh noes!")));
@@ -102,14 +102,18 @@ public class CombineInstruction implements Instruction
             NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
             {
                 workpiece.addStep(step);
-                System.out.println("Combining");
+//                System.out.println("Combining");
             });
 
             mip.set(stack);
+            return;
         }
+
+        if (stored != null)
+            plc.getRobot().spawnItem(stored);
     }
 
-    private ResourceAmount<ItemVariant> receiveItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)
+    private ResourceAmount<ItemVariant> takeItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)
     {
         var storage = target.find();
         if (storage != null)
@@ -126,16 +130,13 @@ public class CombineInstruction implements Instruction
                         transaction.commit();
                         return res;
                     }
+
                     transaction.abort();
-                    return null;
                 }
             }
         }
-        else
-        {
-            return null;
-        }
-        return new ResourceAmount<>(ItemVariant.blank(), 0);
+
+        return null;
     }
 
     @Override
@@ -147,7 +148,7 @@ public class CombineInstruction implements Instruction
     void finish(PLC plc)
     {
         plc.advanceCounter();
-        System.out.println("Finish");
+//        System.out.println("Finish");
     }
 
     @Override
@@ -161,24 +162,5 @@ public class CombineInstruction implements Instruction
     public void readNbt(NbtCompound nbt)
     {
 
-    }
-
-    interface SingleAction extends RobotAction
-    {
-        static SingleAction of(Runnable action)
-        {
-            return action::run;
-        }
-
-        @Override
-        default boolean finished()
-        {
-            return true;
-        }
-
-        @Override
-        default void tick()
-        {
-        }
     }
 }

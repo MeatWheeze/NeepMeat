@@ -472,6 +472,7 @@
   "item.neepmeat.chrysalis": "Divine Chrysalis",
 
   "step.neepmeat.combine": "COMBINE",
+  "message.neepmeat.workpiece.title": "Workpiece",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",

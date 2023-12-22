@@ -17,6 +17,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
@@ -89,10 +90,31 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
     }
 
     @Override
+    public void advanceCounter(int increment)
+    {
+        counter += increment;
+    }
+
+    @Override
     public void raiseError(Error error)
     {
         getWorld().getPlayers().forEach(p -> p.sendMessage(Text.of("NOOOOOOOOOOOOO")));
         this.error = error;
+
+        currentInstruction = null;
+
+        robotActions.clear();
+        if (currentAction != null)
+        {
+            currentAction.first().cancel();
+            currentAction = null;
+        }
+        robot.stay();
+
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(ParticleTypes.SMOKE, robot.getX(), robot.getY(), robot.getZ(), 20, 0.25, 0.25, 0.25, 0.1);
+        }
     }
 
     public void resetError()
@@ -132,17 +154,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
             {
                 currentAction = robotActions.poll();
                 currentAction.first().start();
-                overrideController = currentAction.first().blocksController();
                 sync();
             }
             else
             {
                 if (currentAction != null)
                 {
-//                    robot.returnToBase();
                     robot.stay();
                     currentAction = null;
-                    overrideController = false;
                     sync();
                 }
             }
@@ -150,8 +169,20 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         else
         {
             currentAction.first().tick();
+        }
 
+        boolean prevOverride = overrideController;
+        if (currentAction == null || currentAction.first().finished())
+        {
+            overrideController = false;
+        }
+        else
+        {
             overrideController = currentAction.first().blocksController();
+        }
+        if (overrideController != prevOverride)
+        {
+            sync();
         }
 
         if (world instanceof ServerWorld serverWorld)
@@ -165,6 +196,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC
         robot.tick();
 
 //        sync();
+    }
+
+    public boolean notExecuting()
+    {
+        return currentAction == null || currentAction.first().finished();
     }
 
     public void execute(Instruction instruction)

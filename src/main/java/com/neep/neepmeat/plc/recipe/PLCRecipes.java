@@ -3,6 +3,7 @@ package com.neep.neepmeat.plc.recipe;
 import com.neep.neepmeat.init.NMComponents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
 public class PLCRecipes
 {
@@ -14,10 +15,14 @@ public class PLCRecipes
         {
             NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
             {
-                for (var entry : workpiece.getSteps())
+                var steps = workpiece.getSteps();
+                if (!steps.isEmpty())
                 {
-                    entry.appendText(lines);
-//                    lines.add(Text.of(entry.getId().toString()));
+                    lines.add(Text.translatable("message.neepmeat.workpiece.title").formatted(Formatting.GOLD, Formatting.BOLD));
+                    for (var entry : steps)
+                    {
+                        entry.appendText(lines);
+                    }
                 }
             });
         });
