@@ -220,6 +220,9 @@
   "item.neepmeat.blood_bucket": "Blood Bucket",
   "item.neepmeat.enriched_blood_bucket": "Enriched Blood Bucket",
 
+  "item.neepmeat.meat_bucket": "Meat Bucket",
+  "block.neepmeat.meat": "Meat",
+
   "item.neepmeat.patina_treatment_bucket": "Patina Treatment Bucket",
   "block.neepmeat.patina_treatment": "Patina Treatment",
 

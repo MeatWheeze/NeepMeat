@@ -63,6 +63,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final Identifier DIRTY_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/dirty_ore_fat_still");
     public static final Identifier CLEAN_ORE_FAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/clean_ore_fat_flowing");
     public static final Identifier CLEAN_ORE_FAT= new Identifier(NeepMeat.NAMESPACE, "block/clean_ore_fat_still");
+    public static final Identifier MEAT = new Identifier(NeepMeat.NAMESPACE, "block/meat_still");
+    public static final Identifier MEAT_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/meat_flowing");
 
     @Override
     public void onInitializeClient()
@@ -186,6 +188,11 @@ public class NeepMeatClient implements ClientModInitializer
                 0x3657a2
         ));
 
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MEAT, NMFluids.FLOWING_MEAT, new SimpleFluidRenderHandler(
+                MEAT,
+                MEAT_FLOWING
+        ));
+
         FluidVariantRendering.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantRendering.register(NMFluids.FLOWING_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantAttributes.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatAttributeHandler());
@@ -212,6 +219,8 @@ public class NeepMeatClient implements ClientModInitializer
             registry.register(CLEAN_ORE_FAT_FLOWING);
             registry.register(BLOOD);
             registry.register(BLOOD_FLOWING);
+            registry.register(MEAT);
+            registry.register(MEAT_FLOWING);
         });
 
 

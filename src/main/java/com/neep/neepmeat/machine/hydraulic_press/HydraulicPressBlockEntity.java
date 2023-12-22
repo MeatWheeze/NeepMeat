@@ -6,7 +6,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinStorage;
-import com.neep.neepmeat.recipe.PressingRecipe;
+import com.neep.neepmeat.recipe.AbstractPressingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -29,7 +29,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
     protected short recipeState;
     protected int extensionTicks;
 
-    protected PressingRecipe currentRecipe;
+    protected AbstractPressingRecipe<CastingBasinStorage> currentRecipe;
     protected Identifier recipeId;
 
     public float renderExtension;
@@ -64,7 +64,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         this.recipeState = (short) state;
     }
 
-    protected void startRecipe(CastingBasinStorage storage, PressingRecipe recipe)
+    protected void startRecipe(CastingBasinStorage storage, AbstractPressingRecipe<CastingBasinStorage> recipe)
     {
         if (recipe == null || !storage.item(null).isEmpty())
             return;
@@ -107,7 +107,11 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
 
             if (currentRecipe == null)
             {
-                PressingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.PRESSING, basin.getStorage(), world).orElse(null);
+                AbstractPressingRecipe<CastingBasinStorage> recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.FAT_PRESSING, basin.getStorage(), world).orElse(null);
+
+                if (recipe == null)
+                    recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.PRESSING, basin.getStorage(), world).orElse(null);
+
                 startRecipe(basin.getStorage(), recipe);
             }
             else
@@ -151,7 +155,7 @@ public class HydraulicPressBlockEntity extends SyncableBlockEntity
         if (currentRecipe == null)
         {
             if (recipeId != null)
-                currentRecipe = (PressingRecipe) world.getRecipeManager().get(recipeId).orElse(null);
+                currentRecipe = (AbstractPressingRecipe<CastingBasinStorage>) world.getRecipeManager().get(recipeId).orElse(null);
         }
     }
 
