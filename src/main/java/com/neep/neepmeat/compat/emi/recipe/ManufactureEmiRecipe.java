@@ -1,15 +1,28 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
+import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
+import com.neep.neepmeat.plc.recipe.CombineStep;
+import com.neep.neepmeat.plc.recipe.ImplantStep;
+import com.neep.neepmeat.plc.recipe.InjectStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
+import dev.emi.emi.api.widget.Bounds;
+import dev.emi.emi.api.widget.SlotWidget;
+import dev.emi.emi.api.widget.Widget;
 import dev.emi.emi.api.widget.WidgetHolder;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,6 +80,149 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         int startX = 5;
         int startY = 5;
 
-        // TODO: ???
+        widgets.add(new OutlineWidget(new Bounds(0, 0, getDisplayWidth(), getDisplayHeight())));
+
+        var widgetBase = new LabelledSlot(startX, startY, Text.of("Base: "), EmiStack.of(base));
+        widgets.add(widgetBase);
+
+        var widgetOutput = new LabelledSlot(startX + 20 + widgetBase.width(), startY, Text.of("Output: "), output.get(0), this);
+        widgets.add(widgetOutput);
+
+        int entryX = startX + 1;
+        int entryY = startY + 22;
+        for (var step : steps) {
+            var widget = new EntryWidget(entryX, entryY, step, getDisplayWidth() - 20);
+            widgets.add(widget);
+            entryY += widget.height() + 2;
+        }
+    }
+
+    public static int borderCol()
+    {
+        return PLCCols.BORDER.col;
+    }
+
+    static class LabelledSlot extends Widget {
+        private final SlotWidget slot;
+        private final int originX;
+        private final int originY;
+        private final Text name;
+        private final int slotOriginX;
+        private final int slotOriginY;
+        private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+
+        public LabelledSlot(int originX, int originY, Text name, EmiStack stack) {
+            this(originX, originY, name, stack, null);
+        }
+
+        public LabelledSlot(int originX, int originY, Text name, EmiStack stack, EmiRecipe recipe) {
+            this.name = name;
+            this.originX = originX;
+            this.originY = originY;
+            this.slotOriginX = originX + textRenderer.getWidth(name) + 2;
+            this.slotOriginY = originY;
+            this.slot = new SlotWidget(stack, slotOriginX, slotOriginY).drawBack(false).recipeContext(recipe);
+        }
+
+        public int height() {
+            return Math.max(textRenderer.fontHeight + 3, 19);
+        }
+
+        public int width() {
+            return textRenderer.getWidth(name) + 2 + 20;
+        }
+
+        @Override
+        public Bounds getBounds() {
+            return new Bounds(originX, originY, width(), height());
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            textRenderer.drawWithShadow(matrices, name, originX, originY, borderCol());
+            slot.render(matrices, mouseX, mouseY, delta);
+            GUIUtil.renderBorder(matrices, slotOriginX - 1, slotOriginY - 1, 17, 17, borderCol(), 0);
+            GUIUtil.renderBorder(matrices, slotOriginX, slotOriginY, 15, 15, PLCCols.TRANSPARENT.col, 0);
+        }
+    }
+
+    public static class EntryWidget extends Widget {
+        private final int originX;
+        private final int originY;
+        private final ManufactureStep<?> step;
+        private final Widget widget;
+        private final Text name;
+        private final TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+        private final int width;
+
+        public EntryWidget(int originX, int originY, ManufactureStep<?> step, int width) {
+            this.originX = originX;
+            this.originY = originY;
+            this.step = step;
+            this.name = step.getName();
+            this.width = width;
+
+            this.widget = getThing(originX + width() - 14, originY, step);
+        }
+
+        public int height() {
+            return Math.max(textRenderer.fontHeight + 3, 19);
+        }
+
+        public int width() {
+            return width;
+        }
+
+        @Override
+        public Bounds getBounds() {
+            return new Bounds(originX, originY, width(), height());
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            int x = originX + 2;
+            int y = originY + 2;
+
+            textRenderer.drawWithShadow(matrices, name, x, y, borderCol());
+
+            GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), borderCol(), 0);
+            widget.render(matrices, mouseX, mouseY, delta);
+        }
+    }
+
+    static Widget getThing(int x, int y, ManufactureStep<?> step) {
+        if (step instanceof CombineStep combineStep)
+        {
+            return new SlotWidget(EmiStack.of(combineStep.getItem()), x, y + 2).drawBack(false);
+        }
+        else if (step instanceof InjectStep injectStep)
+        {
+            return new SlotWidget(EmiStack.of(injectStep.getFluid()), x, y + 2).drawBack(false);
+        }
+        else if (step instanceof ImplantStep implantStep)
+        {
+            return new SlotWidget(EmiStack.of(implantStep.getItem()), x, y + 2).drawBack(false);
+        }
+        return new SlotWidget(EmiStack.EMPTY, x, y + 2).drawBack(false);
+    }
+
+    static class OutlineWidget extends Widget {
+        private final Bounds bounds;
+
+        public OutlineWidget(Bounds bounds) {
+            this.bounds = bounds;
+        }
+
+        @Override
+        public Bounds getBounds() {
+            return this.bounds;
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
+            DrawableHelper.fill(matrices, bounds.x(), bounds.y(), bounds.x() + bounds.width(), bounds.y() + bounds.height(), 0xFF000000);
+            GUIUtil.renderBorder(matrices, bounds.x(), bounds.y(), bounds.width(), bounds.height(), borderCol(), 0);
+            GUIUtil.renderBorder(matrices, bounds.x() + 1, bounds.y() + 1, bounds.width() - 2, bounds.height() - 2, PLCCols.TRANSPARENT.col, 0);
+        }
     }
 }
