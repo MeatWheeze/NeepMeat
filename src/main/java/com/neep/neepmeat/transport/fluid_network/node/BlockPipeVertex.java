@@ -395,6 +395,23 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         }
     }
 
+    @Override
+    public void erase()
+    {
+        for (int dir = 0; dir < 6; dir++)
+        {
+            PipeVertex adj = getAdjVertex(dir);
+            if (adj != null)
+            {
+                for (int outDir = 0; outDir < 6; outDir++)
+                {
+                    if (adj.getAdjVertex(outDir) == this)
+                        adj.setAdjVertex(outDir, null);
+                }
+            }
+        }
+    }
+
     protected void deferredLoad()
     {
         if (queuedPositions != null)

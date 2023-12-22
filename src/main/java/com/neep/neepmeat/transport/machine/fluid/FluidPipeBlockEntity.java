@@ -29,11 +29,10 @@ import java.util.Set;
 
 public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends BlockEntity
 {
+    protected boolean replaced = false;
     public NbtCompound queuedNbt;
     protected final T vertex;
     protected final PipeConstructor<T> constructor;
-
-
 
     public FluidPipeBlockEntity(BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
@@ -200,7 +199,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     @Override
     public void setCachedState(BlockState state)
     {
-        markReplaced();
+//        markReplaced();
         super.setCachedState(state);
     }
 
@@ -241,7 +240,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         super.markRemoved();
     }
 
-    protected boolean replaced;
 
     public void markReplaced()
     {
@@ -268,7 +266,9 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     }
     public void onRemove(ServerWorld world)
     {
+        vertex.erase();
         FluidNodeManager.getInstance(world).entityRemoved(getPos());
+
     }
 
     @FunctionalInterface
@@ -290,6 +290,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
                 else
                 {
                     be.onRemove(world);
+                    be.replaced = false;
                 }
             }
         });
