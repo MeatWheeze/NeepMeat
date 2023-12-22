@@ -11,6 +11,8 @@ import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.item.Item;
 
+import java.nio.channels.Pipe;
+
 @SuppressWarnings("unused")
 public class NMItems
 {
@@ -61,6 +63,8 @@ public class NMItems
     public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
 
     public static Item TABLET = ItemRegistry.queueItem(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+
+    public static Item PIPETTE = ItemRegistry.queueItem(new PipetteItem("pipette", 0, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
 

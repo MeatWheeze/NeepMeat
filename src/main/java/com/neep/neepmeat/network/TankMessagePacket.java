@@ -1,6 +1,7 @@
 package com.neep.neepmeat.network;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -46,8 +47,7 @@ public class TankMessagePacket
                 FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
                 MutableText text = FluidVariantAttributes.getName(resource).shallowCopy();
 
-                long mb = Math.floorDiv(amount, FluidConstants.BUCKET / 1000);
-                client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + mb + "mb"), true);
+                client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtils.dropletsToMb(amount) + "mb"), true);
             });
         }
     }

@@ -1,5 +1,6 @@
 package com.neep.neepmeat.util;
 
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
@@ -40,5 +41,10 @@ public class MiscUtils
             }
         }
         return out;
+    }
+
+    public static long dropletsToMb(long droplets)
+    {
+        return Math.floorDiv(droplets, FluidConstants.BUCKET / 1000);
     }
 }
