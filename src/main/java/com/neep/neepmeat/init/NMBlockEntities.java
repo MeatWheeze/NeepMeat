@@ -42,6 +42,7 @@ import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
+import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.surgical_controller.TableControllerBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlockEntity;
@@ -150,6 +151,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemMincerBlockEntity> ITEM_MINCER;
     public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
     public static BlockEntityType<FluidExciterBlockEntity> FLUID_EXCITER;
+    public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -193,6 +195,7 @@ public class NMBlockEntities
         MERGE_ITEM_PIPE = registerBlockEntity("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = registerBlockEntity("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
         INVENTORY_DETECTOR = registerBlockEntity("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
+        SOLIDITY_DETECTOR = registerBlockEntity("solidity_detector", SolidityDetectorBlockEntity::new, NMBlocks.SOLIDITY_DETECTOR);
         ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);
         EJECTOR = registerBlockEntity("ejector", EjectorBlockEntity::new, NMBlocks.EJECTOR);
         ITEM_PUMP = registerBlockEntity("item_pump", ItemPumpBlockEntity::new, NMBlocks.ITEM_PUMP);

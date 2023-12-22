@@ -1,10 +1,9 @@
-package com.neep.neepmeat.machine.content_detector;
+package com.neep.neepmeat.machine.solidity_detector;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlockEntity;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -13,16 +12,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -30,13 +24,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEntityProvider
+public class SolidityDetectorBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public InventoryDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public SolidityDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(SolidityDetectorBlock::never));
         this.setDefaultState(getDefaultState().with(POWERED, false));
     }
 
@@ -44,7 +38,6 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
     {
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, neighborPos);
     }
-
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
@@ -54,25 +47,9 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (!world.isClient)
-        {
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null)
-            {
-                player.openHandledScreen(screenHandlerFactory);
-            }
-        }
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
-    @Nullable
-    public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos)
-    {
-        BlockEntity blockEntity = world.getBlockEntity(pos);
-        return blockEntity instanceof NamedScreenHandlerFactory ? (NamedScreenHandlerFactory) blockEntity : null;
+        updateState(state, world, pos);
     }
 
     @Override
@@ -81,13 +58,6 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
         if (!world.isClient && state.get(POWERED) && world.getBlockTickScheduler().isQueued(pos, this))
         {
             this.updateNeighbors(world, pos, state.with(POWERED, false));
-        }
-
-        // Dump contents if destroyed
-        if (!newState.isOf(state.getBlock()))
-        {
-            world.getBlockEntity(pos, NMBlockEntities.INVENTORY_DETECTOR).ifPresent(be ->
-                    ItemUtils.scatterItems(world, pos, be.getStorage(null)));
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);
@@ -105,6 +75,7 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
         super.onPlaced(world, pos, state, placer, itemStack);
+        updateState(state, world, pos);
     }
 
     @Override
@@ -117,7 +88,7 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new InventoryDetectorBlockEntity(pos, state);
+        return NMBlockEntities.SOLIDITY_DETECTOR.instantiate(pos, state);
     }
 
     @Override
@@ -140,6 +111,17 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
             return 15;
         }
         return 0;
+    }
+
+    protected void updateState(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof SolidityDetectorBlockEntity be && !world.isClient)
+        {
+            Direction facing = state.get(FACING);
+            BlockPos offset = pos.offset(facing);
+            boolean test = be.test(facing, offset);
+            world.setBlockState(pos, state.with(POWERED, test));
+        }
     }
 
     @Override
