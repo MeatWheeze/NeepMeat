@@ -1,12 +1,14 @@
 package com.neep.meatlib.block;
 
 import com.neep.meatlib.item.BaseBlockItem;
+import com.neep.meatlib.item.IMeatItem;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 
 public class BaseBlock extends Block implements IMeatBlock
 {
-    public BaseBlockItem blockItem;
+    public BlockItem blockItem;
     private String registryName;
 
     public BaseBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -16,7 +18,14 @@ public class BaseBlock extends Block implements IMeatBlock
         this.registryName = registryName;
     }
 
-    public BlockItem getBlockItem()
+    public BaseBlock(String registryName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    {
+        super(settings);
+        this.blockItem = factory.get(this, registryName, itemMaxStack, hasLore);
+        this.registryName = registryName;
+    }
+
+    public Item getBlockItem()
     {
         return blockItem;
     }

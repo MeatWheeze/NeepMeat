@@ -4,6 +4,7 @@ import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
@@ -12,13 +13,21 @@ import net.minecraft.world.WorldView;
 
 public class BaseHorFacingBlock extends HorizontalFacingBlock implements IMeatBlock
 {
-    BaseBlockItem blockItem;
+    BlockItem blockItem;
     private String registryName;
 
     public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(settings);
         this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
+        this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        this.registryName = itemName;
+    }
+
+    public BaseHorFacingBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
+    {
+        super(settings);
+        this.blockItem = factory.get(this, itemName, itemMaxStack, hasLore);
         this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         this.registryName = itemName;
     }
