@@ -118,7 +118,8 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
             long extractable = MeatStorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
-            long outputAmount = random.nextInt(101) > 30 ? extractable : extractable + extractable;
+            boolean produceExtra = random.nextFloat() > 0.5;
+            long outputAmount = produceExtra ? extractable : extractable + extractable;
 
             if (outputAmount < CONVERT_MIN)
                 return;
@@ -129,7 +130,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
                 NbtCompound nbt = inputVariant.copyNbt();
                 long extracted = storage.fluidInput.extract(inputVariant, inputAmount, transaction);
                 long inserted = storage.fluidOutput.insert(FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt), outputAmount, transaction);
-                if (extracted > 0)
+                if (extracted > 0 && inserted == outputAmount)
                 {
                     transaction.commit();
                     currentFluid = storage.fluidInput.getResource();

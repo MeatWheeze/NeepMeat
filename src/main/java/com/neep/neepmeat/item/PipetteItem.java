@@ -44,7 +44,8 @@ public class PipetteItem extends BaseItem
             Storage<FluidVariant> blockStorage = FluidStorage.SIDED.find(world, context.getBlockPos(), context.getSide());
             Storage<FluidVariant> itemStorage = FluidStorage.ITEM.find(context.getStack(), ContainerItemContext.ofPlayerHand(context.getPlayer(), context.getHand()));
 
-            if (context.getPlayer().isSneaking() && itemStorage != null)
+            // Only clear fluid if the targeted block does not contain fluid.
+            if (context.getPlayer().isSneaking() && itemStorage != null && blockStorage == null)
             {
                 // Clear the storage
                 try (Transaction transaction = Transaction.openOuter())
