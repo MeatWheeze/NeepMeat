@@ -1,8 +1,8 @@
 package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
-import com.neep.neepmeat.transport.block.item_transport.entity.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -31,7 +31,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class MergePipeBlock extends PneumaticTubeBlock
+public class MergePipeBlock extends ItemPipeBlock
 {
     public static final DirectionProperty FACING = DirectionProperty.of("facing");
 
@@ -99,7 +99,7 @@ public class MergePipeBlock extends PneumaticTubeBlock
         }
 
         // Check if neighbour is forced
-        if (neighborState.getBlock() instanceof PneumaticTubeBlock)
+        if (neighborState.getBlock() instanceof ItemPipeBlock)
         {
             forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
         }
@@ -183,6 +183,6 @@ public class MergePipeBlock extends PneumaticTubeBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, PneumaticPipeBlockEntity::serverTick, world);
+        return MiscUtils.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, ItemPipeBlockEntity::serverTick, world);
     }
 }

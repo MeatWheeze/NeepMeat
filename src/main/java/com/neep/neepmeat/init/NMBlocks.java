@@ -153,7 +153,7 @@ public class NMBlocks
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
+    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new ItemPipeBlock("item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
     public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

@@ -5,7 +5,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class MergePipeRenderer<T extends MergePipeBlockEntity> extends PneumaticPipeRenderer<T>
+public class MergePipeRenderer<T extends MergePipeBlockEntity> extends ItemPipeRenderer<T>
 {
 
     public MergePipeRenderer(BlockEntityRendererFactory.Context context)

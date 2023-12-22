@@ -20,16 +20,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class PneumaticPipeBlockEntity extends SyncableBlockEntity
+public class ItemPipeBlockEntity extends SyncableBlockEntity
 {
     protected List<ItemInPipe> items = new ArrayList<>();
 
-    public PneumaticPipeBlockEntity(BlockPos pos, BlockState state)
+    public ItemPipeBlockEntity(BlockPos pos, BlockState state)
     {
         super(NMBlockEntities.PNEUMATIC_PIPE, pos, state);
     }
 
-    public PneumaticPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public ItemPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -68,7 +68,7 @@ public class PneumaticPipeBlockEntity extends SyncableBlockEntity
             items.add(ItemInPipe.fromNbt(itemList.getCompound(i)));
         }
     }
-    public static void serverTick(World world, BlockPos blockPos, BlockState blockState, PneumaticPipeBlockEntity be)
+    public static void serverTick(World world, BlockPos blockPos, BlockState blockState, ItemPipeBlockEntity be)
     {
         if (be.items.isEmpty())
             return;
