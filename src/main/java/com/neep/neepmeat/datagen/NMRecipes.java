@@ -22,7 +22,8 @@ public class NMRecipes
     {
         MeatRecipeProvider.offerReversibleCompactingRecipes(exporter, NMItems.MEAT_STEEL, NMBlocks.MEAT_STEEL_BLOCK);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.RUSTY_METAL_BLOCK, Items.WATER_BUCKET, NMBlocks.POLISHED_METAL);
-        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_RED_TILES, NMFluids.BLOOD_BUCKET, NMBlocks.YELLOW_TILES);
+        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_RED_TILES, NMFluids.BLOOD_BUCKET, Blocks.TERRACOTTA);
+        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_WHITE_TILES, Blocks.DIRT, Blocks.TERRACOTTA);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.BLUE_IRON_BLOCK, Items.BLUE_DYE, NMBlocks.POLISHED_METAL);
 
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.WHITE_ROUGH_CONCRETE, Items.SAND, Blocks.WHITE_CONCRETE);
