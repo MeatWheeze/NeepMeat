@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.List;
 
@@ -76,30 +77,30 @@ public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<I
     @Override
     public MeatRecipeType<?> getType()
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public MeatRecipeSerialiser<?> getSerialiser()
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public Identifier getId()
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public Object getBase()
     {
-        return null;
+        throw new NotImplementedException();
     }
 
     @Override
     public List<ManufactureStep<?>> getSteps()
     {
-        return null;
+        throw new NotImplementedException();
     }
 }
