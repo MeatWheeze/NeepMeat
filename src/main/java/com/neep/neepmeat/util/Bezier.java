@@ -1,6 +1,7 @@
 package com.neep.neepmeat.util;
 
-import java.util.Arrays;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class Bezier
 {
@@ -73,5 +74,119 @@ public class Bezier
             throw new IllegalArgumentException();
         }
         return PASCAL_TRIANGLE[n][r];
+    }
+
+    public static class Cubic3
+    {
+        protected double[][] points = new double[][] {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+        protected boolean sampled = false;
+        protected double length;
+        protected int samples;
+        protected Vec3d[] distanceSamples;
+        private double[] distanceToT;
+
+        public Cubic3(int samples)
+        {
+            this.samples = samples;
+        }
+
+        public void setPoint(int point, double... weights)
+        {
+            points[point] = weights;
+            sampled = false;
+        }
+
+        public Vec3d value(double t)
+        {
+            return new Vec3d(
+                    bezier3(t, points[0][0], points[1][0], points[2][0], points[3][0]),
+                    bezier3(t, points[0][1], points[1][1], points[2][1], points[3][1]),
+                    bezier3(t, points[0][2], points[1][2], points[2][2], points[3][2])
+            );
+        }
+
+        public double tForDistance(double distance)
+        {
+//            return distanceToT[(int) Math.round(samples * distance / length())];
+            return arrayInterpolate(distanceToT, samples * distance / length());
+        }
+
+        public Vec3d derivative(double t)
+        {
+            return new Vec3d(
+                    derivative3(t, points[0][0], points[1][0], points[2][0], points[3][0]),
+                    derivative3(t, points[0][1], points[1][1], points[2][1], points[3][1]),
+                    derivative3(t, points[0][2], points[1][2], points[2][2], points[3][2])
+            );
+        }
+
+        public double length()
+        {
+            if (!sampled) estimateLength();
+
+            return length;
+        }
+
+        protected void estimateLength()
+        {
+            distanceToT = new double[samples + 1];
+            double[] ts = new double[samples + 1];
+            double[] lengths = new double[samples + 1];
+
+            double tInterval = 1 / (double) samples;
+            int i = 0;
+            Vec3d prevPoint = value(0);
+            for (double t = 0; t <= 1; ++i, t += tInterval)
+            {
+                Vec3d nextPoint = value(t);
+
+                ts[i] = t;
+                length += prevPoint.distanceTo(nextPoint);
+                lengths[i] = length;
+
+                prevPoint = nextPoint;
+            }
+
+            double s = 0;
+            double sInterval = length / samples;
+            for (int j = 0; j < ts.length; ++j, s += sInterval)
+            {
+                distanceToT[j] = thingy(lengths, ts, s);
+            }
+//
+//            double s = 0;
+//            for (int j = 0; j < distanceSamples.length; ++j, s += sInterval)
+//            {
+//
+//            }
+
+            sampled = true;
+        }
+
+        protected double thingy(double[] xs, double[] ys, double x)
+        {
+            int j = 0;
+            for (int i = 0; i < xs.length; i++)
+            {
+                if (Math.abs(xs[i] - x) < Math.abs(xs[j] - x))
+                {
+                    j = i;
+                }
+            }
+
+            // Find fraction
+            double fraction = j < xs.length - 1 ? (x - xs[j]) / (xs[j + 1] - xs[j]) : 0;
+
+            return arrayInterpolate(ys, j + fraction);
+        }
+
+        protected double arrayInterpolate(double[] array, double index)
+        {
+            int lowerIndex = (int) Math.floor(index);
+            if (lowerIndex == array.length - 1) return array[lowerIndex];
+            int higherIndex = (int) Math.ceil(index);
+
+            return MathHelper.lerp(index - lowerIndex, array[lowerIndex], array[higherIndex]);
+        }
     }
 }

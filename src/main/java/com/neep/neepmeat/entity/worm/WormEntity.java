@@ -140,6 +140,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     public void tick()
     {
         super.tick();
+        Bezier.Cubic3 bezier = new Bezier.Cubic3(10);
         setPitch(-90);
 
         double y = getY();
@@ -153,22 +154,32 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 
         Vec3d headLook = head.getPos().add(Vec3d.fromPolar(head.getPitch(), head.getYaw()).multiply(-8));
 
+        bezier.setPoint(0, x, y, z);
+        bezier.setPoint(1, x, y + 5, z);
+        bezier.setPoint(2, headLook.x, headLook.y, headLook.z);
+        bezier.setPoint(3, head.getX(), head.getY(), head.getZ());
+
         for (int i = 0; i < tail.size(); ++i)
         {
             WormSegment segment = tail.get(i);
             float delta = ((float) i) / tail.size();
 
-            double x1 = Bezier.bezier3(delta, x, x, headLook.x, head.getX());
-            double y1 = Bezier.bezier3(delta, y, y + 5, headLook.y, head.getY());
-            double z1 = Bezier.bezier3(delta, z, z, headLook.z, head.getZ());
+            double l = bezier.length();
+            double t = bezier.tForDistance(delta * bezier.length());
+            Vec3d X = bezier.value(t);
+            Vec3d U = bezier.derivative(t);
 
-            double u = Bezier.derivative3(delta, x, x, headLook.x, head.getX());
-            double v = Bezier.derivative3(delta, y, y + 5, headLook.y, head.getY());
-            double w = Bezier.derivative3(delta, z, z, headLook.z, head.getZ());
+//            double x1 = Bezier.bezier3(delta, x, x, headLook.x, head.getX());
+//            double y1 = Bezier.bezier3(delta, y, y + 5, headLook.y, head.getY());
+//            double z1 = Bezier.bezier3(delta, z, z, headLook.z, head.getZ());
+//
+//            double u = Bezier.derivative3(delta, x, x, headLook.x, head.getX());
+//            double v = Bezier.derivative3(delta, y, y + 5, headLook.y, head.getY());
+//            double w = Bezier.derivative3(delta, z, z, headLook.z, head.getZ());
 
-            Vec2f pitchYaw = NMMaths.rectToPol(u, v, w);
+            Vec2f pitchYaw = NMMaths.rectToPol(U.x, U.y, U.z);
 
-            segment.updatePositionAndAngles(x1, y1, z1, pitchYaw.y, pitchYaw.x);
+            segment.updatePositionAndAngles(X.x, X.y, X.z, pitchYaw.y, pitchYaw.x);
         }
 
         updateGoalControls();
