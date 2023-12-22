@@ -18,6 +18,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<ItemBufferBlockEntity> ITEM_BUFFER_BLOCK_ENTITY;
     public static BlockEntityType<GlassTankBlockEntity> GLASS_TANK_BLOCK_ENTITY;
     public static BlockEntityType<ItemDuctBlockEntity> ITEM_DUCT_BLOCK_ENTITY;
+    public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
 
 
     public static void initialiseBlockEntities()
@@ -52,7 +53,13 @@ public class BlockEntityInitialiser
                 FabricBlockEntityTypeBuilder.create(ItemBufferBlockEntity::new, BlockInitialiser.ITEM_BUFFER)
                         .build());
 
+        TROMMEL_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE,
+                NeepMeat.NAMESPACE + "trommel_block_entity",
+                FabricBlockEntityTypeBuilder.create(TrommelBlockEntity::new, BlockInitialiser.TROMMEL)
+                        .build());
+
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
+        ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {

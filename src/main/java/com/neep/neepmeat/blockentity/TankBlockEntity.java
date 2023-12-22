@@ -40,8 +40,6 @@ public class TankBlockEntity extends BlockEntity implements FluidBufferProvider
     @Nullable
     public FluidBuffer getBuffer(Direction direction)
     {
-//        return sideModes.get(direction) != FluidAcceptor.AcceptorModes NONE
-//                || direction == null ? buffer : null;
         return buffer;
     }
 

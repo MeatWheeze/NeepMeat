@@ -1,9 +1,11 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.GlassTankRenderer;
 import com.neep.neepmeat.client.renderer.ItemBufferRenderer;
+import com.neep.neepmeat.client.renderer.TrommelRenderer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.api.ClientModInitializer;
@@ -34,6 +36,8 @@ public class NeepMeatClient
         EntityModelLayerRegistry.registerModelLayer(MODEL_GLASS_TANK_LAYER, GlassTankModel::getTexturedModelData);
 
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.ITEM_BUFFER_BLOCK_ENTITY, ItemBufferRenderer::new);
+
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
 
         FluidRenderHandlerRegistry.INSTANCE.register(BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
                 new Identifier("minecraft:block/water_still"),

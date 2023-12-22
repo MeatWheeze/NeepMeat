@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
 import net.fabricmc.fabric.api.client.model.ModelProviderException;
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider;
+import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.UnbakedModel;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
