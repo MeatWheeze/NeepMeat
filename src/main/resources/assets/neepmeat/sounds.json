@@ -84,5 +84,17 @@
     "sounds": [
       "neepmeat:glome_hit"
     ]
+  },
+  "hound_hit": {
+    "subtitle": "subtitles.neepmeat.hound_hit",
+    "sounds": [
+      "neepmeat:hound_hit"
+    ]
+  },
+  "hound_death": {
+    "subtitle": "subtitles.neepmeat.hound_death",
+    "sounds": [
+      "neepmeat:hound_death"
+    ]
   }
 }
