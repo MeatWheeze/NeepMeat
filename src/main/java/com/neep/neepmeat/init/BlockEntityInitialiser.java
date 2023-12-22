@@ -65,6 +65,7 @@ public class BlockEntityInitialiser
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
+        ItemStorage.SIDED.registerSelf(BUFFER);
 //        ItemStorage.SIDED.registerSelf(PNEUMATIC_PIPE);
         FluidStorage.SIDED.registerSelf(FLUID_PORT);
 

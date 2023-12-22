@@ -1,8 +1,15 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.block.BufferBlock;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
+import com.neep.neepmeat.inventory.BufferInventory;
 import com.neep.neepmeat.inventory.ImplementedInventory;
 import com.neep.neepmeat.screen_handler.BufferScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -19,12 +26,17 @@ import net.minecraft.text.Text;
 import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Iterator;
+
 @SuppressWarnings("UnstableApiUsage")
-public class BufferBlockEntity extends LootableContainerBlockEntity implements ImplementedInventory, NamedScreenHandlerFactory
+public class BufferBlockEntity extends BlockEntity implements
+        Storage<ItemVariant>,
+        NamedScreenHandlerFactory
 {
-    protected DefaultedList<ItemStack> items = DefaultedList.ofSize(9, ItemStack.EMPTY);
+    public ImplementedInventory inventory = new BufferInventory();
 
     public BufferBlockEntity(BlockPos pos, BlockState state)
     {
@@ -40,7 +52,7 @@ public class BufferBlockEntity extends LootableContainerBlockEntity implements I
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        Inventories.writeNbt(tag, items);
+        inventory.writeNbt(tag);
         return tag;
     }
 
@@ -48,13 +60,7 @@ public class BufferBlockEntity extends LootableContainerBlockEntity implements I
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-        Inventories.readNbt(tag, items);
-    }
-
-    @Override
-    public DefaultedList<ItemStack> getItems()
-    {
-        return items;
+        inventory.readNbt(tag);
     }
 
     @Override
@@ -63,36 +69,36 @@ public class BufferBlockEntity extends LootableContainerBlockEntity implements I
         return new TranslatableText(getCachedState().getBlock().getTranslationKey());
     }
 
+    @Nullable
     @Override
-    protected Text getContainerName()
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return null;
+        return new BufferScreenHandler(syncId, inv, this.inventory);
     }
 
     @Override
-    protected DefaultedList<ItemStack> getInvStackList()
+    public long insert(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-        return items;
+        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        System.out.println(storage);
+        return storage.insert(resource, maxAmount, transaction);
     }
 
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list)
+    public long extract(ItemVariant resource, long maxAmount, TransactionContext transaction)
     {
-        this.items = list;
+        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        if (getCachedState().get(BufferBlock.POWERED))
+        {
+            return 0;
+        }
+        return storage.extract(resource, maxAmount, transaction);
     }
 
-//    @Nullable
-//    @Override
-//    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
-//    {
-//        return new BufferScreenHandler(syncId, inv);
-//        return new Generic3x3ContainerScreenHandler(syncId, inv);
-//    }
-
     @Override
-    protected ScreenHandler createScreenHandler(int syncId, PlayerInventory inv)
+    public Iterator<StorageView<ItemVariant>> iterator(TransactionContext transaction)
     {
-//        return new Generic3x3ContainerScreenHandler(syncId, inv);
-        return new BufferScreenHandler(syncId, inv, this);
+        InventoryStorage storage = InventoryStorage.of(this.inventory, Direction.UP);
+        return storage.iterator(transaction);
     }
 }
