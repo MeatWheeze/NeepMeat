@@ -1,15 +1,6 @@
 {
   "replace": false,
   "values": [
-    "neepmeat:duat_stone_stairs",
-    "neepmeat:duat_stone_slab",
-    "neepmeat:duat_stone_wall",
-    "neepmeat:duat_stone",
-    "neepmeat:duat_cobblestone_stairs",
-    "neepmeat:duat_cobblestone_slab",
-    "neepmeat:duat_cobblestone_wall",
-    "neepmeat:duat_cobblestone",
-    "neepmeat:duat_gravel",
     "neepmeat:smooth_tile_white",
     "neepmeat:smooth_tile_orange",
     "neepmeat:smooth_tile_magenta",
@@ -143,7 +134,6 @@
     "neepmeat:multi_tank",
     "neepmeat:fluid_buffer",
     "neepmeat:item_buffer",
-    "neepmeat:mob_platform",
     "neepmeat:fluid_interface",
     "neepmeat:fluid_drain",
     "neepmeat:bottler",

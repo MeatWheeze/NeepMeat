@@ -79,7 +79,7 @@ public class MeatWeapons implements ModInitializer
         MWGraphicsEffects.init();
         MWAttackC2SPacket.init();
 
-        MWEnchantmentTargets.init();
+//        MWEnchantmentTargets.init();
         MWEnchantments.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
