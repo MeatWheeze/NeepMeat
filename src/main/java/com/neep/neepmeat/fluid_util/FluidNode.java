@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /*
     An interface for fluid networks associated with a FluidNodeProvider's face.
@@ -85,14 +87,29 @@ public class FluidNode
             System.out.println("transmit null");
             return;
         }
-//        System.out.println(this + ": pressure: " + pressure);
-        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
-//        System.out.println("gradient: " + pressureGradient);
 
-        float flow = - 405 * pressureGradient;
+        // Here is the most realistic flow rate calculation that you have ever seen.
+        // Laminar Poiseuille flow: Q = (R^4 pi) / (8 * µ) * dP/dX.
 
-        long transferAmount = (flow) > 0 ? (long) flow : 0;
+        // Geometrical solution for velocity in branched pipes:
+        // https://physics.stackexchange.com/questions/31852/flow-of-liquid-among-branches
+        // Useful equation:
+
+        float r = 0.5f;
+
+        // I don't know what this does.
+        AtomicReference<Float> sum = new AtomicReference<>((float) 0);
+        distances.values().forEach((distance) -> sum.updateAndGet(v -> (v + ((float) Math.pow(r, 4) / (float) distance))));
+//
+        float branchFlow = 500 * (pressure - node.getPressure()) * (float) ((Math.pow(r, 4) / distances.get(node)) / sum.get());
+
+//        float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
+//        float flow = - 4050 * pressureGradient / distances.values().size();
+
+        long transferAmount = (branchFlow) > 0 ? (long) branchFlow : 0;
+//        long transferAmount = (flow) > 0 ? (long) flow : 0;
         long amountMoved = StorageUtil.move(storage, node.storage, variant -> true,  transferAmount, null);
+//        System.out.print(node + ", " + node.getPressure() + ", amount: " + amountMoved);
     }
 
     public static void flow(Storage<FluidVariant> from, Storage<FluidVariant> to)
