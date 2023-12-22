@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/outer_stairs",
+  "textures": {
+    "bottom": "neepmeat:block/grey_rough_concrete",
+    "top": "neepmeat:block/grey_rough_concrete",
+    "side": "neepmeat:block/grey_rough_concrete"
+  }
+}
