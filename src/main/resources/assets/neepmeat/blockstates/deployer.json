@@ -1,0 +1,32 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/deployer/deployer",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/deployer/deployer",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/deployer/deployer",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/deployer/deployer",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up": {
+      "model": "neepmeat:block/deployer/deployer",
+      "x": -90
+    },
+    "facing=down": {
+      "model": "neepmeat:block/deployer/deployer",
+      "x": 90
+    }
+  }
+}
