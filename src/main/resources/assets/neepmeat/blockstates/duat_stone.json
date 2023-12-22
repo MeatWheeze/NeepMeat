@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "neepmeat:block/duat_stone"
+      },
+      {
+        "model": "neepmeat:block/duat_stone_mirrored"
+      },
+      {
+        "model": "neepmeat:block/duat_stone",
+        "y": 180
+      },
+      {
+        "model": "neepmeat:block/duat_stone_mirrored",
+        "y": 180
+      }
+    ]
+  }
+}
+

@@ -23,10 +23,9 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.centrifuge.CentrifugeBlock;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorBlock;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
-import com.neep.neepmeat.machine.converter.ConverterBlock;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlock;
-import com.neep.neepmeat.machine.crucible.FatCollectorBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
+import com.neep.neepmeat.machine.crucible.FatCollectorBlock;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlock;
 import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
@@ -44,7 +43,6 @@ import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.multitank.MultiTankBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
-import com.neep.neepmeat.machine.sifter.SifterBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
@@ -53,7 +51,9 @@ import com.neep.neepmeat.machine.surgical_controller.TableControllerBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.*;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidDrainBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
 import com.neep.neepmeat.transport.machine.item.EjectorBlock;
@@ -78,6 +78,10 @@ public class NMBlocks
     public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final FabricBlockSettings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
+
+    public static Block DUAT_STONE = new BaseBuildingBlock("duat_stone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
+    public static Block DUAT_COBBLESTONE = new BaseBuildingBlock("duat_cobblestone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
+    public static Block DUAT_GRAVEL = BlockRegistry.queue(new BaseBlock("duat_gravel", block(), FabricBlockSettings.of(Material.STONE).strength(1.0f).sounds(BlockSoundGroup.GRAVEL)));
 
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 

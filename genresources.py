@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! ~/opt/mcpython/bin/python
 
 import mcresources
 rm = mcresources.ResourceManager('neepmeat')
@@ -16,7 +16,9 @@ blocks = [
 'sandy_bricks',
 'blood_bubble_planks',
 'meat_steel_block',
-'reinforced_glass'
+'reinforced_glass',
+'duat_stone',
+'duat_cobblestone'
 ]
 
 for name in blocks:

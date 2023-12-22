@@ -236,6 +236,10 @@
 
   "block.neepmeat.surgery_controller": "Surgery Controller",
 
+  "block.neepmeat.duat_stone": "Duat Stone",
+  "block.neepmeat.duat_cobblestone": "Duat Cobblestone",
+  "block.neepmeat.duat_gravel": "Duat Gravel",
+
   "item.neepmeat.sacrificial_dagger": "Sacrificial Scalpel",
   "item.neepmeat.animal_heart": "Rough Heart",
   "item.neepmeat.animal_heart.lore_0": "Crude; it lacks any logical design sensibilities.",

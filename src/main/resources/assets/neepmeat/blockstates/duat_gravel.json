@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "neepmeat:block/duat_gravel",
+        "weight": 20
+      },
+      {
+        "model": "neepmeat:block/duat_gravel",
+        "Y": 90,
+        "weight": 20
+      },
+      {
+        "model": "neepmeat:block/duat_gravel",
+        "y": 180,
+        "weight": 20
+      },
+      {
+        "model": "neepmeat:block/duat_gravel",
+        "y": -90,
+        "weight": 20
+      },
+      {
+        "model": "neepmeat:block/duat_gravel_dark",
+        "weight": 1
+      }
+    ]
+  }
+}
+
