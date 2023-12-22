@@ -175,6 +175,7 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
+    // It's rather inefficient and janky
     public static Map<BlockPos, Integer> shortestPath(ServerWorld world, NodePos start, NodePos end, IndexedHashMap<BlockPos, PipeState> pipes)
     {
         Map<BlockPos, Integer> distances = new LinkedHashMap<>();
@@ -184,6 +185,12 @@ public class PipeBranches extends HashMap<Long, PipeState>
 
         distances.put(end.pos, 0);
         queue.add(end.pos);
+
+        // Early return if the end is blocked
+        if (!pipes.get(end.pos).canFluidFlow(start.face.getOpposite(), world.getBlockState(end.pos)))
+        {
+            return null;
+        }
 
         while (!queue.isEmpty())
         {
@@ -209,7 +216,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
                     // Check if pipe can transfer fluid in the opposite direction
                     if (!pipes.get(offset).canFluidFlow(connection.getOpposite(), world.getBlockState(offset)))
                     {
-                        System.out.println(reverse + " false");
                         continue;
                     }
 
