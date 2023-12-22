@@ -147,7 +147,7 @@ public interface IFluidPipe
                 }
                 for (PipeNetwork network : mergeNetworks)
                 {
-                    mergeNetworks.get(0).merge(mutable.toImmutable(), network);
+                    mergeNetworks.get(0).merge(pos, network);
                     merged = true;
                 }
                 if (merged) return;
