@@ -72,6 +72,6 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 
         poseStack.translate(-thrust / 2, shake, -thrust);
 
-//        super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
+        super.render(stack, transformType, poseStack, bufferSource, packedLight, packedOverlay);
     }
 }

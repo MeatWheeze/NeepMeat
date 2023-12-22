@@ -32,7 +32,6 @@ public class MeatWeapons implements ModInitializer
     public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
             new Identifier(NeepMeat.NAMESPACE, "weapons"), () -> new ItemStack(NMItems.SLASHER));
 
-    public static EntityType<PlasmaProjectileEntity> PLASMA = registerEntity("plasma_projectile", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PlasmaProjectileEntity::new));
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
     public static EntityType<ZapProjectileEntity> ZAP;

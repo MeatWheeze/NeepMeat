@@ -57,9 +57,10 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket()
+    public Packet<?> createSpawnPacket()
     {
-        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+//        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+        return super.createSpawnPacket();
     }
 
     @Override

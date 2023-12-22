@@ -41,9 +41,22 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> createSpawnPacket()
+    public Packet<?> createSpawnPacket()
     {
-        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+//        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+        return super.createSpawnPacket();
+    }
+
+    @Override
+    public void setVelocity(double x, double y, double z, float speed, float divergence)
+    {
+        super.setVelocity(x, y, z, speed, divergence);
+    }
+
+    @Override
+    public void setPosition(double x, double y, double z)
+    {
+        super.setPosition(x, y, z);
     }
 
     @Override
