@@ -1,8 +1,14 @@
 package com.neep.meatlib.item;
 
 import com.neep.meatlib.block.MeatlibBlock;
+import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
+
+import java.util.List;
 
 /**
  * An parameter container similar to Item.Settings for use in Block and BlockItem constructors.
@@ -49,6 +55,18 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
         return this;
     }
 
+    public ItemSettings requiresMotor()
+    {
+        this.tooltipSupplier = TooltipSupplier.combine(tooltipSupplier, REQUIRES_MOTOR);
+        return this;
+    }
+
+    public ItemSettings requiresVascular()
+    {
+        this.tooltipSupplier = TooltipSupplier.combine(tooltipSupplier, REQUIRES_VASCULAR);
+        return this;
+    }
+
     public MeatlibBlock.ItemFactory getFactory()
     {
         return factory;
@@ -59,4 +77,7 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
     {
         return factory.create(block, name, settings);
     }
+
+    public static final TooltipSupplier REQUIRES_MOTOR = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".requires_motor").formatted(Formatting.RED));
+    public static final TooltipSupplier REQUIRES_VASCULAR = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".requires_vascular").formatted(Formatting.RED));
 }

@@ -41,6 +41,15 @@ public interface TooltipSupplier
         return new ShiftHidden(lines, Formatting.YELLOW);
     }
 
+    static TooltipSupplier combine(TooltipSupplier supplier, TooltipSupplier supplier1)
+    {
+        return (item, tooltip) ->
+        {
+            supplier.apply(item, tooltip);
+            supplier1.apply(item, tooltip);
+        };
+    }
+
     static void applyMessage(List<Text> tooltip)
     {
         tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".shift_for_info").formatted(Formatting.GRAY));
