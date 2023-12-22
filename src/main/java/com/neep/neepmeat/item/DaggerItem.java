@@ -7,13 +7,22 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.meatlib.item.BaseSwordItem;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.*;
+import net.minecraft.particle.BlockStateParticleEffect;
+import net.minecraft.particle.ParticleType;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
@@ -46,12 +55,27 @@ public class DaggerItem extends BaseSwordItem
         if (target.isDead() && !world.isClient)
         {
             BlockPos pos = target.getBlockPos();
-            if (world.getBlockState(pos.offset(Direction.DOWN)).isOf(NMBlocks.FLUID_DRAIN))
+            if (world.getBlockEntity(pos.down()) instanceof FluidDrainBlockEntity be)
             {
-                RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), NMFluids.FLOWING_BLOOD);
+//                RealisticFluid.incrementLevel(world, pos, world.getBlockState(pos), NMFluids.FLOWING_BLOOD);
+                try (Transaction transaction = Transaction.openOuter())
+                {
+                    be.getBuffer(Direction.UP).insert(FluidVariant.of(NMFluids.STILL_BLOOD), 20250, transaction);
+                    transaction.commit();
+                    spawnBloodParticles(target.getPos(), (ServerWorld) world);
+                }
             }
         }
         return true;
+    }
+
+    public static void spawnBloodParticles(Vec3d entityPos, ServerWorld world)
+    {
+        world.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, NMFluids.BLOOD.getDefaultState()),
+                entityPos.x, entityPos.y, entityPos.z,
+                30,
+                0.1, 1, 0.1,
+                0.1);
     }
 
     @Override

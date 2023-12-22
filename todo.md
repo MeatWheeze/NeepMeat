@@ -56,6 +56,7 @@
 - Add MEAT fluid
 - Add Meat Steel recipe
 - Add Raw Meat Brick recipe
+- Make fluid pipes retain connections
 
 ## Later
 

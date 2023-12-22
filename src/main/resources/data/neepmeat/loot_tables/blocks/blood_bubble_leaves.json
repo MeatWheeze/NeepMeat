@@ -130,7 +130,7 @@
             },
             {
               "condition": "minecraft:random_chance",
-              "chance": 0.05
+              "chance": 0.02
             }
           ],
           "name": "neepmeat:blood_bubble"

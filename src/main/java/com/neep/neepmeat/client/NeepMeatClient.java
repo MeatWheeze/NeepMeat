@@ -48,6 +48,8 @@ public class NeepMeatClient implements ClientModInitializer
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
     public static final EntityModelLayer TANK_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "tank_minecart"), "main");
 
+    public static final Identifier BLOOD_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/blood_flowing");
+    public static final Identifier BLOOD = new Identifier(NeepMeat.NAMESPACE, "block/blood_still");
     public static final Identifier CHARGED_WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_flowing");
     public static final Identifier CHARGED_WORK_FLUID= new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_still");
     public static final Identifier WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_flowing");
@@ -129,9 +131,8 @@ public class NeepMeatClient implements ClientModInitializer
 
         // Fluid textures
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD, new SimpleFluidRenderHandler(
-                new Identifier("minecraft:block/water_still"),
-                new Identifier("minecraft:block/water_still"),
-                0x440d0e
+                BLOOD,
+                BLOOD_FLOWING
         ));
 
 //        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_ENRICHED_BLOOD, NMFluids.FLOWING_ENRICHED_BLOOD, new SimpleFluidRenderHandler(
@@ -206,6 +207,8 @@ public class NeepMeatClient implements ClientModInitializer
             registry.register(DIRTY_ORE_FAT_FLOWING);
             registry.register(CLEAN_ORE_FAT);
             registry.register(CLEAN_ORE_FAT_FLOWING);
+            registry.register(BLOOD);
+            registry.register(BLOOD_FLOWING);
         });
 
 
