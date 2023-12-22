@@ -186,11 +186,6 @@ public class PipeNetwork
             return false;
         }
 
-//        float h = node.getTargetY() - targetNode.getTargetY();
-//        // TODO: gravity
-//        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-//        float flow = node.getMode(world).getFlow() * node.flowMultiplier - targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
-
         if (targetNode.getMode(world) == AcceptorModes.NONE || targetNode.getMode(world) == AcceptorModes.PUSH
                 || node.getMode(world) == AcceptorModes.NONE
                 )
@@ -218,7 +213,6 @@ public class PipeNetwork
             transaction.abort();
 
             long baseFlow = Math.min(maxFlow, amount);
-//                long baseFlow = maxFlow;
 
             List<Supplier<FluidNode>> safeNodes = connectedNodes.stream().filter(targetNode -> thing(world, node, targetNode)).collect(Collectors.toList());
 
