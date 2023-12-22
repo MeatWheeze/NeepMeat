@@ -14,6 +14,7 @@ import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.potion.NMPotions;
+import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.data.FluidNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.StagedTransactions;
@@ -61,6 +62,8 @@ public class NeepMeat implements ModInitializer
 		NMPotions.init();
 		MobSynthesisRegistry.initDefaults();
 		NMGraphicsEffects.init();
+
+		ItemTransport.init();
 
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();
