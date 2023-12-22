@@ -1,7 +1,5 @@
 package com.neep.assembly;
 
-import com.neep.neepmeat.init.BlockInitialiser;
-import com.sun.jna.platform.mac.SystemB;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -35,6 +33,7 @@ public class AssemblyEntity extends Entity
 
     public BlockState state;
     public PalettedContainer<BlockState> blocks;
+//    protected boolean needsPaletteUpdate;
 
     public AssemblyEntity(EntityType<?> type, World world)
     {
@@ -47,6 +46,7 @@ public class AssemblyEntity extends Entity
 //                NbtHelper::fromBlockState,
 //                Blocks.AIR.getDefaultState());
 
+        this.updatePalette();
         this.setBoundingBox(getBounds());
 
 //        blocks.set(0, 0, 0, Blocks.DIRT.getDefaultState());
@@ -96,13 +96,8 @@ public class AssemblyEntity extends Entity
     {
         if (blocks == null)
         {
-            this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
-                    Block.STATE_IDS,
-                    NbtHelper::toBlockState,
-                    NbtHelper::fromBlockState,
-                    Blocks.AIR.getDefaultState());
+            initPalette();
         }
-
 
         blocks.write(nbt, "Palette", "BlockStates");
         return nbt;
@@ -119,6 +114,7 @@ public class AssemblyEntity extends Entity
     public void updatePalette()
     {
         dataTracker.set(PALETTE, writePalette(new NbtCompound()));
+        this.setBoundingBox(getBounds());
     }
 
     @Override
@@ -143,22 +139,71 @@ public class AssemblyEntity extends Entity
     @Override
     protected Box calculateBoundingBox()
     {
-        return getBounds().offset(getPos());
+        return getBounds().offset(getPos().add(-0.5, -1, -0.5));
     }
 
     public Box getBounds()
     {
-        return Box.of(new Vec3d(0, 0, 0), 1, 2, 1);
+//        return Box.of(new Vec3d(0, 0, 0), 1, 2, 1);
+//        Box base = Box.of(new Vec3d(0, 0, 0), 0, 0, 0);
+        double dx = 0;
+        double dy = 0;
+        double dz = 0;
+
+        PalettedContainer<BlockState> states = getPalette();
+        for (int i = 1; i <= 16; ++i)
+        {
+            for (int j = 1; j <= 16; ++j)
+            {
+                for (int k = 1; k <= 16; ++k)
+                {
+//                    if (!(states.get(i, j, i).equals(Blocks.AIR.getDefaultState())))
+//                    if (!states.get(i, j, k).isAir())
+                    if (states.get(i - 1, j - 1, k - 1).isOf(Assembly.PLATFORM))
+                    {
+//                        System.out.println(states.get(i, j, k));
+                        if (i > dx)
+                            dx = i;
+                        if (j > dy)
+                            dy = j;
+                        if (j > dz)
+                            dz = k;
+                    }
+                }
+            }
+        }
+//        return Box.of(Vec3d.ZERO, dx, dy, dz);
+        if (dx == 0 || dy == 0 || dz == 0)
+        {
+            return new Box(0, 0, 0, 1, 1, 1);
+        }
+        return new Box(0, 0, 0, dx, dy, dz);
+//        return Box.of(Vec3d.ZERO, 1, 1, 1);
     }
 
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
-        blocks.set(0, 0, 0, Assembly.PLATFORM.getDefaultState());
-        blocks.set(0, 1, 0, Assembly.PLATFORM.getDefaultState());
-        blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
-        blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
-        updatePalette();
-        System.out.println(getPalette().get(1, 1, 0));
+        if (!player.getEntityWorld().isClient)
+        {
+            if (!player.isSneaking())
+            {
+                blocks.set(0, 0, 0, Assembly.PLATFORM.getDefaultState());
+                blocks.set(0, 1, 0, Assembly.PLATFORM.getDefaultState());
+                blocks.set(1, 1, 0, Assembly.PLATFORM.getDefaultState());
+                blocks.set(1, 1, 1, Assembly.PLATFORM.getDefaultState());
+                blocks.set(2, 1, 1, Assembly.PLATFORM.getDefaultState());
+                blocks.set(4, 1, 1, Assembly.PLATFORM.getDefaultState());
+            }
+            else
+            {
+                initPalette();
+            }
+            updatePalette();
+        }
+
+//        System.out.println(world.getBlockState(getBlockPos()));
+//        System.out.println(!world.getBlockState(getBlockPos()).isAir());
+
         return ActionResult.SUCCESS;
     }
 
@@ -189,6 +234,11 @@ public class AssemblyEntity extends Entity
         return true;
     }
 
+    public boolean canUsePortals()
+    {
+        return false;
+    }
+
     @Override
     public boolean collidesWith(Entity other)
     {
@@ -198,6 +248,15 @@ public class AssemblyEntity extends Entity
     public BlockState getState()
     {
         return dataTracker.get(BLOCK).orElseGet(Blocks.COAL_ORE::getDefaultState);
+    }
+
+    public void initPalette()
+    {
+        this.blocks = new PalettedContainer<>(FALLBACK_PALETTE,
+                Block.STATE_IDS,
+                NbtHelper::toBlockState,
+                NbtHelper::fromBlockState,
+                Blocks.AIR.getDefaultState());
     }
 
     public PalettedContainer<BlockState> getPalette()
