@@ -60,7 +60,7 @@ public class FluidNetwork
         }
         nodes.put(pos, node);
 
-//        System.out.println("Node updated: " + nodes.get(pos).get());
+        System.out.println("Node updated: " + nodes.get(pos));
     }
 
     private void removeNode(NodePos pos)

@@ -130,11 +130,14 @@ public class FluidNode
         this.flow = mode.getFlow();
     }
 
+    public void setNetwork(ServerWorld world, NMFluidNetwork network)
+    {
+        load(world);
+        setNetwork(network);
+    }
+
     public void setNetwork(NMFluidNetwork network)
     {
-//        System.out.println("called set network to replace " + this.network);
-        load((ServerWorld) network.getWorld());
-
         if (!(this.network == null) && !this.network.equals(network))
         {
             this.network.removeNode(new NodePos(pos, face));

@@ -384,12 +384,13 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor, BlockEntityPr
     {
         if (!player.getStackInHand(hand).equals(ItemStack.EMPTY))
         {
-            return ActionResult.PASS;
+            return ActionResult.FAIL;
         }
         if (!world.isClient)
         {
             if (player.isSneaking())
             {
+                System.out.println("eee");
                 System.out.println(FluidNetwork.INSTANCE.getNodes(pos));
                 System.out.println("block entity: " + world.getBlockEntity(pos));
                 return ActionResult.SUCCESS;
