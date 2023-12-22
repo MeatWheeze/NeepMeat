@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sbs"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:slime_ball"
+    },
+    "b": {
+      "item": "neepmeat:meat_steel_component"
+    }
+  },
+  "result": {
+    "item": "neepmeat:transforming_tool_base",
+    "count": 1
+  }
+}
