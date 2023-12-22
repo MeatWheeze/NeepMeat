@@ -1,5 +1,7 @@
 package com.neep.meatweapons.entity;
 
+import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.item.AirtruckItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.vehicle.BoatEntity;
@@ -16,9 +18,14 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 {
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public AirtruckEntity(EntityType<? extends VehicleEntity2> type, World world)
+    public AirtruckEntity(EntityType<? extends AbstractVehicleEntity> type, World world)
     {
         super(type, world);
+    }
+
+    public static AirtruckEntity create(World world)
+    {
+        return new AirtruckEntity(MeatWeapons.AIRTRUCK, world);
     }
 
     @Override

@@ -34,6 +34,7 @@ public class MeatWeapons implements ModInitializer
     public static Item MACHINE_PISTOL = new MachinePistolItem();
     public static Item LMG = new LMGItem();
     public static Item HEAVY_CANNON = new HeavyCannonItem();
+    public static Item AIRTRUCK_ITEM = new AirtruckItem("airtruck", new FabricItemSettings().group(NMItemGroups.WEAPONS));
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {

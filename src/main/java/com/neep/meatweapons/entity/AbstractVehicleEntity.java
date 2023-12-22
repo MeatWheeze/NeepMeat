@@ -35,7 +35,7 @@ public abstract class AbstractVehicleEntity extends VehicleEntity2
 
     public double maxSpeed = 0.1;
 
-    public AbstractVehicleEntity(EntityType<? extends VehicleEntity2> type, World world)
+    public AbstractVehicleEntity(EntityType<? extends Entity> type, World world)
     {
         super(type, world);
         this.inanimate = true;

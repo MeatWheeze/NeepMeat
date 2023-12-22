@@ -5,16 +5,11 @@ package com.neep.meatweapons.entity;
 
 import com.google.common.collect.Lists;
 import com.neep.meatweapons.client.MWKeys;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -29,7 +24,10 @@ import net.minecraft.predicate.entity.EntityPredicates;
 import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockLocating;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -56,8 +54,9 @@ extends Entity {
     private boolean pressingUp;
     private boolean pressingDown;
     private double fallVelocity;
+    protected boolean powered = true;
 
-    public VehicleEntity2(EntityType<? extends VehicleEntity2> entityType, World world)
+    public VehicleEntity2(EntityType<? extends Entity> entityType, World world)
     {
         super(entityType, world);
         this.inanimate = true;
@@ -194,17 +193,19 @@ extends Entity {
 
         this.checkBlockCollision();
 
-        List<Entity> i = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
-        if (!i.isEmpty()) {
+        List<Entity> otherEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
+        if (!otherEntities.isEmpty()) {
             boolean soundEvent = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
-            for (int vec3d = 0; vec3d < i.size(); ++vec3d) {
-                Entity d = i.get(vec3d);
-                if (d.hasPassenger(this)) continue;
-                if (soundEvent && this.getPassengerList().size() < 2 && !d.hasVehicle() && d.getWidth() < this.getWidth() && d instanceof LivingEntity && !(d instanceof WaterCreatureEntity) && !(d instanceof PlayerEntity)) {
-                    d.startRiding(this);
+            for (Entity entity : otherEntities)
+            {
+                if (entity.hasPassenger(this))
+                    continue;
+                if (soundEvent && this.getPassengerList().size() < 2 && !entity.hasVehicle() && entity.getWidth() < this.getWidth() && entity instanceof LivingEntity && !(entity instanceof WaterCreatureEntity) && !(entity instanceof PlayerEntity))
+                {
+                    entity.startRiding(this);
                     continue;
                 }
-                this.pushAwayFrom(d);
+                this.pushAwayFrom(entity);
             }
         }
     }
@@ -303,28 +304,45 @@ extends Entity {
             return;
         }
 
-        float driverOffset = 1.1f;
-        float f = driverOffset;
-        float g = (float)((this.isRemoved() ? (double)0.01f : this.getMountedHeightOffset()) + passenger.getHeightOffset());
+        float driverOffset = 1.0f;
+        float trailerOffset = -1f;
+        float xOffset = driverOffset;
+        float yOffset = (float) (this.getMountedHeightOffset() + passenger.getHeightOffset());
+
         if (this.getPassengerList().size() > 1)
         {
             int i = this.getPassengerList().indexOf(passenger);
-            f = i == 0 ? driverOffset : -0.6f;
+            xOffset = i == 0 ? driverOffset : trailerOffset;
             if (passenger instanceof AnimalEntity)
             {
-                f = (float) (f + 0.2);
+                xOffset = xOffset + 0.2f;
             }
         }
-        Vec3d i = new Vec3d(f, 0.0, 0.0).rotateY(-this.getYaw() * ((float)Math.PI / 180) - 1.5707964f);
-        passenger.setPosition(this.getX() + i.x, this.getY() + (double)g, this.getZ() + i.z);
+
+        Vec3d i = new Vec3d(xOffset, 0.0, 0.0).rotateY((float) (-this.getYaw() * Math.PI / 180 - Math.PI / 2));
+
+        passenger.setPosition(this.getX() + i.x, this.getY() + yOffset, this.getZ() + i.z);
         passenger.setYaw(passenger.getYaw() + this.yawVelocity);
         passenger.setHeadYaw(passenger.getHeadYaw() + this.yawVelocity);
+
+        this.copyEntityData(passenger);
+
         if (passenger instanceof AnimalEntity && this.getPassengerList().size() > 1)
         {
-            int j = passenger.getId() % 2 == 0 ? 90 : 270;
-            passenger.setBodyYaw(((AnimalEntity)passenger).bodyYaw + (float)j);
-            passenger.setHeadYaw(passenger.getHeadYaw() + (float)j);
+            int animalYaw = passenger.getId() % 2 == 0 ? 90 : 270;
+            passenger.setBodyYaw(((AnimalEntity)passenger).bodyYaw + animalYaw);
+            passenger.setHeadYaw(passenger.getHeadYaw() + animalYaw);
         }
+    }
+
+    protected void copyEntityData(Entity entity)
+    {
+        entity.setBodyYaw(this.getYaw());
+        float f = MathHelper.wrapDegrees(entity.getYaw() - this.getYaw());
+        float g = MathHelper.clamp(f, -105.0f, 105.0f);
+        entity.prevYaw += g - f;
+        entity.setYaw(entity.getYaw() + g - f);
+        entity.setHeadYaw(entity.getYaw());
     }
 
     @Override
@@ -393,7 +411,7 @@ extends Entity {
         }
         if (onGround)
         {
-            if (this.fallDistance > 3.0f)
+            if (this.fallDistance > 3.0f && !powered)
             {
                 this.handleFallDamage(this.fallDistance, 1.0f, DamageSource.FALL);
                 if (!this.world.isClient && !this.isRemoved())
