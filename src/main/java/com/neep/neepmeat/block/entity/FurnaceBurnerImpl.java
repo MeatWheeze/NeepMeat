@@ -5,6 +5,7 @@ import com.neep.neepmeat.mixin.FurnaceAccessor;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.FurnaceBlockEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
@@ -28,7 +29,14 @@ public class FurnaceBurnerImpl implements Burner
             int time = furnace.callGetFuelTime(itemStack);
             furnace.setFuelTime(time);
             furnace.setBurnTime(time);
-            itemStack.decrement(1);
+
+            // Consume fuel stack or replace with the recipe remainder
+            Item remainder = itemStack.getItem().getRecipeRemainder();
+            if (remainder == null) itemStack.decrement(1);
+            else
+            {
+                furnace.getInventory().set(1, new ItemStack(remainder));
+            }
             updateBlockstate();
         }
         else

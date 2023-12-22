@@ -112,7 +112,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererRegistry.register(NMBlockEntities.MERGE_ITEM_PIPE, MergePipeRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
-        BlockEntityRendererRegistry.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
+//        BlockEntityRendererRegistry.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.MOTOR, MotorRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
@@ -192,7 +192,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.PNEUMATIC_TUBE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MERGE_ITEM_PIPE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ITEM_PUMP);
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CONVERTER);
+//        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CONVERTER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.DEPLOYER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MIXER);
 //        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.LEADED_GLASS);

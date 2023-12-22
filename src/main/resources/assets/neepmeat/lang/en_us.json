@@ -155,6 +155,7 @@
   "block.neepmeat.buffer.lore_0": "Holds nine stacks. Extraction can be disabled with redstone.",
   "block.neepmeat.content_detector": "Item Detector",
   "block.neepmeat.content_detector.lore_0": "Detects certain items in the inventory it faces.",
+  "block.neepmeat.content_detector.lore_1": "Filter items can be added and removed with hoppers.",
 
   "block.neepmeat.bottler": "Bottler",
   "block.neepmeat.bottler.lore_0": "Inserts fluids into items.",

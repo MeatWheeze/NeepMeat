@@ -168,14 +168,14 @@ public class NMBlocks
     public static Block ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block(), MACHINE_SETTINGS));
     public static Block ASSEMBLER_TOP = BlockRegistry.queue(new AssemblerBlock.Top("assembler_top", FabricBlockSettings.copy(ASSEMBLER)));
 
-    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
+//    public static Block CONVERTER = BlockRegistry.queue(new ConverterBlock("converter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block(), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
 
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(CONVERTER)));
+    public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
     public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
     public static Block MIXER_TOP = BlockRegistry.queue(new MixerTopBlock("mixer_top", 64, false, FabricBlockSettings.copyOf(MIXER)));
@@ -228,7 +228,7 @@ public class NMBlocks
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.CHEST)));
-    public static Block CONTENT_DETECTOR = BlockRegistry.queue(new InventoryDetectorBlock("content_detector", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.OBSERVER)));
+    public static Block CONTENT_DETECTOR = BlockRegistry.queue(new InventoryDetectorBlock("content_detector", block().tooltip(TooltipSupplier.simple(2)), FabricBlockSettings.copy(Blocks.OBSERVER)));
     public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.OAK_WOOD)));
 
     // --- Data ---

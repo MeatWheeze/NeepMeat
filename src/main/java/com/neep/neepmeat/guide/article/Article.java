@@ -38,6 +38,7 @@ public class Article
         MutableText text = Text.Serializer.fromJson(object);
         return new TextContent(text);
     });
+
     public static final Function<JsonObject, Content> CTEXT = DESERIALISERS.put("ctext",
             object ->
             {
