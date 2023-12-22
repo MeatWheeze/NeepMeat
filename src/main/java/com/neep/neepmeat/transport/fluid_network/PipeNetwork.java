@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
@@ -104,7 +105,7 @@ public class PipeNetwork
             LOADED_NETWORKS.add(network);
             return Optional.of(network);
         }
-        System.out.println("fluid network failed");
+        NeepMeat.LOGGER.error("Pipe network creation from NBT failed. This is not intended behaviour.");
 
         return Optional.empty();
     }
@@ -168,6 +169,7 @@ public class PipeNetwork
         if (!isValid())
         {
             LOADED_NETWORKS.remove(this);
+            connectedNodes.forEach(nodeSupplier -> nodeSupplier.ifPresent(n -> n.setNetwork(null)));
             connectedNodes.clear();
             return false;
         }
@@ -179,33 +181,28 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos);
-            Runnable runnable = () ->
+            this.isBuilt = false;
+
+            if (!validate())
             {
-                this.isBuilt = false;
+                return;
+            }
 
-                connectedNodes.forEach((node) -> node.get().setNetwork(this));
-                if (!validate())
-                {
-                    return;
-                }
+            long t1 = System.nanoTime();
 
-                long t1 = System.nanoTime();
-                try
-                {
-                    this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                long t2 = System.nanoTime();
-//                PipeBranches.displayMatrix(nodeMatrix);
-                this.isBuilt = true;
+            // Nodes must be updated with the new network after validation.
+            connectedNodes.forEach((node) -> node.get().setNetwork(this));
+            try
+            {
+                this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            long t2 = System.nanoTime();
+            this.isBuilt = true;
 //                System.out.println("Rebuilt network in " + (t2 - t1) / 1000000 + "ms");
-            };
-//            NetworkRebuilding.getExecutor().execute(runnable);
-            runnable.run();
-//            StagedTransactions.getExecutor().execute(runnable);
         }
     }
 

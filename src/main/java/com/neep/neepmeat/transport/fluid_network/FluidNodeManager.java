@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
@@ -122,6 +123,11 @@ public class FluidNodeManager
     private static void startWorld(MinecraftServer server, ServerWorld world)
     {
         createNetwork(world);
+    }
+
+    private static void stopWorld(MinecraftServer server, ServerWorld world)
+    {
+        WORLD_NETWORKS.clear();
     }
 
     @Override
@@ -312,6 +318,10 @@ public class FluidNodeManager
         if (network == null || network.isSaved) return;
 
         NbtCompound nbt = network.toNbt();
+        if (!network.isValid())
+        {
+            NeepMeat.LOGGER.error("Pipe network '" + network.uuid + "' is invalid but a node is trying to save it.");
+        }
         ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
         network.isSaved = true;
         nodes.forEach(FluidNode::onRemove);
@@ -353,6 +363,7 @@ public class FluidNodeManager
     {
         ServerTickEvents.START_WORLD_TICK.register(FluidNodeManager::tickNetwork);
         ServerWorldEvents.LOAD.register(FluidNodeManager::startWorld);
+        ServerWorldEvents.UNLOAD.register(FluidNodeManager::stopWorld);
 //        ServerWorldEvents.UNLOAD.register(((server, world1) -> System.out.println("UNLOAD -----------------------------------------------------------------")));
 //        ServerChunkEvents.CHUNK_LOAD.registter
     }
