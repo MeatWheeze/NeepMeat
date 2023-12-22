@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 
 public class NMFluids
 {
@@ -74,7 +75,7 @@ public class NMFluids
     public static FlowableFluid FLOWING_MILK;
     public static FlowableFluid STILL_MILK;
     public static Block MILK;
-    public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 2);
+    public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 2).withBucketItem(Items.MILK_BUCKET);
 
     public static FluidVariant CHARGED;
     public static FluidVariant UNCHARGED;

@@ -62,8 +62,15 @@ public class FluidFactory
 
     public Item registerItem()
     {
+        if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for this fluid");
         bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
         return bucketItem;
+    }
+
+    public FluidFactory withBucketItem(Item bucketItem)
+    {
+        this.bucketItem = bucketItem;
+        return this;
     }
 
     public Block registerBlock()
