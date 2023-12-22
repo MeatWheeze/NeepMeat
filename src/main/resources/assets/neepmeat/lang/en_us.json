@@ -212,6 +212,8 @@
   "block.neepmeat.deployer": "Deployer",
   "block.neepmeat.mixer": "Mixer",
   "block.neepmeat.mixer.lore_0": "Combines fluids and items from adjacent tanks.",
+  "block.neepmeat.mixer.lore_1": "Items must be inserted with pipes or hoppers.",
+  "block.neepmeat.mixer.lore_2": "Outputs are extracted with pipes.",
   "block.neepmeat.breaker": "Motorised Breaker",
 
   "block.neepmeat.motor_unit": "Motor",
