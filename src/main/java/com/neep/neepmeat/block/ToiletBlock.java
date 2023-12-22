@@ -32,7 +32,7 @@ import java.util.List;
 public class ToiletBlock extends BaseHorFacingBlock
 {
     public static final BooleanProperty OPEN = Properties.OPEN;
-    public static final VoxelShape OPEN_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 16, 16);
+    public static final VoxelShape OPEN_SHAPE = Block.createCuboidShape(0, 0, 0, 16, 14, 16);
 //    public static final VoxelShape CLOSED_SHAPE = makeClosedShape();
 
     public ToiletBlock(String itemName, ItemSettings itemSettings, Settings settings)
