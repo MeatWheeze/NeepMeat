@@ -1,15 +1,15 @@
 {
   "type": "neepmeat:trommel",
   "input": {
-    "resource": "minecraft:water",
-    "amount": 81000
+    "resource": "neepmeat:tissue_slurry",
+    "amount": 27000
   },
   "output": {
     "resource": "neepmeat:meat",
-    "amount": 81000
+    "amount": 27000
   },
   "aux_output": {
-    "resource": "minecraft:iron_ingot",
+    "resource": "neepmeat:biomass",
     "amount": 1,
     "chance": 0.5
   }

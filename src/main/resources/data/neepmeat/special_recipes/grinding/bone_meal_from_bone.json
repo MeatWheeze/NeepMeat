@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:bone",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:bone_meal",
+    "min": 3,
+    "max": 4
+  },
+  "processtime": 30
+}

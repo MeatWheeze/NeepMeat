@@ -110,7 +110,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements IMotorisedB
     {
         try (Transaction transaction = Transaction.openOuter())
         {
-            be.getFluidStorage(null).insert(FluidVariant.of(NMFluids.STILL_MEAT), DeathBladesBlockEntity.getEntityAmount(entity), transaction);
+            be.getFluidStorage(null).insert(FluidVariant.of(NMFluids.STILL_TISSUE_SLURRY), DeathBladesBlockEntity.getEntityAmount(entity), transaction);
             transaction.commit();
         }
     }

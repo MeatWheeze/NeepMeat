@@ -61,6 +61,8 @@ public class NMItems
     public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
+    public static Item ASSORTED_BIOMASS = new BaseCraftingItem("biomass", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD))
