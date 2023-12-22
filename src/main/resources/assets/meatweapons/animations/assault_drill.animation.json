@@ -1,0 +1,32 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.assault_drill.spin": {
+			"loop": true,
+			"animation_length": 3,
+			"bones": {
+				"bone": {
+					"rotation": {
+						"vector": [0, 0, "-angle"]
+					}
+				},
+				"bone2": {
+					"rotation": {
+						"vector": [0, 0, "angle"]
+					}
+				},
+				"bone3": {
+					"rotation": {
+						"vector": [0, 0, "-angle"]
+					}
+				},
+				"bone4": {
+					"rotation": {
+						"vector": [0, 0, "angle"]
+					}
+				}
+			}
+		}
+	},
+	"geckolib_format_version": 2
+}

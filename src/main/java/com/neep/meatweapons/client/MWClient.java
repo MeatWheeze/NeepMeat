@@ -3,11 +3,13 @@ package com.neep.meatweapons.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
+import com.neep.meatlib.player.PlayerAttachmentManager;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
+import com.neep.meatweapons.client.sound.DrillSoundInstance;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.*;
@@ -66,6 +68,8 @@ public class MWClient implements ClientModInitializer
         GeoItemRenderer.registerItemRenderer(MWItems.MA75, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/ma75.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/ma75.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/ma75.animation.json"))));
 //        GeoItemRenderer.registerItemRenderer(MWItems.BLASTER, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/blaster.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/thingy.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/blaster.animation.json"))));
 
+        GeoItemRenderer.registerItemRenderer(MWItems.ASSAULT_DRILL, new DrillItemRenderer(new DrillItemModel()));
+
         net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(MeatWeapons.AIRTRUCK, AirtruckEntityRenderer::new);
 
     }
@@ -102,5 +106,7 @@ public class MWClient implements ClientModInitializer
                 RenderSystem.enableDepthTest();
             }
         });
+
+        PlayerAttachmentManager.registerAttachment(DrillSoundInstance.ATTACHMENT_ID, DrillSoundInstance::new);
     }
 }

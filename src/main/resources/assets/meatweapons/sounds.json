@@ -95,6 +95,12 @@
     "sounds": [
       "meatweapons:airtruck_running"
     ]
+  },
+  "drill_running": {
+    "subtitle": "subtitles.meatweapons.drill_running",
+    "sounds": [
+      "meatweapons:drill_running"
+    ]
   }
 }
 
