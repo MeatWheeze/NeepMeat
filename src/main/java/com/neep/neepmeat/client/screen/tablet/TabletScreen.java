@@ -88,6 +88,15 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     }
 
     @Override
+    public GuideNode pop()
+    {
+        GuideNode ret = null;
+        if (path.size() > 1) ret = path.pop();
+        leftPane.init();
+        return ret;
+    }
+
+    @Override
     public Deque<GuideNode> getPath()
     {
         return path;
@@ -134,7 +143,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
 
         if (leftPane != null)
         {
-            leftPane.setDimensions(x, y, leftWidth, 120);
+            leftPane.setDimensions(x, y, leftWidth, contentHeight);
             leftPane.init(client);
         }
         if (rightPane != null)

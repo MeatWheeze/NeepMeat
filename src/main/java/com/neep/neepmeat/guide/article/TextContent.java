@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TextContent implements Article.Content
 {
-    private Text text;
+    private final Text text;
 
     public TextContent(MutableText text)
     {

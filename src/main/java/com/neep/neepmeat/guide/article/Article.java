@@ -2,6 +2,7 @@ package com.neep.neepmeat.guide.article;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
@@ -44,7 +45,9 @@ public class Article
 
                     // Apply the correct deserialiser and add the result to contents
                     String contentType = JsonHelper.getString(content, "type");
-                    article.contents.add(DESERIALISERS.get(contentType).apply(content));
+                    article.contents.add(DESERIALISERS.getOrDefault(contentType,
+                            o -> {throw new JsonParseException("Unknown article content type '" + contentType + "'");})
+                            .apply(content));
                 });
         return article;
     }
