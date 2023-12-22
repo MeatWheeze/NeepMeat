@@ -172,7 +172,6 @@ public class NMFluidNetwork
 
     public void tick()
     {
-//        buildPressures();
         for (Supplier<FluidNode> supplier : connectedNodes)
         {
             FluidNode node;

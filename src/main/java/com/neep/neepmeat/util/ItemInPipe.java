@@ -1,5 +1,7 @@
 package com.neep.neepmeat.util;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
@@ -80,6 +82,11 @@ public class ItemInPipe
         this.tickStart = tickStart;
         this.tickEnd = (long) (tickStart + 1 / speed);
         this.set(new Vec3d(0, 0, 0));
+    }
+
+    public ResourceAmount<ItemVariant> getResourceAmount()
+    {
+        return new ResourceAmount<ItemVariant>(ItemVariant.of(itemStack), itemStack.getCount());
     }
 
     public NbtCompound toNbt(NbtCompound nbt)

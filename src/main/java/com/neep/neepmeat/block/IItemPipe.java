@@ -28,7 +28,7 @@ public interface IItemPipe
         return false;
     }
 
-    static List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    default List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
         // Streams are good, aren't they?
         return Arrays.stream(Direction.values()).filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).filter(forbidden).collect(Collectors.toList());
@@ -44,5 +44,10 @@ public interface IItemPipe
     default AcceptorModes getDirectionMode(World world, BlockPos pos, BlockState state, Direction direction)
     {
         return AcceptorModes.INSERT_EXTRACT;
+    }
+
+    static boolean all(Direction direction)
+    {
+        return true;
     }
 }
