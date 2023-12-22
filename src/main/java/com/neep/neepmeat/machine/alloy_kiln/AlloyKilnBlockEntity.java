@@ -37,4 +37,10 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     {
 
     }
+
+    @Override
+    public int getCurrentBurnTime()
+    {
+        return 0;
+    }
 }
