@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:redstone_ore",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:redstone",
+    "amount": 4
+  },
+  "experience": 2,
+  "processtime": 10
+}

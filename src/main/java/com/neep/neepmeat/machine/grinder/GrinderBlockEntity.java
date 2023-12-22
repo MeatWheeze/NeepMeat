@@ -13,10 +13,12 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -132,6 +134,11 @@ public class GrinderBlockEntity extends SyncableBlockEntity
         {
             GrindingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
 
+            if (recipe != null)
+            {
+                long ins = storage.outputStorage.simulateInsert(recipe.getItemInput().resource(), recipe.getItemInput().amount(), null);
+            }
+
             if (recipe != null && storage.outputStorage.simulateInsert(recipe.getItemOutput().resource(),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
@@ -184,7 +191,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity
         }
         else if ((ejectStorage = ItemStorage.SIDED.find(world, offsetPos, Direction.UP)) != null)
         {
-            ejectStorage.insert(storage.outputStorage.getResource(), 1, transaction);
+            ejectStorage.insert(storage.outputStorage.getResource(), stack.getCount(), transaction);
         }
         else
         {
@@ -194,7 +201,10 @@ public class GrinderBlockEntity extends SyncableBlockEntity
             entity.setVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
             world.spawnEntity(entity);
         }
-        storage.outputStorage.extract(storage.outputStorage.getResource(), 1, transaction);
+        storage.outputStorage.extract(storage.outputStorage.getResource(), stack.getCount(), transaction);
+        Vec3d xpPos = Vec3d.ofCenter(pos, 0.5).add(facing.getOffsetX() * 0.6, facing.getOffsetY() * 0.6, facing.getOffsetZ() * 0.6);
+        ExperienceOrbEntity.spawn((ServerWorld) world, xpPos, (int) Math.ceil(storage.getXpStorage().getAmount()));
+        storage.xpStorage.extract(Float.MAX_VALUE, transaction);
     }
 
     public static void serverTick(World world, BlockPos pos,BlockState state, GrinderBlockEntity be)

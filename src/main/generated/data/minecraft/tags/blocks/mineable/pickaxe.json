@@ -80,6 +80,7 @@
     "neepmeat:motor_unit",
     "neepmeat:deployer",
     "neepmeat:agitator",
+    "neepmeat:grinder",
     "neepmeat:converter",
     "neepmeat:converter_base",
     "neepmeat:charnel_compactor",
