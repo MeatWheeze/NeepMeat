@@ -35,8 +35,7 @@
     ]},
     {"type": "menu", "id": "item_transport", "icon": "neepmeat:motor_unit", "text": "Item Transport", "entries": [
       {"type": "page", "id": "item_pipe", "icon": "neepmeat:item_pipe", "text": "Item Pipes"},
-      {"type": "page", "id": "ejector", "icon": "neepmeat:ejector", "text": "Ejector"},
-      {"type": "page", "id": "item_pump", "icon": "neepmeat:item_pump", "text": "Item Pump"},
+      {"type": "page", "id": "ejector", "icon": "neepmeat:ejector", "text": "Item Extraction"},
       {"type": "page", "id": "router", "icon": "neepmeat:router", "text": "Item Router"},
       {"type": "page", "id": "dumper", "icon": "neepmeat:dumper", "text": "Smart Dumper"}
     ]},
@@ -180,7 +179,27 @@
       {"type": "text", "text": "Ejector\n", "bold": true},
       {"type": "text", "text": "When powered with redstone, the ejector transfers one item every 10 ticks from a connected inventory into a pipe."},
       {"type": "text", "text": "\nItem Pump\n", "bold": true},
-      {"type": "text", "text": "The Item Pump behaves similarly to the Ejector, but ejects 16 items at a time. It can also retrieve items from multiple connected inventories. Both machines check for a valid destination before extracting an item."}
+      {"type": "text", "text": "The Item Pump behaves similarly to the Ejector, but ejects 16 items at a time. It can also retrieve items from multiple connected inventories. Both machines check for a valid destination before extracting an item.\n"},
+      {"type": "image", "width": 128, "height": 32, "path": "neepmeat:guide/images/ejector.png"},
+      {"type": "ctext", "text": "\nThis Ejector will extract items from the barrel.\n"},
+      {"type": "image", "width": 128, "height": 32, "path": "neepmeat:guide/images/item_pump.png"}
+    ]},
+    {"id": "router", "contents": [
+      {"type": "text", "text": "Item Router\n", "bold": true},
+      {"type": "text", "text": "The Item Router distributes incoming items to neighbouring pipes. In the GUI, each coloured filter slot corresponds to an output direction."}
+    ]},
+    {"id": "dumper", "contents": [
+      {"type": "text", "text": "Smart Dumper\n", "bold": true},
+      {"type": "text", "text": "The Smart Dumper drops items from its inventory directly below it. Items are only dropped if the inventory below can receive them. The internal inventory holds a single stack and items can be removed by interacting with an empty hand. Powering the dumper with redstone prevents it from dropping items."},
+      {"type": "image", "width": 96, "height": 96, "path": "neepmeat:guide/images/dumper.png"},
+      {"type": "ctext", "text": "This Smart Dumper will only drop items when the Rendering Basin below can accept them.\n"}
+    ]},
+
+    {"id": "assembler", "contents": [
+      {"type": "text", "text": "Assembler\n", "bold": true},
+      {"type": "text", "text": ""},
+      {"type": "image", "width": 96, "height": 96, "path": "neepmeat:guide/images/dumper.png"},
+      {"type": "ctext", "text": "\n"}
     ]}
   ]
 }
