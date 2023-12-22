@@ -1,9 +1,9 @@
 {
   "tree": {"id": "root", "icon": "neepmeat:meat_steel_ingot", "text": "root","entries": [
-      {"type": "menu", "id": "test_entry", "icon": "minecraft:dirt", "text": "Level 1 menu entry", "entries": [
-          {"type": "page", "id": "l2test", "icon": "minecraft:gravel", "text": "Level 2 page entry"}
+      {"type": "menu", "id": "test_entry", "icon": "minecraft:dirt", "text": "Machines", "entries": [
+          {"type": "page", "id": "l2test", "icon": "minecraft:gravel", "text": "Mixer"}
           ]},
-      {"type": "page", "id": "l1test", "icon": "minecraft:stone", "text": "This is a test. This is only a test."}
+      {"type": "page", "id": "l1test", "icon": "minecraft:stone", "text": "Charnel Compactor"}
   ]},
 
   "articles": [

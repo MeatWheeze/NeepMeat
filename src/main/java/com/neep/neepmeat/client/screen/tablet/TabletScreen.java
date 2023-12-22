@@ -35,10 +35,10 @@ public abstract class TabletScreen extends HandledScreen<ScreenHandler>
 
     private float mouseX;
     private float mouseY;
-    protected int screenOffsetX;
-    protected int screenOffsetY;
-    protected int backgroundWidth = 254;
-    protected int backgroundHeight = 169;
+    protected int screenOffsetX = 17;
+    protected int screenOffsetY = 17;
+    protected int backgroundWidth = 255;
+    protected int backgroundHeight = 194;
     protected PlayerEntity player;
     protected int tabWidth = 21;
 
