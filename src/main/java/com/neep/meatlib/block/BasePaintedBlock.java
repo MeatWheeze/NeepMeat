@@ -1,14 +1,19 @@
 package com.neep.meatlib.block;
 
+import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.item.BaseBlockItem;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
+import net.minecraft.block.Blocks;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeItem;
 import net.minecraft.util.DyeColor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BasePaintedBlock
 {
@@ -32,7 +37,6 @@ public class BasePaintedBlock
         for (DyeColor col : DyeColor.values())
         {
             PaintedBlock block = new PaintedBlock(registryName + "_" + col.getName(), col, settings);
-            // TODO: Fix to prevent crash on server!
             COLOURED_BLOCKS.add(block);
         }
     }
@@ -58,9 +62,19 @@ public class BasePaintedBlock
             return registryName;
         }
 
-        public int getColour()
+        public DyeColor getCol()
+        {
+            return this.col;
+        }
+
+        public int getRawCol()
         {
             return col.getFireworkColor();
+        }
+
+        public void generateRecipe(Consumer<RecipeJsonProvider> exporter)
+        {
+            MeatRecipeProvider.offerEightDyeingRecipe(exporter, this, DyeItem.byColor(getCol()), Blocks.SMOOTH_STONE);
         }
     }
 }

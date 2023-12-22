@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:blue_polished_metal"
+    ]
+  },
+  "criteria": {
+    "has_polished_metal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:polished_metal"
+            ]
+          }
+        ]
+      }
+    },
+    "has_blue_dye": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:blue_dye"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:blue_polished_metal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_polished_metal",
+      "has_blue_dye",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -2,6 +2,7 @@ package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.block.machine.CharnelCompactorStorage;
+import com.neep.neepmeat.datagen.NMRecipes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -25,6 +26,7 @@ public class NeepMeat implements ModInitializer
 
 		// Oooh, the jank! There must be a better way.
 		MeatLib.setNamespace(NAMESPACE);
+		NMRecipes.init();
 		NMBlocks blocks = new NMBlocks();
 		NMItems items = new NMItems();
 		NMLootTables.init();

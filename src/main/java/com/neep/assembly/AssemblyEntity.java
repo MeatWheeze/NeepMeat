@@ -17,7 +17,6 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
@@ -82,7 +81,7 @@ public class AssemblyEntity extends Entity
     public static boolean canAssemble(BlockState state)
     {
         return state.isOf(Assembly.PLATFORM) || state.isOf(Assembly.ANCHOR) ||
-                state.isOf(NMBlocks.RUSTED_IRON_BLOCK);
+                state.isOf(NMBlocks.POLISHED_METAL);
 //                state.isOf(BlockInitialiser.RUSTED_IRON_BLOCK.stairs);
     }
 

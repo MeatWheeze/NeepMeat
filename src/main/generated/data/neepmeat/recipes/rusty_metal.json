@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "idi",
+    "iii"
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:polished_metal"
+    },
+    "d": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "result": {
+    "item": "neepmeat:rusty_metal",
+    "count": 8
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "biy",
+    "iyi",
+    "yib"
+  ],
+  "key": {
+    "b": {
+      "item": "minecraft:black_dye"
+    },
+    "y": {
+      "item": "minecraft:yellow_dye"
+    },
+    "i": {
+      "item": "neepmeat:polished_metal"
+    }
+  },
+  "result": {
+    "item": "neepmeat:caution_block",
+    "count": 4
+  }
+}
