@@ -1,23 +1,25 @@
 package com.neep.neepmeat.plc.recipe;
 
-import com.google.common.collect.Maps;
+import com.google.gson.JsonObject;
+import com.neep.neepmeat.NeepMeat;
+import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.apache.http.auth.NTCredentials;
+import net.minecraft.util.registry.Registry;
 
 import java.util.List;
-import java.util.Map;
+import java.util.function.Function;
 
 public interface ManufactureStep<T>
 {
-    Map<String, Provider<?>> REGISTRY = Maps.newHashMap();
-    
+    Registry<Provider<?>> REGISTRY = FabricRegistryBuilder.createSimple(
+        Provider.asClass(),
+        new Identifier(NeepMeat.NAMESPACE, "step_provider")).buildAndRegister();
+
     static <T> Provider<T> register(Identifier id, Provider<T> provider)
     {
-        REGISTRY.put(id.toString(), provider);
-        return provider;
+        return Registry.register(REGISTRY, id, provider);
     }
 
     void mutate(T t);
@@ -30,6 +32,32 @@ public interface ManufactureStep<T>
 
     interface Provider<T>
     {
+        @SuppressWarnings("unchecked")
+        static Class<Provider<?>> asClass()
+        {
+            return (Class<Provider<?>>) (Object) Provider.class;
+        }
+
+        static <T> Provider<T> of(Function<NbtCompound, ManufactureStep<T>> nbtConstructor, Function<JsonObject, ManufactureStep<T>> jsonConstructor)
+        {
+            return new Provider<T>()
+            {
+                @Override
+                public ManufactureStep<T> create(NbtCompound nbt)
+                {
+                    return nbtConstructor.apply(nbt);
+                }
+
+                @Override
+                public ManufactureStep<T> create(JsonObject json)
+                {
+                    return jsonConstructor.apply(json);
+                }
+            };
+        }
+
         ManufactureStep<T> create(NbtCompound nbt);
+
+        ManufactureStep<T> create(JsonObject json);
     }
 }

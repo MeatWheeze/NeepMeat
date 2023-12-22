@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.recipe;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.init.NMComponents;
 import dev.onyxstudios.cca.api.v3.item.ItemComponent;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -15,11 +16,18 @@ import java.util.List;
 
 public class ItemWorkpiece extends ItemComponent implements Workpiece
 {
+    // TODO: remove
     private static final String KEY = NeepMeat.NAMESPACE + ":work_piece";
 
     public ItemWorkpiece(ItemStack stack)
     {
         super(stack);
+    }
+
+    // Checks for validity without implicitly constructing the component.
+    public static boolean has(ItemStack stack)
+    {
+        return stack.getSubNbt(NMComponents.WORKPIECE.getId().toString()) != null;
     }
 
     public void addStep(ManufactureStep<?> step)
@@ -64,7 +72,7 @@ public class ItemWorkpiece extends ItemComponent implements Workpiece
             var compound = list.getCompound(i);
             String id = compound.getString("id");
 
-            var entry = ManufactureStep.REGISTRY.get(id);
+            var entry = ManufactureStep.REGISTRY.get(Identifier.tryParse(id));
             if (entry != null)
             {
                 steps.add(entry.create(compound.getCompound("sub")));

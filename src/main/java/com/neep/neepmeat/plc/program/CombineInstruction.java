@@ -1,5 +1,6 @@
 package com.neep.neepmeat.plc.program;
 
+import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.network.ParticleSpawnS2C;
@@ -11,6 +12,8 @@ import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.recipe.CombineStep;
+import com.neep.neepmeat.plc.recipe.ManufactureRecipe;
+import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import com.neep.neepmeat.plc.robot.SingleAction;
@@ -111,10 +114,16 @@ public class CombineInstruction implements Instruction
             NMComponents.WORKPIECE.maybeGet(stack).ifPresent(workpiece ->
             {
                 workpiece.addStep(step);
-//                System.out.println("Combining");
             });
 
             mip.set(stack);
+
+            ManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MIXING, mip).orElse(null);
+            if (recipe != null)
+            {
+                recipe.ejectOutputs(mip, null);
+            }
+
             return;
         }
 
