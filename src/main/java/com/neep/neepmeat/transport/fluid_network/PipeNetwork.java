@@ -274,7 +274,8 @@ public class PipeNetwork
             }
 
             // Adjust base flow if this node is in a capillary pipe
-            long baseTransfer = networkPipes.get(node.getPos()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
+            // TODO: Somehow avoid the mutable.toimuutable.aargh() thin
+            long baseTransfer = networkPipes.get(node.getPos().mutableCopy().toImmutable()).isCapillary() ? BASE_TRANSFER / 4 : BASE_TRANSFER;
 
             // Prevent unpredictable distribution
             Transaction transaction = Transaction.openOuter();
