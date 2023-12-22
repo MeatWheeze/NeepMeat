@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 
-public class FluidNetwork
+public class NMFluidNetwork
 {
     private World world;
     private HashSet<FluidNode> connectedNodes = new HashSet<>();
@@ -22,7 +22,7 @@ public class FluidNetwork
     private Map<BlockPos, PipeSegment> networkPipes = new HashMap<>();
     private List<BlockPos> pipeQueue = new ArrayList<>();
 
-    public FluidNetwork(World world)
+    public NMFluidNetwork(World world)
     {
         this.world = world;
     }
@@ -33,12 +33,13 @@ public class FluidNetwork
         {
             discoverNodes(startPos, face);
             buildPressures();
-//        tick();
+        tick();
         }
     }
 
     public void tick()
     {
+//        System.out.println(connectedNodes);
         for (FluidNode node : connectedNodes)
         {
             for (FluidNode targetNode : connectedNodes)
@@ -55,10 +56,11 @@ public class FluidNetwork
 //        System.out.println("pipes: " + networkPipes.keySet());
         try
         {
+            // Set networks before updating distances.
+            connectedNodes.forEach((node) -> node.setNetwork(this));
+
             for (FluidNode node : connectedNodes)
             {
-                node.setNetwork(this);
-
 //                PipeSegment pos = networkPipes.get(node.getPos().offset(node.getFace()));
 //                pos.
 
@@ -115,9 +117,8 @@ public class FluidNetwork
                         continue;
                     }
                     // thing here
-//                    System.out.println(node1);
-                int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
-//                    int distanceToNode = 1;
+                    int distanceToNode = networkPipes.get(node1.getPos().offset(node1.getFace())).getDistance();
+
                     node.distances.put(node1, distanceToNode);
                 }
             }
@@ -173,7 +174,6 @@ public class FluidNetwork
                             FluidNodeProvider nodeProvider = (FluidNodeProvider) state2.getBlock();
                             if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
                             {
-//                                System.out.println("target: " + next.toString());
                                 connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
                             }
                         }
@@ -185,7 +185,7 @@ public class FluidNetwork
                                 if (storage != null)
                                 {
                                     FluidNode node = new FluidNode(next, direction.getOpposite(), storage, FluidAcceptor.AcceptorModes.INSERT_EXTRACT, 0);
-                                    System.out.println(node);
+//                                    System.out.println(node);
                                     connectedNodes.add(node);
                                 }
                             }

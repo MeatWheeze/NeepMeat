@@ -3,6 +3,7 @@ package com.neep.neepmeat.fluid_util;
 import com.neep.neepmeat.block.FluidAcceptor;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -13,13 +14,14 @@ import java.util.Map;
 /*
     An interface for fluid networks associated with a FluidNodeProvider's face.
  */
+@SuppressWarnings("UnstableApiUsage")
 public class FluidNode
 {
     private final Direction face;
     private final BlockPos pos;
-    public float pressure = 4;
+    public float pressure;
     public FluidAcceptor.AcceptorModes mode;
-    private FluidNetwork network = null;
+    private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
@@ -29,6 +31,7 @@ public class FluidNode
         this.pos = pos;
         this.storage = storage;
         this.mode = mode;
+        this.pressure = pressure;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class FluidNode
         return "\n" + this.pos.toString() + " " + face;
     }
 
-    public void setNetwork(FluidNetwork network)
+    public void setNetwork(NMFluidNetwork network)
     {
         this.network = network;
         distances.clear();
@@ -55,7 +58,7 @@ public class FluidNode
     {
         if (network == null)
         {
-            network = new FluidNetwork(world);
+            network = new NMFluidNetwork(world);
         }
         network.rebuild(pos, face);
     }
@@ -82,7 +85,26 @@ public class FluidNode
             System.out.println("transmit null");
             return;
         }
+//        System.out.println(this + ": pressure: " + pressure);
         float pressureGradient = (node.getPressure() - getPressure()) / distances.get(node);
-//        System.out.println(node + ", " + distances.get(node) + ", " + pressureGradient);
+//        System.out.println("gradient: " + pressureGradient);
+
+        float flow = - 405 * pressureGradient;
+
+        long transferAmount = (flow) > 0 ? (long) flow : 0;
+        long amountMoved = StorageUtil.move(storage, node.storage, variant -> true,  transferAmount, null);
     }
+
+    public static void flow(Storage<FluidVariant> from, Storage<FluidVariant> to)
+    {
+//        try (Transaction outerTransaction = Transaction.openOuter())
+//        {
+//            StorageUtil.move(from, to, )
+//             (A) some transaction operations
+//             (C) even more operations
+//            outerTransaction.commit(); // This is an outer transaction: changes (A), (B) and (C) are applied.
+//        }
+        // If we hadn't committed the outerTransaction, all changes (A), (B) and (C) would have been reverted.
+    }
+
 }

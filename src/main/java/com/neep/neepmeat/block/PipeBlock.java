@@ -318,7 +318,7 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
 
             Vec3d hitPos = hit.getPos();
             NMVec2f relative = NMMaths.removeAxis(direction.getAxis(), hitPos.subtract(pos.getX(), pos.getY(), pos.getZ()));
-            System.out.println(relative);
+//            System.out.println(relative);
 
             Direction changeDirection = direction;
             if (!relative.isWithin(0.5f, 0.5f, 0.25f))
