@@ -39,4 +39,10 @@ public abstract class InventoryBlockEntity extends SyncableBlockEntity implement
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
     }
+
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
+    }
 }

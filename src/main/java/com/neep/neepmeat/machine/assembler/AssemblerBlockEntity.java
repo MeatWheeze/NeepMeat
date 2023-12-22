@@ -159,6 +159,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                 if (ejected > 0)
                 {
                     target.getStack(i).decrement(ejected);
+                    target.markDirty();
                     spawnSmoke((ServerWorld) world, pos, getCachedState().get(AssemblerBlock.FACING), stack);
                     return true;
                 }
@@ -202,6 +203,7 @@ public class AssemblerBlockEntity extends BloodMachineBlockEntity implements Nam
                     if (!transferStack.isEmpty())
                     {
                         target.setStack(i, patternStack.copy());
+                        target.markDirty();
                         break;
                     }
                 }

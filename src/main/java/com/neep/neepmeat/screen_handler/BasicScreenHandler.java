@@ -13,15 +13,17 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BasicScreenHandler extends ScreenHandler
 {
     protected Inventory inventory;
+    protected PlayerInventory playerInventory;
     @Nullable protected final PropertyDelegate propertyDelegate;
 
-    protected BasicScreenHandler(@Nullable ScreenHandlerType<?> type, PlayerInventory playerInventory, Inventory inventory, int syncId, @Nullable PropertyDelegate delegate)
+    protected BasicScreenHandler(@Nullable ScreenHandlerType<?> type, PlayerInventory playerInventory, @Nullable Inventory inventory, int syncId, @Nullable PropertyDelegate delegate)
     {
         super(type, syncId);
         this.propertyDelegate = delegate;
         this.inventory = inventory;
+        this.playerInventory = playerInventory;
 
-        inventory.onOpen(playerInventory.player);
+        if (inventory != null) inventory.onOpen(playerInventory.player);
 
         if (propertyDelegate != null)
             this.addProperties(delegate);
@@ -107,5 +109,11 @@ public abstract class BasicScreenHandler extends ScreenHandler
     public interface SlotConstructor
     {
         Slot construct(Inventory inventory, int index, int x, int y);
+    }
+
+    @Override
+    public boolean canUse(PlayerEntity player)
+    {
+        return this.inventory.canPlayerUse(player);
     }
 }

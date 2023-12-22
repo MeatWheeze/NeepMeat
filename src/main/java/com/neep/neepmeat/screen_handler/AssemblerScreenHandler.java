@@ -195,6 +195,8 @@ public class AssemblerScreenHandler extends BasicScreenHandler
 
     public static class PatternSlot extends Slot
     {
+        protected final int maxAmount = 1;
+
         public PatternSlot(Inventory inventory, int index, int x, int y)
         {
             super(inventory, index, x, y);
@@ -218,7 +220,9 @@ public class AssemblerScreenHandler extends BasicScreenHandler
         @Override
         public ItemStack insertStack(ItemStack stack, int amount)
         {
-            this.setStack(stack.copy());
+            ItemStack thisStack = stack.copy();
+            thisStack.setCount(1);
+            this.setStack(thisStack);
             return stack;
         }
 

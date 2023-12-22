@@ -12,8 +12,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.Hand;
 import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -193,5 +196,43 @@ public class ItemUtils
             }
         }
         return bl;
+    }
+
+    public static NbtCompound toNbt(Inventory inventory)
+    {
+        NbtCompound nbt = new NbtCompound();
+        writeInventory(nbt, inventory);
+        return nbt;
+    }
+
+    public static NbtCompound writeInventory(NbtCompound nbt, Inventory inventory)
+    {
+        NbtList nbtList = new NbtList();
+        for (int i = 0; i < inventory.size(); ++i)
+        {
+            ItemStack itemStack = inventory.getStack(i);
+
+            if (itemStack.isEmpty()) continue;
+
+            NbtCompound nbtCompound = new NbtCompound();
+            nbtCompound.putByte("Slot", (byte) i);
+            itemStack.writeNbt(nbtCompound);
+            nbtList.add(nbtCompound);
+        }
+//        if (!nbtList.isEmpty() || setIfEmpty)
+        nbt.put("Items", nbtList);
+        return nbt;
+    }
+
+    public static void readInventory(NbtCompound nbt, Inventory inventory)
+    {
+        NbtList nbtList = nbt.getList("Items", 10);
+        for (int i = 0; i < nbtList.size(); ++i)
+        {
+            NbtCompound nbtCompound = nbtList.getCompound(i);
+            int j = nbtCompound.getByte("Slot") & 0xFF;
+            if (j < 0 || j >= inventory.size()) continue;
+            inventory.setStack(j, ItemStack.fromNbt(nbtCompound));
+        }
     }
 }
