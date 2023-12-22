@@ -35,8 +35,8 @@ public class DebugItem extends Item
         }
         if (world.isClient)
         {
-//            context.getPlayer().setVelocity(new Vec3d(0, 1, 0));
-            context.getPlayer().travel(new Vec3d(50, 0, 50));
+            context.getPlayer().setVelocity(new Vec3d(0, 1, 0));
+//            context.getPlayer().travel(new Vec3d(50, 0, 50));
         }
         return ActionResult.FAIL;
     }
