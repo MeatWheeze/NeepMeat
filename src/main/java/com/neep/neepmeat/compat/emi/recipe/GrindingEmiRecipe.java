@@ -9,32 +9,34 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class GrindingEmiRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> input;
-    private List<EmiStack> output;
+    private final List<EmiStack> output;
+
+    private final GrindingRecipe recipe;
 
     public GrindingEmiRecipe(GrindingRecipe recipe) {
+        this.recipe = recipe;
+
         this.id = recipe.getId();
         this.input = List.of(EmiIngredient.of(recipe.getItemInput().getAll().stream().map(Ingredient::ofItems).map(EmiIngredient::of).toList(), recipe.getItemInput().amount()));
-        this.output = List.of(EmiStack.of(recipe.getItemOutput().resource(), recipe.getItemOutput().minAmount()));
 
-        // TODO: append tooltip to output:
-        // Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())
+        List<EmiStack> output = new ArrayList<>();
 
+        output.add(EmiStack.of(recipe.getItemOutput().resource(), recipe.getItemOutput().minAmount()));
         if (recipe.getAuxOutput() != null) {
-            this.output = Stream.concat(this.output.stream(), Stream.of(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()))).toList();
-            // TODO: tooltip
-            // Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())
-            // Text.of("Chance: " + recipe.getItemOutput().chance())
+            output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()));
         }
+
+        this.output = output;
     }
 
     @Override
@@ -71,16 +73,15 @@ public class GrindingEmiRecipe implements EmiRecipe {
     public void addWidgets(WidgetHolder widgets) {
         int startX = getDisplayWidth() / 2 - 41;
         int startY = 10;
-        DecimalFormat df = new DecimalFormat("###.##");
 
         widgets.addTexture(EmiTexture.EMPTY_ARROW, startX + 25, startY + 9);
 
         widgets.addSlot(input.get(0), startX + 1, startY + 9);
 
-        widgets.addSlot(output.get(0), startX + 61, startY + 9).recipeContext(this);
+        widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())).recipeContext(this);
 
         if (output.size() > 1) {
-            widgets.addSlot(output.get(1), startX + 81, startY + 9).recipeContext(this);
+            widgets.addSlot(output.get(1), startX + 81, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getItemOutput().chance())).recipeContext(this);
         }
     }
 }

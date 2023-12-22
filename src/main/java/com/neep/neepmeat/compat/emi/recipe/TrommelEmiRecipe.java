@@ -9,27 +9,34 @@ import dev.emi.emi.api.render.EmiTexture;
 import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class TrommelEmiRecipe implements EmiRecipe {
     private final Identifier id;
     private final List<EmiIngredient> input;
-    private List<EmiStack> output;
+    private final List<EmiStack> output;
+
+    private final TrommelRecipe recipe;
 
     public TrommelEmiRecipe(TrommelRecipe recipe) {
+        this.recipe = recipe;
+
         this.id = recipe.getId();
         this.input = EmiIngredientHelper.inputToIngredient(recipe.getFluidInput());
-        this.output = List.of(EmiStack.of(recipe.getFluidOutput().resource(), recipe.getFluidOutput().minAmount()));
 
+        List<EmiStack> output = new ArrayList<>();
+
+        output.add(EmiStack.of(recipe.getFluidOutput().resource(), recipe.getFluidOutput().minAmount()));
         if (recipe.getAuxOutput() != null) {
-            this.output = Stream.concat(this.output.stream(), Stream.of(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()))).toList();
-            // TODO: tooltip:
-            // Text.of("Chance: " + recipe.getAuxOutput().chance())
+            output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()));
         }
+
+        this.output = output;
     }
 
     @Override
@@ -77,7 +84,7 @@ public class TrommelEmiRecipe implements EmiRecipe {
 
         // Auxiliary output slot
         if (output.size() > 1) {
-            widgets.addSlot(output.get(1), startX + 87, startY + 9).recipeContext(this);
+            widgets.addSlot(output.get(1), startX + 87, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getAuxOutput().chance())).recipeContext(this);
         }
     }
 }
