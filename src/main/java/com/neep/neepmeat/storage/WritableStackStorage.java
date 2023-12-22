@@ -3,27 +3,26 @@ package com.neep.neepmeat.storage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.system.CallbackI;
 
 @SuppressWarnings("UnstableApiUsage")
 public class WritableStackStorage extends SingleVariantStorage<ItemVariant> implements StorageView<ItemVariant>
 {
-    protected int capacity = 64;
+    protected int capacity;
     protected BlockEntity parent;
+    protected Runnable callback;
 
-    public WritableStackStorage(@Nullable BlockEntity parent)
+    public WritableStackStorage(@Nullable Runnable parent)
     {
-        this.parent = parent;
+        this(parent, 64);
     }
 
-    public WritableStackStorage(@Nullable BlockEntity parent, int capacity)
+    public WritableStackStorage(@Nullable Runnable parent, int capacity)
     {
-        this.parent = parent;
+        this.callback = parent;
         this.capacity = capacity;
     }
 
@@ -48,11 +47,7 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant> impl
 
     public void syncIfPossible()
     {
-        if (parent != null)
-        {
-            parent.markDirty();
-            parent.getWorld().updateListeners(parent.getPos(), parent.getCachedState(), parent.getCachedState(), Block.NOTIFY_LISTENERS);
-        }
+        callback.run();
     }
 
     public void setStack(ItemStack stack)

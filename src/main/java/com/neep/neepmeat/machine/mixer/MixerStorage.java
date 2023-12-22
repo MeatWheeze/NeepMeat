@@ -32,7 +32,7 @@ public class MixerStorage extends SimpleInventory
         Runnable callback = parent::sync;
         fluidInput1 = new WritableSingleFluidStorage(FluidConstants.BUCKET, callback);
         fluidInput2 = new WritableSingleFluidStorage(FluidConstants.BUCKET, callback);
-        itemInput = new WritableStackStorage(parent);
+        itemInput = new WritableStackStorage(parent::sync);
         fluidOutput = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, callback);
     }
 

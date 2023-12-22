@@ -3,10 +3,9 @@ package com.neep.neepmeat.blockentity;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
-import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -52,7 +51,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public DeployerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        storage = new WritableStackStorage(this);
+        storage = new WritableStackStorage(this::sync);
     }
 
     public DeployerBlockEntity(BlockPos pos, BlockState state)
