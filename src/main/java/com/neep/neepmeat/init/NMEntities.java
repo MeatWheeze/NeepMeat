@@ -52,6 +52,7 @@ public class NMEntities
         FabricDefaultAttributeRegistry.register(HOUND, HoundEntity.createLivingAttributes());
 
         BOVINE_HORROR = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "bovine_horror", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BovineHorrorEntity::new)
+//                .dimensions(EntityDimensions.fixed(2.7f, 3.5f)).trackedUpdateRate(1).build());
                 .dimensions(EntityDimensions.fixed(2.7f, 3.5f)).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(BOVINE_HORROR, BovineHorrorEntity.createLivingAttributes());
         ACID_SPRAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "acid_spray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AcidSprayEntity::new)

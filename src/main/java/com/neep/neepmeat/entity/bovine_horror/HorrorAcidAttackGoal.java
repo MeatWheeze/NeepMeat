@@ -4,33 +4,35 @@ import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
-import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-import java.util.EnumSet;
-
 public class HorrorAcidAttackGoal extends Goal
 {
     protected BovineHorrorEntity mob;
     protected int ticks = 0;
-    protected boolean spawned = false;
+    protected int spawned = 0;
+    protected int maxSpawned;
+    protected int cooldown = 0;
 
-    public HorrorAcidAttackGoal(BovineHorrorEntity mob)
+    public HorrorAcidAttackGoal(BovineHorrorEntity mob, float size, int maxSpawned)
     {
         this.mob = mob;
-        this.setControls(EnumSet.of(Control.MOVE));
+        this.maxSpawned = maxSpawned;
+//        this.setControls(EnumSet.of(Control.MOVE));
     }
     @Override
     public boolean canStart()
     {
-        if (mob.getTarget() != null)
+        LivingEntity target = mob.getTarget();
+        if (target != null && target.isAlive())
         {
-            double dist = mob.getTarget().getPos().distanceTo(mob.getPos());
-            return dist >= 7;
+            return !mob.canMelee(target);
+//            double dist = mob.getTarget().getPos().distanceTo(mob.getPos());
+//            return dist >= 7;
         }
         return false;
     }
@@ -39,19 +41,20 @@ public class HorrorAcidAttackGoal extends Goal
     public void start()
     {
         ticks = 0;
-        spawned = false;
+        spawned = 0;
+        cooldown = 0;
     }
 
     @Override
     public boolean shouldContinue()
     {
-        return (mob.getTarget() != null && ticks < 100);
+        return (mob.getTarget() != null) && spawned < maxSpawned;
     }
 
     @Override
     public boolean canStop()
     {
-        return ticks <= 20 || ticks >= 100;
+        return ticks <= 10 || ticks >= 50;
     }
 
     @Override
@@ -64,12 +67,13 @@ public class HorrorAcidAttackGoal extends Goal
     public void tick()
     {
         super.tick();
-        ++ticks;
+        ticks += getTickCount(1);
+        cooldown -= getTickCount(1);
 
         World world = mob.getWorld();
 
         LivingEntity target = mob.getTarget();
-        if (ticks > 30 && ticks < 80 && (world.getTime() & 2) == 0)
+        if (ticks > 30 && ticks < 50 && (world.getTime() & 2) == 0)
         {
 //            Vec3d toTarget = new Vec3d(Math.sin(mob.getYaw()), 0.1, Math.cos(mob.getY()));
             Vec3d toTarget = new Vec3d(0, 0.1, 0);
@@ -82,7 +86,7 @@ public class HorrorAcidAttackGoal extends Goal
             }
         }
 
-        if (ticks > 40 && ticks < 60 && !spawned)
+        if (ticks > 30 && spawned < maxSpawned && cooldown <= 0)
         {
             Vec3d toTarget = target.getPos().subtract(mob.getPos());
 
@@ -93,7 +97,8 @@ public class HorrorAcidAttackGoal extends Goal
                     target.getPos(), speed, 1);
             projectile.setOwner(mob);
 
-            spawned = true;
+            cooldown = 6;
+            spawned++;
         }
     }
 }

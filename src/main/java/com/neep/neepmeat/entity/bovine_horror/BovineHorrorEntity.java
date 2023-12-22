@@ -5,10 +5,7 @@ import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.ActiveTargetGoal;
-import net.minecraft.entity.ai.goal.Goal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.boss.BossBar;
@@ -20,6 +17,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.HostileEntity;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -39,13 +37,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-import java.util.EnumSet;
-
 public class BovineHorrorEntity extends HostileEntity implements Monster, IAnimatable
 {
-//    public static int NEXT_SYNC_ID = 0;
-//    protected static final TrackedData<Integer> SYNC_ID = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Integer> SYNC_ID = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.INTEGER);
+    protected static final TrackedData<Float> VISIBILITY = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
     protected static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.horror.wave", ILoopType.EDefaultLoopTypes.LOOP);
 
@@ -54,13 +49,16 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     private final String attackController = "attack";
 
     public float prevVisibility = 0;
-    public float visibility = 0;
+
+    protected final BovineHorrorMeleeAttackGoal meleeAttackGoal = new BovineHorrorMeleeAttackGoal(this);
+    protected boolean phase2 = false; // State pattern? Pah!
 
     private final ServerBossBar bossBar = new ServerBossBar(this.getDisplayName(), BossBar.Color.RED, BossBar.Style.PROGRESS);
 
     public BovineHorrorEntity(EntityType<? extends HostileEntity> entityType, World world)
     {
         super(entityType, world);
+        initCustomGoals();
     }
 
     public static DefaultAttributeContainer.Builder createLivingAttributes()
@@ -68,7 +66,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         return HostileEntity.createHostileAttributes()
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 80)
                 .add(EntityAttributes.GENERIC_FOLLOW_RANGE, 35.0)
-                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.2f)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25f)
                 .add(EntityAttributes.GENERIC_ARMOR_TOUGHNESS, 2.5)
                 .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0)
                 .add(EntityAttributes.GENERIC_ARMOR, 4.0);
@@ -79,6 +77,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     {
         super.initDataTracker();
         dataTracker.startTracking(SYNC_ID, 0);
+        dataTracker.startTracking(VISIBILITY, 0.0f);
     }
 
     public int getSyncId()
@@ -93,9 +92,15 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         targetSelector.add(2, new ActiveTargetGoal<>(this, PlayerEntity.class, true));
 
 //        goalSelector.add(8, new LookAtEntityGoal(this, PlayerEntity.class, 8.0f));
-        goalSelector.add(2, new FaceTowardTargetGoal(this));
-        goalSelector.add(2, new BovineHorrorMeleeAttackGoal(this, 1.0, false));
-        goalSelector.add(2, new HorrorAcidAttackGoal(this));
+//        goalSelector.add(3, new FaceTowardTargetGoal(this));
+//        goalSelector.add(2, new BovineHorrorMeleeAttackGoal(this, 1.0, false));
+    }
+
+    protected void initCustomGoals()
+    {
+        goalSelector.add(2, meleeAttackGoal);
+        goalSelector.add(2, new HorrorMoveToTargetGoal(this, 1.2, true));
+        goalSelector.add(2, new HorrorAcidAttackGoal(this, 3, 2));
     }
 
     @Override
@@ -114,10 +119,6 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
 
     private <T extends IAnimatable> PlayState attackControl(final AnimationEvent<T> event)
     {
-//        if (getEvent() == MobEvent.ATTACK)
-//        {
-//            consumeEvent();
-
         if (handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped))
         {
             event.getController().markNeedsReload();
@@ -171,7 +172,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         }
     }
 
-    protected void spawnParticle(World world, ParticleEffect effect, Random random, Vec3d origin)
+    public void spawnParticle(World world, ParticleEffect effect, Random random, Vec3d origin)
     {
         double r = random.nextFloat() * 1.5 + 0.5;
         double pitch = (random.nextFloat() + 0.5) * 2 * Math.PI / 2;
@@ -190,28 +191,40 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     @Override
     public boolean isInvisibleTo(PlayerEntity player)
     {
-        return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && getVisibility(1) == 0);
+        float visibility = world.isClient() ? prevVisibility : getVisibility();
+        return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && visibility == 0);
     }
 
     @Override
     public void tick()
     {
         super.tick();
-        if (world.isClient())
+
+        if (getHealth() < getMaxHealth() / 2 && !phase2)
         {
-            prevVisibility = visibility;
+            phase2 = true;
+            this.bossBar.setDarkenSky(true);
+
+            goalSelector.clear();
+            goalSelector.add(1, new BHPhaseActionGoal(this));
+            navigation.stop();
+        }
+
+        if (!world.isClient())
+        {
+            prevVisibility = getVisibility();
             if (world.getTime() % 60 == 0)
             {
                 float p = random.nextFloat();
-                if (p > 0.5 && visibility == 0)
+                if (p > 0.5 && getVisibility() == 0)
                 {
-                    visibility = 0.9f;
+                    setVisibility(0.9f);
                 }
             }
 
             if (isAlive())
             {
-                visibility = Math.max(0, visibility - 0.1f);
+                setVisibility(Math.max(0, getVisibility() - 0.1f));
             }
         }
     }
@@ -220,7 +233,8 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     public void onDeath(DamageSource damageSource)
     {
         super.onDeath(damageSource);
-        visibility = 1;
+        setVisibility(1);
+
 
         if (world.isClient())
         {
@@ -231,7 +245,7 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
                         getY() + (random.nextFloat()) * 2 + 0.5,
                         getZ() + (random.nextFloat() - 0.5) * 3,
                         0, 0.1, 0
-                        );
+                );
             }
         }
     }
@@ -239,8 +253,24 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
     @Override
     protected void mobTick()
     {
+        this.bossBar.setPercent(getHealth() / getMaxHealth());
         super.mobTick();
-        this.bossBar.setPercent(this.getHealth() / this.getMaxHealth());
+
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.putBoolean("phase2", phase2);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+        this.phase2 = nbt.getBoolean("phase2");
     }
 
     @Override
@@ -257,7 +287,8 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
 
     public float getVisibility(float tickDelta)
     {
-        return MathHelper.lerp(tickDelta, prevVisibility, visibility);
+//        return MathHelper.lerp(tickDelta, prevVisibility, getVisibility());
+        return getVisibility();
     }
 
 //    @Override
@@ -289,70 +320,39 @@ public class BovineHorrorEntity extends HostileEntity implements Monster, IAnima
         dataTracker.set(SYNC_ID, 0);
     }
 
+    public float getVisibility()
+    {
+        return dataTracker.get(VISIBILITY);
+    }
+
+    public void setVisibility(float visibility)
+    {
+        dataTracker.set(VISIBILITY, visibility);
+    }
+
+    public float getAttackRange(Entity entity)
+    {
+        return 4;
+    }
+
+    public boolean canMelee(Entity entity)
+    {
+        return distanceTo(entity) <= getAttackRange(entity);
+    }
+
+    public boolean isInRange(Entity entity)
+    {
+        return distanceTo(entity) <= getAttackRange(entity) * 0.5;
+    }
+
+    public boolean isInMoveRange(Entity entity)
+    {
+        return distanceTo(entity) <= 20;
+    }
+
     enum MobEvent
     {
         NONE,
         ATTACK
-    }
-
-    static class FaceTowardTargetGoal extends Goal
-    {
-        private final BovineHorrorEntity mob;
-        private int ticksLeft;
-
-        public FaceTowardTargetGoal(BovineHorrorEntity mob) {
-            this.mob = mob;
-            this.setControls(EnumSet.of(Goal.Control.LOOK));
-        }
-
-        @Override
-        public boolean canStart()
-        {
-            LivingEntity livingEntity = this.mob.getTarget();
-            if (livingEntity == null)
-            {
-                return false;
-            }
-            return this.mob.canTarget(livingEntity);
-        }
-
-        @Override
-        public void start()
-        {
-            this.ticksLeft = FaceTowardTargetGoal.toGoalTicks(300);
-            super.start();
-        }
-
-        @Override
-        public boolean shouldContinue()
-        {
-            LivingEntity livingEntity = this.mob.getTarget();
-            if (livingEntity == null)
-            {
-                return false;
-            }
-            if (!this.mob.canTarget(livingEntity))
-            {
-                return false;
-            }
-            return --this.ticksLeft > 0;
-        }
-
-        @Override
-        public boolean shouldRunEveryTick()
-        {
-            return true;
-        }
-
-        @Override
-        public void tick()
-        {
-            LivingEntity livingEntity = this.mob.getTarget();
-            if (livingEntity != null)
-            {
-//                this.mob.lookAtEntity(livingEntity, 10.0f, 10.0f);
-                this.mob.getLookControl().lookAt(livingEntity);
-            }
-        }
     }
 }
