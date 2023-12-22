@@ -58,16 +58,16 @@ public class FluidNetwork
 
     public static void tickNetwork(ServerWorld world)
     {
+        // A mysterious ConcurrentModificationException is thrown when using ListIterator::remove()
         List<FluidNode> removal = new ArrayList<>();
-        List<FluidNode> ooer = new ArrayList<>(WORLD_NETWORKS.get(world).queuedNodes);
-        for (Iterator<FluidNode> it = ooer.iterator(); it.hasNext();)
+        List<FluidNode> queue = new ArrayList<>(WORLD_NETWORKS.get(world).queuedNodes);
+        for (FluidNode node : queue)
         {
-            FluidNode node = it.next();
             node.loadDeferred(world);
-//            it.remove();
             removal.add(node);
         }
         WORLD_NETWORKS.get(world).queuedNodes.removeAll(removal);
+
         NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
     }
 

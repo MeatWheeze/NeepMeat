@@ -307,7 +307,6 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
 
     public void setAmount(long amount)
     {
-//        System.out.println("setamount "+amount);
         inventory.get(0).setCount((int) amount);
     }
 
@@ -318,13 +317,6 @@ public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements
 
     public long getAmount()
     {
-//        System.out.println("getamount "+ inventory.get(0).getCount());
         return inventory.get(0).getCount();
     }
-
-    public List<ItemStack> getInventory()
-    {
-        return inventory;
-    }
-
 }

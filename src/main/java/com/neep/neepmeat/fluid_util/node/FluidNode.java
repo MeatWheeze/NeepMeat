@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 /*
-    An interface for fluid networks associated with a
+    An interface for fluid networks associated with a block and a direction
  */
 @SuppressWarnings("UnstableApiUsage")
 public class FluidNode
@@ -54,7 +54,7 @@ public class FluidNode
         this.flow = mode.getFlow() * flowMultiplier;
     }
 
-    // For deferred loading.
+    // For deferred loading only.
     protected FluidNode(BlockPos pos, Direction face, AcceptorModes mode, float flowMultiplier, long networkId, ServerWorld world)
     {
         this.face = face;
