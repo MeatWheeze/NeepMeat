@@ -11,10 +11,9 @@
   ],
   "client": [
     "BlockModelRendererAccessor",
-    "CowEntityRendererMixin",
-    "ExampleMixin",
-    "HeldItemRendererMixin",
-    "ParticleManagerMixin"
+    "MixinCowEntityRenderer",
+    "MixinHeldItemRenderer",
+    "MixinParticleManager"
   ],
   "injectors": {
     "defaultRequire": 1

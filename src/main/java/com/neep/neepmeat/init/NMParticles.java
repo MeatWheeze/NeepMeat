@@ -1,9 +1,8 @@
 package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.ParticleRegistry;
-import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.mixin.ParticleManagerMixin;
+import com.neep.neepmeat.mixin.MixinParticleManager;
 import com.neep.neepmeat.particle.SwirlingParticle;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import net.fabricmc.api.EnvType;
@@ -52,7 +51,7 @@ public class NMParticles
         private static <T extends ParticleEffect> void registerFactory(ParticleType<T> type, SpriteAwareFactory<?> factory)
         {
             ParticleManager manager = MinecraftClient.getInstance().particleManager;
-            ParticleManager.SimpleSpriteProvider simpleSpriteProvider = ParticleManagerMixin.invokeConstructor();
+            ParticleManager.SimpleSpriteProvider simpleSpriteProvider = MixinParticleManager.invokeConstructor();
             ((ParticleManagerAccessor) manager).getSpriteAwareFactories().put(Registry.PARTICLE_TYPE.getId(type), simpleSpriteProvider);
             ((ParticleManagerAccessor) manager).getFactories().put(Registry.PARTICLE_TYPE.getRawId(type), factory.create(simpleSpriteProvider));
         }
