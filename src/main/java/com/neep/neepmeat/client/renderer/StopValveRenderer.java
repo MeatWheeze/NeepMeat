@@ -1,11 +1,14 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
+@Environment(value = EnvType.CLIENT)
 public class StopValveRenderer<T extends FilterPipeBlockEntity> implements BlockEntityRenderer<T>
 {
     public StopValveRenderer(BlockEntityRendererFactory.Context context)

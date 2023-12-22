@@ -2,6 +2,8 @@ package com.neep.neepmeat.machine.bottler;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -12,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value = EnvType.CLIENT)
 public class BottlerRenderer implements BlockEntityRenderer<BottlerBlockEntity>
 {
     public BottlerRenderer(BlockEntityRendererFactory.Context ctx)

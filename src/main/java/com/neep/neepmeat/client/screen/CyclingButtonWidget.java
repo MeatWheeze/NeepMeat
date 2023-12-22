@@ -11,6 +11,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+@Environment(value = EnvType.CLIENT)
 public class CyclingButtonWidget extends ButtonWidget
 {
 

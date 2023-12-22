@@ -36,14 +36,14 @@ public class MultiFluidRenderer
                     start,
                     start + height,
                     start + height,
-                    1);
+                    1, light);
             start += height;
             ++max;
         }
 //        System.out.println(max);
     }
 
-    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float endXZ, float endY, float scaleY)
+    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float endXZ, float endY, float scaleY, int light)
     {
         Sprite sprite = FluidVariantRendering.getSprite(fluid);
         VertexConsumer consumer = vertices.getBuffer(RenderLayers.getEntityBlockLayer(Blocks.BLACK_STAINED_GLASS.getDefaultState(), false));
@@ -85,7 +85,7 @@ public class MultiFluidRenderer
                 emitter.spriteColor(0, -1, -1, -1, -1);
             }
 
-            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, 0x00F0_00F0, OverlayTexture.DEFAULT_UV);
+            consumer.quad(matrices.peek(), emitter.toBakedQuad(0, sprite, false), r, g, b, light, OverlayTexture.DEFAULT_UV);
         }
     }
 }

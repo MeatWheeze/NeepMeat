@@ -5,6 +5,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
@@ -15,6 +17,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHandler>
 {
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/stirling_engine.png");

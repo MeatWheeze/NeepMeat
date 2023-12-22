@@ -2,6 +2,8 @@ package com.neep.neepmeat.machine.pylon;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -10,6 +12,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class PylonRenderer implements BlockEntityRenderer<PylonBlockEntity>
 {
     public PylonRenderer(BlockEntityRendererFactory.Context ctx)

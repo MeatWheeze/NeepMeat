@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
 import com.neep.neepmeat.transport.machine.item.EjectorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
@@ -20,6 +22,7 @@ import net.minecraft.world.World;
 
 import java.util.Random;
 
+@Environment(value = EnvType.CLIENT)
 public class EjectorRenderer implements BlockEntityRenderer<EjectorBlockEntity>
 {
     public EjectorRenderer(BlockEntityRendererFactory.Context context)

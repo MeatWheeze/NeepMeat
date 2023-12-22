@@ -4,6 +4,8 @@ import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.transport.machine.fluid.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -26,6 +28,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+@Environment(value= EnvType.CLIENT)
 public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEntity>
 {
     private static ItemStack stack = new ItemStack(Items.JUKEBOX, 1);

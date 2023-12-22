@@ -2,6 +2,8 @@ package com.neep.neepmeat.machine.casting_basin;
 
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -23,6 +25,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
 public class CastingBasinRenderer implements BlockEntityRenderer<CastingBasinBlockEntity>
 {

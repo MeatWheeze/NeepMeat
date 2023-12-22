@@ -1,6 +1,8 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.mixin.BlockModelRendererAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
@@ -27,6 +29,7 @@ import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
 
+@Environment(value = EnvType.CLIENT)
 public class BERenderUtils
 {
     public static void renderModel(Identifier model, MatrixStack matrices, World world, BlockPos pos, BlockState state, VertexConsumerProvider vertexConsumers)

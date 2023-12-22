@@ -4,6 +4,8 @@ import com.eliotlash.mclib.math.functions.limit.Min;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -14,6 +16,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 {
     protected static long LAST_WORLD_TIME;

@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidBufferBlock;
 import com.neep.neepmeat.transport.machine.fluid.FluidBufferBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
@@ -12,6 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value = EnvType.CLIENT)
 public class FluidBufferRenderer implements BlockEntityRenderer<FluidBufferBlockEntity>
 {
     public FluidBufferRenderer(BlockEntityRendererFactory.Context context)

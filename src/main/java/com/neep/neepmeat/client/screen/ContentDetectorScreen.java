@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.content_detector.ContentDetectorBehaviour;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -13,6 +15,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+@Environment(value = EnvType.CLIENT)
 public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHandler>
 {
     private static final Identifier BACKGROUND = new Identifier("minecraft", "textures/gui/container/dispenser.png");

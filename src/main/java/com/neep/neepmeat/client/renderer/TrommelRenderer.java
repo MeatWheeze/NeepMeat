@@ -6,6 +6,8 @@ import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
@@ -19,6 +21,7 @@ import net.minecraft.util.math.Vec3f;
 
 import java.util.Random;
 
+@Environment(value = EnvType.CLIENT)
 public class TrommelRenderer<T extends TrommelBlockEntity> implements BlockEntityRenderer<T>
 {
     Model model;

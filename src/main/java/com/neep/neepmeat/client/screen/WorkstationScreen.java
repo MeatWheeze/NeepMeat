@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -10,6 +12,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
+@Environment(value = EnvType.CLIENT)
 public class WorkstationScreen extends HandledScreen<WorkstationScreenHandler>
 {
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/workstation.png");

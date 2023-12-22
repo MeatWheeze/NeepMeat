@@ -3,6 +3,8 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.entity.GlomeEntity;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.TexturedRenderLayers;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -15,6 +17,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 
+@Environment(value = EnvType.CLIENT)
 public class GlomeEntityRenderer extends LivingEntityRenderer<GlomeEntity, GlomeEntityModel>
 {
     public GlomeEntityRenderer(EntityRendererFactory.Context ctx, EntityModelLayer layer)

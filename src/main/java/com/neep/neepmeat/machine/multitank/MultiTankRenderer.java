@@ -2,11 +2,14 @@ package com.neep.neepmeat.machine.multitank;
 
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.client.renderer.MultiFluidRenderer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 
+@Environment(value = EnvType.CLIENT)
 public class MultiTankRenderer implements BlockEntityRenderer<MultiTankBlockEntity>
 {
     public MultiTankRenderer(BlockEntityRendererFactory.Context ctx)

@@ -2,6 +2,8 @@ package com.neep.neepmeat.machine.assembler;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -12,6 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(value= EnvType.CLIENT)
 public class AssemblerRenderer implements BlockEntityRenderer<AssemblerBlockEntity>
 {
 

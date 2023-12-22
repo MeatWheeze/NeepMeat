@@ -4,6 +4,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.util.NMMaths;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
@@ -20,6 +22,7 @@ import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
 import java.util.Random;
 
+@Environment(value = EnvType.CLIENT)
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
     private static final Identifier LAYER = new Identifier(NeepMeat.NAMESPACE, "textures/entity/integrator_basic_overlay.png");
