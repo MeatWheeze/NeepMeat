@@ -2,6 +2,7 @@ package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatweapons.entity.*;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
@@ -66,6 +67,7 @@ public class MeatWeapons implements ModInitializer
         MeatLib.flush();
         MWParticles.init();
         MWGraphicsEffects.init();
+        GunFireC2SPacket.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
     }

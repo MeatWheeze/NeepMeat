@@ -25,15 +25,16 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class LMGItem extends BaseGunItem implements IAnimatable
+public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
-    public LMGItem()
+    public MA75Item()
     {
-        super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new FabricItemSettings());
-        this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.LMG_FIRE);
+        super("ma75", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new FabricItemSettings());
+        this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.AR_FIRE);
+        this.sounds.put(GunSounds.FIRE_SECONDARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }
 
@@ -47,12 +48,6 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     public void registerControllers(AnimationData animationData)
     {
         animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-    }
-
-    @Override
-    public UseAction getUseAction(ItemStack stack)
-    {
-        return UseAction.NONE;
     }
 
     @Override
@@ -93,34 +88,47 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id)
+    {
+        if (id == 1)
+        {
+            player.getItemCooldownManager().set(this, 3);
+            fireSecondary(world, player, stack);
+        }
+    }
+
+    @Override
     public void fire(World world, PlayerEntity player, ItemStack stack)
     {
+        if (!player.getItemCooldownManager().isCoolingDown(this))
         {
-            if (!player.getItemCooldownManager().isCoolingDown(this))
+            if (stack.getDamage() != this.maxShots)
             {
-                if (stack.getDamage() != this.maxShots)
-                {
-                    player.getItemCooldownManager().set(this, 2);
+                player.getItemCooldownManager().set(this, 2);
 
-                    if (!world.isClient)
-                    {
-                        fireBeam(world, player, stack);
-                    }
-                }
-                else // Weapon is out of ammunition.
+                if (!world.isClient)
                 {
-                    if (world.isClient)
-                    {
-                        // Play empty sound.
-                    }
-                    else
-                    {
-                        // Try to reload
-                        this.reload(player, stack, null);
-                    }
+                    fireBeam(world, player, stack);
+                }
+            }
+            else // Weapon is out of ammunition.
+            {
+                if (world.isClient)
+                {
+                    // Play empty sound.
+                }
+                else
+                {
+                    // Try to reload
+                    this.reload(player, stack, null);
                 }
             }
         }
+    }
+
+    protected void fireSecondary(World world, PlayerEntity player, ItemStack stack)
+    {
+        fireShell(world, player, stack);
     }
 
     @Override
@@ -144,7 +152,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
         {
             final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
                 controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.light_machine_gun.fire"));
+                controller.setAnimation(new AnimationBuilder().addAnimation("animation.ma75.fire"));
         }
         else if (state == ANIM_RELOAD)
         {

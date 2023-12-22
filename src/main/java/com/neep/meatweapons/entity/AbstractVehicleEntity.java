@@ -272,7 +272,7 @@ extends Entity {
 
     protected void updateKeys()
     {
-        // TODO: Why does this not crash server?
+        // TODO: Why does this not crash on a server?
         GameOptions options = MinecraftClient.getInstance().options;
 
         this.prevForward = pressingForward;

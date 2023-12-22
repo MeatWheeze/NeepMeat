@@ -44,6 +44,20 @@
     ]
   },
 
+  "ar_fire": {
+    "subtitle": "subtitles.meatweapons.ar_fire",
+    "sounds": [
+      "meatweapons:ar_fire"
+    ]
+  },
+
+  "grenade_fire": {
+    "subtitle": "subtitles.meatweapons.grenade_fire",
+    "sounds": [
+      "meatweapons:grenade_fire"
+    ]
+  },
+
   "airtruck_starting": {
     "subtitle": "subtitles.meatweapons.airtruck_starting",
     "sounds": [
