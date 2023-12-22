@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.google.common.collect.Streams;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.api.item_network.StorageBus;
@@ -10,19 +9,17 @@ import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.item_network.ItemInPipe;
-import com.neep.neepmeat.transport.item_network.RoutingNetworkDFSFinder;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.transport.item_network.RoutingNetworkDFSFinder;
 import com.neep.neepmeat.util.MiscUtils;
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.util.NbtType;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -31,6 +28,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -100,6 +100,8 @@ public class StorageBusBlock extends ItemPipeBlock implements IItemPipe
     {
         protected BlockApiCache<RoutingNetwork, Void> controller;
         protected final List<RetrievalTarget<ItemVariant>> targets = new ArrayList<>(6);
+        protected final List<Pair<BlockPos, Direction>> storageFaces = new ArrayList<>(6);
+        protected boolean needsUpdate = false;
 
         public SBBlockEntity(BlockPos pos, BlockState state)
         {
@@ -139,6 +141,35 @@ public class StorageBusBlock extends ItemPipeBlock implements IItemPipe
         }
 
         @Override
+        public void writeNbt(NbtCompound nbt)
+        {
+            super.writeNbt(nbt);
+            NbtList posList = new NbtList();
+            targets.forEach(t ->
+            {
+                NbtCompound compound = NbtHelper.fromBlockPos(t.getPos());
+                compound.putInt("direction", t.getFace().ordinal());
+                posList.add(compound);
+            });
+            nbt.put("storage_pos", posList);
+        }
+
+        @Override
+        public void readNbt(NbtCompound nbt)
+        {
+            super.readNbt(nbt);
+            NbtList posList = nbt.getList("storage_pos", NbtType.COMPOUND);
+            posList.forEach(c ->
+            {
+                NbtCompound compound = (NbtCompound) c;
+                BlockPos pos = NbtHelper.toBlockPos(compound);
+                Direction direction = Direction.values()[compound.getInt("direction")];
+                storageFaces.add(Pair.of(pos, direction));
+            });
+            needsUpdate = true;
+        }
+
+        @Override
         public void update(ServerWorld world, BlockPos pos)
         {
             RoutingNetworkDFSFinder finder = new RoutingNetworkDFSFinder(world);
@@ -155,6 +186,15 @@ public class StorageBusBlock extends ItemPipeBlock implements IItemPipe
         @Override
         public List<RetrievalTarget<ItemVariant>> getTargets()
         {
+            if (needsUpdate)
+            {
+                if (getWorld() != null && getWorld() instanceof ServerWorld)
+                {
+                    targets.clear();
+                    storageFaces.forEach(p -> targets.add(new RetrievalTarget<>(BlockApiCache.create(ItemStorage.SIDED, (ServerWorld) getWorld(), p.first()), p.second())));
+                    needsUpdate = false;
+                }
+            }
             return targets;
         }
 
@@ -164,7 +204,7 @@ public class StorageBusBlock extends ItemPipeBlock implements IItemPipe
             List<Pair<RetrievalTarget<ItemVariant>, Long>> foundTargets = new ArrayList<>(6);
 
             long remaining = amount;
-            for (RetrievalTarget<ItemVariant> target : targets)
+            for (RetrievalTarget<ItemVariant> target : getTargets())
             {
                 Storage<ItemVariant> storage = target.find();
                 if (storage == null) continue;
