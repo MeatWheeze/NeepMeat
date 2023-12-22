@@ -25,7 +25,7 @@
       "com.neep.meatweapons.MeatWeapons"
     ],
     "client": [
-      "com.neep.neepmeat.NeepMeat",
+      "com.neep.neepmeat.client.NeepMeatClient",
       "com.neep.assembly.Assembly",
       "com.neep.meatweapons.client.MWClient"
     ]

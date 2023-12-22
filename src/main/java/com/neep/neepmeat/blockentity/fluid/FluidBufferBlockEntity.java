@@ -16,6 +16,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -78,13 +79,12 @@ public class FluidBufferBlockEntity extends BlockEntity implements FluidBuffer.F
             if (StorageUtil.move(getBuffer(null), storage, variant -> true, Long.MAX_VALUE, null) > 0)
                 return true;
         }
-
-        else
+        else if (!world.isClient())
         {
-            player.sendMessage(Text.of(Long.toString(getBuffer(null).getAmount())), true);
+            TankBlockEntity.showContents((ServerPlayerEntity) player, pos, buffer);
             return true;
         }
-        return false;
+        return true;
     }
 
     @Override

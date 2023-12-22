@@ -8,6 +8,8 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.BufferScreen;
 import com.neep.neepmeat.client.screen.ContentDetectorScreen;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.network.TankMessagePacket;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -27,7 +29,7 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeepMeatClient
+public class NeepMeatClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
 
@@ -37,6 +39,14 @@ public class NeepMeatClient
     public static final Identifier CHARGED_WORK_FLUID= new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_still");
     public static final Identifier WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_flowing");
     public static final Identifier WORK_FLUID = new Identifier(NeepMeat.NAMESPACE, "block/work_fluid_still");
+
+    @Override
+    public void onInitializeClient()
+    {
+        NeepMeatClient.registerRenderers();
+
+        TankMessagePacket.registerReciever();
+    }
 
     public static void registerRenderers()
     {
