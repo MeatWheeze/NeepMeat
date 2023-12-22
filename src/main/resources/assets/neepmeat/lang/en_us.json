@@ -207,7 +207,7 @@
 
   "block.neepmeat.router": "Item Router",
   "block.neepmeat.router.lore_0": "Distributes items based on filters.",
-  "block.neepmeat.grinder": "Grinder",
+  "block.neepmeat.grinder": "Crusher",
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
   "block.neepmeat.collector": "Fat Collector",
   "block.neepmeat.crucible": "Rendering Basin",
@@ -493,7 +493,7 @@
   "advancements.neepmeat.main.obtain_integrator.description": "Obtain an Integrator Egg from a dungeon chest.",
 
   "advancements.neepmeat.main.place_grinder.title": "Scrunch Scrunch",
-  "advancements.neepmeat.main.place_grinder.description": "Place a Grinder.",
+  "advancements.neepmeat.main.place_grinder.description": "Place a Crusher.",
 
   "advancements.neepmeat.main.enlightenment.title": "How Enlightening",
   "advancements.neepmeat.main.enlightenment.description": "Use a Pedestal connected to an Integrator to produce strange new forms.",

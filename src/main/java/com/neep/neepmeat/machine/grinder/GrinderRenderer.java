@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -14,6 +16,8 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 import net.minecraft.world.World;
 
@@ -33,8 +37,31 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
     @Override
     public void render(GrinderBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
+        double sinTime = Math.sin(be.getWorld().getTime()) * Math.cos(tickDelta) + Math.cos(be.getWorld().getTime()) * Math.sin(tickDelta);
+
         matrices.push();
-        matrices.translate(0.5, 13 / 16f, 0.5);
+        Direction facing = be.getCachedState().get(GrinderBlock.FACING);
+        BERenderUtils.rotateFacing(facing, matrices);
+
+        if (be.currentRecipe != null)
+        {
+            var unit = facing.getUnitVector();
+            double magnitude = Math.abs(0.05 * sinTime);
+
+            matrices.translate(unit.getX() * magnitude, 0, unit.getZ() * magnitude);
+
+        }
+        BERenderUtils.renderModel(NMExtraModels.CRUSHER_JAW, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+        matrices.pop();
+
+        matrices.push();
+        float yOffset = 11 / 16f;
+        if (be.currentRecipe != null)
+        {
+            yOffset += Math.abs(sinTime * 0.02);
+        }
+
+        matrices.translate(0.5, yOffset, 0.5);
         WritableStackStorage input = be.getStorage().getInputStorage();
         ItemStack stack = input.getAsStack();
 
@@ -57,8 +84,8 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(1));
 
         // 2D items lie on their side
-        if (!depth)
-            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
+//        if (!depth)
+            matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
 
         float t;
         float s;
