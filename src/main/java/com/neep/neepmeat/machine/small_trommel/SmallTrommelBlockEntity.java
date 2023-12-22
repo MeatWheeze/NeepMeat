@@ -1,11 +1,14 @@
 package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
+import com.neep.neepmeat.recipe.TrommelRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -84,6 +87,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements IMot
     public void convert()
     {
         FluidVariant inputVariant = storage.input().getResource();
+
+        TrommelRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
+        if (recipe != null)
+        {
+            return;
+        }
+
         OreFatRegistry.Entry entry = OreFatRegistry.getFromVariant(inputVariant);
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
