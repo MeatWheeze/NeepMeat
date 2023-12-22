@@ -4,6 +4,7 @@ import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.*;
@@ -134,6 +135,13 @@ public class BloodNetworkImpl implements BloodNetwork
 
         validate();
         dirty = true;
+    }
+
+    @Override
+    public void unload(BlockPos pos, VascularConduitBlockEntity part)
+    {
+        acceptors.remove(pos);
+        conduits.remove(pos.asLong());
     }
 
     @Override

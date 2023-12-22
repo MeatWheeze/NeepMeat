@@ -6,6 +6,7 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "BrewingRecipeRegistryAccessor",
+    "WorldChunkMixin",
     "FurnaceAccessor",
     "LivingEntityMixin",
     "ServerWorldMixin"

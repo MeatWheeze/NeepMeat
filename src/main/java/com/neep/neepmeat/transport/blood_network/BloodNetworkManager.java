@@ -3,12 +3,16 @@ package com.neep.neepmeat.transport.blood_network;
 import com.google.common.collect.Queues;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.TransportComponents;
+import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.fluid_network.BloodNetwork;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -59,6 +63,12 @@ public class BloodNetworkManager extends PersistentState
 
     private void tick()
     {
+        while (!stagedEvents.isEmpty())
+        {
+            var event = stagedEvents.poll();
+            event.run();
+        }
+
         var it = tickingNetworks.entrySet().iterator();
         while (it.hasNext())
         {
@@ -102,22 +112,29 @@ public class BloodNetworkManager extends PersistentState
         return nbt;
     }
 
-    private static final Queue<Runnable> STAGED_EVENTS = Queues.newArrayDeque();
+    private final Queue<Runnable> stagedEvents = Queues.newArrayDeque();
 
-    public static void stageEvent(Runnable runnable)
+    public void stageEvent(Runnable runnable)
     {
-        STAGED_EVENTS.add(runnable);
+        stagedEvents.add(runnable);
     }
 
     static
     {
-        ServerTickEvents.START_SERVER_TICK.register(server ->
+        WorldChunkEvents.BE_SET_WORLD.register((chunk, be) ->
         {
-            while (!STAGED_EVENTS.isEmpty())
+            BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
+            if (be instanceof VascularConduitEntity conduit)
+                component.register(conduit);
+        });
+
+        WorldChunkEvents.UNLOAD_ENTITIES.register(chunk ->
+        {
+            chunk.getBlockEntities().values().forEach(be ->
             {
-                var event = STAGED_EVENTS.poll();
-                event.run();
-            }
+                if (be instanceof BlockEntityUnloadListener listener)
+                    listener.onUnload(chunk);
+            });
         });
 
         ServerTickEvents.END_WORLD_TICK.register(world ->
@@ -128,10 +145,11 @@ public class BloodNetworkManager extends PersistentState
         ServerChunkEvents.CHUNK_LOAD.register((world, chunk) ->
         {
             var manager = get(world);
-            var map = TransportComponents.BLOOD_NETWORK.get(chunk).getPipes().asMap();
-            map.forEach((uuid, pipes) ->
+            var component = TransportComponents.BLOOD_NETWORK.get(chunk);
+            manager.stageEvent(() ->
             {
-                stageEvent(() ->
+                var map = component.getPipes().asMap();
+                map.forEach((uuid, pipes) ->
                 {
                     manager.tickingNetworks.computeIfAbsent(uuid, u -> new BloodNetworkImpl(uuid, world))
                             .insert(pipes);
