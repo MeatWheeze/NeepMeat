@@ -129,7 +129,7 @@ public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProv
         for (Direction direction : Direction.values())
         {
             BlockState pipeState = world.getBlockState(pos.offset(direction));
-            if (pipeState.getBlock() instanceof IFluidPipe pipe && pipe.getConnections(pipeState, (d) -> true).contains(direction))
+            if (pipeState.getBlock() instanceof IFluidPipe pipe && pipe.getConnections(pipeState, (d) -> true).contains(direction.getOpposite()))
 //                    && pipeState.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction.getOpposite())).isConnected())
             {
                 state = state.with(DIR_TO_CONNECTION.get(direction), true);
