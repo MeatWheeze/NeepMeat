@@ -21,14 +21,15 @@ public class ChrysalisItem extends BaseItem implements ImplantInstaller
     {
         if (entity instanceof CowEntity cow)
         {
-            cow.kill();
+            cow.discard();
             World world = entity.getEntityWorld();
             if (!world.isClient())
             {
                 BovineHorrorEntity bovineHorror = NMEntities.BOVINE_HORROR.create(world);
-                bovineHorror.setPos(cow.getX(), cow.getY(), cow.getZ());
+                bovineHorror.setPos(cow.getX(), cow.getY() + 1, cow.getZ());
                 world.spawnEntity(bovineHorror);
             }
         }
     }
+
 }
