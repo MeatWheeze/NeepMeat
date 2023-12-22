@@ -20,6 +20,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -45,7 +46,10 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     @Override
     public boolean matches(GrinderStorage inventory, World world)
     {
-        return itemInput.test(inventory.getInputStorage());
+        itemInput.cacheMatching();
+        Collection<Item> i = itemInput.getAll();
+        boolean bl = itemInput.test(inventory.getInputStorage());
+        return bl;
     }
 
     @Override

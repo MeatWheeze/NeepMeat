@@ -34,6 +34,7 @@ public class NMItems
     public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // MEAT
+    public static Item MEAT_SCRAP = new BaseCraftingItem("meat_scrap", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.MEAT_SCRAP));
     public static Item RAW_MEAT_BRICK = new BaseCraftingItem("raw_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.MEAT_BRICK));
     public static Item COOKED_MEAT_BRICK = new BaseCraftingItem("cooked_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.COOKED_MEAT_BRICK));
 
