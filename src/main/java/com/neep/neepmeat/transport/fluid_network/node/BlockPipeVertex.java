@@ -17,7 +17,9 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 @SuppressWarnings("UnstableApiUsage")
 public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
@@ -26,6 +28,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
     protected boolean dirty;
+    protected Random jrandom = new Random();
 
     public BlockPipeVertex(FluidPipeBlockEntity<?> fluidPipeBlockEntity)
     {
@@ -132,13 +135,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             }
 
             // Randomise transfer order to reduce opportunities for fluid to get stuck in loops.
-//            final int[] ints = parent.getWorld().getRandom().(0, 6).distinct().limit(6).toArray();
-            int[] ints = new int[6];
-            for (int i = 0; i < 6; ++i)
-            {
-                ints[i] = parent.getWorld().random.nextInt(6);
-            }
-
+            final int[] ints = jrandom.ints(0, 6).distinct().limit(6).toArray();
 
             for (int dir : ints)
             {

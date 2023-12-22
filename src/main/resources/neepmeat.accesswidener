@@ -2,3 +2,4 @@ accessWidener	v1	named
 accessible    class    net/minecraft/server/world/ServerWorld$ServerEntityHandler
 accessible    class    net/minecraft/client/particle/ParticleManager$SimpleSpriteProvider
 extendable    class    net/minecraft/enchantment/EnchantmentTarget
+#accessible    method  net/minecraft/item/Item getGroup ()Lnet/minecraft/item/ItemGroup;

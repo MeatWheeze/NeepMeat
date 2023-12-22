@@ -12,6 +12,7 @@ import java.util.Queue;
 public class MeatItemGroups
 {
     protected static HashMap<ItemGroup, Queue<Item>> QUEUE = Maps.newHashMap();
+    protected static HashMap<Item, ItemGroup> ITEM_TO_GROUP = Maps.newHashMap();
 
     public static void init()
     {
@@ -37,5 +38,11 @@ public class MeatItemGroups
     {
         var queue = QUEUE.get(group);
         queue.addAll(Arrays.asList(items));
+    }
+
+    // Stopgap measure for 1.19.2 backport
+    public static ItemGroup getGroup(Item item)
+    {
+        return ITEM_TO_GROUP.get(item);
     }
 }

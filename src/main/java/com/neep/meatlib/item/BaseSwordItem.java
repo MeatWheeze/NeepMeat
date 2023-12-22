@@ -1,8 +1,10 @@
 package com.neep.meatlib.item;
 
 import com.neep.meatlib.registry.ItemRegistry;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
+import org.jetbrains.annotations.Nullable;
 
 public class BaseSwordItem extends SwordItem implements IMeatItem
 {
@@ -13,6 +15,12 @@ public class BaseSwordItem extends SwordItem implements IMeatItem
         super(material, attackDamage, speed, settings);
         this.registryName = registryName;
         ItemRegistry.queueItem(this);
+    }
+
+    @Override
+    public @Nullable ItemGroup getGroupOverride()
+    {
+        return null;
     }
 
     @Override
