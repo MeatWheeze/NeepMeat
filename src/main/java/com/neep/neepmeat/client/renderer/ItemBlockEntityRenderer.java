@@ -30,11 +30,12 @@ public class ItemBlockEntityRenderer<T extends BlockEntity> implements BlockEnti
     @Override
     public void render(T entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        matrices.push();
 
         ItemStack stack = stackFunction.apply(entity);
+        if (stack.isEmpty())
+            return;
 
-        float delta = 0.1f;
+        matrices.push();
 
         matrices.translate(0.5, offsetFunction.apply(entity), 0.5);
         // Wrap degrees to ensure precision for long-lived worlds
