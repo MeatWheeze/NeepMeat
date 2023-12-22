@@ -1,5 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
+import com.neep.neepmeat.fluid.RealisticFluid;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -45,12 +46,16 @@ public class FluidDrainBlockEntity extends TankBlockEntity
             FluidState fluidState = world.getFluidState(sourcePos);
             Transaction transaction = Transaction.openOuter();
             BlockState fluidBlockState = world.getBlockState(sourcePos);
-            long transferred = this.buffer.insert(FluidVariant.of(fluidState.getFluid()), FluidConstants.BUCKET, transaction);
-            if (transferred >= FluidConstants.BUCKET && world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
+            long targetAmount = world.getFluidState(sourcePos).getLevel() * FluidConstants.BUCKET / 8;
+            long transferred = this.buffer.insert(FluidVariant.of(fluidState.getFluid()), targetAmount, transaction);
+            if (transferred >= targetAmount)
             {
+                if (world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
+                {
 //                world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
-                drainable.tryDrainFluid(world, sourcePos, fluidBlockState);
-                transaction.commit();
+                    drainable.tryDrainFluid(world, sourcePos, fluidBlockState);
+                    transaction.commit();
+                }
             }
             else
             {
@@ -66,7 +71,7 @@ public class FluidDrainBlockEntity extends TankBlockEntity
         {
             return null;
         }
-        else if (world.getFluidState(origin).isStill())
+        else if (world.getFluidState(origin).isStill() || world.getFluidState(origin).getFluid() instanceof RealisticFluid)
         {
             return origin;
         }
@@ -90,10 +95,11 @@ public class FluidDrainBlockEntity extends TankBlockEntity
                     if (visited.contains(newPos) || fluidState.isEmpty())
                         continue;
 
-                    if (fluidState.isStill())
+                    if (fluidState.isStill() || fluidState.getFluid() instanceof RealisticFluid)
                     {
                         return newPos;
-                    } else
+                    }
+                    else
                     {
                         it.add(newPos);
                     }
