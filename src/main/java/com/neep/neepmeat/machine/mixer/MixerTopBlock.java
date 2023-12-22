@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.neep.meatlib.block.IMeatBlock;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -30,7 +30,7 @@ public class MixerTopBlock extends Block implements IMeatBlock, BlockEntityProvi
 
     public MixerTopBlock(String registryName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
         this.registryName = registryName;
     }
 

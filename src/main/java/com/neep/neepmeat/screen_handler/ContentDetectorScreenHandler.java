@@ -1,6 +1,6 @@
 package com.neep.neepmeat.screen_handler;
 
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBehaviour;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBehaviour;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -73,7 +73,7 @@ public class ContentDetectorScreenHandler extends ScreenHandler
         {
             return false;
         }
-        ContentDetectorBehaviour.cycleDelegate(id, this.delegate);
+        InventoryDetectorBehaviour.cycleDelegate(id, this.delegate);
         return true;
     }
 
@@ -121,12 +121,12 @@ public class ContentDetectorScreenHandler extends ScreenHandler
 
     public int getCountMode()
     {
-        return delegate.get(ContentDetectorBehaviour.DEL_COUNT);
+        return delegate.get(InventoryDetectorBehaviour.DEL_COUNT);
     }
 
     public int getBehaviourMode()
     {
-        return delegate.get(ContentDetectorBehaviour.DEL_BEHAVIOUR);
+        return delegate.get(InventoryDetectorBehaviour.DEL_BEHAVIOUR);
     }
 }
 

@@ -2,7 +2,7 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBehaviour;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBehaviour;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -63,7 +63,7 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
         this.behaviourButton = new CyclingButtonWidget(this.x + 20, this.y + 16, 32,
                 16, 0, 8, 32, 3, COUNT_WIDGET, 32, 128, Text.of("uwu"), (button, mouseButton) ->
         {
-            this.buttonPress(ContentDetectorBehaviour.DEL_COUNT);
+            this.buttonPress(InventoryDetectorBehaviour.DEL_COUNT);
         },
         (buttonWidget, matrices, mouseX, mouseY) ->
         {
@@ -73,7 +73,7 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
         this.countButton = new CyclingButtonWidget(this.x + 20, this.y + 54, 32, 16, 0, 8,
                 32, 1, BEHAVIOUR_WIDGET, 32, 64, Text.of("uwu"), (button, mouseButton) ->
         {
-            this.buttonPress(ContentDetectorBehaviour.DEL_BEHAVIOUR);
+            this.buttonPress(InventoryDetectorBehaviour.DEL_BEHAVIOUR);
         },
         (buttonWidget, matrices, mouseX, mouseY) ->
         {
@@ -99,7 +99,7 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
     @Override
     protected void handledScreenTick()
     {
-        behaviourButton.setIndex(handler.delegate.get(ContentDetectorBehaviour.DEL_COUNT));
-        countButton.setIndex(handler.delegate.get(ContentDetectorBehaviour.DEL_BEHAVIOUR));
+        behaviourButton.setIndex(handler.delegate.get(InventoryDetectorBehaviour.DEL_COUNT));
+        countButton.setIndex(handler.delegate.get(InventoryDetectorBehaviour.DEL_BEHAVIOUR));
     }
 }

@@ -2,8 +2,7 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.neepmeat.machine.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
 import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -35,7 +34,7 @@ public class ItemPumpBlock extends BaseFacingBlock implements BlockEntityProvide
 {
     public ItemPumpBlock(String registryName, ItemSettings itemSettings, FabricBlockSettings settings)
     {
-        super(registryName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(registryName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
     }
 
     @Nullable

@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.content_detector;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -28,13 +29,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
-public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntityProvider
+public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final BooleanProperty POWERED = Properties.POWERED;
 
-    public ContentDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public InventoryDetectorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque().solidBlock(ContentDetectorBlock::never));
+        super(itemName, itemSettings, settings.nonOpaque().solidBlock(InventoryDetectorBlock::never));
         this.setDefaultState(getDefaultState().with(POWERED, false));
     }
 
@@ -47,7 +48,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
 //        world.setBlockState(pos, state.with(POWERED, world.isReceivingRedstonePower(pos)));
-        if (world.getBlockEntity(pos) instanceof ContentDetectorBlockEntity be && !world.isClient)
+        if (world.getBlockEntity(pos) instanceof InventoryDetectorBlockEntity be && !world.isClient)
         {
             be.refreshCache();
         }
@@ -89,6 +90,14 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
         {
             this.updateNeighbors(world, pos, state.with(POWERED, false));
         }
+
+        // Dump contents if destroyed
+        if (!newState.isOf(state.getBlock()))
+        {
+            world.getBlockEntity(pos, NMBlockEntities.INVENTORY_DETECTOR).ifPresent(be ->
+                    ItemUtils.scatterItems(world, pos, be.getStorage(null)));
+        }
+
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 
@@ -116,7 +125,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new ContentDetectorBlockEntity(pos, state);
+        return new InventoryDetectorBlockEntity(pos, state);
     }
 
     @Override
@@ -144,7 +153,7 @@ public class ContentDetectorBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.CONTENT_DETECTOR, ContentDetectorBlockEntity::serverTick, null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.INVENTORY_DETECTOR, InventoryDetectorBlockEntity::serverTick, null, world);
     }
 
     @Override

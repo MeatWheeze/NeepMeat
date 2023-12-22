@@ -111,7 +111,7 @@ public class ItemUtils
         return false;
     }
 
-    public static ItemStack mutateView(StorageView<ItemVariant> view)
+    public static ItemStack viewToStack(StorageView<ItemVariant> view)
     {
         return view.getResource().toStack((int) view.getAmount());
     }

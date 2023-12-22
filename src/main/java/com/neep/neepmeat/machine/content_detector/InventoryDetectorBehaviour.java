@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.content_detector;
 
 import net.minecraft.screen.PropertyDelegate;
 
-public class ContentDetectorBehaviour
+public class InventoryDetectorBehaviour
 {
     public static final int DEL_COUNT = 0;
     public static final int DEL_BEHAVIOUR = 1;
@@ -17,7 +17,7 @@ public class ContentDetectorBehaviour
 
     public String tagName;
 
-    public ContentDetectorBehaviour(int maxValue, String tagName)
+    public InventoryDetectorBehaviour(int maxValue, String tagName)
     {
         this.maxValue = maxValue;
         this.tagName = tagName;
@@ -42,5 +42,10 @@ public class ContentDetectorBehaviour
         }
 
         delegate.set(index, (old + 1) % (maxValue + 1));
+    }
+
+    public enum CountMode
+    {
+
     }
 }
