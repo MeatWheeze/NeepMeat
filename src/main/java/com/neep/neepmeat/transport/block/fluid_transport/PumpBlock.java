@@ -21,10 +21,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
@@ -46,11 +48,29 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
         if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
         {
             boolean powered = world.isReceivingRedstonePower(pos);
             be.setActive(powered);
+            be.updateCache();
         }
+    }
+
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        super.onBlockAdded(state, world, pos, oldState, notify);
+        if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
+        {
+            be.updateCache();
+        }
+    }
+
+    @Override
+    public void prepare(BlockState state, WorldAccess world, BlockPos pos, int flags, int maxUpdateDepth)
+    {
+        super.prepare(state, world, pos, flags, maxUpdateDepth);
     }
 
     @Nullable

@@ -41,7 +41,7 @@ public class MultiFluidRenderer
     public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startXYZ, float endXZ, float endY, float scaleY)
     {
         Sprite sprite = FluidVariantRendering.getSprite(fluid);
-        VertexConsumer consumer = vertices.getBuffer(RenderLayers.getEntityBlockLayer(Blocks.BLACK_STAINED_GLASS.getDefaultState(), false));
+        VertexConsumer consumer = vertices.getBuffer(TexturedRenderLayers.getEntityTranslucentCull());
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
         int col = FluidVariantRendering.getColor(fluid);
