@@ -5,6 +5,7 @@ import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.MathHelper;
 
 public class MeatFluidHelper
@@ -14,19 +15,26 @@ public class MeatFluidHelper
     protected static final String KEY_SATURATION = "saturation";
     public static final int MAX_HUNGER = 10;
 
-    public static int getHunger(FluidVariant variant)
+    public static float getHunger(FluidVariant variant)
     {
         NbtCompound root = getRoot(variant);
         if (root != null)
         {
-            return MathHelper.clamp(root.getInt(KEY_HUNGER), 0, MAX_HUNGER);
+            return MathHelper.clamp(root.getFloat(KEY_HUNGER), 0, MAX_HUNGER);
         }
-        return -1;
+        return 0;
     }
 
-    public static void setHunger(FluidVariant variant)
+    public static void setHunger(NbtCompound nbt, float hunger)
     {
+        NbtCompound root = getOrCreateRoot(nbt);
+        root.putFloat(KEY_HUNGER, hunger);
+    }
 
+    public static void setSaturation(NbtCompound nbt, float saturation)
+    {
+        NbtCompound root = getOrCreateRoot(nbt);
+        root.putFloat(KEY_SATURATION, saturation);
     }
 
     public static float getSaturation(FluidVariant variant)
@@ -36,7 +44,7 @@ public class MeatFluidHelper
         {
             return  root.getFloat(KEY_SATURATION);
         }
-        return -1;
+        return 0;
     }
 
     public static void setSaturation(FluidVariant variant)
@@ -49,10 +57,21 @@ public class MeatFluidHelper
         return null;
     }
 
+    protected static NbtCompound getOrCreateRoot(NbtCompound nbt)
+    {
+        if (nbt.contains(KEY_ROOT, NbtCompound.COMPOUND_TYPE)) return nbt.getCompound(KEY_ROOT);
+        else
+        {
+            NbtCompound newRoot = new NbtCompound();
+            nbt.put(KEY_ROOT, newRoot);
+            return newRoot;
+        }
+    }
+
     public static int getColour(FluidVariant variant)
     {
-        int hunger = getHunger(variant);
-        int r = 255 * hunger / MAX_HUNGER;
+        float hunger = getHunger(variant);
+        int r = (int) (255 * hunger / MAX_HUNGER);
         return r << 16;
     }
 

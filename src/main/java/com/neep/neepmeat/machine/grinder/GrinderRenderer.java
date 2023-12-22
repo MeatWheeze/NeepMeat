@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.neepmeat.api.storage.WritableStackStorage;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -13,9 +15,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
+@Environment(value= EnvType.CLIENT)
 public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
 {
     private final ItemRenderer itemRenderer;
@@ -37,8 +41,13 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         int j = stack.isEmpty() ? 187 : Item.getRawId(stack.getItem()) + stack.getDamage();
         this.random.setSeed(j);
 
-        int k = this.getRenderedAmount(stack);
-        BakedModel bakedModel = this.itemRenderer.getModel(stack, be.getWorld(), null, 0);
+        renderItems(stack, matrices, vertexConsumers, itemRenderer, be.getWorld(), random, light);
+    }
+
+    public static void renderItems(ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertices, ItemRenderer itemRenderer, World world, Random random, int light)
+    {
+        int k = getRenderedAmount(stack);
+        BakedModel bakedModel = itemRenderer.getModel(stack, world, null, 0);
         boolean depth = bakedModel.hasDepth();
         float sX = bakedModel.getTransformation().ground.scale.getX();
         float sY = bakedModel.getTransformation().ground.scale.getY();
@@ -61,17 +70,17 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
                 if (depth)
                 {
                     s = (random.nextFloat() * 2.0f - 1.0f) * 0.15f;
-                    t = (this.random.nextFloat() * 2.0f - 1.0f) * 0.15f;
-                    float v = (this.random.nextFloat() * 2.0f - 1.0f) * 0.15f;
+                    t = (random.nextFloat() * 2.0f - 1.0f) * 0.15f;
+                    float v = (random.nextFloat() * 2.0f - 1.0f) * 0.15f;
                     matrices.translate(s, t, v);
                 } else
                 {
-                    s = (this.random.nextFloat() * 2.0f - 1.0f) * 0.15f * 0.5f;
-                    t = (this.random.nextFloat() * 2.0f - 1.0f) * 0.15f * 0.5f;
+                    s = (random.nextFloat() * 2.0f - 1.0f) * 0.15f * 0.5f;
+                    t = (random.nextFloat() * 2.0f - 1.0f) * 0.15f * 0.5f;
                     matrices.translate(s, t, 0.0);
                 }
             }
-            this.itemRenderer.renderItem(stack, ModelTransformation.Mode.GROUND, false, matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV, bakedModel);
+            itemRenderer.renderItem(stack, ModelTransformation.Mode.GROUND, false, matrices, vertices, light, OverlayTexture.DEFAULT_UV, bakedModel);
             matrices.pop();
             if (depth) continue;
             matrices.translate(0.0f * sX, 0.0f * sY, 0.09375f * sZ);
@@ -79,7 +88,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         matrices.pop();
     }
 
-    private int getRenderedAmount(ItemStack stack)
+    public static int getRenderedAmount(ItemStack stack)
     {
         int i = 1;
         if (stack.getCount() > 48)
