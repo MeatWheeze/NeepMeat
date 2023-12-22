@@ -30,6 +30,7 @@ public class BlockInitialiser
     public static Block BLUE_SCAFFOLD_STAIRS;
     public static Block SCAFFOLD_TRAPDOOR;
     public static Block RUSTED_BARS;
+    public static Block CAUTION_BLOCK;
     public static Block RUSTY_VENT;
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("rusted_iron_bricks", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
@@ -75,6 +76,7 @@ public class BlockInitialiser
         RUSTY_VENT = registerBlock(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE).nonOpaque()));
         MESH_PANE = registerBlock(new BasePaneBlock("mesh_panel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
         RUSTED_BARS = registerBlock(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
+        CAUTION_BLOCK = registerBlock(new BaseBlock("caution_block", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.LANTERN)));
 
         // --- Scaffolding
         SCAFFOLD_PLATFORM = registerBlock(new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
