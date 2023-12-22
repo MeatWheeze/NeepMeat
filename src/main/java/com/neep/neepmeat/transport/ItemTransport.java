@@ -43,11 +43,11 @@ public class ItemTransport
 
     public static void init()
     {
-        PIPE_DRIVER_BE = NMBlockEntities.registerBlockEntity("pipe_driver", PipeDriverBlock.PDBlockEntity::new, PIPE_DRIVER);
+        PIPE_DRIVER_BE = NMBlockEntities.register("pipe_driver", PipeDriverBlock.PDBlockEntity::new, PIPE_DRIVER);
         RoutingNetwork.LOOKUP.registerForBlockEntity(PipeDriverBlock.PDBlockEntity::getNetwork, PIPE_DRIVER_BE);
-        STORAGE_BUS_BE = NMBlockEntities.registerBlockEntity("storage_bus", StorageBusBlockEntity::new, STORAGE_BUS);
+        STORAGE_BUS_BE = NMBlockEntities.register("storage_bus", StorageBusBlockEntity::new, STORAGE_BUS);
         RoutablePipe.LOOKUP.registerSelf(STORAGE_BUS_BE);
-        ITEM_REQUESTER_BE = NMBlockEntities.registerBlockEntity("item_requester", ItemRequesterBlockEntity::new, ITEM_REQUESTER);
+        ITEM_REQUESTER_BE = NMBlockEntities.register("item_requester", ItemRequesterBlockEntity::new, ITEM_REQUESTER);
         RoutablePipe.LOOKUP.registerSelf(ITEM_REQUESTER_BE);
 
         ITEM_PIPE.registerFallback((world, pos, state, blockEntity, context) -> state.getBlock() instanceof ItemPipe pipe ? pipe : null);

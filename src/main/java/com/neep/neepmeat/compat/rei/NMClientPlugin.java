@@ -12,6 +12,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.recipe.*;
@@ -92,9 +93,9 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new PressingCategory()
         );
 
-        registry.addWorkstations(MANUFACTURE, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
+        registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
 //        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
-        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
+        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));

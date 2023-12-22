@@ -34,7 +34,7 @@ public class CentrifugeBlock extends BigBlock
     protected Pair<Structure, BlockEntityType<? extends BigBlockStructureBlockEntity>> createStructure()
     {
         Structure structure = (Structure) BlockRegistry.queue(new Structure(getRegistryName() + "_structure", FabricBlockSettings.copyOf(this.settings)));
-        BlockEntityType<BigBlockStructureBlockEntity> type = NMBlockEntities.registerBlockEntity(getRegistryName(), structure::createBlockEntity, this);
+        BlockEntityType<BigBlockStructureBlockEntity> type = NMBlockEntities.register(getRegistryName(), structure::createBlockEntity, this);
         return new Pair<>(structure, type);
     }
 

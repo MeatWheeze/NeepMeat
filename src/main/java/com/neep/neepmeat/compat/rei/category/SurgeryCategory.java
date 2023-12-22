@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.SurgeryDisplay;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.plc.PLCBlocks;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
 import me.shedaniel.rei.api.client.gui.Renderer;
@@ -37,7 +37,7 @@ public class SurgeryCategory implements DisplayCategory<SurgeryDisplay>
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMBlocks.SURGERY_CONTROLLER);
+        return EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER);
     }
 
     @Override

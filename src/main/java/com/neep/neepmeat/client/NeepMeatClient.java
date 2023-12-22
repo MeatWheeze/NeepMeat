@@ -40,6 +40,7 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
+import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
@@ -195,6 +196,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.PLC, PLCRenderer::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
+
+        BlockEntityRendererFactories.register(PLCBlocks.ROBOTIC_ARM_ENTITY, RoboticArmRenderer::new);
 
 
         // Coloured blocks
