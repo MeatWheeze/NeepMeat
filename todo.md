@@ -57,8 +57,9 @@
 - Add flywheel linkage
 - Add BIG FAN
 
-- Shave down the number of failed networks by storing whether a node has a network
+- [done] Shave down the number of failed networks by storing whether a node has a network
 - Improve speed of FluidNetwork node lookup
+- Work out what the hell's going on with BlockApiCache in FluidInterfaceBlockEntity
 
 - Add Caution Tape (looks similar to redstone)
 - Add MultiTank

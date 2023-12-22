@@ -6,8 +6,10 @@ import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
@@ -105,5 +107,14 @@ public class PumpBlockEntity extends SyncableBlockEntity
     {
         Direction facing = getCachedState().get(PumpBlock.FACING);
         return direction == facing ? frontPump : direction == facing.getOpposite() ? backPump : null;
+    }
+
+    BlockApiCache<Storage<FluidVariant>, Direction> frontCache;
+    BlockApiCache<Storage<FluidVariant>, Direction> rearCache;
+
+    // I resent making pumps ticked, it undermines the whole point of ticking fluid networks.
+    public void tick()
+    {
+//        if (frontCache.
     }
 }
