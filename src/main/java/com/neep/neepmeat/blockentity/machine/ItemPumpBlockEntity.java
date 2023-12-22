@@ -4,10 +4,12 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.IItemPipe;
 import com.neep.neepmeat.block.machine.ItemPumpBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.RetrievalTarget;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClientSerializable
+public class ItemPumpBlockEntity extends BloodMachineBlockEntity<ItemPumpBlockEntity> implements BlockEntityClientSerializable
 {
     public static final String NBT_ACTIVE = "active";
     public static final String NBT_COOLDOWN = "cooldown";
@@ -123,6 +125,13 @@ public class ItemPumpBlockEntity extends BlockEntity implements BlockEntityClien
 
     public boolean retrieve(Transaction transaction)
     {
+
+        if (doWork(500, transaction) == 0)
+        {
+//            System.out.println(inputBuffer.getAmount());
+            return false;
+        }
+
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
 
         boolean success = false;
