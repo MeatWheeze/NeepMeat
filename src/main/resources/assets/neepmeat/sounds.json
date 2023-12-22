@@ -123,5 +123,12 @@
     "sounds": [
       "neepmeat:bovine_horror_phase2"
     ]
+  },
+
+  "implant_instruction_apply": {
+    "subtitle": "subtitles.neepmeat.implant_instruction_apply",
+    "sounds": [
+      "neepmeat:implant_instruction_apply"
+    ]
   }
 }
