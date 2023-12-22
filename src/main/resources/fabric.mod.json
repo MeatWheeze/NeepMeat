@@ -51,5 +51,6 @@
     "loom:injected_interfaces": {
       "net/minecraft/client/world/ClientWorld": ["com/neep/meatweapons/client/IEffectProvider"]
     }
-  }
+  },
+  "accessWidener" : "neepmeat.accesswidener"
 }

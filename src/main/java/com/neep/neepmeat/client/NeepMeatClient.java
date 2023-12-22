@@ -55,6 +55,7 @@ public class NeepMeatClient implements ClientModInitializer
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
         ModelLoadingRegistry.INSTANCE.registerModelProvider(NMExtraModels.EXTRA_MODELS);
+        NMParticles.Client.init();
 
         // BlockEntity renderers
         BlockEntityRendererRegistry.INSTANCE.register(NMBlockEntities.GLASS_TANK_BLOCK_ENTITY, GlassTankRenderer::new);
