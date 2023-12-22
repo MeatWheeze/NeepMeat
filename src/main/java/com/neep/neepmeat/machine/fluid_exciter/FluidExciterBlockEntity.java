@@ -43,6 +43,9 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
         {
             if (downCache == null) updateCache();
+
+            if (!(world instanceof ServerWorld serverWorld && serverWorld.getServer().isOnThread())) return 0;
+
             Storage<FluidVariant> downStorage = downCache.find(Direction.DOWN);
             if (downStorage != null)
             {
