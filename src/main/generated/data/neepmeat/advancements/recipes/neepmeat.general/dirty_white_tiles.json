@@ -2,7 +2,7 @@
   "parent": "minecraft:recipes/root",
   "rewards": {
     "recipes": [
-      "neepmeat:dirty_red_tiles"
+      "neepmeat:dirty_white_tiles"
     ]
   },
   "criteria": {
@@ -18,13 +18,13 @@
         ]
       }
     },
-    "has_blood_bucket": {
+    "has_dirt": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
-              "neepmeat:blood_bucket"
+              "minecraft:dirt"
             ]
           }
         ]
@@ -33,14 +33,14 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "neepmeat:dirty_red_tiles"
+        "recipe": "neepmeat:dirty_white_tiles"
       }
     }
   },
   "requirements": [
     [
       "has_terracotta",
-      "has_blood_bucket",
+      "has_dirt",
       "has_the_recipe"
     ]
   ]

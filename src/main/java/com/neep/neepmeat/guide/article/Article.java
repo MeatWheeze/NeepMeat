@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.LiteralText;
@@ -20,6 +21,8 @@ import java.util.function.Function;
 
 public class Article
 {
+    public static final Identifier FONT_ID = new Identifier(NeepMeat.NAMESPACE, "vt323_regular.ttf");
+
     public static Map<String, Function<JsonObject, Content>> DESERIALISERS = new HashMap<>();
 
     public static final Function<JsonObject, Content> TEXT = DESERIALISERS.put("text",

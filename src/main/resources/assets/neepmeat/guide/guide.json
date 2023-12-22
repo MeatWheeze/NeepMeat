@@ -95,15 +95,18 @@
     {"id": "fuel_transducer", "contents": [
       {"type": "text", "text": "Fuel Transducer\n", "bold": true},
       {"type": "text", "text": "The Fuel Transducer receives heat and imbues it into a transmutative substrate, producing Ethereal Fuel."},
-      {"type": "text", "text": "To function, a Fuel Transducer must have one or more hot blocks adjacent to its dome. These can include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. Additional heat sources add to the output power. Ethereal fuel is ejected at pressure from the top of the dome."},
-      {"type": "text", "text": "Water can be supplied by placing a tank below its base. Doing so will double the output power at the cost of water."},
+      {"type": "text", "text": "\nTo function, a Fuel Transducer must have one or more hot blocks adjacent to its dome. These can include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. Additional heat sources add to the output power. Ethereal fuel is ejected at pressure from the top of the dome."},
+      {"type": "text", "text": "\nWater can be supplied by placing a tank below its base. Doing so will double the output power at the cost of water."},
       {"type": "text", "text": "\nHeat sources and power outputs:\n", "bold": true},
       {"type": "text", "text": "Lava: 20eJ/t"},
       {"type": "text", "text": "Lava Cauldron: 20eJ/t"},
       {"type": "text", "text": "Magma Block: 20eJ/t"},
       {"type": "text", "text": "Lit Furnace: 40eJ/t"}
     ]},
-
+    {"id": "fluid_exciter", "contents": [
+      {"type": "text", "text": "Fluid Exciter\n", "bold": true},
+      {"type": "text", "text": "While convenient, using Ethereal Fuel in machines is quite inefficient. The Fluid Exciter ."}
+    ]},
 
     {"id": "mixer", "contents": [
       {"type": "text", "text": "Mixer\n", "bold": true},
