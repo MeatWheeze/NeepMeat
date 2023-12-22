@@ -1,14 +1,11 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.item.AirtruckItem;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -22,6 +19,10 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 {
     private final AnimationFactory factory = new AnimationFactory(this);
 
+    protected final float maxSpeed = 0.05f;
+    protected final float forwardsAccel = 0.004f;
+    protected float forwardsVelocity;
+
     public AirtruckEntity(EntityType<? extends AbstractVehicleEntity> type, World world)
     {
         super(type, world);
@@ -30,6 +31,42 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     public static AirtruckEntity create(World world)
     {
         return new AirtruckEntity(MeatWeapons.AIRTRUCK, world);
+    }
+
+    @Override
+    protected void updateMotion()
+    {
+        if (!this.hasPassengers())
+        {
+            return;
+        }
+
+        float upVelocity = 0.0f;
+        if (this.pressingLeft)
+            this.yawVelocity -= 1.0f;
+        if (this.pressingRight)
+            this.yawVelocity += 1.0f;
+
+        this.setYaw(this.getYaw() + this.yawVelocity);
+
+        if (this.pressingForward && !this.pressingBack)
+            this.forwardsVelocity = Math.min(this.forwardsVelocity + forwardsAccel, maxSpeed);
+        else if (!this.pressingForward && this.pressingBack)
+            this.forwardsVelocity = Math.max(this.forwardsVelocity - forwardsAccel, -maxSpeed);
+        else
+            this.forwardsVelocity *= this.velocityDecay;
+
+        if (this.pressingUp)
+        {
+            upVelocity += 0.08;
+        }
+        if (this.pressingDown)
+        {
+            upVelocity -= 0.08;
+        }
+        this.setVelocity(this.getVelocity().add(MathHelper.sin(-this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity,
+                upVelocity,
+                MathHelper.cos(this.getYaw() * ((float)Math.PI / 180)) * forwardsVelocity));
     }
 
     @Override
@@ -57,7 +94,7 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     }
 
     @Override
-    public SoundEvent getDamageSount()
+    public SoundEvent getDamageSound()
     {
         return SoundEvents.ENTITY_IRON_GOLEM_DAMAGE;
     }

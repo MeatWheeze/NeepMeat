@@ -13,9 +13,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
@@ -31,7 +29,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockLocating;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
@@ -41,21 +38,21 @@ import java.util.List;
 
 public abstract class AbstractVehicleEntity
 extends Entity {
-    private float velocityDecay;
-    private float yawVelocity;
+    protected float velocityDecay;
+    protected float yawVelocity;
     private int delta;
     private double x;
     private double y;
     private double z;
-    private double boatYaw;
-    private double boatPitch;
-    private boolean pressingLeft;
-    private boolean pressingRight;
-    private boolean pressingForward;
-    private boolean pressingBack;
-    private boolean pressingUp;
-    private boolean pressingDown;
-    private double fallVelocity;
+    protected double vehicleYaw;
+    protected double vehiclePitch;
+    protected boolean pressingLeft;
+    protected boolean pressingRight;
+    protected boolean pressingForward;
+    protected boolean pressingBack;
+    protected boolean pressingUp;
+    protected boolean pressingDown;
+    protected double fallVelocity;
     protected boolean powered = true;
 
     protected int health;
@@ -69,7 +66,7 @@ extends Entity {
 
     public abstract ItemStack asStack();
 
-    public abstract SoundEvent getDamageSount();
+    public abstract SoundEvent getDamageSound();
 
     @Override
     protected float getEyeHeight(EntityPose pose, EntityDimensions dimensions)
@@ -132,7 +129,7 @@ extends Entity {
 
         this.scheduleVelocityUpdate();
         this.emitGameEvent(GameEvent.ENTITY_DAMAGED, source.getAttacker());
-        world.playSoundFromEntity(null, this, getDamageSount(), SoundCategory.NEUTRAL, 1, 1);
+        world.playSoundFromEntity(null, this, getDamageSound(), SoundCategory.NEUTRAL, 1, 1);
 
         if (health <= 0)
         {
@@ -174,8 +171,8 @@ extends Entity {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.boatYaw = yaw;
-        this.boatPitch = pitch;
+        this.vehicleYaw = yaw;
+        this.vehiclePitch = pitch;
         this.delta = 10;
     }
 
@@ -237,9 +234,9 @@ extends Entity {
         double dx = this.getX() + (this.x - this.getX()) / (double) this.delta;
         double dy = this.getY() + (this.y - this.getY()) / (double) this.delta;
         double dz = this.getZ() + (this.z - this.getZ()) / (double) this.delta;
-        double dyaw = MathHelper.wrapDegrees(this.boatYaw - (double) this.getYaw());
+        double dyaw = MathHelper.wrapDegrees(this.vehicleYaw - (double) this.getYaw());
         this.setYaw(this.getYaw() + (float) dyaw / (float)this.delta);
-        this.setPitch(this.getPitch() + (float) (this.boatPitch - (double) this.getPitch()) / (float) this.delta);
+        this.setPitch(this.getPitch() + (float) (this.vehiclePitch - (double) this.getPitch()) / (float) this.delta);
         --this.delta;
         this.setPosition(dx, dy, dz);
         this.setRotation(this.getYaw(), this.getPitch());
@@ -266,7 +263,7 @@ extends Entity {
         this.pressingDown = MWKeys.AIRTRUCK_DOWN.isPressed();
     }
 
-    private void updateMotion()
+    protected void updateMotion()
     {
         if (!this.hasPassengers())
         {
