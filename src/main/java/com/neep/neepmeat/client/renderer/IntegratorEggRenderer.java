@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
+import com.neep.neepmeat.maths.NMMaths;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -17,13 +18,19 @@ import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Direction;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.TypeFilter;
+import net.minecraft.util.math.*;
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer;
 
+import java.util.List;
 import java.util.Random;
 
 public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntity>
 {
+    protected int playerSearch = 0;
+
     public IntegratorEggRenderer(BlockEntityRendererFactory.Context context)
     {
         super(new IntegratorEggModel<IntegratorBlockEntity>());
@@ -38,7 +45,29 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
         }
         else
         {
+            if (playerSearch == 0)
+            {
+                playerSearch = 15;
+                BlockPos pos = blockEntity.getPos();
+                Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
+                List<Entity> players = blockEntity.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
+                if (players.size() > 0)
+                {
+                    Vec2f vec = NMMaths.flatten(players.get(0).getPos().subtract(Vec3d.ofCenter(blockEntity.getPos())));
+                    blockEntity.targetFacing = NMMaths.getAngle(vec);
+                }
+            }
+            else
+            {
+                --playerSearch;
+            }
+
+            blockEntity.facing = NMMaths.angleLerp(0.03f, blockEntity.facing, blockEntity.targetFacing);
+
             matrices.push();
+            matrices.translate(0.5d, 0d, 0.5d);
+            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(blockEntity.facing));
+            matrices.translate(-0.5d, 0d, -0.5d);
             matrices.translate(0, 1 + Math.sin((blockEntity.getWorld().getTime() + partialTicks) / 20) / 15, 0);
             super.render(blockEntity, partialTicks, matrices, vertexConsumers, packedLightIn);
             matrices.pop();
