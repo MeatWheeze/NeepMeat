@@ -35,7 +35,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.Iterator;
-import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class ItemDuctBlockEntity extends LootableContainerBlockEntity implements

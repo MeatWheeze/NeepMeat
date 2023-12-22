@@ -27,6 +27,7 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 		ItemInit.registerItems();
 		SoundInitialiser.registerSounds();
 		BlockEntityInitialiser.initialiseBlockEntities();
+		ScreenHandlerInit.registerScreenHandlers();
 
 		FluidNetwork.registerEvents();
 	}

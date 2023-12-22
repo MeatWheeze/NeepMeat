@@ -5,10 +5,9 @@ import com.neep.neepmeat.api.block.BasePaintedBlock;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.BlockInitialiser;
-import com.neep.neepmeat.init.FluidInitialiser;
-import com.neep.neepmeat.init.ItemInit;
+import com.neep.neepmeat.client.screen.BufferScreen;
+import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
@@ -17,6 +16,7 @@ import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -76,6 +76,7 @@ public class NeepMeatClient
                 0xbb1d1d
         ));
 
+        // Coloured blocks
         for (BasePaintedBlock.PaintedBlock block : COLOURED_BLOCKS)
         {
             ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getColour(), block);
@@ -85,6 +86,7 @@ public class NeepMeatClient
 //        ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE);
 //        ColorProviderRegistry.ITEM.register((stack, tintIndex) -> 0x3495eb, BlockInitialiser.GREY_SMOOTH_TILE.asItem());
 
+        // Fluids
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_BLOOD, FluidInitialiser.FLOWING_BLOOD);
         BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), FluidInitialiser.STILL_ENRICHED_BLOOD, FluidInitialiser.FLOWING_ENRICHED_BLOOD);
 
@@ -124,6 +126,9 @@ public class NeepMeatClient
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.FLUID_DRAIN);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), BlockInitialiser.SLOPE_TEST);
+
+        // Screens
+        ScreenRegistry.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);
 
     }
 }
