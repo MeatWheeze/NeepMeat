@@ -164,15 +164,15 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        if (!powered && multiplier > 0) // Rising edge
+        if (!powered && power > 0) // Rising edge
         {
             deploy((ServerWorld) world);
             powered = true;
             sync();
         }
-        else if (powered && multiplier == 0)
+        else if (powered && power == 0)
         {
             powered = false;
             sync(); // Falling edge

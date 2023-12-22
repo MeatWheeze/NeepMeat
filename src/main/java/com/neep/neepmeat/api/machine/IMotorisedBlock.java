@@ -7,7 +7,7 @@ public interface IMotorisedBlock
 {
     boolean tick(IMotorBlockEntity motor);
 
-    void setWorkMultiplier(float multiplier);
+    void setInputPower(float power);
 
     default boolean canConnect(Direction direction)
     {

@@ -27,7 +27,7 @@ public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
 
     }

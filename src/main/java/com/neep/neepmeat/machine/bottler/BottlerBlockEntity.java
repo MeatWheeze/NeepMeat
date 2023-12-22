@@ -173,9 +173,9 @@ public class BottlerBlockEntity extends SyncableBlockEntity implements IMotorise
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.increment = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
+        this.increment = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 
     public int getMaxProgress()

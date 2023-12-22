@@ -250,8 +250,8 @@ public class MixerBlockEntity extends SyncableBlockEntity implements IMotorisedB
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.progressIncrement = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
+        this.progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
     }
 }

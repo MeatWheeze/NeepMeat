@@ -101,7 +101,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements IMotorisedB
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
 
     }

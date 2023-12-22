@@ -112,10 +112,10 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
     }
 
     @Override
-    public void setWorkMultiplier(float multiplier)
+    public void setInputPower(float power)
     {
-        this.multiplier = multiplier;
-        this.angularSpeed = multiplier * 20;
+        this.multiplier = power;
+        this.angularSpeed = power * 20;
         sync();
     }
 
