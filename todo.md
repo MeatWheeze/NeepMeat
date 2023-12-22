@@ -29,7 +29,8 @@
 - [done] Add a source of Whisper Wheat seeds
 - [done] Stirling engine (model can have a little flywheel)
 - [done] Fix pumps!
-- Stop duplication glitch when items enter rotuers
+- [done] Stop duplication glitch when items enter rotuers
+- Standardise router inventory background
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add cutting recipes for building blocks
 - Improve world loading speed by serialising fluid networks

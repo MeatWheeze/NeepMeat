@@ -15,7 +15,6 @@ public class AlloyKilnScreen extends HandledScreen<AlloyKilnScreenHandler>
 {
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/alloy_kiln.png");
 
-    private float angle;
     private final AlloyKilnScreenHandler handler;
 
     public AlloyKilnScreen(AlloyKilnScreenHandler handler, PlayerInventory inventory, Text title)
@@ -23,7 +22,7 @@ public class AlloyKilnScreen extends HandledScreen<AlloyKilnScreenHandler>
         super(handler, inventory, title);
         this.handler = handler;
         backgroundWidth = 176;
-        backgroundHeight = 175;
+        backgroundHeight = 176;
     }
 
     @Override

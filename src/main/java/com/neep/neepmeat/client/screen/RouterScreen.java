@@ -18,7 +18,7 @@ public class RouterScreen extends HandledScreen<RouterScreenHandler>
     public RouterScreen(RouterScreenHandler handler, PlayerInventory inventory, Text title) {
         super(handler, inventory, title);
         this.backgroundWidth = 176;
-        this.backgroundHeight = 171;
+        this.backgroundHeight = 176;
     }
 
     @Override

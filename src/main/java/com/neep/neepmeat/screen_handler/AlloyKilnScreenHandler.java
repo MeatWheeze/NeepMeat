@@ -27,7 +27,7 @@ public class AlloyKilnScreenHandler extends BasicScreenHandler
         checkSize(inventory, 4);
 
         createSlots();
-        createPlayerSlots(0, 95, playerInventory);
+        createPlayerSlots(8, 95, playerInventory);
     }
 
     @Override
