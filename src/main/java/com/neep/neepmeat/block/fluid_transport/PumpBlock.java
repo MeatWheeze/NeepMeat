@@ -5,6 +5,7 @@ import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
+import com.neep.neepmeat.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -88,6 +89,9 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
+        if (ItemUtils.playerHoldingPipe(player, hand))
+            return ActionResult.PASS;
+
         PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);
         if (!world.isClient)
         {

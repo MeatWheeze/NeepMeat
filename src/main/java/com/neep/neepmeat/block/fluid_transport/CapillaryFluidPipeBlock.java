@@ -30,9 +30,9 @@ import java.util.Optional;
 
 public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, IFluidPipe, ICapillaryPipe
 {
-    public CapillaryFluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public CapillaryFluidPipeBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, factory, settings);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)

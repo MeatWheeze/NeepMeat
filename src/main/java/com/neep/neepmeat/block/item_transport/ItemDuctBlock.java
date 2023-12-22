@@ -1,6 +1,7 @@
 package com.neep.neepmeat.block.item_transport;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.blockentity.ItemDuctBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
@@ -36,7 +37,7 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
 
     public ItemDuctBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, BaseBlockItem::new, settings);
 
         this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }

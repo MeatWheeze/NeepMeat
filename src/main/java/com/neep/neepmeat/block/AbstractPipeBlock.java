@@ -56,9 +56,9 @@ public abstract class AbstractPipeBlock extends BaseBlock
             .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 12))
     ).build();
 
-    public AbstractPipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
+    public AbstractPipeBlock(String itemName, int itemMaxStack, boolean hasLore, ItemFactory factory, Settings settings)
     {
-        super(itemName, itemMaxStack, hasLore, settings);
+        super(itemName, itemMaxStack, hasLore, factory, settings);
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(NORTH_CONNECTION, PipeConnectionType.NONE)
                 .with(EAST_CONNECTION, PipeConnectionType.NONE)
