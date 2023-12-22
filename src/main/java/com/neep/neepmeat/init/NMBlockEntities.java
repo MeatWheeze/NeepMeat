@@ -8,6 +8,8 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
+import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
+import com.neep.neepmeat.machine.grinder.GrinderStorage;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
@@ -69,6 +71,7 @@ public class NMBlockEntities
 
     public static BlockEntityType<MixerBlockEntity> MIXER;
     public static BlockEntityType<MixerTopBlockEntity> MIXER_TOP;
+    public static BlockEntityType<GrinderBlockEntity> GRINDER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -113,6 +116,8 @@ public class NMBlockEntities
         DEPLOYER = registerBlockEntity("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
         AGITATOR = registerBlockEntity("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
+        GRINDER = registerBlockEntity("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
+
         VAT_WINDOW = registerBlockEntity("vat_window", (pos, state) -> new IMultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = registerBlockEntity("vat_casing", (pos, state) -> new IMultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
 //        VAT_CASING = registerBlockEntity("vat_casing", IMultiBlock.Entity.createFactory(VAT_CASING), NMBlocks.VAT_CASING);
@@ -131,7 +136,6 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
-
         ItemStorage.SIDED.registerSelf(CONVERTER_BASE);
         ItemStorage.SIDED.registerSelf(DEPLOYER);
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
@@ -145,6 +149,8 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getFluidStorage, MIXER);
         ItemStorage.SIDED.registerForBlockEntity(MixerBlockEntity::getItemStorage, MIXER);
         FluidStorage.SIDED.registerForBlocks(MixerTopBlockEntity::getBottomStorage, NMBlocks.MIXER_TOP);
+
+        ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
 
         FluidStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage(), MULTI_TANK);
 

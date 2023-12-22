@@ -158,6 +158,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
     @Override
     public void writeNbt(NbtCompound nbt)
     {
+        super.writeNbt(nbt);
 //        storage.writeNbt(nbt);
         if (currentRecipe != null)
             nbt.putString("current_recipe", currentRecipe.getId().toString());
@@ -171,6 +172,7 @@ public class MixerBlockEntity extends SyncableBlockEntity
     @Override
     public void readNbt(NbtCompound nbt)
     {
+        super.readNbt(nbt);
         this.currentRecipeId = new Identifier(nbt.getString("current_recipe"));
         readCurrentRecipe();
 
