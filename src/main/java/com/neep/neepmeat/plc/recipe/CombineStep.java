@@ -70,6 +70,16 @@ public class CombineStep implements ManufactureStep<ItemStack>
     }
 
     @Override
+    public boolean equalsOther(ManufactureStep<?> o)
+    {
+        if (o instanceof CombineStep other)
+        {
+            return other.item == item;
+        }
+        return false;
+    }
+
+    @Override
     public Identifier getId()
     {
         return ID;

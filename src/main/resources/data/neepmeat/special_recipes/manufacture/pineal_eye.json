@@ -7,6 +7,10 @@
     {
       "id": "neepmeat:combine",
       "resource": "neepmeat:control_unit"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
     }
   ],
   "output": {

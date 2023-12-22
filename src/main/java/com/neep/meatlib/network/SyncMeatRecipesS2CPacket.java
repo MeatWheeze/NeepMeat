@@ -53,6 +53,13 @@ public class SyncMeatRecipesS2CPacket
             ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
             {
                 Collection<MeatRecipe<?>> recipes = buf.readList(SyncMeatRecipesS2CPacket::readRecipe);
+
+                // We do not need to set the recipes on an integrated server
+                if (client.getServer() != null)
+                {
+                    return;
+                }
+
                 MeatRecipeManager.getInstance().setRecipes(recipes);
             });
         }
