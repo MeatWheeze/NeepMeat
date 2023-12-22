@@ -213,7 +213,7 @@ public class PipeNetwork
 
     public static boolean validPair(ServerWorld world, FluidNode node, Supplier<FluidNode> targetSupplier)
     {
-        return !(targetSupplier.get().equals(node)) && targetSupplier.get() != null && targetSupplier.get().getStorage(world) != null;
+        return targetSupplier.get() != null && !targetSupplier.get().equals(node) && targetSupplier.get().getStorage(world) != null;
     }
 
     public static int sortNodes(ServerWorld world, FluidNode node, FluidNode targetNode)
@@ -238,6 +238,7 @@ public class PipeNetwork
         if (!isBuilt())
             return;
 
+        validate();
         long startTim = System.nanoTime();
         for (int i = 0; i < connectedNodes.size(); i++)
         {
