@@ -39,7 +39,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         // Charnel Compactor recipes
         int page = 0;
-        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.CHARNEL_COMPACTOR).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
+        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
         while (iterator.hasNext())
         {
             List<Item> entries = iterator.next();

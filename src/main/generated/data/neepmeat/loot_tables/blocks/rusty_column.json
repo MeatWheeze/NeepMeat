@@ -7,7 +7,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "neepmeat:rusty_grate"
+          "name": "neepmeat:rusty_column"
         }
       ],
       "conditions": [

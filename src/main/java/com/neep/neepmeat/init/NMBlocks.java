@@ -76,7 +76,7 @@ public class NMBlocks
 
     // --- Building Blocks ---
     public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_column", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
-//    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
+    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", 64, false, FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", 64, false, FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
