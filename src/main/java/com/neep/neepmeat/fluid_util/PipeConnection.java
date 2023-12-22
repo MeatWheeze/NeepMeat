@@ -4,13 +4,13 @@ import net.minecraft.util.StringIdentifiable;
 
 public enum PipeConnection implements StringIdentifiable
 {
-    SIDE("side"),
-    SUPPORT("support"),
-    NONE("none");
+    SIDE("true"),
+    FORCED("forced"),
+    NONE("false");
 
     private final String name;
 
-    private PipeConnection(String name)
+    PipeConnection(String name)
     {
         this.name = name;
     }
@@ -18,6 +18,11 @@ public enum PipeConnection implements StringIdentifiable
     @Override
     public String asString()
     {
-        return this.name();
+        return this.name;
+    }
+
+    public boolean isConnected()
+    {
+        return this != NONE;
     }
 }
