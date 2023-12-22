@@ -4,14 +4,12 @@ import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
-import com.neep.neepmeat.entity.MobPlatformRidingEntity;
 import com.neep.neepmeat.entity.TankMinecartEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.*;
-import net.minecraft.entity.mob.FlyingEntity;
 
 public class NMEntities
 {
@@ -22,7 +20,6 @@ public class NMEntities
     public static EntityType<WormEntity> WORM;
     public static EntityType<KeeperEntity> KEEPER;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
-    public static EntityType<MobPlatformRidingEntity> MOB_PLATFORM;
 
     public static void initialise()
     {
@@ -43,8 +40,5 @@ public class NMEntities
         KEEPER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "keeper", FabricEntityTypeBuilder.create(SpawnGroup.MISC, KeeperEntity::new)
                 .dimensions(EntityDimensions.fixed(0.6f, 1.95f)).trackedUpdateRate(8).trackedUpdateRate(1).build());
         FabricDefaultAttributeRegistry.register(KEEPER, KeeperEntity.createLivingAttributes());
-
-        MOB_PLATFORM = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "mob_platform", FabricEntityTypeBuilder.create(SpawnGroup.MISC, MobPlatformRidingEntity::new)
-                .dimensions(EntityDimensions.fixed(0.1f, 0.1f)).trackedUpdateRate(1).build());
     }
 }

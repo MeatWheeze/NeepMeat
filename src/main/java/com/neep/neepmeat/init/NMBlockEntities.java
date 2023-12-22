@@ -11,7 +11,6 @@ import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
 import com.neep.neepmeat.block.entity.FlameJetBlockEntity;
 import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
 import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
-import com.neep.neepmeat.block.machine.MobPlatformBlockEntity;
 import com.neep.neepmeat.block.vat.FluidPortBlock;
 import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlockEntity;
@@ -155,7 +154,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
     public static BlockEntityType<FluidExciterBlockEntity> FLUID_EXCITER;
     public static BlockEntityType<? extends SolidityDetectorBlockEntity> SOLIDITY_DETECTOR;
-    public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
+//    public static BlockEntityType<? extends MobPlatformBlockEntity> MOB_PLATFORM;
     public static BlockEntityType<? extends SurgeryPlatformBlockEntity> SURGERY_PLATFORM;
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
@@ -195,7 +194,7 @@ public class NMBlockEntities
 //        SPIGOT = registerBlockEntity("spigot", SpigotBlockEntity::new, NMBlocks.SPIGOT);
 
         // --- Surgery Machine ---
-        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
+//        MOB_PLATFORM = registerBlockEntity("mob_platform", MobPlatformBlockEntity::new, NMBlocks.MOB_PLATFORM);
         ITEM_BUFFER_BLOCK_ENTITY = registerBlockEntity("item_buffer", DisplayPlatformBlockEntity::new, NMBlocks.ITEM_BUFFER);
         TableComponent.STRUCTURE_LOOKUP.registerForBlockEntity(DisplayPlatformBlockEntity::getTableComponent, ITEM_BUFFER_BLOCK_ENTITY);
         SURGERY_PLATFORM = registerBlockEntity("surgery_platform", (p, s) -> new SurgeryPlatformBlockEntity(SURGERY_PLATFORM, p, s), NMBlocks.SURGERY_PLATFORM);
