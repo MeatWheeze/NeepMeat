@@ -47,10 +47,14 @@
       "neepmeat:beep"
     ]
   },
-  "pylon_start": {
-    "subtitle": "subtitles.neepmeat.pylon_start",
+  "pylon_start": { "subtitle": "subtitles.neepmeat.pylon_start",
     "sounds": [
       "neepmeat:pylon_start"
+    ]
+  },
+  "pylon_active": { "subtitle": "subtitles.neepmeat.pylon_active",
+    "sounds": [
+      "neepmeat:pylon_active"
     ]
   },
   "cake_scream": {

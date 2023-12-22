@@ -11,16 +11,13 @@ import net.minecraft.util.math.random.Random;
 
 public class PylonSoundInstance extends AbstractSoundInstance implements TickableSoundInstance
 {
-    protected final Identifier startId;
-    protected final Identifier runningId;
-    protected Sound startSound;
-    protected Sound runningSound;
+    protected final Identifier soundId;
     private boolean done;
     private final PylonBlockEntity blockEntity;
 
-    public PylonSoundInstance(PylonBlockEntity be, BlockPos pos, SoundEvent startSound, SoundEvent sound, SoundCategory category)
+    public PylonSoundInstance(PylonBlockEntity be, BlockPos pos, SoundEvent sound, SoundCategory category)
     {
-        super(startSound, category, Random.create());
+        super(sound, category, Random.create());
         this.blockEntity = be;
 
         this.repeat = true;
@@ -29,35 +26,24 @@ public class PylonSoundInstance extends AbstractSoundInstance implements Tickabl
         this.x = pos.getX() + 0.5;
         this.y = pos.getY() + 0.5;
         this.z = pos.getZ() + 0.5;
-        this.startId = startSound.getId();
-        this.runningId = sound.getId();
+        this.soundId = sound.getId();
+//        this.runningId = sound.getId();
     }
 
-    public boolean isRunning()
-    {
-        return blockEntity.getSpeed() >= PylonBlockEntity.RUNNING_SPEED;
-    }
+//    public boolean isRunning()
+//    {
+//        return blockEntity.getSpeed() >= PylonBlockEntity.RUNNING_SPEED;
+//    }
 
     @Override
     public Identifier getId()
     {
-        return isRunning() ? this.runningId : this.startId;
-    }
-
-    @Override
-    public WeightedSoundSet getSoundSet(SoundManager soundManager)
-    {
-        WeightedSoundSet startSet = soundManager.get(this.startId);
-        this.startSound = startSet == null ? SoundManager.MISSING_SOUND : startSet.getSound(random);
-        WeightedSoundSet runningSet = soundManager.get(this.runningId);
-        this.runningSound = runningSet == null ? SoundManager.MISSING_SOUND : runningSet.getSound(random);
-        return runningSet;
+        return this.soundId;
     }
 
     @Override
     public Sound getSound()
     {
-        Sound sound =  this.isRunning() ? runningSound : startSound;
         return sound;
     }
 

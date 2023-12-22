@@ -55,6 +55,7 @@ public class NMSounds
 
     public static SoundEvent COSMIC_BEAM = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "cosmic_beam");
     public static SoundEvent PYLON_START = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "pylon_start");
+    public static SoundEvent PYLON_ACTIVE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "pylon_active");
     public static SoundEvent BEEP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "beep");
 
     public static SoundEvent LMG_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "light_machine_gun_fire");

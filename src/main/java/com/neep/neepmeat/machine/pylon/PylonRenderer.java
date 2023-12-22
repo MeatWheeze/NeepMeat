@@ -28,6 +28,14 @@ public class PylonRenderer implements BlockEntityRenderer<PylonBlockEntity>
         be.angle = MathHelper.wrapDegrees(be.angle + delta * be.getSpeed());
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.angle));
         matrices.translate(-0.5, -0.5, -0.5);
-        BERenderUtils.renderModel(NMExtraModels.PYLON_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+
+        if (be.isRunning())
+        {
+            BERenderUtils.renderModel(NMExtraModels.PYLON_ROTOR_ACTIVE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+        }
+        else
+        {
+            BERenderUtils.renderModel(NMExtraModels.PYLON_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
+        }
     }
 }
