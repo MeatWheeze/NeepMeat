@@ -24,6 +24,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -94,12 +95,15 @@ public class CombineInstruction implements Instruction
         {
             plc.raiseError(new PLC.Error(Text.of("Oh noes!")));
         }
-
-        if (worldSupplier.get() instanceof ServerWorld serverWorld)
+        else
         {
-            ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), ParticleTypes.CLOUD,
-                    Vec3d.ofCenter(from.pos()), new Vec3d(0, 0.2, 0), new Vec3d(0.1, 0.1, 0.1), 3);
+            if (worldSupplier.get() instanceof ServerWorld serverWorld)
+            {
+                ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
+                        Vec3d.ofCenter(from.pos()), new Vec3d(0, 0.3, 0), new Vec3d(0.1, 0.1, 0.1), 4);
+            }
         }
+
     }
 
     private void complete(PLC plc)
@@ -123,12 +127,20 @@ public class CombineInstruction implements Instruction
                 {
                     recipe.ejectOutputs(mip, null);
                 }
+
+                if (worldSupplier.get() instanceof ServerWorld serverWorld)
+                {
+                    ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
+                            plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
+                }
+
                 return;
             }
         }
 
         if (stored != null)
             plc.getRobot().spawnItem(stored);
+
     }
 
     private ResourceAmount<ItemVariant> takeItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)

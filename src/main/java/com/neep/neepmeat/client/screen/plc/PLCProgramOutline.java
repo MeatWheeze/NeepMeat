@@ -107,7 +107,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         {
             if (selectionIndex != -1)
             {
-                PLCSyncProgram.Client.sendDelete(selectionIndex, parent.plc);
+                PLCSyncProgram.Client.sendDelete(selectionIndex, parent.getScreenHandler().getPlc());
                 return true;
             }
         }

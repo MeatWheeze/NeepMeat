@@ -1,5 +1,6 @@
 package com.neep.neepmeat.network;
 
+import com.ibm.icu.text.MessagePattern;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.EnvType;
@@ -22,7 +23,7 @@ public class ParticleSpawnS2C
 {
     public static final Identifier PARTICLE_SPAWN = new Identifier(NeepMeat.NAMESPACE, "particle_spawn");
 
-    public static void sendNearby(ServerWorld world, BlockPos pos, ParticleType<?> particleType, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
+    public static <T extends ParticleEffect> void sendNearby(ServerWorld world, BlockPos pos, T particleType, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
     {
         for (ServerPlayerEntity player : PlayerLookup.around(world, pos, 32))
         {
@@ -30,7 +31,7 @@ public class ParticleSpawnS2C
         }
     }
 
-    public static void send(ServerPlayerEntity player, ParticleType<?> particle, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
+    public static <T extends ParticleEffect> void send(ServerPlayerEntity player, T particle, Vec3d origin, Vec3d velocity, Vec3d spread, int count)
     {
         PacketByteBuf buf = PacketByteBufs.create();
 
@@ -38,7 +39,9 @@ public class ParticleSpawnS2C
         PacketBufUtil.writeVec3d(buf, velocity);
         PacketBufUtil.writeVec3d(buf, spread);
         buf.writeInt(count);
-        buf.writeIdentifier(Registry.PARTICLE_TYPE.getId(particle));
+
+        buf.writeRegistryValue(Registry.PARTICLE_TYPE, particle.getType());
+        particle.write(buf);
 
         ServerPlayNetworking.send(player, PARTICLE_SPAWN, buf);
     }
@@ -54,19 +57,26 @@ public class ParticleSpawnS2C
                 Vec3d velocity = PacketBufUtil.readVec3d(buf);
                 Vec3d spread = PacketBufUtil.readVec3d(buf);
                 int count = buf.readInt();
-                Identifier id = buf.readIdentifier();
 
-                // Not sure about this
-                ParticleEffect type = (ParticleEffect) Registry.PARTICLE_TYPE.get(id);
-
-                for (int i = 0; i < count; ++i)
+                ParticleType<?> type = buf.readRegistryValue(Registry.PARTICLE_TYPE);
+                if (type != null)
                 {
-                    double px = origin.x + (Math.random() - 0.5) * 2 * spread.x;
-                    double py = origin.y + (Math.random() - 0.5) * 2 * spread.y;
-                    double pz = origin.z + (Math.random() - 0.5) * 2 * spread.z;
-                    client.world.addParticle(type, px, py, pz, velocity.x, velocity.y, velocity.z);
+                    ParticleEffect effect = readParameters(type, buf);
+
+                    for (int i = 0; i < count; ++i)
+                    {
+                        double px = origin.x + (Math.random() - 0.5) * 2 * spread.x;
+                        double py = origin.y + (Math.random() - 0.5) * 2 * spread.y;
+                        double pz = origin.z + (Math.random() - 0.5) * 2 * spread.z;
+                        client.world.addParticle(effect, px, py, pz, velocity.x, velocity.y, velocity.z);
+                    }
                 }
             });
+        }
+
+        private static <T extends ParticleEffect> T readParameters(ParticleType<T> type, PacketByteBuf buf)
+        {
+            return type.getParametersFactory().read(type, buf);
         }
     }
 }

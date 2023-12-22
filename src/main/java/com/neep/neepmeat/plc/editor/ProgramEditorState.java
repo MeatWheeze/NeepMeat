@@ -97,7 +97,6 @@ public class ProgramEditorState implements PLCState
         }
     }
 
-
     @FunctionalInterface
     public interface Listener
     {

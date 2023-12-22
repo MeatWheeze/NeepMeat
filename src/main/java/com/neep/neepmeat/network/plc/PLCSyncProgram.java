@@ -2,8 +2,11 @@ package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
+import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.ImmediateInstructionProvider;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
@@ -57,14 +60,22 @@ public class PLCSyncProgram
                 case OPERATION_IMMEDIATE -> applyInstructionImmediate(copy, player.world);
                 case DELETE -> applyDelete(copy, player.world);
                 case RUN -> applyRun(copy, player.world);
+                case MODE -> applyMode(copy, player.world);
             }
         });
+    }
+
+    private static void applyMode(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        plc.setMode(RecordMode.values()[buf.readInt()]);
     }
 
     private static void applyRun(PacketByteBuf buf, World world)
     {
         PLCBlockEntity plc = getPlc(buf, world);
-        plc.runProgram(plc.getEditProgram());
+        plc.runProgram(plc.getEditor().getProgram());
     }
 
     private static void applyDelete(PacketByteBuf buf, World world)
@@ -124,7 +135,8 @@ public class PLCSyncProgram
         OPERATION_IMMEDIATE,
         PROGRAM,
         DELETE,
-        RUN
+        RUN,
+        MODE
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -211,6 +223,17 @@ public class PLCSyncProgram
             PacketByteBuf buf = PacketByteBufs.create();
             buf.writeInt(Action.RUN.ordinal());
             putPlc(buf, plc);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendMode(PLCBlockEntity plc, RecordMode mode)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.MODE.ordinal());
+            putPlc(buf, plc);
+
+            buf.writeInt(mode.ordinal());
 
             ClientPlayNetworking.send(ID, buf);
         }

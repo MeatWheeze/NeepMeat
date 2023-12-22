@@ -43,7 +43,6 @@ public class PLCHudRenderer
         this.robotClient = new SurgicalRobot.Client(be.getRobot(), be);
         this.be.getRobot().setController(client.player);
         this.controller = new PLCMotionController(be.getRobot());
-        client.setScreen(new PLCProgramScreen(be));
     }
 
     public void exit()

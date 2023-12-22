@@ -15,6 +15,7 @@ import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
+import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
@@ -39,6 +40,7 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.player.implant.PlayerImplantManager;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
@@ -215,6 +217,8 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
         HandledScreens.register(ScreenHandlerInit.GUIDE, GuideMainScreen::new);
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
+//        HandledScreens.Provider<PLCScreenHandler, PLCProgramScreen> p =
+        HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
     }
 
     public static void registerLayers()

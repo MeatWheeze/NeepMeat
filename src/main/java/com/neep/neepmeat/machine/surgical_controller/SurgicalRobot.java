@@ -212,6 +212,11 @@ public class SurgicalRobot implements NbtSerialisable
         return new Vec3d(x, y, z);
     }
 
+    public BlockPos getBlockPos()
+    {
+        return new BlockPos(x, y, z);
+    }
+
     public double getX()
     {
         return x;

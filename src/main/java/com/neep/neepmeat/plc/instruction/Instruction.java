@@ -41,7 +41,7 @@ public interface Instruction extends NbtSerialisable
         @Override
         public void start(PlcProgram program, PLC plc)
         {
-
+            plc.setCounter(-1);
         }
 
         @Override
