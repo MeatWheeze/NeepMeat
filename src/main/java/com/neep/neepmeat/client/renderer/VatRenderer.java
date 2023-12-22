@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
 import com.neep.neepmeat.blockentity.machine.VatControllerBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -47,6 +48,12 @@ public class VatRenderer implements BlockEntityRenderer<VatControllerBlockEntity
             matrices.pop();
         }
         transaction.abort();
+
+        matrices.push();
+        matrices.translate(-1.5, 0, -1.5);
+        MultiFluidRenderer.renderMultiFluid((MultiFluidBuffer) be.getFluidStorage(), 1, 2, matrices, vertexConsumers, light, overlay);
+        matrices.pop();
+
         matrices.translate(-0.5, -0.5, -0.5);
 
         matrices.pop();

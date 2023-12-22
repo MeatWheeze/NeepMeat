@@ -113,6 +113,7 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
 
     public NbtCompound writeNbt(NbtCompound nbt)
     {
+        nbt.putLong("total_amount", totalAmount);
         NbtList list = new NbtList();
         list.addAll(slots.stream()
                 .filter(slot -> !slot.isResourceBlank())
@@ -129,10 +130,12 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
 
     public void readNbt(NbtCompound nbt)
     {
+        this.totalAmount = nbt.getLong("total_amount");
         NbtList list = (NbtList) nbt.get("parts");
         if (list == null)
             return;
 
+        slots.clear();
         slots.addAll(list.stream().map(
                         compound -> Slot.fromNbt(this, (NbtCompound) compound)).collect(Collectors.toList()));
     }
@@ -149,11 +152,6 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         return slot;
     }
 
-    protected void validate()
-    {
-
-    }
-
     public void syncIfPossible()
     {
         if (parent != null)
@@ -166,7 +164,17 @@ public class MultiFluidBuffer implements Storage<FluidVariant>
         }
     }
 
-    protected static class Slot extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements SingleSlotStorage<FluidVariant>, StorageView<FluidVariant>
+    public List<Slot> getSlots()
+    {
+        return slots;
+    }
+
+    public long getCapacity()
+    {
+        return capacity;
+    }
+
+    public static class Slot extends SnapshotParticipant<ResourceAmount<FluidVariant>> implements SingleSlotStorage<FluidVariant>, StorageView<FluidVariant>
     {
         protected long amount;
         protected FluidVariant variant;
