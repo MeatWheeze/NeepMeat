@@ -1,5 +1,6 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
+import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
@@ -39,8 +40,12 @@ public class ManufactureEmiRecipe implements EmiRecipe {
         this.base = (Item) recipe.getBase();
         this.steps = recipe.getSteps();
 
+        List<EmiIngredient> inputs = Lists.newArrayList();
+        inputs.add(EmiIngredient.of(Ingredient.ofItems(base)));
+        appendStepIngredients(steps, inputs);
+
         this.id = recipe.getId();
-        this.input = List.of(EmiIngredient.of(Ingredient.ofItems(base)));
+        this.input = inputs;
         this.output = List.of(EmiStack.of(recipe.getOutput().resource(), recipe.getOutput().minAmount()));
     }
 
@@ -182,6 +187,25 @@ public class ManufactureEmiRecipe implements EmiRecipe {
 
             textRenderer.drawWithShadow(matrices, name, x, y, borderCol());
             GUIUtil.renderBorder(matrices, originX, originY, width() + 3, height(), borderCol(), 0);
+        }
+    }
+
+    static void appendStepIngredients(List<ManufactureStep<?>> steps, List<EmiIngredient> ingredients)
+    {
+        for (var step : steps)
+        {
+            if (step instanceof CombineStep combineStep)
+            {
+                ingredients.add(EmiStack.of(combineStep.getItem()));
+            }
+            else if (step instanceof InjectStep injectStep)
+            {
+                ingredients.add(EmiStack.of(injectStep.getFluid()));
+            }
+            else if (step instanceof ImplantStep implantStep)
+            {
+                ingredients.add(EmiStack.of(implantStep.getItem()));
+            }
         }
     }
 
