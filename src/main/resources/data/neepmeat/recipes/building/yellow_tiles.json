@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "idi",
+    " i "
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:smooth_stone"
+    },
+    "d": {
+      "item": "minecraft:vine"
+    }
+  },
+  "result": {
+    "item": "neepmeat:yellow_tiles",
+    "count": 4
+  }
+}

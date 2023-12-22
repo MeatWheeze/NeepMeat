@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:rusted_metal_scaffold_slab"
+    ]
+  },
+  "criteria": {
+    "has_rusted_metal_scaffold": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:rusted_metal_scaffold"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:rusted_metal_scaffold_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rusted_metal_scaffold",
+      "has_the_recipe"
+    ]
+  ]
+}

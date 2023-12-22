@@ -12,6 +12,7 @@ public class NMTags
     public static final TagKey<Item> CHARNEL_COMPACTOR = registerItem(NeepMeat.NAMESPACE, "charnel_substrate");
     public static final TagKey<Item> BLOOD_BUBBLE_LOGS = registerItem(NeepMeat.NAMESPACE, "blood_bubble_logs");
     public static final TagKey<Item> RAW_MEAT = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "raw_meat"));
+    public static final TagKey<Item> METAL_SCAFFOLDING = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "metal_scaffolding"));
 
     private static TagKey<Item> registerItem(String namespace, String id)
     {

@@ -4,8 +4,11 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.block.BaseSlabBlock;
 import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.block.IMeatBlock;
+import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.datagen.NMRecipes;
 import net.minecraft.block.*;
+import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
@@ -17,6 +20,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
+
+import java.util.function.Consumer;
 
 public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Waterloggable
 {
@@ -88,5 +93,11 @@ public class MetalScaffoldingBlock extends BaseBlock implements IMeatBlock, Wate
     private boolean shouldBeBottom(BlockView world, BlockPos pos)
     {
         return world.getBlockState(pos.down()).isOf(this);
+    }
+
+    public void generateRecipe(Consumer<RecipeJsonProvider> exporter)
+    {
+        MeatRecipeProvider.offerStairsRecipe(exporter, stairs, this);
+        MeatRecipeProvider.offerSlabRecipe(exporter, slab, this);
     }
 }
