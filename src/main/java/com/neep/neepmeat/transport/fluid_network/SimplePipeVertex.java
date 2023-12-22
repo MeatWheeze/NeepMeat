@@ -104,7 +104,7 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
         {
             if (v != null) adj.append(System.identityHashCode(v)).append(", ");
         }
-        return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + "head:" + getTotalHead() + "}";
+        return "Vertex@"+System.identityHashCode(this)+"{connection=" + adj + "head:" + getTotalHeight() + "}";
     }
 
     @Override
@@ -167,14 +167,14 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
         return pos;
     }
 
-    public float getTotalHead()
+    public float getTotalHeight()
     {
         return pumpHeight + getHeight();
     }
 
     protected float getHeight()
     {
-        return 0;
+        return height;
     }
 
     protected int numEdges()
