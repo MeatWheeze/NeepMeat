@@ -10,7 +10,7 @@ public interface NMREIPlugin
     CategoryIdentifier<CompactingDisplay> COMPACTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/compacting");
     CategoryIdentifier<MixingDisplay> MIXING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/mixing");
     CategoryIdentifier<AlloySmeltingDisplay> ALLOY_SMELTING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/alloy_smelting");
-    CategoryIdentifier<HeartExtractionDisplay> HEART_EXTRACTION = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/heart_extraction");
+    CategoryIdentifier<VivisectionDisplay> VIVISECTION = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/vivisection");
     CategoryIdentifier<EnlighteningDisplay> ENLIGHTENING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/enlightening");
     CategoryIdentifier<PressingDisplay> PRESSING = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/pressing");
     CategoryIdentifier<SurgeryDisplay> SURGERY = CategoryIdentifier.of(NeepMeat.NAMESPACE, "plugins/surgery");

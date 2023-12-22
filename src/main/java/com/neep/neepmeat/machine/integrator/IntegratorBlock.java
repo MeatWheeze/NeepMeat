@@ -13,14 +13,10 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.condition.LootConditionTypes;
 import net.minecraft.loot.context.LootContext;
-import net.minecraft.loot.context.LootContextParameter;
-import net.minecraft.loot.context.LootContextType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -64,7 +60,7 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, D
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.getStackInHand(hand).isOf(NMItems.SACRIFICIAL_DAGGER))
+        if (player.getStackInHand(hand).isOf(NMItems.SACRIFICIAL_SCALPEL))
             return ActionResult.PASS;
 
         if (!world.isClient)

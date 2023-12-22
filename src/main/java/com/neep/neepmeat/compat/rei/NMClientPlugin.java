@@ -17,7 +17,6 @@ import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import com.neep.neepmeat.recipe.*;
-import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
 import com.neep.neepmeat.transport.FluidTransport;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
@@ -32,6 +31,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -52,7 +52,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     public void registerDisplays(DisplayRegistry registry)
     {
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
-        registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
+//        registerRecipeFiller(registry, GeneralSurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
 //        registerRecipeFiller(registry, TransformingToolRecipe.class, NMrecipeTypes.TRANSFORMING_TOOL, TransformingToolDisplay::new);
         registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
@@ -65,7 +65,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         // Charnel Compactor recipes
         int page = 0;
-        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(entry -> entry.value()).iterator(), 35);
+        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(RegistryEntry::value).iterator(), 35);
         while (iterator.hasNext())
         {
             List<Item> entries = iterator.next();
@@ -73,7 +73,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         }
 
         // Heart extraction
-        registry.add(HeartExtractionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.ANIMAL_HEART)))));
+        registry.add(VivisectionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.REANIMATED_HEART)))));
+        registry.add(VivisectionDisplay.of(NMBlocks.INTEGRATOR_EGG.asItem(), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CHRYSALIS)))));
     }
 
     @Override
@@ -81,7 +82,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     {
         registry.add(
                 new ItemManufactureCategory(),
-                new SurgeryCategory(),
+//                new SurgeryCategory(),
                 new TransformingToolCategory(),
                 new GrindingCategory(),
                 new TrommelCategory(),
@@ -89,21 +90,19 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new CompactingCategory(),
                 new MixingCategory(),
                 new AlloyKilnCategory(),
-                new HeartExtractionCategory(),
+                new VivisectionCategory(),
                 new EnlighteningCategory(),
                 new PressingCategory()
         );
 
         registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.PLC.asItem()));
-//        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
-//        registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
         registry.addWorkstations(ALLOY_SMELTING, EntryStacks.of(NMBlocks.ALLOY_KILN.asItem()));
-        registry.addWorkstations(HEART_EXTRACTION, EntryStacks.of(NMItems.SACRIFICIAL_DAGGER.asItem()));
+        registry.addWorkstations(VIVISECTION, EntryStacks.of(NMItems.SACRIFICIAL_SCALPEL.asItem()));
         registry.addWorkstations(ENLIGHTENING, EntryStacks.of(NMBlocks.PEDESTAL.asItem()));
         registry.addWorkstations(PRESSING, EntryStacks.of(NMBlocks.HYDRAULIC_PRESS.asItem()));
     }
