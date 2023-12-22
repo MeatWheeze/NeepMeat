@@ -200,15 +200,16 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     }
 
     @Override
+    // TODO: enforce api connections
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
-        BlockState targetState = world.getBlockState(pos.offset(direction));
-        boolean connection = canConnectTo(targetState, direction.getOpposite(), (World) world, neighborPos);
-//        if (!world.isClient())
-//        {
-//            System.out.println(direction);
-//            connection = connection || enforceApiConnections((World) world, pos, state, direction);
-//        }
+        System.out.println("stateforupdate");
+        boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
+        if (!world.isClient())
+        {
+            System.out.println(direction);
+            connection = connection || canConnectApi((World) world, pos, state, direction);
+        }
 
         if (connection == state.get(DIR_TO_CONNECTION.get(direction)) && !isFullyConnected(state))
         {
@@ -221,8 +222,16 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        System.out.println(pos);
+        System.out.println("update");
         enforceApiConnections(world, pos, state);
+
+//        Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, fromPos, Direction.NORTH);
+//        if (storage != null)
+//        {
+//
+//            world.setBlockState(pos, state.with(DIR_TO_CONNECTION.get(direction)))
+//        }
+//        System.out.println(storage);
     }
 
     // Only takes into account other pipes, connections to fluid containers are enforced later.
@@ -276,19 +285,20 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
         enforceApiConnections(world, pos, state);
     }
 
+    // Produces connections to fluid containers after placing
     private void enforceApiConnections(World world, BlockPos pos, BlockState state)
     {
         if (!world.isClient)
         {
-            // Connect to fluid containers after placing
+            BlockState blockState2 = state;
             for (Direction direction : Direction.values())
             {
                 if (canConnectApi(world, pos, state, direction))
                 {
-                    state = state.with(DIR_TO_CONNECTION.get(direction), true);
+                    blockState2 = blockState2.with(DIR_TO_CONNECTION.get(direction), true);
                 }
             }
-            world.setBlockState(pos, state, Block.NOTIFY_ALL);
+            world.setBlockState(pos, blockState2,  Block.NOTIFY_ALL);
         }
     }
 
