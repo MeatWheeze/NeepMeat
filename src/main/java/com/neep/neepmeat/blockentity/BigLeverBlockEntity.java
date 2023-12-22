@@ -53,7 +53,6 @@ public class BigLeverBlockEntity extends SyncableBlockEntity
 
     public void togglePower()
     {
-        System.out.println(powered);
         setPower(!powered);
     }
 
