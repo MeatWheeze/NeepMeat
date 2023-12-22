@@ -1,21 +1,17 @@
 package com.neep.neepmeat.machine.mixer;
 
 import com.google.gson.JsonObject;
-import com.ibm.icu.impl.TextTrieMap;
 import com.neep.meatlib.recipe.FluidIngredient;
 import com.neep.meatlib.recipe.GenericIngredient;
 import com.neep.meatlib.recipe.ItemIngredient;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import jdk.jfr.FlightRecorder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.Recipe;
@@ -24,8 +20,6 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.NotImplementedException;
-import org.lwjgl.system.CallbackI;
 
 import java.util.*;
 
@@ -164,13 +158,13 @@ public class MixingRecipe implements Recipe<MixerStorage>
     @Override
     public RecipeSerializer<?> getSerializer()
     {
-        return NMrecipeTypes.MIXING;
+        return NMrecipeTypes.MIXING_SERIALIZER;
     }
 
     @Override
     public RecipeType<?> getType()
     {
-        return NMrecipeTypes.MIXING_TYPE;
+        return NMrecipeTypes.MIXING;
     }
 
     @Override

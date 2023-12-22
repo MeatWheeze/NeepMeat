@@ -3,11 +3,12 @@ package com.neep.neepmeat.machine.grinder;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderStorage
+public class GrinderStorage extends SimpleInventory
 {
     protected GrinderBlockEntity parent;
 
