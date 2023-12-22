@@ -1,6 +1,5 @@
 package com.neep.neepmeat.item;
 
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -30,7 +29,6 @@ public class SlasherItem extends AnimatedSword implements IAnimatable, ISyncable
     {
         super(registryName, ToolMaterials.DIAMOND, 0, -1.2f, settings);
         GeckoLibNetwork.registerSyncable(this);
-//        ItemInit.putItem(registryName, this);
     }
 
     @Override
@@ -65,7 +63,6 @@ public class SlasherItem extends AnimatedSword implements IAnimatable, ISyncable
             final int id = GeckoLibUtil.guaranteeIDForStack(user.getStackInHand(hand), (ServerWorld) world);
 
             if (user.isSprinting())
-//            if (false)
             {
                 GeckoLibNetwork.syncAnimation(user, this, id, ANIM_STAB);
             }
@@ -81,12 +78,6 @@ public class SlasherItem extends AnimatedSword implements IAnimatable, ISyncable
     public void onAnimationSync(int id, int state)
     {
         final AnimationController controller = GeckoLibUtil.getControllerForID(this.factory, id, CONTROLLER_NAME);
-
-        final PlayerEntity player = MinecraftClient.getInstance().player;
-//        if (player != null)
-//        {
-//            player.sendMessage(Text.of("Slashing!"), true);
-//        }
 
         controller.transitionLengthTicks = 1;
         switch (state)

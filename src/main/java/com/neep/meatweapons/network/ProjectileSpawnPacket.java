@@ -35,31 +35,34 @@ public class ProjectileSpawnPacket
     }
 
     @Environment(value= EnvType.CLIENT)
-    public static void registerReceiver()
+    public static class Client
     {
-        ClientPlayNetworking.registerGlobalReceiver(MWNetwork.SPAWN_ID, (client, handler, byteBuf, responseSender) ->
+        public static void registerReceiver()
         {
-            EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
-            UUID uuid = byteBuf.readUuid();
-            int entityId = byteBuf.readVarInt();
-            Vec3d pos = PacketBufUtil.readVec3d(byteBuf);
-            float pitch = PacketBufUtil.readAngle(byteBuf);
-            float yaw = PacketBufUtil.readAngle(byteBuf);
-            client.execute(() ->
+            ClientPlayNetworking.registerGlobalReceiver(MWNetwork.SPAWN_ID, (client, handler, byteBuf, responseSender) ->
             {
-                if (MinecraftClient.getInstance().world == null)
-                    throw new IllegalStateException("Tried to spawn entity in a null world!");
-                Entity e = et.create(MinecraftClient.getInstance().world);
-                if (e == null)
-                    throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
-                e.updateTrackedPosition(pos);
-                e.setPos(pos.x, pos.y, pos.z);
-                e.setPitch(pitch);
-                e.setYaw(yaw);
-                e.setId(entityId);
-                e.setUuid(uuid);
-                MinecraftClient.getInstance().world.addEntity(entityId, e);
+                EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
+                UUID uuid = byteBuf.readUuid();
+                int entityId = byteBuf.readVarInt();
+                Vec3d pos = PacketBufUtil.readVec3d(byteBuf);
+                float pitch = PacketBufUtil.readAngle(byteBuf);
+                float yaw = PacketBufUtil.readAngle(byteBuf);
+                client.execute(() ->
+                {
+                    if (MinecraftClient.getInstance().world == null)
+                        throw new IllegalStateException("Tried to spawn entity in a null world!");
+                    Entity e = et.create(MinecraftClient.getInstance().world);
+                    if (e == null)
+                        throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
+                    e.updateTrackedPosition(pos);
+                    e.setPos(pos.x, pos.y, pos.z);
+                    e.setPitch(pitch);
+                    e.setYaw(yaw);
+                    e.setId(entityId);
+                    e.setUuid(uuid);
+                    MinecraftClient.getInstance().world.addEntity(entityId, e);
+                });
             });
-        });
+        }
     }
 }

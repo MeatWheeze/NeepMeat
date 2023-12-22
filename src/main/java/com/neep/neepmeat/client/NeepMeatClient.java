@@ -30,15 +30,10 @@ import net.minecraft.screen.PlayerScreenHandler;
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class NeepMeatClient implements ClientModInitializer
 {
     public static final EntityModelLayer MODEL_GLASS_TANK_LAYER = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "glass_tank"), "main");
     public static final EntityModelLayer TANK_MINECART = new EntityModelLayer(new Identifier(NeepMeat.NAMESPACE, "tank_minecart"), "main");
-
-    public static List<BasePaintedBlock.PaintedBlock> COLOURED_BLOCKS = new ArrayList<>();
 
     public static final Identifier CHARGED_WORK_FLUID_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_flowing");
     public static final Identifier CHARGED_WORK_FLUID= new Identifier(NeepMeat.NAMESPACE, "block/charged_work_fluid_still");
@@ -50,8 +45,8 @@ public class NeepMeatClient implements ClientModInitializer
     {
         NeepMeatClient.registerRenderers();
 
-        TankMessagePacket.registerReciever();
-        ParticleSpawnPacket.registerReceiver();
+        TankMessagePacket.Client.registerReciever();
+        ParticleSpawnPacket.Client.registerReceiver();
     }
 
     public static void registerRenderers()
@@ -139,7 +134,7 @@ public class NeepMeatClient implements ClientModInitializer
         });
 
         // Coloured blocks
-        for (BasePaintedBlock.PaintedBlock block : COLOURED_BLOCKS)
+        for (BasePaintedBlock.PaintedBlock block : BasePaintedBlock.COLOURED_BLOCKS)
         {
             ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getColour(), block);
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getColour(), block.asItem());

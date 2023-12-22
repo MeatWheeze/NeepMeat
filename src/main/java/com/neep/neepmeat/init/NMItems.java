@@ -1,9 +1,9 @@
 package com.neep.neepmeat.init;
 
-import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.item.*;
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TieredCraftingItemFactory;
+import com.neep.neepmeat.NMItemGroups;
+import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.Item;
 
