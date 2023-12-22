@@ -67,32 +67,38 @@ public class PipeBranches extends HashMap<Long, PipeState>
             }
         }
 
-        for (int i = 0; i < size; ++i)
+        try
         {
-            Supplier<FluidNode> fromNode = nodes.get(i);
-            if (fromNode.get() == null)
-                continue;
-
-            for (int j = 0; j < size; ++j)
+            for (int i = 0; i < size; ++i)
             {
-                Supplier<FluidNode> toNode = nodes.get(j);
-                if (toNode.get() == null || toNode.equals(fromNode))
+                Supplier<FluidNode> fromNode = nodes.get(i);
+                if (fromNode.get() == null)
                     continue;
 
-                NodePos start = fromNode.get().getNodePos();
-                NodePos end = toNode.get().getNodePos();
-                PipeState.FilterFunction filterFunction;
-                if ((filterFunction = shortestPath(world, start, end, pipes)) != null)
+                for (int j = 0; j < size; ++j)
                 {
+                    Supplier<FluidNode> toNode = nodes.get(j);
+                    if (toNode.get() == null || toNode.equals(fromNode))
+                        continue;
+
+                    NodePos start = fromNode.get().getNodePos();
+                    NodePos end = toNode.get().getNodePos();
+                    PipeState.FilterFunction filterFunction;
+                    if ((filterFunction = shortestPath(world, start, end, pipes)) != null)
+                    {
 //                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
-                    matrix[i][j] = filterFunction;
+                        matrix[i][j] = filterFunction;
 //                    matrix[i][j] = PipeState::identity;
-                }
-                else
-                {
-                    matrix[i][j] = PipeState::zero;
+                    } else
+                    {
+                        matrix[i][j] = PipeState::zero;
+                    }
                 }
             }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
         return matrix;
     }

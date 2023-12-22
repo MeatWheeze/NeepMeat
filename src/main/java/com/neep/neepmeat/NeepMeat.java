@@ -8,6 +8,7 @@ import com.neep.neepmeat.datagen.NMRecipes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.transport.thread.NetworkRebuilding;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -48,5 +49,6 @@ public class NeepMeat implements ModInitializer
 		ScreenHandlerInit.registerScreenHandlers();
 
 		FluidNetwork.registerEvents();
+//		NetworkRebuilding.init();
 	}
 }

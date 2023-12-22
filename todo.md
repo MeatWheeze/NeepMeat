@@ -28,7 +28,8 @@
 - [done] Replace Whisper Wheat textures
 - [done] Add a source of Whisper Wheat seeds
 - [done] Stirling engine (model can have a little flywheel)
-- Fix pumps!
+- [done] Fix pumps!
+- Stop duplication glitch when items enter rotuers
 - Add simple uses for Whisper Wheat (food item, etc.)
 - Add cutting recipes for building blocks
 - Add torque shaft
@@ -135,3 +136,16 @@ A Different God
 Tanks Not Included
 - Craft a Fuel Transducer
 
+
+# Bespoke Energy System vs Work Fluid
+
+## Cosmic Potential
+
+- No need for separate motors on fluid processing machines.
+- Marginally better performance
+- More varied cables
+
+## Work Fluid
+
+- *I'm not like the other mods*
+- 

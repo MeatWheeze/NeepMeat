@@ -1,7 +1,7 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.block.pipe.IDataCable;
+import com.neep.neepmeat.api.block.pipe.IDataCable;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

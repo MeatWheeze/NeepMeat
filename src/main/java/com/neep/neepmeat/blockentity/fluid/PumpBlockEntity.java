@@ -1,17 +1,15 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
-import com.neep.neepmeat.block.fluid_transport.PumpBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
+import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

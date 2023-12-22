@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.item_transport;
 
-import com.neep.neepmeat.block.pipe.IItemPipe;
+import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;

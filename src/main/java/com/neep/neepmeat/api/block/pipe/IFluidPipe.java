@@ -1,9 +1,8 @@
-package com.neep.neepmeat.block.pipe;
+package com.neep.neepmeat.api.block.pipe;
 
 import com.neep.neepmeat.block.AbstractPipeBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import net.minecraft.block.BlockState;
@@ -11,6 +10,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 import java.util.Arrays;
 import java.util.List;
@@ -80,7 +80,15 @@ public interface IFluidPipe
 
     default void updateNetwork(ServerWorld world, BlockPos pos, PipeNetwork.UpdateReason reason)
     {
-        Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+        try
+        {
+            Optional<PipeNetwork> net = PipeNetwork.tryCreateNetwork(world, pos, Direction.NORTH);
+        }
+        catch (Exception e)
+        {
+            ExceptionUtils.getRootCause(e).printStackTrace();
+            throw e;
+        }
     }
 
     default void addPipe(ServerWorld world, BlockState state, BlockPos pos)

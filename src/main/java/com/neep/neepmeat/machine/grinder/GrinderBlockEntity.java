@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.grinder;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
-import com.neep.neepmeat.block.pipe.IItemPipe;
+import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;

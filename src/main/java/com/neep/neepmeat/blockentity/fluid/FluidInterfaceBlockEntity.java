@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity.fluid;
 
-import com.neep.neepmeat.block.fluid_transport.FluidInterfaceBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;

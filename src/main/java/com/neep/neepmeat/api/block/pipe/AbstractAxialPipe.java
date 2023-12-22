@@ -1,7 +1,7 @@
-package com.neep.neepmeat.block.pipe;
+package com.neep.neepmeat.api.block.pipe;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.neepmeat.block.fluid_transport.FluidPipeBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import net.minecraft.block.Block;

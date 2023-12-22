@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item_transfer;
 
-import com.neep.neepmeat.block.pipe.IItemPipe;
+import com.neep.neepmeat.api.block.pipe.IItemPipe;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -8,7 +8,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;

@@ -1,10 +1,11 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.pipe.IFluidPipe;
-import com.neep.neepmeat.block.fluid_transport.IFluidNodeProvider;
+import com.ibm.icu.impl.CalendarAstronomer;
+import com.neep.neepmeat.api.block.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
-import com.neep.neepmeat.util.FilterUtils;
+import com.neep.neepmeat.transport.thread.NetworkRebuilding;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -41,6 +42,8 @@ public class PipeNetwork
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     protected PipeState.FilterFunction[][] nodeMatrix = null;
 
+    protected boolean isBuilt;
+
 
     // My pet memory leak.
     // TODO: Find a way to remove unloaded networks from this
@@ -52,6 +55,7 @@ public class PipeNetwork
         this.origin = origin;
         this.originFace = direction;
         this.uid = nextUid();
+        this.isBuilt = false;
     }
 
     private static long currentUid = 0;
@@ -144,21 +148,43 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
-//            PipeBranches.test(world, connectedNodes, networkPipes);
-            connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
-            if (!validate())
+            Runnable runnable = () ->
             {
-                return;
-            }
+                long t1 = System.nanoTime();
+                this.isBuilt = false;
 
-            this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
-            PipeBranches.displayMatrix(nodeMatrix);
+                connectedNodes.forEach((node) -> node.get().setNetwork(world, this));
+                if (!validate())
+                {
+                    return;
+                }
+
+                try
+                {
+                    this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+                PipeBranches.displayMatrix(nodeMatrix);
+                this.isBuilt = true;
+                long t2 = System.nanoTime();
+//                System.out.println("Rebuilt network in " + (t2 - t1) / 1000000 + "ms");
+            };
+//            NetworkRebuilding.getExecutor().execute(runnable);
+            runnable.run();
         }
     }
 
     public void merge(PipeNetwork network)
     {
 
+    }
+
+    public boolean isBuilt()
+    {
+        return isBuilt;
     }
 
     public void setWorld(ServerWorld world)
@@ -193,6 +219,10 @@ public class PipeNetwork
     // This is responsible for transferring the fluid from node to node
     public void tick()
     {
+        if (!isBuilt())
+            return;
+
+        long startTim = System.nanoTime();
         for (int i = 0; i < connectedNodes.size(); i++)
         {
             Supplier<FluidNode> fromSupplier = connectedNodes.get(i);
@@ -296,6 +326,9 @@ public class PipeNetwork
                 }
             }
         }
+        long endTime = System.nanoTime();
+        long totalTime = (endTime - startTim) / 1000000;
+//        System.out.println("World time: " + world.getTime() + "\t ID: " + uid + "\t Total: " + totalTime);
     }
 
     public void discoverNodes(BlockPos startPos, Direction face)
@@ -311,12 +344,15 @@ public class PipeNetwork
         networkPipes.put(startPos, new PipeState(world.getBlockState(startPos)));
         visited.add(startPos);
 
+        int depth = 0;
+
         // Pipe search depth
-        for (int i = 0; i < UPDATE_DISTANCE; ++i)
-        {
+//        for (int i = 0; i < UPDATE_DISTANCE; ++i)
+//        {
 //            for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext();)
-            while (!pipeQueue.isEmpty())
+            while (!pipeQueue.isEmpty() && depth < 20)
             {
+                ++depth;
                 BlockPos current = pipeQueue.poll();
                 BlockState state1 = world.getBlockState(current);
 
@@ -365,7 +401,6 @@ public class PipeNetwork
                     }
                 }
             }
-        }
 //        System.out.println("special: " + special + "state: " + state);
 //        System.out.println(networkPipes);
     }

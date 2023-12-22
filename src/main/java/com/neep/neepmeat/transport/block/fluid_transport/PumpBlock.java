@@ -1,4 +1,4 @@
-package com.neep.neepmeat.block.fluid_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
