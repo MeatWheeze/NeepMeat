@@ -59,6 +59,7 @@ public class BlockInitialiser
 
     public static Block ITEM_DUCT;
     public static Block IRON_PIPE;
+    public static Block COPPER_PIPE;
     public static Block PUMP;
     public static Block TROMMEL;
     public static Block HEATER;
@@ -98,7 +99,8 @@ public class BlockInitialiser
 
         // --- General Blocks ---
         PIPE = registerBlock(new FluidPipeBlock("pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
-        IRON_PIPE = registerBlock(new PipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        IRON_PIPE = registerBlock(new FluidPipeBlock("iron_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
+        COPPER_PIPE = registerBlock(new FluidPipeBlock("copper_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.NETHERITE)));
         TROMMEL = registerBlock(new TrommelBlock("trommel", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
         TROMMEL_CENTRE = registerBlock(new BaseDummyBlock("trommel_centre", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
         HEATER = registerBlock(new HeaterBlock("heater", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

@@ -1,0 +1,207 @@
+{
+  "multipart": [
+    {
+      "when": {
+        "OR": [
+          {"north": "true", "south": "true"},
+          {"east": "true", "west": "true"},
+          {"up": "true", "down": "true"},
+          {"north": "false|forced", "east": "false|forced", "south": "false|forced", "west": "false|forced","up": "false|forced", "down": "false|forced"}
+        ]
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_centre"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side"
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side_alt"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side_alt",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side",
+        "y": 270
+      }
+    },
+
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side",
+        "y": 270
+      }
+    },
+    {
+      "when": {
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side",
+        "y": 270,
+        "x": 270
+      }
+    },
+    {
+      "when": {
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_side_alt",
+        "y": 270,
+        "x": 270
+      }
+    },
+
+    {
+      "when": {
+        "south": "true",
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert"
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_hor",
+        "y": -90
+      }
+    },
+    {
+      "when": {
+        "south": "true",
+        "west": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_hor"
+      }
+    },
+
+    {
+      "when": {
+        "west": "true",
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "y": 90
+      }
+    },
+
+    {
+      "when": {
+        "west": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "x": 90,
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "west": "true",
+        "north": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_hor",
+        "y": 90
+      }
+    },
+
+    {
+      "when": {
+        "north": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "x": 90,
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "north": "true",
+        "east": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_hor",
+        "y": 180
+      }
+    },
+
+    {
+      "when": {
+        "east": "true",
+        "up": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "y": -90,
+        "x": 90
+      }
+    },
+    {
+      "when": {
+        "east": "true",
+        "down": "true"
+      },
+      "apply": {
+        "model": "neepmeat:block/copper_pipe/pipe_curve_vert",
+        "y": -90
+      }
+    }
+  ]
+}
