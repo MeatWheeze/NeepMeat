@@ -4,7 +4,6 @@ import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.blockentity.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +21,7 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state, FluidConstants.BUCKET, FluidConstants.BUCKET);
+        super(type, pos, state);
         this.maxRunningRate = FluidConstants.BUCKET / 2;
     }
 

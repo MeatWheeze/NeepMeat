@@ -36,7 +36,7 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
     protected HeaterBlockEntity(BlockEntityType<HeaterBlockEntity> type, BlockPos pos, BlockState state)
     {
-        super(type, pos, state, CAPACITY, CAPACITY);
+        super(type, pos, state);
     }
 
     public HeaterBlockEntity(BlockPos pos, BlockState state)

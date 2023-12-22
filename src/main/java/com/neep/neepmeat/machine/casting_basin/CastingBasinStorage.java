@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.casting_basin;
 
+import com.neep.meatlib.recipe.ImplementedRecipe;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.storage.WritableStackStorage;
@@ -11,7 +12,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 
 @SuppressWarnings("UnstableApiUsage")
-public class CastingBasinStorage implements NbtSerialisable
+public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.DummyInventory
 {
     protected WritableStackStorage outputStorage;
     protected WritableSingleFluidStorage inputStorage;
