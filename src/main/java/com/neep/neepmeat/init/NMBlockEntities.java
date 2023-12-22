@@ -9,6 +9,7 @@ import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.block.entity.*;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlockEntity;
+import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
@@ -115,6 +116,7 @@ public class NMBlockEntities
     public static BlockEntityType<AssemblerBlockEntity> ASSEMBLER;
     public static BlockEntityType<WorkstationBlockEntity> WORKSTATION;
     public static BlockEntityType<DeathBladesBlockEntity> DEATH_BLADES;
+    public static BlockEntityType<BottlerBlockEntity> BOTTLER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -216,6 +218,8 @@ public class NMBlockEntities
         WORKSTATION = registerBlockEntity("workstation", WorkstationBlockEntity::new, NMBlocks.WORKSTATION);
 
         DEATH_BLADES = registerBlockEntity("death_blades", DeathBladesBlockEntity::new, NMBlocks.DEATH_BLADES);
+
+        BOTTLER = registerBlockEntity("bottler", BottlerBlockEntity::new, NMBlocks.BOTTLER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

@@ -12,6 +12,7 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
@@ -63,7 +64,7 @@ public class FluidFactory
     public Item registerItem()
     {
         if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for this fluid");
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1));
+        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1).recipeRemainder(Items.BUCKET));
         return bucketItem;
     }
 
