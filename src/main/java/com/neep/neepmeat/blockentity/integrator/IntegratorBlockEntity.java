@@ -5,7 +5,6 @@ import com.neep.neepmeat.fluid_transfer.storage.MultiTypedFluidBuffer;
 import com.neep.neepmeat.fluid_transfer.storage.TypedFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -17,6 +16,9 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.text.LiteralText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -29,15 +31,13 @@ import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
 public class IntegratorBlockEntity extends BlockEntity implements
-        FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable, IAnimatable
+        FluidBuffer.FluidBufferProvider, IAnimatable
 {
 
     public static final int ANIM_HATCH = 0;
@@ -61,6 +61,18 @@ public class IntegratorBlockEntity extends BlockEntity implements
         inputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_BLOOD), TypedFluidBuffer.Mode.INSERT_ONLY);
         outputBuffer = new TypedFluidBuffer(this, 2 * FluidConstants.BUCKET, fluidVariant -> fluidVariant.isOf(NMFluids.STILL_ENRICHED_BLOOD), TypedFluidBuffer.Mode.EXTRACT_ONLY);
         buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket()
+    {
+        return BlockEntityUpdateS2CPacket.create(this);
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt()
+    {
+        return createNbt();
     }
 
     @Override

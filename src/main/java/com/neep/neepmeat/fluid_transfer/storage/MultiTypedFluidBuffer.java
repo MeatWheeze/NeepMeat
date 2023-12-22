@@ -3,6 +3,7 @@ package com.neep.neepmeat.fluid_transfer.storage;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 
@@ -23,10 +24,11 @@ public class MultiTypedFluidBuffer extends CombinedStorage<FluidVariant, TypedFl
 
     public void syncIfPossible()
     {
-        if (parent instanceof BlockEntityClientSerializable serializable)
-        {
-            serializable.sync();
-        }
+        parent.getWorld().updateListeners(parent.getPos(), parent.getCachedState(), parent.getCachedState(), Block.NOTIFY_LISTENERS);
+//        if (parent instanceof BlockEntityClientSerializable serializable)
+//        {
+//            serializable.sync();
+//        }
     }
 
     public NbtCompound writeNbt(NbtCompound nbt)

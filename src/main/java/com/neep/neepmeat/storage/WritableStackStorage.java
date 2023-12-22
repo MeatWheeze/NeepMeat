@@ -1,8 +1,8 @@
 package com.neep.neepmeat.storage;
 
-import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
+import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -46,12 +46,13 @@ public class WritableStackStorage extends SingleVariantStorage<ItemVariant>
         if (parent != null)
         {
             parent.markDirty();
+            parent.getWorld().updateListeners(parent.getPos(), parent.getCachedState(), parent.getCachedState(), Block.NOTIFY_LISTENERS);
 
-            if (parent instanceof BlockEntityClientSerializable becs)
-            {
-//                System.out.println("syncing is possible");
-                becs.sync();
-            }
+//            if (parent instanceof BlockEntityClientSerializable becs)
+//            {
+//                becs.sync();
+//            }
+//            world.updateListeners(pos, state, state, Block.NOTIFY_LISTENERS);
         }
     }
 
