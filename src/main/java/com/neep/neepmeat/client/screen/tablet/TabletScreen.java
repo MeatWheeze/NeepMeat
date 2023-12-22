@@ -7,7 +7,7 @@ import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.Element;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -23,8 +23,10 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Environment(value= EnvType.CLIENT)
@@ -34,14 +36,14 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
 
     private float mouseX;
     private float mouseY;
-    protected int screenOffsetX = 17;
-    protected int screenOffsetY = 17;
-    protected int backgroundWidth = 255;
-    protected int backgroundHeight = 194;
+//    protected int screenOffsetX = 17;
+//    protected int screenOffsetY = 17;
+//    protected int tabletWidth = 255;
+//    protected int tabletHeight = 194;
     protected int contentWidth = 340;
     protected int contentHeight = 280;
-    protected int screenWidth = 156;
-    protected int screenHeight = 145;
+//    protected int screenWidth = 156;
+//    protected int screenHeight = 145;
     protected PlayerEntity player;
     protected int tabWidth = 21;
 
@@ -142,7 +144,6 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double amount)
     {
-        Optional<Element> op = this.hoveredElement(mouseX, mouseY);
         return this.hoveredElement(mouseX, mouseY).filter(element ->
                 element.mouseScrolled(mouseX, mouseY, amount)).isPresent();
     }
@@ -157,6 +158,8 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         contentHeight = (int) (this.height * 0.7);
         this.x = (this.width - contentWidth) / 2;
         this.y = (this.height - contentHeight) / 2;
+        this.backgroundWidth = contentWidth;
+        this.backgroundHeight = contentHeight;
 
         float ratio = 0.4f;
         int leftWidth = (int) (ratio * contentWidth);
@@ -181,7 +184,34 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
         RenderSystem.setShaderTexture(0, TABLET_TEXTURE);
-//        drawTexture(matrices, x, y, 0, 0, backgroundWidth, backgroundHeight);
+        matrices.push();
+//        float scale = contentWidth / (float) tabletWidth;
+//        matrices.scale(scale, scale, 1);
+//        matrices.translate(-screenOffsetX, -screenOffsetY, 0);
+//        drawTexture(matrices, x, y, 0, 0, tabletWidth, tabletHeight);
+//        DrawableHelper.drawTexture(matrices, x - screenOffsetX, y - screenOffsetY, this.getZOffset(), 0, 0, tabletWidth + 10, tabletHeight, contentWidth, contentHeight);
+//        drawTexture(matrices, x, x + width, y, y + height, getZOffset(), width, height, 0, 0, 256, 256);
+//        drawTexturedQuad(matrices.peek().getPositionMatrix(), 0, width, 0, height, getZOffset(), 0, tabWidth, 0, tabletHeight);
+//        drawTexturedQuad(matrices.peek().getPositionMatrix(), 0, width, 0, height, getZOffset(), (0 + 0.0f) / (float) 256, (0 + (float) width) / (float) tabletWidth, (0 + 0.0f) / (float) 256, (0 + (float) tabletHeight) / (float) 256);
+        matrices.pop();
+    }
+
+    private static void drawTexture(MatrixStack matrices, int x0, int x1, int y0, int y1, int z, int regionWidth, int regionHeight, float u, float v, int textureWidth, int textureHeight)
+    {
+        drawTexturedQuad(matrices.peek().getPositionMatrix(), x0, x1, y0, y1, z, (u + 0.0f) / (float) textureWidth, (u + (float) regionWidth) / (float) textureWidth, (v + 0.0f) / (float) textureHeight, (v + (float) regionHeight) / (float) textureHeight);
+    }
+
+    private static void drawTexturedQuad(Matrix4f matrix, int x0, int x1, int y0, int y1, int z, float u0, float u1, float v0, float v1)
+    {
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
+        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
+        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
+        bufferBuilder.end();
+        BufferRenderer.draw(bufferBuilder);
     }
 
     @Override
