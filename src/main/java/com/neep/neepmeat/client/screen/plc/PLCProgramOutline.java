@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.editor.ProgramEditorState;
 import com.neep.neepmeat.api.plc.instruction.Instruction;
@@ -18,6 +19,7 @@ import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
@@ -178,6 +180,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
             if (button == GLFW.GLFW_MOUSE_BUTTON_1 && valid)
             {
                 selected = true;
+                client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0f));
                 onInstructionSelect(this);
                 return true;
             }
