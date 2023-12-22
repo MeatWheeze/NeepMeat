@@ -51,6 +51,8 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
+    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("AWAIT REDSTONE")));
+
     private static <T extends InstructionProvider> T register(String path, T provider)
     {
 //        if (provider instanceof ImmediateInstructionProvider immediate)

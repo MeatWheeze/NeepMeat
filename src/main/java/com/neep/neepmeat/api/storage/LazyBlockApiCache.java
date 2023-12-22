@@ -50,10 +50,15 @@ public class LazyBlockApiCache<A, C>
         return new LazyBlockApiCache<>(world, lookup, pos, ctxSupplier);
     }
 
-    public static <A, C> LazyBlockApiCache<MutateInPlace<A>, C> mutate(BlockApiLookup<MutateInPlace<A>, C> lookup, Argument argument, Supplier<ServerWorld> world)
+    public static <A> LazyBlockApiCache<A, Direction> of(BlockApiLookup<A, Direction> lookup, Supplier<ServerWorld> world, Argument argument)
     {
-        return new LazyBlockApiCache<>(world, lookup, argument.pos(), () -> null);
+        return new LazyBlockApiCache<>(world, lookup, argument.pos(), argument::face);
     }
+
+//    public static <A, C> LazyBlockApiCache<MutateInPlace<A>, C> mutate(BlockApiLookup<MutateInPlace<A>, C> lookup, Argument argument, Supplier<ServerWorld> world)
+//    {
+//        return new LazyBlockApiCache<>(world, lookup, argument.pos(), () -> null);
+//    }
 
     public static LazyBlockApiCache<Storage<ItemVariant>, Direction> itemSided(Argument argument, Supplier<ServerWorld> world)
     {

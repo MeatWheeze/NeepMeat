@@ -271,6 +271,7 @@
   "block.neepmeat.surgery_controller": "PLC",
   "block.neepmeat.surgery_platform": "Surgery Platform",
   "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
+  "block.neepmeat.redstone_interface": "PLC Redstone Interface",
 
   "block.neepmeat.duat_stone": "Duat Stone",
   "block.neepmeat.duat_cobblestone": "Duat Cobblestone",
@@ -487,6 +488,7 @@
   "instruction.neepmeat.move.desc": "Tries to move a stack of items from storage ARG1 into storage ARG2.",
   "instruction.neepmeat.implant.desc": "Removes an item from storage ARG1 and surgically implants it into entity ARG2.",
   "instruction.neepmeat.inject.desc": "Draws fluid from storage ARG1 and injects it into the item in workbench ARG2.",
+  "instruction.neepmeat.wait_redstone.desc": "Waits for a signal strength above zero at the redstone interface ARG1.",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
