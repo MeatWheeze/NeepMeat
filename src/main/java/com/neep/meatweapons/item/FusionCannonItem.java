@@ -9,6 +9,7 @@ import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
@@ -129,7 +130,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                     pos = pos.add(transform);
 
                     Vec3d end = pos.add(player.getRotationVec(0.5f).multiply(20));
-                    Optional<LivingEntity> target = this.hitScan(player, pos, end, 20);
+                    Optional<Entity> target = this.hitScan(player, pos, end, 20);
                     target.ifPresent(livingEntity -> livingEntity.damage(DamageSource.player(player), 4));
 
                     // Play fire sound
