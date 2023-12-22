@@ -27,7 +27,7 @@ import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.Moveme
 public class SurgicalRobot implements NbtSerialisable
 {
     private final PLCBlockEntity parent;
-    private MovementState movementState;
+    private MovementState movementState = MovementState.STATE_IDLE;
 
     public double cameraX;
     public double cameraY;
