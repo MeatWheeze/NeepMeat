@@ -130,7 +130,7 @@ public class BigLeverBlock extends LeverBlock implements NMBlock, BlockEntityPro
 
             System.out.println(be.activeTicks);
 
-            world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.4f, 2);
+            world.playSound(null, pos, SoundInitialiser.CLICK, SoundCategory.BLOCKS, 0.7f, 2);
 
 //            Direction facing = state.get(FACING);
 //            Direction hitSide = hit.getSide();
