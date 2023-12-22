@@ -11,29 +11,33 @@ import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class ItemInit
 {
-    public static Map<String, NMItem> ITEMS = new HashMap<>();
+    public static Map<String, NMItem> ITEMS = new LinkedHashMap<>();
 
     public static Item SACRIFICIAL_DAGGER = new DaggerItem("sacrificial_dagger", new FabricItemSettings().group(NMItemGroups.GENERAL));
 
-    public static TieredCraftingItemFactory CRAFTING = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
+    public static TieredCraftingItemFactory ROUGH = new TieredCraftingItemFactory(new String[]{"rough", "pristine"});
+    public static TieredCraftingItemFactory CRUDE = new TieredCraftingItemFactory(new String[]{"crude", "adv"});
 
     public static Item ANIMAL_HEART = new BaseCraftingItem("animal_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item REANIMATED_HEART = new BaseCraftingItem("reanimated_heart", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-//    public static Item ROUGH_FLESH = new BaseCraftingItem("rough_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//    public static Item CLEAN_FLESH = new BaseCraftingItem("clean_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//    public static Item PRISTINE_FLESH = new BaseCraftingItem("pristine_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    // Made from zombie flesh and ganglia
+//    public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("crude_integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
-//    public static Item ROUGH_REANIMATED_FLESH = new BaseCraftingItem("rough_reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//    public static Item CLEAN_REANIMATED_FLESH = new BaseCraftingItem("clean_reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-//    public static Item PRISTINE_REANIMATED_FLESH = new BaseCraftingItem("pristine_reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    // Made from machine fluid
+    public static Item INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item MACHINE_FLUID = new BaseCraftingItem("machine_fluid", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
+    // Organism Parts
     public static Item DIGESTIVE_SYSTEM = new BaseCraftingItem("digestive_system", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERFACE_PORTS = new BaseCraftingItem("interface_array", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item INTERNAL_COMPONENTS = new BaseCraftingItem("internal_components", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static void putItem(String id, NMItem item)
@@ -55,8 +59,9 @@ public class ItemInit
 
     static
     {
-        CRAFTING.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        CRAFTING.get("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-        CRAFTING.get("brain", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//        ROUGH.get("flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//        ROUGH.get("reanimated_flesh", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+        ROUGH.get("brain", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+        CRUDE.get("integration_charge", new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     }
 }
