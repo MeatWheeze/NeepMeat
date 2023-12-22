@@ -10,6 +10,7 @@
     "FurnaceAccessor",
     "LivingEntityMixin",
     "ServerWorldMixin",
+    "ServerPlayNetworkHandlerMixin",
     "WorldChunkMixin"
   ],
   "client": [
