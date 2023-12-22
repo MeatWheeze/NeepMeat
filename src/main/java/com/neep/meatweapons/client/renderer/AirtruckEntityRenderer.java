@@ -29,7 +29,6 @@ import software.bernie.geckolib3.renderers.geo.GeoLayerRenderer;
 import software.bernie.geckolib3.renderers.geo.IGeoRenderer;
 import software.bernie.geckolib3.resource.GeckoLibCache;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
     protected GeoModelProvider<T> modelProvider;
     protected final List<GeoLayerRenderer<T>> layerRenderers = Lists.newArrayList();
     private Identifier whTexture;
-    private VertexConsumerProvider rtb;
+    private VertexConsumerProvider rtb = null;
 
     public AirtruckEntityRenderer(EntityRendererFactory.Context context)
     {
@@ -50,6 +49,12 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
     public Identifier getTexture(T entity)
     {
         return getTextureLocation(entity);
+    }
+
+    @Override
+    public VertexConsumerProvider getCurrentRTB()
+    {
+        return rtb;
     }
 
     @Override
@@ -82,17 +87,17 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
         this.applyRotations(entity, stack, f7, f, partialTicks);
 
         float prop = entity.forwardsVelocity / entity.maxSpeed;
-        GeckoLibCache.getInstance().parser.setValue("r_lf", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
-        GeckoLibCache.getInstance().parser.setValue("r_rf", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
-        GeckoLibCache.getInstance().parser.setValue("r_lb", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
-        GeckoLibCache.getInstance().parser.setValue("r_rb", Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_lf", () -> Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_rf", () -> Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_lb", () -> Math.signum(prop) * -ease(Math.abs(prop))  * 20);
+        GeckoLibCache.getInstance().parser.setValue("r_rb", () -> Math.signum(prop) * -ease(Math.abs(prop))  * 20);
 
         AnimationEvent<T> predicate = new AnimationEvent<T>(entity, 0, 0, partialTicks,
                 false, Collections.singletonList(entityModelData));
         GeoModel model = modelProvider.getModel(modelProvider.getModelLocation(entity));
         if (modelProvider instanceof IAnimatableModel)
         {
-            ((IAnimatableModel<T>) modelProvider).setLivingAnimations(entity, this.getUniqueID(entity), predicate);
+            ((IAnimatableModel<T>) modelProvider).setCustomAnimations(entity, this.getInstanceId(entity));
         }
 
         stack.translate(0, 0.01f, 0);
@@ -106,13 +111,6 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
                 getPackedOverlay(entity, 0), (float) renderColor.getRed() / 255f, (float) renderColor.getGreen() / 255f,
                 (float) renderColor.getBlue() / 255f, invis ? 0.0F : (float) renderColor.getAlpha() / 255);
 
-//        if (!entity.isSpectator()) {
-//            for (GeoLayerRenderer<T> layerRenderer : this.layerRenderers) {
-//                layerRenderer.render(stack, bufferIn, packedLightIn, entity, limbSwing, lastLimbDistance, partialTicks,
-//                        f7, netHeadYaw, headPitch);
-//            }
-//        }
-
         if (FabricLoader.getInstance().isModLoaded("patchouli"))
         {
             PatchouliCompat.patchouliLoaded(stack);
@@ -122,7 +120,7 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
     }
 
     @Override
-    public Integer getUniqueID(T animatable)
+    public int getInstanceId(T animatable)
     {
         return animatable.getUuid().hashCode();
     }
