@@ -38,6 +38,7 @@ public class FluidTransport
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, STOP_VALVE);
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, FILTER_PIPE);
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, CHECK_VALVE);
+        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, LIMITER_VALVE);
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, WINDOW_PIPE);
 
         PipeNetwork.registerEvent();
