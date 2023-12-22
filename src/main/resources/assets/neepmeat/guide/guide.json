@@ -15,10 +15,11 @@
       {"type": "page", "id": "fuel_transducer", "icon": "neepmeat:transducer", "text": "Fuel Transducer"},
       {"type": "page", "id": "fluid_exciter", "icon": "neepmeat:fluid_exciter", "text": "Fluid Exciter"}
       ]},
-    {"type": "menu", "id": "crops", "icon": "neepmeat:motor_unit", "text": "Crops", "entries": [
+    {"type": "menu", "id": "farming", "icon": "neepmeat:motor_unit", "text": "Farming", "entries": [
       {"type": "page", "id": "gland_potato", "icon": "neepmeat:flesh_potato", "text": "Gland Potato"},
       {"type": "page", "id": "whisper_wheat", "icon": "neepmeat:whisper_wheat", "text": "Whisper Wheat"},
-      {"type": "page", "id": "blood_bubble_tree", "icon": "neepmeat:blood_bubble_sapling", "text": "Blood Bubble Tree"}
+      {"type": "page", "id": "blood_bubble_tree", "icon": "neepmeat:blood_bubble_sapling", "text": "Blood Bubble Tree"},
+      {"type": "page", "id": "feeding_trough", "icon": "neepmeat:feeding_trough", "text": "Feeding Trough"}
     ]},
     {"type": "menu", "id": "rotary_machines", "icon": "neepmeat:motor_unit", "text": "Rotary Machines", "entries": [
         {"type": "page", "id": "mixer", "icon": "neepmeat:mixer", "text": "Mixer"},
@@ -177,6 +178,11 @@
     {"id": "blood_bubble_tree", "contents": [
       {"type": "text", "text": "Blood Bubble Tree\n", "bold": true},
       {"type": "text", "text": "Granting Enlightenment to a Warped Fungus remakes its flesh. Instead of fruit, the tree bears membranous sacs filled with animal blood."}
+    ]},
+    {"id": "feeding_trough", "contents": [
+      {"type": "text", "text": "Feeding Trough\n", "bold": true},
+      {"type": "text", "text": "The Feeding Trough dispenses food to nearby livestock, encouraging them to reproduce. It has a radius of five blocks and must be filled with Animal Feed to operate.\n"},
+      {"type": "text", "text": "Attaching a Motor will cause animals to breed at regular intervals. The time between feedings varies from 5s to 60s depending on the output power of the motor."}
     ]},
 
     {"id": "eldritch_enzymes", "contents": [
