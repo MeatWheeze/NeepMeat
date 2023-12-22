@@ -109,7 +109,8 @@ public class FilterPipeBlock extends AbstractAxialPipe implements PipeState.ISpe
         }
         if (world.isClient())
         {
-            world.updateListeners(pos, state, state, Block.NOTIFY_ALL);
+//            world.updateListeners(pos, state, state, Block.REDRAW_ON_MAIN_THREAD);
+            world.scheduleBlockRerenderIfNeeded(pos, state, state);
         }
         return ActionResult.success(world.isClient);
     }
