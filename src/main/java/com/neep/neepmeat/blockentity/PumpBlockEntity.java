@@ -28,6 +28,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     private Map<Direction, FluidNode> sides = new HashMap<>();
     private Map<Direction, FluidAcceptor.AcceptorModes> sideModes = new HashMap<>();
     private FluidBuffer buffer;
+    private boolean needsUpdate;
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
@@ -54,8 +55,11 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
-        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
-        be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
+        if (!world.isReceivingRedstonePower(pos))
+        {
+            be.sides.get(state.get(PumpBlock.FACING)).tick(world);
+            be.sides.get(state.get(PumpBlock.FACING).getOpposite()).tick(world);
+        }
     }
 
     public void update(BlockState state, World world)
@@ -68,7 +72,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     public NbtCompound writeNbt(NbtCompound tag)
     {
         super.writeNbt(tag);
-        tag.putInt("number", number);
+        buffer.writeNBT(tag);
         return tag;
     }
 
@@ -76,43 +80,13 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     public void readNbt(NbtCompound tag)
     {
         super.readNbt(tag);
-        number = tag.getInt("number");
+        buffer.readNBT(tag);
     }
 
     public FluidNode getNode(Direction direction)
     {
         return sides.get(direction);
     }
-
-//    @Override
-//    public boolean supportsExtraction()
-//    {
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean supportsInsertion()
-//    {
-//        return true;
-//    }
-
-//    @Override
-//    public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
-//    {
-//        return maxAmount;
-//    }
-//
-//    @Override
-//    public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
-//    {
-//        return maxAmount;
-//    }
-//
-//    @Override
-//    public Iterator<StorageView<FluidVariant>> iterator(TransactionContext transaction)
-//    {
-//        return null;
-//    }
 
     @Override
     @Nullable
@@ -121,5 +95,11 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
 //        return sideModes.get(direction) != FluidAcceptor.AcceptorModes.NONE
 //                || direction == null ? buffer : null;
         return buffer;
+    }
+
+    @Override
+    public void setNeedsUpdate(boolean needsUpdate)
+    {
+        this.needsUpdate = true;
     }
 }

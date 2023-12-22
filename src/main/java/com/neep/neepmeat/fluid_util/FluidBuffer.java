@@ -22,7 +22,6 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
     private FluidVariant resource = FluidVariant.blank();
     private long amount = 0;
     private BlockEntity parent;
-//    private final SnapshotParticipant<ResourceAmount<FluidVariant>> snapshotParticipant;
 
     public FluidBuffer(BlockEntity parent, long capacity)
     {
@@ -32,12 +31,16 @@ public class FluidBuffer extends SnapshotParticipant<ResourceAmount<FluidVariant
 
     public NbtCompound writeNBT(NbtCompound compound)
     {
+//        NbtCompound compound1 = new NbtCompound();
+        compound.putLong("amount", amount);
+
+//        compound.put("buffer", compound1);
         return compound;
     }
 
     public void readNBT(NbtCompound compound)
     {
-
+        System.out.println(amount);
     }
 
     @Override
