@@ -2,6 +2,7 @@ package com.neep.meatweapons;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatweapons.entity.*;
+import com.neep.meatweapons.item.IGunItem;
 import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
@@ -72,5 +73,10 @@ public class MeatWeapons implements ModInitializer
         GunFireC2SPacket.init();
 
         ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
+    }
+
+    public static boolean redirectClicks(ItemStack stack)
+    {
+        return stack.getItem() instanceof IGunItem gun && gun.redirectClicks();
     }
 }

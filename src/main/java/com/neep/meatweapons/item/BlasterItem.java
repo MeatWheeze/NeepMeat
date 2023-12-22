@@ -55,7 +55,7 @@ public class BlasterItem extends BaseGunItem implements IAnimatable, IAimable
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
         ItemStack itemStack = user.getStackInHand(hand);
-        fire(world, user, itemStack);
+        fire(world, user, itemStack, user.getPitch(), user.getYaw());
         return TypedActionResult.fail(itemStack);
     }
 
@@ -73,7 +73,7 @@ public class BlasterItem extends BaseGunItem implements IAnimatable, IAimable
                 0);
     }
 
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    public void fire(World world, PlayerEntity player, ItemStack stack, double pitch, double yaw)
     {
         {
             if (!player.getItemCooldownManager().isCoolingDown(this))

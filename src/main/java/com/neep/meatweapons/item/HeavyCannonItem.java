@@ -2,23 +2,19 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.entity.ExplodingShellEntity;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
@@ -54,19 +50,6 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        ItemStack itemStack = user.getStackInHand(hand);
-        fire(world, user, itemStack);
-        return TypedActionResult.fail(itemStack);
-    }
-
-//    @Override
-//    public Vec3f getAimOffset()
-//    {
-//        return new Vec3f(0.46f, 0, 0);
-//    }
-    @Override
     public Vec3d getMuzzleOffset(PlayerEntity player, ItemStack stack)
     {
         return new Vec3d(player.getMainHandStack().equals(stack) ? -0.2 : 0.2,
@@ -74,7 +57,8 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
                 0);
     }
 
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    @Override
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
     {
         if (!player.getItemCooldownManager().isCoolingDown(this))
         {
@@ -84,8 +68,8 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
                 if (!world.isClient)
                 {
-                    double yaw = Math.toRadians(player.getHeadYaw());
-                    double pitch = Math.toRadians(player.getPitch(0.1f));
+//                    double yaw = Math.toRadians(player.getHeadYaw());
+//                    double pitch = Math.toRadians(player.getPitch(0.1f));
 
                     double mult = 1.5; // Multiplier for bullet speed.
                     double vx = mult * -Math.sin(yaw) * Math.cos(pitch) + player.getVelocity().getX();
@@ -105,13 +89,13 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
                     playSound(world, player, GunSounds.FIRE_PRIMARY);
 
-                    stack.setDamage(stack.getDamage() + 1);
+                    if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
 
-                    final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                    GeckoLibNetwork.syncAnimation(player, this, id, ANIM_FIRE);
+                    final int anim = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+                    GeckoLibNetwork.syncAnimation(player, this, anim, ANIM_FIRE);
                     for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
                     {
-                        GeckoLibNetwork.syncAnimation(otherPlayer, this, id, ANIM_FIRE);
+                        GeckoLibNetwork.syncAnimation(otherPlayer, this, anim, ANIM_FIRE);
                     }
                 }
             }

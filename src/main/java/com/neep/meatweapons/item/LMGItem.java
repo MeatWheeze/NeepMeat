@@ -1,26 +1,23 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.network.GunFireC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Hand;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
@@ -67,19 +64,10 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
-    {
-        user.setCurrentHand(hand);
-        ItemStack itemStack = user.getStackInHand(hand);
-        return TypedActionResult.pass(itemStack);
-//        return TypedActionResult.fail(itemStack);
-    }
-
-    @Override
     public void usageTick(World world, LivingEntity user, ItemStack stack, int remainingUseTicks)
     {
         ItemStack itemStack = user.getStackInHand(Hand.MAIN_HAND);
-        fire(world, (PlayerEntity) user, itemStack);
+        trigger(world, (PlayerEntity) user, itemStack, 0, user.getPitch(), user.getYaw(), handType);
     }
 
     @Override
@@ -93,7 +81,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public void fire(World world, PlayerEntity player, ItemStack stack)
+    public void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, GunFireC2SPacket.HandType handType)
     {
         {
             if (!player.getItemCooldownManager().isCoolingDown(this))
