@@ -10,6 +10,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -38,6 +39,8 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     protected boolean hasRecipe;
     public static final int MAX_COOLDOWN = 10;
     protected int cooldown;
+
+    private MIP mip = new MIP();
 
     public PedestalBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -240,6 +243,26 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             }
 
             transaction.commit();
+        }
+    }
+
+    public MutateInPlace<ItemStack> getMutateInPlace(Void unused)
+    {
+        return mip;
+    }
+
+    public class MIP implements MutateInPlace<ItemStack>
+    {
+        @Override
+        public ItemStack get()
+        {
+            return storage.getAsStack();
+        }
+
+        @Override
+        public void set(ItemStack stack)
+        {
+            storage.setStack(stack);
         }
     }
 }

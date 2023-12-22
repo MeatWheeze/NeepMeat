@@ -6,6 +6,7 @@
   "message.neepmeat.shift_for_info": "§7Hold §fSHIFT§7 for more info.",
   "message.neepmeat.requires_motor": "Requires an external motor.",
   "message.neepmeat.requires_vascular": "Requires a vascular network.",
+  "message.neepmeat.plc_compatible": "Valid PLC workbench",
 
   "message.neepmeat.power": "Power: ",
   "message.neepmeat.power_unit": "eJ/t",
@@ -266,7 +267,7 @@
   "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from the facing",
   "block.neepmeat.fluid_rationer.lore_1": "storage into a pipe network.",
 
-  "block.neepmeat.surgery_controller": "Surgery Controller",
+  "block.neepmeat.surgery_controller": "PLC",
   "block.neepmeat.surgery_platform": "Surgery Platform",
   "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
 

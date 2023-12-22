@@ -67,6 +67,12 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
         return this;
     }
 
+    public ItemSettings plc()
+    {
+        this.tooltipSupplier = TooltipSupplier.combine(tooltipSupplier, PLC_COMPATIBLE);
+        return this;
+    }
+
     public MeatlibBlock.ItemFactory getFactory()
     {
         return factory;
@@ -80,4 +86,5 @@ public class ItemSettings implements MeatlibBlock.ItemFactory
 
     public static final TooltipSupplier REQUIRES_MOTOR = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".requires_motor").formatted(Formatting.RED));
     public static final TooltipSupplier REQUIRES_VASCULAR = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".requires_vascular").formatted(Formatting.RED));
+    public static final TooltipSupplier PLC_COMPATIBLE = (item, tooltip) -> tooltip.add(Text.translatable("message." + NeepMeat.NAMESPACE + ".plc_compatible").formatted(Formatting.RED));
 }
