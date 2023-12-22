@@ -1,4 +1,4 @@
-package com.neep.neepmeat.recipe.surgery;
+package com.neep.neepmeat.plc.component;
 
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 @SuppressWarnings("UnstableApiUsage")
 public interface TableComponent<T>
 {
-    BlockApiLookup<TableComponent<?>, Void> STRUCTURE_LOOKUP =
+    BlockApiLookup<TableComponent<?>, Void> LOOKUP =
             BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "structure"), asClass(), Void.class);
 
     Storage<T> getStorage();

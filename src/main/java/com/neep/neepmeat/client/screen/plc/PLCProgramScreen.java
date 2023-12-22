@@ -21,6 +21,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
@@ -114,7 +115,7 @@ public class PLCProgramScreen extends Screen
                 double sensitivity = 0.4;
                 PLCMotionController controller = renderer.getController();
                 controller.setPitchYaw(
-                        (float) (controller.getPitch() - deltaY * sensitivity),
+                        (float) MathHelper.clamp(controller.getPitch() - (deltaY * sensitivity), -90, 90),
                         (float) (controller.getYaw() - deltaX * sensitivity));
             }
         }

@@ -25,6 +25,11 @@ public interface PLC
             this.what = what;
         }
 
+        public Error(String what)
+        {
+            this.what = Text.of(what);
+        }
+
         public Text what()
         {
             return what;

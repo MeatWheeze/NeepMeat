@@ -20,6 +20,7 @@ import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
 import com.neep.neepmeat.network.ToolTransformPacket;
 import com.neep.neepmeat.player.implant.*;
+import com.neep.neepmeat.plc.recipe.PLCRecipes;
 import com.neep.neepmeat.potion.NMPotions;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.ItemTransport;
@@ -107,6 +108,8 @@ public class NeepMeat implements ModInitializer
 
 			Burner.LOOKUP.registerForBlockEntity(FurnaceBurnerImpl::get, BlockEntityType.FURNACE);
 			Burner.LOOKUP.registerForBlocks((world, pos, state, blockEntity, context) -> () -> 20, Blocks.LAVA, Blocks.LAVA_CAULDRON, Blocks.MAGMA_BLOCK);
+
+			PLCRecipes.init();
 
 			ScreenHandlerInit.registerScreenHandlers();
 

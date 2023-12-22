@@ -471,6 +471,8 @@
 
   "item.neepmeat.chrysalis": "Divine Chrysalis",
 
+  "step.neepmeat.combine": "COMBINE",
+
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
   "container.neepmeat.stirling_engine": "Stirling Engine",

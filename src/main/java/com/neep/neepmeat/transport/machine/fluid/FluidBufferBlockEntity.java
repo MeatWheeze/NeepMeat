@@ -5,7 +5,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
+import com.neep.neepmeat.plc.component.TableComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

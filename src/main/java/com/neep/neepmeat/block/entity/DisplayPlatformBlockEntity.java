@@ -4,7 +4,8 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.recipe.surgery.TableComponent;
+import com.neep.neepmeat.plc.component.MutateInPlace;
+import com.neep.neepmeat.plc.component.TableComponent;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -23,13 +24,14 @@ public class DisplayPlatformBlockEntity extends SyncableBlockEntity
 {
     protected final WritableStackStorage storage;
     protected final TableComponent<ItemVariant> tableComponent = new Component();
+    protected final MutateInPlace<ItemStack> mip = new Mutate();
 
     public float stackRenderDelta; // Used by the renderer
 
     public DisplayPlatformBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.storage = new WritableStackStorage(this::sync)
+        this.storage = new WritableStackStorage(this::sync, 1)
         {
             @Override
             protected void onFinalCommit()
@@ -52,6 +54,11 @@ public class DisplayPlatformBlockEntity extends SyncableBlockEntity
     public TableComponent<ItemVariant> getTableComponent(Void ctx)
     {
         return tableComponent;
+    }
+
+    public MutateInPlace<ItemStack> getMip(Void ctx)
+    {
+        return mip;
     }
 
     @Override
@@ -103,4 +110,19 @@ public class DisplayPlatformBlockEntity extends SyncableBlockEntity
             return RecipeInputs.ITEM_ID;
         }
     };
+
+    protected class Mutate implements MutateInPlace<ItemStack>
+    {
+        @Override
+        public ItemStack get()
+        {
+            return storage.getAsStack();
+        }
+
+        @Override
+        public void set(ItemStack stack)
+        {
+            storage.setStack(stack);
+        }
+    }
 }

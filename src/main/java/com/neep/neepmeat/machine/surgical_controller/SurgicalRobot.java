@@ -278,10 +278,6 @@ public class SurgicalRobot implements NbtSerialisable
         if (!parent.getWorld().isClient() && shouldUpdatePosition(parent.getWorld()))
             return;
 
-        prevX = this.x;
-        prevY = this.y;
-        prevZ = this.z;
-
         this.x = x;
         this.y = y;
         this.z = z;
@@ -320,10 +316,6 @@ public class SurgicalRobot implements NbtSerialisable
         {
             if (!robot.parent.overrideController())
             {
-                robot.prevX = robot.x;
-                robot.prevY = robot.y;
-                robot.prevZ = robot.z;
-
                 Camera camera = MinecraftClient.getInstance().gameRenderer.getCamera();
 
                 double speed = 0.2;

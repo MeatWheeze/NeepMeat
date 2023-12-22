@@ -86,6 +86,10 @@ public class PLCRobotC2S
         {
             BlockPos pos = PacketBufUtil.readBlockPos(buf);
             World world = client.world;
+
+            if (world == null)
+                return;
+
             double x = buf.readDouble();
             double y = buf.readDouble();
             double z = buf.readDouble();
