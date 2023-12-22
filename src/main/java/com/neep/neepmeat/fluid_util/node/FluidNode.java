@@ -1,5 +1,7 @@
-package com.neep.neepmeat.fluid_util;
+package com.neep.neepmeat.fluid_util.node;
 
+import com.neep.neepmeat.fluid_util.AcceptorModes;
+import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -21,7 +23,7 @@ public class FluidNode
     private final BlockPos pos;
     public float flow;
     public AcceptorModes mode;
-    private NMFluidNetwork network = null;
+//    private NMFluidNetwork network = null;
     public Map<FluidNode, Integer> distances = new HashMap<>();
     private final Storage<FluidVariant> storage;
 
@@ -48,25 +50,25 @@ public class FluidNode
 
     public void setNetwork(NMFluidNetwork network)
     {
-        if (!(this.network == null) && !this.network.equals(network))
-        {
-            this.network.removeNode(this);
-        }
-        this.network = network;
+//        if (!(this.network == null) && !this.network.equals(network))
+//        {
+//            this.network.removeNode(this);
+//        }
+//        this.network = network;
         distances.clear();
     }
 
     public void tick(World world)
     {
-        if (network != null)
-        {
-            network.tick();
-        }
+//        if (network != null)
+//        {
+//            network.tick();
+//        }
     }
 
     public void rebuildNetwork(World world)
     {
-        if (network == null)
+//        if (network == null)
         {
 //            network = new NMFluidNetwork(world, pos, face);
         }

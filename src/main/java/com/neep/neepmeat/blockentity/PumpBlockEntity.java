@@ -4,7 +4,7 @@ import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
 import com.neep.neepmeat.fluid_util.FluidBuffer;
-import com.neep.neepmeat.fluid_util.FluidNode;
+import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -90,11 +90,11 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
         }
     }
 
-    public void createNetwork()
-    {
-        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING));
-        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING).getOpposite());
-    }
+//    public void createNetwork()
+//    {
+//        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING));
+//        new NMFluidNetwork(world, pos, getCachedState().get(PumpBlock.FACING).getOpposite());
+//    }
 
     public void setActive(boolean active)
     {
@@ -122,7 +122,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     {
 //        sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
 //        sides.get(state.get(PumpBlock.FACING).getOpposite()).rebuildNetwork(world);
-        createNetwork();
+//        createNetwork();
         needsUpdate = false;
     }
 
@@ -144,7 +144,7 @@ public class PumpBlockEntity extends BlockEntity implements FluidBufferProvider
     public FluidNode getNode(Direction direction)
     {
         Direction facing = getCachedState().get(PumpBlock.FACING);
-        return new FluidNode(pos, direction, this.getBuffer(direction), sideModes.get(direction), 2);
+        return new FluidNode(pos.offset(direction.getOpposite()), direction.getOpposite(), this.getBuffer(direction), sideModes.get(direction.getOpposite()), 2);
     }
 
     @Override

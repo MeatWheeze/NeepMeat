@@ -1,5 +1,7 @@
 package com.neep.neepmeat.fluid_util;
 
+import com.neep.neepmeat.fluid_util.node.FluidNode;
+import com.neep.neepmeat.fluid_util.node.NodePos;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.ChunkSectionPos;
@@ -7,38 +9,46 @@ import net.minecraft.world.level.storage.AnvilLevelStorage;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class FluidNetwork extends AnvilLevelStorage
+public class FluidNetwork
 {
     public static final FluidNetwork NETWORK = new FluidNetwork();
 
     public Map<ChunkPos, PipeBranches> chunkPipes= new HashMap<>();
+    public Map<ChunkPos, Map<NodePos, Supplier<FluidNode>>> chunkNodes = new HashMap<>();
 
 
-    public PipeBranches getOrCreateMap(ChunkPos pos)
+    public Map<NodePos, Supplier<FluidNode>> getOrCreateMap(ChunkPos pos)
     {
-        PipeBranches out;
-        if ((out = chunkPipes.get(pos)) != null)
+        Map<NodePos, Supplier<FluidNode>> out;
+        if ((out = chunkNodes.get(pos)) != null)
         {
             return out;
         }
-        chunkPipes.put(pos, out = new PipeBranches());
+        chunkNodes.put(pos, out = new HashMap<>());
         return out;
     }
 
-    public void updateSegment(BlockPos pos, PipeSegment segment)
+    public void updateSegment(NodePos pos, FluidNode node)
     {
-        PipeBranches branch = getOrCreateMap(ChunkSectionPos.from(pos).toChunkPos());
-        branch.put(ChunkSectionPos.toLong(pos), segment);
+        Map<NodePos, Supplier<FluidNode>> nodes = getOrCreateMap(pos.toChunkPos());
+        nodes.put(pos, () -> node);
+//        System.out.println("Node updated: " + nodes.get(pos).get());
     }
 
-    public void removeSegment(BlockPos pos)
+    public void removeSegment(NodePos pos)
     {
-        PipeBranches branch;
-        if ((branch = chunkPipes.get(ChunkSectionPos.from(pos).toChunkPos())) == null)
+        Map<NodePos, Supplier<FluidNode>> nodes;
+        if ((nodes = chunkNodes.get(pos.toChunkPos())) == null)
         {
+//            System.out.println(pos);
             return;
         }
-        branch.remove(ChunkSectionPos.toLong(pos));
+        if (nodes.get(pos) != null)
+        {
+//            System.out.println("Node removed: " + nodes.get(pos).get());
+            nodes.remove(pos);
+        }
     }
 }

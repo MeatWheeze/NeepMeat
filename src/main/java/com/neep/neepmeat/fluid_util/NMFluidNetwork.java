@@ -2,6 +2,7 @@ package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.block.FluidAcceptor;
 import com.neep.neepmeat.block.FluidNodeProvider;
+import com.neep.neepmeat.fluid_util.node.FluidNode;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -30,6 +31,7 @@ public class NMFluidNetwork
 
     // My pet memory leak.
     public static List<NMFluidNetwork> LOADED_NETWORKS = new ArrayList<>();
+    public static HashSet<NMFluidNetwork> NETWORKS = new HashSet<>();
 
     static
     {
@@ -41,7 +43,18 @@ public class NMFluidNetwork
         this.world = world;
         this.origin = origin;
         this.originFace = direction;
-        LOADED_NETWORKS.add(this);
+//        LOADED_NETWORKS.add(this);
+    }
+
+    public static Optional<NMFluidNetwork> createNetwork(World world, BlockPos pos, Direction direction)
+    {
+        NMFluidNetwork network = new NMFluidNetwork(world, pos, direction);
+        network.rebuild(pos, direction);
+        if (network.checkValid())
+        {
+            return Optional.of(network);
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -62,12 +75,9 @@ public class NMFluidNetwork
         checkValid();
     }
 
-    public void checkValid()
+    public boolean checkValid()
     {
-        if (connectedNodes.size() == 0)
-        {
-            LOADED_NETWORKS.remove(this);
-        }
+        return connectedNodes.size() != 0;
     }
 
     public void rebuild(BlockPos startPos, Direction face)
@@ -78,6 +88,11 @@ public class NMFluidNetwork
             buildPressures();
 //            tick();
         }
+    }
+
+    public void merge(NMFluidNetwork network)
+    {
+
     }
 
     public void setWorld(World world)
@@ -103,7 +118,6 @@ public class NMFluidNetwork
 
     public void buildPressures()
     {
-//        System.out.println("pipes: " + networkPipes.keySet());
         try
         {
             // Set networks before updating distances.
@@ -111,26 +125,6 @@ public class NMFluidNetwork
 
             for (FluidNode node : connectedNodes)
             {
-//                PipeSegment pos = networkPipes.get(node.getPos().offset(node.getFace()));
-//                pos.
-
-//                BlockPos last = null;
-//                int distance = 0;
-//                for (Iterator<BlockPos> iterator = networkPipes.keySet().iterator(); iterator.hasNext();)
-//                {
-//                    BlockPos current = iterator.next();
-//                    if (last == null)
-//                    {
-//                        last = current;
-//                        networkPipes.get(last).setDistance(distance);
-//                        current = iterator.next();
-//                    }
-//
-//                    if (current.isWithinDistance(last, 1.1))
-//
-//                    last = current;
-//                }
-
                 List<BlockPos> nextSet = new ArrayList<>();
                 networkPipes.values().forEach((segment) -> segment.setVisited(false));
 
@@ -217,31 +211,23 @@ public class NMFluidNetwork
                                 networkPipes.put(next, new PipeSegment(next.toImmutable(), state2));
                             }
                         }
-//                        else if (state2.getBlock() instanceof FluidNodeProvider nodeProvider)
-//                        {
-//                            if (nodeProvider.connectInDirection(state2, direction.getOpposite()))
-//                            {
-//                                connectedNodes.add(nodeProvider.getNode(world, next, direction.getOpposite()));
-//                            }
-//                        }
                         else if (state2.hasBlockEntity())
                         {
+                            BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
+                            Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
+                            if (storage != null)
                             {
-                                BlockApiCache<Storage<FluidVariant>, Direction> cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, next);
-                                Storage<FluidVariant> storage = cache.find(state2, direction.getOpposite());
-                                if (storage != null)
-                                {
-                                    FluidNode node;
-                                    if (state2.getBlock() instanceof FluidNodeProvider provider)
-                                    {
-                                        node = provider.getNode(world, next, direction);
-                                    }
-                                    else
-                                    {
-                                        node = new FluidNode(next, direction.getOpposite(), storage, AcceptorModes.INSERT_EXTRACT, 0);
-                                    }
-                                    connectedNodes.add(node);
-                                }
+//                                FluidNetwork.NETWORK.
+//                                    FluidNode node;
+//                                    if (state2.getBlock() instanceof FluidNodeProvider provider)
+//                                    {
+//                                        node = provider.getNode(world, next, direction);
+//                                    }
+//                                    else
+//                                    {
+//                                        node = new FluidNode(next, direction.getOpposite(), storage, AcceptorModes.INSERT_EXTRACT, 0);
+//                                    }
+//                                    connectedNodes.add(node);
                             }
                         }
                     }

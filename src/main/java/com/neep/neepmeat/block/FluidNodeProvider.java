@@ -1,8 +1,6 @@
 package com.neep.neepmeat.block;
 
-import com.neep.neepmeat.fluid_util.AcceptorModes;
-import com.neep.neepmeat.fluid_util.FluidNode;
-import net.minecraft.block.BlockState;
+import com.neep.neepmeat.fluid_util.node.FluidNode;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
