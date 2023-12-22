@@ -22,19 +22,19 @@ public class BloodFluid extends RealisticFluid
     @Override
     public Fluid getStill()
     {
-        return BlockInitialiser.STILL_TEST;
+        return BlockInitialiser.STILL_BLOOD;
     }
 
     @Override
     public Fluid getFlowing()
     {
-        return BlockInitialiser.FLOWING_TEST;
+        return BlockInitialiser.FLOWING_BLOOD;
     }
 
     @Override
     public Item getBucketItem()
     {
-        return BlockInitialiser.TEST_BUCKET;
+        return BlockInitialiser.BLOOD_BUCKET;
     }
 
     @Override
