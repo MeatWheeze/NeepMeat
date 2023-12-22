@@ -69,8 +69,7 @@ public interface FluidPipe
                 }
                 else
                 {
-                    FluidNodeManager.getInstance(world).removeNode(world, new NodePos(pos, direction));
-                    changed = true;
+                    changed |= FluidNodeManager.getInstance(world).removeNode(world, new NodePos(pos, direction));
                 }
             }
             return changed;

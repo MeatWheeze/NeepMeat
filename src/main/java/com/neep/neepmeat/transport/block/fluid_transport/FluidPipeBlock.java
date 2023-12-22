@@ -80,10 +80,17 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState).isPresent();
         if (!foundPipe)
         {
-            createStorageNodes(world, pos, nextState);
+            // If the nodes have changed, we need to update the pipe.
+            if (createStorageNodes(world, pos, nextState))
+            {
+                FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(nextState));
+            }
         }
-
-        FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(nextState));
+        else if (!state.equals(nextState))
+        {
+            // The addition of a pipe can change this one's junction status
+            FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(nextState));
+        }
     }
 
     @Override

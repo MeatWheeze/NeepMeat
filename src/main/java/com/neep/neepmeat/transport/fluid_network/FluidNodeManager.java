@@ -161,19 +161,23 @@ public class FluidNodeManager
         return out;
     }
 
-    private void removeNode(NodePos pos)
+    private boolean removeNode(NodePos pos)
     {
         Map<NodePos, FluidNode> nodes;
         if ((nodes = chunkNodes.get(pos.toChunkPos().toLong())) == null)
         {
-            return;
+            // No nodes
+            return false;
         }
         if (nodes.get(pos) != null)
         {
             // Ensure that node is removed from connected networks
             nodes.get(pos).onRemove();
             nodes.remove(pos);
+            return true;
         }
+
+        return false;
     }
 
     // Creates or retrieves a node block entity
@@ -265,14 +269,16 @@ public class FluidNodeManager
 //        validatePos(serverWorld, pos.pos);
 //    }
 
-    public void removeNode(World world, NodePos pos)
+    public boolean removeNode(World world, NodePos pos)
     {
         if (!(world instanceof ServerWorld serverWorld))
         {
-            return;
+            return false;
         }
-        removeNode(pos);
+
+        boolean removed = removeNode(pos);
         validatePos(serverWorld, pos.pos());
+        return removed;
     }
 
     public List<FluidNode> getNodes(BlockPos pos)
