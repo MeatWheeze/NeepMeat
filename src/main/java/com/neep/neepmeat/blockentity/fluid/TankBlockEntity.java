@@ -1,13 +1,12 @@
 package com.neep.neepmeat.blockentity.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.fluid_transfer.FluidBuffer;
-import com.neep.neepmeat.fluid_transfer.storage.WritableFluidBuffer;
+import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.api.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
@@ -20,7 +19,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class TankBlockEntity extends SyncableBlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
+public class TankBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
     protected final WritableFluidBuffer buffer;
 

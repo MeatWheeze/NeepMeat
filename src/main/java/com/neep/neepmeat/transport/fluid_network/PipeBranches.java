@@ -1,7 +1,7 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network;
 
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.fluid.Fluids;

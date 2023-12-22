@@ -1,10 +1,9 @@
-package com.neep.neepmeat.fluid_transfer.node;
+package com.neep.neepmeat.transport.fluid_network.node;
 
 import com.neep.neepmeat.transport.block.fluid_transport.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.transport.block.fluid_transport.IVariableFlowBlock;
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeNetwork;
+import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

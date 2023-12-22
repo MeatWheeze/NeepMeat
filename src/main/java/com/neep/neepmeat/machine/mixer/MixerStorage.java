@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.mixer;
 
-import com.neep.neepmeat.fluid_transfer.storage.WritableSingleFluidStorage;
+import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;

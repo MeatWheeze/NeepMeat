@@ -2,10 +2,10 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.neepmeat.api.block.pipe.AbstractAxialPipe;
 import com.neep.neepmeat.blockentity.CheckValveBlockEntity;
-import com.neep.neepmeat.fluid_transfer.AcceptorModes;
-import com.neep.neepmeat.fluid_transfer.FluidNetwork;
-import com.neep.neepmeat.fluid_transfer.PipeState;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
+import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeState;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;

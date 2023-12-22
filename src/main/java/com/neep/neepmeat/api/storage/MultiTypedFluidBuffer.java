@@ -1,9 +1,7 @@
-package com.neep.neepmeat.fluid_transfer.storage;
+package com.neep.neepmeat.api.storage;
 
-import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
-import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 

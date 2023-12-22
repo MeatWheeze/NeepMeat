@@ -1,11 +1,9 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network;
 
-import com.ibm.icu.impl.CalendarAstronomer;
 import com.neep.neepmeat.api.block.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
-import com.neep.neepmeat.fluid_transfer.node.FluidNode;
-import com.neep.neepmeat.fluid_transfer.node.NodePos;
-import com.neep.neepmeat.transport.thread.NetworkRebuilding;
+import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
+import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;

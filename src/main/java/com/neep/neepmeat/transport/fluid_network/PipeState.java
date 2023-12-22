@@ -1,4 +1,4 @@
-package com.neep.neepmeat.fluid_transfer;
+package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.AbstractPipeBlock;

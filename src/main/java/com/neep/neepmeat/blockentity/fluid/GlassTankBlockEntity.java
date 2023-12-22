@@ -1,11 +1,12 @@
 package com.neep.neepmeat.blockentity.fluid;
 
+import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 
-public class GlassTankBlockEntity extends TankBlockEntity implements com.neep.neepmeat.fluid_transfer.FluidBuffer.FluidBufferProvider
+public class GlassTankBlockEntity extends TankBlockEntity implements FluidBuffer.FluidBufferProvider
 {
 //    private final WritableFluidBuffer buffer;
 
