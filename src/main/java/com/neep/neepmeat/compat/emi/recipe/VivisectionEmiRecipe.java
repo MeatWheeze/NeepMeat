@@ -29,7 +29,7 @@ public class VivisectionEmiRecipe implements EmiRecipe {
     public VivisectionEmiRecipe(List<EntityType<?>> input, Item output) {
         this.entities = input.stream().map(e -> (Text) Text.translatable(e.getTranslationKey())).toList();
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection_"+String.join("_", input.stream().map(e -> e.getUntranslatedName().toLowerCase(Locale.ROOT)).toList())); // TODO: ?????????
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+String.join("_", input.stream().map(e -> e.getUntranslatedName().toLowerCase(Locale.ROOT)).toList()));
         this.input = List.of();
         this.output = List.of(EmiStack.of(output));
     }
@@ -37,7 +37,7 @@ public class VivisectionEmiRecipe implements EmiRecipe {
     public VivisectionEmiRecipe(Item input, Item output) {
         this.entities = List.of();
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection_"+Registry.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT)); // TODO: ???
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+Registry.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
         this.input = List.of(EmiIngredient.of(Ingredient.ofItems(input)));
         this.output = List.of(EmiStack.of(output));
     }

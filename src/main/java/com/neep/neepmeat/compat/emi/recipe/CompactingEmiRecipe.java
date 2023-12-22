@@ -26,7 +26,7 @@ public class CompactingEmiRecipe implements EmiRecipe {
     public CompactingEmiRecipe(List<Item> input, Item output, int page) {
         this.page = page;
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "compacting_"+page); // TODO: ???
+        this.id = new Identifier(NeepMeat.NAMESPACE, "compacting/"+page);
         this.input = input.stream().map(Ingredient::ofItems).map(EmiIngredient::of).toList();
         this.output = List.of(EmiStack.of(output));
     }
