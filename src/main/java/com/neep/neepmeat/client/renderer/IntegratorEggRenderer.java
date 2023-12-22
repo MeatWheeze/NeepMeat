@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.util.NMMaths;
@@ -71,9 +72,10 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
                     (float) renderColor.getBlue() / 255f, (float) renderColor.getAlpha() / 255);
 
             // Render enlightenment overlay
+            float dataPropt = (float) be.getData(DataVariant.NORMAL) / IntegratorBlockEntity.MAX_DATA;
             RenderLayer cameo =  RenderLayer.getEntityTranslucent(LAYER);
             render(model, be, partialTicks, cameo, matrices, vertexConsumers,
-                    vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, be.getData() / IntegratorBlockEntity.MAX_DATA);
+                    vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, dataPropt);
 
             matrices.pop();
             matrices.pop();

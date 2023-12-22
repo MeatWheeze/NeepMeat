@@ -43,7 +43,7 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
         super.readNbt(nbt);
     }
 
-    public Storage<DataVariant> getDataStorage()
+    public DataStorage getDataStorage()
     {
         return storage;
     }

@@ -3,14 +3,19 @@ package com.neep.neepmeat.block.entity;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
+import com.neep.neepmeat.machine.integrator.Integrator;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedIntegratorStructureBlockEntity extends BigBlockStructureBlockEntity
+public class AdvancedIntegratorStructureBlockEntity extends BigBlockStructureBlockEntity implements Integrator
 {
     @Nullable private AdvancedIntegratorBlockEntity parent;
 
@@ -45,5 +50,36 @@ public class AdvancedIntegratorStructureBlockEntity extends BigBlockStructureBlo
             parent = (AdvancedIntegratorBlockEntity) world.getBlockEntity(getControllerPos());
         }
         return parent;
+    }
+
+    @Override
+    public BlockPos getBlockPos() { return getPos(); }
+
+    @Override
+    public boolean canEnlighten() { return true; }
+
+    @Override
+    public void setLookPos(BlockPos pos)
+    {
+
+    }
+
+    @Override
+    public void spawnBeam(World world, BlockPos pos)
+    {
+        Integrator.spawnBeam((ServerWorld) world, getControllerPos().up(4), pos);
+        world.playSound(null, pos, NMSounds.ADVANCED_INTEGRATOR_CHARGE, SoundCategory.BLOCKS, 20, 0.8f);
+    }
+
+    @Override
+    public long getData(DataVariant variant)
+    {
+        return getParent().getDataStorage().getAmount();
+    }
+
+    @Override
+    public float extract(DataVariant variant, long amount, TransactionContext transaction)
+    {
+        return getParent().getDataStorage().extract(variant, amount, transaction);
     }
 }

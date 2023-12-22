@@ -3,9 +3,10 @@ package com.neep.neepmeat.machine.integrator;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataPort;
+import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -25,6 +26,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
@@ -47,7 +49,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 import java.util.*;
 
 @SuppressWarnings("UnstableApiUsage")
-public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnimatable
+public class IntegratorBlockEntity extends SyncableBlockEntity implements Integrator, IAnimatable
 {
     protected int growthTimeRemaining = 1000;
     protected final IntegratorStorage storage;
@@ -89,34 +91,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
     {
         super(NMBlockEntities.INTEGRATOR, pos, state);
         this.storage = new IntegratorStorage(this);
-    }
-
-    public static IntegratorBlockEntity findIntegrator(World world, BlockPos pos, int maxDist)
-    {
-        Queue<BlockPos> queue = new LinkedList<>();
-        List<BlockPos> visited = new ArrayList<>();
-        queue.add(pos);
-        while (!queue.isEmpty())
-        {
-            BlockPos current = queue.poll();
-            for (Direction direction : Direction.values())
-            {
-                BlockPos offset = current.offset(direction);
-
-                if (pos.getManhattanDistance(offset) > maxDist || visited.contains(offset)) continue;
-
-                if (world.getBlockState(offset).isOf(NMBlocks.DATA_CABLE))
-                {
-                    queue.add(offset);
-                    visited.add(offset);
-                }
-                else if (world.getBlockEntity(offset) instanceof IntegratorBlockEntity integrator)
-                {
-                    return integrator;
-                }
-            }
-        }
-        return null;
     }
 
     @Override
@@ -242,7 +216,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
 
     public void showContents(ServerPlayerEntity player)
     {
-        if (!isMature())
+        if (!canEnlighten())
             player.sendMessage(Text.of("Blood: " + storage.immatureStorage.getAmount() / (FluidConstants.BUCKET) * 100 + "%"), true);
         else
             player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".integrator.data", data, MAX_DATA), true);
@@ -275,11 +249,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         return storage.itemStorage;
     }
 
-    public float getData()
-    {
-        return data;
-    }
-
     public float insertEnlightenment(float maxAmount, TransactionContext transaction)
     {
         float inserted = Math.min(MAX_DATA - data, maxAmount);
@@ -292,9 +261,40 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
         return 0;
     }
 
-    public float extractEnlightenment(float maxAmount, TransactionContext transaction)
+    @Override
+    public boolean canEnlighten()
     {
-        float extracted = Math.min(maxAmount, data);
+        return isMature;
+    }
+
+    @Override
+    public BlockPos getBlockPos() { return getPos(); }
+
+
+    @Override
+    public void setLookPos(BlockPos pos)
+    {
+        this.lookTarget = pos;
+        sync();
+    }
+
+    @Override
+    public void spawnBeam(World world, BlockPos pos)
+    {
+        Integrator.spawnBeam((ServerWorld) world, getPos().up(), pos);
+        world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
+    }
+
+    @Override
+    public long getData(DataVariant variant)
+    {
+        return data;
+    }
+
+    @Override
+    public float extract(DataVariant variant, long amount, TransactionContext transaction)
+    {
+        long extracted = Math.min(amount, data);
         if (extracted > 0)
         {
             dataSnapshot.updateSnapshots(transaction);
@@ -302,17 +302,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements IAnima
             return extracted;
         }
         return 0;
-    }
-
-    public boolean isMature()
-    {
-        return isMature;
-    }
-
-    public void setLookPos(BlockPos pos)
-    {
-        this.lookTarget = pos;
-        sync();
     }
 
     public Vec3d getLookTarget()

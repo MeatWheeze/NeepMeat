@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -51,10 +52,10 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
         int i = state.get(LEVEL);
         ItemStack itemStack = player.getStackInHand(hand);
         float chance = getIncreaseChance(itemStack.getItem());
-        IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
+        Integrator integrator = Integrator.findIntegrator(world, pos, 10);
         if (i < 8 && chance > 0)
         {
-            if (integrator != null && integrator.isMature())
+            if (integrator != null && integrator.canEnlighten())
             {
                 if (i < 7 && !world.isClient)
                 {
@@ -72,7 +73,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
             {
                 player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".compactor.not_found"), true);
             }
-            else if (!integrator.isMature())
+            else if (!integrator.canEnlighten())
             {
                 player.sendMessage(Text.translatable("message." + NeepMeat.NAMESPACE + ".compactor.immature"), true);
             }

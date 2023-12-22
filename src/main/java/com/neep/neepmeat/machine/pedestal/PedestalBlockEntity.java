@@ -9,7 +9,7 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
@@ -136,14 +136,14 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         @Override
         public void startRecipe(EnlighteningRecipe recipe)
         {
-
             setRecipe(recipe);
             hasRecipe = true;
 
             getIntegrator().setLookPos(pos);
             world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
-            world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
-            spawnBeam((ServerWorld) world, integrator.up(), pos);
+//            world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
+            getIntegrator().spawnBeam(world, pos);
+//            spawnBeam((ServerWorld) world, integrator.up(), pos);
             sync();
         }
 
@@ -158,7 +158,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
         public void finishRecipe()
         {
             load(world);
-            IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
+            Integrator integrator = Integrator.findIntegrator(world, pos, 10);
             try (Transaction transaction = Transaction.openOuter())
             {
                 if (currentRecipe != null && integrator != null)
@@ -175,9 +175,11 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             load(world);
             if (currentRecipe == null)
             {
-                IntegratorBlockEntity integrator = IntegratorBlockEntity.findIntegrator(world, pos, 10);
-                if (integrator == null || !integrator.isMature()) return;
-                this.integrator = integrator.getPos();
+                Integrator integrator = Integrator.findIntegrator(world, pos, 10);
+                if (integrator == null || !integrator.canEnlighten())
+                    return;
+
+                this.integrator = integrator.getBlockPos();
 
                 EnlighteningRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ENLIGHTENING, this, world).orElse(null);
                 if (recipe != null)
@@ -220,9 +222,9 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             recipeId = null;
         }
 
-        public IntegratorBlockEntity getIntegrator()
+        public Integrator getIntegrator()
         {
-            if (world.getBlockEntity(integrator) instanceof IntegratorBlockEntity be) return be;
+            if (world.getBlockEntity(integrator) instanceof Integrator be) return be;
             return null;
         }
     }
