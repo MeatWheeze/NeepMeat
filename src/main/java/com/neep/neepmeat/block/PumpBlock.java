@@ -3,7 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
-import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
+import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -110,7 +110,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
             else
             {
 //                System.out.println(NMFluidNetwork.LOADED_NETWORKS);
-                for (NMFluidNetwork network : NMFluidNetwork.LOADED_NETWORKS)
+                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
                 {
 //                    System.out.println(network.connectedNodes);
                     System.out.print("\n" + network.uid + " nodes: ");
