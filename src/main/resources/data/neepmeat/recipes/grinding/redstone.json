@@ -1,7 +1,7 @@
 {
   "type": "neepmeat:grinding",
   "input": {
-    "resource": "minecraft:redstone_ore",
+    "tag": "minecraft:redstone_ores",
     "amount": 1
   },
   "output": {

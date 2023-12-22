@@ -1,7 +1,7 @@
 {
   "type": "neepmeat:grinding",
   "input": {
-    "resource": "minecraft:coal_ore",
+    "tag": "minecraft:coal_ores",
     "amount": 1
   },
   "output": {

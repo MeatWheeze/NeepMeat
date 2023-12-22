@@ -33,11 +33,11 @@ public class GrinderStorage extends SimpleInventory
             public boolean canInsert(ItemVariant resource)
             {
                 World world = parent.getWorld();
-                if (world == null)
+//                if (world == null)
                     return true;
 
-                List<?> list = world.getRecipeManager().listAllOfType(NMrecipeTypes.GRINDING);
-                return list.stream().anyMatch(r -> r instanceof GrindingRecipe recipe && recipe.getItemInput().resource().equals(resource));
+//                List<?> list = world.getRecipeManager().listAllOfType(NMrecipeTypes.GRINDING);
+//                return list.stream().anyMatch(r -> r instanceof GrindingRecipe recipe && recipe.getItemInput().resource().equals(resource));
             }
         };
 

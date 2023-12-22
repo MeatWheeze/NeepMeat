@@ -1,6 +1,7 @@
 package com.neep.neepmeat.storage;
 
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
@@ -10,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.system.CallbackI;
 
 @SuppressWarnings("UnstableApiUsage")
-public class WritableStackStorage extends SingleVariantStorage<ItemVariant>
+public class WritableStackStorage extends SingleVariantStorage<ItemVariant> implements StorageView<ItemVariant>
 {
     protected int capacity = 64;
     protected BlockEntity parent;

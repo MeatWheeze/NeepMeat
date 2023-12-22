@@ -44,7 +44,7 @@ public class ItemIngredient extends GenericIngredient<Item, ItemVariant>
         else
         {
             buf.writeBoolean(true);
-            Item item = this.getResourceType();
+            Item item = this.resource.getItem();
             buf.writeVarInt(Registry.ITEM.getRawId(item)); // ID
             buf.writeLong(this.amount()); // Amount
 

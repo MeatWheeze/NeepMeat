@@ -2,29 +2,37 @@ package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
 import com.neep.meatlib.recipe.ItemIngredient;
+import com.neep.meatlib.recipe.RecipeInput;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.GrinderStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
 public class GrindingRecipe implements Recipe<GrinderStorage>
 {
     protected Identifier id;
-    protected ItemIngredient itemInput;
+    protected RecipeInput<Item> itemInput;
     protected ItemIngredient itemOutput;
     protected float experience;
     protected int processTime;
 
-    public GrindingRecipe(Identifier id, ItemIngredient itemInput, ItemIngredient itemOutput, float experience, int processTime)
+    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, ItemIngredient itemOutput, float experience, int processTime)
     {
         this.itemInput = itemInput;
         this.itemOutput = itemOutput;
@@ -49,11 +57,6 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     public boolean fits(int width, int height)
     {
         return false;
-    }
-
-    public ItemIngredient getItemInput()
-    {
-        return itemInput;
     }
 
     @Override
@@ -94,7 +97,13 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     {
         try (Transaction inner = transaction.openNested())
         {
-            long extracted = storage.getInputStorage().extract(itemInput.resource(), itemInput.amount(), transaction);
+            Optional<Item> item = itemInput.getFirstMatching(storage.getInputStorage());
+            if (item.isEmpty())
+            {
+                throw new IllegalStateException("Storage contents must conform to recipe");
+            }
+
+            long extracted = storage.getInputStorage().extract(ItemVariant.of(item.get()), itemInput.amount(), transaction);
             if (extracted == itemInput.amount())
             {
                 inner.commit();
@@ -136,7 +145,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         public GrindingRecipe read(Identifier id, JsonObject json)
         {
             JsonObject inputElement = JsonHelper.getObject(json, "input");
-            ItemIngredient itemInput = ItemIngredient.fromJson(inputElement);
+            RecipeInput<Item> itemInput = RecipeInput.fromJson(Registry.ITEM, inputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
             ItemIngredient itemOutput = ItemIngredient.fromJson(outputElement);
@@ -150,7 +159,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         @Override
         public GrindingRecipe read(Identifier id, PacketByteBuf buf)
         {
-            ItemIngredient itemInput = ItemIngredient.fromBuffer(buf);
+            RecipeInput<Item> itemInput = RecipeInput.fromBuffer(Registry.ITEM, buf);
             ItemIngredient itemOutput = ItemIngredient.fromBuffer(buf);
             float experience = buf.readFloat();
             int time = buf.readVarInt();
@@ -161,7 +170,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         @Override
         public void write(PacketByteBuf buf, GrindingRecipe recipe)
         {
-            recipe.itemInput.write(buf);
+            recipe.itemInput.write(Registry.ITEM, buf);
             recipe.itemOutput.write(buf);
             buf.writeFloat(recipe.experience);
             buf.writeVarInt(recipe.processTime);
@@ -170,7 +179,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         @FunctionalInterface
         public interface RecipeFactory<T extends GrindingRecipe>
         {
-            T create(Identifier var1, ItemIngredient in, ItemIngredient out, float xp, int time);
+            T create(Identifier var1, RecipeInput<Item> in, ItemIngredient out, float xp, int time);
         }
     }
 }

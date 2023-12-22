@@ -134,11 +134,6 @@ public class GrinderBlockEntity extends SyncableBlockEntity
         {
             GrindingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.GRINDING, storage, world).orElse(null);
 
-            if (recipe != null)
-            {
-                long ins = storage.outputStorage.simulateInsert(recipe.getItemInput().resource(), recipe.getItemInput().amount(), null);
-            }
-
             if (recipe != null && storage.outputStorage.simulateInsert(recipe.getItemOutput().resource(),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
