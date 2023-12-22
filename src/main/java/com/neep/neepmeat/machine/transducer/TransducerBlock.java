@@ -5,6 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,6 +20,13 @@ public class TransducerBlock extends BaseBlock implements BlockEntityProvider
     public TransducerBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings);
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
+    {
+        world.getBlockEntity(pos, NMBlockEntities.TRANSDUCER).ifPresent(TransducerBlockEntity::update);
+        super.neighborUpdate(state, world, pos, block, fromPos, notify);
     }
 
     @Nullable
