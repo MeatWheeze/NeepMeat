@@ -21,6 +21,7 @@ public class FluidTransport
     public static Block FILTER_PIPE = BlockRegistry.queue(new FilterPipeBlock("filter_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block WINDOW_PIPE = BlockRegistry.queue(new WindowPipeBlock("window_fluid_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block COPPER_PIPE = BlockRegistry.queue(new CapillaryFluidPipeBlock("copper_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block PUMP = BlockRegistry.queue(new PumpBlock("pump", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block TANK = BlockRegistry.queue(new TankBlock("basic_tank", NMBlocks.block().factory(TankItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
@@ -33,6 +34,7 @@ public class FluidTransport
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, STOP_VALVE);
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, FILTER_PIPE);
         PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, CHECK_VALVE);
+        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, WINDOW_PIPE);
 
         PipeNetwork.registerEvent();
     }

@@ -1,32 +1,62 @@
 {
-  "variants": {
-    "facing=east": {
-      "model": "neepmeat:block/check_valve",
-      "y": 90,
-      "x": 0
+  "multipart": [
+    {
+      "when": {
+        "facing": "north"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve"
+      }
     },
-    "facing=north": {
-      "model": "neepmeat:block/check_valve",
-      "y": 0,
-      "x": 0
+    {
+      "when": {
+        "facing": "south"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve",
+        "y": 180
+      }
     },
-    "facing=south": {
-      "model": "neepmeat:block/check_valve",
-      "y": 180,
-      "x": 0
+    {
+      "when": {
+        "facing": "east"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve",
+        "y": 90
+      }
     },
-    "facing=west": {
-      "model": "neepmeat:block/check_valve",
-      "y": -90,
-      "x": 0
+    {
+      "when": {
+        "facing": "west"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve",
+        "y": -90
+      }
     },
-    "facing=up": {
-      "model": "neepmeat:block/check_valve",
-      "x": -90
+    {
+      "when": {
+        "facing": "up"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve",
+        "x": -90
+      }
     },
-    "facing=down": {
-      "model": "neepmeat:block/check_valve",
-      "x": 90
+    {
+      "when": {
+        "facing": "down"
+      },
+      "apply": {
+        "model": "neepmeat:block/check_valve",
+        "x": 90
+      }
+    },
+    {
+      "apply": {
+        "model": "neepmeat:block/rusty_pipe/pipe_test"
+      }
     }
-  }
+  ]
 }

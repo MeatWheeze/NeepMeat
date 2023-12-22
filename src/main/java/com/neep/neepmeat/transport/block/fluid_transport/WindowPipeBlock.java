@@ -20,9 +20,9 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityProvider
+public class WindowPipeBlock extends AbstractAxialPipe implements BlockEntityProvider
 {
-    public CheckValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public WindowPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings.nonOpaque());
     }
@@ -52,21 +52,14 @@ public class CheckValveBlock extends AbstractAxialPipe implements BlockEntityPro
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.CHECK_VALVE.instantiate(pos, state);
+        return NMBlockEntities.WINDOW_PIPE.instantiate(pos, state);
     }
 
-    public static class CheckValvePipeVertex extends BlockPipeVertex
+    public static class WindowPipeVertex extends BlockPipeVertex
     {
-        public CheckValvePipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
+        public WindowPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
         {
             super(fluidPipeBlockEntity);
-        }
-
-        @Override
-        public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
-        {
-            long superAmount = super.canInsert(world, inDir, variant, maxAmount);
-            return  inDir == parent.getCachedState().get(FACING).ordinal() ? superAmount : 0;
         }
 
         @Override

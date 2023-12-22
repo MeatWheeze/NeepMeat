@@ -5,9 +5,7 @@
         "facing": "north|south"
       },
       "apply": {
-        "model": "neepmeat:block/filter_pipe",
-        "x": 0,
-        "y": 0
+        "model": "neepmeat:block/rusty_pipe/window_ns"
       }
     },
     {
@@ -15,7 +13,7 @@
         "facing": "east|west"
       },
       "apply": {
-        "model": "neepmeat:block/filter_pipe",
+        "model": "neepmeat:block/rusty_pipe/window_ns",
         "y": 90
       }
     },
@@ -24,12 +22,10 @@
         "facing": "up|down"
       },
       "apply": {
-        "model": "neepmeat:block/filter_pipe",
-        "x": -90,
-        "y": 0
+        "model": "neepmeat:block/rusty_pipe/window_ns",
+        "x": 90
       }
     },
-
     {
       "apply": {
         "model": "neepmeat:block/rusty_pipe/pipe_test"

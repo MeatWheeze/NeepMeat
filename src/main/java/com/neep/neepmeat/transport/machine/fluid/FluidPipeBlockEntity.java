@@ -4,6 +4,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -29,6 +30,11 @@ public class FluidPipeBlockEntity extends BlockEntity
         super(type, pos, state);
         this.vertex = constructor.create(this);
         this.constructor = constructor;
+    }
+
+    public void setNetwork(PipeNetwork network)
+    {
+        this.network = network;
     }
 
     @Override

@@ -93,7 +93,7 @@ public abstract class AbstractAxialPipe extends BaseFacingBlock implements IFlui
     }
 
     @Override
-    public boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
+    public boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof FacingBlock)
         {

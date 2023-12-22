@@ -9,6 +9,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 public interface IFluidPipe
 {
-    static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
+    static boolean isConnectedIn(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         if (state.getBlock() instanceof AbstractPipeBlock)
         {
@@ -178,7 +179,7 @@ public interface IFluidPipe
         updateNetwork(world, pos, state, PipeNetwork.UpdateReason.PIPE_REMOVED);
     }
 
-    default boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction)
+    default boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
     {
         return true;
     }
