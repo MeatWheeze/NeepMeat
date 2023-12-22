@@ -7,6 +7,7 @@ import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -25,6 +26,12 @@ public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
     public IntegratorEggBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
+    }
+
+    @Override
+    public BlockRenderType getRenderType(BlockState state)
+    {
+        return BlockRenderType.ENTITYBLOCK_ANIMATED;
     }
 
     @Nullable
