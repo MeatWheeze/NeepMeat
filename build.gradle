@@ -25,6 +25,7 @@ repositories {
 	maven { url 'https://www.jitpack.io' }
 	maven { url 'https://maven.ladysnake.org/releases' }
 //	maven { url 'https://lazurite.dev/releases' } // A random myron fork for the wrong version
+	maven { url "https://maven.terraformersmc.com/" }
 }
 
 configurations.configureEach {
@@ -56,13 +57,22 @@ dependencies {
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}")
 
 	// REI
-	modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
-	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
 
 	// Myron
 //	modImplementation include("dev.monarkhes:myron:1.6.2+1.19.2")
+
+	// EMI
+	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
+
+	if (project.recipe_viewer == "rei") {
+		modRuntimeOnly "dev.architectury:architectury-fabric:${project.architectury_version}"
+		modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
+	}
+	if (project.recipe_viewer == "emi") {
+		modLocalRuntime "dev.emi:emi-fabric:${project.emi_version}"
+	}
 }
 
 processResources {
