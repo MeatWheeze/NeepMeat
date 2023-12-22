@@ -9,6 +9,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -46,6 +49,8 @@ public class ToiletBlock extends BaseHorFacingBlock
     {
         if (world.isReceivingRedstonePower(pos) && state.get(OPEN))
         {
+            spawnParticles(world, pos);
+
             // Find a living entity in the block above and teleport it one block below the toilet block.
             Box box = new Box(pos.up());
             List<LivingEntity> entityList = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, e -> true);
@@ -62,6 +67,14 @@ public class ToiletBlock extends BaseHorFacingBlock
             }
         }
         super.neighborUpdate(state, world, pos, block, fromPos, notify);
+    }
+
+    protected void spawnParticles(World world, BlockPos pos)
+    {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(ParticleTypes.SPLASH, pos.getX() + 0.5, pos.getY() + 0.9, pos.getZ() + 0.5, 10, 0.1, 0, 0.1, 0.1);
+        }
     }
 
     @Override
