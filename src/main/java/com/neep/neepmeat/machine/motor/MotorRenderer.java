@@ -4,6 +4,8 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -14,8 +16,16 @@ import net.minecraft.util.math.Vec3f;
 
 public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
 {
-    public MotorRenderer(BlockEntityRendererFactory.Context context)
+    protected float lastFrame;
+    protected float currentFrame;
+
+    public MotorRenderer(BlockEntityRendererFactory.Context ctx)
     {
+        WorldRenderEvents.BEFORE_BLOCK_OUTLINE.register(((context, hitResult) ->
+        {
+            this.lastFrame = this.currentFrame;
+            return true;
+        }));
     }
 
     @Override
@@ -24,13 +34,18 @@ public class MotorRenderer implements BlockEntityRenderer<MotorBlockEntity>
         matrices.push();
         Direction facing = be.getCachedState().get(BaseFacingBlock.FACING);
 
-        long time = be.getWorld().getTime();
+        this.currentFrame = be.getWorld().getTime() + tickDelta;
+        float delta = (float) (currentFrame - lastFrame);
+//        this.lastFrame = currentFrame;
 
-        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.5, be.currentSpeed, be.running ? 1 : 0));
+        // Temporal discretisation!
+
+        be.currentSpeed = (float) (be.rotorSpeed * MathHelper.lerp(0.1, be.currentSpeed, be.running ? 0.1 : 0));
+        be.angle = MathHelper.wrapDegrees(be.angle + be.currentSpeed * delta);
 
         BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.NEGATIVE_Z.getRadialQuaternion((be.getWorld().getTime() + tickDelta) * be.currentSpeed));
+        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(be.angle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MOTOR_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 
