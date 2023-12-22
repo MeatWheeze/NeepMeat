@@ -4,8 +4,8 @@ import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeConnectionType;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.util.MiscUitls;
 import com.neep.neepmeat.util.ItemInPipe;
+import com.neep.neepmeat.util.MiscUitls;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -27,9 +27,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntityProvider, IItemPipe
 {
@@ -63,8 +60,8 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        BlockState state2 = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
+//        BlockState state2 = enforceApiConnections(world, pos, state);
+//        world.setBlockState(pos, state2, Block.NOTIFY_ALL);
 
         if (!(world.getBlockState(fromPos).getBlock() instanceof PneumaticTubeBlock))
         {
@@ -84,20 +81,22 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     @Override
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
     {
+        PipeConnectionType type = state.get(DIR_TO_CONNECTION.get(direction));
+        boolean forced = type == PipeConnectionType.FORCED;
+
         boolean connection = canConnectTo(neighborState, direction.getOpposite(), (World) world, neighborPos);
         if (!world.isClient())
         {
-            connection = connection || canConnectApi((World) world, pos, state, direction);
+            connection = connection || (canConnectApi((World) world, pos, state, direction));
         }
 
         // Check if neighbour is forced
-        boolean neighbourForced = false;
         if (neighborState.getBlock() instanceof PneumaticTubeBlock)
         {
-            neighbourForced = neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
+            forced = forced || neighborState.get(DIR_TO_CONNECTION.get(direction.getOpposite())) == PipeConnectionType.FORCED;
         }
 
-        PipeConnectionType connection1 = neighbourForced
+        PipeConnectionType connection1 = forced
                 ? PipeConnectionType.FORCED
                 : connection ? PipeConnectionType.SIDE : PipeConnectionType.NONE;
 
@@ -181,6 +180,7 @@ public class PneumaticTubeBlock extends AbstractPipeBlock implements BlockEntity
     private boolean canConnectApi(World world, BlockPos pos, BlockState state, Direction direction)
     {
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos.offset(direction), direction.getOpposite());
+//        return false;
         return storage != null;
     }
 
