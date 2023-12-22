@@ -53,7 +53,6 @@ public class PLCHudRenderer
 
     public boolean onRender()
     {
-        var camera = MinecraftClient.getInstance().gameRenderer.getCamera();
         return true;
     }
 
@@ -94,8 +93,9 @@ public class PLCHudRenderer
 
         ((CameraAccessor) camera).callSetPos(robot.cameraX, robot.cameraY, robot.cameraZ);
 
-
         ((CameraAccessor) camera).callSetRotation(controller.lerpYaw, controller.lerpPitch);
+
+        ((CameraAccessor) camera).setThirdPerson(true);
     }
 
     private void clientTick()
