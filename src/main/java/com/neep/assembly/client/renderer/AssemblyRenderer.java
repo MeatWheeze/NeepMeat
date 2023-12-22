@@ -1,6 +1,7 @@
 package com.neep.assembly.client.renderer;
 
 import com.neep.assembly.AssemblyEntity;
+import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
@@ -10,6 +11,7 @@ import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.world.chunk.PalettedContainer;
 
 import java.util.Random;
 
@@ -31,15 +33,40 @@ public class AssemblyRenderer extends EntityRenderer<AssemblyEntity>
         matrices.push();
         matrices.translate(-0.5, -1, -0.5);
 
-        MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
-//                entity.getState(),
-//                Blocks.STONE.getDefaultState(),
-                entity.getPalette().get(0, 0, 0),
-                entity.getBlockPos(),
-                entity.world, matrices,
-                vertexConsumers.getBuffer(RenderLayer.getTranslucent()),
-                false,
-                new Random(0));
+        PalettedContainer<BlockState> container = entity.getPalette();
+
+        matrices.push();
+        for (int i = 0; i < 16; ++i)
+        {
+            matrices.push();
+            for (int j = 0; j < 16; ++j)
+            {
+                matrices.push();
+                for (int k = 0; k < 16; ++k)
+                {
+                    BlockState state = container.get(i, j, k);
+
+                    if (!state.isAir())
+                    {
+                        MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
+                                container.get(i, j, k),
+//                                state,
+                                entity.getBlockPos(),
+                                entity.world, matrices,
+                                vertexConsumers.getBuffer(RenderLayer.getTranslucent()),
+                                false,
+                                new Random(0));
+                    }
+                    matrices.translate(0, 0, 1);
+                }
+                matrices.pop();
+                matrices.translate(0, 1, 0);
+            }
+            matrices.pop();
+            matrices.translate(1, 0, 0);
+        }
+        matrices.pop();
+
 
         int light2 = entity.world.getLightLevel(entity.getBlockPos().up());
 
