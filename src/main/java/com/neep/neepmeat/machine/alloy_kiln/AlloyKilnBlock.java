@@ -2,7 +2,6 @@ package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlockEntity;
 import com.neep.neepmeat.util.MiscUitls;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -11,11 +10,15 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
@@ -54,6 +57,20 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     }
 
     @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (!world.isClient)
+        {
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            if (screenHandlerFactory != null)
+            {
+                player.openHandledScreen(screenHandlerFactory);
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return COLLISION_SHAPE;
@@ -82,7 +99,8 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public NamedScreenHandlerFactory createScreenHandlerFactory(BlockState state, World world, BlockPos pos)
     {
-        return super.createScreenHandlerFactory(state, world, pos);
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        return blockEntity instanceof NamedScreenHandlerFactory factory ? factory : null;
     }
 
     @Override

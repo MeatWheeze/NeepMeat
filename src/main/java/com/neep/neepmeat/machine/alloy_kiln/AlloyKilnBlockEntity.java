@@ -1,17 +1,26 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.IHeatable;
-import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
+import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
+import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatable
+public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatable, NamedScreenHandlerFactory
 {
     protected int fuelTime;
     protected int burnTime;
@@ -95,6 +104,19 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     public int getCurrentBurnTime()
     {
         return 0;
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+        return new TranslatableText("container." + NeepMeat.NAMESPACE + ".alloy_kiln");
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
+    {
+        return new AlloyKilnScreenHandler(syncId, inv, storage.inventory, propertyDelegate);
     }
 
     @Override
