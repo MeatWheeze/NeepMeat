@@ -96,9 +96,9 @@ public class NMBlocks
     public static Block SPIGOT = BlockRegistry.queue(new SpigotBlock("spigot", 64, false, FLUID_MACHINE_SETTINGS));
 
     // --- Item Transfer ---
-    public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(BlockSoundGroup.METAL);
+    public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("pneumatic_pipe", 64, true, ITEM_PIPE_SETTINGS));
+    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("item_pipe", 64, true, ITEM_PIPE_SETTINGS));
     public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, ITEM_PIPE_SETTINGS));
     public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, MACHINE_SETTINGS));
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, MACHINE_SETTINGS));

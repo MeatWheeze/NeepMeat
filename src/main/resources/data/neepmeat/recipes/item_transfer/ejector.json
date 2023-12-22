@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sis",
+    "sps",
+    "wrw"
+  ],
+  "key": {
+    "w": {
+      "tag": "minecraft:planks"
+    },
+    "s": {
+      "item": "minecraft:smooth_stone"
+    },
+    "r": {
+      "item": "minecraft:redstone"
+    },
+    "p": {
+      "item": "minecraft:piston"
+    },
+    "i": {
+      "item": "neepmeat:item_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:ejector",
+    "count": 1
+  }
+}
