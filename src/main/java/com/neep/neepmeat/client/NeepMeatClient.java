@@ -74,7 +74,7 @@ public class NeepMeatClient implements ClientModInitializer
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
         net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
-        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER, MixerRenderer::new);
+        net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry.register(NMBlockEntities.MIXER_TOP, MixerRenderer::new);
 
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
@@ -182,6 +182,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.FLUID_DRAIN);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.SLOPE_TEST);
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.MIXER_TOP);
 
         // Screens
         ScreenRegistry.register(ScreenHandlerInit.BUFFER_SCREEN_HANDLER, BufferScreen::new);

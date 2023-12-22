@@ -1,4 +1,4 @@
-package com.neep.neepmeat.blockentity.machine.mixer;
+package com.neep.neepmeat.machine.mixer;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MixerStorage

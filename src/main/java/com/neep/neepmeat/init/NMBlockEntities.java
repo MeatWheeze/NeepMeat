@@ -8,11 +8,12 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
-import com.neep.neepmeat.blockentity.machine.mixer.MixerBlockEntity;
+import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
 import com.neep.neepmeat.fluid_transfer.FluidBuffer;
+import com.neep.neepmeat.machine.mixer.MixerTopBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -65,6 +66,7 @@ public class NMBlockEntities
     public static BlockEntityType<RouterBlockEntity> ROUTER;
 
     public static BlockEntityType<MixerBlockEntity> MIXER;
+    public static BlockEntityType<MixerTopBlockEntity> MIXER_TOP;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -72,6 +74,7 @@ public class NMBlockEntities
                 FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public static void initialise()
     {
         // --- Fluid Transfer ---
@@ -119,6 +122,7 @@ public class NMBlockEntities
 //        LARGE_CONVERTER = registerBlockEntity("large_converter", LargeConverterBlockEntity::new, NMBlocks.LARGE_CONVERTER);
 
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
+        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
