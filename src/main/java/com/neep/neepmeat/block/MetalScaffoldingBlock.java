@@ -40,9 +40,7 @@ public class MetalScaffoldingBlock extends BaseBlock implements NMBlock, Waterlo
 
     public MetalScaffoldingBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
-//        super(settings);
         super(itemName, itemMaxStack, hasLore, settings.nonOpaque());
-//        this.blockItem = new BaseBlockItem(this, itemName, itemMaxStack, hasLore);
         registryName = itemName;
 
         this.setDefaultState((this.stateManager.getDefaultState()).with(WATERLOGGED, false).with(BOTTOM, false));
