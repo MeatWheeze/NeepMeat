@@ -14,7 +14,7 @@ public class PlayerEntityMixin implements MeatPlayerEntity
     private final PlayerAttachmentManager attachmentManager = new PlayerAttachmentManager((PlayerEntity) (Object) this);
 
     @Override
-    public PlayerAttachmentManager neepmeat$getAttachmentManager()
+    public PlayerAttachmentManager meatlib$getAttachmentManager()
     {
         return attachmentManager;
     }

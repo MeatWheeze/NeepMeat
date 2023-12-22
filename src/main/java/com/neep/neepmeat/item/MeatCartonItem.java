@@ -68,7 +68,7 @@ public class MeatCartonItem extends BaseItem
 
     // This is necessary because Item::getFoodComponent does not require the ItemStack as an argument, making it
     // impossible to return a custom FoodComponent based on the stack's NBT.
-    protected ItemStack eatFood(LivingEntity user, World world, ItemStack stack)
+    public ItemStack eatFood(LivingEntity user, World world, ItemStack stack)
     {
         if (stack.isFood())
         {
@@ -80,7 +80,6 @@ public class MeatCartonItem extends BaseItem
                 stack.decrement(1);
             }
 
-            // The poor man's polymorphism
             if (user instanceof PlayerEntity player)
             {
                 NbtCompound nbt = stack.getOrCreateNbt();

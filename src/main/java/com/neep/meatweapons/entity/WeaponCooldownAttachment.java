@@ -18,7 +18,7 @@ public class WeaponCooldownAttachment implements PlayerAttachment
 
     public static WeaponCooldownAttachment get(PlayerEntity player)
     {
-        return player.neepmeat$getAttachmentManager().getAttachment(ID);
+        return player.meatlib$getAttachmentManager().getAttachment(ID);
     }
 
     public WeaponCooldownAttachment(PlayerEntity player)
