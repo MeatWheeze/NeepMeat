@@ -3,6 +3,8 @@ package com.neep.neepmeat.blockentity;
 import com.neep.neepmeat.block.FluidNodeProvider;
 import com.neep.neepmeat.block.PumpBlock;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
+import com.neep.neepmeat.fluid_util.FluidNetwork2;
+import com.neep.neepmeat.fluid_util.FluidNode;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -16,8 +18,7 @@ import java.util.Map;
 
 public class PumpBlockEntity extends BlockEntity
 {
-    private FluidNetwork network = null;
-    private Map<Direction, FluidNetwork> sides = new HashMap<>();
+    private Map<Direction, FluidNode> sides = new HashMap<>();
 
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
@@ -28,9 +29,10 @@ public class PumpBlockEntity extends BlockEntity
         {
             for (Direction direction : Direction.values())
             {
-                if (((FluidNodeProvider) state.getBlock()).connectInDirection(state, direction))
+                FluidNodeProvider nodeProvider = (FluidNodeProvider) state.getBlock();
+                if (nodeProvider.connectInDirection(state, direction))
                 {
-                    sides.put(direction, new FluidNetwork(direction, pos));
+                    sides.put(direction, new FluidNode(pos, direction, nodeProvider.getDirectionMode(state, direction)));
                 }
             }
         }
@@ -40,15 +42,13 @@ public class PumpBlockEntity extends BlockEntity
 
     public static void tick(World world, BlockPos pos, BlockState state, PumpBlockEntity be)
     {
+        // TODO: work out why this could be null
+        be.sides.get(state.get(PumpBlock.FACING)).tick(world);
     }
 
     public void update(BlockState state, World world)
     {
-        if (network == null)
-        {
-            network = new FluidNetwork(state.get(PumpBlock.FACING), pos);
-        }
-        network.refresh(world);
+        sides.get(state.get(PumpBlock.FACING)).rebuildNetwork(world);
     }
 
     @Override
@@ -64,5 +64,10 @@ public class PumpBlockEntity extends BlockEntity
     {
         super.readNbt(tag);
         number = tag.getInt("number");
+    }
+
+    public FluidNode getNode(Direction direction)
+    {
+        return sides.get(direction);
     }
 }
