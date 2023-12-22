@@ -1,11 +1,9 @@
 package com.neep.neepmeat.block.machine;
 
 import com.neep.meatlib.block.BaseBlock;
-import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.tag.NMTags;
+import com.neep.neepmeat.datagen.tag.NMTags;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ComposterBlock;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,15 +14,11 @@ import net.minecraft.stat.Stats;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.ItemTags;
-import net.minecraft.tag.TagManager;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 
 import java.util.Random;
 
