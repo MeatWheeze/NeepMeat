@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.function.Supplier;
 
-public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, DirectionalFluidAcceptor, FluidNodeProvider
+public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, IDirectionalFluidAcceptor, IFluidNodeProvider
 {
     public PumpBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {

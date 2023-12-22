@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer.node;
 
-import com.neep.neepmeat.block.DirectionalFluidAcceptor;
+import com.neep.neepmeat.block.IDirectionalFluidAcceptor;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
 import com.neep.neepmeat.fluid_transfer.NMFluidNetwork;
@@ -231,7 +231,7 @@ public class FluidNode
     {
         BlockPos target = nodePos.facingBlock();
         BlockState state = world.getBlockState(target);
-        if (state.getBlock() instanceof DirectionalFluidAcceptor acceptor)
+        if (state.getBlock() instanceof IDirectionalFluidAcceptor acceptor)
         {
             return acceptor.getDirectionMode(world, target, state, face.getOpposite());
         }

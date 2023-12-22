@@ -6,15 +6,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public interface FluidAcceptor
+public interface IFluidPipe
 {
     static boolean isConnectedIn(World world, BlockPos pos, BlockState state, Direction direction)
     {
-        if (state.getBlock() instanceof PipeBlock)
+        if (state.getBlock() instanceof AbstractPipeBlock)
         {
-            return state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
+            return state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected();
         }
-        else if (state.getBlock() instanceof FluidAcceptor acceptor)
+        else if (state.getBlock() instanceof IFluidPipe acceptor)
         {
             return acceptor.connectInDirection(world, pos, state, direction);
         }
@@ -30,5 +30,4 @@ public interface FluidAcceptor
     {
         return AcceptorModes.INSERT_EXTRACT;
     }
-
 }

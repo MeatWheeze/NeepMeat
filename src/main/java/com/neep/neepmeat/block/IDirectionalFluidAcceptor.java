@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
-public interface DirectionalFluidAcceptor extends FluidAcceptor
+public interface IDirectionalFluidAcceptor extends IFluidPipe
 {
     boolean connectInDirection(World world, BlockPos pos, BlockState state, Direction direction);
 

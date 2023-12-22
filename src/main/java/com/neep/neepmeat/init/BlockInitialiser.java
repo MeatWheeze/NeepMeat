@@ -73,6 +73,7 @@ public class BlockInitialiser
 
     // --- Item Transfer ---
     public static Block ITEM_DUCT = queueBlock(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
+    public static Block PNEUMATIC_TUBE = queueBlock(new PneumaticTubeBlock("pneumatic_pipe", 64, true, FabricBlockSettings.of(Material.METAL).strength(4.0f).sounds(BlockSoundGroup.METAL)));
 
     // --- Assembly ---
     public static Block LINEAR_RAIL = queueBlock(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));

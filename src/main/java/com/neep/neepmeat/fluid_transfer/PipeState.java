@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid_transfer;
 
-import com.neep.neepmeat.block.PipeBlock;
+import com.neep.neepmeat.block.AbstractPipeBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -21,11 +21,11 @@ public class PipeState
     }
     public PipeState(BlockPos pos, BlockState state)
     {
-        if (state.getBlock() instanceof PipeBlock)
+        if (state.getBlock() instanceof AbstractPipeBlock)
         {
             for (Direction direction : Direction.values())
             {
-                if (state.get(PipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
+                if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
                 {
                     connections.add(direction);
                 }
