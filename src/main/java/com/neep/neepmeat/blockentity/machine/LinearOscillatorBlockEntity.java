@@ -70,6 +70,9 @@ public class LinearOscillatorBlockEntity extends BlockEntity implements BlockEnt
 
     public void extend()
     {
+        if (!getWorld().isReceivingRedstonePower(getPos()))
+            return;
+
         this.cooldown = this.maxCooldown;
         this.extended = true;
 
