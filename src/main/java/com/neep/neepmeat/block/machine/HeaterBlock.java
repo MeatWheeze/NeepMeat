@@ -50,6 +50,13 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        super.onStateReplaced(state, world, pos, newState, moved);
+
+    }
+
+    @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
         ((HeaterBlockEntity) world.getBlockEntity(pos)).refreshCache(world, pos, state);

@@ -220,6 +220,12 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     }
 
     @Override
+    public int getFuelTime()
+    {
+        return fuelTime;
+    }
+
+    @Override
     public void updateState(World world, BlockPos pos, BlockState oldState)
     {
         BlockState state = getCachedState();
@@ -231,9 +237,39 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements IHeatab
     }
 
     @Override
+    public void setHeatMultiplier(float multiplier)
+    {
+
+    }
+
+    @Override
+    public float getHeatMultiplier()
+    {
+        return 0;
+    }
+
+    @Override
     public int getCurrentBurnTime()
     {
         return 0;
+    }
+
+    @Override
+    public int getCookTimeTotal()
+    {
+        return cookTimeTotal;
+    }
+
+    @Override
+    public int getCookTime()
+    {
+        return cookTime;
+    }
+
+    @Override
+    public void setCookTime(int cookTime)
+    {
+        this.cookTime = cookTime;
     }
 
     @Override

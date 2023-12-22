@@ -8,7 +8,6 @@ import com.neep.neepmeat.machine.IHeatable;
 import com.neep.neepmeat.network.ParticleSpawnPacket;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,7 +16,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -29,6 +27,7 @@ import java.util.Random;
 @SuppressWarnings("UnstableApiUsage")
 public class HeaterBlockEntity extends BloodMachineBlockEntity
 {
+
     public static long USE_AMOUNT = FluidConstants.BUCKET / 300;
     public static long CAPACITY = 4 * USE_AMOUNT;
 
@@ -66,15 +65,37 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 
     public void tick()
     {
+        super.tick();
+        maxRunningRate = FluidConstants.BUCKET / 2;
         if (heatable == null)
         {
             refreshCache(getWorld(), getPos(), getCachedState());
         }
 
         if (heatable != null)
-            heatable.setBurning();
+        {
+            if (this.getRunningRate() > 0)
+            {
+                heatable.setBurning();
+            }
+            heatable.setHeatMultiplier(getRunningRate());
+
+            Direction facing = getCachedState().get(HeaterBlock.FACING);
+            BlockPos furnacePos = pos.offset(facing);
+            BlockState state = getWorld().getBlockState(furnacePos);
+            heatable.updateState(getWorld(), furnacePos, state);
+        }
 
         heatBlock();
+    }
+
+    @Override
+    public void markRemoved()
+    {
+        if (this.heatable != null)
+            heatable.setHeatMultiplier(0);
+
+        super.markRemoved();
     }
 
     @Override
@@ -89,13 +110,6 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity
 //                + ", "
 //                + (outputBuffer.getAmount())), true);
 //        getWorld().playSound(null, getPos(), SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
-    }
-
-    public static void updateBlockState(IHeatable accessor, World world, BlockPos pos)
-    {
-        BlockState state = world.getBlockState(pos);
-        state = state.with(AbstractFurnaceBlock.LIT, accessor.getCurrentBurnTime() > 0);
-        world.setBlockState(pos, state, Block.NOTIFY_ALL);
     }
 
     public void heatBlock()

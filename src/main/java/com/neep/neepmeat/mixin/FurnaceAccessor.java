@@ -3,16 +3,30 @@ package com.neep.neepmeat.mixin;
 import com.neep.neepmeat.machine.IHeatable;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.recipe.AbstractCookingRecipe;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.collection.DefaultedList;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 @Mixin(AbstractFurnaceBlockEntity.class)
-public interface FurnaceAccessor extends IHeatable
+public interface FurnaceAccessor
 {
 	@Accessor
 	int getBurnTime();
+
+	@Accessor
+	int getFuelTime();
+
+	@Accessor
+	int getCookTimeTotal();
+
+	@Accessor
+	int getCookTime();
+
+	@Accessor
+	RecipeType<? extends AbstractCookingRecipe> getRecipeType();
 
 	@Accessor("inventory")
 	DefaultedList<ItemStack> getInventory();
@@ -28,5 +42,8 @@ public interface FurnaceAccessor extends IHeatable
 
 	@Invoker("getFuelTime")
 	int callGetFuelTime(ItemStack fuel);
+
+	@Invoker("isBurning")
+	boolean callIsBurning();
 }
 

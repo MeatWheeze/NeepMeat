@@ -4,13 +4,14 @@
   "package": "com.neep.neepmeat.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
-    "FurnaceAccessor"
+    "FurnaceAccessor",
+    "MixinAbstractFurnaceBlockEntity"
   ],
   "client": [
+    "BlockModelRendererAccessor",
     "ExampleMixin",
     "HeldItemRendererMixin",
-    "ParticleManagerMixin",
-    "BlockModelRendererAccessor"
+    "ParticleManagerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
