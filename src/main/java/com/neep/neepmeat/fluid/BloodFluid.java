@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid;
 
-import com.neep.neepmeat.block.BlockInitialiser;
+import com.neep.neepmeat.init.BlockInitialiser;
 import net.minecraft.block.*;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;

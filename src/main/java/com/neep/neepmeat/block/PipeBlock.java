@@ -8,7 +8,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.LiteralText;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -23,7 +22,7 @@ import net.minecraft.world.WorldAccess;
 
 import java.util.Map;
 
-public class PipeBlock extends BaseBlock
+public class PipeBlock extends BaseBlock implements FluidAcceptor
 {
 //    public static final EnumProperty<PipeConnection> NORTH_CONNECTION = PipeProperties.NORTH_CONNECTION;
 //    public static final EnumProperty<PipeConnection> EAST_CONNECTION = PipeProperties.EAST_CONNECTION;
@@ -55,7 +54,7 @@ public class PipeBlock extends BaseBlock
             .put(Direction.SOUTH, Block.createCuboidShape(4, 4, 11, 12, 12, 16))
             .put(Direction.WEST, Block.createCuboidShape(0, 4, 4, 5, 12, 12))
             .put(Direction.UP, Block.createCuboidShape(4, 11, 4, 12, 16, 12))
-            .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 8))
+            .put(Direction.DOWN, Block.createCuboidShape(4, 0, 4, 12, 5, 12))
     ).build();
 
     public PipeBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
@@ -198,9 +197,13 @@ public class PipeBlock extends BaseBlock
     }
 
     // TODO: Add other things
-    public boolean canConnectTo(BlockState state)
+    public boolean canConnectTo(BlockState state, Direction direction)
     {
-        return state.getBlock() instanceof PipeBlock;
+        if (state.getBlock() instanceof FluidAcceptor)
+        {
+            return ((FluidAcceptor) state.getBlock()).connectInDirection(state, direction);
+        }
+        return false;
     }
 
     private static boolean isNotConnected(BlockState state)
@@ -225,6 +228,11 @@ public class PipeBlock extends BaseBlock
                 ;
     }
 
+    public static boolean isConnectedIn(BlockState state, Direction direction)
+    {
+        return state.get(DIR_TO_CONNECTION.get(direction));
+    }
+
     private BlockState getConnections(BlockView world, BlockState state, BlockPos pos)
     {
         for (Direction direction : Direction.values())
@@ -233,7 +241,7 @@ public class PipeBlock extends BaseBlock
             if (property) continue;
             BlockPos adjPos = pos.offset(direction);
             BlockState adjState = world.getBlockState(adjPos);
-            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState));
+            state = state.with(DIR_TO_CONNECTION.get(direction), canConnectTo(adjState, direction.getOpposite()));
         }
         return state;
     }
@@ -241,7 +249,7 @@ public class PipeBlock extends BaseBlock
     private boolean connectInDirection(WorldAccess world, BlockPos pos, Direction direction)
     {
         BlockState targetState = world.getBlockState(pos.offset(direction));
-        return canConnectTo(targetState);
+        return canConnectTo(targetState, direction.getOpposite());
     }
 
     @Override
