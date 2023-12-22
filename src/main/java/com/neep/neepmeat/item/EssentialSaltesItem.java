@@ -2,11 +2,13 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.neepmeat.init.NMItems;
 import dev.architectury.event.events.common.EntityEvent;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -61,24 +63,35 @@ public class EssentialSaltesItem extends BaseItem
     @Override
     public ActionResult useOnEntity(ItemStack stack, PlayerEntity user, LivingEntity entity, Hand hand)
     {
-        storeEntity(stack, entity);
-        user.setStackInHand(hand, stack);
-        return ActionResult.SUCCESS;
+//        storeEntity(stack, entity);
+//        user.setStackInHand(hand, stack);
+//        return ActionResult.SUCCESS;
+        return super.useOnEntity(stack, user, entity, hand);
     }
 
     @Override
     public ActionResult useOnBlock(ItemUsageContext context)
     {
-        Entity entity = createEntity(context.getStack(), context.getWorld(), true);
+//        Entity entity = createEntity(context.getStack(), context.getWorld(), true);
+//
+//        if (entity != null)
+//        {
+//            Vec3d hitPos = context.getHitPos();
+//            entity.setPos(hitPos.x, hitPos.y + 1, hitPos.z);
+//            context.getWorld().spawnEntity(entity);
+//        }
 
-        if (entity != null)
-        {
-            Vec3d hitPos = context.getHitPos();
-            entity.setPos(hitPos.x, hitPos.y + 1, hitPos.z);
-            context.getWorld().spawnEntity(entity);
-        }
+        return super.useOnBlock(context);
+    }
 
-        return ActionResult.SUCCESS;
+    public static void onEntityDeath(LivingEntity livingEntity)
+    {
+        World world = livingEntity.getWorld();
+        Vec3d pos = livingEntity.getPos();
+        ItemStack stack = NMItems.ESSENTIAL_SALTES.getDefaultStack();
+        EssentialSaltesItem.storeEntity(stack, livingEntity);
+        ItemEntity entity = new ItemEntity(world, pos.x, pos.y, pos.z, stack);
+        world.spawnEntity(entity);
     }
 
     public static void storeEntity(ItemStack stack, LivingEntity entity)
