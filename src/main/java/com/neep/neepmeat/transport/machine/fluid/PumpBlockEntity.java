@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.PumpBlock;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -70,6 +71,11 @@ public class PumpBlockEntity extends SyncableBlockEntity
         }
 
         this.markDirty();
+    }
+
+    protected void updateNetworks()
+    {
+
     }
 
     @Override
