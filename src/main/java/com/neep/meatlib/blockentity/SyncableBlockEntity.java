@@ -61,4 +61,13 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
         return nbt;
     }
 
+    @Override
+    public void markDirty()
+    {
+        if (this.world != null)
+        {
+            world.markDirty(pos);
+            BlockEntity.markDirty(this.world, this.pos, this.getCachedState());
+        }
+    }
 }
