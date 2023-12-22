@@ -5,13 +5,12 @@ import com.neep.neepmeat.block.pipe.IFluidPipe;
 import com.neep.neepmeat.blockentity.CheckValveBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.FluidNetwork;
+import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.fluid_transfer.node.NodePos;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -21,9 +20,10 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-public class CheckValveBlock extends BaseFacingBlock implements IFluidPipe, IVariableFlowBlock
+import java.util.function.Function;
+
+public class CheckValveBlock extends BaseFacingBlock implements IFluidPipe, IVariableFlowBlock, PipeState.ISpecialPipe
 {
     public static final VoxelShape X_SHAPE = Block.createCuboidShape(0, 4, 4, 16, 12, 12);
     public static final VoxelShape Y_SHAPE = Block.createCuboidShape(4, 0, 4, 12, 16, 12);
@@ -111,5 +111,14 @@ public class CheckValveBlock extends BaseFacingBlock implements IFluidPipe, IVar
             return be.getApparentFlow();
         }
         return 0;
+    }
+
+    @Override
+    public Function<Long, Long> get(Direction bias, BlockState state)
+    {
+        if (bias == state.get(FACING))
+            return Function.identity();
+        else
+            return flow -> 0L;
     }
 }

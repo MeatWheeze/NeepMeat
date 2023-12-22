@@ -34,7 +34,7 @@ public class PipeNetwork
 
     public static long BASE_TRANSFER = 10500;
 
-    public HashSet<Supplier<FluidNode>> connectedNodes = new HashSet<>();
+    public List<Supplier<FluidNode>> connectedNodes = new ArrayList<>();
 
     public final IndexedHashMap<BlockPos, PipeState> networkPipes = new IndexedHashMap<>();
     private final List<BlockPos> pipeQueue = new ArrayList<>();
@@ -141,11 +141,12 @@ public class PipeNetwork
         if (!world.isClient)
         {
             discoverNodes(startPos, face);
-            PipeBranches.test(world, connectedNodes, networkPipes);
+//            PipeBranches.test(world, connectedNodes, networkPipes);
             connectedNodes.forEach((node) -> node.get().setNetwork((ServerWorld) world, this));
             if (!validate())
             {
             }
+
 
         }
     }
@@ -258,6 +259,9 @@ public class PipeNetwork
                     );
                 }
 
+                // Apply corresponding convolution
+
+
                 long amountMoved;
                 if (Q >= 0)
                 {
@@ -336,6 +340,8 @@ public class PipeNetwork
             }
             pipeQueue.addAll(nextSet);
         }
+//        System.out.println("special: " + special + "state: " + state);
+        System.out.println(networkPipes);
     }
 
     public void removeNode(NodePos pos)
