@@ -4,6 +4,7 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
 import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.inventory.SimpleInventory;
@@ -34,6 +35,12 @@ public class UpgradeManagerScreenHandler extends BasicScreenHandler
     public ImplantManager getImplantManager()
     {
         return manager.getImplantManager();
+    }
+
+    @Nullable
+    public MutateInPlace<?> getMip()
+    {
+        return manager.getMip();
     }
 
     @Override

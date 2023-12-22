@@ -34,7 +34,7 @@ public class UpgradeManagerBlockEntity extends SyncableBlockEntity implements Ex
         if (itemMip != null)
         {
             Entity entity = itemMip.get();
-            if (entity != null) // Shouldn't ever be null, but just in case.
+            if (entity != null)
             {
                 return NMComponents.IMPLANT_MANAGER.getNullable(entity);
             }
@@ -59,5 +59,10 @@ public class UpgradeManagerBlockEntity extends SyncableBlockEntity implements Ex
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
     {
         PacketBufUtil.writeBlockPos(buf, pos);
+    }
+
+    public MutateInPlace<?> getMip()
+    {
+        return MutateInPlace.ENTITY.find(world, pos.offset(getCachedState().get(UpgradeManagerBlock.FACING)), null);
     }
 }

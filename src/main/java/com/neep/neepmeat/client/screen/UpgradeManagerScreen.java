@@ -3,7 +3,9 @@ package com.neep.neepmeat.client.screen;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.screen_handler.UpgradeManagerScreenHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -21,8 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHandler>
 {
-    @Nullable
-    private Identifier selected;
+    @Nullable private Identifier selected;
+    @Nullable private ImplantManager implantManager;
+    @Nullable private MutateInPlace<?> mip;
 
     public UpgradeManagerScreen(UpgradeManagerScreenHandler handler, PlayerInventory inventory, Text title)
     {
@@ -30,20 +33,9 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
-    {
-        GUIUtil.renderBorder(matrices, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
-    }
-
-    @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
-    {
-    }
-
-    @Override
     protected void init()
     {
-        this.backgroundWidth = 300;
+        this.backgroundWidth = 450;
         this.backgroundHeight = 200;
 
         super.init();
@@ -56,6 +48,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         ImplantManager manager = handler.getImplantManager();
         if (manager != null)
         {
+            this.implantManager = manager;
             for (var entry : handler.getImplantManager().getInstalled())
             {
                 addDrawableChild(new InstalledWidget(entry, listX, listY, entryWidth, entryHeight));
@@ -68,10 +61,65 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
                 Text.translatable("screen.neepmeat.upgrade_manager.remove")));
     }
 
+    @Override
+    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    {
+        super.renderBackground(matrices);
+        GUIUtil.renderBorder(matrices, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
+    }
+
+    @Override
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    {
+        if (mip == null)
+        {
+            Text message1 = Text.of("No valid PLC workbench found.");
+            Text message2 = Text.of("Place a PLC workbench in front of the machine.");
+            int textWidth = textRenderer.getWidth(message1);
+            textRenderer.drawWithShadow(matrices, message1, (backgroundWidth - textWidth) / 2f, 20, PLCCols.TEXT.col);
+            textWidth = textRenderer.getWidth(message2);
+            textRenderer.drawWithShadow(matrices, message2, (backgroundWidth - textWidth) / 2f, 20 + textRenderer.fontHeight * 1.5f, PLCCols.TEXT.col);
+        }
+        else if (implantManager == null)
+        {
+            Text message1 = Text.of("No upgradable object found.");
+            Text message2 = Text.of("Insert an item or entity into the connected workbench.");
+            int textWidth = textRenderer.getWidth(message1);
+            textRenderer.drawWithShadow(matrices, message1, (backgroundWidth - textWidth) / 2f, 20, PLCCols.TEXT.col);
+            textWidth = textRenderer.getWidth(message2);
+            textRenderer.drawWithShadow(matrices, message2, (backgroundWidth - textWidth) / 2f, 20 + textRenderer.fontHeight * 1.5f, PLCCols.TEXT.col);
+        }
+    }
+
+    @Override
+    protected void handledScreenTick()
+    {
+        if (client.world.getTime() % 4 == 0)
+        {
+            this.mip = handler.getMip();
+        }
+
+        ImplantManager newManager = null;
+        if (this.mip != null)
+        {
+            Object object = mip.get();
+            if (object != null)
+            {
+                newManager = NMComponents.IMPLANT_MANAGER.getNullable(object);
+            }
+        }
+
+        if (newManager != this.implantManager)
+        {
+            this.implantManager = newManager;
+            clearAndInit();
+        }
+    }
+
     private void onRemoveButton()
     {
         ImplantManager manager = handler.getImplantManager();
-        if (manager != null)
+        if (manager != null && selected != null)
         {
             manager.removeImplant(selected);
             clearAndInit();
@@ -109,7 +157,12 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            int col = isMouseOver(mouseX, mouseY) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
+            int col = PLCCols.INVALID.col;
+            if (selected != null)
+            {
+                col = isMouseOver(mouseX, mouseY) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
+            }
+
             GUIUtil.renderBorder(matrices, x, y, width, height,  col, 0);
             ClickableWidget.drawCenteredText(matrices, textRenderer, this.getMessage(),
                     x + width / 2, y + (height - 8) / 2, PLCCols.TEXT.col);
@@ -142,9 +195,10 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         @Override
         public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
         {
-            GUIUtil.renderBorder(matrices, x, y, width, height, PLCCols.BORDER.col, 0);
+            int textCol = id.equals(selected) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
+            GUIUtil.renderBorder(matrices, x, y, width, height, textCol, 0);
 
-            textRenderer.draw(matrices, id.toString(), x + 2, y + 1, PLCCols.TEXT.col);
+            textRenderer.draw(matrices, id.toString(), x + 2, y + 1, textCol);
         }
 
         @Override
