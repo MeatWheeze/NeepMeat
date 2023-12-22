@@ -79,19 +79,12 @@ public class MWKeys
                 }
 
                 // Suppress the base game's attack processing
-                while (client.options.attackKey.wasPressed());
+                while (client.options.attackKey.wasPressed())
+                {
+                    System.out.println("attak");
+                };
             }
         });
-    }
-
-    protected static void oneUsePress(MinecraftClient client, PlayerEntity player)
-    {
-
-    }
-
-    protected static void onAttackPress(MinecraftClient client, PlayerEntity player)
-    {
-
     }
 
     public static void sendTrigger(PacketByteBuf buf)
