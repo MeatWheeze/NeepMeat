@@ -2,7 +2,11 @@ package com.neep.meatlib;
 
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatweapons.MeatWeapons;
+import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.ModInitializer;
+import net.minecraft.client.particle.SuspendParticle;
+import org.apache.logging.log4j.Level;
 
 public class MeatLib implements ModInitializer
 {
@@ -16,6 +20,8 @@ public class MeatLib implements ModInitializer
     @Override
     public void onInitialize()
     {
+        NeepMeat.LOGGER.printf(Level.INFO, "Meatlib registry");
+        System.out.println(ItemRegistry.ITEMS);
         BlockRegistry.registerBlocks();
         ItemRegistry.registerItems();
     }

@@ -1,0 +1,70 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.engine.running": {
+			"loop": true,
+			"animation_length": 1.56,
+			"bones": {
+				"wheel": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.56": {
+							"vector": [0, 360, 0]
+						}
+					}
+				},
+				"piston": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.72": {
+							"vector": [0, 5.5, 0],
+							"easing": "linear"
+						},
+						"1.56": {
+							"vector": [0, 0, 0],
+							"easing": "linear"
+						}
+					}
+				},
+				"sleeve": {
+					"scale": {
+						"0.0": {
+							"vector": [1, 0, 1]
+						},
+						"0.72": {
+							"vector": [1, 1, 1]
+						},
+						"1.56": {
+							"vector": [1, 0, 1]
+						}
+					}
+				}
+			}
+		},
+		"animation.engine.idle": {
+			"loop": true,
+			"anim_time_update": "300",
+			"bones": {
+				"wheel": {
+					"rotation": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"piston": {
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"sleeve": {
+					"scale": {
+						"vector": [1, 0, 1]
+					}
+				}
+			}
+		}
+	}
+}

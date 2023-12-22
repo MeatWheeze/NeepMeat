@@ -21,7 +21,8 @@
     "main": [
       "com.neep.neepmeat.NeepMeat",
       "com.neep.assembly.Assembly",
-      "com.neep.meatlib.MeatLib"
+      "com.neep.meatlib.MeatLib",
+      "com.neep.meatweapons.MeatWeapons"
     ],
     "client": [
       "com.neep.neepmeat.NeepMeat",

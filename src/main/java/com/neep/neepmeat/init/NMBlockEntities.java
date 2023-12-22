@@ -20,6 +20,9 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.security.ProtectionDomain;
+import java.util.Map;
+
 public class NMBlockEntities
 {
     public static BlockEntityType<?> NODE_BLOCK_ENTITY;

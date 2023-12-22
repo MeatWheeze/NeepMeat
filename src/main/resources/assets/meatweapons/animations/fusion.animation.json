@@ -1,0 +1,99 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.fusion.fire": {
+			"animation_length": 0.32,
+			"anim_time_update": "0",
+			"start_delay": "0",
+			"bones": {
+				"main": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [-7.5, 0, 0]
+						},
+						"0.2": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [0, 0, 3]
+						},
+						"0.32": {
+							"vector": [0, 0, 0]
+						}
+					}
+				},
+				"flash": {
+					"position": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.04": {
+							"vector": [0, 1.5, -2]
+						},
+						"0.2": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"scale": {
+						"0.0": {
+							"vector": [1, 1, 1]
+						},
+						"0.04": {
+							"vector": [8.15, 8.65, 1]
+						},
+						"0.2": {
+							"vector": [1, 1, 1]
+						}
+					}
+				}
+			}
+		},
+		"animation.fusion.reload_r": {
+			"animation_length": 0.6,
+			"override_previous_animation": true,
+			"start_delay": "0",
+			"bones": {
+				"main": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"0.12": {
+							"vector": [-32.5, -17.5, 0]
+						},
+						"0.48": {
+							"vector": [-32.5, -12.5, 0]
+						},
+						"0.6": {
+							"vector": [0, 0, 0]
+						}
+					},
+					"position": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"magazine": {
+					"position": {
+						"0.08": {
+							"vector": [0, 0, 0]
+						},
+						"0.28": {
+							"vector": [0, -10, 0]
+						},
+						"0.48": {
+							"vector": [0, 0, 0]
+						}
+					}
+				}
+			}
+		}
+	}
+}

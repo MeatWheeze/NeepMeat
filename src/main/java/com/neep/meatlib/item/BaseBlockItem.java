@@ -25,7 +25,7 @@ public class BaseBlockItem extends BlockItem implements IMeatItem
         super(block, new FabricItemSettings().maxCount(itemMaxStack).group(NMItemGroups.GENERAL));
         this.name = registryName;
         this.hasLore = hasLore;
-        ItemRegistry.queueItem(this, getRegistryName());
+        ItemRegistry.queueItem(this);
     }
 
     @Override

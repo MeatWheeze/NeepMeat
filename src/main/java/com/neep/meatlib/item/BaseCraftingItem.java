@@ -10,7 +10,7 @@ public class BaseCraftingItem extends BaseItem implements IMeatItem
     {
         super(registryName, hasLore, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(this, registryName );
+        ItemRegistry.queueItem(this);
     }
 
     @Override

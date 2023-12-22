@@ -18,7 +18,7 @@ private final String registryName;
     {
         super(fluid, settings);
         this.registryName=registryName;
-        ItemRegistry.queueItem(this, registryName);
+        ItemRegistry.queueItem(this);
     }
 
     @Override

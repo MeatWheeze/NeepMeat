@@ -12,7 +12,7 @@ public class BaseSwordItem extends SwordItem implements IMeatItem
     {
         super(material, attackDamage, speed, settings);
         this.registryName = registryName;
-        ItemRegistry.queueItem(this, getRegistryName());
+        ItemRegistry.queueItem(this);
     }
 
     @Override
