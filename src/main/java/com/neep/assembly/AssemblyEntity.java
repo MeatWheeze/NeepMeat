@@ -3,7 +3,7 @@ package com.neep.assembly;
 import com.neep.assembly.block.AnchorBlock;
 import com.neep.assembly.block.IRail;
 import com.neep.assembly.storage.AssemblyContainer;
-import com.neep.neepmeat.block.actuator.LinearRailBlock;
+import com.neep.neepmeat.init.BlockInitialiser;
 import com.neep.neepmeat.util.LinearDirection;
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
@@ -68,7 +68,9 @@ public class AssemblyEntity extends Entity
 
     public static boolean canAssemble(BlockState state)
     {
-        return state.isOf(Assembly.PLATFORM) || state.isOf(Assembly.ANCHOR);
+        return state.isOf(Assembly.PLATFORM) || state.isOf(Assembly.ANCHOR) ||
+                state.isOf(BlockInitialiser.RUSTED_IRON_BLOCK);
+//                state.isOf(BlockInitialiser.RUSTED_IRON_BLOCK.stairs);
     }
 
     @Override
@@ -173,6 +175,7 @@ public class AssemblyEntity extends Entity
 //        setVelocity(0.0, 0.0, 0);
 //        this.move(MovementType.SELF, (getVelocity()));
 
+
         AssemblyContainer container = getPalette();
         if (anchorPositions.size() == 1)
         {
@@ -188,6 +191,7 @@ public class AssemblyEntity extends Entity
                     Vec3f vel = railDir == LinearDirection.FORWARDS ? railFacing.getUnitVector() : railFacing.getOpposite().getUnitVector();
                     vel.multiplyComponentwise(0.1f, 0.1f, -0.1f);
                     this.setVelocity(vel);
+                    this.velocityModified = true;
 //                    System.out.println(vel);
                 }
                 else
@@ -196,8 +200,16 @@ public class AssemblyEntity extends Entity
                 }
             }
         }
-//        this.move(MovementType.SELF, new Vec3d(0, 0.1, 0));
-        this.move(MovementType.SELF, getVelocity());
+        if (this.isLogicalSideForUpdatingMovement())
+        {
+//            this.move(MovementType.SELF, new Vec3d(0, -0.1, 0));
+            this.move(MovementType.SELF, getVelocity());
+        }
+        else
+        {
+            this.move(MovementType.SELF, getVelocity());
+//            this.setVelocity(Vec3d.ZERO);
+        }
     }
 
 
@@ -217,23 +229,26 @@ public class AssemblyEntity extends Entity
         if (true)
         {
             if ((vec3d = this.adjustMovementForCollisions(movement)).lengthSquared() > 1.0E-7)
+//            if ((vec3d = movement).lengthSquared() > 1.0E-7)
             {
-                this.setPosition(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
+                Vec3d newPos = new Vec3d(this.getX() + vec3d.x, this.getY() + vec3d.y, this.getZ() + vec3d.z);
+                this.setPosition(newPos);
+                if (this.isLogicalSideForUpdatingMovement())
+                {
+                    this.updateTrackedPosition(newPos);
+                }
                 Vec3d finalMovement = movement;
 //                if (false)
                 {
                     world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), getBoundingBox().expand(0, 0.1, 0), (t) -> true).forEach(
                             entity ->
                             {
-//                        entity.move(MovementType.PISTON, finalMovement);
-//                        entity.set(finalMovement.x, finalMovement.y, finalMovement.z);
-//                        entity.setVelocity(finalMovement.add(entity.getVelocity().x, 0, entity.getVelocity().z));
                                 if (false)
                                     entity.setPosition(getPos().add(0.5, 0.5, 0));
                                 if (true)
                                 {
-                                    entity.setOnGround(true);
                                     entity.setVelocity(finalMovement);
+                                    entity.setOnGround(true);
                                 }
                             }
                     );
@@ -374,7 +389,7 @@ public class AssemblyEntity extends Entity
     {
 //        if (entity.getBoundingBox().minY <= this.getBoundingBox().minY)
 //        {
-//            super.pushAwayFrom(entity);
+            super.pushAwayFrom(entity);
 //        }
     }
 
