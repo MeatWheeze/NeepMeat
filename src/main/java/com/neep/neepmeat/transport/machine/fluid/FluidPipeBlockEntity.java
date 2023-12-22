@@ -213,7 +213,6 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
             if (queuedNbt != null)
             {
                 FluidNodeManager.getInstance(getWorld()).readNodes(getPos(), queuedNbt, serverWorld);
-
             }
         }
     }
