@@ -9,37 +9,38 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(ServerWorld.class)
-public abstract class MixinServerWorld implements IServerWorld
+public abstract class ServerWorldMixin implements IServerWorld
 {
     @Shadow public abstract void removePlayer(ServerPlayerEntity player, Entity.RemovalReason reason);
 
-    public FluidNodeManager nodeManager = new FluidNodeManager((ServerWorld) (Object) this);
-    public ItemNetwork itemNetwork = new ItemNetwork((ServerWorld) (Object) this);
-    public FluidNetworkManager networkManager;
+    @Unique public FluidNodeManager neepmeat$nodeManager = new FluidNodeManager((ServerWorld) (Object) this);
+    @Unique public ItemNetwork neepmeat$itemNetwork = new ItemNetwork((ServerWorld) (Object) this);
+    @Unique public FluidNetworkManager neepmeat$networkManager;
 
     @Override
     public void setFluidNetworkManager(FluidNetworkManager manager)
     {
-        this.networkManager = manager;
+        this.neepmeat$networkManager = manager;
     }
 
     @Override
     public FluidNodeManager getFluidNodeManager()
     {
-        return nodeManager;
+        return neepmeat$nodeManager;
     }
 
     @Override
     public FluidNetworkManager getFluidNetworkManager()
     {
-        return networkManager;
+        return neepmeat$networkManager;
     }
 
     @Override
     public ItemNetwork getItemNetwork()
     {
-        return itemNetwork;
+        return neepmeat$itemNetwork;
     }
 }
