@@ -44,6 +44,7 @@ public class FilterPipeBlock extends AbstractAxialPipe implements BlockEntityPro
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        super.onStateReplaced(state, world, pos, newState, moved);
         if (world.isClient())
             return;
 

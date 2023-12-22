@@ -171,9 +171,9 @@ public class BlockPipeVertex extends SimplePipeVertex
                 if (transferAmount < 0)
                 {
                     FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
-                    long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), variant, transferAmount);
                     if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
                     {
+                        long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
                         extracted = storage.extract(foundVariant, -permittedAmount, transaction);
                         variant = foundVariant;
                         amount += extracted;
