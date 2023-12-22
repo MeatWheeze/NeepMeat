@@ -1,6 +1,6 @@
 package com.neep.neepmeat.block.base;
 
-import com.neep.neepmeat.item.BaseBlockItem;
+import com.neep.neepmeat.item.base.BaseBlockItem;
 import net.minecraft.block.PaneBlock;
 import net.minecraft.item.BlockItem;
 
