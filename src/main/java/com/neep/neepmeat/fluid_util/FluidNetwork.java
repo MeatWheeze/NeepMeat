@@ -4,10 +4,12 @@ import com.neep.neepmeat.blockentity.NodeContainerBlockEntity;
 import com.neep.neepmeat.fluid_util.node.FluidNode;
 import com.neep.neepmeat.fluid_util.node.NodePos;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -21,15 +23,39 @@ import java.util.function.Supplier;
 
 public class FluidNetwork
 {
-    public static final FluidNetwork INSTANCE = new FluidNetwork();
+    protected static final HashMap<ServerWorld, FluidNetwork> WORLD_NETWORKS = new HashMap<>();
 
-    public static List<FluidNode> QUEUED_NODES = new ArrayList<>();
+    public List<FluidNode> queuedNodes = new ArrayList<>();
+    public final Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
+    protected final ServerWorld world;
 
-    public Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
+    protected FluidNetwork(ServerWorld world)
+    {
+        this.world = world;
+    }
+
+    public static FluidNetwork getInstance(ServerWorld world)
+    {
+        return WORLD_NETWORKS.get(world);
+    }
+
+    public void queueNode(FluidNode node)
+    {
+        this.queuedNodes.add(node);
+    }
+
+    public static FluidNetwork getInstance(World world)
+    {
+        if (!(world instanceof ServerWorld))
+        {
+            return null;
+        }
+        return getInstance((ServerWorld) world);
+    }
 
     public static void tickNetwork(ServerWorld world)
     {
-        for (Iterator<FluidNode> it = QUEUED_NODES.listIterator(); it.hasNext();)
+        for (Iterator<FluidNode> it = WORLD_NETWORKS.get(world).queuedNodes.listIterator(); it.hasNext();)
         {
             FluidNode node = it.next();
             node.loadDeferred(world);
@@ -37,6 +63,42 @@ public class FluidNetwork
         }
 
         NMFluidNetwork.LOADED_NETWORKS.forEach(NMFluidNetwork::tick);
+    }
+
+    protected static void createNetwork(ServerWorld world)
+    {
+        FluidNetwork network = WORLD_NETWORKS.get(world);
+        if (network == null)
+        {
+            network = new FluidNetwork(world);
+            WORLD_NETWORKS.put(world, network);
+        }
+        System.out.println(" --------------------- world: " + world + ", net: " + network);
+    }
+
+    private static void startWorld(MinecraftServer server, ServerWorld world)
+    {
+        createNetwork(world);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return new HashCodeBuilder()
+                .append(chunkNodes.hashCode())
+                .append(world)
+                .toHashCode();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (!(o instanceof FluidNetwork network))
+        {
+            return false;
+        }
+        return network.world.equals(world)
+                && network.chunkNodes.equals(chunkNodes);
     }
 
     public Map<NodePos, FluidNode> getOrCreateMap(ChunkPos pos)
@@ -169,8 +231,8 @@ public class FluidNetwork
         return nbt;
     }
 
-//    public void readNodes(ServerWorld world, BlockPos pos, NbtCompound nbt)
-    public void readNodes(BlockPos pos, NbtCompound nbt)
+    // Extracts fluid nodes and adds them to the world's network
+    public void readNodes(BlockPos pos, NbtCompound nbt, ServerWorld world)
     {
         List<FluidNode> nodes = new ArrayList<>();
         for (Direction direction : Direction.values())
@@ -180,23 +242,25 @@ public class FluidNetwork
             {
                 continue;
             }
-            nodes.add(FluidNode.fromNbt((NbtCompound) nodeNbt));
+            nodes.add(FluidNode.fromNbt((NbtCompound) nodeNbt, world));
         }
         putNodes(nodes, pos);
     }
 
     public Supplier<FluidNode> getNodeSupplier(NodePos pos)
     {
-        return new NodeSupplier(pos);
+        return new NodeSupplier(pos, world);
     }
 
     public static class NodeSupplier implements Supplier<FluidNode>
     {
         NodePos pos;
+        ServerWorld world;
 
-        public NodeSupplier(NodePos pos)
+        public NodeSupplier(NodePos pos, ServerWorld world)
         {
             this.pos = pos;
+            this.world = world;
         }
 
         @Override
@@ -226,12 +290,15 @@ public class FluidNetwork
         @Override
         public FluidNode get()
         {
-            return INSTANCE.getOrCreateMap(pos.toChunkPos()).get(pos);
+            return getInstance(world).getOrCreateMap(pos.toChunkPos()).get(pos);
         }
     }
 
-    static
+    public static void registerEvents()
     {
         ServerTickEvents.END_WORLD_TICK.register(FluidNetwork::tickNetwork);
+        ServerWorldEvents.LOAD.register(FluidNetwork::startWorld);
+//        ServerWorldEvents.UNLOAD.register(((server, world1) -> System.out.println("UNLOAD -----------------------------------------------------------------")));
+//        ServerChunkEvents.CHUNK_LOAD.registter
     }
 }

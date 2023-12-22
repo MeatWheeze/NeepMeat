@@ -285,7 +285,7 @@ public class NMFluidNetwork
                             Storage<FluidVariant> storage = FluidStorage.SIDED.find(world, next, direction.getOpposite());
                             if (storage != null)
                             {
-                                Supplier<FluidNode> node = FluidNetwork.INSTANCE.getNodeSupplier(new NodePos(current, direction));
+                                Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(new NodePos(current, direction));
                                 if (node.get() != null)
                                 {
                                     connectedNodes.add(node);
@@ -316,10 +316,10 @@ public class NMFluidNetwork
 
     public void removeNode(NodePos pos)
     {
-        Supplier<FluidNode> node = FluidNetwork.INSTANCE.getNodeSupplier(pos);
+        Supplier<FluidNode> node = FluidNetwork.getInstance(world).getNodeSupplier(pos);
 //        System.out.println("trying to remove " + node + " from " + uid +  ", contains: " + connectedNodes.contains(node));
 //        System.out.println(connectedNodes);
-        connectedNodes.remove(FluidNetwork.INSTANCE.getNodeSupplier(pos));
+        connectedNodes.remove(FluidNetwork.getInstance(world).getNodeSupplier(pos));
         validate();
     }
 }
