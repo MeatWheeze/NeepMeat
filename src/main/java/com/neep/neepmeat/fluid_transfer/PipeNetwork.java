@@ -186,10 +186,10 @@ public class PipeNetwork
             return false;
         }
 
-        float h = node.getTargetY() - targetNode.getTargetY();
-        // TODO: gravity
-        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
-        float flow = node.getMode(world).getFlow() * node.flowMultiplier - targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
+//        float h = node.getTargetY() - targetNode.getTargetY();
+//        // TODO: gravity
+//        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+//        float flow = node.getMode(world).getFlow() * node.flowMultiplier - targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
 
         if (targetNode.getMode(world) == AcceptorModes.NONE || targetNode.getMode(world) == AcceptorModes.PUSH
                 || node.getMode(world) == AcceptorModes.NONE
@@ -230,7 +230,7 @@ public class PipeNetwork
                 double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
                 float flow = node.getMode(world).getFlow() * node.flowMultiplier -
                         targetNode.getMode(world).getFlow() * targetNode.flowMultiplier;
-                long insertBranchFlow = (long) Math.ceil(baseFlow * (flow) / (safeNodes.size()));
+                long insertBranchFlow = (long) Math.ceil(baseFlow * (flow + gravityFlowIn) / (safeNodes.size()));
 
                 long amountMoved;
                 if (insertBranchFlow >= 0)
@@ -240,20 +240,6 @@ public class PipeNetwork
                     t2.commit();
                 }
             }
-//
-//            // Reorganise nodes so that closest come first.
-//            List<Supplier<FluidNode>> sorted = connectedNodes.stream().sorted((t1, t2) -> compareNodes(t1.get(), t2.get(), node)).collect(Collectors.toList());
-//            for (Supplier<FluidNode> targetSupplier : sorted)
-//            {
-//                FluidNode targetNode;
-//                if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null
-//                        || supplier.get().getStorage(world) == null || targetSupplier.get().getStorage(world) == null
-//                        || !supplier.get().isStorage || !targetSupplier.get().isStorage)
-//                {
-//                    continue;
-//                }
-//                node.transmitFluid(world, targetNode);
-//            }
         }
     }
 
