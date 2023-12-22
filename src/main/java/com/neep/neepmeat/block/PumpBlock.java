@@ -88,7 +88,14 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, D
         PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);
         if (!world.isClient)
         {
-            be.update(state, world);
+            if (!player.isSneaking())
+            {
+                be.update(state, world);
+            }
+            else
+            {
+                PumpBlockEntity.tick(world, pos, state, be);
+            }
         }
         return ActionResult.SUCCESS;
     }
