@@ -188,7 +188,6 @@ public class PedestalBlockEntity extends SyncableBlockEntity
                     startRecipe(recipe);
                 }
             }
-            else interrupt();
             sync();
         }
 
