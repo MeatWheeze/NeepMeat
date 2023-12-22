@@ -119,6 +119,11 @@ public class LimiterValveBlockEntity extends FluidPipeBlockEntity<LimiterValveBl
         return new LimiterValveScreenHandler(syncId, inv, propertyDelegate);
     }
 
+    protected int getMaxFlowRate()
+    {
+        return maxFlowRate * (mbMode == 0 ? 1 : 81);
+    }
+
     public static class LimiterValveVertex extends BlockPipeVertex
     {
         public LimiterValveVertex(FluidPipeBlockEntity<LimiterValveVertex> fluidPipeBlockEntity)
@@ -130,7 +135,7 @@ public class LimiterValveBlockEntity extends FluidPipeBlockEntity<LimiterValveBl
         public long canInsert(ServerWorld world, int inDir, FluidVariant variant, long maxAmount)
         {
             long superAmount = super.canInsert(world, inDir, variant, maxAmount);
-            return Math.min(superAmount, ((LimiterValveBlockEntity) parent).maxFlowRate);
+            return Math.min(superAmount, ((LimiterValveBlockEntity) parent).getMaxFlowRate());
         }
 
         @Override
