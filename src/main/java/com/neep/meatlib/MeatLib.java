@@ -20,8 +20,6 @@ public class MeatLib implements ModInitializer
     @Override
     public void onInitialize()
     {
-        NeepMeat.LOGGER.printf(Level.INFO, "Meatlib registry");
-        System.out.println(ItemRegistry.ITEMS);
         BlockRegistry.registerBlocks();
         ItemRegistry.registerItems();
     }

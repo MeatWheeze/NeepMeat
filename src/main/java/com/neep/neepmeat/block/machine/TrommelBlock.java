@@ -9,6 +9,7 @@ import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
@@ -142,8 +143,14 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
 
         public Structure(String registryName, Settings settings)
         {
-            super(settings.dropsLike(NMBlocks.TROMMEL).nonOpaque());
+            super(settings.nonOpaque());
             this.registryName = registryName;
+        }
+
+        @Override
+        public ItemConvertible dropsLike()
+        {
+            return NMBlocks.TROMMEL;
         }
 
         @Override

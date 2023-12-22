@@ -50,9 +50,9 @@ public class NMBlocks
 
 //    public static Block FILLED_SCAFFOLD = new BaseBuildingBlock("filled_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(BlockSoundGroup.NETHERITE));
 
-    public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(2f).sounds(BlockSoundGroup.NETHERITE));
-    public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(2f).sounds(BlockSoundGroup.NETHERITE));
-    public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(2f).sounds(BlockSoundGroup.NETHERITE));
+    public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(BlockSoundGroup.NETHERITE));
+    public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(BlockSoundGroup.NETHERITE));
+    public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(BlockSoundGroup.NETHERITE));
 
     // --- Building Blocks ---
     public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_vent", 64, false, FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
@@ -77,19 +77,19 @@ public class NMBlocks
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", 64, true, FLUID_PIPE_SETTINGS));
 
     // --- Machines
-    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
-    public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, MACHINE_SETTINGS));
-    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", MACHINE_SETTINGS));
-    public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", 64, false, MACHINE_SETTINGS));
-    public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_strucrure", MACHINE_SETTINGS));
+    public static final FabricBlockSettings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE).nonOpaque().solidBlock(ContentDetectorBlock::never);
+    public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_strucrure", FabricBlockSettings.copy(SMALL_TROMMEL)));
 
-    public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, MACHINE_SETTINGS));
-    public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, MACHINE_SETTINGS));
-    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", 64, false, MACHINE_SETTINGS));
-    public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", 64, false, MACHINE_SETTINGS));
-    public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", 64, false, MACHINE_SETTINGS));
-    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", 64, false, MACHINE_SETTINGS));
-    public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, MACHINE_SETTINGS));
+    public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", 64, false, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", 64, false, FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", 64, false, FLUID_PIPE_SETTINGS));
     public static Block ALEMBIC = BlockRegistry.queue(new AlembicBlock("alembic", 64, false, FLUID_PIPE_SETTINGS));
@@ -102,7 +102,7 @@ public class NMBlocks
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", 64, true, FabricBlockSettings.copy(CONVERTER)));
 
     public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
-    public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", 64, true, BRASS_BLOCKS));
+    public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", 64, true, FabricBlockSettings.copyOf(BRASS_BLOCKS)));
     public static Block MIXER_TOP = BlockRegistry.queue(new MixerTopBlock("mixer_top", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
     public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", 64, false, FabricBlockSettings.copyOf(MIXER)));
@@ -132,11 +132,11 @@ public class NMBlocks
     // --- Item Transfer ---
     public static final FabricBlockSettings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
     public static Block ITEM_DUCT = BlockRegistry.queue(new ItemDuctBlock("item_duct", 64, true, FabricBlockSettings.copyOf(Blocks.HOPPER)));
-    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("item_pipe", 64, true, ITEM_PIPE_SETTINGS));
-    public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, ITEM_PIPE_SETTINGS));
-    public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, MACHINE_SETTINGS));
-    public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, MACHINE_SETTINGS));
-    public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", 64, true, MACHINE_SETTINGS));
+    public static Block PNEUMATIC_TUBE = BlockRegistry.queue(new PneumaticTubeBlock("item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
+    public static Block MERGE_ITEM_PIPE = BlockRegistry.queue(new MergePipeBlock("merge_item_pipe", 64, true, FabricBlockSettings.copyOf(ITEM_PIPE_SETTINGS)));
+    public static Block ITEM_PUMP = BlockRegistry.queue(new ItemPumpBlock("item_pump", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", 64, true, FabricBlockSettings.copy(Blocks.CHEST)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new ContentDetectorBlock("content_detector", 64, true, FabricBlockSettings.copy(Blocks.OBSERVER)));
     public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", 64, true, FabricBlockSettings.copy(Blocks.OAK_WOOD)));

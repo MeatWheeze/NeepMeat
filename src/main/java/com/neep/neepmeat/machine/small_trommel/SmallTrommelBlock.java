@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
@@ -82,6 +83,12 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
         {
             super(registryName, settings.nonOpaque());
             this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+        }
+
+        @Override
+        public ItemConvertible dropsLike()
+        {
+            return NMBlocks.SMALL_TROMMEL;
         }
 
         @Override

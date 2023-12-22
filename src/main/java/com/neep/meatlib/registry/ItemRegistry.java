@@ -32,7 +32,7 @@ public class ItemRegistry
         return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, item.getRegistryName()), (Item) item);
     }
 
-    public static Item queueItem1(String path, Item item)
+    public static Item queueItem(String path, Item item)
     {
         return ITEMS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, path), item);
     }
