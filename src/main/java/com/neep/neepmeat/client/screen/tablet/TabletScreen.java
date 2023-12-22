@@ -7,7 +7,6 @@ import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
@@ -32,10 +31,9 @@ import java.util.stream.Collectors;
 @Environment(value= EnvType.CLIENT)
 public class TabletScreen extends HandledScreen<ScreenHandler> implements ITabletScreen
 {
-    public static final Identifier TABLET_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/tablet_background.png");
+//    public static final Identifier TABLET_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/tablet_background.png");
+    public static final Identifier LOGO_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/tablet/neep.png");
 
-    private float mouseX;
-    private float mouseY;
 //    protected int screenOffsetX = 17;
 //    protected int screenOffsetY = 17;
 //    protected int tabletWidth = 255;
@@ -45,7 +43,6 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
 //    protected int screenWidth = 156;
 //    protected int screenHeight = 145;
     protected PlayerEntity player;
-    protected int tabWidth = 21;
 
     protected int animationTicks;
     protected boolean start;
@@ -121,6 +118,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     {
         this.renderBackground(matrices);
 
+        // Initial animation
         matrices.push();
         float scale = MathHelper.clampedLerp(0.01f, 1f, (animationTicks + delta) / 10f);
         matrices.translate(0, height / 2f * (1 - scale), 0);
@@ -129,9 +127,8 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         {
             super.render(matrices, mouseX, mouseY, delta);
             this.drawMouseoverTooltip(matrices, mouseX, mouseY);
+            this.drawLogo(matrices, delta);
         }
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
 
         int borderCol = 0xFF008800;
         int offset = 3;
@@ -154,8 +151,8 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
         super.init();
         addDrawableChild(leftPane);
         addDrawableChild(rightPane);
-        contentWidth = (int) (this.width * 0.7);
-        contentHeight = (int) (this.height * 0.7);
+        contentWidth = (int) (1920 * 0.2);
+        contentHeight = (int) (1080 * 0.2);
         this.x = (this.width - contentWidth) / 2;
         this.y = (this.height - contentHeight) / 2;
         this.backgroundWidth = contentWidth;
@@ -168,7 +165,7 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
 
         if (leftPane != null)
         {
-            leftPane.setDimensions(x, y, leftWidth, contentHeight);
+            leftPane.setDimensions(x, y, leftWidth, contentHeight - 26);
             leftPane.init(client);
         }
         if (rightPane != null)
@@ -181,43 +178,99 @@ public class TabletScreen extends HandledScreen<ScreenHandler> implements ITable
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
+    }
+
+    protected void drawLogo(MatrixStack matrices, float delta)
+    {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TABLET_TEXTURE);
-        matrices.push();
-//        float scale = contentWidth / (float) tabletWidth;
-//        matrices.scale(scale, scale, 1);
-//        matrices.translate(-screenOffsetX, -screenOffsetY, 0);
-//        drawTexture(matrices, x, y, 0, 0, tabletWidth, tabletHeight);
-//        DrawableHelper.drawTexture(matrices, x - screenOffsetX, y - screenOffsetY, this.getZOffset(), 0, 0, tabletWidth + 10, tabletHeight, contentWidth, contentHeight);
-//        drawTexture(matrices, x, x + width, y, y + height, getZOffset(), width, height, 0, 0, 256, 256);
-//        drawTexturedQuad(matrices.peek().getPositionMatrix(), 0, width, 0, height, getZOffset(), 0, tabWidth, 0, tabletHeight);
-//        drawTexturedQuad(matrices.peek().getPositionMatrix(), 0, width, 0, height, getZOffset(), (0 + 0.0f) / (float) 256, (0 + (float) width) / (float) tabletWidth, (0 + 0.0f) / (float) 256, (0 + (float) tabletHeight) / (float) 256);
-        matrices.pop();
+        RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
+        int logoHeight = 24;
+        int logoWidth = 60;
+        drawTexture(matrices, x, y + contentHeight - logoHeight + 1, 0, 0, logoWidth, logoHeight, logoWidth, 26);
     }
 
-    private static void drawTexture(MatrixStack matrices, int x0, int x1, int y0, int y1, int z, int regionWidth, int regionHeight, float u, float v, int textureWidth, int textureHeight)
-    {
-        drawTexturedQuad(matrices.peek().getPositionMatrix(), x0, x1, y0, y1, z, (u + 0.0f) / (float) textureWidth, (u + (float) regionWidth) / (float) textureWidth, (v + 0.0f) / (float) textureHeight, (v + (float) regionHeight) / (float) textureHeight);
-    }
-
-    private static void drawTexturedQuad(Matrix4f matrix, int x0, int x1, int y0, int y1, int z, float u0, float u1, float v0, float v1)
-    {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
-        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
-        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
-        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
-    }
+//    private void renderBlockTest(MatrixStack matrices)
+//    {
+//        ItemRenderer renderer = client.getItemRenderer();
+//        ItemModels models = renderer.getModels();
+//        BakedModel bakedModel = models.getModel(NMItems.COMPOUND_INJECTOR);
+//
+//        MatrixStack matrixStack = RenderSystem.getModelViewStack();
+//        matrixStack.push();
+//        matrixStack.translate(x, y, 100.0f + getZOffset());
+//        matrixStack.translate(8.0, 8.0, 0.0);
+//        matrixStack.scale(1.0f, -1.0f, 1.0f);
+//        matrixStack.scale(12.0f, 12.0f, 12.0f);
+//        RenderSystem.applyModelViewMatrix();
+//        VertexConsumerProvider.Immediate immediate = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
+//        renderItem(matrixStack, bakedModel, getZOffset());
+//
+//        RenderSystem.disableTexture();
+//        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+//        float r = 1;
+//        float g = 0;
+//        float b = 0;
+//        float a = 255f;
+//
+//    }
+//
+//    public static void renderItem(MatrixStack matrices, BakedModel model, int z)
+//    {
+//        ModelTransformation.Mode renderMode = ModelTransformation.Mode.GUI;
+//        matrices.push();
+//        model.getTransformation().getTransformation(renderMode).apply(false, matrices);
+//        matrices.translate(-0.5, -0.5, -0.5);
+////        RenderLayer renderLayer = RenderLayers.getItemLayer(stack, true);
+////        VertexConsumer vertexConsumer = ItemRenderer.getDirectItemGlintConsumer(vertexConsumers, renderLayer, true, stack.hasGlint());
+//        renderBakedItemModel(model, matrices, z);
+//        matrices.pop();
+//    }
+//
+//    private static void renderBakedItemModel(BakedModel model, MatrixStack matrices, int z)
+//    {
+//        Random random = new Random();
+//
+//        for (Direction direction : Direction.values())
+//        {
+//            random.setSeed(42L);
+//            renderWireframe(matrices, model.getQuads(null, direction, random), z);
+//        }
+//        random.setSeed(42L);
+//        renderWireframe(matrices, model.getQuads(null, null, random), z);
+//    }
+//
+//    private static void renderWireframe(MatrixStack matrices, List<BakedQuad> quads, int z)
+//    {
+//        MatrixStack.Entry entry = matrices.peek();
+//        for (BakedQuad bakedQuad : quads)
+//        {
+//            int i = 0x77FF77;
+//            float r = (float)(i >> 16 & 0xFF) / 255.0f;
+//            float g = (float)(i >> 8 & 0xFF) / 255.0f;
+//            float b = (float)(i & 0xFF) / 255.0f;
+//
+//            Tessellator tessellator = Tessellator.getInstance();
+//            BufferBuilder bufferBuilder = tessellator.getBuffer();
+//            bufferBuilder.begin(VertexFormat.DrawMode.DEBUG_LINE_STRIP, VertexFormats.POSITION_COLOR);
+//            bufferBuilder.vertex(bakedQuad.getVertexData(), height, getZOffset()).color(r, g, b, a).next();
+//            bufferBuilder.vertex(width, height, getZOffset()).color(r, g, b, a).next();
+//            bufferBuilder.vertex(width - 10, 0.0, getZOffset()).color(r, g, b, a).next();
+//            bufferBuilder.vertex(20.0, 20.0, getZOffset()).color(r, g, b, a).next();
+//
+//            ByteBuffer bb = new ByteBuffer();
+//            Vector4f vector4f = new Vector4f(f, g, h, 1.0f);
+//            vector4f.transform(matrix4f);
+//            bufferBuilder.vertex(vector4f.getX(), vector4f.getY(), vector4f.getZ()).color(r, g, b, a);
+//            tessellator.draw();
+//        }
+//    }
 
     @Override
     protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
     {
 //        super.drawForeground(matrices, mouseX, mouseY);
+
     }
 
     @Override
