@@ -1,10 +1,10 @@
 {
   "variants": {
     "bottom=false": {
-      "model": "neepmeat:block/scaffold_top"
+      "model": "neepmeat:block/rusted_metal_scaffold_top"
     },
     "bottom=true": {
-      "model": "neepmeat:block/scaffold_bottom"
+      "model": "neepmeat:block/rusted_metal_scaffold_bottom"
     }
   }
 }
