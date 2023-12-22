@@ -4,6 +4,7 @@ import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.fluid.*;
 import com.neep.neepmeat.item.BaseBucketItem;
+import com.neep.neepmeat.machine.FluidFuelRegistry;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -11,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -89,6 +91,9 @@ public class NMFluids
         FLOWING_ETHEREAL_FUEL = ETHEREAL_FACTORY.registerFlowing();
         ETHEREAL_FUEL_BUCKET = ETHEREAL_FACTORY.registerItem();
         ETHEREAL_FUEL = ETHEREAL_FACTORY.registerBlock();
+
+        FluidFuelRegistry.getInstance().register(STILL_ETHEREAL_FUEL, 2, true, null);
+        FluidFuelRegistry.getInstance().register(Fluids.WATER, 1, false, null);
 
         CHARGED = FluidVariant.of(STILL_CHARGED_WORK_FLUID);
         UNCHARGED = FluidVariant.of(STILL_WORK_FLUID);

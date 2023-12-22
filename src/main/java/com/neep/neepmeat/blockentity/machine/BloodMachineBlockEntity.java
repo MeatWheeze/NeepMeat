@@ -2,10 +2,10 @@ package com.neep.neepmeat.blockentity.machine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.FluidBuffer;
-import com.neep.neepmeat.api.storage.MultiTypedFluidBuffer;
-import com.neep.neepmeat.api.storage.TypedFluidBuffer;
-import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.machine.FluidFuelRegistry;
 import com.neep.neepmeat.transport.fluid_network.FluidNetwork;
+import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
+import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -20,40 +20,35 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 
 @SuppressWarnings("UnstableApiUsage")
 public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implements FluidBuffer.FluidBufferProvider
 {
-    public TypedFluidBuffer outputBuffer;
-    protected MultiTypedFluidBuffer buffer;
     protected InputStorage inputStorage = new InputStorage();
 
-    protected boolean enabled;
+    protected boolean enabled = true;
     public long maxRunningRate = FluidConstants.BUCKET;
 
-    protected long lastInput;
     protected long runningRate;
+    protected float fluidMultiplier;
 
     protected class InputStorage extends SnapshotParticipant<Long> implements SingleSlotStorage<FluidVariant>
     {
-        long currentInput;
-
-        public boolean canInsert(FluidVariant variant)
-        {
-            return variant.isOf(Fluids.WATER) || variant.isOf(NMFluids.STILL_ENRICHED_BLOOD);
-        }
+        long lastInput;
+        FluidVariant lastFluid;
 
         @Override
         public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
         {
             if (enabled && canInsert(resource))
             {
-                long inserted = Math.min(maxAmount, maxRunningRate - currentInput);
+                long inserted = Math.min(maxAmount, maxRunningRate - lastInput);
                 if (inserted > 0)
                 {
-//                    snapshotParticipant.updateSnapshots(transaction);
                     updateSnapshots(transaction);
-                    currentInput += inserted;
+                    lastFluid = resource;
+                    lastInput += inserted;
                 }
                 return inserted;
             }
@@ -93,69 +88,43 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         @Override
         protected Long createSnapshot()
         {
-            return this.currentInput;
+            return this.lastInput;
         }
 
         @Override
         protected void readSnapshot(Long snapshot)
         {
-            this.currentInput = snapshot;
-        }
-    };
-
-    protected SnapshotParticipant<Long> snapshotParticipant = new SnapshotParticipant<>()
-    {
-        @Override
-        protected Long createSnapshot()
-        {
-            return lastInput;
-        }
-
-        @Override
-        protected void readSnapshot(Long snapshot)
-        {
-            lastInput = snapshot;
+            this.lastInput = snapshot;
         }
     };
 
     public BloodMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long inCapacity, long outCapacity)
     {
         super(type, pos, state);
-//        inputBuffer = new TypedFluidBuffer(inCapacity, fluidVariant -> fluidVariant.equals(NMFluids.CHARGED), TypedFluidBuffer.Mode.INSERT_ONLY, this::sync);
-//        outputBuffer = new TypedFluidBuffer(outCapacity, fluidVariant -> fluidVariant.equals(NMFluids.UNCHARGED), TypedFluidBuffer.Mode.EXTRACT_ONLY, this::sync);
-//        buffer = new MultiTypedFluidBuffer(this, List.of(inputBuffer, outputBuffer));
     }
 
-    public long doWork(long amount, TransactionContext transaction)
+    public boolean canInsert(FluidVariant variant)
     {
-//        Transaction nested = transaction.openNested();
-//        long extracted = inputBuffer.extractDirect(NMFluids.CHARGED, amount, nested);
-////        long inserted = outputBuffer.insertDirect(NMFluids.UNCHARGED, extracted, nested);
-////        if (extracted == amount && inserted == amount)
-//        if (extracted == amount)
-//        {
-//            nested.commit();
-//            return extracted;
-//        }
-//        nested.abort();
-        return 0;
+        return FluidFuelRegistry.getInstance().containsKey(variant.getFluid());
     }
 
     public void tick()
     {
-        enabled = true;
         if (FluidNetwork.shouldTick(world.getTime()))
         {
-            this.runningRate = this.inputStorage.currentInput;
-            this.inputStorage.currentInput = 0;
-            long t = world.getTime();
+            // Get effective influx per tick
+            this.runningRate = this.inputStorage.lastInput / PipeNetwork.TICK_RATE;
+
+            if (inputStorage.lastInput != 0)
+                this.fluidMultiplier = FluidFuelRegistry.getInstance().get(inputStorage.lastFluid.getFluid()).multiplier();
+            this.inputStorage.lastInput = 0;
             sync();
         }
     }
 
     public float getRunningRate()
     {
-        return (this.runningRate / (float) this.maxRunningRate);
+        return MathHelper.clamp((this.runningRate / (float) this.maxRunningRate) * fluidMultiplier, 0, maxRunningRate);
     }
 
     @Override
@@ -169,15 +138,17 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     {
         super.writeNbt(nbt);
         nbt.putLong("runningRate", runningRate);
-        nbt.putLong("lastInput", lastInput);
+        nbt.putLong("lastInput", inputStorage.lastInput);
+        nbt.putFloat("fluidMultiplier", fluidMultiplier);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.lastInput = nbt.getLong("lastInput");
+        this.inputStorage.lastInput = nbt.getLong("lastInput");
         this.runningRate = nbt.getLong("runningRate");
+        this.fluidMultiplier = nbt.getFloat("fluidMultiplier");
     }
 
     public void onUse(PlayerEntity player, Hand hand)

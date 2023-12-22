@@ -129,11 +129,10 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     public boolean retrieve(Transaction transaction)
     {
 
-        if (doWork(USE_AMOUNT, transaction) == 0)
-        {
-//            System.out.println(inputBuffer.getAmount());
-            return false;
-        }
+//        if (doWork(USE_AMOUNT, transaction) == 0)
+//        {
+//            return false;
+//        }
 
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
 
