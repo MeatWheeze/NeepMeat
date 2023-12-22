@@ -2,12 +2,7 @@ package com.neep.meatweapons.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.entity.EquipmentSlot;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.vehicle.BoatEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -21,26 +16,9 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 {
     private final AnimationFactory factory = new AnimationFactory(this);
 
-    public AirtruckEntity(EntityType<? extends Entity> type, World world)
+    public AirtruckEntity(EntityType<? extends VehicleEntity2> type, World world)
     {
         super(type, world);
-    }
-
-    public ActionResult interactMob(PlayerEntity player, Hand hand)
-    {
-        if (!this.world.isClient)
-        {
-            player.setYaw(this.getYaw());
-            player.setPitch(this.getPitch());
-            player.startRiding(this);
-        }
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
-    public boolean collidesWith(Entity other)
-    {
-        return BoatEntity.canCollide(this, other);
     }
 
     @Override

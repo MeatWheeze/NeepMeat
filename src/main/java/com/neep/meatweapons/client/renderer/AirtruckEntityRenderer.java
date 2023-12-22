@@ -81,7 +81,7 @@ public class AirtruckEntityRenderer<T extends AbstractVehicleEntity & IAnimatabl
         stack.push();
         EntityModelData entityModelData = new EntityModelData();
 
-        float f = MathHelper.lerpAngleDegrees(partialTicks, entity.prevYaw, entity.yaw);
+        float f = MathHelper.lerpAngleDegrees(partialTicks, entity.prevYaw, entity.getYaw());
 
         float f7 = this.handleRotationFloat(entity, partialTicks);
         this.applyRotations(entity, stack, f7, f, partialTicks);

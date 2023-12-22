@@ -62,6 +62,7 @@ public class MWClient implements ClientModInitializer
         registerEntityModels();
         registerAnimations();
         MWParticles.initClient();
+        MWKeys.registerKeybinds();
     }
 
 }

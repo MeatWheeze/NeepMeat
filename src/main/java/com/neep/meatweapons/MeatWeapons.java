@@ -39,9 +39,14 @@ public class MeatWeapons implements ModInitializer
     {
         return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                 builder
-                        .dimensions(EntityDimensions.fixed(3F, 2F))
+                        .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
                         .build());
+    }
+
+    public static <T extends Entity> EntityType<T> registerEntity(String id, EntityType<T> type)
+    {
+        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
     }
 
     @Override
@@ -50,7 +55,13 @@ public class MeatWeapons implements ModInitializer
         BULLET = registerEntity("bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, BulletEntity::new));
         CANNON_BULLET = registerEntity("cannon_bullet", FabricEntityTypeBuilder.create(SpawnGroup.MISC, CannonBulletEntity::new));
         EXPLODING_SHELL = registerEntity("exploding_shell", FabricEntityTypeBuilder.create(SpawnGroup.MISC, ExplodingShellEntity::new));
-        AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new));
+
+        AIRTRUCK = registerEntity("airtruck", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AirtruckEntity::new)
+                .trackedUpdateRate(1)
+                .forceTrackedVelocityUpdates(true)
+                .dimensions(EntityDimensions.fixed(3F, 2F))
+                .trackRangeBlocks(10)
+                .build());
 
         MeatLib.setNamespace(NAMESPACE);
         ItemRegistry.registerItems();
