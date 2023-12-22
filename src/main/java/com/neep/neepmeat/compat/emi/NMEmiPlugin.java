@@ -12,6 +12,7 @@ import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.recipe.PLCRecipes;
+import com.neep.neepmeat.plc.recipe.TransformingToolRecipe;
 import com.neep.neepmeat.transport.FluidTransport;
 import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
@@ -75,10 +76,10 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(MANUFACTURE, MANUFACTURE_WORKSTATION);
+        registry.addWorkstation(TRANSFORMING_TOOL, TRANSFORMING_TOOL_WORKSTATION);
         registry.addWorkstation(MIXING, MIXING_WORKSTATION);
         registry.addWorkstation(PRESSING, PRESSING_WORKSTATION);
         registry.addWorkstation(SURGERY, SURGERY_WORKSTATION);
-        registry.addWorkstation(TRANSFORMING_TOOL, TRANSFORMING_TOOL_WORKSTATION);
         registry.addWorkstation(TROMMEL, TROMMEL_WORKSTATION);
 
         RecipeManager manager = registry.getRecipeManager();
@@ -114,21 +115,13 @@ public class NMEmiPlugin implements EmiPlugin {
                 .stream()
                 .map(ManufactureEmiRecipe::new)
                 .forEach(registry::addRecipe);
-//        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.SURGERY)
-//                .values()
-//                .stream()
-//                .map(SurgeryEmiRecipe::new)
-//                .forEach(registry::addRecipe);
-//        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.TRANSFORMING_TOOL)
-//                .values()
-//                .stream()
-//                .map(TransformingToolEmiRecipe::new)
-//                .forEach(registry::addRecipe);
         MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.TROMMEL)
                 .values()
                 .stream()
                 .map(TrommelEmiRecipe::new)
                 .forEach(registry::addRecipe);
+
+        registry.addRecipe(new ToolManufactureEmiRecipe(TransformingToolRecipe.getInstance()));
 
         // Charnel Compactor recipes
         int page = 0;

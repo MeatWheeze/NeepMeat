@@ -1,5 +1,6 @@
 package com.neep.neepmeat.compat.rei.display;
 
+import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
@@ -54,7 +55,12 @@ public class TransformingToolDisplay implements Display
 
     public Item getBase()
     {
-        return NMItems.TRANSFORMING_TOOL_BASE;
+        return (Item) recipe.getBase();
+    }
+
+    public ManufactureStep<?> getStep()
+    {
+        return recipe.getSteps().get(0);
     }
 
     static class Serializer implements DisplaySerializer<TransformingToolDisplay>

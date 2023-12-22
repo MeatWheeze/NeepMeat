@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface ManufactureRecipe<C> extends MeatRecipe<C>
 {
+    // TODO: Use generics
     Object getBase();
     List<ManufactureStep<?>> getSteps();
 }
