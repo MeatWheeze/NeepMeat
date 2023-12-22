@@ -30,7 +30,7 @@
         {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
     ]},
-    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Fluid Machines", "entries": [
+    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Energetic Fluid-Powered Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
       {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"},
       {"type": "page", "id": "surgery", "icon": "neepmeat:surgery_controller", "text": "Machine Surgery"}
@@ -145,7 +145,7 @@
     ]},
     {"id": "item_mincer", "contents": [
       {"type": "text", "text": "Small Mincer\n", "bold": true},
-      {"type": "text", "text": "The Small Mincer squeezes food items into a coarse meat slurry. The quality of the resulting substance is determined by the quality of the inserted meat."},
+      {"type": "text", "text": "The Item Mincer squeezes food items into a coarse meat slurry. The quality of the resulting substance is determined by the quality of the inserted meat."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Items can be inserted through hoppers or pipes or by dropping them into the hopper. Coarse meat is accessible by pipes on the machine's front face. A running motor must be connected for this machine to function.\n\nEach meat item produces 111mb of Meat Slurry, but the hunger and saturation values of the food are retained by the fluid. Slurries of differing quality can be mixed in any NEEPMeat fluid tank."}
     ]},
