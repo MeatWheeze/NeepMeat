@@ -11,7 +11,11 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
+import net.minecraft.util.ItemScatterer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
@@ -64,6 +68,18 @@ public class ItemUtils
     public static boolean notBlank(StorageView<ItemVariant> view)
     {
         return !view.isResourceBlank();
+    }
+
+    public static void scatterItems(World world, BlockPos pos, Storage<ItemVariant> storage)
+    {
+        Transaction transaction = Transaction.openOuter();
+        Iterator<? extends StorageView<ItemVariant>> it = storage.iterator(transaction);
+        while (it.hasNext())
+        {
+            StorageView<ItemVariant> view = it.next();
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, view.getResource().toStack((int) view.getAmount()));
+        }
+        transaction.commit();
     }
 
     public static ItemStack mutateView(StorageView<ItemVariant> view)

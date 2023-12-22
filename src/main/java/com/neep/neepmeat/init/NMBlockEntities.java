@@ -138,7 +138,6 @@ public class NMBlockEntities
         MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
         MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);
 
-        ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
@@ -159,6 +158,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), ALLOY_KILN);
+        ItemStorage.SIDED.registerForBlockEntity(ItemBufferBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getFuelStorage(direction), STIRLING_ENGINE);
 
