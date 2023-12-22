@@ -7,6 +7,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.nbt.NbtCompound;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -34,11 +35,17 @@ public class BottlerStorage implements NbtSerialisable
             @Override
             protected void onFinalCommit()
             {
-                fillingStorage = FluidStorage.ITEM.find(variant.toStack(), ContainerItemContext.ofSingleSlot(this));
+                updateFillingStorage();
                 super.onFinalCommit();
             }
         };
 //        fluidStorage = new InternalFluidStorage(0, parent::sync);
+    }
+
+    public void updateFillingStorage()
+    {
+        fillingStorage = FluidStorage.ITEM.find(itemStorage.getAsStack(), ContainerItemContext.ofSingleSlot(itemStorage));
+        if (fillingStorage == null) fillingStorage = Storage.empty();
     }
 
     public WritableStackStorage getItemStorage()
@@ -48,7 +55,9 @@ public class BottlerStorage implements NbtSerialisable
 
     public Storage<FluidVariant> getFluidStorage()
     {
-        return fillingStorage != null ? fillingStorage : null;
+        if (fillingStorage == null) updateFillingStorage();
+
+        return fillingStorage;
     }
 
     @Override
