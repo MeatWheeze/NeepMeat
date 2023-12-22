@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "neepmeat:block/white_rough_concrete",
+		"1": "neepmeat:block/robotic_arm/parts",
 		"particle": "neepmeat:block/white_rough_concrete"
 	},
 	"elements": [
@@ -10,12 +10,12 @@
 			"to": [16, 8, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 8], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 8], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 8], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 8], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+				"north": {"uv": [4, 2, 8, 4], "texture": "#1"},
+				"east": {"uv": [4, 2, 8, 4], "texture": "#1"},
+				"south": {"uv": [4, 2, 8, 4], "texture": "#1"},
+				"west": {"uv": [4, 2, 8, 4], "texture": "#1"},
+				"up": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"down": {"uv": [0, 0, 4, 4], "texture": "#1"}
 			}
 		}
 	]
