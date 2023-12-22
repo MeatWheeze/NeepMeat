@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "neepmeat:block/filled_scaffold",
+    "top": "neepmeat:block/filled_scaffold",
+    "side": "neepmeat:block/filled_scaffold"
+  }
+}
