@@ -42,6 +42,17 @@ public interface IFluidPipe
         return Optional.empty();
     }
 
+    // Call this first
+    static void onStateReplaced(World world, BlockPos pos, BlockState state, BlockState newState)
+    {
+        if (!newState.isOf(state.getBlock())
+                && world instanceof ServerWorld serverWorld
+                && serverWorld.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+        {
+            be.markReplaced();
+        }
+    }
+
     default boolean createStorageNodes(World world, BlockPos pos, BlockState state)
     {
         if (!world.isClient)
@@ -76,9 +87,9 @@ public interface IFluidPipe
                     .filter(dir -> state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(dir)).isConnected()).filter(forbidden)
                     .collect(Collectors.toList());
         }
-        else if (state.getBlock() instanceof AbstractAxialPipe)
+        else if (state.getBlock() instanceof AbstractAxialFluidPipe)
         {
-            Direction facing = state.get(AbstractAxialPipe.FACING);
+            Direction facing = state.get(AbstractAxialFluidPipe.FACING);
             return List.of(facing, facing.getOpposite()).stream().filter(forbidden).collect(Collectors.toList());
         }
         else
@@ -109,6 +120,7 @@ public interface IFluidPipe
             }
             else if (reason.isRemoved())
             {
+
                 // Look for adjacent networks and add this pipe to the first one.
                 Set<PipeNetwork> updatedNetworks = Sets.newHashSet();
                 BlockPos.Mutable mutable = pos.mutableCopy();

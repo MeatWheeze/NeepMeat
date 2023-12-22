@@ -228,6 +228,18 @@ public class BlockPipeVertex extends SimplePipeVertex
     }
 
     @Override
+    public void setSaveState(SaveState saveState)
+    {
+        parent.setSaveState(saveState);
+    }
+
+    @Override
+    public SaveState getState()
+    {
+        return parent.state;
+    }
+
+    @Override
     public long insert(int fromDir, int toDir, long maxAmount, ServerWorld world, FluidVariant insertVariant, TransactionContext transaction)
     {
         return super.insert(fromDir, toDir, maxAmount, world, insertVariant, transaction);

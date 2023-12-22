@@ -1,9 +1,8 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.data.FluidNetworkManager;
+import com.neep.neepmeat.transport.data.PipeNetworkSerialiser;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.nbt.NbtCompound;
@@ -30,40 +29,52 @@ public interface PipeNetwork
         network.rebuild(pos);
         if (network.isValid())
         {
-            LOADED_NETWORKS.add(network);
+            startTickingNetwork(network);
             return;
-        }
-        else
-        {
-            network.remove();
         }
         System.out.println("fluid network failed");
     }
 
-    static void createFromNbt(ServerWorld world, UUID uuid)
-    {
-        FluidNetworkManager manager = ((IServerWorld) world).getFluidNetworkManager();
-        NbtCompound networkNbt = manager.getNetwork(uuid);
 
-        // If the world didn't save properly, this could be null.
-        if (networkNbt == null) return;
-
-        PipeNetwork network = PipeNetworkImpl.fromNbt(world, networkNbt);
-        LOADED_NETWORKS.add(network);
-    }
-
-    static void addNetwork(PipeNetwork network)
+    static void startTickingNetwork(PipeNetwork network)
     {
         LOADED_NETWORKS.add(network);
     }
 
-    static void removeNetwork(PipeNetwork network)
+    static void stopTickingNetwork(PipeNetwork network)
     {
+        network.unload();
         LOADED_NETWORKS.remove(network);
     }
 
-    void rebuild(BlockPos startPos);
-    void tick();
+
+    static void discardNetwork(ServerWorld world, PipeNetwork network)
+    {
+        LOADED_NETWORKS.remove(network);
+        ((IServerWorld) world).getPipeNetworkManager().unregisterNetwork(network);
+    }
+
+    static void storeNetwork(ServerWorld world, PipeNetwork network)
+    {
+        ((IServerWorld) world).getPipeNetworkManager().storeNetwork(network.getUUID(), network.toNbt());
+    }
+
+    static void retrieveNetwork(ServerWorld world, UUID uuid)
+    {
+        PipeNetworkSerialiser manager = ((IServerWorld) world).getPipeNetworkManager();
+        NbtCompound networkNbt = manager.getNetwork(uuid);
+
+        if (networkNbt == null) return;
+
+        PipeNetwork network = PipeNetworkImpl.fromNbt(world, networkNbt);
+        startTickingNetwork(network);
+    }
+
+//    static void retrieveNetwork(ServerWorld world, NbtCompound nbt)
+//    {
+//        PipeNetwork network = PipeNetworkImpl.fromNbt(world, nbt);
+//        startTickingNetwork(network);
+//    }
 
     static void registerEvent()
     {
@@ -71,12 +82,10 @@ public interface PipeNetwork
         {
             LOADED_NETWORKS.clear();
         });
-
-        ServerChunkEvents.CHUNK_LOAD.register((world, chunk) ->
-        {
-//            ((IServerWorld) world).getFluidNetworkManager().getNetwork().
-        });
     }
+
+    void rebuild(BlockPos startPos);
+    void tick();
 
     boolean merge(BlockPos pos, PipeNetwork other);
 
@@ -85,10 +94,12 @@ public interface PipeNetwork
     boolean canTick(ServerWorld world);
 
     void update(BlockPos vertexPos, @Nullable PipeVertex vertex, UpdateReason reason);
-
+    
     void remove();
 
     NbtCompound toNbt();
+
+    void unload();
 
     enum UpdateReason
     {

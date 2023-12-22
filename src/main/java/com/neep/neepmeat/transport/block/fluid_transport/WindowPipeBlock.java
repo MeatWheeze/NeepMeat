@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.api.pipe.AbstractAxialPipe;
+import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class WindowPipeBlock extends AbstractAxialPipe implements BlockEntityProvider
+public class WindowPipeBlock extends AbstractAxialFluidPipe implements BlockEntityProvider
 {
     public WindowPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {

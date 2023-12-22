@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network;
 
+import me.shedaniel.autoconfig.event.ConfigSerializeEvent;
+
 public interface PipeVertex extends PipeFlowComponent
 {
     void tick();
@@ -36,4 +38,15 @@ public interface PipeVertex extends PipeFlowComponent
     void addHead(int h);
 
     long getPos();
+
+    void setSaveState(SaveState saveState);
+
+    SaveState getState();
+
+    enum SaveState
+    {
+        PENDING_LOAD,
+        LOADED,
+        NEW
+    }
 }
