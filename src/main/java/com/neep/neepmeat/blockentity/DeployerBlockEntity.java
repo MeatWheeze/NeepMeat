@@ -86,15 +86,15 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    if (doWork(BASE_WORK_AMOUNT, transaction) == BASE_WORK_AMOUNT)
-                    {
-                        transaction.commit();
+//                    if (doWork(BASE_WORK_AMOUNT, transaction) == BASE_WORK_AMOUNT)
+//                    {
+//                        transaction.commit();
                         deploy((ServerWorld) world);
-                    }
-                    else
-                    {
-                        transaction.abort();
-                    }
+//                    }
+//                    else
+//                    {
+//                        transaction.abort();
+//                    }
                 }
             }
             powered = true;
@@ -102,8 +102,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
         else
         {
             powered = false;
-            if (hasMotor())
-                getConnectedMotor().setRunning(false);
         }
     }
 
@@ -229,14 +227,14 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public void setConnectedMotor(@Nullable IMotorBlockEntity motor)
+    public void tick(IMotorBlockEntity motor)
     {
-        this.motor = motor;
+
     }
 
     @Override
-    public IMotorBlockEntity getConnectedMotor()
+    public void setWorkMultiplier(float multiplier)
     {
-        return motor;
+
     }
 }
