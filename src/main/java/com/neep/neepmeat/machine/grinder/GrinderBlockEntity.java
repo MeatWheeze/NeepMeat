@@ -2,12 +2,12 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.IMotorisedBlock;
-import com.neep.neepmeat.transport.api.pipe.IItemPipe;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.recipe.GrindingRecipe;
-import com.neep.neepmeat.api.storage.WritableStackStorage;
+import com.neep.neepmeat.transport.api.pipe.IItemPipe;
 import com.neep.neepmeat.util.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -22,6 +22,8 @@ import net.minecraft.entity.ExperienceOrbEntity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -44,6 +46,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
     public static final float INCREMENT_MAX = 2;
     public static final float INCREMENT_MIN = 0.2f;
+    public static final float MULTIPLIER_MIN = 0.05f;
     protected float progressIncrement;
     protected float progress;
 
@@ -113,6 +116,14 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     public void tick()
     {
         readCurrentRecipe();
+
+        if (progressIncrement == 0)
+        {
+            currentRecipe = null;
+            return;
+        }
+
+        // Eject outputs
         if (!storage.getOutputStorage().isEmpty())
         {
             try (Transaction transaction = Transaction.openOuter())
@@ -124,23 +135,12 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
 
         if (currentRecipe != null)
         {
-//            try (Transaction transaction = Transaction.openOuter())
-//            {
-//                long workAmount = 90;
-//                if (doWork(workAmount, transaction) == workAmount)
-//                {
-//                    transaction.commit();
-//                    ++progress;
-//                }
-//                else
-//                {
-//                    transaction.abort();
-//                }
-//            }
-
             progress = Math.min(processLength, progress + progressIncrement);
 
-            if (progress >= this.processLength)
+            ((ServerWorld) world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, getCurrentRecipe().getItemOutput().resource().getDefaultStack()),
+                pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 1, 0.1, 0, 0.1, 0.01);
+
+            if (progress >= this.processLength || !getCurrentRecipe().matches(storage, world))
             {
                 endDutyCycle();
                 this.progress = 0;
@@ -167,17 +167,17 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
             if (recipe != null && storage.outputStorage.simulateInsert(ItemVariant.of(recipe.getItemOutput().resource()),
                     recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
-                try (Transaction transaction = Transaction.openOuter())
-                {
-                    if (recipe.takeInputs(storage, transaction))
-                    {
-                        transaction.commit();
-                        setCurrentRecipe(recipe);
-                        this.processLength = recipe.getTime();
-                    }
-                    else
-                        transaction.abort();
-                }
+//                try (Transaction transaction = Transaction.openOuter())
+//                {
+//                    if (recipe.takeInputs(storage, transaction))
+//                    {
+//                        transaction.commit();
+                setCurrentRecipe(recipe);
+                this.processLength = recipe.getTime();
+//                    }
+//                    else
+//                        transaction.abort();
+//                }
             }
         }
         sync();
@@ -189,13 +189,12 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
         {
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (getCurrentRecipe().ejectOutput(storage, transaction))
+                if (getCurrentRecipe().matches(storage, world) && getCurrentRecipe().takeInputs(storage, transaction) && getCurrentRecipe().ejectOutput(storage, transaction))
                 {
                     ejectOutput(transaction);
                     transaction.commit();
                 }
-                else
-                    transaction.abort();
+                else transaction.abort();
             }
             this.setCurrentRecipe(null);
         }
@@ -290,6 +289,7 @@ public class GrinderBlockEntity extends SyncableBlockEntity implements IMotorise
     @Override
     public void setWorkMultiplier(float multiplier)
     {
-        this.progressIncrement = MathHelper.lerp(multiplier, INCREMENT_MIN, INCREMENT_MAX);
+        this.progressIncrement = MathHelper.lerp(multiplier, 0, INCREMENT_MAX);
+        if (multiplier < MULTIPLIER_MIN) progressIncrement = 0;
     }
 }
