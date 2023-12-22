@@ -40,7 +40,7 @@ public class SyncMeatRecipesS2CPacket
 
     public static <T extends MeatRecipe<?>> void writeRecipe(PacketByteBuf buf, T recipe)
     {
-        MeatRecipeSerialiser<T> serialiser = recipe.getSerialiser();
+        MeatRecipeSerialiser<T> serialiser = (MeatRecipeSerialiser<T>) recipe.getSerialiser();
         buf.writeIdentifier(RecipeRegistry.RECIPE_SERIALISER.getId(serialiser));
         buf.writeIdentifier(recipe.getId());
         serialiser.write(buf, recipe);

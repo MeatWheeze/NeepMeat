@@ -33,4 +33,20 @@ public class RecipeRegistry
             }
         });
     }
+
+    public static <T extends MeatRecipe<?>> MeatRecipeType<T> registerSpecialType(final String namespace, final String id)
+    {
+        return Registry.register(RECIPE_TYPE, new Identifier(namespace, id), new MeatRecipeType<T>()
+        {
+            public String toString()
+            {
+                return id;
+            }
+        });
+    }
+
+    public static <T extends MeatRecipe<?>> MeatRecipeSerialiser<T> registerSerializer(final String namespace, final String id, MeatRecipeSerialiser<T> serializer)
+    {
+        return Registry.register(RECIPE_SERIALISER, new Identifier(namespace, id), serializer);
+    }
 }

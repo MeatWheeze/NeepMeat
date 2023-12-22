@@ -1,6 +1,9 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatRecipeSerialiser;
+import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -9,22 +12,17 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrindingRecipe implements Recipe<GrinderStorage>
+public class GrindingRecipe implements MeatRecipe<GrinderStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
@@ -44,30 +42,12 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     }
 
     @Override
-    public boolean matches(GrinderStorage inventory, World world)
+    public boolean matches(GrinderStorage inventory)
     {
         itemInput.cacheMatching();
         Collection<Item> i = itemInput.getAll();
         boolean bl = itemInput.test(inventory.getInputStorage());
         return bl;
-    }
-
-    @Override
-    public ItemStack craft(GrinderStorage inventory)
-    {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean fits(int width, int height)
-    {
-        return false;
-    }
-
-    @Override
-    public ItemStack getOutput()
-    {
-        throw new UnsupportedOperationException("use getItemOutput instead");
     }
 
     public RecipeInput<Item> getItemInput()
@@ -92,13 +72,13 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public MeatRecipeSerialiser<?> getSerialiser()
     {
         return NMrecipeTypes.GRINDING_SERIALIZER;
     }
 
     @Override
-    public RecipeType<?> getType()
+    public MeatRecipeType<?> getType()
     {
         return NMrecipeTypes.GRINDING;
     }
@@ -108,6 +88,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         return processTime;
     }
 
+    @Override
     public boolean takeInputs(GrinderStorage storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
@@ -129,16 +110,17 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         return false;
     }
 
-    public boolean ejectOutput(GrinderStorage storage, TransactionContext transaction)
+    @Override
+    public boolean ejectOutputs(GrinderStorage context, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
         {
             itemOutput.update();
 //            long inserted = storage.getOutputStorage().insert(ItemVariant.of(itemOutput.resource()), itemOutput.amount(), transaction);
 
-            boolean bl1 = itemOutput.insertInto(storage.getOutputStorage(), ItemVariant::of, inner);
-            boolean bl2 = extraOutput == null || extraOutput.insertInto(storage.getExtraStorage(), ItemVariant::of, inner);
-            boolean bl3 = storage.getXpStorage().insert(experience, transaction) == experience;
+            boolean bl1 = itemOutput.insertInto(context.getOutputStorage(), ItemVariant::of, inner);
+            boolean bl2 = extraOutput == null || extraOutput.insertInto(context.getExtraStorage(), ItemVariant::of, inner);
+            boolean bl3 = context.getXpStorage().insert(experience, transaction) == experience;
 
             if (bl1 && bl2 && bl3)
             {
@@ -150,7 +132,7 @@ public class GrindingRecipe implements Recipe<GrinderStorage>
         return false;
     }
 
-    public static class Serializer implements RecipeSerializer<GrindingRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<GrindingRecipe>
     {
         RecipeFactory<GrindingRecipe> factory;
         int processTIme;

@@ -42,9 +42,9 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return Optional.ofNullable(this.recipesById.get(id));
     }
 
-    public <C extends Inventory, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context, TransactionContext transaction)
+    public <C extends Inventory, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
     {
-        return this.getAllOfType(type).values().stream().flatMap(recipe -> type.match(recipe, context, transaction).stream()).findFirst();
+        return this.getAllOfType(type).values().stream().flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
     }
 
     private <C, T extends MeatRecipe<C>> Map<Identifier, MeatRecipe<C>> getAllOfType(MeatRecipeType<T> type)
