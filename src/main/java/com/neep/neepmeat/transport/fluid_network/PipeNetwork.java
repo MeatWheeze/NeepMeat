@@ -205,7 +205,7 @@ public class PipeNetwork
                 && targetSupplier.get().getStorage(world) != null;
 
         float h = node.getTargetY() - targetNode.getTargetY();
-        double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+        double gravityFlowIn = h < -0 ? 0 : 0.1 * h;
 
         // Pass if the current node is extracting from others OR is inserting into others.
         boolean activePulling = node.getFlow(world) < 0;
@@ -213,7 +213,7 @@ public class PipeNetwork
         boolean targetInsert = targetNode.getMode(world).canInsert();
         boolean targetExtract = targetNode.getMode(world).canExtract();
 
-        return check1 && (activePulling && targetExtract || activePushing && targetInsert || gravityFlowIn != 0);
+        return check1 && (activePulling && targetExtract || activePushing && targetInsert || gravityFlowIn > 0 && !activePulling && !activePushing);
     }
 
     // This abomination is responsible for transferring the fluid from node to node
@@ -221,6 +221,8 @@ public class PipeNetwork
     {
         if (!isBuilt())
             return;
+
+        int step = 0;
 
         long startTim = System.nanoTime();
         for (int i = 0; i < connectedNodes.size(); i++)
@@ -253,8 +255,7 @@ public class PipeNetwork
             safeIndices = new ArrayList<>();
             for (int j = 0; j < connectedNodes.size(); j++)
             {
-                if (predicate.test(connectedNodes.get(j)))
-                    safeIndices.add(j);
+                if (predicate.test(connectedNodes.get(j))) safeIndices.add(j);
             }
 
             double sumDist = safeIndices.stream().mapToDouble(idx -> 1f / FluidNode.exactDistance(connectedNodes.get(idx).get(), node)).sum();
@@ -264,25 +265,54 @@ public class PipeNetwork
                 Supplier<FluidNode> targetSupplier = connectedNodes.get(j);
                 FluidNode targetNode = targetSupplier.get();
 
+                Transaction transaction1 = Transaction.openOuter();
+                long tAmount = node.firstAmount(world, transaction);
+                long tCapacity = node.firstCapacity(world, transaction);
+                long tOutBaseFlow = Math.min(baseTransfer, tAmount);
+                long tInBaseFlow = Math.min(baseTransfer, tCapacity);
+                transaction1.abort();
+
                 float h = node.getTargetY() - targetNode.getTargetY();
-                double gravityFlowIn = h < -1 ? 0 : 0.1 * h;
+                double gravityFlowIn = h < -0 ? 0 : 0.1 * h;
                 float flow = node.getFlow(world) - targetNode.getFlow(world);
 
                 double L = FluidNode.exactDistance(node, targetNode);
 
                 long amountMoved;
                 double v1 = (1f / L) / (sumDist);
-                if (flow + gravityFlowIn > 0)
+//                if (flow + gravityFlowIn > 0)
+                if (flow > 0 || gravityFlowIn > 0 && flow == 0)
                 {
+                    double q = flow > 0 ? flow : gravityFlowIn;
                     final int finalI = i;
-                    long Q = (long) Math.ceil(outBaseFlow * (flow + gravityFlowIn) * v1);
-                    StagedTransactions.queue(t -> StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t));
+                    long Q = (long) Math.ceil(Math.min(outBaseFlow, tInBaseFlow) * (q) * v1);
+                    int finalStep1 = step;
+                    StagedTransactions.queue(t ->
+                    {
+//                        System.out.println(finalStep1);
+                        return StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, t);
+                    });
+                    StagedTransactions.TRANSACTIONS.poll().move(null);
+
+//                     StorageUtil.move(node.getStorage(world), targetNode.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, Q) > 0, Q, null);
+                    ++step;
                 }
-                else if (flow + gravityFlowIn < 0)
+                else if (flow < 0 || gravityFlowIn < 0 && flow == 0)
                 {
+                    double q = flow < 0 ? flow : gravityFlowIn;
                     final int finalI = i;
-                    long Q = (long) Math.ceil(inBaseFlow * (flow + gravityFlowIn) * v1);
-                    StagedTransactions.queue(t -> StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, t));
+
+                    long Q = (long) Math.ceil(Math.min(inBaseFlow, tOutBaseFlow) * (q) * v1);
+                    int finalStep = step;
+                    StagedTransactions.queue(t ->
+                    {
+//                        System.out.println(finalStep);
+                        return StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, t);
+                    });
+                    StagedTransactions.TRANSACTIONS.poll().move(null);
+
+//                    StorageUtil.move(targetNode.getStorage(world), node.getStorage(world), v -> nodeMatrix[finalI][j].applyVariant(v, - Q) > 0, - Q, null);
+                    ++step;
                 }
             }
         }
