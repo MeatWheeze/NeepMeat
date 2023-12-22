@@ -1,5 +1,6 @@
 package com.neep.assembly;
 
+import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -16,13 +17,18 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IdListPalette;
 import net.minecraft.world.chunk.Palette;
 import net.minecraft.world.chunk.PalettedContainer;
+import org.apache.logging.log4j.Level;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class AssemblyEntity extends Entity
@@ -57,6 +63,11 @@ public class AssemblyEntity extends Entity
     public AssemblyEntity(World world)
     {
         this(Assembly.ASSEMBLY_ENTITY, world);
+    }
+
+    public static boolean canAssemble(BlockState state)
+    {
+        return state.isOf(Assembly.PLATFORM);
     }
 
     @Override
@@ -139,7 +150,8 @@ public class AssemblyEntity extends Entity
     @Override
     protected Box calculateBoundingBox()
     {
-        return getBounds().offset(getPos().add(-0.5, -1, -0.5));
+//        return getBounds().offset(getPos().add(-0.5, -1, -0.5));
+        return getBounds().offset(getPos());
     }
 
     public Box getBounds()
@@ -161,12 +173,12 @@ public class AssemblyEntity extends Entity
 //                    if (!states.get(i, j, k).isAir())
                     if (states.get(i - 1, j - 1, k - 1).isOf(Assembly.PLATFORM))
                     {
-//                        System.out.println(states.get(i, j, k));
+//                        System.out.println(i + ", " + j + ", " + k + ", " + ", current z: " + dz + ", " + states.get(i, j, k));
                         if (i > dx)
                             dx = i;
                         if (j > dy)
                             dy = j;
-                        if (j > dz)
+                        if (k > dz)
                             dz = k;
                     }
                 }
@@ -196,7 +208,8 @@ public class AssemblyEntity extends Entity
             }
             else
             {
-                initPalette();
+//                initPalette();
+                this.remove(RemovalReason.DISCARDED);
             }
             updatePalette();
         }
@@ -244,6 +257,16 @@ public class AssemblyEntity extends Entity
     {
         return BoatEntity.canCollide(this, other);
     }
+
+//    public void setBlocks(List<BlockPos> posList, List<BlockState> stateList)
+//    {
+//        PalettedContainer<BlockState> states = getPalette();
+//        for (int i = 0; i < posList.size(); ++i)
+//        {
+//            BlockPos pos =
+//            states.set(posList.get(i))
+//        }
+//    }
 
     public BlockState getState()
     {

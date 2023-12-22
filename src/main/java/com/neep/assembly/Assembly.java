@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -39,6 +40,9 @@ public class Assembly implements ModInitializer, ClientModInitializer
 
         Registry.register(Registry.BLOCK, new Identifier(NAMESPACE, "platform"), PLATFORM);
         Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "platform"), new BlockItem(PLATFORM,
+                new FabricItemSettings().group(NMItemGroups.GENERAL)));
+
+        Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "assembly_debug"), new DebugItem(
                 new FabricItemSettings().group(NMItemGroups.GENERAL)));
     }
 
