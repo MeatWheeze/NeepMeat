@@ -8,7 +8,6 @@ import net.minecraft.nbt.NbtCompound;
 
 public interface PLCInstruction extends NbtSerialisable
 {
-
     boolean canStart(PLC plc);
 
     void start(PlcProgram program, PLC plc);

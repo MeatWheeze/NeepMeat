@@ -1,16 +1,26 @@
 package com.neep.neepmeat.plc.program;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.plc.Instructions;
+import com.neep.neepmeat.plc.opcode.InstructionProvider;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.function.Supplier;
 
-public class PLCProgramImpl implements PlcProgram
+public class PLCProgramImpl implements MutableProgram
 {
-    protected List<PLCInstruction> instructions = Lists.newArrayList();
+    private final Supplier<World> worldSupplier;
+    protected ArrayList<PLCInstruction> instructions = Lists.newArrayList();
 
-    public PLCProgramImpl()
+    public PLCProgramImpl(Supplier<World> worldSupplier)
     {
 
+        this.worldSupplier = worldSupplier;
     }
 
     public void add(PLCInstruction instruction)
@@ -26,5 +36,63 @@ public class PLCProgramImpl implements PlcProgram
             return instructions.get(index);
         }
         return PLCInstruction.end();
+    }
+
+    @Override
+    public int size()
+    {
+        return instructions.size();
+    }
+
+    @Override
+    public void emit(PLCInstruction instruction)
+    {
+        instructions.add(instruction);
+    }
+
+    @Override
+    public void insert(int index, PLCInstruction instruction)
+    {
+        instructions.add(index, instruction);
+    }
+
+    @Override
+    public void remove(int index)
+    {
+        if (index < instructions.size() && index >= 0)
+            instructions.remove(index);
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        NbtList list = new NbtList();
+        for (PLCInstruction instruction : instructions)
+        {
+            NbtCompound instructionNbt = new NbtCompound();
+            instruction.writeNbt(instructionNbt);
+            instructionNbt.putString("id", Instructions.REGISTRY.getKey(instruction.getProvider()).toString());
+        }
+        nbt.put("instructions", list);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        instructions.clear();
+
+        NbtList list = nbt.getList("instructions", NbtElement.COMPOUND_TYPE);
+        for (int i = 0; i < list.size(); ++i)
+        {
+            NbtCompound instructionNbt = list.getCompound(i);
+
+            Identifier id = Identifier.tryParse(instructionNbt.getString("id"));
+            InstructionProvider provider = Instructions.REGISTRY.get(id);
+            if (provider != null)
+            {
+                instructions.add(provider.createFromNbt(worldSupplier, instructionNbt));
+            }
+        }
     }
 }

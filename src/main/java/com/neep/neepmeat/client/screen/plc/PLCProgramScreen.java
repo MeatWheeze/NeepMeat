@@ -1,24 +1,42 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
+import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.PLCBlockEntity;
 import com.neep.neepmeat.plc.opcode.InstructionBuilder;
 import com.neep.neepmeat.plc.opcode.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCInstruction;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.gui.tooltip.TooltipComponent;
+import net.minecraft.client.gui.widget.ClickableWidget;
+import net.minecraft.client.render.*;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector4f;
 import net.minecraft.world.RaycastContext;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
+import software.bernie.geckolib3.core.util.Color;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class PLCProgramScreen extends Screen
 {
+    protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
+    public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
+
     protected PLCOperationSelector operationSelector = new PLCOperationSelector(this);
     protected PLCProgramOutline outline = new PLCProgramOutline(this);
 
@@ -51,6 +69,38 @@ public class PLCProgramScreen extends Screen
         addDrawableChild(outline);
         outline.init(client, width, height);
         outline.setDimensions(width, height);
+
+        addDrawableChild(new SaveButton(104, 2, 16, 16, Text.of("Save")));
+        addDrawableChild(new RunButton(104 + 17, 2, 16, 16, Text.of("Run")));
+    }
+
+    @Override
+    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    {
+        float x0 = 0;
+        float y0 = 0;
+        float x1 = width;
+        float y1 = height;
+        float z = 0;
+        float u0 = 0;
+        float v0 = 0;
+        float u1 = 1;
+        float v1 = 1;
+        var matrix = matrices.peek().getPositionMatrix();
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderTexture(0, VIGNETTE);
+        RenderSystem.enableBlend();
+        BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
+        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+        bufferBuilder.vertex(matrix, x0, y1, z).texture(u0, v1).next();
+        bufferBuilder.vertex(matrix, x1, y1, z).texture(u1, v1).next();
+        bufferBuilder.vertex(matrix, x1, y0, z).texture(u1, v0).next();
+        bufferBuilder.vertex(matrix, x0, y0, z).texture(u0, v0).next();
+        BufferRenderer.drawWithShader(bufferBuilder.end());
+
+        super.render(matrices, mouseX, mouseY, delta);
+
+
     }
 
     @Override
@@ -123,6 +173,9 @@ public class PLCProgramScreen extends Screen
     protected void emitInstruction(PLCInstruction instruction)
     {
         client.player.sendMessage(Text.of(instruction.toString()));
+        plc.getEditProgram().emit(instruction);
+        outline.update();
+        PLCSyncProgram.Client.syncProgram(plc, plc.getEditProgram());
     }
 
     protected BlockHitResult raycastClick(double mouseX, double mouseY)
@@ -162,9 +215,162 @@ public class PLCProgramScreen extends Screen
     }
 
     @Override
+    public void removed()
+    {
+        super.removed();
+        PLCHudRenderer.leave();
+    }
+
+    @Override
     public void close()
     {
         super.close();
         PLCHudRenderer.leave();
+    }
+
+    private void renderTooltipText(MatrixStack matrices, List<Text> texts, int x, int y, int col)
+    {
+        renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), x, y, col);
+    }
+
+    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y, int col)
+    {
+        x += 12;
+        y -= 12;
+        if (components.isEmpty())
+        {
+            return;
+        }
+
+        int maxWidth = 0;
+        int maxHeight = components.size() == 1 ? -2 : 0;
+        for (TooltipComponent tooltipComponent : components)
+        {
+            int componentWidth = tooltipComponent.getWidth(this.textRenderer);
+            if (componentWidth > maxWidth)
+            {
+                maxWidth = componentWidth;
+            }
+            maxHeight += tooltipComponent.getHeight();
+        }
+
+        if (x + maxWidth > this.width)
+        {
+            x -= 28 + maxWidth;
+        }
+
+        if (y + maxHeight + 6 > this.height)
+        {
+            y = this.height - maxHeight - 6;
+        }
+
+        matrices.push();
+        float itemRendererPrevZ = this.itemRenderer.zOffset;
+        float prevZ = this.getZOffset();
+        this.itemRenderer.zOffset = 400.0f;
+        this.setZOffset(400);
+        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+
+//        int borderCol = Color.ofRGBA(255, 94, 33, 255).getColor();
+        Screen.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
+        drawHorizontalLine(matrices, x, x + maxWidth + 2, y, col);
+        drawHorizontalLine(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
+        drawVerticalLine(matrices, x + maxWidth + 2, y, y + maxHeight + 2, col);
+        drawVerticalLine(matrices, x, y, y + maxHeight + 2, col);
+
+        RenderSystem.disableBlend();
+        RenderSystem.enableTexture();
+        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+        matrices.translate(0.0, 0.0, 400.0);
+
+        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+        int yAdvance = y + 2;
+        for (int index = 0; index < components.size(); ++index)
+        {
+            TooltipComponent tooltipComponent2 = components.get(index);
+            tooltipComponent2.drawText(this.textRenderer, x + 2, yAdvance, matrix4f, immediate);
+            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+        }
+
+        immediate.draw();
+        matrices.pop();
+        yAdvance = y;
+        for (int index = 0; index < components.size(); ++index)
+        {
+            TooltipComponent tooltipComponent2 = components.get(index);
+            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, matrices, this.itemRenderer, 400);
+            yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
+        }
+        this.itemRenderer.zOffset = itemRendererPrevZ;
+        this.setZOffset((int) prevZ);
+    }
+
+    class SaveButton extends ClickableWidget
+    {
+        public SaveButton(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        {
+            MinecraftClient minecraftClient = MinecraftClient.getInstance();
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, WIDGETS);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
+            int i = this.getYImage(this.isHovered());
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+            int thingHeight = 16;
+            this.drawTexture(matrices, this.x, this.y, getU(), getV() + i * thingHeight, this.width, this.height);
+            this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
+
+            if (isMouseOver(mouseX, mouseY))
+            {
+                renderTooltip(matrices, mouseX, mouseY);
+            }
+        }
+
+        protected int getU()
+        {
+            return 0;
+        }
+
+        protected int getV()
+        {
+            return 0;
+        }
+
+        @Override
+        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+        {
+            renderTooltipText(matrices, List.of(getMessage()), mouseX, mouseY, borderColour());
+        }
+
+        @Override
+        public void appendNarrations(NarrationMessageBuilder builder)
+        {
+
+        }
+    }
+
+    class RunButton extends SaveButton
+    {
+        public RunButton(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        @Override
+        protected int getU()
+        {
+            return 16;
+        }
+    }
+
+    public static int borderColour()
+    {
+        return Color.ofRGBA(255, 94, 33, 255).getColor();
     }
 }
