@@ -2,11 +2,14 @@ package com.neep.neepmeat.machine.stirling_engine;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.block.IntegratorBlock;
 import com.neep.neepmeat.block.machine.IMotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.IMotorBlockEntity;
 import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -23,15 +26,37 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+@SuppressWarnings("UnstableApiUsage")
 public class StirlingEngineBlockEntity extends SyncableBlockEntity implements NamedScreenHandlerFactory, IMotorBlockEntity
 {
     protected StirlingEngineStorage storage;
 
-    public int energyStored;
+    public static final int MAX_ENERGY = 8192;
+
     public float angle;
+
+    protected int energyStored;
+    private int prevEnergy;
 
     protected int burnTime;
     protected int fuelTime;
+
+    protected IMotorisedBlock cache = null;
+
+//    protected SnapshotParticipant<Integer> snapshotParticipant = new SnapshotParticipant<>()
+//    {
+//        @Override
+//        protected Integer createSnapshot()
+//        {
+//            return energyStored;
+//        }
+//
+//        @Override
+//        protected void readSnapshot(Integer snapshot)
+//        {
+//            energyStored = snapshot;
+//        }
+//    };
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
     {
@@ -64,6 +89,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             return 3;
         }
     };
+
 
     public StirlingEngineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -98,30 +124,46 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
 
     public void tick()
     {
+        if (cache == null)
+            update(world, pos, pos, getCachedState());
+
         this.burnTime = Math.max(0, burnTime - 1);
 
         if (isBurning())
         {
-            this.energyStored = Math.min(8192, energyStored + 1);
+            this.energyStored = Math.min(MAX_ENERGY, energyStored + 2);
             sync();
         }
 
         if (burnTime == 0)
         {
             int time;
-            if ((time = storage.decrementFuel()) > 0)
+            if (getWorkMultiplier() < 0.8 && (time = storage.decrementFuel()) > 0)
             {
                 this.burnTime = time;
                 this.fuelTime = time;
             }
             updateBurning();
         }
+
+        if (cache != null)
+        {
+            cache.setWorkMultiplier(getWorkMultiplier());
+            doWork();
+
+            if (!cache.tick(this))
+                energyStored = prevEnergy;
+        }
+    }
+
+    public float getWorkMultiplier()
+    {
+        return energyStored / (float) MAX_ENERGY;
     }
 
     public static void serverTick(World world, BlockPos pos, BlockState state, StirlingEngineBlockEntity be)
     {
         be.tick();
-
     }
 
     public boolean isBurning()
@@ -161,40 +203,28 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         return (float) (w1 * 180 / Math.PI); // Convert to degrees / tick
     }
 
-    @Override
-    public long doWork(long amount, TransactionContext transaction)
+    public int doWork()
     {
-        long convertAmount = amount / 10;
+        int convertAmount = 1;
         if (energyStored > convertAmount)
         {
+            this.prevEnergy = energyStored;
             energyStored -= convertAmount;
             sync();
-            return amount;
+            return convertAmount;
         }
         return 0;
     }
 
     @Override
-    public void setRunning(boolean running)
-    {
-
-    }
-
-    @Override
-    public void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
-    {
-
-    }
-
-    @Override
     public void setConnectedBlock(IMotorisedBlock motorised)
     {
-
+        cache = motorised;
     }
 
     @Override
     public IMotorisedBlock getConnectedBlock()
     {
-        return null;
+        return cache;
     }
 }

@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 @SuppressWarnings("UnstableApiUsage")
 public interface IMotorBlockEntity
 {
-    long doWork(long amount, TransactionContext transaction);
+    default long doWork(long amount, TransactionContext transaction) {return 0;}
 
-    void setRunning(boolean running);
+    default void setRunning(boolean running) {}
 
     default void update(World world, BlockPos pos, BlockPos fromPos, BlockState state)
     {

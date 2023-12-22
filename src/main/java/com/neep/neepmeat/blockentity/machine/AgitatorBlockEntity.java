@@ -7,7 +7,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
-import org.jetbrains.annotations.Nullable;
 
 public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
 {
@@ -22,9 +21,9 @@ public class AgitatorBlockEntity extends BlockEntity implements IMotorisedBlock
     }
 
     @Override
-    public void tick(IMotorBlockEntity motor)
+    public boolean tick(IMotorBlockEntity motor)
     {
-
+        return false;
     }
 
     @Override

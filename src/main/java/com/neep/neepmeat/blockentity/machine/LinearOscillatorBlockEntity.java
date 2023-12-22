@@ -163,9 +163,10 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     }
 
     @Override
-    public void tick(IMotorBlockEntity motor)
+    public boolean tick(IMotorBlockEntity motor)
     {
         tick();
+        return true;
     }
 
     @Override
