@@ -4,6 +4,7 @@ import com.neep.neepmeat.block.machine.HeaterBlock;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.FluidInitialiser;
 import com.neep.neepmeat.mixin.FurnaceAccessor;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.AbstractFurnaceBlock;
@@ -56,15 +57,16 @@ public class HeaterBlockEntity extends BloodMachineBlockEntity<HeaterBlockEntity
             }
         }
 
-        long transfer = 180;
-        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getCapacity() - inputBuffer.getAmount() >= transfer)
+        long transfer = FluidConstants.BUCKET / 1000;
+        if (outputBuffer.getCapacity() - outputBuffer.getAmount() >= transfer && inputBuffer.getAmount() >= transfer)
         {
             Transaction transaction = Transaction.openOuter();
             long transferred = inputBuffer.extractDirect(FluidVariant.of(FluidInitialiser.STILL_ENRICHED_BLOOD), transfer, transaction);
             long inserted = outputBuffer.insertDirect(FluidVariant.of(FluidInitialiser.STILL_BLOOD), transferred, transaction);
+//            System.out.println("furnace");
             if (transferred >= transfer)
             {
-                accessor.setBurnTime(100);
+                accessor.setBurnTime(10);
                 updateBlockState(accessor, getWorld(), getPos().offset(getCachedState().get(HeaterBlock.FACING)));
             }
             transaction.commit();

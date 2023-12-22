@@ -45,7 +45,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        System.out.println(type.supports(state));
+//        System.out.println(type.supports(state));
         return checkType(type, BlockEntityInitialiser.HEATER, HeaterBlockEntity::serverTick, world);
     }
 

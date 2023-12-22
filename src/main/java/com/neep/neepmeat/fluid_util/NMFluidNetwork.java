@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
 public class NMFluidNetwork
@@ -146,6 +147,15 @@ public class NMFluidNetwork
         return world;
     }
 
+    int compareNodes(FluidNode node1, FluidNode node2, FluidNode ref)
+    {
+        if (node1.getDistance(ref) == node2.getDistance(ref))
+        {
+            return 0;
+        }
+        return node1.getDistance(ref) < node2.getDistance(ref) ? -1 : 1;
+    }
+
     public void tick()
     {
         buildPressures();
@@ -156,7 +166,10 @@ public class NMFluidNetwork
             {
                 continue;
             }
-            for (Supplier<FluidNode> targetSupplier : connectedNodes)
+
+            // Reorganise nodes so that closest come first.
+            List<Supplier<FluidNode>> sorted = connectedNodes.stream().sorted((t1, t2) -> compareNodes(t1.get(), t2.get(), node)).collect(Collectors.toList());
+            for (Supplier<FluidNode> targetSupplier : sorted)
             {
                 FluidNode targetNode;
                 if ((targetNode = targetSupplier.get()).equals(node) || targetSupplier.get() == null || supplier.get().getStorage((ServerWorld) world) == null)
@@ -266,8 +279,7 @@ public class NMFluidNetwork
 
                     if (FluidAcceptor.isConnectedIn(state1, direction) && !networkPipes.containsValue(new PipeState(next)))
                     {
-//                        System.out.println("true"
-//                        );
+//                        System.out.println("true");
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof FluidAcceptor
                                 && !(state2.getBlock() instanceof FluidNodeProvider))

@@ -14,6 +14,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Interface;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +97,12 @@ public class FluidNode
         nbt.putLong("network_id", networkId);
         nbt.putFloat("multiplier", flowMultiplier);
         return nbt;
+    }
+
+    public int getDistance(FluidNode node)
+    {
+        Integer dist = distances.get(node);
+        return dist != null ? dist : Integer.MAX_VALUE;
     }
 
     public void loadDeferred(ServerWorld world)
@@ -264,6 +272,7 @@ public class FluidNode
         // My linear approximation of the Hazen-Williams approximation
         float h = getTargetY() - node.getTargetY();
         double gravityFlowIn = h < -1 ? 0 : 0.4 * h;
+//        gravityFlowIn = 0;
 
         float insertBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumIn));
         float extractBranchFlow = (float) (500 * (flow + gravityFlowIn) * (float) ((Math.pow(r, 4) / (distances.get(node))) / sumOut));
@@ -276,8 +285,8 @@ public class FluidNode
         else
         {
             amountMoved = StorageUtil.move(node.getStorage(world), getStorage(world), variant -> true, (long) - extractBranchFlow, null);
-
         }
+//        System.out.println(amountMoved + node.toString());
     }
 
     public boolean canInsert()
