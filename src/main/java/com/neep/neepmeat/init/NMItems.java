@@ -30,12 +30,12 @@ public class NMItems
     public static Item REFRACTORY_BRICKS = new BaseCraftingItem("refractory_brick", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_BRASS = new BaseCraftingItem("whisper_brass_ingot", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item MEAT_STEEL = new BaseCraftingItem("meat_steel_ingot", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item BLOOD_BUBBLE = new BaseCraftingItem("blood_bubble", 1, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.BLOOD_BUBBLE));
     public static Item MEAT_STEEL_COMPONENT = new BaseCraftingItem("meat_steel_component", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item CONTROL_UNIT = new BaseCraftingItem("control_unit", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     // MEAT
-    public static Item MEAT_SCRAP = new BaseCraftingItem("meat_scrap", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.MEAT_SCRAP));
+    public static Item MEAT_SCRAP = new BaseCraftingItem("meat_scrap", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_SCRAP));
     public static Item RAW_MEAT_BRICK = new BaseCraftingItem("raw_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.MEAT_BRICK));
     public static Item COOKED_MEAT_BRICK = new BaseCraftingItem("cooked_meat_brick", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.COOKED_MEAT_BRICK));
 
