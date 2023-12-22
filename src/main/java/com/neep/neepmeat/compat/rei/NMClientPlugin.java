@@ -17,6 +17,7 @@ import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.recipe.EnlighteningRecipe;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import com.neep.neepmeat.recipe.PressingRecipe;
+import com.neep.neepmeat.recipe.surgery.SurgeryRecipe;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
@@ -49,6 +50,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     @Override
     public void registerDisplays(DisplayRegistry registry)
     {
+        registerRecipeFiller(registry, SurgeryRecipe.class, NMrecipeTypes.SURGERY, SurgeryDisplay::new);
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
         registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
@@ -72,6 +74,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     public void registerCategories(CategoryRegistry registry)
     {
         registry.add(
+                new SurgeryCategory(),
                 new GrindingCategory(),
                 new CompactingCategory(),
                 new MixingCategory(),
@@ -81,6 +84,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
                 new PressingCategory()
         );
 
+        registry.addWorkstations(SURGERY, EntryStacks.of(NMBlocks.SURGERY_CONTROLLER.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.GRINDER.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
         registry.addWorkstations(MIXING, EntryStacks.of(NMBlocks.MIXER.asItem()));
@@ -91,15 +95,30 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
     }
 
     @Override
+    public void preStage(PluginManager<REIClientPlugin> manager, ReloadStage stage)
+    {
+//        System.out.println("NeepMeat Client reload at stage " + stage);
+    }
+
+    private ReloadStage lastStage;
+
+    @Override
     public void postStage(PluginManager<REIClientPlugin> manager, ReloadStage stage)
     {
-        // Inject all special recipes
-        this.sortedRecipes = MeatRecipeManager.getInstance().values().parallelStream().sorted(RECIPE_COMPARATOR).collect(Collectors.toList());
-        for (int i = sortedRecipes.size() - 1; i >= 0; i--)
+
+        // This method is executed twice for START and twice for END. To prevent all recipes from being injected twice,
+        // it must detect a state that only occurs once.
+        if (stage == ReloadStage.END && lastStage == ReloadStage.START)
         {
-            MeatRecipe<?> recipe = sortedRecipes.get(i);
-            DisplayRegistry.getInstance().addWithReason(recipe, SPECIAL_RECIPE_MANAGER);
+            // Inject all Meatlib recipes
+            this.sortedRecipes = MeatRecipeManager.getInstance().values().parallelStream().sorted(RECIPE_COMPARATOR).collect(Collectors.toList());
+            for (int i = sortedRecipes.size() - 1; i >= 0; i--)
+            {
+                MeatRecipe<?> recipe = sortedRecipes.get(i);
+                DisplayRegistry.getInstance().addWithReason(recipe, SPECIAL_RECIPE_MANAGER);
+            }
         }
+        lastStage = stage;
     }
 
     public static <T extends MeatRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, MeatRecipeType<? super T> recipeType, Function<? extends T, @Nullable D> filler) {
