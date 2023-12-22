@@ -68,12 +68,11 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
     @Override
     public void fromClientTag(NbtCompound tag)
     {
-        buffer.readNbt(tag);
     }
 
     @Override
     public NbtCompound toClientTag(NbtCompound tag)
     {
-        return buffer.writeNbt(tag);
+        return tag;
     }
 }
