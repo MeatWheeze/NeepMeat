@@ -1,10 +1,12 @@
 package com.neep.neepmeat.fluid_util;
 
 import com.neep.neepmeat.fluid_util.node.FluidNode;
+import com.neep.neepmeat.fluid_util.node.NodeDataManager;
 import com.neep.neepmeat.fluid_util.node.NodePos;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.ChunkPos;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.spongepowered.asm.mixin.injection.Coerce;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,11 @@ public class FluidNetwork
 
     public Map<ChunkPos, Map<NodePos, FluidNode>> chunkNodes = new HashMap<>();
 
+    public void appendData(ServerWorld world)
+    {
+        NodeDataManager manager = NodeDataManager.getWorldInstance(world);
+//        manager.writeNbt();
+    }
 
     public Map<NodePos, FluidNode> getOrCreateMap(ChunkPos pos)
     {

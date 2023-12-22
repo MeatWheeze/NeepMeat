@@ -42,6 +42,7 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock
 //        BlockPos blockPos = pos.offset(direction.getOpposite());
 //        BlockState blockState = world.getBlockState(blockPos);
 //        return blockState.isSideSolidFullSquare(world, blockPos, direction);
-        return state.hasBlockEntity();
+        return true;
+//        return state.hasBlockEntity();
     }
 }

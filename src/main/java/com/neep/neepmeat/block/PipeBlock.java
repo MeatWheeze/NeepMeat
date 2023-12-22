@@ -2,6 +2,7 @@ package com.neep.neepmeat.block;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
+import com.neep.neepmeat.blockentity.TestBlockEntity;
 import com.neep.neepmeat.fluid_util.AcceptorModes;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
 import com.neep.neepmeat.fluid_util.NMFluidNetwork;
@@ -13,6 +14,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.*;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
@@ -291,18 +293,10 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
         world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
-//        if (!state.equals(updatedState) && !world.isClient) // Storage detected
-//        {
-            // Dirty bodge for now. Might change if it works.
-            createStorageNodes(world, pos, updatedState);
-
-            /*
-                Create a node when pipe placed
-                Node searches for other nodes
-                If one or more other nodes are found, a network is created.
-             */
-
-//        }
+        createStorageNodes(world, pos, updatedState);
+        world.addBlockEntity(new TestBlockEntity(pos, state));
+        BlockEntity be = world.getBlockEntity(pos);
+        System.out.println(be);
     }
 
     // Produces connections to fluid containers after placing
@@ -344,7 +338,6 @@ public class PipeBlock extends BaseBlock implements FluidAcceptor
     {
         if (!world.isClient)
         {
-            System.out.println("ooer");
             for (Direction direction : Direction.values())
             {
                 Storage<FluidVariant> storage;
