@@ -32,12 +32,6 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     }
 
     @Override
-    public void setRunning(boolean running)
-    {
-
-    }
-
-    @Override
     public void tick()
     {
         super.tick();
@@ -59,6 +53,12 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
     public void setConnectedBlock(IMotorisedBlock motorised)
     {
         this.cache = motorised;
+    }
+
+    @Override
+    public float getRotorAngle()
+    {
+        return angle;
     }
 
     @Override
