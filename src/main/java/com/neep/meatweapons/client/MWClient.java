@@ -4,6 +4,7 @@ import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
+import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.network.BeamPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
@@ -61,6 +62,7 @@ public class MWClient implements ClientModInitializer
         registerAnimations();
         MWParticles.initClient();
         MWKeys.registerKeybinds();
+        AirtruckSoundInstance.initEvent();
     }
 
 }
