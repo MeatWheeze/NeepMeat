@@ -6,6 +6,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.FluidDrainable;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -43,10 +44,12 @@ public class FluidDrainBlockEntity extends TankBlockEntity
         {
             FluidState fluidState = world.getFluidState(sourcePos);
             Transaction transaction = Transaction.openOuter();
+            BlockState fluidBlockState = world.getBlockState(sourcePos);
             long transferred = this.buffer.insert(FluidVariant.of(fluidState.getFluid()), FluidConstants.BUCKET, transaction);
-            if (transferred >= FluidConstants.BUCKET)
+            if (transferred >= FluidConstants.BUCKET && world.getBlockState(sourcePos).getBlock() instanceof FluidDrainable drainable)
             {
-                world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
+//                world.setBlockState(sourcePos, Blocks.AIR.getDefaultState());
+                drainable.tryDrainFluid(world, sourcePos, fluidBlockState);
                 transaction.commit();
             }
             else
