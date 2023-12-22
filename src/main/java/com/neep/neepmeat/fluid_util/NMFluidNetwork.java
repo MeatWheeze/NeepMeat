@@ -266,6 +266,8 @@ public class NMFluidNetwork
 
                     if (FluidAcceptor.isConnectedIn(state1, direction) && !networkPipes.containsValue(new PipeState(next)))
                     {
+                        System.out.println("true"
+                        );
                         // Check that target is a pipe and not a fluid block entity
                         if (state2.getBlock() instanceof FluidAcceptor
                                 && !(state2.getBlock() instanceof FluidNodeProvider))
