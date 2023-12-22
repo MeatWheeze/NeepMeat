@@ -6,6 +6,8 @@ import com.neep.neepmeat.client.renderer.MeatSteelArmourRenderer;
 import com.neep.neepmeat.client.renderer.SwordRenderer;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.event.client.ClientSpriteRegistryCallback;
@@ -16,6 +18,7 @@ import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
+@Environment(value= EnvType.CLIENT)
 public class NMFluidsClient
 {
     public static final Identifier BLOOD_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/blood_flowing");
@@ -127,6 +130,8 @@ public class NMFluidsClient
 
         FluidVariantRendering.register(NMFluids.STILL_C_MEAT, new CoarseMeatVariantRenderHandler());
         FluidVariantRendering.register(NMFluids.FLOWING_C_MEAT, new CoarseMeatVariantRenderHandler());
+        FluidVariantAttributes.register(NMFluids.STILL_C_MEAT, new MeatAttribtuteHandler());
+        FluidVariantAttributes.register(NMFluids.FLOWING_C_MEAT, new MeatAttribtuteHandler());
 
         ClientSpriteRegistryCallback.event(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE).register((atlasTexture, registry) ->
         {
