@@ -156,12 +156,6 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
     }
 
     @Override
-    public void addHead(int h)
-    {
-        pumpHeight += h;
-    }
-
-    @Override
     public long getPos()
     {
         return pos;
@@ -201,52 +195,7 @@ public abstract class SimplePipeVertex extends SnapshotParticipant<ResourceAmoun
         clearEdges();
     }
 
-    @Override
-    public boolean collapseEdges()
-    {
-        if (canSimplify())
-        {
-            if (numEdges() == 2)
-            {
-                PipeVertex[] edge = new PipeVertex[2];
-                int current = 0;
-
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (getAdjVertices()[i] != null)
-                    {
-                        edge[current] = getAdjVertex(i);
-                        ++current;
-                    }
-                }
-
-                // Determine the directions to link together.
-                for (int i = 0; i < 6; ++i)
-                {
-                    if (edge[0].getAdjVertex(i) == this)
-                    {
-                        edge[0].setAdjVertex(i, edge[1]);
-                    }
-
-                    if (edge[1].getAdjVertex(i) == this)
-                    {
-                        edge[1].setAdjVertex(i, edge[0]);
-                    }
-                }
-                return true;
-
-            }
-            else if (numEdges() == 1)
-            {
-                clearEdges();
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-//    @Override
+    //    @Override
 //    public long[] getVelocity()
 //    {
 //        return null;

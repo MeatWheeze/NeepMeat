@@ -3,8 +3,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
-import com.neep.neepmeat.transport.fluid_network.PipeNetworkImpl;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
 import com.neep.neepmeat.util.ItemUtils;
@@ -92,25 +90,25 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
             }
             else
             {
-                System.out.println("All ticking fluid networks:");
-                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
-                {
-//                    System.out.println(network.connectedNodes);
-                    System.out.print("\n" + network.getUUID() + " nodes: ");
-//                    if (network instanceof PipeNetworkImpl1 impl1)
+//                System.out.println("All ticking fluid networks:");
+//                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
+//                {
+////                    System.out.println(network.connectedNodes);
+//                    System.out.print("\n" + network.getUUID() + " nodes: ");
+////                    if (network instanceof PipeNetworkImpl1 impl1)
+////                    {
+////                        for (Supplier<FluidNode> supplier : impl1.getNodes())
+////                        {
+////                            System.out.print(supplier.get());
+////                        }
+////                    }
+//                    if (network instanceof PipeNetworkImpl impl2)
 //                    {
-//                        for (Supplier<FluidNode> supplier : impl1.getNodes())
-//                        {
-//                            System.out.print(supplier.get());
-//                        }
+//                        System.out.print("\n");
+//                        impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
 //                    }
-                    if (network instanceof PipeNetworkImpl impl2)
-                    {
-                        System.out.print("\n");
-                        impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
-                    }
-                    System.out.print("\n");
-                }
+//                    System.out.print("\n");
+//                }
             }
             TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
         }

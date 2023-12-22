@@ -2,14 +2,11 @@ package com.neep.neepmeat.transport.data;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.PersistentState;
 
 import java.util.HashMap;
@@ -30,43 +27,6 @@ public class PipeNetworkSerialiser extends PersistentState
     {
         this.world = world;
         this.markDirty();
-
-//        ServerChunkEvents.CHUNK_LOAD.register((world1, chunk) ->
-//        {
-//            if (Objects.equals(world1, world))
-//            {
-//                unloaded.get(chunk.getPos().toLong())
-//                        .forEach(uuid -> PipeNetwork.retrieveNetwork(world, allNetworks.get(uuid)));
-//            }
-//        });
-    }
-
-    public void storeNetwork(UUID uuid, NbtCompound nbt)
-    {
-        allNetworks.put(uuid, nbt);
-        this.markDirty();
-    }
-
-    public void unloadNetwork(BlockPos from, PipeNetwork network)
-    {
-        unloaded.put(ChunkPos.toLong(from), network.getUUID());
-    }
-
-    public NbtCompound getNetwork(UUID uuid)
-    {
-        return allNetworks.get(uuid);
-    }
-
-    // Call when a network expands into a new chunk
-    public void registerNetwork(PipeNetwork network)
-    {
-        allNetworks.put(network.getUUID(), network.toNbt());
-//        chunkToNetwork.put(chunkPos, network);
-    }
-
-    public void unregisterNetwork(PipeNetwork network)
-    {
-        allNetworks.remove(network.getUUID());
     }
 
     // Methods for sorting the NBT contents into a UUID to compound list

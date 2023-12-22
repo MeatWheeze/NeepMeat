@@ -5,7 +5,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
@@ -101,7 +100,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
-            updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
 
             FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(updatedState));
         }
@@ -114,7 +112,6 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             return;
 
         createStorageNodes(world, pos, newState);
-        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.CONNECTION_CHANGED);
         FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(newState));
     }
 
@@ -160,7 +157,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
                 {
                     System.out.println(vertex.getAmount());
                     System.out.println(vertex.getVariant());
-                    System.out.println(vertex.getPumpHead());
+                    System.out.println(vertex.getPumpHeight());
                 }
             }
             return ActionResult.SUCCESS;

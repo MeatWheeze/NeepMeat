@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.api.pipe;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -68,8 +67,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
 
         if (!(world.getBlockState(fromPos).getBlock() instanceof FluidPipeBlock))
         {
-            if (createStorageNodes(world, pos, state))
-                updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.NODE_CHANGED);
+            createStorageNodes(world, pos, state);
         }
 
         FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(state));
@@ -82,7 +80,6 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
             return;
 
         createStorageNodes(world, pos, state);
-        updateNetwork((ServerWorld) world, pos, state, PipeNetwork.UpdateReason.PIPE_ADDED);
         FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(state));
     }
 
@@ -123,7 +120,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
                 {
                     System.out.println(vertex.getAmount());
                     System.out.println(vertex.getVariant());
-                    System.out.println(vertex.getPumpHead());
+                    System.out.println(vertex.getPumpHeight());
                 }
             }
             return ActionResult.SUCCESS;

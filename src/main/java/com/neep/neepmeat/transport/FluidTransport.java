@@ -6,7 +6,6 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
-import com.neep.neepmeat.transport.fluid_network.PipeNetwork;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -45,8 +44,6 @@ public class FluidTransport
 
 //        PipeVertex.LOOKUP.registerForBlocks(FluidTransport::getVertex, PIPE);
         PipeVertex.LOOKUP.registerFallback(FluidTransport::getVertex);
-
-        PipeNetwork.registerEvent();
     }
 
     private static PipeVertex getVertex(World world, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, Void unused)
@@ -54,15 +51,6 @@ public class FluidTransport
         if (blockEntity instanceof FluidPipeBlockEntity<?> be)
         {
             return be.getPipeVertex();
-        }
-        return null;
-    }
-
-    public static PipeNetwork getNetwork(World world, BlockPos pos, BlockState state, BlockEntity be, Void context)
-    {
-        if (be instanceof FluidPipeBlockEntity<?> pipeBE)
-        {
-//            return pipeBE.getPipeVertex().getNetwork();
         }
         return null;
     }
