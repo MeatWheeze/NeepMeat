@@ -6,7 +6,6 @@ import com.neep.neepmeat.util.IndexedHashMap;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -22,19 +21,11 @@ public class PipeBranches extends HashMap<Long, PipeState>
         {
             System.out.println("Yes!");
             List<Supplier<FluidNode>> list = nodes.stream().sequential().collect(Collectors.toList());
-//            IndexedHashMap<BlockPos, PipeState> clearRoutes = removeDeadEnds(world, pipes);
-//            System.out.println(clearRoutes);
-//            for (BlockPos pos : clearRoutes.keySet())
-//            {
-//                world.spawnParticles(ParticleTypes.BARRIER, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, 10, 0, 0, 0, 0);
-//            }
 
             NodePos start = list.get(0).get().getNodePos();
             NodePos end = list.get(1).get().getNodePos();
             Map<BlockPos, Integer> distances = shortestPath(world, start, end, pipes);
             System.out.println(distances);
-//            long flowResult = followPath(world, start, end, 100, distances, pipes);
-//            System.out.println(flowResult);
         }
         else
         {
@@ -42,9 +33,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static void testMatrix(Function<Long, Long>[][] matrix)
+    public static void displayMatrix(Function<Long, Long>[][] matrix)
     {
-//        long[][] out = new long[matrix.length][matrix[0].length];
         for (int i = 0; i < matrix.length; ++i)
         {
             for (int j = 0; j < matrix[0].length; ++j)
@@ -54,7 +44,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
             }
             System.out.println();
         }
-//        System.out.println(Arrays.deepToString(out));
     }
 
     public static Function<Long, Long>[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
@@ -91,8 +80,9 @@ public class PipeBranches extends HashMap<Long, PipeState>
                 Map<BlockPos, Integer> distances;
                 if ((distances = shortestPath(world, start, end, pipes)) != null)
                 {
-                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
-                    matrix[i][j] = function;
+//                    Function<Long, Long> function = followPath(world, start, end, distances, pipes);
+//                    matrix[i][j] = function;
+                    matrix[i][j] = Function.identity();
                 }
                 else
                 {
@@ -152,22 +142,6 @@ public class PipeBranches extends HashMap<Long, PipeState>
             while (pipes.get(current) != null && pipes.get(current).connections.size() < 3);
         }
         return clearRoutes;
-    }
-
-    public static void enumeratePositions(BlockPos start, BlockPos end, IndexedHashMap<BlockPos, PipeState> pipes)
-    {
-
-    }
-
-    public static void doThings(IndexedHashMap<BlockPos, PipeState> pipes)
-    {
-       for (int i = 0; i < pipes.size(); ++i)
-       {
-           PipeState.ISpecialPipe specialPipe;
-           if ((specialPipe = pipes.get(i).getSpecial()) != null)
-           {
-           }
-       }
     }
 
     public static void findRoute(NodePos fromPos, NodePos toPos, IndexedHashMap<BlockPos, PipeState> pipes)

@@ -153,7 +153,7 @@ public class PipeNetwork
             }
 
             this.nodeMatrix = PipeBranches.getMatrix(world, connectedNodes, networkPipes);
-            PipeBranches.testMatrix(nodeMatrix);
+            PipeBranches.displayMatrix(nodeMatrix);
         }
     }
 
