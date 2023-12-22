@@ -26,6 +26,7 @@ public class BlockPipeVertex extends SimplePipeVertex
     protected final NodeSupplier[] nodes = new NodeSupplier[6];
     protected long[] velocity = new long[6];
     private final ObjectArrayList<PipeFlowComponent> components = new ObjectArrayList<>(6);
+    private final ObjectArrayList<Long> componentAmounts = new ObjectArrayList<>(6);
 
     public BlockPipeVertex(FluidPipeBlockEntity fluidPipeBlockEntity)
     {
@@ -90,16 +91,23 @@ public class BlockPipeVertex extends SimplePipeVertex
         {
             components.clear();
             components.size(6);
-            int outputs = 0;
+//            componentAmounts.clear();
+//            componentAmounts.size(6);
+
+//            long transferToNodes = 0;
+
+            int transfers = 0;
+
             for (int dir = 0; dir < nodes.length; ++dir)
             {
                 NodeSupplier node = nodes[dir];
                 if (node != null && node.get() != null && getNodeInflux(node) >= 0)
                 {
                     components.set(dir, node);
-                    ++outputs;
+                    ++transfers;
                 }
             }
+
 
             for (int dir = 0; dir < getAdjVertices().length; ++dir)
             {
@@ -107,9 +115,10 @@ public class BlockPipeVertex extends SimplePipeVertex
                 if (vertex != null && vertex.getTotalHead() - this.getTotalHead() <= 0)
                 {
                     components.set(dir, vertex);
-                    ++outputs;
+                    ++transfers;
                 }
             }
+
 
             // Randomise transfer order to reduce opportunities for fluid to get stuck in loops.
             final int[] ints = parent.getWorld().getRandom().ints(0, 6).distinct().limit(6).toArray();
@@ -119,14 +128,24 @@ public class BlockPipeVertex extends SimplePipeVertex
                 PipeFlowComponent component = components.get(dir);
                 if (component == null) continue;
 
-                long transferAmount = (long) Math.min(amount, Math.ceil(oldAmount / (float) outputs));
+                long transferAmount = (long) Math.min(amount, Math.ceil(amount / (float) transfers));
+
                 long received = component.insert(dir, 0, transferAmount, (ServerWorld) parent.getWorld(), variant, transaction);
+
                 amount -= received;
                 if (amount <= 0) variant = FluidVariant.blank();
-            }
 
+                --transfers;
+            }
             transaction.commit();
         }
+    }
+
+    private int numOutputs()
+    {
+        int outputs = 0;
+        for (PipeFlowComponent c : components) if (c != null) ++outputs;
+        return outputs;
     }
 
     // Get the flow with respect to the node
