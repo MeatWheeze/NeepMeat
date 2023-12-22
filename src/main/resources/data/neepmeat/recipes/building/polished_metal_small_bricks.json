@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ii ",
+    "ii ",
+    "   "
+  ],
+  "key": {
+    "i": {
+      "item": "neepmeat:polished_metal_bricks"
+    }
+  },
+  "result": {
+    "item": "neepmeat:polished_metal_small_bricks",
+    "count": 4
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "neepmeat:rusty_metal_slab"
+    ]
+  },
+  "criteria": {
+    "has_rusty_metal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:rusty_metal"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "neepmeat:rusty_metal_slab"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_rusty_metal",
+      "has_the_recipe"
+    ]
+  ]
+}
