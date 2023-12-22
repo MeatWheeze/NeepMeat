@@ -20,6 +20,8 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -42,7 +44,15 @@ public class PedestalBlockEntity extends SyncableBlockEntity
     {
         super(type, pos, state);
         this.recipeBehaviour = new PedestalBlockEntity.RecipeBehaviour();
-        this.storage = new WritableStackStorage(this::sync, 1);
+        this.storage = new WritableStackStorage(this::sync, 1)
+        {
+            @Override
+            protected void onFinalCommit()
+            {
+                super.onFinalCommit();
+                world.updateComparators(pos, getCachedState().getBlock());
+            }
+        };
     }
 
     public PedestalBlockEntity(BlockPos pos, BlockState state)
@@ -188,6 +198,25 @@ public class PedestalBlockEntity extends SyncableBlockEntity
                 currentRecipe = (EnlighteningRecipe) world.getRecipeManager().get(recipeId).orElse(null);
             }
             recipeId = null;
+        }
+    }
+
+    public void extractFromItem(ItemEntity itemEntity)
+    {
+        ItemStack itemStack = itemEntity.getStack();
+        if (itemStack.isEmpty())
+            return;
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            int transferred = (int) storage.insert(ItemVariant.of(itemStack), itemStack.getCount(), transaction);
+            itemStack.decrement(transferred);
+            if (itemStack.getCount() <= 0)
+            {
+                itemEntity.discard();
+            }
+
+            transaction.commit();
         }
     }
 }

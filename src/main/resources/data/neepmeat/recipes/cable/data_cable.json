@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "iii",
+    "gbg",
+    "iii"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:brain_rough"
+    },
+    "i": {
+      "item": "minecraft:iron_nugget"
+    },
+    "g": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:data_cable",
+    "count": 5
+  }
+}
