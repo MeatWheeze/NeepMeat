@@ -5,6 +5,7 @@ import com.neep.meatlib.block.*;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.actuator.LinearRailBlock;
 import com.neep.neepmeat.block.content_detector.ContentDetectorBlock;
+import com.neep.neepmeat.machine.casting_basin.CastingBasinBlock;
 import com.neep.neepmeat.machine.crucible.AlembicBlock;
 import com.neep.neepmeat.machine.crucible.CrucibleBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
@@ -102,6 +103,8 @@ public class NMBlocks
     public static final FabricBlockSettings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static Block MIXER = BlockRegistry.queue(new MixerBlock("mixer", 64, true, BRASS_BLOCKS));
     public static Block MIXER_TOP = BlockRegistry.queue(new MixerTopBlock("mixer_top", 64, false, FabricBlockSettings.copyOf(MIXER)));
+
+    public static Block CASTING_BASIN = BlockRegistry.queue(new CastingBasinBlock("casting_basin", 64, false, FabricBlockSettings.copyOf(MIXER)));
 
     public static final FabricBlockSettings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.NETHERITE);
     public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", 64, false, VAT_SETTINGS));

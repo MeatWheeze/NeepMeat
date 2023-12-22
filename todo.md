@@ -50,13 +50,17 @@
 - Add coloured fluid pipes
 - [done] Create REI plugin
 - Add Caution Tape (looks similar to redstone)
+- Add MultiTank
 
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times
+- Secure blood machine fluid input detection by transferring irreversible things to a transaction callback
 
 ## Ore Processing
 
 - [done] Add crucible and recipes
-- Add dynamic creation of Raw Ore Fat
+- [done] Add dynamic creation of Raw Ore Fat
+- [done] Add Trommel
+- Add casting basin and hydraulic press
 
 ## Alloys
 - Add Meat Potato farming
@@ -134,6 +138,11 @@ Crafting
 - Sound event when charging attack
 - Sound event for failed and successful attacks
 - Particles for resulting heart item
+
+## Casting
+
+- The Hydraulic Press requires a constant source of pressure. When extending, it takes in fluid. When retracting, this fluid is sent to the exhaust.
+- When above a casting basin, the press will only extend when a valid recipe is present. 
 
 ## Late-Game Machinery
 

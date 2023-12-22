@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.model.SwordModel;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
@@ -102,6 +103,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererRegistry.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
         BlockEntityRendererRegistry.register(NMBlockEntities.ALEMBIC, AlembicRenderer::new);
+        BlockEntityRendererRegistry.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
 
         EntityRendererRegistry.register(NMEntities.TANK_MINECART, (ctx) -> new TankMinecartRenderer(ctx, TANK_MINECART));
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
