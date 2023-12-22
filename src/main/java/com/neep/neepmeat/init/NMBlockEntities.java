@@ -8,6 +8,7 @@ import com.neep.neepmeat.blockentity.*;
 import com.neep.neepmeat.blockentity.fluid.*;
 import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.blockentity.machine.*;
+import com.neep.neepmeat.blockentity.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.MergePipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.PneumaticPipeBlockEntity;
 import com.neep.neepmeat.blockentity.pipe.RouterBlockEntity;
@@ -16,7 +17,6 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -63,6 +63,8 @@ public class NMBlockEntities
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
     public static BlockEntityType<RouterBlockEntity> ROUTER;
+
+    public static BlockEntityType<MixerBlockEntity> MIXER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -115,6 +117,8 @@ public class NMBlockEntities
         CONVERTER = registerBlockEntity("converter", ConverterBlockEntity::new, NMBlocks.CONVERTER);
         CONVERTER_BASE = registerBlockEntity("converter_base", ConverterBaseBlockEntity::new, NMBlocks.CONVERTER_BASE);
 //        LARGE_CONVERTER = registerBlockEntity("large_converter", LargeConverterBlockEntity::new, NMBlocks.LARGE_CONVERTER);
+
+        MIXER = registerBlockEntity("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
