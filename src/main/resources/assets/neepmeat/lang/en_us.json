@@ -143,6 +143,9 @@
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
   "item.neepmeat.integration_charge_adv.lore": "The fluid writhes inside its shell, as if alive.",
 
+  "item.neepmeat.whisper_flour": "Whisper Flour",
+  "item.neepmeat.whisper_flour.lore": "Its grains hold terrible secrets of the cosmos.",
+
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
   "block.neepmeat.charnel_compactor.lore": "Converts flesh into Body Compound when blessed by an Integrator.",
 
