@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "www"
+  ],
+  "key": {
+    "w": {
+      "item": "neepmeat:whisper_wheat"
+    }
+  },
+  "result": {
+    "item": "neepmeat:whisper_bread",
+    "count": 1
+  }
+}
