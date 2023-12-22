@@ -20,6 +20,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotorisedBlock
 {
     protected float power;
@@ -33,7 +34,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotor
         @Override
         public float getFlow()
         {
-            return 1;
+            return 0.5f;
         }
 
         @Override
@@ -72,7 +73,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotor
                     if (canStart())
                     {
                         state = State.PROCESSING;
-                        processEnergy = 40;
+                        processEnergy = 15;
                         sync();
                     }
                 }
@@ -162,6 +163,6 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements IMotor
     public enum State
     {
         IDLE,
-        PROCESSING;
+        PROCESSING
     }
 }
