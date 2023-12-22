@@ -46,6 +46,9 @@ public class SurgicalRobot implements NbtSerialisable
         this.x = dockingPos.x;
         this.y = dockingPos.y;
         this.z = dockingPos.z;
+        this.clientX = x;
+        this.clientY = y;
+        this.clientZ = z;
     }
 
     public void tick()
@@ -154,9 +157,9 @@ public class SurgicalRobot implements NbtSerialisable
     {
         nbt.putByte(NBT_MOVEMENT_STATE, movementState);
         nbt.putByte(NBT_NEXT_TYPE, nextType);
-        nbt.putDouble("x", x);
-        nbt.putDouble("y", y);
-        nbt.putDouble("z", z);
+        nbt.putDouble("rx", x);
+        nbt.putDouble("ry", y);
+        nbt.putDouble("rz", z);
     }
 
     @Override
@@ -164,9 +167,9 @@ public class SurgicalRobot implements NbtSerialisable
     {
         this.movementState = nbt.getByte(NBT_MOVEMENT_STATE);
         this.nextType=nbt.getByte(NBT_NEXT_TYPE);
-        this.x = nbt.getDouble("x");
-        this.y = nbt.getDouble("y");
-        this.z = nbt.getDouble("z");
+        this.x = nbt.getDouble("rx");
+        this.y = nbt.getDouble("ry");
+        this.z = nbt.getDouble("rz");
     }
 
     public boolean isActive()

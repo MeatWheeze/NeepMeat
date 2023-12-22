@@ -1,8 +1,11 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.recipe.surgery.TableComponent;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -19,6 +22,8 @@ public class SurgeryTableContext implements NbtSerialisable
 {
     private final List<BlockApiCache<TableComponent<?>, Void>> caches = new ArrayList<>(9);
     private final List<BlockPos> posList = new ArrayList<>(9);
+
+    Storage<ItemVariant> storage = new WritableStackStorage(() -> {}, Integer.MAX_VALUE);
 
     @Nullable
     public TableComponent<TransferVariant<?>> getStructure(int i)
@@ -70,5 +75,10 @@ public class SurgeryTableContext implements NbtSerialisable
     {
         caches.clear();
         posList.clear();
+    }
+
+    public Storage<ItemVariant> getStorage()
+    {
+        return storage;
     }
 }

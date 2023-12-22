@@ -58,12 +58,6 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     @Override
     public boolean matches(SurgeryTableContext context)
     {
-        // Iterate position of top left corner
-//        for (int i = 0; i <= context.getWidth() - width; ++i)
-//        {
-//            for (int j = 0; j <= context.getHeight() - height; ++j)
-//            {
-
         // 1. Does the block expose a valid Surgery Table Structure API?
         // 2. Does the reported storage lookup match the lookup in the recipe?
         // 3. Does the storage match the ingredient's conditions?
@@ -73,7 +67,14 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
             int index = v * height + u;
             RecipeInput<?> input = inputs.get(index);
             TableComponent<? extends TransferVariant<?>> structure = context.getStructure(index);
-            if (structure == null || !Objects.equals(structure.getType(), input.getType())) continue;
+
+            // Pass missing or invalid structures if the corresponding input does not care
+            if (input.isEmpty()) continue;
+
+            // Fail if types do not match or the structure is invalid
+            if (structure == null || !Objects.equals(structure.getType(), input.getType()))
+                return false;
+
             try (Transaction transaction = Transaction.openOuter())
             {
                 if (!input.test(structure.getStorage(), transaction))
@@ -116,6 +117,8 @@ public class SurgeryRecipe implements MeatRecipe<SurgeryTableContext>
     @Override
     public boolean ejectOutputs(SurgeryTableContext context, TransactionContext transaction)
     {
+        output.update();
+        output.insertInto(context.getStorage(), ItemVariant::of, transaction);
         return false;
     }
 
