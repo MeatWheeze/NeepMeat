@@ -35,14 +35,6 @@ public class GlassTankBlockEntity extends TankBlockEntity implements com.neep.ne
         super.readNbt(tag);
     }
 
-
-//    @Override
-//    @Nullable
-//    public WritableFluidBuffer getBuffer(Direction direction)
-//    {
-//        return buffer;
-//    }
-
     @Override
     public void fromClientTag(NbtCompound tag)
     {
