@@ -40,11 +40,15 @@ public class MotorBlockEntity extends BloodMachineBlockEntity implements IMotorB
         {
             update((ServerWorld) world, pos, pos, getCachedState());
         }
+    }
 
+    @Override
+    protected void onRateChange()
+    {
+        super.onRateChange();
         if (cache != null && cache.getBlockEntity() instanceof IMotorisedBlock motorised)
         {
-            float mult = getRunningRate();
-            motorised.setWorkMultiplier(mult);
+            motorised.setWorkMultiplier(getRunningRate());
             motorised.tick(this);
         }
     }

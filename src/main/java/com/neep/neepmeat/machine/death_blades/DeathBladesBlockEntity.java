@@ -13,6 +13,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -54,9 +55,7 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
     {
         this.cooldown = Math.min(MAX_COOLDOWN, cooldown + increment);
 
-        this.angularSpeed = multiplier * 20;
         this.angle = MathHelper.wrapDegrees(this.angle + angularSpeed);
-        sync();
 
         if (cooldown >= MAX_COOLDOWN && angularSpeed > 0)
         {
@@ -116,13 +115,15 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
     public void setWorkMultiplier(float multiplier)
     {
         this.multiplier = multiplier;
+        this.angularSpeed = multiplier * 20;
+        sync();
     }
 
     @Override
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.putFloat("angle", angle);
+//        nbt.putFloat("angle", angle);
         nbt.putFloat("angularSpeed", angularSpeed);
     }
 
@@ -130,7 +131,12 @@ public class DeathBladesBlockEntity extends SyncableBlockEntity implements IMoto
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.angle = nbt.getFloat("angle");
+//        this.angle = nbt.getFloat("angle");
         this.angularSpeed = nbt.getFloat("angularSpeed");
+    }
+
+    public static void clientTick(World world, BlockPos pos, BlockState state, DeathBladesBlockEntity be)
+    {
+        be.angle = MathHelper.wrapDegrees(be.angle + be.angularSpeed);
     }
 }

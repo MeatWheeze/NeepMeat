@@ -2,16 +2,20 @@ package com.neep.neepmeat.machine.death_blades;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -42,6 +46,13 @@ public class DeathBladesBlock extends BaseFacingBlock implements BlockEntityProv
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         return this.getDefaultState().with(FACING, context.getSide());
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.DEATH_BLADES, null, DeathBladesBlockEntity::clientTick, world);
     }
 
     @Nullable

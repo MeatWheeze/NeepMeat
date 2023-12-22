@@ -169,7 +169,12 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
         if (FluidNodeManager.shouldTick(world.getTime()))
         {
             // Get effective influx per tick
+            float prevRate = this.runningRate;
             this.runningRate = this.inputStorage.lastInput / PipeNetwork.TICK_RATE;
+            if (prevRate != runningRate)
+            {
+                onRateChange();
+            }
 
             // Determine power multiplier from the inserted fluid
             if (inputStorage.lastInput != 0 && inputStorage.lastFluid != null)
@@ -188,6 +193,8 @@ public abstract class BloodMachineBlockEntity extends SyncableBlockEntity implem
     {
         return MathHelper.clamp((this.runningRate / (float) this.maxRunningRate) * fluidMultiplier, 0, 1);
     }
+
+    protected void onRateChange() {}
 
     @Override
     public Storage<FluidVariant> getBuffer(Direction direction)
