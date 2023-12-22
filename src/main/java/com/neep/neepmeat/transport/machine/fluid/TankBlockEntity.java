@@ -1,21 +1,29 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.LazySupplier;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.TankMessagePacket;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -23,17 +31,64 @@ import net.minecraft.world.World;
 @SuppressWarnings("UnstableApiUsage")
 public class TankBlockEntity extends SyncableBlockEntity
 {
-    protected final WritableSingleFluidStorage buffer;
+    protected final WritableSingleFluidStorage buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync)
+    {
+        @Override
+        public long extract(FluidVariant extractedVariant, long maxAmount, TransactionContext transaction)
+        {
+            TankBlockEntity upStorage = upCache.get().find(getType());
+            long upExtracted = 0;
+            if (upStorage != null)
+            {
+                upExtracted = upStorage.getStorage(null).extract(extractedVariant, maxAmount, transaction);
+            }
+
+            if (upExtracted < maxAmount)
+            {
+                long extracted = super.extract(extractedVariant, maxAmount - upExtracted, transaction);
+                return upExtracted + extracted;
+            }
+            else
+            {
+                return upExtracted;
+            }
+        }
+
+        @Override
+        public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
+        {
+            var downStorage = downCache.get().find(getType());
+
+            long downInserted = 0;
+            if (downStorage != null)
+            {
+                downInserted = downStorage.getStorage(null).insert(insertedVariant, maxAmount, transaction);
+            }
+
+            long inserted = 0;
+            if (maxAmount - downInserted > 0)
+            {
+                inserted = super.insert(insertedVariant, maxAmount - downInserted, transaction);
+            }
+
+            return downInserted + inserted;
+        }
+    };
+
+    protected LazySupplier<BlockApiCache<TankBlockEntity, BlockEntityType<?>>> downCache = LazySupplier.of(() ->
+            BlockApiCache.create(LOOKUP, (ServerWorld) getWorld(), getPos().down()));
+
+    protected LazySupplier<BlockApiCache<TankBlockEntity, BlockEntityType<?>>> upCache = LazySupplier.of(() ->
+            BlockApiCache.create(LOOKUP, (ServerWorld) getWorld(), getPos().up()));
 
     public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync);
     }
 
     public TankBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.TANK_BLOCK_ENTITY, pos, state);
+        this(NMBlockEntities.TANK, pos, state);
     }
 
     public WritableSingleFluidStorage getStorage(Direction direction)
@@ -79,5 +134,18 @@ public class TankBlockEntity extends SyncableBlockEntity
     {
         world.playSound(null, pos, SoundEvents.BLOCK_IRON_DOOR_CLOSE, SoundCategory.BLOCKS, 1f, 1.5f);
         TankMessagePacket.send(player, pos, buffer.getAmount(), buffer.getResource());
+    }
+
+    public static final BlockApiLookup<TankBlockEntity, BlockEntityType<?>> LOOKUP = BlockApiLookup.get(
+            new Identifier(NeepMeat.NAMESPACE, "tank_lookup"),
+            TankBlockEntity.class, (Class<BlockEntityType<?>>) (Class<?>) BlockEntityType.class
+    );
+
+    public static <T extends BlockEntity> TankBlockEntity find(T be, BlockEntityType<?> type)
+    {
+        if (be.getType().equals(type))
+            return (TankBlockEntity) be;
+
+        return null;
     }
 }
