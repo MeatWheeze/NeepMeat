@@ -1,12 +1,13 @@
 package com.neep.neepmeat.block;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.block.pipe.AbstractAxialPipe;
-import com.neep.neepmeat.block.pipe.IAxialPipe;
+import com.neep.neepmeat.blockentity.StopValveBlockEntity;
 import com.neep.neepmeat.fluid_transfer.PipeState;
 import com.neep.neepmeat.item.FluidComponentItem;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
@@ -16,17 +17,18 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
-public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe
+public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpecialPipe, BlockEntityProvider
 {
     public static final BooleanProperty OPEN = BooleanProperty.of("open");
 
     public StopValveBlock(String itemName, int itemMaxStack, boolean hasLore, Settings settings)
     {
         super(itemName, itemMaxStack, hasLore, FluidComponentItem::new, settings.nonOpaque());
-        this.setDefaultState(this.getStateManager().getDefaultState().with(OPEN, false));
+        this.setDefaultState(this.getStateManager().getDefaultState().with(OPEN, true));
     }
 
     @Override
@@ -44,7 +46,7 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-
+        world.setBlockState(pos, state.cycle(OPEN));
 
         return ActionResult.success(world.isClient);
     }
@@ -54,5 +56,12 @@ public class StopValveBlock extends AbstractAxialPipe implements PipeState.ISpec
     {
         super.appendProperties(builder);
         builder.add(OPEN);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return new StopValveBlockEntity(pos, state);
     }
 }
