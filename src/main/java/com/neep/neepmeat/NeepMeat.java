@@ -9,6 +9,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 public class NeepMeat implements ModInitializer, ClientModInitializer
 {
@@ -19,8 +20,9 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 	@Override
 	public void onInitialize()
 	{
+		LOGGER.info("Hello from NeepMeat!");
 
-		LOGGER.info("Hello Fabric world!");
+		GeckoLib.initialize();
 
 		BlockInitialiser.registerBlocks();
 		ItemInit.registerItems();
