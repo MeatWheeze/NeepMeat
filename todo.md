@@ -80,7 +80,7 @@
 ## Crafting Ingredients
 
 - Add Meat Steel recipe (Compress iron and MEAT in a Casting Basin with a Hydraulic Press)
-- Add Meat Steel casing
+- [done] Add Meat Steel casing
 
 ## Fixes
 - Fix inconsistent ArrayStoreException after rebuilding fluid networks many times

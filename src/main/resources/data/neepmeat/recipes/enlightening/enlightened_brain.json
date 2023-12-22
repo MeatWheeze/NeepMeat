@@ -1,0 +1,12 @@
+{
+  "type": "neepmeat:enlightening",
+  "item_input": {
+    "resource": "neepmeat:brain_rough",
+    "amount": 1
+  },
+  "data": 1000,
+  "output": {
+    "resource": "neepmeat:enlightened_brain",
+    "amount": 1
+  }
+}
