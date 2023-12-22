@@ -19,6 +19,7 @@ import java.util.Random;
 
 public class TubeUtils
 {
+    // TODO: Cutoff depth
     public static long tryTransfer(ItemInPipe item, BlockPos pos, BlockState state, Direction out, World world)
     {
         BlockPos toPos = pos.offset(out);
@@ -39,14 +40,14 @@ public class TubeUtils
         else if (toState.isAir())
         {
             double offset = 0.2;
-            Entity itemEntity = new ItemEntity(world,
+            ItemEntity itemEntity = new ItemEntity(world,
                     toPos.getX() + 0.5 - offset * out.getOffsetX(),
                     toPos.getY() + 0.1 - offset * out.getOffsetY(),
                     toPos.getZ() + 0.5 - offset * out.getOffsetZ(),
-                    item.getItemStack(),
+                    item.getItemStack().copy(),
                     out.getOffsetX() * item.speed, out.getOffsetY() * item.speed, out.getOffsetZ() * item.speed);
             world.spawnEntity(itemEntity);
-            amountInserted = item.getCount();
+            return -1;
         }
         else if ((storage = ItemStorage.SIDED.find(world, toPos, out)) != null)
         {
@@ -59,7 +60,6 @@ public class TubeUtils
         else
         {
             item.getItemStack().decrement((int) amountInserted);
-            bounce(item, world, state);
             return amountInserted;
         }
     }

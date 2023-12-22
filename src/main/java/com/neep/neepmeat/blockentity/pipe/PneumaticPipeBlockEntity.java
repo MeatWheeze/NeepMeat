@@ -107,6 +107,9 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
 
     public static void serverTick(World world, BlockPos blockPos, BlockState blockState, PneumaticPipeBlockEntity be)
     {
+        if (be.items.isEmpty())
+            return;
+
         Iterator<ItemInPipe> it = be.items.listIterator();
         while (it.hasNext())
         {
@@ -116,7 +119,13 @@ public class PneumaticPipeBlockEntity extends BlockEntity implements BlockEntity
             {
                 long transferred = TubeUtils.tryTransfer(item, blockPos, blockState, item.out, world);
                 if (transferred == -1)
+                {
                     it.remove();
+                }
+                else
+                {
+                    TubeUtils.bounce(item, world, blockState);
+                }
             }
         }
         be.sync();
