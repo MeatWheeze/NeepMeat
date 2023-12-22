@@ -1,9 +1,7 @@
 package com.neep.neepmeat.block;
 
 import com.neep.neepmeat.block.base.BaseBlock;
-import com.neep.neepmeat.blockentity.FluidBufferProvider;
-import com.neep.neepmeat.blockentity.TankBlockEntity;
-import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
@@ -38,7 +36,7 @@ public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new IntegratorEggBlockEntity(pos, state);
+        return new IntegratorBlockEntity(pos, state);
     }
 
     @Nullable
@@ -51,7 +49,7 @@ public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return checkType(type, BlockEntityInitialiser.INTEGRATOR_EGG, IntegratorEggBlockEntity::serverTick, world);
+        return checkType(type, BlockEntityInitialiser.INTEGRATOR, IntegratorBlockEntity::serverTick, world);
     }
 
     @Override
@@ -59,9 +57,9 @@ public class IntegratorEggBlock extends BaseBlock implements BlockEntityProvider
     {
         if (!world.isClient)
         {
-            if (world.getBlockEntity(pos) instanceof FluidBufferProvider be)
+            if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
             {
-                player.sendMessage(Text.of(Float.toString(be.getBuffer(null).getAmount() / (float) FluidConstants.BUCKET)), true);
+                player.sendMessage(Text.of(be.getInputBuffer().getAmount() / (float) FluidConstants.BUCKET + ", " + be.getOutputBuffer().getAmount() / (float) FluidConstants.BUCKET), true);
             }
         }
         return ActionResult.SUCCESS;

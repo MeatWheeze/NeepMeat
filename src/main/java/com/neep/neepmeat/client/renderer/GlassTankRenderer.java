@@ -3,7 +3,7 @@ package com.neep.neepmeat.client.renderer;
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.blockentity.GlassTankBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import net.fabricmc.fabric.api.renderer.v1.Renderer;
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess;
 import net.fabricmc.fabric.api.renderer.v1.mesh.MutableQuadView;
@@ -40,7 +40,7 @@ public class GlassTankRenderer implements BlockEntityRenderer<GlassTankBlockEnti
     {
         matrices.push();
 
-        FluidBuffer buffer = blockEntity.getBuffer(null);
+        WritableFluidBuffer buffer = blockEntity.getBuffer(null);
         float scale = ((float) buffer.getAmount()) / ((float) buffer.getCapacity());
         FluidVariant fluid = blockEntity.getBuffer(null).getResource();
         renderFluidCuboid(vertexConsumers, matrices, fluid, 0.1f, 0.9f, 0.9f, scale);

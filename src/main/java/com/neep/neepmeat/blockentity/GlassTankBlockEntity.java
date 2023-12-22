@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.block.entity.BlockEntityClientSerializable;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -12,14 +12,14 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class GlassTankBlockEntity extends BlockEntity implements FluidBufferProvider, BlockEntityClientSerializable
+public class GlassTankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_util.FluidBuffer.FluidBufferProvider, BlockEntityClientSerializable
 {
-    private final FluidBuffer buffer;
+    private final WritableFluidBuffer buffer;
 
     public GlassTankBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.GLASS_TANK_BLOCK_ENTITY, pos, state);
-        this.buffer = new FluidBuffer(this, 8 * FluidConstants.BUCKET);
+        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class GlassTankBlockEntity extends BlockEntity implements FluidBufferProv
 
     @Override
     @Nullable
-    public FluidBuffer getBuffer(Direction direction)
+    public WritableFluidBuffer getBuffer(Direction direction)
     {
 //        return sideModes.get(direction) != FluidAcceptor.AcceptorModes NONE
 //                || direction == null ? buffer : null;

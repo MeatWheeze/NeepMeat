@@ -1,6 +1,6 @@
 package com.neep.neepmeat.blockentity;
 
-import com.neep.neepmeat.fluid_util.FluidBuffer;
+import com.neep.neepmeat.fluid_util.storage.WritableFluidBuffer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockState;
@@ -11,20 +11,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class TankBlockEntity extends BlockEntity implements FluidBufferProvider
+public class TankBlockEntity extends BlockEntity implements com.neep.neepmeat.fluid_util.FluidBuffer.FluidBufferProvider
 {
-    protected final FluidBuffer buffer;
+    protected final WritableFluidBuffer buffer;
 
     public TankBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        this.buffer = new FluidBuffer(this, 8 * FluidConstants.BUCKET);
+        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
     }
 
     public TankBlockEntity(BlockPos pos, BlockState state)
     {
         super(BlockEntityInitialiser.TANK_BLOCK_ENTITY, pos, state);
-        this.buffer = new FluidBuffer(this, 8 * FluidConstants.BUCKET);
+        this.buffer = new WritableFluidBuffer(this, 8 * FluidConstants.BUCKET);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class TankBlockEntity extends BlockEntity implements FluidBufferProvider
 
     @Override
     @Nullable
-    public FluidBuffer getBuffer(Direction direction)
+    public WritableFluidBuffer getBuffer(Direction direction)
     {
         return buffer;
     }

@@ -2,19 +2,18 @@ package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.blockentity.*;
-import com.neep.neepmeat.blockentity.integrator.IntegratorEggBlockEntity;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import com.neep.neepmeat.blockentity.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.fluid_util.FluidBuffer;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-
-import java.util.function.Supplier;
 
 public class BlockEntityInitialiser
 {
@@ -27,7 +26,7 @@ public class BlockEntityInitialiser
     public static BlockEntityType<TrommelBlockEntity> TROMMEL_BLOCK_ENTITY;
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
     public static BlockEntityType<FluidPortBlockEntity> FLUID_PORT;
-    public static BlockEntityType<IntegratorEggBlockEntity> INTEGRATOR_EGG;
+    public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
 
     public static <T extends BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -46,7 +45,7 @@ public class BlockEntityInitialiser
         TROMMEL_BLOCK_ENTITY = registerBlockEntity("trommel", TrommelBlockEntity::new, BlockInitialiser.TROMMEL);
         FLUID_DRAIN = registerBlockEntity("fluid_drain", FluidDrainBlockEntity::new, BlockInitialiser.FLUID_DRAIN);
         FLUID_PORT = registerBlockEntity("fluid_port", FluidPortBlockEntity::new, BlockInitialiser.FLUID_PORT);
-        INTEGRATOR_EGG = registerBlockEntity("integrator_egg", IntegratorEggBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
+        INTEGRATOR = registerBlockEntity("integrator_egg", IntegratorBlockEntity::new, BlockInitialiser.INTEGRATOR_EGG);
 
         ItemStorage.SIDED.registerSelf(ITEM_BUFFER_BLOCK_ENTITY);
         ItemStorage.SIDED.registerSelf(TROMMEL_BLOCK_ENTITY);
@@ -54,9 +53,9 @@ public class BlockEntityInitialiser
 
         FluidStorage.SIDED.registerFallback((world, pos, state, be, direction) ->
         {
-            if (be instanceof FluidBufferProvider provider)
+            if (be instanceof FluidBuffer.FluidBufferProvider provider)
             {
-                return provider.getBuffer(direction);
+                return (Storage<FluidVariant>) provider.getBuffer(direction);
             }
             return null;
         });

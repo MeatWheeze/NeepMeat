@@ -1,7 +1,6 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.blockentity.TrommelBlockEntity;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.renderer.GlassTankRenderer;
 import com.neep.neepmeat.client.renderer.IntegratorEggRenderer;
@@ -9,8 +8,6 @@ import com.neep.neepmeat.client.renderer.ItemBufferRenderer;
 import com.neep.neepmeat.client.renderer.TrommelRenderer;
 import com.neep.neepmeat.init.BlockEntityInitialiser;
 import com.neep.neepmeat.init.BlockInitialiser;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -19,7 +16,6 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
@@ -42,7 +38,7 @@ public class NeepMeatClient
 
         BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.TROMMEL_BLOCK_ENTITY, TrommelRenderer::new);
 
-        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR_EGG, IntegratorEggRenderer::new);
+        BlockEntityRendererRegistry.INSTANCE.register(BlockEntityInitialiser.INTEGRATOR, IntegratorEggRenderer::new);
 
         FluidRenderHandlerRegistry.INSTANCE.register(BlockInitialiser.STILL_BLOOD, BlockInitialiser.FLOWING_BLOOD, new SimpleFluidRenderHandler(
                 new Identifier("minecraft:block/water_still"),
