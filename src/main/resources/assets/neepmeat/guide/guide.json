@@ -142,7 +142,9 @@
       {"type": "text", "text": "Hydraulic Press\n", "bold": true},
       {"type": "text", "text": "When Ore Fats are subjected to high pressures, the transient corpulence is forced to de-manifest and fine metal ingots remain."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "If the press is placed above a Casting Basin, it will begin extending if a valid fluid is in the basin. To make the arm extend, a bucket of any fluid can be pumped into either of the two side ports. To make the arm retract, this fluid must be pumped out."}
+      {"type": "text", "text": "If the press is placed above a Casting Basin, it will begin extending if a valid fluid is in the basin. To make the arm extend, a bucket of any fluid can be pumped into either of the two side ports. To make the arm retract, this fluid must be pumped out."},
+      {"type": "text", "text": "\nMilking\n", "bold": true},
+      {"type": "text", "text": "To milk a cow, place it above a fluid drain and beneath a Hydraulic Press. As the cow is compressed, milk will be deposited in the drain."}
     ]},
 
     {"id": "heart_extraction", "contents": [
