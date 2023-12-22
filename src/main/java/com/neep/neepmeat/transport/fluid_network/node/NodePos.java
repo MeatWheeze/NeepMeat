@@ -18,6 +18,13 @@ public class NodePos
         this.face = face;
     }
 
+    public NbtCompound toNbt(NbtCompound nbt)
+    {
+        nbt.putLong("pos", pos.asLong());
+        nbt.putInt("face", face.getId());
+        return nbt;
+    }
+
     public static NodePos fromNbt(NbtCompound nbt)
     {
         BlockPos pos = BlockPos.fromLong(nbt.getLong("pos"));
@@ -60,10 +67,4 @@ public class NodePos
         return pos.offset(face);
     }
 
-    public NbtCompound toNbt(NbtCompound nbt)
-    {
-        nbt.putLong("pos", pos.asLong());
-        nbt.putInt("face", face.getId());
-        return nbt;
-    }
 }

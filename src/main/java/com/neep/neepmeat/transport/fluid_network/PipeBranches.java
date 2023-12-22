@@ -52,9 +52,8 @@ public class PipeBranches extends HashMap<Long, PipeState>
         }
     }
 
-    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<Supplier<FluidNode>> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
+    public static PipeState.FilterFunction[][] getMatrix(ServerWorld world, List<NodeSupplier> nodes, IndexedHashMap<BlockPos, PipeState> pipes)
     {
-        long tt1 = System.nanoTime();
         int size = nodes.size();
 
         // Initialise matrix

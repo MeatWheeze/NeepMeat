@@ -46,6 +46,10 @@ public class NodeContainerBlockEntity extends BlockEntity
     public void markRemoved()
     {
         super.markRemoved();
-        FluidNodeManager.getInstance(world).markEntityRemoved(pos);
+        if (!world.isPosLoaded(pos.getX(), pos.getY()))
+        {
+            FluidNodeManager.getInstance(world).entityUnloaded(pos);
+        }
+        else FluidNodeManager.getInstance(world).entityRemoved(pos);
     }
 }

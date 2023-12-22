@@ -4,6 +4,7 @@ import com.neep.neepmeat.blockentity.fluid.NodeContainerBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.IFluidNodeProvider;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
+import com.neep.neepmeat.transport.intrfaces.IServerWorld;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
@@ -25,7 +26,6 @@ import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.*;
-import java.util.function.Supplier;
 
 public class FluidNodeManager
 {
@@ -35,7 +35,7 @@ public class FluidNodeManager
     protected final Long2ObjectMap<Map<NodePos, FluidNode>> chunkNodes = new Long2ObjectArrayMap<>();
     protected final ServerWorld world;
 
-    protected FluidNodeManager(ServerWorld world)
+    public FluidNodeManager(ServerWorld world)
     {
         this.world = world;
     }
@@ -43,6 +43,15 @@ public class FluidNodeManager
     public static FluidNodeManager getInstance(ServerWorld world)
     {
         return WORLD_NETWORKS.get(world);
+    }
+
+    public static FluidNodeManager getInstance(World world)
+    {
+        if (!(world instanceof ServerWorld))
+        {
+            return null;
+        }
+        return getInstance((ServerWorld) world);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)
@@ -54,21 +63,22 @@ public class FluidNodeManager
         }
     }
 
+    public boolean isPosLoaded(BlockPos pos)
+    {
+        boolean loaded = true;
+        for (FluidNode node : getNodes(pos))
+        {
+            loaded = loaded && !node.needsDeferredLoading;
+        }
+        return loaded;
+    }
+
     public void queueNode(FluidNode node)
     {
         if (world.getServer().isOnThread())
         {
             this.queuedNodes.add(node);
         }
-    }
-
-    public static FluidNodeManager getInstance(World world)
-    {
-        if (!(world instanceof ServerWorld))
-        {
-            return null;
-        }
-        return getInstance((ServerWorld) world);
     }
 
     public static boolean shouldTick(long worldTime)
@@ -156,7 +166,6 @@ public class FluidNodeManager
             // Ensure that node is removed from connected networks
             nodes.get(pos).onRemove();
             nodes.remove(pos);
-            PipeNetwork.validateAll();
         }
     }
 
@@ -279,9 +288,24 @@ public class FluidNodeManager
         }
     }
 
-    public void markEntityRemoved(BlockPos pos)
+    /** Called whenever a node block entity is removed.
+     * @param pos Position of node block entity
+     */
+    public void entityRemoved(BlockPos pos)
     {
         getNodes(pos).forEach(FluidNode::onRemove);
+    }
+
+    public void entityUnloaded(BlockPos pos)
+    {
+        List<FluidNode> nodes = getNodes(pos);
+        PipeNetwork network = nodes.get(0).getNetwork();
+        if (network == null || network.isSaved) return;
+
+        NbtCompound nbt = network.toNbt();
+        ((IServerWorld) world).getFluidNetworkManager().storeNetwork(network.uuid, nbt);
+        network.isSaved = true;
+        nodes.forEach(FluidNode::onRemove);
     }
 
     public NbtCompound writeNodes(BlockPos pos, NbtCompound nbt)
@@ -314,53 +338,6 @@ public class FluidNodeManager
     public NodeSupplier getNodeSupplier(NodePos pos)
     {
         return new NodeSupplier(pos, world);
-    }
-
-    public static class NodeSupplier implements Supplier<FluidNode>
-    {
-        NodePos pos;
-        ServerWorld world;
-
-        public NodeSupplier(NodePos pos, ServerWorld world)
-        {
-            this.pos = pos;
-            this.world = world;
-        }
-
-        @Override
-        public boolean equals(Object o)
-        {
-            if (!(o instanceof NodeSupplier supplier))
-            {
-                return false;
-            }
-            return supplier.pos.equals(pos);
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return new HashCodeBuilder()
-                    .append(pos.hashCode())
-                    .toHashCode();
-        }
-
-        @Override
-        public String toString()
-        {
-            return "provider for " + pos.toString();
-        }
-
-        @Override
-        public FluidNode get()
-        {
-            return getInstance(world).getOrCreateMap(pos.toChunkPos()).get(pos);
-        }
-
-        public boolean exists()
-        {
-            return get() != null;
-        }
     }
 
     public static void registerEvents()
