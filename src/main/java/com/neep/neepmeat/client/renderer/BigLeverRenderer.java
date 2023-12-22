@@ -10,6 +10,7 @@ import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.init.BlockInitialiser;
 import net.fabricmc.fabric.api.client.model.BakedModelManagerHelper;
+import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.render.RenderLayer;
@@ -23,6 +24,7 @@ import net.minecraft.client.util.ModelIdentifier;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 import java.util.Random;
@@ -40,22 +42,33 @@ public class BigLeverRenderer<T extends BigLeverBlockEntity> implements BlockEnt
     public void render(T be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
         Direction facing = be.getCachedState().get(BaseHorFacingBlock.FACING);
+        WallMountLocation face = be.getCachedState().get(BigLeverBlock.FACE);
 
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
-//        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(facing.asRotation()));
-//        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
-        matrices.translate(-0.5, -0.5, -0.5);
+        matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()));
 
-//        MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
-//                BlockInitialiser.BIG_LEVER.getDefaultState(),
-//                be.getPos(),
-//                be.getWorld(),
-//                matrices,
-//                vertexConsumers.getBuffer(RenderLayer.getCutout()),
-//                true,
-//                new Random());
-//        matrices.pop();
+        switch (face)
+        {
+            case FLOOR:
+                matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI)));
+                break;
+            case WALL:
+                matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI / 2)));
+                break;
+            case CEILING:
+                matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) (Math.PI)));
+                break;
+        }
+
+        matrices.translate(0, -0.2, 0);
+//        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.getWorld().getTime() + tickDelta * 1));
+        boolean switched = !be.getWorld().getBlockState(be.getPos()).get(BigLeverBlock.POWERED);
+        float angle = (float) be.tickCounter / be.activeTicks * 20;
+        be.leverDelta = (float) MathHelper.lerp(0.1, be.leverDelta, switched ? 0 : angle);
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(be.leverDelta));
+        matrices.translate(0, 0.2, 0);
+        matrices.translate(-0.5, -0.5, -0.5);
 
         BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
         BakedModel handle = BakedModelManagerHelper.getModel(manager, NMExtraModels.BIG_LEVER_HANDLE);

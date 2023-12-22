@@ -2,10 +2,7 @@ package com.neep.neepmeat;
 
 import com.neep.neepmeat.client.NeepMeatClient;
 import com.neep.neepmeat.fluid_util.FluidNetwork;
-import com.neep.neepmeat.init.BlockEntityInitialiser;
-import com.neep.neepmeat.init.BlockInitialiser;
-import com.neep.neepmeat.init.FluidInitialiser;
-import com.neep.neepmeat.init.ItemInit;
+import com.neep.neepmeat.init.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
 import org.apache.logging.log4j.LogManager;
@@ -28,6 +25,7 @@ public class NeepMeat implements ModInitializer, ClientModInitializer
 		BlockInitialiser.registerBlocks();
 		FluidInitialiser.initialiseFluids();
 		ItemInit.registerItems();
+		SoundInitialiser.registerSounds();
 		BlockEntityInitialiser.initialiseBlockEntities();
 
 		FluidNetwork.registerEvents();
