@@ -80,7 +80,7 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
         super(input, output);
     }
 
-    public static Serializer<SurgeryDisplay> serializer()
+    public static Serializer<SurgeryDisplay> getSerializer()
     {
         return Serializer.ofSimple(SurgeryDisplay::new);
     }

@@ -3,7 +3,7 @@
   "itemGroup.neepmeat.ingredients": "NeepMeat Crafting",
   "itemGroup.neepmeat.food": "NeepMeat Food",
 
-  "message.neepmeat.shift_for_info": "Hold SHIFT for more info.",
+  "message.neepmeat.shift_for_info": "§7Hold §fSHIFT§7 for more info.",
 
   "message.neepmeat.power": "Power: ",
   "message.neepmeat.power_unit": "eJ/t",
@@ -408,6 +408,7 @@
   "category.neepmeat.enlightening": "Enlightening",
   "category.neepmeat.enlightening.data": "Data: %d",
   "category.neepmeat.surgery": "Machine Surgery",
+  "category.neepmeat.transforming_tool": "Transforming Tool Manufacture",
   "category.neepmeat.trommel": "Trommel",
 
   "advancements.neepmeat.main.root.title": "NEEPMeat",
