@@ -1,19 +1,24 @@
 package com.neep.neepmeat.machine.trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.neepmeat.block.machine.TrommelBlock;
+import com.neep.neepmeat.block.multiblock.IControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrommelBlockEntity extends SyncableBlockEntity
+public class TrommelBlockEntity extends SyncableBlockEntity implements IControllerBlockEntity
 {
     protected TrommelStorage storage;
     protected List<BlockPos> structures = new ArrayList<>();
@@ -48,13 +53,29 @@ public class TrommelBlockEntity extends SyncableBlockEntity
         storage.readNbt(nbt);
     }
 
-    public void addStructure(TrommelBlock.StructureBlockEntity be)
+    public void addStructure(TrommelStructureBlockEntity be)
     {
         structures.add(be.getPos());
     }
 
-    public void signalBroken()
+    @Override
+    public void componentBroken(ServerWorld world)
     {
         world.setBlockState(getPos(), Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
+    }
+
+    public Storage<FluidVariant> getFluidInput()
+    {
+        return null;
+    }
+
+    public Storage<FluidVariant> getFluidOutput()
+    {
+        return null;
+    }
+
+    public Storage<ItemVariant> getItemOutput()
+    {
+        return null;
     }
 }

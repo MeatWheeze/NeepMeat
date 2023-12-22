@@ -5,15 +5,13 @@ import com.neep.meatlib.block.IMeatBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
+import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.StructureBlockBlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -23,9 +21,6 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-
-import javax.management.NotCompliantMBeanException;
-import java.util.function.Supplier;
 
 public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
@@ -70,9 +65,9 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         if (!world.isAir(pos)) return false;
 
         world.setBlockState(pos, NMBlocks.TROMMEL_STRUCTURE.getDefaultState(), Block.NOTIFY_LISTENERS);
-        if (world.getBlockEntity(pos) instanceof StructureBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof TrommelStructureBlockEntity be)
         {
-            be.setController(origin);
+            be.setController(origin, controller.getCachedState().get(FACING).getOpposite());
             controller.addStructure(be);
         }
         return true;
@@ -184,9 +179,9 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         @Override
         public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
         {
-            if (world.getBlockEntity(pos) instanceof StructureBlockEntity be)
+            if (!world.isClient() && world.getBlockEntity(pos) instanceof TrommelStructureBlockEntity be)
             {
-                be.signalBroken(world);
+                be.signalBroken((ServerWorld) world);
             }
             super.onStateReplaced(state, world, pos, newState, moved);
         }
@@ -199,46 +194,4 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         }
     }
 
-    public static class StructureBlockEntity extends BlockEntity
-    {
-        protected BlockPos controllerPos;
-
-        public StructureBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
-        {
-            super(type, pos, state);
-        }
-
-        public StructureBlockEntity(BlockPos pos, BlockState state)
-        {
-            this(NMBlockEntities.TROMMEL_STRUCTURE, pos, state);
-        }
-
-        public void setController(BlockPos pos)
-        {
-            this.controllerPos = pos;
-            markDirty();
-        }
-
-        public void signalBroken(World world)
-        {
-            if (controllerPos != null && world.getBlockEntity(controllerPos) instanceof TrommelBlockEntity be)
-            {
-                be.signalBroken();
-            }
-        }
-
-        @Override
-        public void readNbt(NbtCompound nbt)
-        {
-            super.readNbt(nbt);
-            this.controllerPos = NbtHelper.toBlockPos((NbtCompound) nbt.get("controller"));
-        }
-
-        @Override
-        protected void writeNbt(NbtCompound nbt)
-        {
-            super.writeNbt(nbt);
-            nbt.put("controller", NbtHelper.fromBlockPos(this.controllerPos));
-        }
-    }
 }
