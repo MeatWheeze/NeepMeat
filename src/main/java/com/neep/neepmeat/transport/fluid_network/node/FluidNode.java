@@ -307,7 +307,10 @@ public class FluidNode
 
     public AcceptorModes getMode()
     {
-        if (hasPump) getPump().getMode();
+        if (hasPump)
+        {
+            return getPump().getMode();
+        }
         return AcceptorModes.INSERT_EXTRACT;
     }
 

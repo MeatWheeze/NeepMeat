@@ -195,6 +195,10 @@
 
   "block.neepmeat.synthesiser": "Oviparous Synthesiser",
 
+  "block.neepmeat.fluid_rationer": "Fluid Rationer",
+  "block.neepmeat.fluid_rationer.lore_0": "Ejects discrete fluid amounts from",
+  "block.neepmeat.fluid_rationer.lore_1": "a connected tank.",
+
 
   "block.neepmeat.surgery_controller": "Surgery Controller",
 

@@ -1,8 +1,0 @@
-{
-  "type": "minecraft:stonecutting",
-  "ingredient": {
-    "item": "neepmeat:polished_metal"
-  },
-  "result": "neepmeat:polished_metal_wall",
-  "count": 1
-}

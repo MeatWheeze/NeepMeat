@@ -15,7 +15,7 @@ public class MiscUtils
 {
     @Nullable
     public static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A>
-    checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, BlockEntityTicker<E> serverTicker, BlockEntityTicker<E> clientTicker, World world)
+    checkType(BlockEntityType<A> givenType, BlockEntityType<E> expectedType, @Nullable BlockEntityTicker<E> serverTicker, @Nullable BlockEntityTicker<E> clientTicker, World world)
     {
         return expectedType == givenType ? world.isClient ? (BlockEntityTicker<A>) clientTicker : (BlockEntityTicker <A>) serverTicker
                 : null;

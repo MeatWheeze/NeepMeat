@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.fluid_network;
 
 import com.neep.neepmeat.transport.api.pipe.IFluidPipe;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.util.IndexedHashMap;
@@ -236,6 +237,8 @@ public class PipeNetwork
         // Pass if the current node is extracting from others OR is inserting into others.
         boolean activePulling = node.getFlow() < 0;
         boolean activePushing = node.getFlow() > 0;
+        AcceptorModes thing = targetNode.getMode();
+        float f = targetNode.getFlow();
         boolean targetInsert = targetNode.getFlow() <= 0 && targetNode.getMode().canInsert();
         boolean targetExtract = targetNode.getFlow() >= 0 && targetNode.getMode().canExtract();
 
@@ -267,6 +270,7 @@ public class PipeNetwork
             FluidNode node = fromSupplier.get();
             if (node == null || node.getStorage(world) == null
                     || !fromSupplier.get().isStorage
+                    || !node.getMode().canFlow()
 //                    || !fromSupplier.get().getMode(world).isDriving()
             )
             {

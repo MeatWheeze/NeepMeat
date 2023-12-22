@@ -13,6 +13,7 @@ import com.neep.neepmeat.machine.bottler.BottlerBlockEntity;
 import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
+import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
@@ -59,6 +60,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.ai.brain.task.RangedApproachTask;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
@@ -132,6 +134,7 @@ public class NMBlockEntities
     public static BlockEntityType<MincerBlockEnity> MINCER;
     public static BlockEntityType<FlameJetBlockEntity> FLAME_JET;
     public static BlockEntityType<ItemMincerBlockEntity> ITEM_MINCER;
+    public static BlockEntityType<FluidRationerBlockEntity> FLUID_RATIONER;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> registerBlockEntity(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -262,6 +265,10 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getInputStorage, ITEM_MINCER);
         FluidStorage.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getOutputStorage, ITEM_MINCER);
         FluidPump.SIDED.registerForBlockEntity(ItemMincerBlockEntity::getPump, ITEM_MINCER);
+
+        FLUID_RATIONER = registerBlockEntity("fluid_rationer", FluidRationerBlockEntity::new, NMBlocks.FLUID_RATIONER);
+        FluidStorage.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getStorage, FLUID_RATIONER);
+        FluidPump.SIDED.registerForBlockEntity(FluidRationerBlockEntity::getPump, FLUID_RATIONER);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
