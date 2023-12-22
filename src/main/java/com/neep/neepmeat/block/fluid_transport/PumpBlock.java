@@ -2,6 +2,7 @@ package com.neep.neepmeat.block.fluid_transport;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.blockentity.fluid.PumpBlockEntity;
+import com.neep.neepmeat.blockentity.fluid.TankBlockEntity;
 import com.neep.neepmeat.fluid_transfer.AcceptorModes;
 import com.neep.neepmeat.fluid_transfer.PipeNetwork;
 import com.neep.neepmeat.fluid_transfer.node.FluidNode;
@@ -12,6 +13,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -127,7 +129,8 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider, I
 //                PumpBlockEntity.tick(world, pos, state, be);
 //                be.sides.get(state.get(PumpBlock.FACING)).tick(world);
             }
-            player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount())), true);
+//            player.sendMessage(Text.of(Long.toString(be.getBuffer(null).getAmount())), true);
+            TankBlockEntity.showContents((ServerPlayerEntity) player, pos, be.getBuffer(null));
         }
         return ActionResult.SUCCESS;
     }
