@@ -179,58 +179,51 @@ public class NMFluidNetwork
     {
         try
         {
-            for (Supplier<FluidNode> supplier : connectedNodes)
+            FluidNode node = connectedNodes.iterator().next().get();
+
+            List<BlockPos> nextSet = new ArrayList<>();
+            networkPipes.values().forEach((segment) -> segment.setVisited(false));
+
+            pipeQueue.clear();
+            pipeQueue.add(node.getPos());
+
+            for (int i = 0; i < UPDATE_DISTANCE; ++i)
             {
-                FluidNode node = supplier.get();
-                if (node == null)
+//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
+                for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
+                {
+                    BlockPos current = iterator.next();
+                    networkPipes.get(current).setDistance(i + 1);
+                    networkPipes.get(current).setVisited(true);
+//                        System.out.println(networkPipes.get(current).getDistance() + ", " + networkPipes.get(current).connections);
+                    for (Direction direction : networkPipes.get(current).connections)
+                    {
+                        if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
+//                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
+                        {
+                            nextSet.add(current.offset(direction));
+                        }
+                    }
+                    iterator.remove();
+                }
+                pipeQueue.addAll(nextSet);
+                nextSet.clear();
+            }
+
+            // TODO: optimise further
+            for (Supplier<FluidNode> supplier1 : connectedNodes)
+            {
+                FluidNode targetNode = supplier1.get();
+                if (targetNode == null
+                        || targetNode.equals(node)
+                        || node.mode == AcceptorModes.NONE)
                 {
                     continue;
                 }
-
-                List<BlockPos> nextSet = new ArrayList<>();
-                networkPipes.values().forEach((segment) -> segment.setVisited(false));
-
-                pipeQueue.clear();
-                pipeQueue.add(node.getPos());
-
-                for (int i = 0; i < UPDATE_DISTANCE; ++i)
-                {
-//                for (ListIterator<PipeSegment> iterator = networkPipes.listIterator(); iterator.hasNext();)
-                    for (ListIterator<BlockPos> iterator = pipeQueue.listIterator(); iterator.hasNext(); )
-                    {
-                        BlockPos current = iterator.next();
-                        networkPipes.get(current).setDistance(i + 1);
-                        networkPipes.get(current).setVisited(true);
-//                        System.out.println(networkPipes.get(current).getDistance() + ", " + networkPipes.get(current).connections);
-                        for (Direction direction : networkPipes.get(current).connections)
-                        {
-                            if (networkPipes.containsKey(current.offset(direction)) && !networkPipes.get(current.offset(direction)).isVisited())
-//                            if (networkPipes.containsKey(current.offset(direction)) && !visited.contains(current.offset(direction)))
-                            {
-                                nextSet.add(current.offset(direction));
-                            }
-                        }
-                        iterator.remove();
-                    }
-                    pipeQueue.addAll(nextSet);
-                    nextSet.clear();
-                }
-
-                // TODO: optimise further
-                for (Supplier<FluidNode> supplier1 : connectedNodes)
-                {
-                    FluidNode targetNode = supplier1.get();
-                    if (targetNode == null
-                            || targetNode.equals(node)
-                            || node.mode == AcceptorModes.NONE)
-                    {
-                        continue;
-                    }
-                    int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
+                int distanceToNode = networkPipes.get(targetNode.getPos()).getDistance();
 //                    System.out.print(node + ",\n " + distanceToNode + "\n");
-                    node.distances.put(targetNode, distanceToNode);
-//                    node.distances.put(node1, 1);
-                }
+                node.distances.put(targetNode, distanceToNode);
+                targetNode.distances.put(node, distanceToNode);
             }
         }
         catch (Exception e)
