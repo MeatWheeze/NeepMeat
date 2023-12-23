@@ -66,6 +66,7 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
         {
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());
+            sync();
         }
     }
 
@@ -85,7 +86,6 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         MotorEntity.super.update(world, pos, fromPos, state);
-//        enabled = (!world.isReceivingRedstonePower(pos));
         loadTorque = updateLoadTorque();
         sync();
     }

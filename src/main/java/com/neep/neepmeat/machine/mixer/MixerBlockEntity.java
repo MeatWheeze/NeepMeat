@@ -143,13 +143,13 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
                         this.processLength = recipe.processTime;
                         this.processStart = world.getTime();
 //                        world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), processTime);
+                        sync();
                     }
                     else
                         transaction.abort();
                 }
             }
         }
-        sync();
     }
 
     public void endDutyCycle()

@@ -40,7 +40,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     {
         super(NMBlockEntities.PUMP, pos, state);
 
-        buffer = new WritableSingleFluidStorage(FluidConstants.BLOCK, this::sync);
+        buffer = new WritableSingleFluidStorage(FluidConstants.BLOCK, this::markDirty);
     }
 
     @Override

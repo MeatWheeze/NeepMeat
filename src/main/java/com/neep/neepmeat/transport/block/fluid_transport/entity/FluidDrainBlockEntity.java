@@ -35,7 +35,7 @@ public class FluidDrainBlockEntity extends SyncableBlockEntity implements FluidB
     public FluidDrainBlockEntity(BlockPos pos, BlockState state)
     {
         super(NMBlockEntities.FLUID_DRAIN, pos, state);
-        this.buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync);
+        this.buffer = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::markDirty);
     }
 
     public boolean needsCooldown()
