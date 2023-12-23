@@ -45,7 +45,6 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     protected Identifier currentRecipeId;
     protected GrindingRecipe currentRecipe;
 
-
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state, 0.02f, 0.02f, 2);
@@ -165,9 +164,9 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
             {
                 setCurrentRecipe(recipe);
                 this.processLength = recipe.getTime();
+                sync();
             }
         }
-        sync();
     }
 
     private void endRecipe()
