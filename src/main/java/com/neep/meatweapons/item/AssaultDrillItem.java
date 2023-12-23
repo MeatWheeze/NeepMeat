@@ -1,6 +1,5 @@
 package com.neep.meatweapons.item;
 
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
 import com.neep.meatlib.api.event.InputEvents;
@@ -12,8 +11,8 @@ import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.api.processing.PowerUtils;
-import com.neep.neepmeat.implant.item.ShieldUpgrade;
-import com.neep.neepmeat.init.NMComponents;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -36,7 +35,6 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -275,33 +273,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return state.isIn(this.effectiveBlocks);
     }
 
-    static
-    {
-        InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
-        {
-            MinecraftClient client = MinecraftClient.getInstance();
-            if (client.player != null && client.options != null)
-            {
-                ItemStack mainStack = client.player.getMainHandStack();
-
-                if (mainStack.getItem() instanceof AssaultDrillItem drill &&
-                        (client.options.attackKey.matchesKey(key, scancode)
-                     || client.options.attackKey.matchesMouse(key))
-                )
-                {
-                    if (client.options.attackKey.isPressed())
-                    {
-                        drill.onAttackBlock(mainStack, client.player);
-                    }
-                    else
-                    {
-                        drill.onFinishAttackBlock(mainStack, client.player);
-                    }
-                }
-            }
-        });
-    }
-
     @Override
     public int getItemBarStep(ItemStack stack)
     {
@@ -460,6 +431,36 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         {
             return 0;
         }
+    }
 
+    @Environment(EnvType.CLIENT)
+    public static class Client
+    {
+        public static void init()
+        {
+            InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
+            {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.player != null && client.options != null)
+                {
+                    ItemStack mainStack = client.player.getMainHandStack();
+
+                    if (mainStack.getItem() instanceof AssaultDrillItem drill &&
+                            (client.options.attackKey.matchesKey(key, scancode)
+                                    || client.options.attackKey.matchesMouse(key))
+                    )
+                    {
+                        if (client.options.attackKey.isPressed())
+                        {
+                            drill.onAttackBlock(mainStack, client.player);
+                        }
+                        else
+                        {
+                            drill.onFinishAttackBlock(mainStack, client.player);
+                        }
+                    }
+                }
+            });
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.client.sound.DrillSoundInstance;
+import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.*;
@@ -82,6 +83,8 @@ public class MWClient implements ClientModInitializer
         MWParticles.initClient();
         MWKeys.registerKeybinds();
         AirtruckSoundInstance.initEvent();
+
+        AssaultDrillItem.Client.init();
 
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BEAM, BeamEffect::new);
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BULLET_TRAIL, BulletTrailEffect::new);
