@@ -42,14 +42,17 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        FluidPipe.onStateReplaced(world, pos, state, newState);
+        FluidPipe.onStateReplaced(world, pos, state, newState, this);
+
         super.onStateReplaced(state, world, pos, newState, moved);
+
         if (world.isClient())
             return;
 
         if (!state.isOf(newState.getBlock()))
         {
             removePipe((ServerWorld) world, state, pos);
+
         }
         else
         {
@@ -76,7 +79,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         world.setBlockState(pos, nextState, Block.NOTIFY_LISTENERS);
 
         BlockState fromState = world.getBlockState(fromPos);
-        boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState).isPresent();
+        boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState) != null;
         if (!foundPipe)
         {
             // If the nodes have changed, we need to update the pipe.

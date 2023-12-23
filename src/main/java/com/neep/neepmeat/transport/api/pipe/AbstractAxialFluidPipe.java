@@ -86,7 +86,7 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        FluidPipe.onStateReplaced(world, pos, state, newState);
+        FluidPipe.onStateReplaced(world, pos, state, newState, this);
         super.onStateReplaced(state, world, pos, newState, moved);
 
         if (world.isClient())

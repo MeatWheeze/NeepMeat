@@ -70,9 +70,10 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     public void updateNodes(ServerWorld world, BlockPos pos, BlockState state)
     {
         Arrays.fill(nodes, null);
-        FluidPipe.findFluidPipe(world, pos, state).ifPresent(p ->
+        FluidPipe pipe = FluidPipe.findFluidPipe(world, pos, state);
+        if (pipe != null)
         {
-            for (Direction direction : p.getConnections(state, d -> true))
+            for (Direction direction : pipe.getConnections(state, d -> true))
             {
                 FluidNode node = FluidNodeManager.getInstance(world).get(new NodePos(pos, direction));
                 if (node != null)
@@ -80,7 +81,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                     nodes[direction.ordinal()] = node;
                 }
             }
-        });
+        }
     }
 
     protected float getHeight(int dir)

@@ -1,12 +1,15 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
-import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
+import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -33,20 +36,27 @@ public interface FluidPipe
         return false;
     }
 
-    static Optional<FluidPipe> findFluidPipe(World world, BlockPos pos, BlockState state)
+    static FluidPipe findFluidPipe(World world, BlockPos pos, BlockState state)
     {
-        if (state.getBlock() instanceof FluidPipe pipe) return Optional.of(pipe);
-        return Optional.empty();
+        if (state.getBlock() instanceof FluidPipe pipe)
+            return pipe;
+
+        return null;
     }
 
     // Call this first
-    static void onStateReplaced(World world, BlockPos pos, BlockState state, BlockState newState)
+    static void onStateReplaced(World world, BlockPos pos, BlockState state, BlockState newState, FluidPipe fluidPipe)
     {
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
+        if (!world.isClient())
         {
-            if (!newState.isOf(state.getBlock()) && world instanceof ServerWorld serverWorld)
+            if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
             {
-                be.markReplaced();
+                if (!newState.isOf(state.getBlock()))
+                {
+                    be.markReplaced();
+
+                    fluidPipe.propagateRemoval((ServerWorld) world, pos, state);
+                }
             }
         }
     }
@@ -95,10 +105,76 @@ public interface FluidPipe
         }
     }
 
+    default void propagateRemoval(ServerWorld world, BlockPos pos, BlockState oldState)
+    {
+        var toNotify = getNearestVertices(world, pos, oldState);
+        for (var pair : toNotify)
+        {
+            pair.first().setAdjVertex(pair.second().getOpposite().ordinal(), null);
+        }
+    }
+
+    default List<Pair<PipeVertex, Direction>> getNearestVertices(ServerWorld world, BlockPos start, BlockState oldState)
+    {
+        List<Pair<PipeVertex, Direction>> vertices = Lists.newArrayList();
+
+        Set<BlockPos> visited = Sets.newHashSet();
+        Deque<BlockPos> stack = Queues.newArrayDeque();
+        Deque<BlockState> stateQueue = Queues.newArrayDeque();
+        Deque<FluidPipe> pipeQueue = Queues.newArrayDeque();
+
+        PipeVertex startVertex = this.getPipeVertex(world, start, oldState);
+        if (!startVertex.canSimplify())
+        {
+            return vertices;
+        }
+
+        visited.add(start);
+        stack.add(start);
+        pipeQueue.add(this);
+        stateQueue.add(oldState);
+
+        while (!stack.isEmpty())
+        {
+            BlockPos current = stack.poll();
+            FluidPipe currentPipe = pipeQueue.poll();
+            BlockState currentState = stateQueue.poll();
+
+            BlockPos.Mutable mutable = current.mutableCopy();
+
+            for (Direction direction : currentPipe.getConnections(currentState, p -> true))
+            {
+                mutable.set(current, direction);
+
+                if (visited.contains(mutable))
+                    continue;
+
+                BlockState offsetState = world.getBlockState(mutable);
+                FluidPipe offsetPipe = FluidPipe.findFluidPipe(world, mutable, offsetState);
+                if (offsetPipe != null)
+                {
+                    PipeVertex vertex = offsetPipe.getPipeVertex(world, mutable, offsetState);
+                    if (vertex != null && !vertex.canSimplify())
+                    {
+                        vertices.add(Pair.of(vertex, direction));
+                        continue;
+                    }
+
+                    visited.add(mutable.toImmutable());
+                    stack.add(mutable.toImmutable());
+                    stateQueue.add(offsetState);
+                    pipeQueue.add(offsetPipe);
+                }
+            }
+        }
+        return vertices;
+    }
+
     default void removePipe(ServerWorld world, BlockState state, BlockPos pos)
     {
         FluidNodeManager.removeStorageNodes(world, pos);
 //        updateNetwork(world, pos, state, PipeNetwork.UpdateReason.PIPE_REMOVED);
+
     }
 
     default boolean connectInDirection(BlockView world, BlockPos pos, BlockState state, Direction direction)
@@ -116,7 +192,7 @@ public interface FluidPipe
         if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
         {
             // TODO: remove this cast
-            ((BlockPipeVertex) be.getPipeVertex()).updateNodes((ServerWorld) world, pos.toImmutable(), state);
+            be.getPipeVertex().updateNodes(world, pos.toImmutable(), state);
             return be.getPipeVertex();
         }
         return null;

@@ -146,7 +146,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
         {
             var current = queue.poll();
             BlockState currentState = world.getBlockState(current.first());
-            FluidPipe pipe = FluidPipe.findFluidPipe(world, current.first(), currentState).orElse(null);
+            FluidPipe pipe = FluidPipe.findFluidPipe(world, current.first(), currentState);
 
             // This indicates that the connection is to a node, so no further action is required.
             if (pipe == null)
@@ -260,6 +260,7 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
     public void onLoad(ServerWorld world)
     {
     }
+
     public void onRemove(ServerWorld world)
     {
         vertex.erase();
