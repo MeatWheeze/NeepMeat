@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rrr",
+    "r r",
+    "rrr"
+  ],
+  "key": {
+    "r": {
+      "item": "neepmeat:rusty_metal"
+    }
+  },
+  "result": {
+    "item": "neepmeat:metal_barrel",
+    "count": 2
+  }
+}
