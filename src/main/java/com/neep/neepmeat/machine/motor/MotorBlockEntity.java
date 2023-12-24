@@ -32,6 +32,8 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
         if (cache == null)
         {
             update((ServerWorld) world, pos, pos, getCachedState());
+            if (cache != null)
+                sync();
         }
         if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
@@ -87,7 +89,6 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     {
         MotorEntity.super.update(world, pos, fromPos, state);
         loadTorque = updateLoadTorque();
-        sync();
     }
 
     @Override
