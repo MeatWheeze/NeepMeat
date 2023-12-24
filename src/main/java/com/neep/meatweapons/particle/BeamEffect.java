@@ -1,5 +1,7 @@
 package com.neep.meatweapons.particle;
 
+import com.mojang.blaze3d.platform.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.BeamRenderer;
 import net.fabricmc.api.EnvType;
@@ -47,7 +49,7 @@ public class BeamEffect extends BeamGraphicsEffect
     public void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta)
     {
         matrices.push();
-        VertexConsumer consumer = consumers.getBuffer(Client.BEAM_LAYER);
+        VertexConsumer consumer = consumers.getBuffer(Client.BEAM_FUNC.apply(Client.BEAM_TEXTURE));
         Vec3d beam = (end.subtract(start));
         float x = Math.max(0, maxTime - time - tickDelta) / (float) maxTime;
 //        float x = 1;
@@ -61,20 +63,40 @@ public class BeamEffect extends BeamGraphicsEffect
     @Environment(value= EnvType.CLIENT)
     public static class Client
     {
+        public static void init()
+        {
+
+        }
+
+
+        // All these things come from RenderPhase. They may appear public, but that is provided by Architectury
+        public static final RenderPhase.Transparency TRANSLUCENT_TRANSPARENCY = new RenderPhase.Transparency("translucent_transparency", () ->
+        {
+            RenderSystem.enableBlend();
+            RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ONE_MINUS_SRC_ALPHA);
+        }, () -> {
+            RenderSystem.disableBlend();
+            RenderSystem.defaultBlendFunc();
+        });
+
+        public static final RenderPhase.Cull DISABLE_CULLING = new RenderPhase.Cull(false);
+
+        public static final RenderPhase.WriteMaskState COLOR_MASK = new RenderPhase.WriteMaskState(true, false);
+
         public static final Function<Identifier, RenderLayer> BEAM_FUNC = Util.memoize((texture) ->
         {
             RenderLayer.MultiPhaseParameters multiPhaseParameters = RenderLayer.MultiPhaseParameters.builder()
-                    .shader(BEACON_BEAM_SHADER)
+                    .shader(new RenderPhase.Shader(GameRenderer::getRenderTypeBeaconBeamShader))
                     .texture(new RenderPhase.Texture(texture, false, false))
-                    .transparency(RenderPhase.TRANSLUCENT_TRANSPARENCY)
-                    .cull(RenderPhase.DISABLE_CULLING)
-                    .writeMaskState(RenderPhase.COLOR_MASK)
+                    .transparency(TRANSLUCENT_TRANSPARENCY)
+                    .cull(DISABLE_CULLING)
+                    .writeMaskState(COLOR_MASK)
                     .build(false);
             return RenderLayer.of("beam", VertexFormats.POSITION_COLOR_TEXTURE_LIGHT_NORMAL, VertexFormat.DrawMode.QUADS, 256, false, true, multiPhaseParameters);
         });
 
         public static final Identifier BEAM_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
-        public static final RenderLayer BEAM_LAYER = BEAM_FUNC.apply(BEAM_TEXTURE);
+//        public static final RenderLayer BEAM_LAYER = BEAM_FUNC.apply(BEAM_TEXTURE);
 
     }
 }

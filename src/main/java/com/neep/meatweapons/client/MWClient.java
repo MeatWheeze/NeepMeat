@@ -86,6 +86,8 @@ public class MWClient implements ClientModInitializer
 
         AssaultDrillItem.Client.init();
 
+        BeamEffect.Client.init();
+
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BEAM, BeamEffect::new);
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.BULLET_TRAIL, BulletTrailEffect::new);
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.ZAP, ZapBeamEffect::new);
