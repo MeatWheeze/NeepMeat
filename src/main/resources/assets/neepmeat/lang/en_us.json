@@ -78,8 +78,18 @@
 
   "block.neepmeat.dirty_white_tiles": "Dirty White Tiles",
   "block.neepmeat.dirty_white_tiles_stairs": "Dirty White Tiles Stairs",
-  "block.neepmeat.dirty_white_tiles_slab": "Dirty Red White Slab",
-  "block.neepmeat.dirty_white_tiles_wall": "Dirty Red White Wall",
+  "block.neepmeat.dirty_white_tiles_slab": "Dirty White Tiles Slab",
+  "block.neepmeat.dirty_white_tiles_wall": "Dirty White Tiles Wall",
+
+  "block.neepmeat.bloody_bricks": "Bloody Bricks",
+  "block.neepmeat.bloody_bricks_stairs": "Bloody Bricks Stairs",
+  "block.neepmeat.bloody_bricks_slab": "Bloody Bricks Slab",
+  "block.neepmeat.bloody_bricks_wall": "Bloody Bricks Wall",
+
+  "block.neepmeat.bloody_tiles": "Bloody Tiles",
+  "block.neepmeat.bloody_tiles_stairs": "Bloody Tiles Stairs",
+  "block.neepmeat.bloody_tiles_slab": "Bloody Tiles Slab",
+  "block.neepmeat.bloody_tiles_wall": "Bloody Tiles Wall",
 
   "block.neepmeat.rusted_metal_scaffold": "Rusted Metal Scaffold",
   "block.neepmeat.rusted_metal_scaffold_stairs": "Rusted Metal Scaffold Stairs",

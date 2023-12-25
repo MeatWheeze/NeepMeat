@@ -72,6 +72,7 @@ import net.minecraft.world.BlockView;
 @SuppressWarnings("unused")
 public class NMBlocks
 {
+    // --- Building Blocks ---
     public static final AbstractBlock.Settings METAL = FabricBlockSettings.of(Material.METAL).hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
     public static final AbstractBlock.Settings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
@@ -100,6 +101,9 @@ public class NMBlocks
     public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock("dirty_white_tiles", true, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block SAND_BRICKS = new BaseBuildingBlock("sandy_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
     public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock("meat_steel_block", true, FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
+
+    public static Block BLOODY_BRICKS = new BaseBuildingBlock("bloody_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
+    public static Block BLOODY_TILES = new BaseBuildingBlock("bloody_tiles", false, FabricBlockSettings.copyOf(BLOODY_BRICKS));
 
     public static Block REINFORCED_GLASS = new BaseBuildingBlock("reinforced_glass", false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
     {
@@ -139,13 +143,13 @@ public class NMBlocks
     public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
     public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
 
-    // --- Building Blocks ---
     public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_column", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
     public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", block(), FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
     public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", block(), FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(NMSoundGroups.METAL)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
+    // Decorations
     public static Block DIRTY_SINK = BlockRegistry.queue(new BaseBlock("dirty_sink", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
     public static Block SMALL_SINK = BlockRegistry.queue(new SinkBlock("small_sink", block(), FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));
     public static Block TELEVISION_OFF = BlockRegistry.queue(new TelevisionBlock("television_off", block(), FabricBlockSettings.copyOf(Blocks.STONE).nonOpaque()));

@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/stairs",
+  "textures": {
+    "bottom": "neepmeat:block/bloody_tiles",
+    "top": "neepmeat:block/bloody_tiles",
+    "side": "neepmeat:block/bloody_tiles"
+  }
+}

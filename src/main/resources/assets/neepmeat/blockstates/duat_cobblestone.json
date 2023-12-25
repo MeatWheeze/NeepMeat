@@ -1,7 +1,8 @@
 {
-"variants": {
-        "": { "model": "neepmeat:block/duat_cobblestone" }
-      }
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "": {
+      "model": "neepmeat:block/duat_cobblestone"
+    }
+  }
 }
-
-

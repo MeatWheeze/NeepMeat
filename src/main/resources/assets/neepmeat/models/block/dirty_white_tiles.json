@@ -1,5 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/cube_all",
   "textures": {
     "all": "neepmeat:block/dirty_white_tiles"
   }

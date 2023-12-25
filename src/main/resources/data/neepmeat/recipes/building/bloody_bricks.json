@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ppp",
+    "pbp",
+    "ppp"
+  ],
+  "key": {
+    "p": {
+      "item": "minecraft:stone_bricks"
+    },
+    "b": {
+      "item": "neepmeat:blood_bubble"
+    }
+  },
+  "result": {
+    "item": "neepmeat:bloody_bricks",
+    "count": 8
+  }
+}

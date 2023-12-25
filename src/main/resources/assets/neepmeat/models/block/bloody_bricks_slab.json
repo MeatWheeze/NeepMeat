@@ -1,0 +1,9 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/slab",
+  "textures": {
+    "bottom": "neepmeat:block/bloody_bricks",
+    "top": "neepmeat:block/bloody_bricks",
+    "side": "neepmeat:block/bloody_bricks"
+  }
+}

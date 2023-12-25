@@ -1,5 +1,4 @@
 {
-	"parent": "neepmeat:block/caution_block"
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "neepmeat:block/caution_block"
 }
-
-
