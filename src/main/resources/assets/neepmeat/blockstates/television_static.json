@@ -1,0 +1,67 @@
+{
+  "variants": {
+    "rotation=0": {
+      "model": "neepmeat:block/television/static_n"
+    },
+    "rotation=1": {
+      "model": "neepmeat:block/television/static_22"
+    },
+    "rotation=2": {
+      "model": "neepmeat:block/television/static_45"
+    },
+    "rotation=3": {
+      "model": "neepmeat:block/television/static_67"
+    },
+
+    "rotation=4": {
+      "model": "neepmeat:block/television/static_n",
+      "y": 90
+    },
+    "rotation=5": {
+      "model": "neepmeat:block/television/static_22",
+      "y": 90
+    },
+    "rotation=6": {
+      "model": "neepmeat:block/television/static_45",
+      "y": 90
+    },
+    "rotation=7": {
+      "model": "neepmeat:block/television/static_67",
+      "y": 90
+    },
+
+    "rotation=8": {
+      "model": "neepmeat:block/television/static_n",
+      "y": 180
+    },
+    "rotation=9": {
+      "model": "neepmeat:block/television/static_22",
+      "y": 180
+    },
+    "rotation=10": {
+      "model": "neepmeat:block/television/static_45",
+      "y": 180
+    },
+    "rotation=11": {
+      "model": "neepmeat:block/television/static_67",
+      "y": 180
+    },
+
+    "rotation=12": {
+      "model": "neepmeat:block/television/static_n",
+      "y": 270
+    },
+    "rotation=13": {
+      "model": "neepmeat:block/television/static_22",
+      "y": 270
+    },
+    "rotation=14": {
+      "model": "neepmeat:block/television/static_45",
+      "y": 270
+    },
+    "rotation=15": {
+      "model": "neepmeat:block/television/static_67",
+      "y": 270
+    }
+  }
+}

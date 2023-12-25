@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "neepmeat:television_off"
+    }
+  ],
+  "result": {
+    "item": "neepmeat:television_static",
+    "count": 1
+  }
+}

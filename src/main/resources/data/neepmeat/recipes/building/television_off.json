@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " ii",
+    "iip",
+    "sss"
+  ],
+  "key": {
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "p": {
+      "item": "minecraft:glass_pane"
+    },
+    "s": {
+      "item": "neepmeat:rusty_metal"
+    }
+  },
+  "result": {
+    "item": "neepmeat:television_off",
+    "count": 2
+  }
+}
