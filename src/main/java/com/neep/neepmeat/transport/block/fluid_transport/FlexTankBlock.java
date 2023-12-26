@@ -1,6 +1,5 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
-import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
@@ -23,9 +22,7 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Queue;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
 {
@@ -34,75 +31,12 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
         super(registryName,itemSettings, settings);
     }
 
-    protected static Set<FlexTankBlockEntity> findThings(World world, BlockPos start)
-    {
-        Set<FlexTankBlockEntity> found = Sets.newHashSet();
-        Queue<BlockPos> queue = Queues.newArrayDeque();
-        Set<BlockPos> visited = Sets.newHashSet();
-
-        queue.add(start);
-        visited.add(start);
-
-        if (world.getBlockEntity(start) instanceof FlexTankBlockEntity be)
-        {
-            found.add(be);
-        }
-
-        while (!queue.isEmpty())
-        {
-            BlockPos current = queue.poll();
-
-            BlockPos.Mutable mutable = current.mutableCopy();
-            for (Direction direction : Direction.values())
-            {
-                mutable.set(current, direction);
-
-                if (visited.contains(mutable))
-                    continue;
-
-                visited.add(mutable.toImmutable());
-
-                if (world.getBlockEntity(mutable) instanceof FlexTankBlockEntity be)
-                {
-                    found.add(be);
-                    queue.add(mutable.toImmutable());
-                }
-            }
-        }
-
-        return found;
-    }
-
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
         if (world.getBlockEntity(pos) instanceof FlexTankBlockEntity be)
         {
-            updateConnections(world, be);
-        }
-    }
-
-    protected static void updateConnections(World world, FlexTankBlockEntity origin)
-    {
-        var found = findThings(world, origin.getPos());
-
-        FlexTankBlockEntity root = null;
-        int lowest = Integer.MAX_VALUE;
-        for (var be : found)
-        {
-            BlockPos bePos = be.getPos();
-            if (bePos.getY() < lowest)
-            {
-                lowest = bePos.getY();
-                root = be;
-            }
-        }
-
-        root.markRoot(found.stream().map(BlockEntity::getPos).collect(Collectors.toSet()));
-
-        for (var be : found)
-        {
-            be.setRoot(root);
+            FlexTankBlockEntity.updateConnections(world, be);
         }
     }
 
@@ -131,7 +65,7 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
 
                 for (FlexTankBlockEntity adj : adjacent)
                 {
-                    updateConnections(world, adj);
+                    FlexTankBlockEntity.updateConnections(world, adj);
                 }
             }
         }
@@ -144,20 +78,9 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
         super.onPlaced(world, pos, state, placer, itemStack);
         if (!world.isClient() && world.getBlockEntity(pos) instanceof FlexTankBlockEntity be)
         {
-            updateConnections(world, be);
+            FlexTankBlockEntity.updateConnections(world, be);
         }
     }
-
-    //    @Override
-//    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
-//    {
-//        if (!world.isClient())
-//        {
-//            world.createAndScheduleBlockTick(pos, this, 1);
-//        }
-//
-//        super.onBlockAdded(state, world, pos, oldState, notify);
-//    }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
