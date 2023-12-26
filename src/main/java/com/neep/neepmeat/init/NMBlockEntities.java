@@ -54,7 +54,6 @@ import com.neep.neepmeat.machine.transducer.TransducerBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
-import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
@@ -63,10 +62,7 @@ import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
-import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
-import com.neep.neepmeat.transport.block.fluid_transport.entity.LimiterValveBlockEntity;
-import com.neep.neepmeat.transport.block.fluid_transport.entity.WindowPipeBlockEntity;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
@@ -98,6 +94,7 @@ public class NMBlockEntities
     public static BlockEntityType<TankBlockEntity> TANK;
     public static BlockEntityType<TankBlockEntity> ADVANCED_TANK;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
+    public static BlockEntityType<FlexTankBlockEntity> FLEX_TANK;
 
     public static BlockEntityType<MetalBarrelBlockEntity> METAL_BARREL;
 
@@ -214,6 +211,10 @@ public class NMBlockEntities
 
         FLUID_DRAIN = register("fluid_drain", FluidDrainBlockEntity::new, FluidTransport.FLUID_DRAIN);
         FLUID_INTERFACE = register("fluid_port", FluidInterfaceBlockEntity::new, FluidTransport.FLUID_INTERFACE);
+
+        FLEX_TANK = register("flex_tank", (p, s) -> new FlexTankBlockEntity(FLEX_TANK, p, s), FluidTransport.FLEX_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(FlexTankBlockEntity::getStorage, FLEX_TANK);
+
         HEATER = register("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
 

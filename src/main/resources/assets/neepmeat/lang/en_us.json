@@ -206,6 +206,9 @@
   "block.neepmeat.advanced_tank.filled": "Advanced Tank (%s)",
 
   "block.neepmeat.multi_tank": "Multi Tank",
+
+  "block.neepmeat.flex_tank": "Flex Tank",
+
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
   "block.neepmeat.fluid_buffer.lore_0": "Holds a bucket's worth of fluid.",
   "block.neepmeat.fluid_drain": "Fluid Drain",

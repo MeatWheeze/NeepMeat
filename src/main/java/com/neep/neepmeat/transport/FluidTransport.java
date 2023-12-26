@@ -40,6 +40,8 @@ public class FluidTransport
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
+    public static Block FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("flex_tank", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
+
     public static void init()
     {
 //        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, PIPE);

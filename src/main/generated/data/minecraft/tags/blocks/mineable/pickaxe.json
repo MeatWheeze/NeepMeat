@@ -190,6 +190,7 @@
     "neepmeat:fluid_buffer",
     "neepmeat:fluid_interface",
     "neepmeat:fluid_drain",
+    "neepmeat:flex_tank",
     "neepmeat:pipe_driver",
     "neepmeat:storage_bus",
     "neepmeat:item_requester"
