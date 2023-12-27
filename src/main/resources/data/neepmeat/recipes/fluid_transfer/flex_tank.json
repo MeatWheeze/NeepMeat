@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " p ",
+    "c c",
+    " c "
+  ],
+  "key": {
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    },
+    "c": {
+      "item": "neepmeat:meat_steel_ingot"
+    }
+  },
+  "result": {
+    "item": "neepmeat:flex_tank",
+    "count": 1
+  }
+}

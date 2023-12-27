@@ -4,11 +4,9 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.network.TankMessagePacket;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
@@ -131,6 +129,12 @@ public class TankBlockEntity extends SyncableBlockEntity
             return true;
         }
         return true;
+    }
+
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
     }
 
     public static void showContents(ServerPlayerEntity player, World world, BlockPos pos, StorageView<FluidVariant> buffer)

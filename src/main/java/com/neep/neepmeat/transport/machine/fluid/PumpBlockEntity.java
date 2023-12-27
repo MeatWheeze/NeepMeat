@@ -71,11 +71,6 @@ public class PumpBlockEntity extends SyncableBlockEntity
         this.markDirty();
     }
 
-    protected void updateNetworks()
-    {
-
-    }
-
     @Override
     public void writeNbt(NbtCompound tag)
     {

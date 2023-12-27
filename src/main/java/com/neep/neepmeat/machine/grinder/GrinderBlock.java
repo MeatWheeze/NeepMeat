@@ -100,4 +100,21 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
             }
         }
     }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof GrinderBlockEntity be)
+        {
+            var storage = be.storage.inputStorage;
+            return (int) Math.ceil(15f * ((double) storage.amount / storage.getCapacity()));
+        }
+        return super.getComparatorOutput(state, world, pos);
+    }
 }

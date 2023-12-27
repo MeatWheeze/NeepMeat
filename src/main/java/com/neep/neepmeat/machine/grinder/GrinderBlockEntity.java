@@ -108,6 +108,13 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         readCurrentRecipe();
     }
 
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
+        world.updateComparators(pos, getCachedState().getBlock());
+    }
+
     public void tick()
     {
         readCurrentRecipe();

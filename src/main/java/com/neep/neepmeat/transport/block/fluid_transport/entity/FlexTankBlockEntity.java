@@ -232,16 +232,6 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         }
     }
 
-    public ResourceAmount<FluidVariant> moveFluid()
-    {
-        ResourceAmount<FluidVariant> amount = new ResourceAmount<>(storage.getResource(), storage.getAmount());
-
-        storage.amount = 0;
-        storage.variant = FluidVariant.blank();
-
-        return amount;
-    }
-
     class FlexTankStorage extends WritableSingleFluidStorage
     {
         public FlexTankStorage(Runnable finalCallback)
