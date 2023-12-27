@@ -5,6 +5,8 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FlexTankBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -43,33 +45,35 @@ public class FlexTankBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
-        super.onStateReplaced(state, world, pos, newState, moved);
-
-        if (!world.isClient())
+//        ResourceAmount<FluidVariant> thing = new ResourceAmount<>(FluidVariant.blank(), 0);
+        if (!newState.isOf(this) && !world.isClient())
         {
-            if (!newState.isOf(this))
+            // Get the block entity before it is removed
+            if (world.getBlockEntity(pos) instanceof FlexTankBlockEntity be)
             {
-                BlockPos.Mutable mutable = pos.mutableCopy();
-                Set<FlexTankBlockEntity> roots = Sets.newHashSet();
+                // Block entity will be removed here
+                super.onStateReplaced(state, world, pos, newState, moved);
+
                 Set<FlexTankBlockEntity> adjacent = Sets.newHashSet();
+
+                BlockPos.Mutable mutable = pos.mutableCopy();
                 for (Direction direction : Direction.values())
                 {
                     mutable.set(pos, direction);
 
-                    if (world.getBlockEntity(mutable) instanceof FlexTankBlockEntity be)
+                    if (world.getBlockEntity(mutable) instanceof FlexTankBlockEntity adj)
                     {
-                        adjacent.add(be);
-                        roots.add(be.getRoot());
+                        adjacent.add(adj);
                     }
                 }
 
                 for (FlexTankBlockEntity adj : adjacent)
                 {
-                    FlexTankBlockEntity.updateConnections(world, adj);
+                    var root = FlexTankBlockEntity.updateConnections(world, adj);
+                    be.setRoot(root); // Move as much fluid as possible into the new root(s).
                 }
             }
         }
-
     }
 
     @Override

@@ -44,6 +44,11 @@ public class LazyBlockApiCache<A, C>
         return cache.find(ctxSupplier.get());
     }
 
+    public void invalidate()
+    {
+        cache = null;
+    }
+
     private void validate()
     {
         if (cache == null)

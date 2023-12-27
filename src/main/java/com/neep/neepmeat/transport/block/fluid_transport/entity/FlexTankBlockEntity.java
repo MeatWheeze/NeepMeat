@@ -4,10 +4,15 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -15,37 +20,31 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.nbt.NbtList;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlexTankBlockEntity extends SyncableBlockEntity
 {
     private Set<BlockPos> children = Sets.newHashSet();
     @Nullable private BlockPos root;
+    private final StorageCache cache = new StorageCache();
 
-    private final WritableSingleFluidStorage storage = new WritableSingleFluidStorage(0, this::markDirty)
-    {
-        @Override
-        protected long getCapacity(FluidVariant variant)
-        {
-            return children.size() * 8 * FluidConstants.BUCKET;
-        }
-    };
+    private FlexTankStorage storage = new FlexTankStorage(this::markDirty);
 
     public FlexTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
 
-    public static void updateConnections(World world, FlexTankBlockEntity origin)
+    public static FlexTankBlockEntity updateConnections(World world, FlexTankBlockEntity origin)
     {
-        var found = findThings(world, origin.getPos());
+        var found = findBlocks(world, origin.getPos());
 
         if (!found.isEmpty())
         {
@@ -70,10 +69,14 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
             {
                 be.setRoot(root);
             }
+
+            return root;
         }
+
+        return null;
     }
 
-    protected static Set<FlexTankBlockEntity> findThings(World world, BlockPos start)
+    protected static Set<FlexTankBlockEntity> findBlocks(World world, BlockPos start)
     {
         Set<FlexTankBlockEntity> found = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -159,16 +162,16 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
 
     public Storage<FluidVariant> getStorage(Direction direction)
     {
-        FlexTankBlockEntity root = getRoot();
-        if (isRoot())
-        {
-            return storage;
-        }
-        else if (root != null)
-        {
-            return getRoot().getStorage(direction);
-        }
-        return Storage.empty();
+//        FlexTankBlockEntity root = getRoot();
+//        if (isRoot())
+//        {
+//            return storage;
+//        }
+//        else if (root != null)
+//        {
+//            return getRoot().getStorage(direction);
+//        }
+        return storage;
     }
 
     public void markRoot(Set<BlockPos> children)
@@ -178,7 +181,7 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
 
     public boolean isRoot()
     {
-        return this == getRoot();
+        return pos.equals(root) || this == getRoot();
     }
 
     public void setRoot(FlexTankBlockEntity root)
@@ -192,11 +195,13 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
                 // If this used to be the root, move the fluid to the new root.
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    // Excess fluid should be deleted if capacity is lower
-                    root.storage.insert(storage.variant, storage.amount, transaction);
+                    FluidVariant variant = storage.getResource();
+                    long extracted = storage.extract(variant, storage.getAmount(), transaction);
+                    if (extracted > 0)
+                    {
+                        long forwarded = root.storage.insert(variant, extracted, transaction);
+                    }
 
-                    storage.amount = 0;
-                    storage.variant = FluidVariant.blank();
                     transaction.commit();
                 }
             }
@@ -224,6 +229,94 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         else
         {
             return children.size();
+        }
+    }
+
+    public ResourceAmount<FluidVariant> moveFluid()
+    {
+        ResourceAmount<FluidVariant> amount = new ResourceAmount<>(storage.getResource(), storage.getAmount());
+
+        storage.amount = 0;
+        storage.variant = FluidVariant.blank();
+
+        return amount;
+    }
+
+    class FlexTankStorage extends WritableSingleFluidStorage
+    {
+        public FlexTankStorage(Runnable finalCallback)
+        {
+            super(0, finalCallback);
+        }
+
+        @Override
+        public long insert(FluidVariant insertedVariant, long maxAmount, TransactionContext transaction)
+        {
+            if (isRoot())
+            {
+                return super.insert(insertedVariant, maxAmount, transaction);
+            }
+            else if (root != null)
+            {
+                return cache.find().insert(insertedVariant, maxAmount, transaction);
+            }
+            return 0;
+        }
+
+        @Override
+        public long extract(FluidVariant extractedVariant, long maxAmount, TransactionContext transaction)
+        {
+            if (isRoot())
+            {
+                return super.extract(extractedVariant, maxAmount, transaction);
+            }
+            else if (root != null)
+            {
+                return cache.find().extract(extractedVariant, maxAmount, transaction);
+            }
+            return 0;
+        }
+
+        @Override
+        public Iterator<StorageView<FluidVariant>> iterator()
+        {
+            if (isRoot())
+            {
+                return super.iterator();
+            }
+            else if (root != null)
+            {
+                return cache.find().iterator();
+            }
+            return Collections.emptyIterator();
+        }
+
+        @Override
+        protected long getCapacity(FluidVariant variant)
+        {
+            return children.size() * 8 * FluidConstants.BUCKET;
+        }
+    }
+
+    private class StorageCache
+    {
+        private BlockApiCache<Storage<FluidVariant>, Direction> cache = null;
+        private BlockPos lastRootPos = null;
+
+        public Storage<FluidVariant> find()
+        {
+            if ((!Objects.equals(lastRootPos, root) || cache == null) && root != null)
+            {
+                lastRootPos = root;
+                cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) world, root);
+            }
+
+            if (cache != null)
+            {
+                return cache.find(Direction.DOWN);
+            }
+
+            return Storage.empty();
         }
     }
 }
