@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
+import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -17,7 +18,8 @@ import net.minecraft.util.math.Direction;
 @SuppressWarnings("UnstableApiUsage")
 public class LiquidFuelMachine extends SyncableBlockEntity
 {
-    protected WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(8 * FluidConstants.BUCKET, this::sync);
+    protected WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(bufferCapacity(), this::sync);
+
     public LiquidFuelMachine(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -26,6 +28,17 @@ public class LiquidFuelMachine extends SyncableBlockEntity
     public Storage<FluidVariant> getTank(Direction direction)
     {
         return fluidStorage;
+    }
+
+    protected long maxPower()
+    {
+        return 1000;
+    }
+
+    protected long bufferCapacity()
+    {
+        double baseEnergy = FluidEnegyRegistry.getInstance().getOrEmpty(NMFluids.STILL_ETHEREAL_FUEL).baseEnergy();
+        return (long) (maxPower() / baseEnergy);
     }
 
     public long extractEnergy(long abs, TransactionContext transaction)

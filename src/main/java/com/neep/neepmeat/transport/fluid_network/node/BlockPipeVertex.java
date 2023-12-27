@@ -103,6 +103,53 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
     }
 
     @Override
+    public void preTick()
+    {
+        deferredLoad();
+        stepHeight();
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            for (FluidNode node : nodes)
+            {
+                if (node == null) continue;
+
+                Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
+
+                float f = getNodeFlow(node.getNodePos(), node);
+
+                // Calculate the amount with respect to this vertex.
+                long transferAmount = - (long) Math.ceil(f * getCapacity());
+                if (transferAmount > 0)
+                {
+                    FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
+                    long extracted;
+                    if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
+                    {
+                        // Note the negative signs
+                        long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
+                        extracted = storage.extract(foundVariant, permittedAmount, transaction);
+                        if (extracted > 0)
+                        {
+                            variant = foundVariant;
+                            amount += extracted;
+                            dirty = true;
+                        }
+                    }
+                }
+            }
+            transaction.commit();
+
+            if (dirty)
+            {
+                parent.markDirty();
+                dirty = false;
+            }
+        }
+        super.preTick();
+    }
+
+    @Override
     public void tick()
     {
         try (Transaction transaction = Transaction.openOuter())
@@ -144,8 +191,10 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 PipeFlowComponent component = components.get(dir);
                 if (component == null) continue;
 
+                long amount1 = canOutput((ServerWorld) parent.getWorld(), dir, variant, amount);
+
                 // Even if previous transfers failed, the remaining fluid should all be transferred.
-                long transferAmount = (long) Math.min(amount, Math.ceil(amount / (float) transfers));
+                long transferAmount = (long) Math.min(amount1, Math.ceil(amount / (float) transfers));
 
                 // TODO: determine toDir so that check valves work again.
                 // Apparently they have been broken since April 2023 without me noticing.
@@ -170,8 +219,8 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
             }
         }
     }
-
     // Get the flow with respect to the node
+
     protected float getNodeFlow(NodePos pos, FluidNode node)
     {
         // Negative for influx, positive for efflux.
@@ -226,51 +275,9 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
         }
     }
 
-    @Override
-    public void preTick()
+    protected long canOutput(ServerWorld world, int outDir, FluidVariant variant, long maxAmount)
     {
-        deferredLoad();
-        stepHeight();
-
-        try (Transaction transaction = Transaction.openOuter())
-        {
-            for (FluidNode node : nodes)
-            {
-                if (node == null) continue;
-
-                Storage<FluidVariant> storage = node.getStorage((ServerWorld) parent.getWorld());
-
-                float f = getNodeFlow(node.getNodePos(), node);
-
-                // Calculate the amount with respect to this vertex.
-                long transferAmount = - (long) Math.ceil(f * getCapacity());
-                if (transferAmount > 0)
-                {
-                    FluidVariant foundVariant = StorageUtil.findExtractableResource(storage, transaction);
-                    long extracted;
-                    if (foundVariant != null && (variant.isBlank() || foundVariant.equals(variant)))
-                    {
-                        // Note the negative signs
-                        long permittedAmount = canInsert((ServerWorld) parent.getWorld(), node.getNodePos().face().getOpposite().ordinal(), foundVariant, transferAmount);
-                        extracted = storage.extract(foundVariant, permittedAmount, transaction);
-                        if (extracted > 0)
-                        {
-                            variant = foundVariant;
-                            amount += extracted;
-                            dirty = true;
-                        }
-                    }
-                }
-            }
-            transaction.commit();
-
-            if (dirty)
-            {
-                parent.markDirty();
-                dirty = false;
-            }
-        }
-        super.preTick();
+        return maxAmount;
     }
 
     @Override

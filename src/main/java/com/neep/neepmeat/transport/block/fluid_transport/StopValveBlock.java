@@ -96,6 +96,13 @@ public class StopValveBlock extends AbstractAxialFluidPipe implements BlockEntit
         }
 
         @Override
+        public long canOutput(ServerWorld world, int outDir, FluidVariant variant, long maxAmount)
+        {
+            long superAmount = super.canOutput(world, outDir, variant, maxAmount);
+            return parent.getCachedState().get(OPEN) ? superAmount : 0;
+        }
+
+        @Override
         public boolean canSimplify()
         {
             return false;
