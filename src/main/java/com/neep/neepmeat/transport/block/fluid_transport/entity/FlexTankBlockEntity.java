@@ -165,6 +165,7 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
     public void markRoot(Set<BlockPos> children)
     {
         this.children = children;
+        storage.validate();
     }
 
     public boolean isRoot()
@@ -274,6 +275,11 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         {
             return children.size() * FlexTankBlockEntity.this.capacity;
         }
+
+        public void validate()
+        {
+            amount = Math.min(getCapacity(), amount);
+        }
     }
 
     private class StorageCache
@@ -291,7 +297,9 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
 
             if (cache != null)
             {
-                return cache.find(Direction.DOWN);
+                var found = cache.find(Direction.DOWN);
+                if (found != null)
+                    return found;
             }
 
             return Storage.empty();

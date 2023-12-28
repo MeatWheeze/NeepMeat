@@ -52,8 +52,8 @@ public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvi
 
     public static BlockState getLevelState(BlockState old, int comparatorLevel)
     {
-//        int level = fillProp == 0 ? 0 : (int) Math.max(1, Math.ceil(fillProp * 7));
-        return old.with(LEVEL, (int) MathHelper.clamp(comparatorLevel / 15f * 7, 0, 7));
+        int level = comparatorLevel > 0 && comparatorLevel <= 2 ? 1 : (int) MathHelper.clamp(comparatorLevel / 15f * 7, 0, 7);
+        return old.with(LEVEL, level);
     }
 
     @Override
