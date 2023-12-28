@@ -42,6 +42,8 @@ public class FluidTransport
 
     public static Block FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("flex_tank", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
+    public static Block FLUID_GAUGE = BlockRegistry.queue(new FluidGaugeBlock("fluid_gauge", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
+
     public static void init()
     {
 //        PipeNetwork.LOOKUP.registerForBlocks(FluidTransport::getNetwork, PIPE);

@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 
 import java.util.function.Supplier;
 
+// TODO: Refactor into interface and impl, add null object implementation
 public class LazyBlockApiCache<A, C>
 {
     private BlockApiCache<A, C> cache = null;

@@ -208,6 +208,7 @@
   "block.neepmeat.multi_tank": "Multi Tank",
 
   "block.neepmeat.flex_tank": "Flex Tank",
+  "block.neepmeat.flex_tank.lore_0": "Capacity is increased by adding more blocks",
 
   "block.neepmeat.fluid_buffer": "Fluid Buffer",
   "block.neepmeat.fluid_buffer.lore_0": "Holds a bucket's worth of fluid.",
@@ -215,6 +216,10 @@
   "block.neepmeat.fluid_drain.lore_0": "Collects fluids from the world.",
   "block.neepmeat.fluid_interface": "Fluid Interface",
   "block.neepmeat.fluid_interface.lore_0": "Acts as a proxy for the block it faces.",
+
+  "block.neepmeat.fluid_gauge": "Fluid Gauge",
+  "block.neepmeat.fluid_gauge.lore_0": "Emits redstone based on a block's fill percentage.",
+
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
   "block.neepmeat.fluid_exciter": "Heart Machine",

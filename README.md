@@ -25,6 +25,10 @@ NeepMeat is a Minecraft mod that adds various forms of darkly aesthetic automati
 - [done] Programmable automation controller
 - More eldritchness
 
+## Notes
+
 For more details see the Modrinth page: https://modrinth.com/mod/neepmeat
 
-For anyone who wants to look at my ~spaghetti~ codebase: Lasciate ogne speranza, voi ch'intrate! If you're getting into modding and want examples, please regard everything I've done with extreme suspicion.
+Github shows many contributors who have not contributed to this obscure project. This is because I started with the Fabric ExampleMod and started committing to the repository without squashing the commits. I'm unsure how much of an issue this is, but it feels as though I'm claiming falsely that these people (some of them well-known in the Fabric ecosystem) have contributed to my mod.
+
+For anyone who wants to look at my ~spaghetti~ codebase: Lasciate ogne speranza, voi ch'intrate! If you're getting into Fabric modding and want examples, please regard everything I've done with extreme suspicion.
