@@ -7,6 +7,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariantAttributes;
 import net.minecraft.network.PacketByteBuf;
@@ -15,6 +16,8 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+
+import java.text.DecimalFormat;
 
 public class TankMessagePacket
 {
@@ -43,7 +46,22 @@ public class TankMessagePacket
                 FluidVariant resource = FluidVariant.fromNbt(buf.readNbt());
                 MutableText text = FluidVariantAttributes.getName(resource).copy();
 
-                client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtils.dropletsToMb(amount) + "mb"), true);
+//                long buckets = amount / FluidConstants.BUCKET;
+//                long remainder = amount % FluidConstants.BUCKET;
+//                double dRemainder = remainder / FluidConstants.BUCKET;
+
+                double buckets = (double) amount / FluidConstants.BUCKET;
+
+                DecimalFormat df = new DecimalFormat("###.###");
+                if (buckets > 10)
+                {
+                    client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " +  df.format(buckets) + "b"), true);
+                }
+                else
+                {
+                    client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtils.dropletsToMb(amount) + "mb"), true);
+                }
+
             });
         }
     }
