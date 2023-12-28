@@ -14,8 +14,11 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -25,7 +28,9 @@ import java.util.Map;
 
 public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvider
 {
-    protected Map<Direction, VoxelShape> SHAPE_MAP = ImmutableMap.of(
+    public static final IntProperty LEVEL = IntProperty.of("level", 0, 7);
+
+    protected final Map<Direction, VoxelShape> SHAPE_MAP = ImmutableMap.of(
             Direction.NORTH, Block.createCuboidShape(6, 0, 0, 10, 16, 2),
             Direction.EAST, Block.createCuboidShape(14, 0, 6, 16, 16, 10),
             Direction.SOUTH, Block.createCuboidShape(6, 0, 14, 10, 16, 16),
@@ -43,6 +48,12 @@ public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvi
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         return this.getDefaultState().with(FACING, context.getSide().getOpposite());
+    }
+
+    public static BlockState getLevelState(BlockState old, int comparatorLevel)
+    {
+//        int level = fillProp == 0 ? 0 : (int) Math.max(1, Math.ceil(fillProp * 7));
+        return old.with(LEVEL, (int) MathHelper.clamp(comparatorLevel / 15f * 7, 0, 7));
     }
 
     @Override
@@ -65,6 +76,13 @@ public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvi
     public boolean emitsRedstonePower(BlockState state)
     {
         return true;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(LEVEL);
     }
 
     @Nullable

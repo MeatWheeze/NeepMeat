@@ -213,10 +213,10 @@ public class BERenderUtils
         matrices.translate(-0.5, -0.5, -0.5);
     }
 
-    public static void renderFluidCuboid(VertexConsumerProvider vertices, MatrixStack matrices, FluidVariant fluid, float startY, float endY, float depth, float scaleY, int light)
+    public static void renderFluidCuboid(VertexConsumerProvider vcs, MatrixStack matrices, FluidVariant fluid, float startY, float endY, float depth, float scaleY, int light)
     {
         Sprite sprite = FluidVariantRendering.getSprite(fluid);
-        VertexConsumer consumer = vertices.getBuffer(RenderLayer.getTranslucent());
+        VertexConsumer consumer = vcs.getBuffer(RenderLayer.getTranslucent());
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
         int col = FluidVariantRendering.getColor(fluid);

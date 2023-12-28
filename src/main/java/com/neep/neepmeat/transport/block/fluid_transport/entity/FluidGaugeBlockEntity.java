@@ -47,7 +47,8 @@ public class FluidGaugeBlockEntity extends SyncableBlockEntity
             if (comparatorOutput != prevOutput)
             {
 //                world.updateComparators(pos, getCachedState().getBlock());
-                world.updateNeighbors(pos, getCachedState().getBlock());
+//                world.updateNeighbors(pos, getCachedState().getBlock());
+                world.setBlockState(pos, FluidGaugeBlock.getLevelState(getCachedState(), comparatorOutput));
             }
         }
     }
