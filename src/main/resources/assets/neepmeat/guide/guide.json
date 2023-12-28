@@ -58,6 +58,7 @@
     {"type": "menu", "id": "fluid_transport", "icon": "neepmeat:motor_unit", "text": "Fluid Transport", "entries": [
       {"type": "page", "id": "fluid_pipe", "icon": "neepmeat:fluid_pipe", "text": "Fluid Pipes"},
       {"type": "page", "id": "valves", "icon": "neepmeat:check_valve", "text": "Valves"},
+      {"type": "page", "id": "flex_tank", "icon": "neepmeat:flex_tank", "text": "Flex Tanks"},
       {"type": "page", "id": "fluid_drain", "icon": "neepmeat:fluid_drain", "text": "Fluid Drain"},
       {"type": "page", "id": "fluid_interface", "icon": "neepmeat:fluid_interface", "text": "Fluid Interface"},
       {"type": "page", "id": "fluid_rationer", "icon": "neepmeat:fluid_rationer", "text": "Fluid Rationer"}
@@ -296,6 +297,11 @@
       {"type": "text", "text": "Filter pipes only allow a specific fluid type to pass. By default, all fluids will be permitted. The filter can be changed by right-clicking the block with any container that holds the desired fluid."},
       {"type": "text", "text": "\nFlow Control Valve\n", "bold": true},
       {"type": "text", "text": "This pipe allows the maximum flow rate to be configured. Right-clicking opens a GUI that allows the rate to be set. Note that this value cannot exceed the maximum flow rate of other pipes.."}
+    ]},
+    {"id": "flex_tank", "contents": [
+      {"type": "text", "text": "Flex Tanks\n", "bold": true},
+      {"type": "text", "text": "Adjacent flex tanks share a single fluid reservoir."},
+      {"type": "text", "text": "They are available in basic and advanced forms which hold 8 and 16 buckets per block respectively."}
     ]},
     {"id": "fluid_drain", "contents": [
       {"type": "text", "text": "Fluid Drain\n", "bold": true},
