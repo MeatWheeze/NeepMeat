@@ -7,14 +7,14 @@
   ],
   "key": {
     "t": {
-      "item": "neepmeat:basic_tank"
+      "item": "neepmeat:advanced_tank"
     },
     "c": {
       "item": "minecraft:copper_ingot"
     }
   },
   "result": {
-    "item": "neepmeat:flex_tank",
+    "item": "neepmeat:advanced_flex_tank",
     "count": 1
   }
 }

@@ -5,12 +5,10 @@ import com.google.common.collect.Sets;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -35,16 +33,18 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
     @Nullable private BlockPos root;
     private final StorageCache cache = new StorageCache();
 
-    private FlexTankStorage storage = new FlexTankStorage(this::markDirty);
+    private final FlexTankStorage storage = new FlexTankStorage(this::markDirty);
+    private final long capacity;
 
-    public FlexTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+    public FlexTankBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, long capacity)
     {
         super(type, pos, state);
+        this.capacity = capacity;
     }
 
-    public static FlexTankBlockEntity updateConnections(World world, FlexTankBlockEntity origin)
+    public static FlexTankBlockEntity updateConnections(World world, FlexTankBlockEntity origin, BlockEntityType<FlexTankBlockEntity> type)
     {
-        var found = findBlocks(world, origin.getPos());
+        Set<FlexTankBlockEntity> found = findBlocks(world, origin.getPos(), type);
 
         if (!found.isEmpty())
         {
@@ -76,7 +76,7 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         return null;
     }
 
-    protected static Set<FlexTankBlockEntity> findBlocks(World world, BlockPos start)
+    protected static Set<FlexTankBlockEntity> findBlocks(World world, BlockPos start, BlockEntityType<FlexTankBlockEntity> type)
     {
         Set<FlexTankBlockEntity> found = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -85,10 +85,7 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         queue.add(start);
         visited.add(start);
 
-        if (world.getBlockEntity(start) instanceof FlexTankBlockEntity be)
-        {
-            found.add(be);
-        }
+        world.getBlockEntity(start, type).ifPresent(found::add);
 
         while (!queue.isEmpty())
         {
@@ -104,11 +101,11 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
 
                 visited.add(mutable.toImmutable());
 
-                if (world.getBlockEntity(mutable) instanceof FlexTankBlockEntity be)
+                world.getBlockEntity(mutable, type).ifPresent(be ->
                 {
                     found.add(be);
                     queue.add(mutable.toImmutable());
-                }
+                });
             }
         }
 
@@ -162,15 +159,6 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
 
     public Storage<FluidVariant> getStorage(Direction direction)
     {
-//        FlexTankBlockEntity root = getRoot();
-//        if (isRoot())
-//        {
-//            return storage;
-//        }
-//        else if (root != null)
-//        {
-//            return getRoot().getStorage(direction);
-//        }
         return storage;
     }
 
@@ -284,7 +272,7 @@ public class FlexTankBlockEntity extends SyncableBlockEntity
         @Override
         protected long getCapacity(FluidVariant variant)
         {
-            return children.size() * 8 * FluidConstants.BUCKET;
+            return children.size() * FlexTankBlockEntity.this.capacity;
         }
     }
 

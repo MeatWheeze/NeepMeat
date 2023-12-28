@@ -61,7 +61,6 @@ import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.FluidGaugeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
@@ -83,8 +82,6 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-import java.beans.Beans;
-
 public class NMBlockEntities
 {
     public static BlockEntityType<FluidPipeBlockEntity<?>> FLUID_PIPE;
@@ -98,6 +95,7 @@ public class NMBlockEntities
     public static BlockEntityType<TankBlockEntity> ADVANCED_TANK;
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
     public static BlockEntityType<FlexTankBlockEntity> FLEX_TANK;
+    public static BlockEntityType<FlexTankBlockEntity> ADVANCED_FLEX_TANK;
     public static BlockEntityType<FluidGaugeBlockEntity> FLUID_GAUGE;
 
     public static BlockEntityType<MetalBarrelBlockEntity> METAL_BARREL;
@@ -216,8 +214,10 @@ public class NMBlockEntities
         FLUID_DRAIN = register("fluid_drain", FluidDrainBlockEntity::new, FluidTransport.FLUID_DRAIN);
         FLUID_INTERFACE = register("fluid_port", FluidInterfaceBlockEntity::new, FluidTransport.FLUID_INTERFACE);
 
-        FLEX_TANK = register("flex_tank", (p, s) -> new FlexTankBlockEntity(FLEX_TANK, p, s), FluidTransport.FLEX_TANK);
+        FLEX_TANK = register("flex_tank", (p, s) -> new FlexTankBlockEntity(FLEX_TANK, p, s, FluidTransport.FLEX_TANK.capacity), FluidTransport.FLEX_TANK);
         FluidStorage.SIDED.registerForBlockEntity(FlexTankBlockEntity::getStorage, FLEX_TANK);
+        ADVANCED_FLEX_TANK = register("advanced_flex_tank", (p, s) -> new FlexTankBlockEntity(ADVANCED_FLEX_TANK, p, s, FluidTransport.ADVANCED_FLEX_TANK.capacity), FluidTransport.ADVANCED_FLEX_TANK);
+        FluidStorage.SIDED.registerForBlockEntity(FlexTankBlockEntity::getStorage, ADVANCED_FLEX_TANK);
 
         FLUID_GAUGE = register("fluid_gauge", (p, s) -> new FluidGaugeBlockEntity(FLUID_GAUGE, p, s), FluidTransport.FLUID_GAUGE);
 

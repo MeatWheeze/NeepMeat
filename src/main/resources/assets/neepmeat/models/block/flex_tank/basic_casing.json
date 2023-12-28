@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "neepmeat:block/flex_tank/casing"
+    "all": "neepmeat:block/flex_tank/basic_casing"
   }
 }

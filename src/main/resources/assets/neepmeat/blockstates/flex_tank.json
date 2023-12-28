@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "neepmeat:block/flex_tank/casing"
+      "model": "neepmeat:block/flex_tank/basic_casing"
     }
   }
 }

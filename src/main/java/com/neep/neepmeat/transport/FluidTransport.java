@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport;
 
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.item.TankItem;
@@ -40,7 +41,10 @@ public class FluidTransport
     public static Block FLUID_INTERFACE = BlockRegistry.queue(new FluidInterfaceBlock("fluid_interface", NMBlocks.block().tooltip((TooltipSupplier.simple(1))).factory(FluidComponentItem::new), NMBlocks.FLUID_MACHINE_SETTINGS));
     public static Block FLUID_DRAIN = BlockRegistry.queue(new FluidDrainBlock("fluid_drain", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
-    public static Block FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("flex_tank", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static FlexTankBlock FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("flex_tank", 8 * FluidConstants.BUCKET, () -> NMBlockEntities.FLEX_TANK,
+            NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static FlexTankBlock ADVANCED_FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("advanced_flex_tank", 16 * FluidConstants.BUCKET, () -> NMBlockEntities.ADVANCED_FLEX_TANK,
+            NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
     public static Block FLUID_GAUGE = BlockRegistry.queue(new FluidGaugeBlock("fluid_gauge", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
