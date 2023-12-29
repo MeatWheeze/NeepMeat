@@ -13,11 +13,11 @@
       "item": "minecraft:iron_nugget"
     },
     "i": {
-      "item": "minecraft:copper_ingot"
+      "item": "minecraft:iron_ingot"
     }
   },
   "result": {
-    "item": "neepmeat:fluid_gauge",
+    "item": "neepmeat:item_gauge",
     "count": 1
   }
 }

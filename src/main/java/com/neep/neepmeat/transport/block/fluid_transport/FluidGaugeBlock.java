@@ -3,7 +3,6 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidGaugeBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -25,8 +24,9 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.Supplier;
 
-public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvider
+public class FluidGaugeBlock<T> extends BaseFacingBlock implements BlockEntityProvider
 {
     public static final IntProperty LEVEL = IntProperty.of("level", 0, 7);
 
@@ -39,9 +39,12 @@ public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvi
             Direction.DOWN, Block.createCuboidShape(6, 0, 0, 10, 2, 16)
     );
 
-    public FluidGaugeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    private final Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> typeSupplier;
+
+    public FluidGaugeBlock(String itemName, Supplier<BlockEntityType<FluidGaugeBlockEntity<T>>> type, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
+        this.typeSupplier = type;
     }
 
     @Override
@@ -89,13 +92,13 @@ public class FluidGaugeBlock extends BaseFacingBlock implements BlockEntityProvi
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.FLUID_GAUGE.instantiate(pos, state);
+        return typeSupplier.get().instantiate(pos, state);
     }
 
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.FLUID_GAUGE, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+        return MiscUtils.checkType(type, typeSupplier.get(), (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
     }
 }

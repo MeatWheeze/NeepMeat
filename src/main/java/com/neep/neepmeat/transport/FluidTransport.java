@@ -46,7 +46,10 @@ public class FluidTransport
     public static FlexTankBlock ADVANCED_FLEX_TANK = BlockRegistry.queue(new FlexTankBlock("advanced_flex_tank", 16 * FluidConstants.BUCKET, () -> NMBlockEntities.ADVANCED_FLEX_TANK,
             NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
-    public static Block FLUID_GAUGE = BlockRegistry.queue(new FluidGaugeBlock("fluid_gauge", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block FLUID_GAUGE = BlockRegistry.queue(new FluidGaugeBlock<>("fluid_gauge", () -> NMBlockEntities.FLUID_GAUGE,
+            NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
+    public static Block ITEM_GAUGE = BlockRegistry.queue(new FluidGaugeBlock<>("item_gauge", () -> NMBlockEntities.ITEM_GAUGE,
+            NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_MACHINE_SETTINGS));
 
     public static void init()
     {

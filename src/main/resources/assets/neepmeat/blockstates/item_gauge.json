@@ -1,0 +1,187 @@
+{
+  "variants": {
+    "facing=north,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "y": 90,
+      "x": 0
+      },
+    "facing=south,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "x": -90
+    },
+    "facing=down,level=0": { "model": "neepmeat:block/item_gauge/item_gauge_0",
+      "x": 90
+    },
+
+    "facing=north,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "x": -90
+    },
+    "facing=down,level=1": { "model": "neepmeat:block/item_gauge/item_gauge_1",
+      "x": 90
+    },
+
+    "facing=north,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "x": -90
+    },
+    "facing=down,level=2": { "model": "neepmeat:block/item_gauge/item_gauge_2",
+      "x": 90
+    },
+
+    "facing=north,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "x": -90
+    },
+    "facing=down,level=3": { "model": "neepmeat:block/item_gauge/item_gauge_3",
+      "x": 90
+    },
+
+    "facing=north,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "x": -90
+    },
+    "facing=down,level=4": { "model": "neepmeat:block/item_gauge/item_gauge_4",
+      "x": 90
+    },
+
+    "facing=north,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "x": -90
+    },
+    "facing=down,level=5": { "model": "neepmeat:block/item_gauge/item_gauge_5",
+      "x": 90
+    },
+
+    "facing=north,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "x": -90
+    },
+    "facing=down,level=6": { "model": "neepmeat:block/item_gauge/item_gauge_6",
+      "x": 90
+    },
+
+    "facing=north,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "y": 0,
+      "x": 0
+    },
+    "facing=east,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "y": 90,
+      "x": 0
+    },
+    "facing=south,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "y": -90,
+      "x": 0
+    },
+    "facing=up,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "x": -90
+    },
+    "facing=down,level=7": { "model": "neepmeat:block/item_gauge/item_gauge_7",
+      "x": 90
+    }
+  }
+}

@@ -75,7 +75,9 @@ import com.neep.neepmeat.transport.machine.item.ItemPumpBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -96,7 +98,8 @@ public class NMBlockEntities
     public static BlockEntityType<FluidBufferBlockEntity> FLUID_BUFFER;
     public static BlockEntityType<FlexTankBlockEntity> FLEX_TANK;
     public static BlockEntityType<FlexTankBlockEntity> ADVANCED_FLEX_TANK;
-    public static BlockEntityType<FluidGaugeBlockEntity> FLUID_GAUGE;
+    public static BlockEntityType<FluidGaugeBlockEntity<FluidVariant>> FLUID_GAUGE;
+    public static BlockEntityType<FluidGaugeBlockEntity<ItemVariant>> ITEM_GAUGE;
 
     public static BlockEntityType<MetalBarrelBlockEntity> METAL_BARREL;
 
@@ -219,7 +222,8 @@ public class NMBlockEntities
         ADVANCED_FLEX_TANK = register("advanced_flex_tank", (p, s) -> new FlexTankBlockEntity(ADVANCED_FLEX_TANK, p, s, FluidTransport.ADVANCED_FLEX_TANK.capacity), FluidTransport.ADVANCED_FLEX_TANK);
         FluidStorage.SIDED.registerForBlockEntity(FlexTankBlockEntity::getStorage, ADVANCED_FLEX_TANK);
 
-        FLUID_GAUGE = register("fluid_gauge", (p, s) -> new FluidGaugeBlockEntity(FLUID_GAUGE, p, s), FluidTransport.FLUID_GAUGE);
+        FLUID_GAUGE = register("fluid_gauge", (p, s) -> new FluidGaugeBlockEntity<>(FLUID_GAUGE, p, s, FluidStorage.SIDED), FluidTransport.FLUID_GAUGE);
+        ITEM_GAUGE = register("item_gauge", (p, s) -> new FluidGaugeBlockEntity<>(ITEM_GAUGE, p, s, ItemStorage.SIDED), FluidTransport.ITEM_GAUGE);
 
         HEATER = register("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
