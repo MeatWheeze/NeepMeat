@@ -12,6 +12,8 @@ import net.minecraft.util.math.BlockPos;
 
 public abstract class SyncableBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
+    private boolean updateComparators;
+
     public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -73,7 +75,18 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
         if (this.world != null)
         {
             world.markDirty(pos);
+            this.updateComparators = true;
             BlockEntity.markDirty(this.world, this.pos, this.getCachedState());
+        }
+    }
+
+    // This can be called once every tick
+    public void tryUpdateComparators()
+    {
+        if (updateComparators)
+        {
+            world.updateComparators(pos, getCachedState().getBlock());
+            updateComparators = false;
         }
     }
 }

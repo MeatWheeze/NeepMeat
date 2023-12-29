@@ -6,7 +6,6 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.Heatable;
-import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.recipe.AlloyKilnRecipe;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -41,7 +40,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
 
     protected Identifier currentRecipeId;
     protected AlloyKilnRecipe currentRecipe;
-    protected MotorEntity connectedMotor;
 
     protected AlloyKilnStorage storage;
 
@@ -107,6 +105,8 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
 
     public void tick(World world, BlockPos pos, BlockState state)
     {
+        tryUpdateComparators();
+
         boolean wasBurning = isBurning();
 
         if (currentRecipe == null)
@@ -271,30 +271,6 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
     {
         this.heatMultiplier = heat;
     }
-
-//    @Override
-//    public float getHeat()
-//    {
-//        return heatMultiplier;
-//    }
-//
-//    @Override
-//    public int getCookTimeTotal()
-//    {
-//        return cookTimeTotal;
-//    }
-//
-//    @Override
-//    public int getCookTime()
-//    {
-//        return cookTime;
-//    }
-//
-//    @Override
-//    public void setCookTime(int cookTime)
-//    {
-//        this.cookTime = cookTime;
-//    }
 
     @Override
     public Text getDisplayName()

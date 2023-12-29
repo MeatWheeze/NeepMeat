@@ -3,8 +3,8 @@ package com.neep.neepmeat.machine.casting_basin;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import com.neep.neepmeat.util.ItemUtils;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -58,6 +58,22 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
             });
         }
         super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof CastingBasinBlockEntity be)
+        {
+            return StorageUtil.calculateComparatorOutput(be.storage.outputStorage);
+        }
+        return 0;
     }
 
     @Nullable

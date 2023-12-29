@@ -20,7 +20,7 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
     public CastingBasinStorage(CastingBasinBlockEntity parent)
     {
         this.parent = parent;
-        this.outputStorage = new WritableStackStorage(parent::sync, 1)
+        this.outputStorage = new WritableStackStorage(this::syncOutput, 1)
         {
             @Override
             public boolean supportsInsertion()
@@ -43,6 +43,12 @@ public class CastingBasinStorage implements NbtSerialisable, ImplementedRecipe.D
                 return super.canExtract(variant) && !locked;
             }
         };
+    }
+
+    private void syncOutput()
+    {
+        parent.sync();
+        parent.tryUpdateComparators();
     }
 
     @Override

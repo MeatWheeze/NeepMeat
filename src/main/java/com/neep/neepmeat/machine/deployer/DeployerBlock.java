@@ -2,7 +2,9 @@ package com.neep.neepmeat.machine.deployer;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.MotorBlock;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -42,18 +44,35 @@ public class DeployerBlock extends BaseFacingBlock implements BlockEntityProvide
         {
             return ActionResult.PASS;
         }
-        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient() && be.onUse(player, hand))
+
+        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be && !world.isClient())
         {
-            return ActionResult.SUCCESS;
+            be.onUse(player, hand);
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof DeployerBlockEntity be)
+        {
+            return StorageUtil.calculateComparatorOutput(be.storage);
+        }
+        return 0;
     }
 
     @Nullable
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new DeployerBlockEntity(pos, state);
+        return NMBlockEntities.DEPLOYER.instantiate(pos, state);
     }
 
 }

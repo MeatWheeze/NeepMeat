@@ -4,6 +4,7 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -77,6 +78,22 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     }
 
     @Override
+    public boolean hasComparatorOutput(BlockState state)
+    {
+        return true;
+    }
+
+    @Override
+    public int getComparatorOutput(BlockState state, World world, BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof AlloyKilnBlockEntity be)
+        {
+            return StorageUtil.calculateComparatorOutput(be.getStorage().getInputStorage());
+        }
+        return 0;
+    }
+
+    @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return COLLISION_SHAPE;
@@ -144,6 +161,6 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new AlloyKilnBlockEntity(pos, state);
+        return NMBlockEntities.ALLOY_KILN.instantiate(pos, state);
     }
 }

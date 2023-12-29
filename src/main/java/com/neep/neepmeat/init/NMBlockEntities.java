@@ -280,7 +280,8 @@ public class NMBlockEntities
 
         STIRLING_ENGINE = register("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = register("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
-        DEPLOYER = register("deployer", DeployerBlockEntity::new, NMBlocks.DEPLOYER);
+        DEPLOYER = register("deployer", (p, s) -> new DeployerBlockEntity(DEPLOYER, p, s), NMBlocks.DEPLOYER);
+        ItemStorage.SIDED.registerSelf(DEPLOYER);
         AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
         GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
@@ -375,7 +376,6 @@ public class NMBlockEntities
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
-        ItemStorage.SIDED.registerSelf(DEPLOYER);
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 
         ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);

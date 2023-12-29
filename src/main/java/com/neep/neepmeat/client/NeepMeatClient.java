@@ -157,7 +157,7 @@ public class NeepMeatClient implements ClientModInitializer
             be.stackRenderDelta = MathHelper.lerp(0.1f, be.stackRenderDelta, be.getStorage(null).getAmount() <= 0 ? 0.3f : 0f);
             return 0.25f + be.stackRenderDelta;
         }));
-        BlockEntityRendererFactories.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.TROMMEL, TrommelRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.SMALL_TROMMEL, SmallTrommelRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.INTEGRATOR, IntegratorEggRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_INTEGRATOR, AdvancedIntegratorRenderer::new);

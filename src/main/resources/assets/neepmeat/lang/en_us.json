@@ -222,7 +222,7 @@
   "block.neepmeat.fluid_interface.lore_0": "Acts as a proxy for the block it faces.",
 
   "block.neepmeat.fluid_gauge": "Fluid Gauge",
-  "block.neepmeat.fluid_gauge.lore_0": "Emits redstone based on a block's fill percentage.",
+  "block.neepmeat.fluid_gauge.lore_0": "Emits redstone based on a tank's fill percentage.",
 
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",

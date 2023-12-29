@@ -53,11 +53,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
         storage = new WritableStackStorage(this::sync);
     }
 
-    public DeployerBlockEntity(BlockPos pos, BlockState state)
-    {
-        this(NMBlockEntities.DEPLOYER, pos, state);
-    }
-
     @Override
     public void readNbt(NbtCompound nbt)
     {
@@ -208,5 +203,12 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public Diagnostics get()
     {
         return Diagnostics.insufficientPower(power < minPower, power, minPower);
+    }
+
+    @Override
+    public void markDirty()
+    {
+        super.markDirty();
+        tryUpdateComparators();
     }
 }
