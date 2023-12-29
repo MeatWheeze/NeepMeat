@@ -66,7 +66,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
     {
         if (!world.isAir(pos)) return false;
 
-        world.setBlockState(pos, NMBlocks.TROMMEL_STRUCTURE.getDefaultState(), Block.NOTIFY_LISTENERS);
+//        world.setBlockState(pos, NMBlocks.TROMMEL_STRUCTURE.getDefaultState(), Block.NOTIFY_LISTENERS);
         if (world.getBlockEntity(pos) instanceof TrommelStructureBlockEntity be)
         {
             be.setController(origin, controller.getCachedState().get(FACING).getOpposite());
@@ -86,7 +86,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
     {
         for (BlockPos p : getVolume(world, origin, facing))
         {
-            if (!(world.isAir(p) || world.getBlockState(p).isOf(NMBlocks.TROMMEL))) return false;
+//            if (!(world.isAir(p) || world.getBlockState(p).isOf(NMBlocks.TROMMEL))) return false;
         }
         return true;
     }
@@ -118,7 +118,7 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         Direction facing = state.get(FACING).getOpposite();
         for (BlockPos p : getVolume(world, pos, facing))
         {
-            if (world.getBlockState(p).isOf(NMBlocks.TROMMEL_STRUCTURE))
+//            if (world.getBlockState(p).isOf(NMBlocks.TROMMEL_STRUCTURE))
             {
                 world.setBlockState(p, Blocks.AIR.getDefaultState(), Block.NOTIFY_LISTENERS);
             }
@@ -151,7 +151,8 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
         @Override
         public ItemConvertible dropsLike()
         {
-            return NMBlocks.TROMMEL;
+            return Blocks.AIR;
+//            return NMBlocks.TROMMEL;
         }
 
         @Override
@@ -178,11 +179,11 @@ public class TrommelBlock extends BaseHorFacingBlock implements BlockEntityProvi
             return 1.0f;
         }
 
-        @Override
-        public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
-        {
-            return NMBlocks.TROMMEL.getPickStack(world, pos, state);
-        }
+//        @Override
+//        public ItemStack getPickStack(BlockView world, BlockPos pos, BlockState state)
+//        {
+//            return NMBlocks.TROMMEL.getPickStack(world, pos, state);
+//        }
 
         @Override
         public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)

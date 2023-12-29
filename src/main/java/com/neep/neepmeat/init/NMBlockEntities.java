@@ -262,8 +262,8 @@ public class NMBlockEntities
                 (pos, state) -> new AdvancedIntegratorStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE);
         DataPort.DATA_PORT.registerForBlockEntity(AdvancedIntegratorStructureBlockEntity::getPort, ADVANCED_INTEGRATOR_STRUCTURE);
 
-        TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
-        TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
+//        TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
+//        TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);
         SMALL_TROMMEL = register("small_trommel", SmallTrommelBlockEntity::new, NMBlocks.SMALL_TROMMEL);
         SMALL_TROMMEL_STRUCTURE = register("small_trommel_structure", SmallTrommelBlockEntity.Structure::new, NMBlocks.SMALL_TROMMEL_STRUCTURE);
         FluidStorage.SIDED.registerForBlockEntity(SmallTrommelBlockEntity::getInputStorage, SMALL_TROMMEL);

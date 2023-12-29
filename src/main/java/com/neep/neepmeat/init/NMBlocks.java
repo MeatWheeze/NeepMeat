@@ -18,7 +18,6 @@ import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlock;
-import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorEggBlock;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
@@ -163,8 +162,8 @@ public class NMBlocks
 
 
     // --- Machines
-    public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block TROMMEL = BlockRegistry.queue(new TrommelBlock("trommel", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block TROMMEL_STRUCTURE = BlockRegistry.queue(new TrommelBlock.Structure("trommel_top", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SMALL_TROMMEL = BlockRegistry.queue(new SmallTrommelBlock("small_trommel", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SMALL_TROMMEL_STRUCTURE = BlockRegistry.queue(new SmallTrommelBlock.Structure("small_trommel_structure", FabricBlockSettings.copy(SMALL_TROMMEL)));
 
