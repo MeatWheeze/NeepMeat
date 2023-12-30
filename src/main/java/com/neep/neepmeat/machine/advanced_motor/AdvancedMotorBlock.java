@@ -6,10 +6,7 @@ import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.init.NMItems;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorEntity;
-import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -90,19 +87,19 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (!world.isClient())
-        {
-            world.getBlockEntity(pos, NMBlockEntities.ADVANCED_MOTOR).ifPresent(be ->
-            {
-                be.update((ServerWorld) world, pos, fromPos, state);
-            });
-        }
+//        if (!world.isClient())
+//        {
+//            world.getBlockEntity(pos, NMBlockEntities.ADVANCED_MOTOR).ifPresent(be ->
+//            {
+//                be.update((ServerWorld) world, pos, fromPos, state);
+//            });
+//        }
     }
 
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
+        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
     }
 
     @Nullable

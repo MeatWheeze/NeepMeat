@@ -15,9 +15,10 @@ public interface MotorEntity
     default void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
     {
         Direction facing = state.get(BaseFacingBlock.FACING);
-        if ((world.getBlockEntity(pos.offset(facing)) instanceof MotorisedBlock block))
+        setConnectedBlock(BlockApiCache.create(MeatLib.VOID_LOOKUP, world, pos.offset(facing)));
+
+        if (getConnectedBlock().getBlockEntity() instanceof MotorisedBlock block)
         {
-            setConnectedBlock(BlockApiCache.create(MeatLib.VOID_LOOKUP, world, pos.offset(facing)));
             block.setInputPower((float) getMechPUPower());
         }
     }

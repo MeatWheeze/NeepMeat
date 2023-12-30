@@ -42,7 +42,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         matrices.push();
         BERenderUtils.rotateFacing(facing, matrices);
         float yOffset = 11 / 16f;
-        if (be.currentRecipe != null)
+        if (be.currentRecipe != null && be.progressIncrement() > 0)
         {
             yOffset += Math.abs(sinTime * 0.02);
         }

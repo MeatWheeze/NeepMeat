@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.motor;
 
+import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -9,6 +11,8 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
 public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
@@ -19,8 +23,8 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     protected float outputPower = 0;
     protected float loadTorque;
 
-
-    protected BlockApiCache<Void, Void> cache = null;
+    @Nullable protected BlockApiCache<Void, Void> cache = null;
+    @Nullable private MotorisedBlock lastMotorised;
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
     {
@@ -31,12 +35,24 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     {
         if (cache == null)
         {
-            update((ServerWorld) world, pos, pos, getCachedState());
-            if (cache != null)
-                sync();
+            Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
         }
-        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
+
+        if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
+            if (motorised.getLoadTorque() != loadTorque)
+            {
+                loadTorque = motorised.getLoadTorque();
+                sync();
+            }
+
+            if (motorised != lastMotorised)
+            {
+                lastMotorised = motorised;
+                onPowerChange();
+            }
+
             motorised.tick(this);
         }
 
@@ -81,13 +97,6 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     public float getRotorAngle()
     {
         return angle;
-    }
-
-    @Override
-    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
-    {
-        MotorEntity.super.update(world, pos, fromPos, state);
-        loadTorque = updateLoadTorque();
     }
 
     @Override

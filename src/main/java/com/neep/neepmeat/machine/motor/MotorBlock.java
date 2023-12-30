@@ -88,10 +88,10 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
-        {
-            be.update((ServerWorld) world, pos, fromPos, state);
-        }
+//        if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
+//        {
+//            be.update((ServerWorld) world, pos, fromPos, state);
+//        }
     }
 
     @Override

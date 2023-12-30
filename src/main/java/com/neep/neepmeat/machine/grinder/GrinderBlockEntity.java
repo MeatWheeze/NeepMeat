@@ -43,6 +43,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     protected float progress;
 
     protected Identifier currentRecipeId;
+    protected GrindingRecipe lastRecipe;
     protected GrindingRecipe currentRecipe;
 
     public GrinderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -119,11 +120,13 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     {
         readCurrentRecipe();
 
-        if (progressIncrement == 0)
-        {
-            currentRecipe = null;
-            return;
-        }
+//        if (progressIncrement == 0)
+//        {
+//            currentRecipe = null;
+//            currentRecipeId = null;
+//            progress = 0;
+//            return;
+//        }
 
         // Eject outputs
         if (!storage.getOutputStorage().isEmpty() || !storage.extraStorage.isEmpty())
@@ -138,9 +141,6 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         if (currentRecipe != null)
         {
             progress = Math.min(processLength, progress + progressIncrement);
-
-//            ((ServerWorld) world).spawnParticles(new ItemStackParticleEffect(ParticleTypes.ITEM, getCurrentRecipe().getItemOutput().resource().getDefaultStack()),
-//                pos.getX() + 0.5, pos.getY() + 0.8, pos.getZ() + 0.5, 1, 0.2, 0, 0.2, 0.02);
 
             if (progress >= this.processLength || !getCurrentRecipe().matches(storage))
             {
@@ -158,6 +158,8 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
                 this.progress = 0;
             }
         }
+
+        super.serverTick();
     }
 
     private void startRecipe()

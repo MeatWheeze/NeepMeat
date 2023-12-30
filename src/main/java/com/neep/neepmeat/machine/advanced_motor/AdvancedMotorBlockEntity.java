@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.advanced_motor;
 
+import com.neep.meatlib.MeatLib;
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -12,8 +14,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.Nullable;
 
-//@SuppressWarnings("UnstableApiUsage")
 public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements MotorEntity
 {
     public float rotorSpeed = 1f; // rad per tick
@@ -22,8 +24,9 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     protected float influx;
 
     protected float loadTorque;
+    @Nullable protected MotorisedBlock lastMotorised;
 
-    protected BlockApiCache<Void, Void> cache = null;
+    @Nullable protected BlockApiCache<Void, Void> cache = null;
 
     protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
     {
@@ -52,14 +55,28 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
         super(type, pos, state);
     }
 
-    public void tick()
+    public void serverTick()
     {
         if (cache == null)
         {
-            update((ServerWorld) world, pos, pos, getCachedState());
+            Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
         }
-        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
+
+        if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
+            if (motorised.getLoadTorque() != loadTorque)
+            {
+                loadTorque = motorised.getLoadTorque();
+                sync();
+            }
+
+            if (motorised != lastMotorised)
+            {
+                lastMotorised = motorised;
+                onPowerChange();
+            }
+
             motorised.tick(this);
         }
     }
@@ -87,15 +104,6 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     }
 
     @Override
-    public void update(ServerWorld world, BlockPos pos, BlockPos fromPos, BlockState state)
-    {
-        MotorEntity.super.update(world, pos, fromPos, state);
-//        enabled = (!world.isReceivingRedstonePower(pos));
-        loadTorque = updateLoadTorque();
-        sync();
-    }
-
-    @Override
     public BlockApiCache<Void, Void> getConnectedBlock()
     {
         return cache;
@@ -110,8 +118,8 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     @Override
     public float getSpeed()
     {
-        double P = PowerUtils.perUnitToAbsWatt(getMechPUPower());
-        return  (float) (P / (loadTorque != 0 ? loadTorque : PowerUtils.MOTOR_TORQUE_LOSS));
+        double power = PowerUtils.perUnitToAbsWatt(getMechPUPower());
+        return (float) (power / (loadTorque != 0 ? loadTorque : PowerUtils.MOTOR_TORQUE_LOSS));
     }
 
     @Override

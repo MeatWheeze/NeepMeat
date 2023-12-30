@@ -12,6 +12,7 @@ public abstract class MotorisedMachineBlockEntity extends SyncableBlockEntity im
 {
     protected float minPower;
     protected float power;
+    protected float lastPower;
     protected float progressIncrement;
     protected float minIncrement;
     protected float maxIncrement;
@@ -28,6 +29,15 @@ public abstract class MotorisedMachineBlockEntity extends SyncableBlockEntity im
     public MotorisedBlock.Diagnostics get()
     {
         return MotorisedBlock.Diagnostics.insufficientPower(power < minPower, power, minPower);
+    }
+
+    public void serverTick()
+    {
+        if (lastPower != power)
+        {
+            lastPower = power;
+            sync();
+        }
     }
 
     @Override
