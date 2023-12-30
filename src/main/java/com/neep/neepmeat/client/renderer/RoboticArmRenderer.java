@@ -26,9 +26,9 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
 
         var player = MinecraftClient.getInstance().player;
 
-        double targetX = player.getX();
-        double targetY = player.getY();
-        double targetZ = player.getZ();
+        double targetX = player.prevX;
+        double targetY = player.prevY;
+        double targetZ = player.prevZ;
 
         double relX = targetX - (be.getPos().getX() + 0.5);
         double relY = targetY - (be.getPos().getY() + 1 + 2 / 16f);

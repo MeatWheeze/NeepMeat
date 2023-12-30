@@ -15,6 +15,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel P_PYLON_ACTIVE_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor_active"));
     public static final PartialModel P_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor"));
     public static final PartialModel P_PLC_ROBOT = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/table_controller/robot"));
+    public static final PartialModel LO_ARMATURE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature"));
 
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
@@ -22,7 +23,6 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier ITEM_PUMP_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/item_pump_shuttle");
     public static Identifier ITEM_PUMP_CHEST = new Identifier(NeepMeat.NAMESPACE, "block/item_pump_chest");
     public static Identifier VALVE_WHEEL = new Identifier(NeepMeat.NAMESPACE, "block/valve/wheel");
-    public static Identifier LO_ARMATURE = new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature");
     public static Identifier MOTOR_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor");
     public static Identifier DEPLOYER_SHUTTLE = new Identifier(NeepMeat.NAMESPACE, "block/deployer/shuttle");
     public static Identifier AGITATOR_BLADES = new Identifier(NeepMeat.NAMESPACE, "block/agitator/agitator_blades");
@@ -55,7 +55,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(ITEM_PUMP_SHUTTLE);
         out.accept(ITEM_PUMP_CHEST);
         out.accept(VALVE_WHEEL);
-        out.accept(LO_ARMATURE);
         out.accept(MOTOR_ROTOR);
         out.accept(DEPLOYER_SHUTTLE);
         out.accept(AGITATOR_BLADES);

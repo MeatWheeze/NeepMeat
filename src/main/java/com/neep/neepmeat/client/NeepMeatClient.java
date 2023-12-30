@@ -155,6 +155,7 @@ public class NeepMeatClient implements ClientModInitializer
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.PYLON).alwaysSkipRender().factory(PylonInstance::new).apply();
         InstancedRenderRegistry.configure(PLCBlocks.PLC_ENTITY).alwaysSkipRender().factory(PLCInstance::new).apply();
+        InstancedRenderRegistry.configure(NMBlockEntities.LINEAR_OSCILLATOR).alwaysSkipRender().factory(LinearOscillatorInstance::new).apply();
 
         // BlockEntity renderers
         BlockEntityRendererFactories.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
@@ -178,7 +179,6 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_PUMP, ItemPumpRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.EJECTOR, EjectorRenderer::new);
 //        BlockEntityRendererFactories.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MOTOR, MotorRenderer::new);
 //        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_MOTOR, AdvancedMotorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
