@@ -16,6 +16,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel P_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor"));
     public static final PartialModel P_PLC_ROBOT = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/table_controller/robot"));
     public static final PartialModel LO_ARMATURE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature"));
+    public static final PartialModel STIRLING_ENGINE_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/stirling_engine/rotor"));
 
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
@@ -30,7 +31,6 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier INTEGRATOR_BASE = new Identifier(NeepMeat.NAMESPACE, "block/integrator/base");
     public static Identifier ADVANCED_INTEGRATOR_MEAT = new Identifier(NeepMeat.NAMESPACE, "block/advanced_integrator/meat");
     public static Identifier ADVANCED_INTEGRATOR_DANGLIES = new Identifier(NeepMeat.NAMESPACE, "block/advanced_integrator/danglies");
-    public static Identifier STIRLING_ENGINE_ROTOR = new Identifier(NeepMeat.NAMESPACE, "block/stirling_engine/rotor");
     public static Identifier TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/trommel/mesh");
     public static Identifier SMALL_TROMMEL_MESH = new Identifier(NeepMeat.NAMESPACE, "block/small_trommel/mesh");
     public static Identifier HYDRAULIC_PRESS_ARM = new Identifier(NeepMeat.NAMESPACE, "block/hydraulic_press/arm");
@@ -62,7 +62,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(INTEGRATOR_BASE);
         out.accept(ADVANCED_INTEGRATOR_MEAT);
         out.accept(ADVANCED_INTEGRATOR_DANGLIES);
-        out.accept(STIRLING_ENGINE_ROTOR);
         out.accept(TROMMEL_MESH);
         out.accept(SMALL_TROMMEL_MESH);
         out.accept(HYDRAULIC_PRESS_ARM);

@@ -1,4 +1,4 @@
-package com.neep.neepmeat.machine.advanced_motor;
+package com.neep.neepmeat.machine.motor;
 
 import com.jozufozu.flywheel.api.MaterialManager;
 import com.jozufozu.flywheel.api.instance.DynamicInstance;
@@ -7,7 +7,6 @@ import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.NMExtraModels;
-import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -17,14 +16,15 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
 @Environment(EnvType.CLIENT)
-public class AdvancedMotorInstance extends BlockEntityInstance<AdvancedMotorBlockEntity> implements DynamicInstance
+public class MotorInstance extends BlockEntityInstance<MotorBlockEntity> implements DynamicInstance
 {
     private final ModelData rotor;
     private final MatrixStack matrices = new MatrixStack();
 
-    public AdvancedMotorInstance(MaterialManager materialManager, AdvancedMotorBlockEntity blockEntity)
+    public MotorInstance(MaterialManager materialManager, MotorBlockEntity blockEntity)
     {
         super(materialManager, blockEntity);
+
         matrices.translate(getInstancePosition().getX(), getInstancePosition().getY(), getInstancePosition().getZ());
 
         rotor = materialManager.defaultSolid().material(Materials.TRANSFORMED)
@@ -38,12 +38,6 @@ public class AdvancedMotorInstance extends BlockEntityInstance<AdvancedMotorBloc
     }
 
     @Override
-    public void updateLight()
-    {
-        relight(getInstancePosition(), rotor);
-    }
-
-    @Override
     public void beginFrame()
     {
         matrices.push();
@@ -53,13 +47,15 @@ public class AdvancedMotorInstance extends BlockEntityInstance<AdvancedMotorBloc
         blockEntity.currentSpeed = (float) (blockEntity.rotorSpeed * MathHelper.lerp(0.1, blockEntity.currentSpeed, blockEntity.getSpeed()));
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.currentSpeed * delta);
 
-        BERenderUtils.rotateFacingSouth(facing, matrices);
-        matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle));
-        matrices.translate(-0.5, -0.5, -0.5);
+        rotor.loadIdentity().translate(getInstancePosition()).centre()
+            .multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()))
+            .multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle))
+            .unCentre();
+    }
 
-        rotor.setTransform(matrices);
-
-        matrices.pop();
+    @Override
+    public void updateLight()
+    {
+        relight(getWorldPosition(), rotor);
     }
 }
