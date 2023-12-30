@@ -27,7 +27,7 @@ public class MachineHudOverlay
 
     protected MotorisedBlock.Diagnostics diagnostics = null;
     protected int updateInterval = 10;
-    protected long lastUpdateTime = 0;
+    protected int updateCounter = 0;
 
     public MachineHudOverlay()
     {
@@ -45,12 +45,13 @@ public class MachineHudOverlay
 
     public void update(MinecraftClient client, ClientWorld world)
     {
-        if (world == null || client.player == null || world.getTime() - lastUpdateTime < updateInterval)
+        updateCounter = Math.min(updateInterval, updateCounter + 1);
+        if (world == null || client.player == null || updateCounter < updateInterval)
         {
             return;
         }
 
-        lastUpdateTime = world.getTime();
+        updateCounter = 0;
 
         if (client.crosshairTarget != null && client.crosshairTarget instanceof BlockHitResult result)
         {
