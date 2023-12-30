@@ -27,12 +27,11 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
-import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
+import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressInstance;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
-import com.neep.neepmeat.machine.stirling_engine.StirlingEngineInstance;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
@@ -175,7 +174,6 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.ALEMBIC, AlembicRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.CASTING_BASIN, CastingBasinRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.HYDRAULIC_PRESS, HydraulicPressRenderer::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.PEDESTAL, c -> new ItemBlockEntityRenderer<>(
                 c, be -> be.getStorage(null).getResource().toStack(), be -> 0.67f));
