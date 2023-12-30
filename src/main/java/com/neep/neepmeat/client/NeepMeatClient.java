@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client;
 
+import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
@@ -21,6 +22,7 @@ import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.item.NetworkingToolItem;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorRenderer;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
@@ -28,13 +30,14 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
+import com.neep.neepmeat.machine.grinder.GrinderInstance;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressRenderer;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.motor.MotorRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
-import com.neep.neepmeat.machine.pylon.PylonRenderer;
+import com.neep.neepmeat.machine.pylon.PylonInstance;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
 import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
@@ -143,7 +146,16 @@ public class NeepMeatClient implements ClientModInitializer
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());
         ModelLoadingRegistry.INSTANCE.registerModelProvider(NMExtraModels.EXTRA_MODELS);
+        NMExtraModels.init();
         NMParticles.Client.init();
+
+        // Flywheel
+        InstancedRenderRegistry.configure(NMBlockEntities.GRINDER).factory(GrinderInstance::new).apply();
+        BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
+
+        InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NMBlockEntities.PYLON).alwaysSkipRender().factory(PylonInstance::new).apply();
 
         // BlockEntity renderers
         BlockEntityRendererFactories.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
@@ -169,13 +181,12 @@ public class NeepMeatClient implements ClientModInitializer
 //        BlockEntityRendererFactories.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.LINEAR_OSCILLATOR, LinearOscillatorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MOTOR, MotorRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_MOTOR, AdvancedMotorRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_MOTOR, AdvancedMotorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MIXER, MixerRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.STIRLING_ENGINE, StirlingEngineRenderer::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.CRUCIBLE, CrucibleRenderer::new);
@@ -193,7 +204,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererFactories.register(NMBlockEntities.BOTTLER, BottlerRenderer::new);
 
-        BlockEntityRendererFactories.register(NMBlockEntities.PYLON, PylonRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.PYLON, PylonInstance::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 

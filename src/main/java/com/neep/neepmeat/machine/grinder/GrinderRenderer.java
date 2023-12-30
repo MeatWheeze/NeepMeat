@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.grinder;
 
 import com.neep.neepmeat.api.storage.WritableStackStorage;
-import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -25,12 +24,12 @@ import java.util.Random;
 @Environment(value= EnvType.CLIENT)
 public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
 {
-    private final ItemRenderer itemRenderer;
     private final Random random = new Random();
+    private final ItemRenderer itemRenderer;
 
     public GrinderRenderer(BlockEntityRendererFactory.Context ctx)
     {
-        this.itemRenderer = MinecraftClient.getInstance().getItemRenderer();
+        this.itemRenderer = ctx.getItemRenderer();
     }
 
     @Override
@@ -38,22 +37,10 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
     {
         double sinTime = Math.sin(be.getWorld().getTime()) * Math.cos(tickDelta) + Math.cos(be.getWorld().getTime()) * Math.sin(tickDelta);
 
-        matrices.push();
         Direction facing = be.getCachedState().get(GrinderBlock.FACING);
-        BERenderUtils.rotateFacing(facing, matrices);
-
-        if (be.currentRecipe != null && be.progressIncrement() > 0)
-        {
-            var unit = facing.getUnitVector();
-            double magnitude = Math.abs(0.05 * sinTime);
-
-            matrices.translate(unit.getX() * magnitude, 0, unit.getZ() * magnitude);
-
-        }
-        BERenderUtils.renderModel(NMExtraModels.CRUSHER_JAW, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
-        matrices.pop();
 
         matrices.push();
+        BERenderUtils.rotateFacing(facing, matrices);
         float yOffset = 11 / 16f;
         if (be.currentRecipe != null)
         {
@@ -68,10 +55,10 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         int j = stack.isEmpty() ? 187 : Item.getRawId(stack.getItem()) + stack.getDamage();
         this.random.setSeed(j);
 
+        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
         renderItems(stack, matrices, vertexConsumers, itemRenderer, be.getWorld(), random, light);
         matrices.pop();
     }
@@ -138,4 +125,5 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         }
         return i;
     }
+
 }

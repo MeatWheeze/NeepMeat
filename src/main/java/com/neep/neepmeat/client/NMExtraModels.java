@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client;
 
+import com.jozufozu.flywheel.core.PartialModel;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.minecraft.resource.ResourceManager;
@@ -9,6 +10,11 @@ import java.util.function.Consumer;
 
 public class NMExtraModels implements ExtraModelProvider
 {
+    public static final PartialModel P_CRUSHER_JAW = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/grinder/jaw"));
+    public static final PartialModel P_PYLON_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor"));
+    public static final PartialModel P_PYLON_ACTIVE_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor_active"));
+    public static final PartialModel P_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor"));
+
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");
@@ -72,5 +78,10 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(ROBOTIC_ARM_SPINNY_BIT);
         out.accept(ROBOTIC_ARM_SEGMENT_1);
         out.accept(ROBOTIC_ARM_SEGMENT_2);
+    }
+
+    public static void init()
+    {
+
     }
 }

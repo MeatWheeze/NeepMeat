@@ -24,8 +24,8 @@ repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url 'https://www.jitpack.io' }
 	maven { url 'https://maven.ladysnake.org/releases' }
-//	maven { url 'https://lazurite.dev/releases' } // A random myron fork for the wrong version
 	maven { url "https://maven.terraformersmc.com/" }
+	maven { url "https://maven.tterrag.com/" }
 }
 
 configurations.configureEach {
@@ -56,12 +56,16 @@ dependencies {
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-item:${project.cca_version}")
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}")
 
+	// Flywheel
+	modImplementation("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
+
 	// REI
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
 
 	// Myron
 //	modImplementation include("dev.monarkhes:myron:1.6.2+1.19.2")
+
 
 	// EMI
 	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
