@@ -23,7 +23,6 @@ import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.item.NetworkingToolItem;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
-import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorRenderer;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
@@ -40,7 +39,7 @@ import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.pylon.PylonInstance;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineRenderer;
-import com.neep.neepmeat.machine.surgical_controller.PLCRenderer;
+import com.neep.neepmeat.machine.surgical_controller.PLCInstance;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
@@ -154,8 +153,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
 
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
-
         InstancedRenderRegistry.configure(NMBlockEntities.PYLON).alwaysSkipRender().factory(PylonInstance::new).apply();
+        InstancedRenderRegistry.configure(PLCBlocks.PLC_ENTITY).alwaysSkipRender().factory(PLCInstance::new).apply();
 
         // BlockEntity renderers
         BlockEntityRendererFactories.register(NMBlockEntities.WINDOW_PIPE, WindowPipeRenderer::new);
@@ -208,7 +207,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockEntityRendererFactories.register(NMBlockEntities.SYNTHESISER, SynthesiserRenderer::new);
 
-        BlockEntityRendererFactories.register(PLCBlocks.PLC_ENTITY, PLCRenderer::new);
+//        BlockEntityRendererFactories.register(PLCBlocks.PLC_ENTITY, PLCInstance::new);
 
         BlockEntityRendererFactories.register(NMBlockEntities.ITEM_MINCER, ItemMincerRenderer::new);
 
