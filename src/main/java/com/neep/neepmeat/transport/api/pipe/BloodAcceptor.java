@@ -18,18 +18,19 @@ public interface BloodAcceptor
         return 0;
     }
 
-    default void updateInflux(float influx) {};
+    default float updateInflux(float influx) { return influx; };
 
     Mode getMode();
 
     enum Mode
     {
-        IN,
-        OUT;
+        SINK,
+        SOURCE,
+        ACTIVE_SINK;
 
         public boolean isOut()
         {
-            return this == OUT;
+            return this == SOURCE;
         }
     }
 }

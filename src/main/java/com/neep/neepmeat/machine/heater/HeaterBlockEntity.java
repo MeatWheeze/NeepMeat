@@ -144,14 +144,15 @@ public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAccep
     }
 
     @Override
-    public void updateInflux(float influx)
+    public float updateInflux(float influx)
     {
         this.influx = influx;
+        return influx;
     }
 
     @Override
     public Mode getMode()
     {
-        return Mode.IN;
+        return Mode.SINK;
     }
 }

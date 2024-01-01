@@ -91,4 +91,9 @@ public class PosDirectionMap<T>
         }
         return listCache;
     }
+
+    public void forEach(Consumer<T> action)
+    {
+        flatStream().forEach(action);
+    }
 }

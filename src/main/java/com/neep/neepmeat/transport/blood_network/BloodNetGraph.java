@@ -21,10 +21,10 @@ import java.util.Set;
 public class BloodNetGraph
 {
     protected final World world;
-    protected final BloodNetworkImpl.AcceptorManager acceptors;
+    protected final ConduitBloodNetwork.AcceptorManager acceptors;
     protected Long2ObjectOpenHashMap<VascularConduitEntity> conduits = new Long2ObjectOpenHashMap<>();
 
-    public BloodNetGraph(World world, BloodNetworkImpl.AcceptorManager acceptors)
+    public BloodNetGraph(World world, ConduitBloodNetwork.AcceptorManager acceptors)
     {
         this.world = world;
         this.acceptors = acceptors;

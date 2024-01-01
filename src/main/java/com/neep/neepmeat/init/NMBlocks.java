@@ -53,6 +53,8 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
 import com.neep.neepmeat.transport.machine.item.BufferBlock;
@@ -75,6 +77,7 @@ public class NMBlocks
     public static final AbstractBlock.Settings METAL = FabricBlockSettings.of(Material.METAL).hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
     public static final AbstractBlock.Settings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
     public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
+    public static final AbstractBlock.Settings VASCULAR_CONDUIT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
     public static final AbstractBlock.Settings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).nonOpaque().solidBlock(InventoryDetectorBlock::never);
     public static final AbstractBlock.Settings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final AbstractBlock.Settings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
@@ -242,9 +245,10 @@ public class NMBlocks
     public static Block DUMPER = BlockRegistry.queue(new DumperBlock("dumper", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.OAK_WOOD)));
 
     // --- Data ---
-    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), FLUID_PIPE_SETTINGS));
-    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), FLUID_PIPE_SETTINGS));
-    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block().tooltip(TooltipSupplier.simple(1)), FLUID_PIPE_SETTINGS));
+    public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), VASCULAR_CONDUIT_SETTINGS));
+    public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
+    public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS));
+    public static Block VSC = BlockRegistry.queue(new VSCBlock("vsc", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
 
     // --- Crops ---
     public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));

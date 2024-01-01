@@ -28,25 +28,20 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
 
     @Nullable protected BlockApiCache<Void, Void> cache = null;
 
-    protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    protected final BloodAcceptor bloodAcceptor = new BloodAcceptor()
     {
         @Override
-        public long getOutput()
-        {
-            return 0;
-        }
-
-        @Override
-        public void updateInflux(float influx)
+        public float updateInflux(float influx)
         {
             AdvancedMotorBlockEntity.this.influx = influx;
             onPowerChange();
+            return influx;
         }
 
         @Override
         public Mode getMode()
         {
-            return Mode.IN;
+            return Mode.SINK;
         }
     };
 

@@ -43,7 +43,7 @@ public class BloodNetworkManager extends PersistentState
 
     public BloodNetwork create(BlockPos pos)
     {
-        var network = new BloodNetworkImpl(UUID.randomUUID(), world);
+        var network = new ConduitBloodNetwork(UUID.randomUUID(), world);
 
 //        TransportComponents.BLOOD_NETWORK.get(world.getChunk(pos)).addNetwork(network);
         tickingNetworks.put(network.getUUID(), network);
@@ -160,7 +160,7 @@ public class BloodNetworkManager extends PersistentState
                 var map = component.getPipes().asMap();
                 map.forEach((uuid, pipes) ->
                 {
-                    manager.tickingNetworks.computeIfAbsent(uuid, u -> new BloodNetworkImpl(uuid, world))
+                    manager.tickingNetworks.computeIfAbsent(uuid, u -> new ConduitBloodNetwork(uuid, world))
                             .insert(pipes);
                 });
             });

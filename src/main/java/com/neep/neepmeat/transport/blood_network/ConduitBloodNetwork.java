@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-public class BloodNetworkImpl implements BloodNetwork
+public class ConduitBloodNetwork implements BloodNetwork
 {
     protected final ServerWorld world;
     protected final UUID uuid;
@@ -29,11 +29,14 @@ public class BloodNetworkImpl implements BloodNetwork
 
     protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
 
-    protected long output = 0;
+    protected long lastInternal = 0;
     protected boolean removed = false;
     protected boolean dirty = false;
 
-    public BloodNetworkImpl(UUID uuid, ServerWorld world)
+    protected double frequency;
+    protected double potential;
+
+    public ConduitBloodNetwork(UUID uuid, ServerWorld world)
     {
         this.uuid = uuid;
         this.world = world;
@@ -64,7 +67,8 @@ public class BloodNetworkImpl implements BloodNetwork
         // Rediscover conduits and acceptors, leaving disconnected branches with null network.
         conduits.rebuild(pos);
 
-        if (!validate()) return;
+        if (!validate())
+            return;
 
         conduits.getConduits().values().forEach(c -> c.setNetwork(this));
 
@@ -86,23 +90,51 @@ public class BloodNetworkImpl implements BloodNetwork
             internal += acceptor.getOutput();
         }
 
-        int size = acceptors.sinks().asList().size();
-        long out = size != 0 ? internal / size : 0;
+//        var cit = acceptors.consumers().flatStream().iterator();
+//        while (cit.hasNext())
+//        {
+//            var consumer = cit.next();
+//        }
 
-        if (out != output)
+        int size = acceptors.sinks().asList().size();
+
+//        long out = size != 0 ? internal / size : 0;
+//        long out = size != 0 ? internal : 0;
+
+        if (internal != lastInternal)
         {
             sinkUpdateQueue.addAll(acceptors.sinks().asList());
-            output = out;
+            sinkUpdateQueue.addAll(acceptors.activeSinks().asList());
+            lastInternal = internal;
         }
 
-        var sit = sinkUpdateQueue.iterator();
-        while (sit.hasNext())
+        if (!sinkUpdateQueue.isEmpty())
         {
-            var sink = sit.next();
-            sit.remove();
+            float outputPU = ((float) (internal)) / PowerUtils.referencePower();
+            for (var consumer : acceptors.activeSinks().asList())
+            {
+                float inserted = consumer.updateInflux(outputPU);
+                outputPU = Math.max(0, outputPU - inserted);
+            }
 
-            sink.updateInflux(((float) out) / PowerUtils.referencePower());
+            // Passive sinks will soak up the remainder.
+            float perSink = size != 0 ? outputPU / size : 0;
+            for (var sink : acceptors.sinks().asList())
+            {
+                sink.updateInflux(perSink);
+            }
+
+            sinkUpdateQueue.clear();
         }
+
+//        var sit = sinkUpdateQueue.iterator();
+//        while (sit.hasNext())
+//        {
+//            var sink = sit.next();
+//            sit.remove();
+//
+//            sink.updateInflux(((float) out) / PowerUtils.referencePower());
+//        }
     }
 
     @Override
@@ -169,7 +201,7 @@ public class BloodNetworkImpl implements BloodNetwork
 
     public void mergeInto(BloodNetwork network)
     {
-        if (network instanceof BloodNetworkImpl other)
+        if (network instanceof ConduitBloodNetwork other)
         {
             conduits.getConduits().forEach(other::insert);
             acceptors.mergeInto(other.acceptors);
@@ -189,6 +221,7 @@ public class BloodNetworkImpl implements BloodNetwork
 
             network.mergeInto(this);
         }
+
         acceptors.sort();
         sinkUpdateQueue.addAll(acceptors.sinks().asList());
 
@@ -224,6 +257,7 @@ public class BloodNetworkImpl implements BloodNetwork
         protected PosDirectionMap<BloodAcceptor> acceptors = new PosDirectionMap<>(BloodAcceptor.class);
         protected PosDirectionMap<BloodAcceptor> sources = new PosDirectionMap<>(BloodAcceptor.class);
         protected PosDirectionMap<BloodAcceptor> sinks = new PosDirectionMap<>(BloodAcceptor.class);
+        protected PosDirectionMap<BloodAcceptor> consumers = new PosDirectionMap<>(BloodAcceptor.class);
         public boolean sort = false;
 
 
@@ -272,13 +306,11 @@ public class BloodNetworkImpl implements BloodNetwork
         public void add(long pos, int dir, BloodAcceptor acceptor)
         {
             acceptors.put(pos, dir, acceptor);
-            if (acceptor.getMode().isOut())
+            switch (acceptor.getMode())
             {
-                sources.put(pos, dir, acceptor);
-            }
-            else
-            {
-                sinks.put(pos, dir, acceptor);
+                case SOURCE -> sources.put(pos, dir, acceptor);
+                case SINK -> sinks.put(pos, dir, acceptor);
+                case ACTIVE_SINK -> consumers.put(pos, dir, acceptor);
             }
         }
 
@@ -286,6 +318,7 @@ public class BloodNetworkImpl implements BloodNetwork
         {
             sources.clear();
             sinks.clear();
+            consumers.clear();
             acceptors.fastForEach(entry ->
             {
                 for (int dir = 0; dir < 6; ++dir)
@@ -293,13 +326,12 @@ public class BloodNetworkImpl implements BloodNetwork
                     var acceptor = entry.getValue()[dir];
                     if (acceptor == null) continue;
 
-                    if (acceptor.getMode().isOut())
+                    long pos = entry.getLongKey();
+                    switch (acceptor.getMode())
                     {
-                        sources.put(entry.getLongKey(), dir, acceptor);
-                    }
-                    else
-                    {
-                        sinks.put(entry.getLongKey(), dir, acceptor);
+                        case SOURCE -> sources.put(pos, dir, acceptor);
+                        case SINK -> sinks.put(pos, dir, acceptor);
+                        case ACTIVE_SINK -> consumers.put(pos, dir, acceptor);
                     }
                 }
             });
@@ -313,6 +345,7 @@ public class BloodNetworkImpl implements BloodNetwork
             acceptors.remove(lpos);
             sources.remove(lpos);
             sinks.remove(lpos);
+            consumers.remove(lpos);
         }
 
         public void clear()
@@ -320,6 +353,7 @@ public class BloodNetworkImpl implements BloodNetwork
             acceptors.clear();
             sources.clear();
             sinks.clear();
+            consumers.clear();
         }
 
         public Stream<BloodAcceptor> sources()
@@ -330,6 +364,11 @@ public class BloodNetworkImpl implements BloodNetwork
         public PosDirectionMap<BloodAcceptor> sinks()
         {
             return sinks;
+        }
+
+        public PosDirectionMap<BloodAcceptor> activeSinks()
+        {
+            return consumers;
         }
     }
 }

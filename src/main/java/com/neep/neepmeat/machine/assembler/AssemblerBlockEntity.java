@@ -63,15 +63,16 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
     protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
     {
         @Override
-        public void updateInflux(float influx)
+        public float updateInflux(float influx)
         {
             powerInput = influx;
+            return influx;
         }
 
         @Override
         public Mode getMode()
         {
-            return Mode.IN;
+            return Mode.SINK;
         }
     };
 

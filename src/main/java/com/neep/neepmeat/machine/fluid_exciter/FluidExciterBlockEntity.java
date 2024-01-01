@@ -76,7 +76,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         @Override
         public Mode getMode()
         {
-            return Mode.OUT;
+            return Mode.SOURCE;
         }
     };
 

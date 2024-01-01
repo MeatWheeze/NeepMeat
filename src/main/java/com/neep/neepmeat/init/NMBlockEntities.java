@@ -59,6 +59,7 @@ import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
@@ -175,6 +176,7 @@ public class NMBlockEntities
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
+    public static BlockEntityType<VSCBlockEntity> VSC;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -229,6 +231,8 @@ public class NMBlockEntities
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
         VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
+        VSC = register("vsc", (pos, state) -> new VSCBlockEntity(VSC, pos, state), NMBlocks.VSC);
+        BloodAcceptor.SIDED.registerForBlockEntity(VSCBlockEntity::getBloodAcceptor, VSC);
 
         METAL_BARREL = register("metal_barrel", (pos, state) -> new MetalBarrelBlockEntity(METAL_BARREL, pos, state), NMBlocks.METAL_BARREL);
 
@@ -426,7 +430,7 @@ public class NMBlockEntities
             @Override
             public Mode getMode()
             {
-                return Mode.OUT;
+                return Mode.SOURCE;
             }
 
             @Override
