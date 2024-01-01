@@ -27,7 +27,6 @@ import com.neep.neepmeat.machine.casting_basin.CastingBasinRenderer;
 import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
-import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressInstance;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
