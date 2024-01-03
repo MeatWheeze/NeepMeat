@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -25,16 +26,13 @@ public class ConduitBloodNetwork implements BloodNetwork
     protected final UUID uuid;
 
     protected final BloodNetGraph conduits;
-    protected AcceptorManager acceptors = new AcceptorManager();
+    protected AcceptorManager acceptors = new AcceptorManager(this);
 
     protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
 
     protected long lastInternal = 0;
     protected boolean removed = false;
     protected boolean dirty = false;
-
-    protected double frequency;
-    protected double potential;
 
     public ConduitBloodNetwork(UUID uuid, ServerWorld world)
     {
@@ -60,7 +58,8 @@ public class ConduitBloodNetwork implements BloodNetwork
     {
         // Disown all conduits
         conduits.getConduits().values().forEach(c -> c.setNetwork(null));
-        acceptors.stream().forEach(a -> a.updateInflux(0));
+        acceptors.stream().forEach(this::removeAcceptor);
+
         acceptors.clear();
         sinkUpdateQueue.clear();
 
@@ -138,6 +137,13 @@ public class ConduitBloodNetwork implements BloodNetwork
     }
 
     @Override
+    public void updateTransfer(@Nullable BloodAcceptor changed)
+    {
+        // TODO: replace with boolean flag
+        sinkUpdateQueue.add(() -> null);
+    }
+
+    @Override
     public void add(BlockPos pos, VascularConduitEntity newPart)
     {
         insert(pos.asLong(), newPart);
@@ -166,7 +172,7 @@ public class ConduitBloodNetwork implements BloodNetwork
     @Override
     public void remove(BlockPos pos, VascularConduitEntity part)
     {
-        acceptors.get(pos).forEach(a -> { if (a != null) a.updateInflux(0); } );
+        acceptors.get(pos).forEach(this::removeAcceptor);
         acceptors.remove(pos);
 
         conduits.remove(pos.asLong());
@@ -187,7 +193,7 @@ public class ConduitBloodNetwork implements BloodNetwork
     @Override
     public void update(BlockPos pos, VascularConduitEntity part)
     {
-        acceptors.get(pos).forEach(a -> { if (a != null) a.updateInflux(0); } );
+        acceptors.get(pos).forEach(this::removeAcceptor);
 
         acceptors.remove(pos);
         conduits.remove(pos.asLong());
@@ -197,6 +203,15 @@ public class ConduitBloodNetwork implements BloodNetwork
 
         validate();
         dirty = true;
+    }
+
+    private void removeAcceptor(BloodAcceptor acceptor)
+    {
+        if (acceptor == null)
+            return;
+
+        acceptor.updateInflux(0);
+        acceptor.setNetwork(null);
     }
 
     public void mergeInto(BloodNetwork network)
@@ -254,12 +269,18 @@ public class ConduitBloodNetwork implements BloodNetwork
 
     class AcceptorManager
     {
+        private final ConduitBloodNetwork network;
+
         protected PosDirectionMap<BloodAcceptor> acceptors = new PosDirectionMap<>(BloodAcceptor.class);
         protected PosDirectionMap<BloodAcceptor> sources = new PosDirectionMap<>(BloodAcceptor.class);
         protected PosDirectionMap<BloodAcceptor> sinks = new PosDirectionMap<>(BloodAcceptor.class);
         protected PosDirectionMap<BloodAcceptor> consumers = new PosDirectionMap<>(BloodAcceptor.class);
         public boolean sort = false;
 
+        public AcceptorManager(ConduitBloodNetwork network)
+        {
+            this.network = network;
+        }
 
         public void discover(World world, BlockPos pos, BlockState state, VascularConduit conduit)
         {
@@ -296,6 +317,10 @@ public class ConduitBloodNetwork implements BloodNetwork
                 for (int dir = 0; dir < 6; ++dir)
                 {
                     var a = entry.getValue();
+
+                    if (a[dir] != null)
+                        a[dir].setNetwork(other.network);
+
                     other.acceptors.put(entry.getLongKey(), dir, a[dir]);
                 }
             });
@@ -306,6 +331,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         public void add(long pos, int dir, BloodAcceptor acceptor)
         {
             acceptors.put(pos, dir, acceptor);
+            acceptor.setNetwork(ConduitBloodNetwork.this);
             switch (acceptor.getMode())
             {
                 case SOURCE -> sources.put(pos, dir, acceptor);

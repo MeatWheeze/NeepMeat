@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -62,7 +63,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         }
     };
 
-    BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public long getOutput()

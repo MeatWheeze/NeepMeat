@@ -5,6 +5,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.FakePlayerEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.AssemblerScreenHandler;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
@@ -60,7 +61,7 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
 
     protected int targetSize;
 
-    protected BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    protected BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public float updateInflux(float influx)

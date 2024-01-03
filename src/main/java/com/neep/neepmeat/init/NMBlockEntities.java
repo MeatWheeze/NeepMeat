@@ -58,6 +58,7 @@ import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;

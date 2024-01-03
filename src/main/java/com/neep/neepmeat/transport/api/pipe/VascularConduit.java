@@ -100,10 +100,13 @@ public interface VascularConduit
                     var network = BloodNetwork.find(world, mutable);
                     if (conduit != null)
                     {
-                        if ( network != null && !updatedNetworks.contains(network))
+                        if (network != null)
                         {
-                            updatedNetworks.add(network);
-                            network.rebuild(mutable.toImmutable(), reason);
+                            if (!updatedNetworks.contains(network))
+                            {
+                                updatedNetworks.add(network);
+                                network.rebuild(mutable.toImmutable(), reason);
+                            }
                         }
                         else
                         {

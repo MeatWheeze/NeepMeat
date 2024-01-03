@@ -14,6 +14,7 @@ public class VSCScreenHandler extends BasicScreenHandler
     public VSCScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
         this(playerInventory, null, syncId, new ArrayPropertyDelegate(VSCBlockEntity.VSCDelegate.Names.values().length));
+        setProperty(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), buf.readInt());
     }
 
     public VSCScreenHandler(PlayerInventory playerInventory, @Nullable Inventory inventory, int syncId, @Nullable PropertyDelegate delegate)

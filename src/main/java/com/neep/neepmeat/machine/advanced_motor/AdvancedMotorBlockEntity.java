@@ -6,6 +6,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.minecraft.block.BlockState;
@@ -28,7 +29,7 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
 
     @Nullable protected BlockApiCache<Void, Void> cache = null;
 
-    protected final BloodAcceptor bloodAcceptor = new BloodAcceptor()
+    protected final BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public float updateInflux(float influx)

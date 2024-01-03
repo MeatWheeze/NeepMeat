@@ -1,12 +1,14 @@
 package com.neep.neepmeat.transport.block.energy_transport.entity;
 
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
+import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,11 +22,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandlerFactory
+public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
     protected long influx;
 
-    protected final BloodAcceptor backAcceptor = new BloodAcceptor()
+    protected final AbstractBloodAcceptor backAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public Mode getMode()
@@ -48,7 +50,7 @@ public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandler
         }
     };
 
-    protected final BloodAcceptor frontAcceptor = new BloodAcceptor()
+    protected final BloodAcceptor frontAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public Mode getMode()
@@ -81,6 +83,19 @@ public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandler
         return frontAcceptor;
     }
 
+    public void setDesiredPower(int power)
+    {
+        if (desiredPower != power)
+        {
+            desiredPower = power;
+            BloodNetwork network = backAcceptor.getNetwork();
+            if (network != null)
+            {
+                network.updateTransfer(backAcceptor);
+            }
+        }
+    }
+
     @Override
     public void readNbt(NbtCompound nbt)
     {
@@ -89,7 +104,7 @@ public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandler
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt.putInt("desired_power", desiredPower);
@@ -98,7 +113,7 @@ public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandler
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
     {
-
+        buf.writeInt(desiredPower);
     }
 
     @Override
@@ -130,7 +145,7 @@ public class VSCBlockEntity extends BlockEntity implements ExtendedScreenHandler
         {
             switch (Names.values()[index])
             {
-                case POWER_FLOW_EJ -> desiredPower = value;
+                case POWER_FLOW_EJ -> setDesiredPower(value);
             }
             markDirty();
         }
