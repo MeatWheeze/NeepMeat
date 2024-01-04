@@ -65,7 +65,7 @@ dependencies {
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
 
 	// Myron
-	modImplementation "dev.monarkhes:myron:1.6.2+1.19.2-test"
+	modImplementation "dev.monarkhes:myron:${project.myron_version}"
 
 	// EMI
 	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"

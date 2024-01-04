@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.block.entity.AdvancedIntegratorStructureBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -34,6 +35,12 @@ public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedInteg
     }
 
     @Override
+    public BlockRenderType getRenderType(BlockState state)
+    {
+        return BlockRenderType.MODEL;
+    }
+
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (!player.getStackInHand(hand).isEmpty())
@@ -49,10 +56,4 @@ public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedInteg
         }
         return ActionResult.SUCCESS;
     }
-
-//    @Override
-//    public @Nullable BigBlockStructureBlockEntity createBlockEntity(BlockPos pos, BlockState state)
-//    {
-//        return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE.instantiate(pos, state);
-//    }
 }
