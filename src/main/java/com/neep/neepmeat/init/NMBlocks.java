@@ -87,6 +87,8 @@ public class NMBlocks
 //    public static Block DUAT_COBBLESTONE = new BaseBuildingBlock("duat_cobblestone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
 //    public static Block DUAT_GRAVEL = BlockRegistry.queue(new BaseBlock("duat_gravel", block(), FabricBlockSettings.of(Material.STONE).strength(1.0f).sounds(BlockSoundGroup.GRAVEL)));
 
+    public static Block OBJ_TEST = BlockRegistry.queue(new BaseBlock("obj_test", FabricBlockSettings.copyOf(Blocks.STONE)));
+
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));

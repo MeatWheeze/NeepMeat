@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/block",
+  "model": "neepmeat:block/obj_test.obj"
+}

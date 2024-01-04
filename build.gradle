@@ -37,6 +37,7 @@ configurations.configureEach {
 }
 
 
+
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
 
@@ -64,8 +65,7 @@ dependencies {
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
 
 	// Myron
-//	modImplementation include("dev.monarkhes:myron:1.6.2+1.19.2")
-
+	modImplementation "dev.monarkhes:myron:1.6.2+1.19.2-test"
 
 	// EMI
 	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"

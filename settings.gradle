@@ -9,3 +9,9 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
+
+sourceControl {
+    gitRepository('https://github.com/MeatWheeze/myron.git') {
+        producesModule("dev.monarkhes:myron")
+    }
+}
