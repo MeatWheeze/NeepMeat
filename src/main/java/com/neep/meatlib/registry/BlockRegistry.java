@@ -50,7 +50,7 @@ public class BlockRegistry
         return (Block) block;
     }
 
-    public static Block queue(Block block, String registryName)
+    public static <T extends Block> T queue(T block, String registryName)
     {
         MeatLib.assertActive(block);
         BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);

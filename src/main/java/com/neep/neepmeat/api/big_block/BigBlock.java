@@ -1,49 +1,71 @@
 package com.neep.neepmeat.api.big_block;
 
-import com.neep.meatlib.block.MeatlibBlock;
-import net.minecraft.block.*;
-import net.minecraft.block.entity.BlockEntityType;
+import com.neep.meatlib.block.BaseBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class BigBlock extends Block implements MeatlibBlock
+public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 {
-    private final String registryName;
-    private final BigBlockStructure structureBlock;
+//    public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 2);
 
-    public BigBlock(String registryName, Settings settings)
+    private final T structureBlock;
+
+    public BigBlock(Settings settings)
     {
         super(settings);
-        this.registryName = registryName;
-        this.structureBlock = createStructure();
+        this.structureBlock = registerStructureBlock();
     }
 
-    protected abstract BigBlockStructure createStructure();
+    protected abstract T registerStructureBlock();
+
     protected abstract BlockVolume getVolume();
+//    protected BigBlockStructure registerStructureBlock()
+//    {
+//        return BlockRegistry.queue(new BigBlockStructure(this, FabricBlockSettings.of(Material.METAL)), "obj_test_structure");
 
-    public final BigBlockStructure getStructure()
+//    }
+
+//    protected BlockVolume getVolume()
+//    {
+//        return VOLUME;
+//    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return structureBlock;
+        return getVolume().toVoxelShape();
     }
-
-    protected abstract BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType();
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
     {
-        Box box = getVolume().toBox(pos);
-        return world.isSpaceEmpty(box) && super.canPlaceAt(state, world, pos);
+        for (var a : getVolume().iterable())
+        {
+            if (!world.isAir(pos.add(a)))
+            {
+                return false;
+            }
+        }
+
+        return super.canPlaceAt(state, world, pos) && world.isSpaceEmpty(getVolume().toBox(pos));
     }
 
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
+        super.onPlaced(world, pos, state, placer, itemStack);
+
         BlockPos.Mutable mutable = pos.mutableCopy();
         for (Vec3i vec : getVolume().iterable())
         {
@@ -53,17 +75,18 @@ public abstract class BigBlock extends Block implements MeatlibBlock
             if (mutable.equals(pos)) continue;
 
             world.setBlockState(mutable, structureBlock.getDefaultState(), NOTIFY_ALL);
-            if (world.getBlockEntity(mutable) instanceof BigBlockStructureBlockEntity be)
+            if (world.getBlockEntity(mutable) instanceof BigBlockStructureEntity be)
             {
                 be.setController(pos);
             }
         }
-        super.onPlaced(world, pos, state, placer, itemStack);
     }
 
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
+        super.onStateReplaced(state, world, pos, newState, moved);
+
         if (!newState.isOf(this))
         {
             BlockPos.Mutable mutable = pos.mutableCopy();
@@ -73,13 +96,10 @@ public abstract class BigBlock extends Block implements MeatlibBlock
                 world.setBlockState(mutable, Blocks.AIR.getDefaultState(), NOTIFY_ALL);
             }
         }
-        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
-    @Override
-    public String getRegistryName()
+    public T getStructure()
     {
-        return registryName;
+        return structureBlock;
     }
-
 }

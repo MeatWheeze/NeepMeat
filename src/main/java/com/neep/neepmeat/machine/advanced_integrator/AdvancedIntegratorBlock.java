@@ -1,15 +1,13 @@
 package com.neep.neepmeat.machine.advanced_integrator;
 
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BigBlockStructure;
-import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.api.big_block.BlockVolume;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
@@ -32,27 +30,29 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProvider, DataCable
+public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructure> implements MeatlibBlock, BlockEntityProvider, DataCable
 {
     public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 0);
-//    public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
+
+    private final String registryName;
 
     public AdvancedIntegratorBlock(String registryName, Settings settings)
     {
-        super(registryName, settings.nonOpaque());
+        super(settings);
+        this.registryName = registryName;
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
     }
 
     @Override
-    protected BigBlockStructure createStructure()
+    protected AdvancedIntegratorStructure registerStructureBlock()
     {
-        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, FabricBlockSettings.of(Material.METAL)), "advanced_integrator_structure");
     }
 
     @Override
-    protected BlockEntityType<? extends BigBlockStructureBlockEntity> getBlockEntityType()
+    protected BlockVolume getVolume()
     {
-        return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE;
+        return VOLUME;
     }
 
     @Override
@@ -69,12 +69,6 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
         }
 
         return super.onUse(state, world, pos, player, hand, hit);
-    }
-
-    @Override
-    protected BlockVolume getVolume()
-    {
-        return VOLUME;
     }
 
     @Override
@@ -98,5 +92,11 @@ public class AdvancedIntegratorBlock extends BigBlock implements BlockEntityProv
                 (w, pos, state1, be) -> be.serverTick(),
                 (w, pos, state1, be) -> be.clientTick(),
                 world);
+    }
+
+    @Override
+    public String getRegistryName()
+    {
+        return registryName;
     }
 }

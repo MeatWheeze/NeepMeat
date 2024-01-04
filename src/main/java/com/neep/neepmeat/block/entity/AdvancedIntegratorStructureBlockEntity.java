@@ -2,7 +2,7 @@ package com.neep.neepmeat.block.entity;
 
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
-import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
+import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
@@ -16,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedIntegratorStructureBlockEntity extends BigBlockStructureBlockEntity implements Integrator
+public class AdvancedIntegratorStructureBlockEntity extends BigBlockStructureEntity implements Integrator
 {
     @Nullable private AdvancedIntegratorBlockEntity parent;
 

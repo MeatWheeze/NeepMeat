@@ -58,7 +58,6 @@ import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
-import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
@@ -129,7 +128,7 @@ public class NMBlockEntities
     public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
     public static BlockEntityType<IntegratorBlockEntity> INTEGRATOR;
     public static BlockEntityType<AdvancedIntegratorBlockEntity> ADVANCED_INTEGRATOR;
-    public static BlockEntityType<AdvancedIntegratorStructureBlockEntity> ADVANCED_INTEGRATOR_STRUCTURE;
+//    public static BlockEntityType<AdvancedIntegratorStructureBlockEntity> ADVANCED_INTEGRATOR_STRUCTURE;
     public static BlockEntityType<HeaterBlockEntity> HEATER;
 
     public static BlockEntityType<BigLeverBlockEntity> BIG_LEVER;
@@ -267,9 +266,9 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerForBlockEntity(IntegratorBlockEntity::getItemStorage, INTEGRATOR);
 
         ADVANCED_INTEGRATOR = register("advanced_integrator", (pos, state) -> new AdvancedIntegratorBlockEntity(ADVANCED_INTEGRATOR, pos, state), NMBlocks.ADVANCED_INTEGRATOR);
-        ADVANCED_INTEGRATOR_STRUCTURE = register("advanced_integrator_structure",
-                (pos, state) -> new AdvancedIntegratorStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE);
-        DataPort.DATA_PORT.registerForBlockEntity(AdvancedIntegratorStructureBlockEntity::getPort, ADVANCED_INTEGRATOR_STRUCTURE);
+//        ADVANCED_INTEGRATOR_STRUCTURE = register("advanced_integrator_structure",
+//                (pos, state) -> new AdvancedIntegratorStructureBlockEntity(ADVANCED_INTEGRATOR_STRUCTURE, pos, state), NMBlocks.ADVANCED_INTEGRATOR_STRUCTURE);
+        DataPort.DATA_PORT.registerForBlockEntity(AdvancedIntegratorStructureBlockEntity::getPort, NMBlocks.ADVANCED_INTEGRATOR.getStructure().getBlockEntityType());
 
 //        TROMMEL = register("trommel", TrommelBlockEntity::new, NMBlocks.TROMMEL);
 //        TROMMEL_STRUCTURE = register("trommel_structure", TrommelStructureBlockEntity::new, NMBlocks.TROMMEL_STRUCTURE);

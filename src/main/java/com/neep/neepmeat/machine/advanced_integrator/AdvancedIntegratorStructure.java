@@ -1,34 +1,36 @@
 package com.neep.neepmeat.machine.advanced_integrator;
 
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
-import com.neep.neepmeat.api.big_block.BigBlockStructureBlockEntity;
 import com.neep.neepmeat.block.entity.AdvancedIntegratorStructureBlockEntity;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
+import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-public class AdvancedIntegratorStructure extends BigBlockStructure implements DataCable
+public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedIntegratorStructureBlockEntity> implements DataCable
 {
-    public AdvancedIntegratorStructure(BigBlock parent, String registryName, Settings settings)
+    public AdvancedIntegratorStructure(BigBlock parent, Settings settings)
     {
-        super(parent, registryName, settings);
+        super(parent, settings);
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    protected BlockEntityType<AdvancedIntegratorStructureBlockEntity> registerBlockEntity()
     {
-        return parent.getOutlineShape(state, world, pos, context);
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "advanced_integrator_structure"),
+                FabricBlockEntityTypeBuilder.create(
+                        (p, s) -> new AdvancedIntegratorStructureBlockEntity(getBlockEntityType(), p, s),
+                        this).build());
     }
 
     @Override
@@ -48,9 +50,9 @@ public class AdvancedIntegratorStructure extends BigBlockStructure implements Da
         return ActionResult.SUCCESS;
     }
 
-    @Override
-    public @Nullable BigBlockStructureBlockEntity createBlockEntity(BlockPos pos, BlockState state)
-    {
-        return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE.instantiate(pos, state);
-    }
+//    @Override
+//    public @Nullable BigBlockStructureBlockEntity createBlockEntity(BlockPos pos, BlockState state)
+//    {
+//        return NMBlockEntities.ADVANCED_INTEGRATOR_STRUCTURE.instantiate(pos, state);
+//    }
 }

@@ -7,17 +7,16 @@ import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.entity.CandleCronenCakeBlock;
 import com.neep.neepmeat.block.entity.CronenCakeBlock;
 import com.neep.neepmeat.block.machine.AgitatorBlock;
-import com.neep.neepmeat.block.machine.TrommelBlock;
 import com.neep.neepmeat.block.redstone.BigLeverBlock;
 import com.neep.neepmeat.block.sapling.BloodBubbleTreeGenerator;
 import com.neep.neepmeat.block.vat.*;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlock;
+import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorStructure;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.machine.alloy_kiln.AlloyKilnBlock;
 import com.neep.neepmeat.machine.assembler.AssemblerBlock;
@@ -53,7 +52,6 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
@@ -87,7 +85,7 @@ public class NMBlocks
 //    public static Block DUAT_COBBLESTONE = new BaseBuildingBlock("duat_cobblestone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
 //    public static Block DUAT_GRAVEL = BlockRegistry.queue(new BaseBlock("duat_gravel", block(), FabricBlockSettings.of(Material.STONE).strength(1.0f).sounds(BlockSoundGroup.GRAVEL)));
 
-    public static Block OBJ_TEST = BlockRegistry.queue(new BaseBlock("obj_test", FabricBlockSettings.copyOf(Blocks.STONE)));
+//    public static Block OBJ_TEST = BlockRegistry.queue(new BigBlock("obj_test", FabricBlockSettings.copyOf(Blocks.STONE)));
 
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
 
@@ -272,9 +270,10 @@ public class NMBlocks
 
     // --- Integrator ---
     public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
+
 //    public static Block ADVANCED_INTEGRATOR_EGG = BlockRegistry.queue(new AdvancedIntegratorEggBlock("advanced_integrator_egg", block(), FabricBlockSettings.copyOf(INTEGRATOR_EGG)));
-    public static BigBlock ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
-    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = ADVANCED_INTEGRATOR.getStructure();
+    public static BigBlock<AdvancedIntegratorStructure> ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+//    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = ADVANCED_INTEGRATOR.getStructure();
 //    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = BlockRegistry.queue(new BigBlockStructure(ADVANCED_INTEGRATOR, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
 
     public static Block STATUE = BlockRegistry.queue(new StatueBlock("statue", block(), FabricBlockSettings.copyOf(Blocks.PRISMARINE)));
