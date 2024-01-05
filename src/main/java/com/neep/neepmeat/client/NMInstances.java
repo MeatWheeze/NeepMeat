@@ -7,6 +7,7 @@ import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
 import com.neep.neepmeat.machine.grinder.GrinderInstance;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressInstance;
+import com.neep.neepmeat.machine.large_motor.LargeMotorInstance;
 import com.neep.neepmeat.machine.motor.MotorInstance;
 import com.neep.neepmeat.machine.pylon.PylonInstance;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineInstance;
@@ -22,8 +23,9 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.GRINDER).factory(GrinderInstance::new).apply();
         BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
 
-        InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.MOTOR).alwaysSkipRender().factory(MotorInstance::new).apply();
+        InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
+        InstancedRenderRegistry.configure(NMBlockEntities.LARGE_MOTOR).alwaysSkipRender().factory(LargeMotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.STIRLING_ENGINE).alwaysSkipRender().factory(StirlingEngineInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.HYDRAULIC_PRESS).alwaysSkipRender().factory(HydraulicPressInstance::new).apply();
 

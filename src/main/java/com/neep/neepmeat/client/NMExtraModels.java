@@ -18,6 +18,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel LO_ARMATURE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/linear_oscillator/armature"));
     public static final PartialModel STIRLING_ENGINE_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/stirling_engine/rotor"));
     public static final PartialModel HYDRAULIC_PRESS_ARM = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/hydraulic_press/arm"));
+    public static final PartialModel LARGE_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/large_motor/large_motor_rotor.obj"));
 
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 

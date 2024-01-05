@@ -1,7 +1,6 @@
-package com.neep.neepmeat.machine.advanced_motor;
+package com.neep.neepmeat.machine.large_motor;
 
 import com.neep.meatlib.MeatLib;
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -17,36 +16,35 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements MotorEntity
+public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorEntity
 {
-    public float rotorSpeed = 1f; // rad per tick
-    public float currentSpeed = 0;
-    public float angle;
+    public float angle; // TODO: thread things since this is modified concurrently in LargeMotorInstance
+    public float currentSpeed;
+
     protected float influx;
 
-    protected float loadTorque;
-    @Nullable protected MotorisedBlock lastMotorised;
-
-    @Nullable protected BlockApiCache<Void, Void> cache = null;
-
-    protected final BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
+    protected AbstractBloodAcceptor acceptor = new AbstractBloodAcceptor()
     {
-        @Override
-        public float updateInflux(float influx)
-        {
-            AdvancedMotorBlockEntity.this.influx = influx;
-            onPowerChange();
-            return influx;
-        }
-
         @Override
         public Mode getMode()
         {
             return Mode.SINK;
         }
+
+        @Override
+        public float updateInflux(float influx)
+        {
+            LargeMotorBlockEntity.this.influx = influx;
+            return influx;
+        }
     };
 
-    public AdvancedMotorBlockEntity(BlockEntityType<AdvancedMotorBlockEntity> type, BlockPos pos, BlockState state)
+    @Nullable
+    protected BlockApiCache<Void, Void> cache = null;
+    private float loadTorque;
+    private MotorisedBlock lastMotorised;
+
+    public LargeMotorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
     }
@@ -55,10 +53,11 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     {
         if (cache == null)
         {
-            Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+            Direction facing = getCachedState().get(LargeMotorBlock.FACING);
             cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
         }
 
+        // TODO: Replace with API lookup
         if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
         {
             if (motorised.getLoadTorque() != loadTorque)
@@ -87,22 +86,16 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
         sync();
     }
 
-//    @Override
-//    public void setConnectedBlock(BlockApiCache<Void, Void> motorised)
-//    {
-//        this.cache = motorised;
-//    }
-
     @Override
     public float getRotorAngle()
     {
         return angle;
     }
 
-    @Override
-    public BlockApiCache<Void, Void> getConnectedBlock()
+    public float getSpeed()
     {
-        return cache;
+        double power = PowerUtils.perUnitToAbsWatt(getMechPUPower());
+        return (float) (power / Math.max(loadTorque, PowerUtils.MOTOR_TORQUE_LOSS));
     }
 
     @Override
@@ -111,12 +104,6 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
         return influx;
     }
 
-    @Override
-    public float getSpeed()
-    {
-        double power = PowerUtils.perUnitToAbsWatt(getMechPUPower());
-        return (float) (power / (loadTorque != 0 ? loadTorque : PowerUtils.MOTOR_TORQUE_LOSS));
-    }
 
     @Override
     public void writeNbt(NbtCompound nbt)
@@ -134,14 +121,14 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
         this.influx = nbt.getFloat("influx");
     }
 
-    public BloodAcceptor getBloodAcceptor(Direction face)
+    @Override
+    public BlockApiCache<Void, Void> getConnectedBlock()
     {
-        return bloodAcceptor;
+        return null;
     }
 
-    @Override
-    public void markRemoved()
+    public BloodAcceptor getAcceptor(Direction face)
     {
-        super.markRemoved();
+        return acceptor;
     }
 }

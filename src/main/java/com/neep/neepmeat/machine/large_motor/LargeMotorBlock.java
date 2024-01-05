@@ -8,11 +8,16 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BlockVolume;
+import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -22,12 +27,13 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implements MeatlibBlock
+public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     private final String registryName;
     public static final BlockVolume VOLUME = BlockVolume.range(
@@ -66,7 +72,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     @Override
     protected LargeMotorStructureBlock registerStructureBlock()
     {
-        return BlockRegistry.queue(new LargeMotorStructureBlock(this, FabricBlockSettings.of(Material.METAL)), "large_motor_structure");
+        return BlockRegistry.queue(new LargeMotorStructureBlock(this, FabricBlockSettings.copyOf(this)), "large_motor_structure");
     }
 
     @Override
@@ -106,32 +112,9 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
 
     public static VoxelShape rotateShape(VoxelShape shape, Direction direction)
     {
-//        double s = Math.sin(Math.toRadians(degrees));
-//        double c = Math.cos(Math.toRadians(degrees));
-
         AtomicReference<VoxelShape> newShape = new AtomicReference<>(VoxelShapes.empty());
         shape.forEachBox((minX, minY, minZ, maxX, maxY, maxZ) ->
         {
-//            double newMinX = (minX * c - minZ * s);
-//            double newMaxX = (maxX * c - maxZ * s);
-//
-//            double newMinZ = (minZ * c + minX * s);
-//            double newMaxZ = (maxZ * c + maxX * s);
-//
-//            if (newMinX > newMaxX)
-//            {
-//                double temp = newMinX;
-//                newMinX = newMaxX;
-//                newMaxX = temp;
-//            }
-//
-//            if (newMinZ > newMaxZ)
-//            {
-//                double temp = newMinZ;
-//                newMinZ = newMaxZ;
-//                newMaxZ = temp;
-//            }
-
             newShape.set(VoxelShapes.union(newShape.get(), rotatedCuboid(direction, minX, minY, minZ, maxX, maxY, maxZ)));
         });
 
@@ -148,5 +131,19 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
             case EAST -> VoxelShapes.cuboid(1 - zMin, yMin, xMin, 1 - zMax, yMax, xMax);
             default -> throw new IllegalStateException("Unexpected value: " + direction);
         };
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.LARGE_MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return NMBlockEntities.LARGE_MOTOR.instantiate(pos, state);
     }
 }

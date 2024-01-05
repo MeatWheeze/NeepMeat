@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 public class BigBlockStructureEntity extends SyncableBlockEntity
 {
     @Nullable
-    private BlockPos controllerPos;
+    protected BlockPos controllerPos;
 
     public BigBlockStructureEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {

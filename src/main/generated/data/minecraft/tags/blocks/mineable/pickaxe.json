@@ -101,6 +101,8 @@
     "neepmeat:breaker",
     "neepmeat:motor_unit",
     "neepmeat:advanced_motor",
+    "neepmeat:large_motor_structure",
+    "neepmeat:large_motor",
     "neepmeat:stirling_engine",
     "neepmeat:deployer",
     "neepmeat:agitator",

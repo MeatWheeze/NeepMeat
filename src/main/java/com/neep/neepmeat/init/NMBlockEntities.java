@@ -36,6 +36,8 @@ import com.neep.neepmeat.machine.homogeniser.HomogeniserBlockEntity;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
+import com.neep.neepmeat.machine.large_motor.LargeMotorBlockEntity;
+import com.neep.neepmeat.machine.large_motor.LargeMotorStructureEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
 import com.neep.neepmeat.machine.mixer.MixerBlockEntity;
 import com.neep.neepmeat.machine.motor.LiquidFuelMachine;
@@ -84,6 +86,8 @@ import net.minecraft.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+
+import java.beans.Beans;
 
 public class NMBlockEntities
 {
@@ -177,6 +181,7 @@ public class NMBlockEntities
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
     public static BlockEntityType<VSCBlockEntity> VSC;
+    public static BlockEntityType<LargeMotorBlockEntity> LARGE_MOTOR;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -285,6 +290,10 @@ public class NMBlockEntities
 
         ADVANCED_MOTOR = register("advanced_motor", (pos, state) -> new AdvancedMotorBlockEntity(ADVANCED_MOTOR, pos, state), NMBlocks.ADVANCED_MOTOR);
         BloodAcceptor.SIDED.registerForBlockEntity(AdvancedMotorBlockEntity::getBloodAcceptor, ADVANCED_MOTOR);
+
+        LARGE_MOTOR = register("large_motor", (p, s) -> new LargeMotorBlockEntity(LARGE_MOTOR, p, s), NMBlocks.LARGE_MOTOR);
+        BloodAcceptor.SIDED.registerForBlockEntity(LargeMotorBlockEntity::getAcceptor, LARGE_MOTOR);
+        BloodAcceptor.SIDED.registerForBlockEntity(LargeMotorStructureEntity::getBloodAcceptor, NMBlocks.LARGE_MOTOR.getStructure().getBlockEntityType());
 
         STIRLING_ENGINE = register("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = register("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);

@@ -30,14 +30,6 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
 
     protected abstract BlockEntityType<T> registerBlockEntity();
 
-//    protected BlockEntityType<BigBlockStructureEntity> registerBlockEntity()
-//    {
-//        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "argh"),
-//                FabricBlockEntityTypeBuilder.create(
-//                        (p, s) -> new BigBlockStructureEntity(getBlockEntityType(), p, s),
-//                        this).build());
-//    }
-
     public BlockEntityType<T> getBlockEntityType()
     {
         return blockEntityType;
@@ -82,7 +74,7 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     @Override
     protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
     {
-        world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(parent.getDefaultState()));
+//        world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(parent.getDefaultState()));
     }
 
     @Override

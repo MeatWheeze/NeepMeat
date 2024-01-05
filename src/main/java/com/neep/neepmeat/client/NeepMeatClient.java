@@ -270,6 +270,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.VAT_WINDOW);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ADVANCED_INTEGRATOR);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.LARGE_MOTOR);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.REINFORCED_GLASS);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) ((BaseBuildingBlock) NMBlocks.REINFORCED_GLASS).stairs);
