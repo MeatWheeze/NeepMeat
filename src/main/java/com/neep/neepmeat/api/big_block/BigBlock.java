@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.big_block;
 
-import com.neep.meatlib.block.BaseBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -29,7 +28,12 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 
     protected abstract T registerStructureBlock();
 
-    protected abstract BlockVolume getVolume();
+    protected abstract BlockVolume getVolume(BlockState blockState);
+
+//    protected VoxelShape getShape(BlockState state)
+//    {
+//        return getVolume(state).toVoxelShape();
+//    }
 //    protected BigBlockStructure registerStructureBlock()
 //    {
 //        return BlockRegistry.queue(new BigBlockStructure(this, FabricBlockSettings.of(Material.METAL)), "obj_test_structure");
@@ -44,13 +48,13 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return getVolume().toVoxelShape();
+        return getVolume(state).toVoxelShape();
     }
 
     @Override
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
     {
-        for (var a : getVolume().iterable())
+        for (var a : getVolume(state).iterable())
         {
             if (!world.isAir(pos.add(a)))
             {
@@ -58,7 +62,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
             }
         }
 
-        return super.canPlaceAt(state, world, pos) && world.isSpaceEmpty(getVolume().toBox(pos));
+        return super.canPlaceAt(state, world, pos) && world.isSpaceEmpty(getVolume(state).toBox(pos));
     }
 
     @Override
@@ -67,7 +71,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
         super.onPlaced(world, pos, state, placer, itemStack);
 
         BlockPos.Mutable mutable = pos.mutableCopy();
-        for (Vec3i vec : getVolume().iterable())
+        for (Vec3i vec : getVolume(state).iterable())
         {
             mutable.set(pos, vec);
 
@@ -90,7 +94,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
         if (!newState.isOf(this))
         {
             BlockPos.Mutable mutable = pos.mutableCopy();
-            for (Vec3i vec : getVolume().iterable())
+            for (Vec3i vec : getVolume(state).iterable())
             {
                 mutable.set(pos, vec);
                 world.setBlockState(mutable, Blocks.AIR.getDefaultState(), NOTIFY_ALL);

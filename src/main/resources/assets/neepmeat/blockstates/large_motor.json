@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/large_motor/large_motor.obj",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/large_motor/large_motor.obj",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/large_motor/large_motor.obj",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/large_motor/large_motor.obj",
+      "y": -90,
+      "x": 0
+    }
+  }
+}

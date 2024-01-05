@@ -39,6 +39,7 @@ import com.neep.neepmeat.machine.homogeniser.HomogeniserBlock;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlock;
 import com.neep.neepmeat.machine.integrator.IntegratorBlock;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlock;
+import com.neep.neepmeat.machine.large_motor.LargeMotorBlock;
 import com.neep.neepmeat.machine.mincer.MincerBlock;
 import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
@@ -111,7 +112,7 @@ public class NMBlocks
     {
         @Override
         public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction)
-        {
+{
             if (stateFrom.isOf(this) || stateFrom.isOf((Block) stairs) && stateFrom.get(StairsBlock.FACING).equals(direction.getOpposite()))
             {
                 return true;
@@ -176,6 +177,7 @@ public class NMBlocks
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block().tooltip(TooltipSupplier.hidden(2)).requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block LARGE_MOTOR = BlockRegistry.queue(new LargeMotorBlock("large_motor", block().tooltip(TooltipSupplier.hidden(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

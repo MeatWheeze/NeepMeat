@@ -29,6 +29,16 @@ public class BlockVolume
         return volume;
     }
 
+    public static BlockVolume range(int startX, int startY, int startZ, int endX, int endY, int endZ)
+    {
+        BlockVolume volume = new BlockVolume();
+        BlockPos.iterate(new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ)).forEach(mutable ->
+        {
+            volume.add(mutable.toImmutable());
+        });
+        return volume;
+    }
+
     public Iterable<Vec3i> iterable()
     {
         return set;
@@ -42,6 +52,22 @@ public class BlockVolume
     public boolean remove(Vec3i pos)
     {
         return set.remove(pos);
+    }
+
+    public BlockVolume rotateY(float degrees)
+    {
+        BlockVolume newVolume = new BlockVolume();
+        for (Vec3i offset : set)
+        {
+            double s = Math.sin(Math.toRadians(degrees));
+            double c = Math.cos(Math.toRadians(degrees));
+            newVolume.add(new Vec3i(
+                    Math.round(offset.getX() * c - offset.getZ() * s),
+                    offset.getY(),
+                    Math.round(offset.getX() * s + offset.getZ() * c)
+            ));
+        }
+        return newVolume;
     }
 
     public VoxelShape toVoxelShape()

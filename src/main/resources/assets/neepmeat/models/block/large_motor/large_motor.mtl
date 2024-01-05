@@ -1,0 +1,5 @@
+# Made in Blockbench 4.9.0
+newmtl m_d840f091-48f5-6d80-9500-3d3122962757
+map_Kd neepmeat:block/large_motor/base
+newmtl m_6a28f9be-20d6-969d-8125-46fc549e4449
+map_Kd neepmeat:block/large_motor/inner

@@ -50,7 +50,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     }
 
     @Override
-    protected BlockVolume getVolume()
+    protected BlockVolume getVolume(BlockState blockState)
     {
         return VOLUME;
     }

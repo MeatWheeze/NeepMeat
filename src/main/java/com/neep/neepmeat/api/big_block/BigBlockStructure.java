@@ -53,7 +53,9 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     {
         if (world.getBlockEntity(pos) instanceof BigBlockStructureEntity be)
         {
-            return be.translateShape(parent.getOutlineShape(state, world, pos, context));
+            BlockState parentState = world.getBlockState(be.getControllerPos());
+            if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
+                return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
         }
         return super.getOutlineShape(state, world, pos, context);
     }
