@@ -9,6 +9,7 @@ import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEvents;
@@ -55,9 +56,13 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
         {
             BlockState parentState = world.getBlockState(be.getControllerPos());
             if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
-                return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
+               return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
+//            else
+//                return VoxelShapes.empty();
+//            return VoxelShapes.cuboid(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
         }
-        return super.getOutlineShape(state, world, pos, context);
+
+        return VoxelShapes.empty();
     }
 
     @Override
