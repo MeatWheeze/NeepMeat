@@ -1,22 +1,21 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Maps;
-import it.unimi.dsi.fastutil.longs.AbstractLong2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2LongMap;
-import net.minecraft.util.math.BlockPos;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class PosDirectionMap<T>
 {
     private final Class<T> clazz;
-//    private final Long2ObjectOpenHashMap<T[]> map = new Long2ObjectOpenHashMap<>();
-    private final HashMap<BlockPos, T[]> map = Maps.newHashMap();
+    private final Long2ObjectOpenHashMap<T[]> map = new Long2ObjectOpenHashMap<>();
+//    private final HashMap<BlockPos, T[]> map = Maps.newHashMap();
     private List<T> listCache;
     boolean dirty = true;
 
@@ -28,8 +27,8 @@ public class PosDirectionMap<T>
 //    public void fastForEach(Consumer<Long2ObjectMap.Entry<T[]>> consumer)
     public void fastForEach(Consumer<Long2ObjectMap.Entry<T[]>> consumer)
     {
-        map.entrySet().forEach(e -> consumer.accept(new AbstractLong2ObjectMap.BasicEntry<>(e.getKey().asLong(), e.getValue())));
-//        map.long2ObjectEntrySet().fastForEach(consumer);
+//        map.entrySet().forEach(e -> consumer.accept(new AbstractLong2ObjectMap.BasicEntry<>(e.getKey().asLong(), e.getValue())));
+        map.long2ObjectEntrySet().fastForEach(consumer);
     }
 
     public Long2ObjectMap<T[]> map()
@@ -66,7 +65,8 @@ public class PosDirectionMap<T>
     public void put(long key, T[] array)
     {
         dirty = true;
-        map.put(BlockPos.fromLong(key), array);
+//        map.put(BlockPos.fromLong(key), array);
+        map.put(key, array);
     }
 
     public void clear()
@@ -82,7 +82,8 @@ public class PosDirectionMap<T>
 
     public void put(long key, int dir, T value)
     {
-        map.computeIfAbsent(BlockPos.fromLong(key), k -> (T[]) Array.newInstance(clazz, 6))[dir] = value;
+//        map.computeIfAbsent(BlockPos.fromLong(key), k -> (T[]) Array.newInstance(clazz, 6))[dir] = value;
+        map.computeIfAbsent(key, k -> (T[]) Array.newInstance(clazz, 6))[dir] = value;
         dirty = true;
     }
 
