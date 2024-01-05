@@ -35,6 +35,7 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
         public float updateInflux(float influx)
         {
             LargeMotorBlockEntity.this.influx = influx;
+            onPowerChange();
             return influx;
         }
     };
@@ -54,7 +55,7 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
         if (cache == null)
         {
             Direction facing = getCachedState().get(LargeMotorBlock.FACING);
-            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
+            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing, 2).up());
         }
 
         // TODO: Replace with API lookup
