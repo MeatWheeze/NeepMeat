@@ -1,5 +1,7 @@
 package com.neep.neepmeat.transport.client.screen;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
@@ -7,12 +9,16 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 
 public class VSCScreen extends HandledScreen<VSCScreenHandler>
 {
+    private final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/vsc.png");
+
     private TextField textField;
 
     public VSCScreen(VSCScreenHandler handler, PlayerInventory inventory, Text title)
@@ -23,13 +29,14 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
     @Override
     protected void init()
     {
-        this.backgroundWidth = 450;
-        this.backgroundHeight = 200;
+        this.backgroundWidth = 64;
+        this.backgroundHeight = 32;
 
         super.init();
 
-        textField = new TextField(this.textRenderer, x, y, 3 * 18, 17, Text.of(""));
+        textField = new TextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""));
         textField.setText(Integer.toString(handler.getProperty(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal())));
+        textField.setDrawsBackground(false);
 
         textField.setChangedListener(s ->
         {
@@ -42,7 +49,13 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
     @Override
     protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
     {
-
+        super.renderBackground(matrices);
+        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.setShaderTexture(0, TEXTURE);
+        int i = this.x;
+        int j = (this.height - this.backgroundHeight) / 2;
+        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
