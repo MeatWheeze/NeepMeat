@@ -58,14 +58,15 @@ dependencies {
 	modApi include("dev.onyxstudios.cardinal-components-api:cardinal-components-block:${project.cca_version}")
 
 	// Flywheel
-	modImplementation("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
+	// Couldn't find Fabric releases that were accessible to the average user, so I assume that JiJ is the only way.
+	modImplementation include("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
 
 	// REI
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-default-plugin-fabric:${project.rei_version}"
 
 	// Myron
-	modImplementation "dev.monarkhes:myron:${project.myron_version}"
+	modImplementation include("dev.monarkhes:myron:${project.myron_version}")
 
 	// EMI
 	modCompileOnly "dev.emi:emi-fabric:${project.emi_version}:api"
