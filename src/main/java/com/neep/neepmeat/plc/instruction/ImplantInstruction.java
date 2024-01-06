@@ -139,7 +139,7 @@ public class ImplantInstruction implements Instruction
                     workpiece.clearSteps();
                 }
 
-                return;
+                stored = null;
             }
         }
 
@@ -149,7 +149,7 @@ public class ImplantInstruction implements Instruction
 
     private void finish(PLC plc)
     {
-
+        plc.advanceCounter();
     }
 
     private BlockPos getEntityPos(PLC plc)
