@@ -161,6 +161,7 @@ modrinth {
 	dependencies = [
 			new ModDependency('P7dR8mSH', 'required'), // Fabric API
 			new ModDependency('8BmcQJ2H', 'required'), // Geckolib
-			new ModDependency('nfn13YXA', 'optional') // REI
+			new ModDependency('nfn13YXA', 'optional'), // REI
+			new ModDependency('fRiHVvU7', 'optional') // REI
 	]
 }
