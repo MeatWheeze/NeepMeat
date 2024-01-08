@@ -30,6 +30,7 @@ import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlockEntity;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
+import com.neep.neepmeat.machine.flywheel.FlywheelBlockEntity;
 import com.neep.neepmeat.machine.grinder.GrinderBlockEntity;
 import com.neep.neepmeat.machine.heater.HeaterBlockEntity;
 import com.neep.neepmeat.machine.homogeniser.HomogeniserBlockEntity;
@@ -182,6 +183,7 @@ public class NMBlockEntities
     public static BlockEntityType<?> VASCULAR_CONDUIT;
     public static BlockEntityType<VSCBlockEntity> VSC;
     public static BlockEntityType<LargeMotorBlockEntity> LARGE_MOTOR;
+    public static BlockEntityType<FlywheelBlockEntity> FLYWHEEL;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -294,6 +296,8 @@ public class NMBlockEntities
         LARGE_MOTOR = register("large_motor", (p, s) -> new LargeMotorBlockEntity(LARGE_MOTOR, p, s), NMBlocks.LARGE_MOTOR);
         BloodAcceptor.SIDED.registerForBlockEntity(LargeMotorBlockEntity::getAcceptor, LARGE_MOTOR);
         BloodAcceptor.SIDED.registerForBlockEntity(LargeMotorStructureEntity::getBloodAcceptor, NMBlocks.LARGE_MOTOR.getStructure().getBlockEntityType());
+
+        FLYWHEEL = register("large_flywheel", (p, s) -> new FlywheelBlockEntity(FLYWHEEL, p, s), NMBlocks.FLYWHEEL);
 
         STIRLING_ENGINE = register("stirling_engine", StirlingEngineBlockEntity::new, NMBlocks.STIRLING_ENGINE);
         LINEAR_OSCILLATOR = register("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);

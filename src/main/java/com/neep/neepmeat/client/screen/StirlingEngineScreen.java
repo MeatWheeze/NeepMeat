@@ -56,6 +56,11 @@ public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHand
         drawMouseoverTooltip(matrices, mouseX, mouseY);
     }
 
+    @Override
+    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    {
+    }
+
     public void drawBurnTime(MatrixStack matrices, int i, int j)
     {
         int time = handler.getProperty(0);

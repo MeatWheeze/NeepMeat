@@ -47,7 +47,6 @@ public class StirlingEngineInstance extends BlockEntityInstance<StirlingEngineBl
 
         matrices.translate(0.5, 0.5, 0.5);
 
-        // Temporal discretisation!
         float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.getSpeed() * delta);
         matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(blockEntity.angle));

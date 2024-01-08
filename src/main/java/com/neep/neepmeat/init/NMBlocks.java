@@ -33,6 +33,7 @@ import com.neep.neepmeat.machine.deployer.DeployerBlock;
 import com.neep.neepmeat.machine.dumper.DumperBlock;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlock;
+import com.neep.neepmeat.machine.flywheel.FlywheelBlock;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.machine.heater.HeaterBlock;
 import com.neep.neepmeat.machine.homogeniser.HomogeniserBlock;
@@ -178,6 +179,7 @@ public class NMBlocks
     public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block().tooltip(TooltipSupplier.hidden(2)).requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static LargeMotorBlock LARGE_MOTOR = BlockRegistry.queue(new LargeMotorBlock("large_motor", block().tooltip(TooltipSupplier.hidden(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block FLYWHEEL = BlockRegistry.queue(new FlywheelBlock("large_flywheel", block().tooltip(TooltipSupplier.simple(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

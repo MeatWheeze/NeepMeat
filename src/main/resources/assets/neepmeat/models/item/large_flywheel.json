@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:block/block",
+	"model": "neepmeat:block/flywheel/flywheel.obj"
+}
+
+
