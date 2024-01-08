@@ -10,8 +10,9 @@ pluginManagement {
     }
 }
 
+// Grab the NeepMeat-specific myron fork
 sourceControl {
-    gitRepository('https://github.com/MeatWheeze/myron.git') {
-        producesModule("dev.monarkhes:myron")
+    gitRepository('https://github.com/MeatWheeze/myron-neepmeat.git') {
+        producesModule("dev.monarkhes:myron-neepmeat")
     }
 }

@@ -103,6 +103,7 @@
     "neepmeat:advanced_motor",
     "neepmeat:large_motor_structure",
     "neepmeat:large_motor",
+    "neepmeat:large_flywheel",
     "neepmeat:stirling_engine",
     "neepmeat:deployer",
     "neepmeat:agitator",
