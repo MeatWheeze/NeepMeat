@@ -19,14 +19,6 @@
       "model": "neepmeat:block/upgrade_manager",
       "y": -90,
       "x": 0
-    },
-    "facing=up": {
-      "model": "neepmeat:block/upgrade_manager",
-      "x": -90
-    },
-    "facing=down": {
-      "model": "neepmeat:block/upgrade_manager",
-      "x": 90
     }
   }
 }
