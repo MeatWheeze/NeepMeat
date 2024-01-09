@@ -4,6 +4,7 @@ import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
+import com.neep.neepmeat.machine.charnel_pump.CharnelPumpInstance;
 import com.neep.neepmeat.machine.flywheel.FlywheelInstance;
 import com.neep.neepmeat.machine.grinder.GrinderInstance;
 import com.neep.neepmeat.machine.grinder.GrinderRenderer;
@@ -30,6 +31,7 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.STIRLING_ENGINE).alwaysSkipRender().factory(StirlingEngineInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.FLYWHEEL).alwaysSkipRender().factory(FlywheelInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.HYDRAULIC_PRESS).alwaysSkipRender().factory(HydraulicPressInstance::new).apply();
+        InstancedRenderRegistry.configure(NMBlockEntities.CHARNEL_PUMP).alwaysSkipRender().factory(CharnelPumpInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMBlockEntities.PYLON).alwaysSkipRender().factory(PylonInstance::new).apply();
         InstancedRenderRegistry.configure(PLCBlocks.PLC_ENTITY).alwaysSkipRender().factory(PLCInstance::new).apply();

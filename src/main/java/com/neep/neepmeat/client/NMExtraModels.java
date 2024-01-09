@@ -20,6 +20,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel HYDRAULIC_PRESS_ARM = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/hydraulic_press/arm"));
     public static final PartialModel LARGE_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/large_motor/large_motor_rotor.obj"));
     public static final PartialModel FLYWHEEL = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/flywheel/flywheel.obj"));
+    public static final PartialModel CHARNEL_PUMP_PLUNGER = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/charnel_pump/charnel_pump_plunger.obj"));
 
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
