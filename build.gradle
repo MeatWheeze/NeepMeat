@@ -59,7 +59,7 @@ dependencies {
 
 	// Flywheel
 	// Couldn't find Fabric releases that were accessible to the average user, so I assume that JiJ is the only way.
-	modImplementation include("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
+	modApi include("com.jozufozu.flywheel:flywheel-fabric-${project.flywheel_mc_version}:${project.flywheel_version}")
 
 	// REI
 	modCompileOnly "me.shedaniel:RoughlyEnoughItems-api-fabric:${project.rei_version}"
