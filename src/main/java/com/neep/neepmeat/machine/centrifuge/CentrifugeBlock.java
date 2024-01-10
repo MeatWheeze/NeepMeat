@@ -7,7 +7,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
-import com.neep.neepmeat.api.big_block.BlockVolume;
+import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +16,7 @@ import net.minecraft.world.BlockView;
 
 public class CentrifugeBlock extends BigBlock
 {
-    public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 0);
+    public static final BigBlockPattern VOLUME = BigBlockPattern.oddCylinder(1, 0, 0, null);
     public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
 
     public CentrifugeBlock(String registryName, Settings settings)
@@ -38,7 +38,7 @@ public class CentrifugeBlock extends BigBlock
     }
 
     @Override
-    protected BlockVolume getVolume(BlockState blockState)
+    protected BigBlockPattern getVolume(BlockState blockState)
     {
         return VOLUME;
     }

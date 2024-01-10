@@ -6,6 +6,7 @@ import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.neep.neepmeat.client.NMExtraModels;
+import com.neep.neepmeat.client.renderer.BERenderUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -37,9 +38,16 @@ public class CharnelPumpInstance extends BlockEntityInstance<CharnelPumpBlockEnt
 
         double s = Math.sin((blockEntity.getWorld().getTime() + MinecraftClient.getInstance().getTickDelta()) / 100f);
 
+        BERenderUtils.rotateFacing(blockEntity.getCachedState().get(CharnelPumpBlock.FACING), matrices);
         matrices.translate(0, 8 * s, 0);
 
         plunger.setTransform(matrices);
         matrices.pop();
+    }
+
+    @Override
+    public void updateLight()
+    {
+        relight(getWorldPosition(), plunger);
     }
 }

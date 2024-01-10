@@ -29,7 +29,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 
     protected abstract T registerStructureBlock();
 
-    protected abstract BlockVolume getVolume(BlockState blockState);
+    protected abstract BigBlockPattern getVolume(BlockState blockState);
 
 //    protected VoxelShape getShape(BlockState state)
 //    {
@@ -71,7 +71,13 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
             }
         }
 
-        return super.canPlaceAt(state, world, pos) && world.isSpaceEmpty(getVolume(state).toBox(pos));
+        for (var box : getVolume(state).toVoxelShape().getBoundingBoxes())
+        {
+            if (!world.isSpaceEmpty(box))
+                return false;
+        }
+
+        return super.canPlaceAt(state, world, pos);
     }
 
     @Override
@@ -79,20 +85,21 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
     {
         super.onPlaced(world, pos, state, placer, itemStack);
 
-        BlockPos.Mutable mutable = pos.mutableCopy();
-        for (Vec3i vec : getVolume(state).iterable())
-        {
-            mutable.set(pos, vec);
-
-            // Do not replace the origin block
-            if (mutable.equals(pos)) continue;
-
-            world.setBlockState(mutable, structureBlock.getDefaultState(), NOTIFY_ALL);
-            if (world.getBlockEntity(mutable) instanceof BigBlockStructureEntity be)
-            {
-                be.setController(pos);
-            }
-        }
+        getVolume(state).placeBlocks(world, pos, pos);
+//        BlockPos.Mutable mutable = pos.mutableCopy();
+//        for (Vec3i vec : getVolume(state).iterable())
+//        {
+//            mutable.set(pos, vec);
+//
+//            // Do not replace the origin block
+//            if (mutable.equals(pos)) continue;
+//
+//            world.setBlockState(mutable, structureBlock.getDefaultState(), NOTIFY_ALL);
+//            if (world.getBlockEntity(mutable) instanceof BigBlockStructureEntity be)
+//            {
+//                be.setController(pos);
+//            }
+//        }
     }
 
     @Override

@@ -12,7 +12,6 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +45,11 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     {
         if (world.getBlockEntity(pos) instanceof BigBlockStructureEntity be)
         {
-            BlockState parentState = world.getBlockState(be.getControllerPos());
+            BlockPos controllerPos = be.getControllerPos();
+            if (controllerPos == null)
+                return VoxelShapes.fullCube();
+
+            BlockState parentState = world.getBlockState(controllerPos);
             if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
                return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
 //            else

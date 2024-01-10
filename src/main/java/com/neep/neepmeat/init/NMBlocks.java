@@ -197,7 +197,7 @@ public class NMBlocks
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
-    public static BigBlock<?> CHARNEL_PUMP = BlockRegistry.queue(new CharnelPumpBlock("charnel_pump", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
+    public static CharnelPumpBlock CHARNEL_PUMP = BlockRegistry.queue(new CharnelPumpBlock("charnel_pump", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
     public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
 

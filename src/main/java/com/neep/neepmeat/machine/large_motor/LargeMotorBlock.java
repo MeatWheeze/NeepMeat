@@ -7,7 +7,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BlockVolume;
+import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -36,17 +36,10 @@ import java.util.concurrent.atomic.AtomicReference;
 public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     private final String registryName;
-    public static final BlockVolume VOLUME = BlockVolume.range(
-            -1, 0, 0, 1, 2, -1
-    );
+    private final BigBlockPattern volume;
 
-    public static final VoxelShape NORMAL_SHAPE = VOLUME.toVoxelShape();
+    public final VoxelShape normalShape;
 
-//    public final VoxelShape NORTH_SHAPE = NORMAL_SHAPE;
-//    public final VoxelShape EAST_SHAPE = rotateShape(NORMAL_SHAPE, 90);
-//    public final VoxelShape SOUTH_SHAPE = rotateShape(NORMAL_SHAPE, 180);
-//    public final VoxelShape WEST_SHAPE = rotateShape(NORMAL_SHAPE, 270);
-//
     private static VoxelShape cuboid(double minX, double minY, double minZ, double sizeX, double sizeY, double sizeZ)
     {
         return VoxelShapes.cuboid(minX, minY, minZ, minX + sizeX, minY + sizeY, minZ + sizeZ);
@@ -67,6 +60,9 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
         this.registryName = registryName;
         ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
+
+        volume = BigBlockPattern.range( -1, 0, 0, 1, 2, -1, getStructure().getDefaultState());
+        normalShape = volume.toVoxelShape();
     }
 
     @Override
@@ -76,10 +72,10 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     }
 
     @Override
-    protected BlockVolume getVolume(BlockState blockState)
+    protected BigBlockPattern getVolume(BlockState blockState)
     {
         Direction facing = blockState.get(FACING);
-        return VOLUME.rotateY(facing.asRotation() - 180);
+        return volume.rotateY(facing.asRotation() - 180);
     }
 
 

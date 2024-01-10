@@ -8,7 +8,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.big_block.BlockVolume;
+import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtils;
@@ -32,7 +32,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructure> implements MeatlibBlock, BlockEntityProvider, DataCable
 {
-    public static final BlockVolume VOLUME = BlockVolume.oddCylinder(1, 0, 0);
+    private final BigBlockPattern volume;
 
     private final String registryName;
 
@@ -41,6 +41,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
         super(settings);
         this.registryName = registryName;
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
+        volume = BigBlockPattern.oddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override
@@ -50,9 +51,9 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     }
 
     @Override
-    protected BlockVolume getVolume(BlockState blockState)
+    protected BigBlockPattern getVolume(BlockState blockState)
     {
-        return VOLUME;
+        return volume;
     }
 
     @Override

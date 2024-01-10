@@ -22,6 +22,7 @@ import com.neep.neepmeat.machine.breaker.LinearOscillatorBlockEntity;
 import com.neep.neepmeat.machine.casting_basin.CastingBasinBlockEntity;
 import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlock;
 import com.neep.neepmeat.machine.charnel_pump.CharnelPumpBlockEntity;
+import com.neep.neepmeat.machine.charnel_pump.CharnelPumpStructure;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlockEntity;
 import com.neep.neepmeat.machine.converter.ConverterBlockEntity;
 import com.neep.neepmeat.machine.crafting_station.WorkstationBlockEntity;
@@ -336,6 +337,7 @@ public class NMBlockEntities
 //        FluidStorage.SIDED.registerForBlockEntity(BloodMachineBlockEntity::getBuffer, PLC);
 
         CHARNEL_PUMP = register("charnel_pump", (p, s) -> new CharnelPumpBlockEntity(CHARNEL_PUMP, p, s), NMBlocks.CHARNEL_PUMP);
+        BloodAcceptor.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getAcceptor, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
 
         VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
