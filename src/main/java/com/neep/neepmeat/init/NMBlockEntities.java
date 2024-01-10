@@ -61,6 +61,7 @@ import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import com.neep.neepmeat.machine.trough.TroughBlockEntity;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlockEntity;
+import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
@@ -133,6 +134,7 @@ public class NMBlockEntities
     public static BlockEntityType<ConverterBlockEntity> LARGE_CONVERTER;
 
     public static BlockEntityType<CharnelPumpBlockEntity> CHARNEL_PUMP;
+    public static BlockEntityType<WellHeadBlockEntity> WELL_HEAD;
 
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
     public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
@@ -338,6 +340,7 @@ public class NMBlockEntities
 
         CHARNEL_PUMP = register("charnel_pump", (p, s) -> new CharnelPumpBlockEntity(CHARNEL_PUMP, p, s), NMBlocks.CHARNEL_PUMP);
         BloodAcceptor.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getAcceptor, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
+        WELL_HEAD = register("well_head", (p, s) -> new WellHeadBlockEntity(WELL_HEAD, p, s), NMBlocks.WELL_HEAD);
 
         VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);

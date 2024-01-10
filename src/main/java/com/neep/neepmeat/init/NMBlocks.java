@@ -55,6 +55,7 @@ import com.neep.neepmeat.machine.synthesiser.SynthesiserBlock;
 import com.neep.neepmeat.machine.transducer.TransducerBlock;
 import com.neep.neepmeat.machine.trough.TroughBlock;
 import com.neep.neepmeat.machine.upgrade_manager.UpgradeManagerBlock;
+import com.neep.neepmeat.machine.well_head.WellHeadBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.transport.block.item_transport.*;
@@ -198,6 +199,7 @@ public class NMBlocks
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static CharnelPumpBlock CHARNEL_PUMP = BlockRegistry.queue(new CharnelPumpBlock("charnel_pump", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
+    public static WellHeadBlock WELL_HEAD = BlockRegistry.queue(new WellHeadBlock("well_head", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
     public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
 

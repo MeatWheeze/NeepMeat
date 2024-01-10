@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/well_head",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/well_head",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/well_head",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/well_head",
+      "y": -90,
+      "x": 0
+    }
+  }
+}
