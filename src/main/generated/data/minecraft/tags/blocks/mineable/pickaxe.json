@@ -118,6 +118,8 @@
     "neepmeat:transducer",
     "neepmeat:pedestal",
     "neepmeat:charnel_compactor",
+    "neepmeat:charnel_pump_structure",
+    "neepmeat:charnel_pump",
     "neepmeat:mixer_structure",
     "neepmeat:mixer",
     "neepmeat:casting_basin",
