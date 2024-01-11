@@ -1,16 +1,14 @@
 package com.neep.neepmeat.machine.well_head;
 
 import com.google.common.collect.Sets;
+import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class BlockEntityFinder<T extends BlockEntity>
 {
@@ -32,39 +30,75 @@ public class BlockEntityFinder<T extends BlockEntity>
         this.positions = Sets.newHashSet();
     }
 
-    public BlockEntityFinder<T> add(ChunkPos... chunkPos)
+    public BlockEntityFinder<T> addAll(Collection<ChunkPos> list)
     {
-        positions.addAll(List.of(chunkPos));
+        positions.addAll(list);
         posIterator = positions.iterator();
         return this;
     }
 
     public void tick()
     {
-        // If an update is not due but the iterator is not empty, continue.
-        if (world.getTime() + updateInterval < lastUpdate && !posIterator.hasNext())
+        result.removeIf(BlockEntity::isRemoved);
+
+        if (world.getTime() + updateInterval < lastUpdate)
         {
             return;
         }
-        else if (!posIterator.hasNext()) // If an update is due and the iterator has finished
-        {
-            posIterator = positions.iterator();
-        }
 
-        // Checking one chunk per tick will hopefully reduce the performance impact, if any.
-        // My main worry is regularly checking a chunk that is made completely out of block entities.
-        if (posIterator.hasNext())
-        {
-            ChunkPos chunkPos = posIterator.next();
+        lastUpdate = world.getTime();
 
+        result.clear();
+        for (var chunkPos : positions)
+        {
             WorldChunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
 
-            chunk.getBlockEntities().values().stream()
-                    .filter(be -> be.getType().equals(type))
-                    .forEach(be -> result.add((T) be));
+            try
+            {
+                chunk.getBlockEntities().values().stream()
+                        .filter(be -> be.getType().equals(type))
+                        .forEach(be -> result.add((T) be));
+            }
+            catch (ClassCastException e)
+            {
+                // Make this non-fatal because it's someone else's fault.
+                NeepMeat.LOGGER.error("Block entity in chunk {} {}: class does not match type: {}", chunkPos.x, chunkPos.z, e.getMessage());
+            }
 
-            result.removeIf(BlockEntity::isRemoved);
         }
+
+//        // If an update is not due but the iterator is not empty, continue.
+//        if (world.getTime() + updateInterval < lastUpdate && !posIterator.hasNext())
+//        {
+//            return;
+//        }
+//        else if (!posIterator.hasNext()) // If an update is due and the iterator has finished
+//        {
+//            posIterator = positions.iterator();
+//        }
+//
+//        // Checking one chunk per tick will hopefully reduce the performance impact, if any.
+//        // My main worry is regularly checking a chunk that is made completely out of block entities.
+//        if (posIterator.hasNext())
+//        {
+//            ChunkPos chunkPos = posIterator.next();
+//
+//            WorldChunk chunk = world.getChunk(chunkPos.x, chunkPos.z);
+//
+//            chunk.getBlockEntities().values().stream()
+//                    .filter(be -> be.getType().equals(type))
+//                    .forEach(be -> result.add((T) be));
+//
+//            result.removeIf(BlockEntity::isRemoved);
+//        }
+    }
+
+    /**
+     * Returns true when we can be sure that the world block entities have not changed.
+     */
+    public boolean notDirty()
+    {
+        return world.getTime() == lastUpdate;
     }
 
     public Set<T> result()

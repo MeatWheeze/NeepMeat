@@ -3,8 +3,8 @@ package com.neep.neepmeat.machine.well_head;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.*;
@@ -16,10 +16,10 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
 public class WellHeadBlock extends TallBlock implements BlockEntityProvider
@@ -64,6 +64,11 @@ public class WellHeadBlock extends TallBlock implements BlockEntityProvider
         return super.getOutlineShape(state, world, pos, context);
     }
 
+    @Override
+    public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos)
+    {
+        return world.getBlockState(pos.down()).isOf(NMBlocks.WRITHING_EARTH_SPOUT) && super.canPlaceAt(state, world, pos);
+    }
 
     @Nullable
     @Override

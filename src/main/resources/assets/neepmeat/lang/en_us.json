@@ -445,7 +445,9 @@
   "block.neepmeat.charnel_pump": "Charnel Pump",
   "block.neepmeat.well_head": "Well Head",
   "block.neepmeat.well_head.lore_0": "Must be placed on a writhing earth spout produced by a nearby Charnel Pump. Writhing earths can be extracted when the pump is active.",
+  "block.neepmeat.writhing_stone": "Writhing Stone",
   "block.neepmeat.writhing_earth_spout": "Writhing Earth Spout",
+  "block.neepmeat.contaminated_dirt": "Contaminated Rubble",
 
   "message.neepmeat.synthesiser.template": "Current template organism: %s",
 
