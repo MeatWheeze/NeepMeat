@@ -34,9 +34,9 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
         return false;
     }
 
-    private boolean canSpread(BlockState state, World world, BlockPos pos, int distance)
+    private boolean canSpread(BlockState state, World world, BlockPos pos, int distance, boolean air)
     {
-        if (!state.isIn(BlockTags.DIRT) && !state.isAir())
+        if (!state.isIn(BlockTags.DIRT) && !(air && state.isAir()))
             return false;
 
         BlockPos.Mutable mutable = pos.mutableCopy();
@@ -59,7 +59,7 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
         return true;
     }
 
-    boolean propagate(World world, BlockPos pos, BlockState state, int distance, int maxDistance, Random random)
+    boolean propagate(World world, BlockPos pos, BlockState state, int distance, int maxDistance, Random random, boolean air)
     {
         if (distance >= maxDistance)
             return false;
@@ -73,10 +73,10 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
 
             if (newState.isOf(NMBlocks.WRITHING_EARTH_SPOUT) || newState.isOf(NMBlocks.CONTAMINATED_DIRT))
             {
-                if (propagate(world, newPos, newState, distance + 1, maxDistance, random))
+                if (propagate(world, newPos, newState, distance + 1, maxDistance, random, air))
                     return true;
             }
-            else if (canSpread(newState, world, newPos, distance))
+            else if (canSpread(newState, world, newPos, distance, air))
             {
                 world.setBlockState(newPos, NMBlocks.CONTAMINATED_DIRT.getDefaultState());
                 return true;
@@ -88,7 +88,7 @@ public class WrithingEarthSpoutBlock extends BaseBlock implements BlockEntityPro
     @Override
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random)
     {
-        propagate(world, pos, state, 0, 7, random);
+        propagate(world, pos, state, 0, 7, random, !world.getBlockState(pos.up()).isOf(NMBlocks.WELL_HEAD));
 //        if (!canSurvive(state, world, pos))
 //        {
 //            world.setBlockState(pos, Blocks.DIRT.getDefaultState());
