@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.motor;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -23,7 +22,7 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     protected float outputPower = 0;
     protected float loadTorque;
 
-    @Nullable protected BlockApiCache<Void, Void> cache = null;
+    @Nullable protected BlockApiCache<MotorisedBlock, Void> cache = null;
     @Nullable private MotorisedBlock lastMotorised;
 
     public MotorBlockEntity(BlockEntityType<MotorBlockEntity> type, BlockPos pos, BlockState state)
@@ -36,10 +35,11 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
         if (cache == null)
         {
             Direction facing = getCachedState().get(BaseFacingBlock.FACING);
-            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
+            cache = BlockApiCache.create(MotorisedBlock.LOOKUP, (ServerWorld) world, pos.offset(facing));
         }
 
-        if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
+        MotorisedBlock motorised = cache.find(null);
+        if (motorised != null)
         {
             if (motorised.getLoadTorque() != loadTorque)
             {
@@ -88,27 +88,21 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
     }
 
     @Override
-    public void setConnectedBlock(BlockApiCache<Void, Void> motorised)
-    {
-        this.cache = motorised;
-    }
-
-    @Override
     public float getRotorAngle()
     {
         return angle;
     }
 
     @Override
-    public BlockApiCache<Void, Void> getConnectedBlock()
-    {
-        return cache;
-    }
-
-    @Override
     public double getMechPUPower()
     {
         return outputPower;
+    }
+
+    @Override
+    public MotorisedBlock getConnectedBlock()
+    {
+        return cache != null ? cache.find(null) : null;
     }
 
     @Override

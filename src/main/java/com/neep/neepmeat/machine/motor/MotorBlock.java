@@ -5,6 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorBlock;
 import com.neep.neepmeat.util.ItemUtils;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.Block;
@@ -48,31 +49,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        World world = context.getWorld();
-        Direction facing = context.getSide();
-        BlockPos pos = context.getBlockPos().offset(context.getSide().getOpposite());
-        if (world.getBlockEntity(pos) instanceof MotorisedBlock)
-        {
-//            BlockState state = world.getBlockState(pos);
-            return getDefaultState().with(FACING, facing.getOpposite());
-//            else if (state.getBlock() instanceof BaseVertFacingBlock)
-//            {
-//                return getDefaultState().with(FACING, facing);
-//            }
-        }
-        else
-        {
-            BlockPos.Mutable mutable = context.getBlockPos().mutableCopy();
-            for (Direction direction : Direction.values())
-            {
-                mutable.set(context.getBlockPos(), direction);
-                if (world.getBlockEntity(mutable) instanceof MotorisedBlock motorised)
-                {
-                    return getDefaultState().with(FACING, direction);
-                }
-            }
-        }
-        return super.getPlacementState(context);
+        return AdvancedMotorBlock.adjacentMotorisedDirection(context, this);
     }
 
     @Override

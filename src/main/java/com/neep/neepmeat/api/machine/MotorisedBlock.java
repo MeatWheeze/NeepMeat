@@ -8,12 +8,16 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
-import org.jetbrains.annotations.Nullable;
 
 import static com.neep.neepmeat.api.processing.PowerUtils.*;
 
 public interface MotorisedBlock
 {
+    BlockApiLookup<MotorisedBlock, Void> LOOKUP = BlockApiLookup.get(
+            new Identifier(NeepMeat.NAMESPACE, "motorised_block"),
+            MotorisedBlock.class, Void.class
+    );
+
     boolean tick(MotorEntity motor);
 
     void setInputPower(float power);

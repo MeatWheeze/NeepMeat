@@ -16,6 +16,8 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemUsage;
+import net.minecraft.item.ItemUsageContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -52,12 +54,17 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
+        return adjacentMotorisedDirection(context, this);
+    }
+
+    public static BlockState adjacentMotorisedDirection(ItemPlacementContext context, Block block)
+    {
         World world = context.getWorld();
         Direction facing = context.getSide();
         BlockPos pos = context.getBlockPos().offset(context.getSide().getOpposite());
         if (world.getBlockEntity(pos) instanceof MotorisedBlock)
         {
-            return getDefaultState().with(FACING, facing.getOpposite());
+            return block.getDefaultState().with(FACING, facing.getOpposite());
         }
         else
         {
@@ -67,33 +74,13 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
                 mutable.set(context.getBlockPos(), direction);
                 if (world.getBlockEntity(mutable) instanceof MotorisedBlock)
                 {
-                    return getDefaultState().with(FACING, direction);
+                    return block.getDefaultState().with(FACING, direction);
                 }
             }
         }
-        return super.getPlacementState(context);
-    }
 
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
-    {
-        if (!state.isOf(newState.getBlock()))
-        {
-            world.getBlockEntity(pos, NMBlockEntities.ADVANCED_MOTOR).ifPresent(MotorEntity::onRemoved);
-        }
-        super.onStateReplaced(state, world, pos, newState, moved);
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
-    {
-//        if (!world.isClient())
-//        {
-//            world.getBlockEntity(pos, NMBlockEntities.ADVANCED_MOTOR).ifPresent(be ->
-//            {
-//                be.update((ServerWorld) world, pos, fromPos, state);
-//            });
-//        }
+        return block.getDefaultState().with(FACING, context.getPlayer().isSneaking() ?
+                context.getPlayerLookDirection().getOpposite() : context.getPlayerLookDirection());
     }
 
     @Override

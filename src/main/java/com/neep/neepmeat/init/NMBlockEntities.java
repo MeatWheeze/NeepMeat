@@ -3,6 +3,7 @@ package com.neep.neepmeat.init;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.FluidPump;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.HoldingTrackBlock;
@@ -429,14 +430,20 @@ public class NMBlockEntities
 
         // --- Furnaces ---
 
-//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.FURNACE);
-//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.BLAST_FURNACE);
-//        IHeatable.LOOKUP.registerForBlockEntity((blockEntity, unused) -> new HeatableFurnace.Wrapper(blockEntity), BlockEntityType.SMOKER);
         Heatable.LOOKUP.registerFallback((world, pos, state, blockEntity, context) ->
         {
             if (blockEntity instanceof AbstractFurnaceBlockEntity furnace)
             {
                 return HeatableFurnace.of(furnace);
+            }
+            return null;
+        });
+
+        MotorisedBlock.LOOKUP.registerFallback((world, pos, state, blockEntity, context) ->
+        {
+            if (blockEntity instanceof MotorisedBlock motorisedBlock)
+            {
+                return motorisedBlock;
             }
             return null;
         });

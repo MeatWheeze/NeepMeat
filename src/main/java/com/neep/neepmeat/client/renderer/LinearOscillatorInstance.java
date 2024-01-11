@@ -44,7 +44,7 @@ public class LinearOscillatorInstance extends BlockEntityInstance<LinearOscillat
         Direction facing = blockEntity.getCachedState().get(BaseFacingBlock.FACING);
         extension = (float) MathHelper.lerp(0.3, extension, blockEntity.extension);
         float maxExtension = 1 / 16f * 9;
-        Quaternion yaw = Vec3f.POSITIVE_Y.getDegreesQuaternion(facing.asRotation());
+        Quaternion yaw = Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation());
 
         armature.loadIdentity()
                 .translate(getInstancePosition())

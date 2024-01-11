@@ -78,8 +78,6 @@ public class PowerUtils
 
 
     /**
-     * To avoid stupidly large numbers (the order of magnitude of 1e14) power will be given per bucket rather than per droplet.
-     * I will hope that the resulting floating point imprecision will not have a significant effect.
      * @return The power given by one bucket per tick of water flowing through a 1mx1m area in NEEP Customary Units.
      */
     public static long referencePower()
@@ -114,6 +112,8 @@ public class PowerUtils
 //        double C = 2;
 
 //        return (long) (1d/2d * (Q*Q*Q)/(A*A) * density * C);
+
+        // It doesn't give user-friendly numbers.
 
         // Okay fine. Let's just make it 1000. A nice round number.
         return 1000;

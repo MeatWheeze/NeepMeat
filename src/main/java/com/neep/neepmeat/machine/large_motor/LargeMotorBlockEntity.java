@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.large_motor;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -23,6 +22,8 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
 
     protected float influx;
 
+    protected final float maxInflux = 8000f / PowerUtils.referencePower();
+
     protected AbstractBloodAcceptor acceptor = new AbstractBloodAcceptor()
     {
         @Override
@@ -34,14 +35,14 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
         @Override
         public float updateInflux(float influx)
         {
-            LargeMotorBlockEntity.this.influx = influx;
+            LargeMotorBlockEntity.this.influx = Math.min(influx, maxInflux);
             onPowerChange();
             return influx;
         }
     };
 
     @Nullable
-    protected BlockApiCache<Void, Void> cache = null;
+    protected BlockApiCache<MotorisedBlock, Void> cache = null;
     private float loadTorque;
     private MotorisedBlock lastMotorised;
 
@@ -55,11 +56,11 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
         if (cache == null)
         {
             Direction facing = getCachedState().get(LargeMotorBlock.FACING);
-            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing, 2).up());
+            cache = BlockApiCache.create(MotorisedBlock.LOOKUP, (ServerWorld) world, pos.offset(facing, 2).up());
         }
 
-        // TODO: Replace with API lookup
-        if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
+        MotorisedBlock motorised = cache.find(null);
+        if (motorised != null)
         {
             if (motorised.getLoadTorque() != loadTorque)
             {
@@ -85,6 +86,13 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
             motorised.setInputPower((float) this.getMechPUPower());
         }
         sync();
+    }
+
+    @Override
+    public void markRemoved()
+    {
+        onRemoved();
+        super.markRemoved();
     }
 
     @Override
@@ -123,9 +131,9 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
     }
 
     @Override
-    public BlockApiCache<Void, Void> getConnectedBlock()
+    public MotorisedBlock getConnectedBlock()
     {
-        return null;
+        return cache != null ? cache.find(null) : null;
     }
 
     public BloodAcceptor getAcceptor(Direction face)

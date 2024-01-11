@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.stirling_engine;
 
+import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -20,6 +21,7 @@ import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,22 +41,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     protected int burnTime;
     protected int fuelTime;
 
-    protected BlockApiCache<Void, Void> cache = null;
-
-//    protected SnapshotParticipant<Integer> snapshotParticipant = new SnapshotParticipant<>()
-//    {
-//        @Override
-//        protected Integer createSnapshot()
-//        {
-//            return energyStored;
-//        }
-//
-//        @Override
-//        protected void readSnapshot(Integer snapshot)
-//        {
-//            energyStored = snapshot;
-//        }
-//    };
+    protected BlockApiCache<MotorisedBlock, Void> cache = null;
 
     protected final PropertyDelegate propertyDelegate = new PropertyDelegate()
     {
@@ -107,7 +94,6 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         nbt.putInt("burn_time", burnTime);
         nbt.putInt("fuel_time", fuelTime);
         nbt.putFloat("energy", thingyStored);
-//        nbt.putInt("fuel_time", fuelTime);
     }
 
     public void readNbt(NbtCompound nbt)
@@ -117,20 +103,22 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         this.burnTime = nbt.getInt("burn_time");
         this.fuelTime = nbt.getInt("fuel_time");
         this.thingyStored = nbt.getFloat("energy");
-//        this.fuelTime = nbt.getInt("fuel_time");
     }
 
     public void tick()
     {
         if (cache == null)
-            update((ServerWorld) world, pos, pos, getCachedState());
+        {
+            Direction facing = getCachedState().get(BaseFacingBlock.FACING);
+            cache = BlockApiCache.create(MotorisedBlock.LOOKUP, (ServerWorld) world, pos.offset(facing));
+        }
 
         this.burnTime = Math.max(0, burnTime - 1);
 
+        float newThingyStored = thingyStored;
         if (isBurning())
         {
-            this.thingyStored = Math.min(MAX_THINGY, thingyStored + 1);
-            sync();
+            newThingyStored = Math.min(MAX_THINGY, thingyStored + 1);
         }
 
         if (burnTime == 0)
@@ -144,11 +132,18 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
             updateBurning();
         }
 
-        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
+        MotorisedBlock motorised = cache.find(null);
+        if (motorised != null)
         {
             motorised.setInputPower((float) getMechPUPower());
             doWork();
             motorised.tick(this);
+        }
+
+        if (newThingyStored != thingyStored)
+        {
+            thingyStored = newThingyStored;
+            sync();
         }
     }
 
@@ -199,23 +194,14 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         return (float) (w1 * 180 / Math.PI); // Convert to degrees / tick
     }
 
-    public float doWork()
+    public void doWork()
     {
         float convertAmount = 0.5f;
         if (thingyStored >= convertAmount)
         {
             this.prevEnergy = thingyStored;
             thingyStored = Math.max(0, thingyStored - convertAmount);
-            sync();
-            return convertAmount;
         }
-        return 0;
-    }
-
-    @Override
-    public void setConnectedBlock(BlockApiCache<Void, Void> motorised)
-    {
-        cache = motorised;
     }
 
     @Override
@@ -237,8 +223,8 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
     }
 
     @Override
-    public BlockApiCache<Void, Void> getConnectedBlock()
+    public MotorisedBlock getConnectedBlock()
     {
-        return cache;
+        return cache != null ? cache.find(null) : null;
     }
 }

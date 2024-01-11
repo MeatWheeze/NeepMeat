@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.advanced_motor;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -27,14 +26,16 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     protected float loadTorque;
     @Nullable protected MotorisedBlock lastMotorised;
 
-    @Nullable protected BlockApiCache<Void, Void> cache = null;
+    protected final float maxInflux = 4000f / PowerUtils.referencePower();
+
+    @Nullable protected BlockApiCache<MotorisedBlock, Void> cache = null;
 
     protected final BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public float updateInflux(float influx)
         {
-            AdvancedMotorBlockEntity.this.influx = influx;
+            AdvancedMotorBlockEntity.this.influx = Math.min(influx, maxInflux);
             onPowerChange();
             return influx;
         }
@@ -56,10 +57,11 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
         if (cache == null)
         {
             Direction facing = getCachedState().get(BaseFacingBlock.FACING);
-            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) world, pos.offset(facing));
+            cache = BlockApiCache.create(MotorisedBlock.LOOKUP, (ServerWorld) world, pos.offset(facing));
         }
 
-        if (cache.getBlockEntity() instanceof MotorisedBlock motorised)
+        MotorisedBlock motorised = cache.find(null);
+        if (motorised != null)
         {
             if (motorised.getLoadTorque() != loadTorque)
             {
@@ -100,9 +102,9 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     }
 
     @Override
-    public BlockApiCache<Void, Void> getConnectedBlock()
+    public MotorisedBlock getConnectedBlock()
     {
-        return cache;
+        return cache != null ? cache.find(null) : null;
     }
 
     @Override
@@ -143,5 +145,6 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     public void markRemoved()
     {
         super.markRemoved();
+        onRemoved();
     }
 }

@@ -45,6 +45,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     // Rendering only
     public long extensionTime = 0;
     public float clientExtension = 0;
+    private float power;
 
     public LinearOscillatorBlockEntity(BlockPos pos, BlockState state)
     {
@@ -104,7 +105,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
         List<LivingEntity> entities = world.getEntitiesByType(TypeFilter.instanceOf(LivingEntity.class), box, entity -> true);
         entities.forEach(entity ->
         {
-            entity.damage(DamageSource.GENERIC, 2);
+            entity.damage(DamageSource.GENERIC, power * 20);
             double mult = 0.5;
             entity.addVelocity(facing.getOffsetX() * mult, facing.getOffsetY() * mult, facing.getOffsetZ() * mult);
         });
@@ -177,6 +178,7 @@ public class LinearOscillatorBlockEntity extends SyncableBlockEntity implements 
     public void setInputPower(float power)
     {
         this.running = power != 0;
+        this.power = power;
         this.cooldownIncrement = INCREMENT_MIN + power * (INCREMENT_MAX - INCREMENT_MIN);
     }
 }
