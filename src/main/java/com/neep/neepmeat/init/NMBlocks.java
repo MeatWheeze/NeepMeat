@@ -200,7 +200,7 @@ public class NMBlocks
 
     public static Block CHARNEL_COMPACTOR = BlockRegistry.queue(new CharnelCompactorBlock("charnel_compactor", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static CharnelPumpBlock CHARNEL_PUMP = BlockRegistry.queue(new CharnelPumpBlock("charnel_pump", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
-    public static WellHeadBlock WELL_HEAD = BlockRegistry.queue(new WellHeadBlock("well_head", block(), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
+    public static WellHeadBlock WELL_HEAD = BlockRegistry.queue(new WellHeadBlock("well_head", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static Block WRITHING_EARTH = BlockRegistry.queue(new WrithingEarthSpoutBlock("writhing_earth_spout", block(), FabricBlockSettings.copyOf(Blocks.DIRT)));
 
     public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));

@@ -1,21 +1,18 @@
 package com.neep.meatlib.item;
 
 import com.neep.neepmeat.NeepMeat;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
-import net.minecraft.text.StringVisitable;
-import net.minecraft.text.Style;
-import net.minecraft.text.Text;
+import net.minecraft.text.*;
 import net.minecraft.util.Formatting;
 
 import java.util.List;
-import java.util.Optional;
 
 @FunctionalInterface
 public interface TooltipSupplier
 {
-    LineBreakingVisitor VISITOR = new LineBreakingVisitor(30);
-
     static TooltipSupplier BLANK = (i, t) -> {};
 
     void apply(Item item, List<Text> tooltip);
@@ -29,17 +26,35 @@ public interface TooltipSupplier
     {
         return (item, list) ->
         {
-            for (int i = 0; i < lines; ++i)
+            for (int lineNumber = 0; lineNumber < lines; ++lineNumber)
             {
-                var txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
-//                Text txt = Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(Formatting.GRAY);
-//                txt.visit(asString ->
-//                {
-//                    return Optional.empty();
-//                });
-                list.add(txt);
+                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+                var txt = Text.translatable(item.getTranslationKey() + ".lore_" + lineNumber).formatted(Formatting.GRAY);
+                List<OrderedText> newText = textRenderer.wrapLines(txt, 200);
+
+                for (var line : newText)
+                {
+                    MutableText textLine = Text.empty();
+
+                    line.accept((index, style, codePoint) ->
+                    {
+                        textLine.append(Text.literal(Character.toString(codePoint)).setStyle(style));
+                        return true;
+                    });
+
+                    list.add(textLine);
+                }
             }
         };
+    }
+
+    class RangedVisitor implements CharacterVisitor
+    {
+        @Override
+        public boolean accept(int index, Style style, int codePoint)
+        {
+            return false;
+        }
     }
 
     static TooltipSupplier hidden(int lines)
@@ -77,80 +92,27 @@ public interface TooltipSupplier
         {
             if (lines != 0 && Screen.hasShiftDown())
             {
-                for (int i = 0; i < lines; ++i)
+                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+                var txt = Text.translatable(item.getTranslationKey() + ".lore_0").formatted(Formatting.GRAY);
+                List<OrderedText> newText = textRenderer.wrapLines(txt, 200);
+
+                for (var line : newText)
                 {
-                    tooltip.add(Text.translatable(item.getTranslationKey() + ".lore_" + i).formatted(formatting));
+                    MutableText textLine = Text.empty();
+
+                    line.accept((index, style, codePoint) ->
+                    {
+                        textLine.append(Text.literal(Character.toString(codePoint)).setStyle(style.withColor(Formatting.YELLOW)));
+                        return true;
+                    });
+
+                    tooltip.add(textLine);
                 }
             }
             else
             {
                 applyMessage(tooltip);
             }
-        }
-    }
-
-    class LineBreakingVisitor
-    {
-        private final int maxWidth;
-        private float totalWidth;
-        private int lastSpaceBreak = -1;
-        private Style lastSpaceStyle = Style.EMPTY;
-        private int count;
-        private int startOffset;
-
-        protected String currentLine = "";
-
-        public LineBreakingVisitor(int maxWidth)
-        {
-            this.maxWidth = maxWidth;
-        }
-
-        public boolean accept(int i, Style style, int codePoint, List<Text> tooltips)
-        {
-            int k = i + this.startOffset;
-            switch (codePoint)
-            {
-                case 10:
-                {
-                    return this.breakLine(k, style, tooltips);
-                }
-                case 32:
-                {
-                    this.lastSpaceBreak = k;
-                    this.lastSpaceStyle = style;
-                }
-            }
-            this.totalWidth += 1;
-            if (this.totalWidth > this.maxWidth)
-            {
-                if (this.lastSpaceBreak != -1)
-                {
-                    return this.breakLine(this.lastSpaceBreak, this.lastSpaceStyle, tooltips);
-                }
-                return this.breakLine(k, style, tooltips);
-            }
-            this.count = k + Character.charCount(codePoint);
-//            currentLine.append(Character.toString(codePoint));
-            currentLine += Character.toString(codePoint);
-            return true;
-        }
-
-        public void reset()
-        {
-            currentLine = "";
-            totalWidth = 0;
-        }
-
-        private boolean breakLine(int finishIndex, Style finishStyle, List<Text> tooltips)
-        {
-            tooltips.add(Text.of(currentLine));
-            reset();
-            return true;
-        }
-
-        public void offset(int extraOffset)
-        {
-            this.startOffset += extraOffset;
         }
     }
 }

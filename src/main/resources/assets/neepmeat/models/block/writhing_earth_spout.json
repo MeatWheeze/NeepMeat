@@ -1,7 +1,7 @@
 {
 	"parent": "block/cube_all",
       	"textures": {
-        	"all": "neepmeat:block/writhing_earth_spout"
+        	"all": "neepmeat:block/charnel_pump/writhing_earth_spout"
       	}
 }
 
