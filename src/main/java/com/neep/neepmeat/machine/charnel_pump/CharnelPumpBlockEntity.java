@@ -3,10 +3,13 @@ package com.neep.neepmeat.machine.charnel_pump;
 import com.google.common.collect.Lists;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMParticles;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
 import com.neep.neepmeat.machine.well_head.WellHeadBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -30,7 +33,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-public class CharnelPumpBlockEntity extends SyncableBlockEntity
+public class CharnelPumpBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     private final Random random = Random.create();
 
@@ -55,7 +58,11 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity
         return list;
     }
 
-    private WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 16, this::sync);
+    public final long minPower = 300;
+    private float lastPower;
+    private float inputPower;
+
+    private WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 16, this::markDirty);
 
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -67,24 +74,33 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity
         wellHeadFinder.get().tick();
         writhingSpoutFinder.get().tick();
 
-        spawnSpouts();
+        if (inputPower != lastPower)
+        {
+            lastPower = inputPower;
+            sync();
+        }
 
         Set<WellHeadBlockEntity> found = wellHeadFinder.get().result();
         long distributeAmount = FluidConstants.BUCKET; // Integer multiple of bucket, will vary based on power input.
 
-        for (var wellHead : found)
+        if (inputPower >= (float) minPower / PowerUtils.referencePower())
         {
-            try (Transaction transaction = Transaction.openOuter())
+            spawnSpouts();
+
+            for (var wellHead : found)
             {
-                long extracted = fluidStorage.extract(FluidVariant.of(Fluids.WATER), distributeAmount, transaction);
-                if (extracted == distributeAmount)
+                try (Transaction transaction = Transaction.openOuter())
                 {
-                    wellHead.receiveFluid(distributeAmount, transaction);
-                    transaction.commit();
-                }
-                else
-                {
-                    transaction.abort();
+                    long extracted = fluidStorage.extract(FluidVariant.of(Fluids.WATER), distributeAmount, transaction);
+                    if (extracted == distributeAmount)
+                    {
+                        wellHead.receiveFluid(distributeAmount, transaction);
+                        transaction.commit();
+                    }
+                    else
+                    {
+                        transaction.abort();
+                    }
                 }
             }
         }
@@ -97,12 +113,14 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity
                 && (surfaceState.isIn(BlockTags.DIRT) || surfaceState.isIn(BlockTags.STONE_ORE_REPLACEABLES));
     }
 
+    // Check for existing sprouts. If none are found, spawn a new one.
     private void spawnSpouts()
     {
         var writhing = writhingSpoutFinder.get();
 
         if (writhing.notDirty() && writhing.result().isEmpty())
         {
+            // Find a position on the surface within the adjacent 3x3 square of chunks.
             BlockPos rand = BlockPos.iterateRandomly(random, 1, getPos(), 25).iterator().next();
             int surfaceHeight = world.getChunk(rand).sampleHeightmap(Heightmap.Type.WORLD_SURFACE, rand.getX(), rand.getZ());
             BlockPos surfacePos = new BlockPos(rand.getX(), surfaceHeight, rand.getZ());
@@ -142,5 +160,18 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity
     public Storage<FluidVariant> getFluidStorage(Direction face)
     {
         return fluidStorage;
+    }
+
+
+    @Override
+    public boolean tick(MotorEntity motor)
+    {
+        return false;
+    }
+
+    @Override
+    public void setInputPower(float power)
+    {
+        this.inputPower = power;
     }
 }

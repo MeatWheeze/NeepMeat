@@ -8,6 +8,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.util.MiscUtils;
@@ -48,10 +49,11 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
         ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings));
         this.name = name;
         volume = BigBlockPattern.oddCylinder(1, 0, 7, getStructure().getDefaultState())
-                .set(2, 0, 0, getStructure().getDefaultState())
-                .set(2, 1, 0, getStructure().getDefaultState())
+                .set(-2, 0, 0, getStructure().getDefaultState())
+                .set(-2, 1, 0, getStructure().getDefaultState())
+                .enableApi(-2, 1, 0, MotorisedBlock.LOOKUP)
                 .enableApi(0, 0, -1, FluidStorage.SIDED)
-                .enableApi(2, 1, 0, BloodAcceptor.SIDED);
+        ;
 
         patternMap = ImmutableMap.of(
                 Direction.NORTH, volume,

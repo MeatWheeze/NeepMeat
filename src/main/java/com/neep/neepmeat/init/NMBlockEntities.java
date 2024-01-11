@@ -341,6 +341,7 @@ public class NMBlockEntities
         CHARNEL_PUMP = register("charnel_pump", (p, s) -> new CharnelPumpBlockEntity(CHARNEL_PUMP, p, s), NMBlocks.CHARNEL_PUMP);
         BloodAcceptor.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getAcceptor, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
         FluidStorage.SIDED.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getFluidStorage, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
+        MotorisedBlock.LOOKUP.registerForBlockEntity(CharnelPumpStructure.CPSBlockEntity::getMotorised, NMBlocks.CHARNEL_PUMP.getStructure().getBlockEntityType());
         WELL_HEAD = register("well_head", (p, s) -> new WellHeadBlockEntity(WELL_HEAD, p, s), NMBlocks.WELL_HEAD);
         FluidStorage.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidStorage, WELL_HEAD);
         FluidPump.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidPump, WELL_HEAD);

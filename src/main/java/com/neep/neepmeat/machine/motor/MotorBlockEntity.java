@@ -79,7 +79,8 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
 
     protected void onPowerChange()
     {
-        if (cache != null && cache.getBlockEntity() instanceof MotorisedBlock motorised)
+        MotorisedBlock motorised = getConnectedBlock();
+        if (motorised != null)
         {
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());

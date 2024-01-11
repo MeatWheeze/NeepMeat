@@ -1,5 +1,5 @@
 # Made in Blockbench 4.9.0
 newmtl m_ed6657f6-98be-38d0-67b4-58bda411672a
-map_Kd neepmeat:/block/charnel_pump/inner
+map_Kd neepmeat:block/charnel_pump/inner
 newmtl m_b69234fd-f04c-9dc6-0efe-96e871da9ade
-map_Kd neepmeat:/block/charnel_pump/main
+map_Kd neepmeat:block/charnel_pump/main
