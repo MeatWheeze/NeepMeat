@@ -6,9 +6,11 @@ import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +22,7 @@ import net.minecraft.world.BlockView;
 
 public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure.CPSBlockEntity>
 {
+
     public CharnelPumpStructure(BigBlock<?> parent, Settings settings)
     {
         super(parent, settings);
@@ -48,8 +51,21 @@ public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure
             super(type, pos, state);
         }
 
+        public Storage<FluidVariant> getFluidStorage(Direction face)
+        {
+            if (apis.contains(FluidStorage.SIDED.getId()) && controllerPos != null)
+            {
+                if (world.getBlockEntity(controllerPos) instanceof CharnelPumpBlockEntity be)
+                {
+                    return be.getFluidStorage(null);
+                }
+            }
+            return null;
+        }
+
         public BloodAcceptor getAcceptor(Direction direction)
         {
+            // tODO: remove
             if (apis.contains(BloodAcceptor.SIDED.getId()))
             {
                 return new BloodAcceptor()

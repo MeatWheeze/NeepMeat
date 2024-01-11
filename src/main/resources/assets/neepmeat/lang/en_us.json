@@ -446,6 +446,11 @@
   "message.neepmeat.compactor.not_found": "No Integrator organism is connected.",
   "message.neepmeat.compactor.immature": "The connected Integrator organism is not fully grown.",
 
+  "block.neepmeat.charnel_pump": "Charnel Pump",
+  "block.neepmeat.well_cap": "Well Cap",
+  "block.neepmeat.well_cap.lore_0": "Place on a spout of writhing earth to extract fats.",
+  "block.neepmeat.writhing_earth_spout": "Writhing Earth Spout",
+
   "message.neepmeat.synthesiser.template": "Current template organism: %s",
 
   "block.neepmeat.work_fluid": "Work Fluid",

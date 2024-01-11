@@ -10,12 +10,16 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -25,6 +29,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
@@ -45,6 +50,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
         volume = BigBlockPattern.oddCylinder(1, 0, 7, getStructure().getDefaultState())
                 .set(2, 0, 0, getStructure().getDefaultState())
                 .set(2, 1, 0, getStructure().getDefaultState())
+                .enableApi(0, 0, -1, FluidStorage.SIDED)
                 .enableApi(2, 1, 0, BloodAcceptor.SIDED);
 
         patternMap = ImmutableMap.of(
@@ -98,5 +104,12 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return NMBlockEntities.CHARNEL_PUMP.instantiate(pos, state);
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtils.checkType(type, NMBlockEntities.CHARNEL_PUMP, ((world1, pos, state1, blockEntity) -> blockEntity.serverTick()), null, world);
     }
 }
