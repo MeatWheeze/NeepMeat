@@ -141,11 +141,4 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
     {
         return bloodAcceptor;
     }
-
-    @Override
-    public void markRemoved()
-    {
-        super.markRemoved();
-        onRemoved();
-    }
 }

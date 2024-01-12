@@ -9,6 +9,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -91,6 +92,16 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
         return this.getDefaultState().with(FACING, ctx.getPlayerFacing());
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()))
+        {
+            world.getBlockEntity(pos, NMBlockEntities.LARGE_MOTOR).ifPresent(MotorEntity::onRemoved);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

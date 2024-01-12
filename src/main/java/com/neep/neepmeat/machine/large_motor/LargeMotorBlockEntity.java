@@ -90,13 +90,6 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
     }
 
     @Override
-    public void markRemoved()
-    {
-        onRemoved();
-        super.markRemoved();
-    }
-
-    @Override
     public float getRotorAngle()
     {
         return angle;

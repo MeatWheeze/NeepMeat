@@ -128,11 +128,4 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
         this.loadTorque = nbt.getFloat("loadTorque");
         this.outputPower = nbt.getFloat("influx");
     }
-
-    @Override
-    public void markRemoved()
-    {
-        super.markRemoved();
-    }
-
 }

@@ -57,6 +57,16 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
         return adjacentMotorisedDirection(context, this);
     }
 
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!state.isOf(newState.getBlock()))
+        {
+            world.getBlockEntity(pos, NMBlockEntities.ADVANCED_MOTOR).ifPresent(MotorEntity::onRemoved);
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
     public static BlockState adjacentMotorisedDirection(ItemPlacementContext context, Block block)
     {
         World world = context.getWorld();
