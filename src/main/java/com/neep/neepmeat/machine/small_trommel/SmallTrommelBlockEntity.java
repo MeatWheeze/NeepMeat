@@ -31,7 +31,7 @@ import java.util.Random;
 public class SmallTrommelBlockEntity extends SyncableBlockEntity implements MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     public static final float INCREMENT_MIN = 0.1f;
-    public static final float INCREMENT_MAX = 1;
+    public static final float INCREMENT_MAX = 2;
     public static long CONVERT_MIN = 100;
     public static long BASE_AMOUNT = 9000;
 
@@ -177,7 +177,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
         this.power = power;
         if (power >= minPower)
         {
-            progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, INCREMENT_MAX);
+            progressIncrement = MathHelper.lerp(power, INCREMENT_MIN, 2);
         }
         else
         {

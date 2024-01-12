@@ -136,13 +136,10 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
         try (Transaction inner = transaction.openNested())
         {
             Storage<FluidVariant> output = inventory.getFluidOutput();
-            if (output != null)
+            if (fluidOutput.insertInto(output, FluidVariant::of, transaction))
             {
-                if (fluidOutput.insertInto(output, FluidVariant::of, transaction))
-                {
-                    inner.commit();
-                    return true;
-                }
+                inner.commit();
+                return true;
             }
             inner.abort();
         }

@@ -59,7 +59,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
 
     public Storage<FluidVariant> getFluidStorage(@Nullable Direction direction)
     {
-        return getOutputStorage();
+        return getExtractOutput();
     }
 
     public static WritableStackStorage getItemStorageFromTop(World world, BlockPos pos, BlockState state, @Nullable BlockEntity be, @Nullable Direction direction)
@@ -75,7 +75,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     {
         if (world.getBlockEntity(pos.down()) instanceof MixerBlockEntity mixer)
         {
-            return mixer.getOutputStorage();
+            return mixer.getExtractOutput();
         }
         return null;
     }
@@ -125,9 +125,14 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
         return storage.getFluidOutput();
     }
 
+    public Storage<FluidVariant> getExtractOutput()
+    {
+        return storage.getExtractOutput();
+    }
+
     public void startDutyCycle()
     {
-        if (currentRecipe == null && getOutputStorage() != null)
+        if (currentRecipe == null)
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 

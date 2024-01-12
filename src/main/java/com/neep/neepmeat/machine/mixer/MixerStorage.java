@@ -6,9 +6,13 @@ import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.ExtractionOnlyStorage;
+import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.nbt.NbtCompound;
 
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -19,6 +23,7 @@ public class MixerStorage implements ImplementedRecipe.DummyInventory
     protected WritableSingleFluidStorage fluidInput1;
     protected WritableSingleFluidStorage fluidInput2;
     protected WritableSingleFluidStorage fluidOutput;
+    protected Storage<FluidVariant> extractionOnlyOutput;
     protected WritableStackStorage itemInput;
 
     // Silly method of remembering the input fluids to show their particles
@@ -33,6 +38,21 @@ public class MixerStorage implements ImplementedRecipe.DummyInventory
         fluidInput2 = new WritableSingleFluidStorage(FluidConstants.BUCKET, callback);
         itemInput = new WritableStackStorage(parent::sync);
         fluidOutput = new WritableSingleFluidStorage(2 * FluidConstants.BUCKET, callback);
+
+        extractionOnlyOutput = new ExtractionOnlyStorage<>()
+        {
+            @Override
+            public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
+            {
+                return fluidOutput.extract(resource, maxAmount, transaction);
+            }
+
+            @Override
+            public Iterator<StorageView<FluidVariant>> iterator()
+            {
+                return fluidOutput.iterator();
+            }
+        };
     }
 
     public Storage<FluidVariant> getInputStorages()
@@ -91,5 +111,26 @@ public class MixerStorage implements ImplementedRecipe.DummyInventory
     public Storage<FluidVariant> getFluidOutput()
     {
         return fluidOutput;
+    }
+
+    public Storage<FluidVariant> getExtractOutput()
+    {
+        return extractionOnlyOutput;
+    }
+
+    private static class FluidOutputStorage extends WritableSingleFluidStorage
+    {
+        public boolean locked = true;
+
+        public FluidOutputStorage(long capacity, Runnable finalCallback)
+        {
+            super(capacity, finalCallback);
+        }
+
+        @Override
+        protected boolean canInsert(FluidVariant variant)
+        {
+            return !locked && super.canInsert(variant);
+        }
     }
 }

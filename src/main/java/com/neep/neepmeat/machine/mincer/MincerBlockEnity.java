@@ -93,7 +93,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
 
     protected void damageEntity(ServerWorld world, LivingEntity entity)
     {
-        float damageAmount = 1;
+        float damageAmount = 20 * power;
         if (entity.getHealth() <= damageAmount)
         {
             entity.remove(Entity.RemovalReason.DISCARDED);
