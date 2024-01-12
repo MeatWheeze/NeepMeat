@@ -1,5 +1,6 @@
 package com.neep.neepmeat.api.processing;
 
+import com.google.common.collect.Sets;
 import com.neep.neepmeat.fluid.ore_fat.OreFatFluidFactory;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalItemTags;
@@ -15,11 +16,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
 public class OreFatRegistry
 {
-    protected static List<Entry> ENTRIES = new LinkedList<>();
+    protected static Set<Entry> ENTRIES = Sets.newHashSet();
 
     public static void init()
     {
@@ -41,6 +43,11 @@ public class OreFatRegistry
     public static void register(TagKey<Item> tag, String name, Integer col, Item result)
     {
         ENTRIES.add(new Entry(tag, Text.of(name), col, result));
+    }
+
+    public static Set<Entry> getEntries()
+    {
+        return ENTRIES;
     }
 
     public static Entry getFromInput(Item item)
