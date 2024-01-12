@@ -347,7 +347,7 @@
   "item.neepmeat.divine_organ": "Divine Organ",
 
   "item.neepmeat.integration_charge_crude": "Body Compound Cartridge",
-  "item.neepmeat.integration_charge_crude.lore_0": "It's still alive.",
+  "item.neepmeat.integration_charge_crude.lore_0": "The flesh is still alive.",
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
   "item.neepmeat.integration_charge_adv.lore_0": "The fluid writhes inside its shell, as if alive.",
 
@@ -444,7 +444,7 @@
 
   "block.neepmeat.charnel_pump": "Charnel Pump",
   "block.neepmeat.well_head": "Well Head",
-  "block.neepmeat.well_head.lore_0": "Must be placed on a writhing earth spout produced by a nearby Charnel Pump. Writhing earths can be extracted when the pump is active.",
+  "block.neepmeat.well_head.lore_0": "Receives writhing earths liberated by a nearby Charnel Pump. Must be placed on a Writhing Earth Spout.",
   "block.neepmeat.writhing_stone": "Writhing Stone",
   "block.neepmeat.writhing_earth_spout": "Writhing Earth Spout",
   "block.neepmeat.contaminated_dirt": "Contaminated Rubble",

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "mbm",
+    "mpm",
+    "mpm"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "b": {
+      "item": "neepmeat:meat_steel_block"
+    },
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:well_head",
+    "count": 1
+  }
+}

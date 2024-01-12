@@ -8,6 +8,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
@@ -19,7 +20,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.fluid.Fluids;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
@@ -62,7 +62,14 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
     private float lastPower;
     private float inputPower;
 
-    private WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 16, this::markDirty);
+    private WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET * 16, this::markDirty)
+    {
+        @Override
+        protected boolean canInsert(FluidVariant variant)
+        {
+            return variant.getFluid().equals(NMFluids.STILL_WORK_FLUID);
+        }
+    };
 
     public CharnelPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -91,7 +98,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
-                    long extracted = fluidStorage.extract(FluidVariant.of(Fluids.WATER), distributeAmount, transaction);
+                    long extracted = fluidStorage.extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID), distributeAmount, transaction);
                     if (extracted == distributeAmount)
                     {
                         wellHead.receiveFluid(distributeAmount, transaction);

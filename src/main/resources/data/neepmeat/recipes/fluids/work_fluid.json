@@ -1,7 +1,7 @@
 {
   "type": "neepmeat:mixing",
   "item": {
-    "resource": "neepmeat:whisper_flour",
+    "resource": "neepmeat:integration_charge_crude",
     "amount": 1
   },
   "fluid1": {
