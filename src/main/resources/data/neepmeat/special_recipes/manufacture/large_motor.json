@@ -1,0 +1,24 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:meat_steel_block"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:advanced_motor"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:advanced_motor"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:large_motor",
+    "amount": 1
+  }
+}

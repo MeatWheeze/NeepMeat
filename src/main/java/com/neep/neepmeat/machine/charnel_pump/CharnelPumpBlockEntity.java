@@ -58,7 +58,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
         return list;
     }
 
-    public final long minPower = 300;
+    public final long minPower = 1000;
     private float lastPower;
     private float inputPower;
 

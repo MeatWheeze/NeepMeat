@@ -47,7 +47,8 @@
       {"type": "page", "id": "trommel", "icon": "neepmeat:small_trommel", "text": "Trommel"},
       {"type": "page", "id": "crucible", "icon": "neepmeat:crucible", "text": "Rendering Basin"},
       {"type": "page", "id": "collector", "icon": "neepmeat:collector", "text": "Fat Collector"},
-      {"type": "page", "id": "press", "icon": "neepmeat:hydraulic_press", "text": "Hydraulic Press"}
+      {"type": "page", "id": "press", "icon": "neepmeat:hydraulic_press", "text": "Hydraulic Press"},
+      {"type": "page", "id": "charnel_pump", "icon": "neepmeat:rusty_metal", "text": "Charnel Pump"}
     ]},
     {"type": "menu", "id": "meat_processing", "icon": "neepmeat:raw_meat_brick", "text": "Meat Processing", "entries": [
       {"type": "page", "id": "meat", "icon": "neepmeat:raw_meat_brick", "text": "Meat"},
@@ -237,6 +238,13 @@
       {"type": "text", "text": "If the press is placed above a Casting Basin, it will begin extending if a valid fluid is in the basin. To make the arm extend, a bucket of any fluid can be pumped into either of the two side ports. To make the arm retract, this fluid must be pumped out."},
       {"type": "text", "text": "\nMilking\n", "bold": true},
       {"type": "text", "text": "To milk a cow, place it above a fluid drain and beneath a Hydraulic Press. As the cow is compressed, milk will be deposited in the drain."}
+    ]},
+    {"id": "charnel_pump", "contents": [
+      {"type": "text", "text": "Charnel Pump\n", "bold": true},
+      {"type": "text", "text": "Work Fluid can be induced to seek out precious minerals and engulf them. When injected at high pressure into a rock formation, the fluid will force apart minute fractures, allowing it animalcules to digest the newly exposed mineral deposits. The Charnel Pump performs these functions and encourages the fluid to return to the surface once saturated"},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "The Charnel pump is a structure six blocks tall with a nominal diameter of three blocks. A motor can connect to the protrusion on the left side and work fluid is input through the port at the rear. The motor must deliver over 1000eJ/t for the Charnel Pump to run. Each pumping cycle will consume one bucket of Work Fluid."}
+      {"type": "text", "text": "\nWhen the pump is first turned on, the surface will be breached by a spout of writhing earth nearby. A Well Head must be placed on this to receive the resources liberated from the earth."}
     ]},
 
     {"id": "brains", "contents": [
