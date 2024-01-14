@@ -50,6 +50,6 @@ public class WrithingStoneBlock extends BaseBlock
     private boolean canSpread(BlockState blockState, ServerWorld world, BlockPos spreadPos)
     {
 //        return blockState.isAir();
-        return blockState.isIn(BlockTags.STONE_ORE_REPLACEABLES);
+        return blockState.isIn(BlockTags.STONE_ORE_REPLACEABLES) || blockState.isIn(BlockTags.DIRT);
     }
 }

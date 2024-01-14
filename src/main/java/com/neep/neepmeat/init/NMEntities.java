@@ -9,6 +9,8 @@ import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.entity.hound.HoundEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
+import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
+import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
@@ -26,6 +28,8 @@ public class NMEntities
     public static EntityType<BovineHorrorEntity> BOVINE_HORROR;
     public static EntityType<AcidSprayEntity> ACID_SPRAY;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
+
+    public static EntityType<PhageRayEntity> PHAGE_RAY;
 
     public static void initialise()
     {
@@ -57,5 +61,8 @@ public class NMEntities
         FabricDefaultAttributeRegistry.register(BOVINE_HORROR, BovineHorrorEntity.createLivingAttributes());
         ACID_SPRAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "acid_spray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, AcidSprayEntity::new)
                 .dimensions(EntityDimensions.fixed(1f, 1f)).trackedUpdateRate(8).build());
+
+        PHAGE_RAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "phage_ray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PhageRayEntity::new)
+                .dimensions(EntityDimensions.fixed(2.8f, 2.8f)).trackedUpdateRate(3).build());
     }
 }

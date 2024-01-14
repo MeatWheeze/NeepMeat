@@ -49,6 +49,7 @@ import com.neep.neepmeat.machine.motor.LiquidFuelMachine;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
+import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
@@ -135,6 +136,8 @@ public class NMBlockEntities
     public static BlockEntityType<CharnelPumpBlockEntity> CHARNEL_PUMP;
     public static BlockEntityType<WellHeadBlockEntity> WELL_HEAD;
     public static BlockEntityType<WrithingEarthSpoutBlockEntity> WRITHING_EARTH_SPOUT;
+
+    public static BlockEntityType<PhageRayBlockEntity> PHAGE_RAY;
 
     public static BlockEntityType<FluidDrainBlockEntity> FLUID_DRAIN;
     public static BlockEntityType<FluidInterfaceBlockEntity> FLUID_INTERFACE;
@@ -346,6 +349,8 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidStorage, WELL_HEAD);
         FluidPump.SIDED.registerForBlockEntity(WellHeadBlockEntity::getFluidPump, WELL_HEAD);
         WRITHING_EARTH_SPOUT = register("writhing_earth_spout", (p, s) -> new WrithingEarthSpoutBlockEntity(WRITHING_EARTH_SPOUT, p, s), NMBlocks.WRITHING_EARTH_SPOUT);
+
+        PHAGE_RAY = register("phage_ray", (p, s) -> new PhageRayBlockEntity(PHAGE_RAY, p, s), NMBlocks.PHAGE_RAY);
 
         VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);

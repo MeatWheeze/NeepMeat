@@ -49,6 +49,7 @@ import com.neep.neepmeat.machine.mincer.MincerBlock;
 import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
+import com.neep.neepmeat.machine.phage_ray.PhageRayBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
@@ -206,6 +207,8 @@ public class NMBlocks
     public static Block CONTAMINATED_DIRT = BlockRegistry.queue(new ContaminatedDirtBlock("contaminated_dirt", block(), FabricBlockSettings.copyOf(Blocks.DIRT).strength(3).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
     public static Block WRITHING_EARTH_SPOUT = BlockRegistry.queue(new WrithingEarthSpoutBlock("writhing_earth_spout", block(), FabricBlockSettings.copyOf(Blocks.DIRT).strength(8).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
     public static Block WRITHING_STONE = BlockRegistry.queue(new WrithingStoneBlock("writhing_stone", block(), FabricBlockSettings.copyOf(Blocks.STONE).strength(6).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS)));
+
+    public static PhageRayBlock PHAGE_RAY = BlockRegistry.queue(new PhageRayBlock("phage_ray", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static MixerBlock MIXER = BlockRegistry.queue(new MixerBlock("mixer", block().tooltip(TooltipSupplier.hidden(4)).requiresMotor(), FabricBlockSettings.copyOf(BRASS_BLOCKS)));
 

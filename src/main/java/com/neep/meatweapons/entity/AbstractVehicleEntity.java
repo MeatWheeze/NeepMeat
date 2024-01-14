@@ -446,7 +446,8 @@ extends Entity {
     }
 
     @Override
-    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition) {
+    protected void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition)
+    {
         this.fallVelocity = this.getVelocity().y;
         if (this.hasVehicle())
         {
