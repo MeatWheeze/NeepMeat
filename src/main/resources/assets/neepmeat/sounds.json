@@ -178,5 +178,14 @@
     "sounds": [
       "neepmeat:inject"
     ]
-  }
+  },
+
+  "phage_ray_charge": { "subtitle": "subtitles.neepmeat.phage_ray.charge",
+    "sounds": [
+      "neepmeat:phage_ray_charge"
+    ]},
+  "phage_ray_running": { "subtitle": "subtitles.neepmeat.phage_ray.running",
+    "sounds": [
+      "neepmeat:phage_ray_running"
+    ]}
 }

@@ -24,6 +24,9 @@ public class NMSounds
     public static SoundEvent ADVANCED_INTEGRATOR_CHARGE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "advanced_integrator_charge");
     public static SoundEvent ADVANCED_INTEGRATOR_AMBIENT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "advanced_integrator_ambient");
 
+    public static SoundEvent PHAGE_RAY_CHARGE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "phage_ray_charge");
+    public static SoundEvent PHAGE_RAY_RUNNING = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "phage_ray_running");
+
     public static SoundEvent METAL_BARREL_OPEN = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_open");
     public static SoundEvent METAL_BARREL_CLOSE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "metal_barrel_close");
 

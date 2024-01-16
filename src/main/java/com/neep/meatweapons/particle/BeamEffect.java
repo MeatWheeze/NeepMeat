@@ -69,7 +69,7 @@ public class BeamEffect extends BeamGraphicsEffect
         }
 
 
-        // All these things come from RenderPhase. They may appear public, but that is provided by Architectury
+        // All these things come from RenderPhase. They may appear public, but that is due to Architectury accessWideners.
         public static final RenderPhase.Transparency TRANSLUCENT_TRANSPARENCY = new RenderPhase.Transparency("translucent_transparency", () ->
         {
             RenderSystem.enableBlend();
@@ -96,7 +96,6 @@ public class BeamEffect extends BeamGraphicsEffect
         });
 
         public static final Identifier BEAM_TEXTURE = new Identifier(MeatWeapons.NAMESPACE, "textures/misc/beam.png");
-//        public static final RenderLayer BEAM_LAYER = BEAM_FUNC.apply(BEAM_TEXTURE);
 
     }
 }

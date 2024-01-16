@@ -3,6 +3,7 @@ package com.neep.neepmeat.client;
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
 import com.neep.neepmeat.machine.charnel_pump.CharnelPumpInstance;
 import com.neep.neepmeat.machine.flywheel.FlywheelInstance;
@@ -11,6 +12,7 @@ import com.neep.neepmeat.machine.grinder.GrinderRenderer;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressInstance;
 import com.neep.neepmeat.machine.large_motor.LargeMotorInstance;
 import com.neep.neepmeat.machine.motor.MotorInstance;
+import com.neep.neepmeat.machine.phage_ray.PhageRayInstance;
 import com.neep.neepmeat.machine.pylon.PylonInstance;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineInstance;
 import com.neep.neepmeat.machine.surgical_controller.PLCInstance;
@@ -36,5 +38,7 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.PYLON).alwaysSkipRender().factory(PylonInstance::new).apply();
         InstancedRenderRegistry.configure(PLCBlocks.PLC_ENTITY).alwaysSkipRender().factory(PLCInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.LINEAR_OSCILLATOR).alwaysSkipRender().factory(LinearOscillatorInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
     }
 }

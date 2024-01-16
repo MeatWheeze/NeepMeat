@@ -3,6 +3,7 @@ package com.neep.neepmeat.client;
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
+import com.neep.meatweapons.particle.PhageRayGraphicsEffect;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
@@ -30,6 +31,7 @@ import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
+import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
@@ -94,6 +96,7 @@ public class NeepMeatClient implements ClientModInitializer
         NMKeys.registerKeybindings();
 
         GraphicsEffectClient.registerEffect(NMGraphicsEffects.REMINA, ReminaGraphicsEvent::new);
+        GraphicsEffectClient.registerEffect(NMGraphicsEffects.PHAGE_RAY, PhageRayGraphicsEffect::new);
 
         NMDimensionEffects.init();
 
@@ -101,6 +104,8 @@ public class NeepMeatClient implements ClientModInitializer
         PLCClient.init();
 
         NetworkingToolItem.Client.init();
+
+        PhageRayEntity.Client.init();
 
 //        ImplantAttributes.register(Impla);
     }

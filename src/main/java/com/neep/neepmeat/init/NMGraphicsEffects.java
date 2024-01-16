@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 public class NMGraphicsEffects
 {
     public static final GraphicsEffectType REMINA = GraphicsEffects.register(NeepMeat.NAMESPACE, "remina", new GraphicsEffectType());
+    public static final GraphicsEffectType PHAGE_RAY = GraphicsEffects.register(NeepMeat.NAMESPACE, "phage_ray", new GraphicsEffectType());
 
     public static void init()
     {
@@ -16,4 +17,5 @@ public class NMGraphicsEffects
 //            ServerPlayNetworking.send(handler.getPlayer(),GraphicsEffects.CHANNEL_ID, GraphicsEffects.createPacket(REMINA, handler.getPlayer().getWorld()));
         });
     }
+
 }

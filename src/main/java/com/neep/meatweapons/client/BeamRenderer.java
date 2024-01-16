@@ -16,6 +16,11 @@ public class BeamRenderer
 {
     public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, int r, int g, int b, int a, float t, int l)
     {
+        renderBeam(matrices, vertexConsumer, cameraPos, p0, p1, 0, r, g, b, a, t, l);
+    }
+
+    public static void renderBeam(MatrixStack matrices, VertexConsumer vertexConsumer, Vec3d cameraPos, Vec3d p0, Vec3d p1, float roll, int r, int g, int b, int a, float t, int l)
+    {
         matrices.push();
         Vec3d beam = p1.subtract(p0);
 
@@ -27,10 +32,11 @@ public class BeamRenderer
 
         matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
         matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) yaw));
+        Matrix3f normal = matrices.peek().getNormalMatrix().copy();
+        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(roll));
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f model = entry.getPositionMatrix();
-        Matrix3f normal = entry.getNormalMatrix();
 
         vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, -t / 2, 0), 0, 1); // p0
         vertex(vertexConsumer, model, normal, r, g, b, a, l, new Vec3d(0, -t / 2, beam.length()), 1, 1); // p1

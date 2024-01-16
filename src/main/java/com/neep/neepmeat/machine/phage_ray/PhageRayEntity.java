@@ -1,5 +1,22 @@
 package com.neep.neepmeat.machine.phage_ray;
 
+import com.google.common.collect.MapMaker;
+import com.neep.meatlib.api.event.InputEvents;
+import com.neep.meatlib.api.event.UseAttackCallback;
+import com.neep.meatlib.graphics.GraphicsEffects;
+import com.neep.meatlib.network.PacketBufUtil;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.init.NMGraphicsEffects;
+import com.neep.neepmeat.init.NMSounds;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.EntityTrackingSoundInstance;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -7,9 +24,14 @@ import net.minecraft.entity.MovementType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.MathHelper;
@@ -18,14 +40,44 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+
 public class PhageRayEntity extends Entity
 {
+    public static final Identifier CHANNEL_ID = new Identifier(NeepMeat.NAMESPACE, "phage_ray");
+
     @Nullable private PhageRayBlockEntity parent;
+
+    private boolean trigger = false;
+    private int triggerTicks = 0;
+    private double range = 30;
+    private int delta;
+
+    public float vehicleYaw;
+    public float vehiclePitch;
 
     public PhageRayEntity(EntityType<?> type, World world)
     {
         super(type, world);
         intersectionChecked = true;
+    }
+
+    private void syncBeamEffect(ServerPlayerEntity player, World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
+    {
+        if (world.isClient)
+            throw new IllegalStateException("packet create called on the client!");
+
+        PacketByteBuf byteBuf = GraphicsEffects.createPacket(NMGraphicsEffects.PHAGE_RAY, world);
+
+        PacketBufUtil.writeVec3d(byteBuf, start);
+        PacketBufUtil.writeVec3d(byteBuf, end);
+        PacketBufUtil.writeVec3d(byteBuf, velocity);
+        byteBuf.writeFloat(scale);
+        byteBuf.writeInt(maxTime);
+        byteBuf.writeVarInt(getId());
+
+        ServerPlayNetworking.send(player, GraphicsEffects.CHANNEL_ID, byteBuf);
+
     }
 
     @Override
@@ -46,6 +98,13 @@ public class PhageRayEntity extends Entity
 
     }
 
+    @Nullable
+    @Override
+    public Entity getPrimaryPassenger()
+    {
+        return getFirstPassenger();
+    }
+
     @Override
     public void tick()
     {
@@ -55,30 +114,101 @@ public class PhageRayEntity extends Entity
             remove(RemovalReason.DISCARDED);
         }
 
-        if (!world.isClient())
+//        interpolateAngles();
+
+        if (isLogicalSideForUpdatingMovement() && getFirstPassenger() != null)
         {
-            if (hasPassengers() && getFirstPassenger() != null)
+//            float td = MinecraftClient.getInstance().getTickDelta();
+//            float ya = (float) Math.toDegrees(Math.sin((world.getTime() + td) / 10));
+
+            this.prevYaw = getYaw();
+            this.prevPitch = getPitch();
+            this.setYaw(getFirstPassenger().getYaw());
+            this.setPitch(limitPitch(getFirstPassenger().getPitch()));
+            this.setRotation(this.getYaw(), this.getPitch());
+        }
+
+        if (world.isClient())
+        {
+            clientTick();
+        }
+
+        if (trigger)
+        {
+            if (triggerTicks >= 20)
             {
-                this.setYaw(getFirstPassenger().getYaw());
-                this.setPitch(limitPitch(getFirstPassenger().getPitch()));
-
-                if (world.getTime() % 2 == 0)
+                if (!world.isClient())
                 {
-                    RaycastContext context = new RaycastContext(
-                            getPos().add(0, 1.5, 0),
-                            getPos().add(getRotationVector().multiply(30)),
-                            RaycastContext.ShapeType.COLLIDER,
-                            RaycastContext.FluidHandling.NONE,
-                            this);
+                    spawnBeams();
+                    breakBlocks();
+                }
+            }
+            ++triggerTicks;
 
-                    BlockHitResult result = world.raycast(context);
-                    if (result.getType() == HitResult.Type.BLOCK)
-                    {
-                        world.breakBlock(result.getBlockPos(), false);
-                    }
+            if (!hasPlayerRider())
+                trigger = false;
+        }
+        else
+        {
+            triggerTicks = 0;
+        }
+
+    }
+
+    private void spawnBeams()
+    {
+        int beamInterval = 10;
+        if (triggerTicks % beamInterval == 0)
+        {
+            for (ServerPlayerEntity player : PlayerLookup.tracking(this))
+            {
+                syncBeamEffect(player, world,
+                        getBeamOrigin(), getBeamEnd(), Vec3d.ZERO, 1.2f, beamInterval);
+            }
+        }
+    }
+
+    private void breakBlocks()
+    {
+        if (hasPassengers() && getFirstPassenger() != null)
+        {
+            if (world.getTime() % 2 == 0)
+            {
+                RaycastContext context = new RaycastContext(
+                        getBeamOrigin(),
+                        getBeamEnd(),
+                        RaycastContext.ShapeType.COLLIDER,
+                        RaycastContext.FluidHandling.NONE,
+                        this);
+
+                BlockHitResult result = world.raycast(context);
+                if (result.getType() == HitResult.Type.BLOCK)
+                {
+                    world.breakBlock(result.getBlockPos(), false);
                 }
             }
         }
+    }
+
+
+    private void setPlayerTrigger(boolean trigger)
+    {
+        this.trigger = trigger;
+    }
+
+    public Vec3d getBeamOrigin()
+    {
+        return getPos().add(0, 1.5, 0);
+    }
+
+    public Vec3d getBeamEnd()
+    {
+        return getBeamOrigin().add(getRotationVector().multiply(range));
+    }
+
+    public Vec3d getClientBeamEnd(float tickDelta)
+    {
+        return getBeamOrigin().add(getRotationVec(tickDelta).multiply(range));
     }
 
     private float limitPitch(float pitch)
@@ -159,10 +289,14 @@ public class PhageRayEntity extends Entity
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
-        if (hasPassengers())
-            return ActionResult.PASS;
+        if (!world.isClient())
+        {
+            if (hasPassengers())
+                return ActionResult.PASS;
 
-        return player.startRiding(this) ? ActionResult.CONSUME : ActionResult.PASS;
+            return player.startRiding(this) ? ActionResult.CONSUME : ActionResult.PASS;
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Override
@@ -180,19 +314,19 @@ public class PhageRayEntity extends Entity
             positionUpdater.accept(passenger, v.x, v.y, v.z);
         }
     }
-
     @Override
     public void onPassengerLookAround(Entity passenger)
     {
         super.onPassengerLookAround(passenger);
-        this.setYaw(passenger.getYaw());
-        this.setPitch(limitPitch(passenger.getPitch()));
+//        this.setYaw(passenger.getYaw());
+//        this.setPitch(limitPitch(passenger.getPitch()));
     }
-
     //    @Override
 //    public double getMountedHeightOffset()
 //    {
+
 //        return geth;
+
 //    }
 
     @Override
@@ -204,5 +338,121 @@ public class PhageRayEntity extends Entity
     public void setParent(PhageRayBlockEntity phageRayBlockEntity)
     {
         this.parent = phageRayBlockEntity;
+    }
+
+    static
+    {
+        ServerPlayNetworking.registerGlobalReceiver(CHANNEL_ID, (server, player, handler, buf, responseSender) ->
+        {
+            boolean trigger = buf.readBoolean();
+            server.execute(() ->
+            {
+                if (player.getVehicle() instanceof PhageRayEntity phageRay)
+                {
+                    phageRay.setPlayerTrigger(trigger);
+                }
+            });
+        });
+    }
+
+    // --- Client things ---
+
+    @Environment(EnvType.CLIENT)
+    private final TrackingSoundInstance runningInstance = new TrackingSoundInstance(
+            NMSounds.PHAGE_RAY_RUNNING, SoundCategory.BLOCKS,
+            16, 1,
+            this);
+
+    @Environment(EnvType.CLIENT)
+    private static class TrackingSoundInstance extends EntityTrackingSoundInstance
+    {
+        public TrackingSoundInstance(SoundEvent sound, SoundCategory category, float volume, float pitch, Entity entity)
+        {
+            super(sound, category, volume, pitch, entity, 0);
+            this.repeat = true;
+            this.repeatDelay = 0;
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public void clientTick()
+    {
+        SoundManager manager = MinecraftClient.getInstance().getSoundManager();
+        if (trigger && triggerTicks == 0)
+        {
+            manager.play(new EntityTrackingSoundInstance(NMSounds.PHAGE_RAY_CHARGE, SoundCategory.BLOCKS, 16, 1, this, 0));
+        }
+
+        if (triggerTicks >= 20 && !manager.isPlaying(runningInstance))
+        {
+            manager.play(runningInstance);
+        }
+        else if (triggerTicks == 0 && manager.isPlaying(runningInstance))
+        {
+            manager.stop(runningInstance);
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static class Client
+    {
+        private static boolean prevUse;
+
+        public static void init()
+        {
+            InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
+            {
+                MinecraftClient client = MinecraftClient.getInstance();
+                if (client.player == null)
+                    return;
+
+                if (client.player.getVehicle() instanceof PhageRayEntity phageRay)
+                {
+                    if (client.options.useKey.isPressed())
+                    {
+                        if (!prevUse)
+                        {
+                            phageRay.setPlayerTrigger(true);
+                            sendPacket(client.player, true);
+                            prevUse = true;
+                        }
+                    }
+                    else
+                    {
+                        if (prevUse)
+                        {
+                            phageRay.setPlayerTrigger(false);
+                            sendPacket(client.player, false);
+                            prevUse = false;
+                        }
+                    }
+                }
+            });
+
+            UseAttackCallback.DO_USE.register(client ->
+            {
+                if (client.player.getVehicle() instanceof PhageRayEntity phageRay)
+                {
+                    return false;
+                }
+                return true;
+            });
+        }
+
+        private static void sendPacket(PlayerEntity player, boolean trigger)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+
+            buf.writeBoolean(trigger);
+
+            ClientPlayNetworking.send(CHANNEL_ID, buf);
+        }
+
+        static Map<PhageRayEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
+
+        public static Client get(PhageRayEntity entity)
+        {
+            return MAP.computeIfAbsent(entity, e -> new Client());
+        }
     }
 }
