@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.phage_ray;
 
 import com.google.common.collect.MapMaker;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.neep.meatlib.api.event.InputEvents;
 import com.neep.meatlib.api.event.UseAttackCallback;
 import com.neep.meatlib.graphics.GraphicsEffects;
@@ -14,6 +16,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.sound.EntityTrackingSoundInstance;
 import net.minecraft.client.sound.SoundManager;
@@ -34,13 +37,15 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
+import java.util.*;
 
 public class PhageRayEntity extends Entity
 {
@@ -114,13 +119,8 @@ public class PhageRayEntity extends Entity
             remove(RemovalReason.DISCARDED);
         }
 
-//        interpolateAngles();
-
         if (isLogicalSideForUpdatingMovement() && getFirstPassenger() != null)
         {
-//            float td = MinecraftClient.getInstance().getTickDelta();
-//            float ya = (float) Math.toDegrees(Math.sin((world.getTime() + td) / 10));
-
             this.prevYaw = getYaw();
             this.prevPitch = getPitch();
             this.setYaw(getFirstPassenger().getYaw());
@@ -168,28 +168,111 @@ public class PhageRayEntity extends Entity
         }
     }
 
+    private static class Target
+    {
+        public final BlockPos pos;
+        public int progress;
+
+        public Target(BlockPos pos)
+        {
+            this.pos = pos;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return pos.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            return pos.equals(obj);
+        }
+    }
+
+    private final HashMap<BlockPos, Float> targets = Maps.newHashMap();
+
+    private Set<BlockPos> getTargets(Vec3d origin, Vec3d end)
+    {
+        Vec3d v = new Vec3d(0, 0.5, 0);
+        Vec3d u = getRotationVector().crossProduct(v).normalize().multiply(0.5);
+
+        var starts = List.of(
+                origin.subtract(u).subtract(v),
+                origin.subtract(u).add(v),
+                origin.add(u).add(v),
+                origin.add(u).subtract(v)
+        );
+
+        var ends = List.of(
+                end.subtract(u).subtract(v),
+                end.subtract(u).add(v),
+                end.add(u).add(v),
+                end.add(u).subtract(v)
+        );
+
+        Set<BlockPos> newTargets = Sets.newHashSet();
+        for (int i = 0; i < 4; i++)
+        {
+            RaycastContext context = new RaycastContext(
+                    starts.get(i),
+                    ends.get(i),
+                    RaycastContext.ShapeType.COLLIDER,
+                    RaycastContext.FluidHandling.NONE,
+                    this);
+
+            BlockHitResult result = world.raycast(context);
+
+            if (result.getType() == HitResult.Type.BLOCK)
+            {
+                newTargets.add(result.getBlockPos());
+                targets.putIfAbsent(result.getBlockPos(), 0.0f);
+            }
+        }
+
+        return newTargets;
+    }
+
     private void breakBlocks()
     {
         if (hasPassengers() && getFirstPassenger() != null)
         {
             if (world.getTime() % 2 == 0)
             {
-                RaycastContext context = new RaycastContext(
-                        getBeamOrigin(),
-                        getBeamEnd(),
-                        RaycastContext.ShapeType.COLLIDER,
-                        RaycastContext.FluidHandling.NONE,
-                        this);
+                Set<BlockPos> newTargets = getTargets(getBeamOrigin(), getBeamEnd());
 
-                BlockHitResult result = world.raycast(context);
-                if (result.getType() == HitResult.Type.BLOCK)
+                targets.entrySet().removeIf(e -> !newTargets.contains(e.getKey()));
+            }
+
+            Iterator<Map.Entry<BlockPos, Float>> it = targets.entrySet().iterator();
+            while (it.hasNext())
+            {
+                var target = it.next();
+                if (target.getValue() >= 1)
                 {
-                    world.breakBlock(result.getBlockPos(), false);
+                    world.breakBlock(target.getKey(), false);
+                    it.remove();
+                }
+                else
+                {
+                    BlockState state = world.getBlockState(target.getKey());
+                    target.setValue(target.getValue() + calcBlockBreakingDelta(state, world, target.getKey()));
                 }
             }
         }
     }
 
+    public float calcBlockBreakingDelta(BlockState state, BlockView world, BlockPos pos)
+    {
+        float f = state.getHardness(world, pos);
+        if (f == -1.0f)
+        {
+            return 0.0f;
+        }
+
+        return 4 / f / 30f;
+    }
 
     private void setPlayerTrigger(boolean trigger)
     {
