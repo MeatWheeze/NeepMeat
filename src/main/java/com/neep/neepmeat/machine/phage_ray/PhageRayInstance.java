@@ -6,12 +6,15 @@ import com.jozufozu.flywheel.backend.instancing.entity.EntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.neep.neepmeat.client.NMExtraModels;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
 
+@Environment(EnvType.CLIENT)
 public class PhageRayInstance extends EntityInstance<PhageRayEntity> implements DynamicInstance
 {
     private final ModelData base;
@@ -39,24 +42,17 @@ public class PhageRayInstance extends EntityInstance<PhageRayEntity> implements 
         matrices.translate(getInstancePosition().getX(), getInstancePosition().getY() - 0.5, getInstancePosition().getZ());
 
         float tickDelta = MinecraftClient.getInstance().getTickDelta();;
-//        float pitch = MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch());
-//        float yaw = MathHelper.lerp(tickDelta, entity.prevYaw, entity.getYaw());
         float pitch = entity.getPitch(tickDelta);
         float yaw = entity.getYaw(tickDelta);
-//        System.out.println(yaw);
-//        if (entity.getPrimaryPassenger() instanceof PlayerEntity player)
-//        {
-//            pitch = player.getPitch();
-//            yaw = player.getYaw();
-//        }
+
         matrices.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(yaw));
         matrices.translate(-0.5, 0, -0.5);
 
         base.setTransform(matrices);
 
-        matrices.translate(0, 1.5, 0);
+        matrices.translate(0, 2, 0.5);
         matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(pitch));
-        matrices.translate(0, -1.5, 0);
+        matrices.translate(0, -2, -0.5);
 
         barrel.setTransform(matrices);
 

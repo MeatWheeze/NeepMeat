@@ -168,6 +168,11 @@ public class PhageRayEntity extends Entity
         }
     }
 
+    public boolean trigger()
+    {
+        return trigger;
+    }
+
     private static class Target
     {
         public final BlockPos pos;

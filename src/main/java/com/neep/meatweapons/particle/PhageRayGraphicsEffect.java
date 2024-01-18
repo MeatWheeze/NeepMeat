@@ -41,6 +41,9 @@ public class PhageRayGraphicsEffect extends BeamGraphicsEffect
     @Override
     public void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta)
     {
+        if (!parent.trigger())
+            return;
+
         this.start = parent.getBeamOrigin();
         this.end = parent.getClientBeamEnd(tickDelta);
 
