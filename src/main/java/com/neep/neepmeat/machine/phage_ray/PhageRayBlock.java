@@ -1,5 +1,6 @@
 package com.neep.neepmeat.machine.phage_ray;
 
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
@@ -12,15 +13,23 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.util.MiscUtils;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockRenderType;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -80,7 +89,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
         return name;
     }
 
-    static class PhageRayStructureBlock extends BigBlockStructure<PhageRayStructureBlockEntity>
+    public static class PhageRayStructureBlock extends BigBlockStructure<PhageRayStructureBlockEntity>
     {
         public PhageRayStructureBlock(BigBlock<?> parent, Settings settings)
         {
@@ -104,12 +113,51 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
         }
     }
 
-    static class PhageRayStructureBlockEntity extends BigBlockStructureEntity
+    public static class PhageRayStructureBlockEntity extends BigBlockStructureEntity
     {
+        @Nullable
+        private BlockApiCache<Void, Void> cache;
+
+        private final StructureBloodAcceptor acceptor = new StructureBloodAcceptor();
+
         public PhageRayStructureBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state);
         }
-    }
 
+        public BloodAcceptor getAcceptor(Direction direction)
+        {
+            return acceptor;
+        }
+
+        private class StructureBloodAcceptor extends AbstractBloodAcceptor
+        {
+            @Override
+            public Mode getMode()
+            {
+                return Mode.ACTIVE_SINK;
+            }
+
+            @Override
+            public float updateInflux(float influx)
+            {
+                return getControllerBE().getBloodAcceptor().updateInflux(influx);
+            }
+        }
+
+        @Nullable
+        private PhageRayBlockEntity getControllerBE()
+        {
+            if (controllerPos == null)
+            {
+                return null;
+            }
+            else if (cache == null)
+            {
+                cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
+            }
+
+            return cache.getBlockEntity() instanceof PhageRayBlockEntity controller ? controller : null;
+        }
+    }
 }

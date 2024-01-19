@@ -8,6 +8,7 @@ import com.neep.meatlib.api.event.UseAttackCallback;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
@@ -24,7 +25,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.MovementType;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
@@ -50,16 +55,13 @@ import java.util.*;
 public class PhageRayEntity extends Entity
 {
     public static final Identifier CHANNEL_ID = new Identifier(NeepMeat.NAMESPACE, "phage_ray");
+    protected static final TrackedData<Boolean> RUNNING = DataTracker.registerData(PhageRayEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     @Nullable private PhageRayBlockEntity parent;
 
     private boolean trigger = false;
     private int triggerTicks = 0;
     private double range = 30;
-    private int delta;
-
-    public float vehicleYaw;
-    public float vehiclePitch;
 
     public PhageRayEntity(EntityType<?> type, World world)
     {
@@ -88,7 +90,7 @@ public class PhageRayEntity extends Entity
     @Override
     protected void initDataTracker()
     {
-
+        dataTracker.startTracking(RUNNING, false);
     }
 
     @Override
@@ -132,8 +134,18 @@ public class PhageRayEntity extends Entity
         {
             clientTick();
         }
+        else
+        {
+            // Update running state
+            boolean canRun = parent != null && parent.canRun();
 
-        if (trigger)
+            if (dataTracker.get(RUNNING) != canRun)
+            {
+                dataTracker.set(RUNNING, canRun);
+            }
+        }
+
+        if (isRunning() && trigger)
         {
             if (triggerTicks >= 20)
             {
@@ -171,29 +183,6 @@ public class PhageRayEntity extends Entity
     public boolean trigger()
     {
         return trigger;
-    }
-
-    private static class Target
-    {
-        public final BlockPos pos;
-        public int progress;
-
-        public Target(BlockPos pos)
-        {
-            this.pos = pos;
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return pos.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj)
-        {
-            return pos.equals(obj);
-        }
     }
 
     private final HashMap<BlockPos, Float> targets = Maps.newHashMap();
@@ -276,7 +265,7 @@ public class PhageRayEntity extends Entity
             return 0.0f;
         }
 
-        return 4 / f / 30f;
+        return 20 / f / 30f;
     }
 
     private void setPlayerTrigger(boolean trigger)
@@ -374,6 +363,11 @@ public class PhageRayEntity extends Entity
         return true;
     }
 
+    public boolean isRunning()
+    {
+        return dataTracker.get(RUNNING);
+    }
+
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
@@ -466,12 +460,12 @@ public class PhageRayEntity extends Entity
     public void clientTick()
     {
         SoundManager manager = MinecraftClient.getInstance().getSoundManager();
-        if (trigger && triggerTicks == 0)
+        if (isRunning() && trigger && triggerTicks == 0)
         {
             manager.play(new EntityTrackingSoundInstance(NMSounds.PHAGE_RAY_CHARGE, SoundCategory.BLOCKS, 16, 1, this, 0));
         }
 
-        if (triggerTicks >= 20 && !manager.isPlaying(runningInstance))
+        if (isRunning() && triggerTicks >= 20 && !manager.isPlaying(runningInstance))
         {
             manager.play(runningInstance);
         }
@@ -479,6 +473,13 @@ public class PhageRayEntity extends Entity
         {
             manager.stop(runningInstance);
         }
+    }
+
+    @Nullable
+    @Override
+    public ItemStack getPickBlockStack()
+    {
+        return NMBlocks.PHAGE_RAY.asItem().getDefaultStack();
     }
 
     @Environment(EnvType.CLIENT)

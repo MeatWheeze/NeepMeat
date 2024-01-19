@@ -3,6 +3,8 @@ package com.neep.neepmeat.machine.phage_ray;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMEntities;
+import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.Entity;
@@ -15,6 +17,32 @@ import java.util.List;
 public class PhageRayBlockEntity extends SyncableBlockEntity
 {
     @Nullable private PhageRayEntity tetheredEntity;
+
+    private float power;
+    private final float minPower = 0.1f;
+
+    private final BloodAcceptor acceptor = new AbstractBloodAcceptor()
+    {
+
+        @Override
+        public Mode getMode()
+        {
+            return Mode.ACTIVE_SINK;
+        }
+
+        @Override
+        public float updateInflux(float influx)
+        {
+            if (influx >= minPower)
+            {
+                PhageRayBlockEntity.this.power = influx;
+                return minPower;
+            }
+            PhageRayBlockEntity.this.power = 0;
+            return 0;
+        }
+    };
+
 
     public PhageRayBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -58,5 +86,20 @@ public class PhageRayBlockEntity extends SyncableBlockEntity
         }
 
         tetheredEntity.setParent(this);
+    }
+
+    public BloodAcceptor getBloodAcceptor()
+    {
+        return acceptor;
+    }
+
+    public float getPower()
+    {
+        return power;
+    }
+
+    public boolean canRun()
+    {
+        return power >= minPower;
     }
 }

@@ -49,6 +49,7 @@ import com.neep.neepmeat.machine.motor.LiquidFuelMachine;
 import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
+import com.neep.neepmeat.machine.phage_ray.PhageRayBlock;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
@@ -351,6 +352,7 @@ public class NMBlockEntities
         WRITHING_EARTH_SPOUT = register("writhing_earth_spout", (p, s) -> new WrithingEarthSpoutBlockEntity(WRITHING_EARTH_SPOUT, p, s), NMBlocks.WRITHING_EARTH_SPOUT);
 
         PHAGE_RAY = register("phage_ray", (p, s) -> new PhageRayBlockEntity(PHAGE_RAY, p, s), NMBlocks.PHAGE_RAY);
+        BloodAcceptor.SIDED.registerForBlockEntity(PhageRayBlock.PhageRayStructureBlockEntity::getAcceptor, NMBlocks.PHAGE_RAY.getStructure().getBlockEntityType());
 
         VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
         VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);

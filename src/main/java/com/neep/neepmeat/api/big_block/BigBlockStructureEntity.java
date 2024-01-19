@@ -1,11 +1,14 @@
 package com.neep.neepmeat.api.big_block;
 
 import com.google.common.collect.Lists;
+import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.*;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -34,8 +37,6 @@ public class BigBlockStructureEntity extends SyncableBlockEntity
     {
         apis.add(api.getId());
     }
-
-//    public void setApi(BlockApiLookup<>)
 
     public VoxelShape translateShape(VoxelShape outlineShape)
     {
@@ -92,4 +93,19 @@ public class BigBlockStructureEntity extends SyncableBlockEntity
     {
         return controllerPos;
     }
+
+//    @Nullable
+//    protected <T> T getControllerBE()
+//    {
+//        if (controllerPos == null)
+//        {
+//            return null;
+//        }
+//        else if (cache == null)
+//        {
+//            cache = BlockApiCache.create(MeatLib.VOID_LOOKUP, (ServerWorld) getWorld(), controllerPos);
+//        }
+//
+//        return cache.getBlockEntity() instanceof CharnelPumpBlockEntity controller ? controller : null;
+//    }
 }
