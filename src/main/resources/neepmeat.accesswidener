@@ -4,4 +4,4 @@ accessible    class    net/minecraft/client/particle/ParticleManager$SimpleSprit
 extendable    class    net/minecraft/enchantment/EnchantmentTarget
 mutable       field net/minecraft/entity/mob/MobEntity goalSelector Lnet/minecraft/entity/ai/goal/GoalSelector;
 mutable       field net/minecraft/entity/mob/MobEntity targetSelector Lnet/minecraft/entity/ai/goal/GoalSelector;
-#accessible    method  net/minecraft/item/Item getGroup ()Lnet/minecraft/item/ItemGroup;
+#accessible    field net/fabricmc/fabric/impl/transfer/item/InventoryStorageImpl WRAPPERS Ljava/util/Map;

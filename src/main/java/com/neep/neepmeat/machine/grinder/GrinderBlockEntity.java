@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.grinder;
 
 import com.neep.meatlib.recipe.MeatRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -168,7 +168,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
         {
             GrindingRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, storage).orElse(null);
 
-            if (recipe != null && MeatStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
+            if (recipe != null && MeatlibStorageUtil.simulateInsert(storage.outputStorage, ItemVariant.of(recipe.getItemOutput().resource()),
                                                                  recipe.getItemOutput().amount(), null) == recipe.getItemOutput().amount())
             {
                 setCurrentRecipe(recipe);

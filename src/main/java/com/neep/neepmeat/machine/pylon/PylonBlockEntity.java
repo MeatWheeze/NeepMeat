@@ -72,7 +72,6 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
             });
         }
 
-        Client client = Client.MAP.computeIfAbsent(this, pylon -> new Client(this, pos));
         client.tick();
     }
 
@@ -152,6 +151,9 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     {
         return port;
     }
+
+    @Environment(value=EnvType.CLIENT)
+    private final Client client = new Client(this, getPos());
 
     @Environment(value=EnvType.CLIENT)
     private static class Client

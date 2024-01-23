@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.mixer;
 
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -136,7 +136,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
         {
             MixingRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.MIXING, storage, world).orElse(null);
 
-            if (recipe != null && MeatStorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
+            if (recipe != null && MeatlibStorageUtil.simulateInsert(getOutputStorage(), FluidVariant.of(recipe.fluidOutput.resource()),
                                                                  recipe.fluidOutput.amount(), null) == recipe.fluidOutput.amount())
             {
                 try (Transaction transaction = Transaction.openOuter())

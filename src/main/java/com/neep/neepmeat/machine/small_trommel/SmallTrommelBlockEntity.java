@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.recipe.MeatRecipeManager;
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.machine.TrommelBlock;
@@ -118,7 +118,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
         if (inputVariant.isOf(NMFluids.STILL_DIRTY_ORE_FAT) && entry != null)
         {
             long inputAmount = (long) Math.floor(BASE_AMOUNT);
-            long extractable = MeatStorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
+            long extractable = MeatlibStorageUtil.simulateExtract(storage.fluidInput, inputVariant, inputAmount, null);
             boolean produceExtra = random.nextFloat() > 0.5;
             long outputAmount = produceExtra ? extractable : extractable + extractable;
 

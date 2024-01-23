@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.fluid_rationer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -106,7 +106,7 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
                 Storage<FluidVariant> storage = cache.find(back);
 
                 // Find a fluid in the connected tank with an amount that matches the target
-                FluidVariant variant = MeatStorageUtil.findExtractableResource(storage, (t, v, a) -> a >= targetAmount, transaction);
+                FluidVariant variant = MeatlibStorageUtil.findExtractableResource(storage, (t, v, a) -> a >= targetAmount, transaction);
                 if (variant != null)
                 {
                     if (StorageUtil.move(storage, outputStorage, this.outputStorage::matchesFilter, targetAmount, transaction) == targetAmount)

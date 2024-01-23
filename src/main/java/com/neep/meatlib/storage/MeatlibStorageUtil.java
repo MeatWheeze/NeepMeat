@@ -1,15 +1,10 @@
-package com.neep.meatlib.util;
+package com.neep.meatlib.storage;
 
-import com.neep.neepmeat.api.storage.WritableStackStorage;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.minecraft.item.Item;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,7 +14,7 @@ import java.util.function.BiPredicate;
  * Some fluid functions that are as similar as possible to StorageUtil versions but with added predicate parameters.
  */
 @SuppressWarnings("UnstableApiUsage")
-public class MeatStorageUtil
+public class MeatlibStorageUtil
 {
     @Nullable
     public static <T> ResourceAmount<T> findExtractableContent(@Nullable Storage<T> storage, BiPredicate<TransactionContext, T> filter, @Nullable TransactionContext transaction)
@@ -28,7 +23,7 @@ public class MeatStorageUtil
 
         if (extractableResource != null)
         {
-            long extractableAmount = MeatStorageUtil.simulateExtract(storage, extractableResource, Long.MAX_VALUE, transaction);
+            long extractableAmount = MeatlibStorageUtil.simulateExtract(storage, extractableResource, Long.MAX_VALUE, transaction);
 
             if (extractableAmount > 0)
             {

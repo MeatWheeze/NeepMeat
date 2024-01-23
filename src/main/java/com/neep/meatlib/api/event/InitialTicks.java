@@ -1,5 +1,6 @@
 package com.neep.meatlib.api.event;
 
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.server.world.ServerWorld;
@@ -34,6 +35,11 @@ public final class InitialTicks
         ServerWorldEvents.LOAD.register((server, world) ->
         {
             MAP.put(world, new InitialTicks(world));
+        });
+
+        ServerLifecycleEvents.SERVER_STOPPED.register(server ->
+        {
+            MAP.clear();
         });
 
         ServerTickEvents.START_WORLD_TICK.register(world ->

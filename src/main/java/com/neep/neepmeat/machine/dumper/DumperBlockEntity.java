@@ -1,13 +1,12 @@
 package com.neep.neepmeat.machine.dumper;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -85,7 +84,7 @@ public class DumperBlockEntity extends SyncableBlockEntity
         }
 
         Storage<ItemVariant> storage = ItemStorage.SIDED.find(world, pos, Direction.UP);
-        return storage == null || MeatStorageUtil.simulateInsert(storage, resource, amount, transaction) == amount;
+        return storage == null || MeatlibStorageUtil.simulateInsert(storage, resource, amount, transaction) == amount;
     }
 
     public void tick()

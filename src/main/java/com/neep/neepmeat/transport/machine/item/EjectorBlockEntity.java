@@ -1,7 +1,7 @@
 package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -138,7 +138,7 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
         Storage<ItemVariant> storage;
         if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
         {
-            return MeatStorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
+            return MeatlibStorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
         }
 //        return TubeUtils.canEjectSimple(amount, world, pos.offset(facing), transaction);
         return amount.amount();

@@ -74,7 +74,8 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 
     public void clientTick()
     {
-        Client.get(this).tick();
+        client.tick();
+//        Client.get(this).tick();
     }
 
     public static class DataStorage extends SingleVariantStorage<DataVariant>
@@ -143,23 +144,19 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
     }
 
     @Environment(EnvType.CLIENT)
+    private final Client client = new Client(this);
+
+    @Environment(EnvType.CLIENT)
     private static class Client
     {
         private static final Map<AdvancedIntegratorBlockEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
 
-        private final AdvancedIntegratorBlockEntity be;
         private final MinecraftClient client = MinecraftClient.getInstance();
         private final BlockSoundInstance sound;
 
         public Client(AdvancedIntegratorBlockEntity be)
         {
-            this.be = be;
             this.sound = new BlockSoundInstance(NMSounds.ADVANCED_INTEGRATOR_AMBIENT, SoundCategory.BLOCKS, be.getPos().up(3));
-        }
-
-        public static Client get(AdvancedIntegratorBlockEntity be)
-        {
-            return MAP.computeIfAbsent(be, Client::new);
         }
 
         public void tick()

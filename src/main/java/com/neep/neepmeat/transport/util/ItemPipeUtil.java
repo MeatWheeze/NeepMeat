@@ -1,6 +1,6 @@
 package com.neep.neepmeat.transport.util;
 
-import com.neep.meatlib.util.MeatStorageUtil;
+import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
@@ -256,7 +256,7 @@ public class ItemPipeUtil
                     }
                     else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                     {
-                        return MeatStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
+                        return MeatlibStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
                     }
                 }
             }
