@@ -141,7 +141,11 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
             @Override
             public float updateInflux(float influx)
             {
-                return getControllerBE().getBloodAcceptor().updateInflux(influx);
+                var be =  getControllerBE();
+                if (be != null)
+                    return be.getBloodAcceptor().updateInflux(influx);
+
+                return 0;
             }
         }
 

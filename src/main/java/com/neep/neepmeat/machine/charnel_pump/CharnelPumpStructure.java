@@ -62,9 +62,9 @@ public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure
         {
             if (apis.contains(FluidStorage.SIDED.getId()) && controllerPos != null)
             {
-                if (world.getBlockEntity(controllerPos) instanceof CharnelPumpBlockEntity be)
+                if (getControllerBE() != null)
                 {
-                    return be.getFluidStorage(null);
+                    return getControllerBE().getFluidStorage(null);
                 }
             }
             return null;
@@ -74,10 +74,7 @@ public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure
         {
             if (apis.contains(MotorisedBlock.LOOKUP.getId()))
             {
-                if (world.getBlockEntity(controllerPos) instanceof CharnelPumpBlockEntity be)
-                {
-                    return getControllerBE();
-                }
+                return getControllerBE();
             }
             return null;
         }
