@@ -163,6 +163,7 @@ public class BloodNetworkManager extends PersistentState
                     manager.tickingNetworks.computeIfAbsent(uuid, u -> new ConduitBloodNetwork(uuid, world))
                             .insert(pipes);
                 });
+                component.loaded = true;
             });
         });
     }

@@ -12,6 +12,7 @@ import net.minecraft.nbt.NbtList;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.ProtoChunk;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,10 +22,12 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
 {
     private final Chunk chunk;
 
-    // We do not want to prevent GC of block entities that have been removed from the world.
     private final Set<VascularConduitEntity> pipes = Collections.newSetFromMap(new WeakHashMap<>());
     private final Multimap<UUID, VascularConduitEntity> loadedPipes = Multimaps.newSetMultimap(Maps.newHashMap(), Sets::newHashSet);
     private final Queue<Pair<UUID, BlockPos>> pipesToLoad = Queues.newArrayDeque();
+
+    // Networks are loaded in the tick loop
+    public boolean loaded = false;
 
     public BloodNetworkChunkComponent(Chunk chunk)
     {
@@ -40,22 +43,39 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
     public void readFromNbt(@NotNull NbtCompound nbt)
     {
         NbtList list = nbt.getList("pipes", NbtElement.COMPOUND_TYPE);
-        for (var element : list)
+        for (int i = 0; i < list.size(); ++i)
         {
-            if (element instanceof NbtCompound compound)
-            {
-                UUID uuid = compound.getUuid("uuid");
-                BlockPos pos = BlockPos.fromLong(compound.getLong("pos"));
+            NbtCompound compound = list.getCompound(i);
+            UUID uuid = compound.getUuid("uuid");
+            BlockPos pos = BlockPos.fromLong(compound.getLong("pos"));
 
-                pipesToLoad.add(Pair.of(uuid, pos));
-            }
+            pipesToLoad.add(Pair.of(uuid, pos));
         }
     }
 
     @Override
     public void writeToNbt(@NotNull NbtCompound nbt)
     {
+        // I don't think ProtoChunks can ever have pipes in them.
+        if (chunk instanceof ProtoChunk)
+            return;
+
+        // Pipes are added to networks on the first tick, so it is possible that this method will be called before that happens.
+        // In this situation, we need to save pipesToLoad instead of loadedPipes.
         NbtList list = new NbtList();
+        if (loaded)
+        {
+            saveLoadedPipes(list);
+        }
+        else
+        {
+            savePipesToLoad(list);
+        }
+        nbt.put("pipes", list);
+    }
+
+    void saveLoadedPipes(NbtList list)
+    {
         for (var pipe : pipes)
         {
             var network = pipe.getNetwork();
@@ -66,7 +86,7 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
 
             if (network == null)
             {
-                NeepMeat.LOGGER.error("Vascular Conduit at " + pipe.getBlockPos() + "has a null network. This indicates that saving or loading has failed.");
+                NeepMeat.LOGGER.warn("Vascular Conduit at " + pipe.getBlockPos() + "has a null network. This indicates that saving or loading has failed.");
                 continue;
             }
 
@@ -76,21 +96,24 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
             entry.putUuid("uuid", uuid);
             list.add(entry);
         }
-        nbt.put("pipes", list);
+    }
+
+    void savePipesToLoad(NbtList list)
+    {
+        for (var pair : pipesToLoad)
+        {
+            NbtCompound compound = new NbtCompound();
+            compound.putUuid("uuid", pair.first());
+            compound.putLong("pos", pair.second().asLong());
+            list.add(compound);
+        }
+
     }
 
     @Override
     public boolean equals(Object o)
     {
         return false;
-    }
-
-    private ServerWorld getWorld()
-    {
-        if (chunk instanceof WorldChunk worldChunk && worldChunk.getWorld() instanceof ServerWorld serverWorld)
-            return serverWorld;
-
-        throw new IllegalStateException("BloodNetworkChunkComponent created on client or on ");
     }
 
     public Multimap<UUID, VascularConduitEntity> getPipes()
