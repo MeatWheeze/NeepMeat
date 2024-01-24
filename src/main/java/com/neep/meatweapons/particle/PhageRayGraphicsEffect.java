@@ -10,6 +10,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -50,7 +51,8 @@ public class PhageRayGraphicsEffect extends BeamGraphicsEffect
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(TRAIL_LAYER);
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
-                start, end, (world.getTime() + tickDelta) * 30, 255, 255, 255,
+                // TODO: fix overflow
+                start, end, (MathHelper.wrapDegrees(world.getTime()) + tickDelta) * 30, 255, 255, 255,
                255, scale, 255);
         matrices.pop();
     }
