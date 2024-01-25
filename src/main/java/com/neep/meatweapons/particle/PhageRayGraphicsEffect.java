@@ -19,6 +19,7 @@ public class PhageRayGraphicsEffect extends BeamGraphicsEffect
 {
     public static final Identifier TRAIL_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/misc/phage_ray.png");
     public static final RenderLayer TRAIL_LAYER = RenderLayer.getEntityTranslucent(TRAIL_TEXTURE);
+    public static final RenderLayer CRYSTAL_BEAM_LAYER = RenderLayer.getEntityTranslucentEmissive(new Identifier(NeepMeat.NAMESPACE, "textures/block/phage_ray/beam.png"));
 
     private PhageRayEntity parent = null;
 
@@ -50,10 +51,14 @@ public class PhageRayGraphicsEffect extends BeamGraphicsEffect
 
         matrices.push();
         VertexConsumer consumer = consumers.getBuffer(TRAIL_LAYER);
+
+
         BeamRenderer.renderBeam(matrices, consumer, camera.getPos(),
-                // TODO: fix overflow
                 start, end, (MathHelper.wrapDegrees(world.getTime()) + tickDelta) * 30, 255, 255, 255,
                255, scale, 255);
+
+        BeamRenderer.renderTube(camera.getPos(), start, end, tickDelta, parent.age, matrices, consumers.getBuffer(CRYSTAL_BEAM_LAYER), 255);
+
         matrices.pop();
     }
 }
