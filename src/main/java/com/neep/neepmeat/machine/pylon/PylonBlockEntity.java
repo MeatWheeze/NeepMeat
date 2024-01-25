@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.pylon;
 
 import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -10,12 +11,13 @@ import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.MinecraftClient;
@@ -28,6 +30,8 @@ import net.minecraft.world.World;
 import java.util.Map;
 import java.util.Random;
 
+import static com.neep.neepmeat.machine.well_head.BlockEntityFinder.chunkRange;
+
 public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     public static final float RUNNING_SPEED = 16;
@@ -36,7 +40,10 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     public float angle;
     private float speed;
 
-    private SimpleDataPort port = new SimpleDataPort(this);
+    private final SimpleDataPort port = new SimpleDataPort(this);
+
+    private final LazySupplier<BlockEntityFinder<AdvancedIntegratorBlockEntity>> integratorFinder = LazySupplier.of(() ->
+            new BlockEntityFinder<>(getWorld(), NMBlockEntities.ADVANCED_INTEGRATOR, 40).addAll(chunkRange(getPos())));
 
     protected final Random random = new Random(0);
 
@@ -78,9 +85,12 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     @Override
     public boolean tick(MotorEntity motor)
     {
+        integratorFinder.get().tick();
+
         float prevSpeed = speed;
         this.speed = motor.getSpeed();
-        if (prevSpeed != speed) sync();
+        if (prevSpeed != speed)
+            sync();
 
         if (isRunning())
         {
@@ -88,8 +98,10 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
 
             try (Transaction transaction = Transaction.openOuter())
             {
-//                long sendAmount =
-                port.send(DataVariant.NORMAL, 1, transaction);
+                integratorFinder.get().result().forEach(i ->
+                {
+                    i.getDataStorage().insert(DataVariant.NORMAL, 1, transaction);
+                });
                 transaction.commit();
             }
         }

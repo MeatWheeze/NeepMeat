@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.charnel_pump;
 
-import com.google.common.collect.Lists;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -24,13 +23,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.tag.BlockTags;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.Heightmap;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 public class CharnelPumpBlockEntity extends SyncableBlockEntity implements MotorisedBlock
@@ -38,25 +34,10 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
     private final Random random = Random.create();
 
     private final LazySupplier<BlockEntityFinder<WellHeadBlockEntity>> wellHeadFinder = LazySupplier.of(() ->
-        new BlockEntityFinder<>(getWorld(), NMBlockEntities.WELL_HEAD, 20).addAll(chunkRange(getPos())));
+        new BlockEntityFinder<>(getWorld(), NMBlockEntities.WELL_HEAD, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
 
     private final LazySupplier<BlockEntityFinder<WrithingEarthSpoutBlockEntity>> writhingSpoutFinder = LazySupplier.of(() ->
-        new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(chunkRange(getPos())));
-
-    private static Collection<ChunkPos> chunkRange(BlockPos pos)
-    {
-        ChunkPos origin = new ChunkPos(pos);
-
-        List<ChunkPos> list = Lists.newArrayList();
-        for (int i = origin.x - 1; i <= 1; ++i)
-        {
-            for (int k = origin.z - 1; k <= 1; ++k)
-            {
-                list.add(new ChunkPos(i, k));
-            }
-        }
-        return list;
-    }
+        new BlockEntityFinder<>(getWorld(), NMBlockEntities.WRITHING_EARTH_SPOUT, 20).addAll(BlockEntityFinder.chunkRange(getPos())));
 
     public final long minPower = 1000;
     private float lastPower;
@@ -116,7 +97,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
     private boolean canSpoutSpawn(BlockPos surfacePos)
     {
         BlockState surfaceState = world.getBlockState(surfacePos);
-        return chunkRange(pos).contains(world.getChunk(surfacePos).getPos())
+        return BlockEntityFinder.chunkRange(pos).contains(world.getChunk(surfacePos).getPos())
                 && (surfaceState.isIn(BlockTags.DIRT) || surfaceState.isIn(BlockTags.STONE_ORE_REPLACEABLES));
     }
 

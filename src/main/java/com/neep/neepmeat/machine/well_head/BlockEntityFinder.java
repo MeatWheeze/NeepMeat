@@ -1,9 +1,11 @@
 package com.neep.neepmeat.machine.well_head;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
@@ -20,8 +22,6 @@ public class BlockEntityFinder<T extends BlockEntity>
     private final int updateInterval;
     private long lastUpdate = 0;
 
-    private Iterator<ChunkPos> posIterator = Collections.emptyIterator();
-
     public BlockEntityFinder(World world, BlockEntityType<T> type, int updateInterval)
     {
         this.world = world;
@@ -30,10 +30,24 @@ public class BlockEntityFinder<T extends BlockEntity>
         this.positions = Sets.newHashSet();
     }
 
+    public static Collection<ChunkPos> chunkRange(BlockPos pos)
+    {
+        ChunkPos origin = new ChunkPos(pos);
+
+        List<ChunkPos> list = Lists.newArrayList();
+        for (int i = -1; i <= 1; ++i)
+        {
+            for (int k = -1; k <= 1; ++k)
+            {
+                list.add(new ChunkPos(i + origin.x, k + origin.z));
+            }
+        }
+        return list;
+    }
+
     public BlockEntityFinder<T> addAll(Collection<ChunkPos> list)
     {
         positions.addAll(list);
-        posIterator = positions.iterator();
         return this;
     }
 
