@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
@@ -22,9 +23,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
+public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory, VascularConduitEntity
 {
     protected long influx;
+    @Nullable private BloodNetwork network;
 
     protected final AbstractBloodAcceptor backAcceptor = new AbstractBloodAcceptor()
     {
@@ -127,6 +129,18 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
         return new VSCScreenHandler(inv, null, syncId, propertyDelegate);
+    }
+
+    @Override
+    public @Nullable BloodNetwork getNetwork()
+    {
+        return network;
+    }
+
+    @Override
+    public void setNetwork(@Nullable BloodNetwork network)
+    {
+        this.network = network;
     }
 
     public class VSCDelegate implements PropertyDelegate

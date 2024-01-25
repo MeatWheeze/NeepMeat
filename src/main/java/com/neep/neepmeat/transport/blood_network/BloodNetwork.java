@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.blood_network;
 
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
-import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -43,5 +42,5 @@ public interface BloodNetwork
 
     void insert(Collection<VascularConduitEntity> pipes);
 
-    void unload(BlockPos pos, VascularConduitBlockEntity part);
+    void unload(BlockPos pos, VascularConduitEntity part);
 }

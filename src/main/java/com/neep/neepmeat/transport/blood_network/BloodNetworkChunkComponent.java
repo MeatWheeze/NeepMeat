@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.*;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
@@ -125,7 +126,7 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
             while (!pipesToLoad.isEmpty())
             {
                 var pair = pipesToLoad.poll();
-                var entity = (VascularConduitEntity) chunk.getBlockEntity(pair.second());
+                var entity = ((RememberMyNetwork) chunk.getBlockEntity(pair.second())).get();
 
                 // Invalid NBT or saving weirdness can cause this.
                 if (entity == null)

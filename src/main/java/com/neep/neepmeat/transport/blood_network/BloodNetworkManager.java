@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.TransportComponents;
 import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
 import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -44,17 +44,7 @@ public class BloodNetworkManager extends PersistentState
     public BloodNetwork create(BlockPos pos)
     {
         var network = new ConduitBloodNetwork(UUID.randomUUID(), world);
-
-//        TransportComponents.BLOOD_NETWORK.get(world.getChunk(pos)).addNetwork(network);
         tickingNetworks.put(network.getUUID(), network);
-
-
-//        long chunk = ChunkPos.toLong(pos);
-
-//        Set<UUID> adjacent = getOrCreateEntry(chunk);
-//        tickingNetworks.add(new NetworkEntry(network, adjacent));
-//        savedNetworks.put(network.getUUID(), network.toNbt());
-//        adjacent.add(network.uuid);
 
         return network;
     }
@@ -121,19 +111,19 @@ public class BloodNetworkManager extends PersistentState
     {
         WorldChunkEvents.BE_SET_WORLD.register((chunk, be) ->
         {
-            if (be instanceof VascularConduitEntity conduit)
+            if (be instanceof RememberMyNetwork conduit)
             {
                 BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
-                component.register(conduit);
+                component.register(conduit.get());
             }
         });
 
         WorldChunkEvents.BE_MANUAL_REMOVE.register(((chunk, be) ->
         {
-            if (be instanceof VascularConduitEntity conduit)
+            if (be instanceof RememberMyNetwork conduit)
             {
                 BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
-                component.unregister(conduit);
+                component.unregister(conduit.get());
             }
         }));
 

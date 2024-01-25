@@ -32,6 +32,7 @@ import com.neep.neepmeat.machine.crucible.CrucibleBlockEntity;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
 import com.neep.neepmeat.machine.deployer.DeployerBlockEntity;
 import com.neep.neepmeat.machine.dumper.DumperBlockEntity;
+import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlock;
 import com.neep.neepmeat.machine.fluid_exciter.FluidExciterBlockEntity;
 import com.neep.neepmeat.machine.fluid_rationer.FluidRationerBlockEntity;
 import com.neep.neepmeat.machine.flywheel.FlywheelBlockEntity;
@@ -69,6 +70,7 @@ import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
@@ -362,9 +364,9 @@ public class NMBlockEntities
 
         FLUID_EXCITER = register("fluid_exciter", (pos, state) -> new FluidExciterBlockEntity(FLUID_EXCITER, pos, state), NMBlocks.FLUID_EXCITER);
         FluidStorage.SIDED.registerForBlockEntity(FluidExciterBlockEntity::getInputStorage, FLUID_EXCITER);
-//        FluidStorage.SIDED.registerForBlocks((world, pos, state, be, context) -> world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity fbe ? fbe.getOutputStorage(context) : null, NMBlocks.FLUID_EXCITER.getStructureBlock());
-//        FluidPump.SIDED.registerForBlocks(FluidExciterBlockEntity::getPump, NMBlocks.FLUID_EXCITER.getStructureBlock());
         BloodAcceptor.SIDED.registerForBlocks(FluidExciterBlockEntity::getBloodAcceptorFromTop, NMBlocks.FLUID_EXCITER.getStructureBlock());
+        VascularConduitEntity.LOOKUP.registerForBlocks(FluidExciterBlock::getConduitFromTop, NMBlocks.FLUID_EXCITER.getStructureBlock());
+        VascularConduitEntity.registerPersistentNetwork(be -> be.getConduitEntity(null), FLUID_EXCITER);
 
         MIXER = register("mixer", MixerBlockEntity::new, NMBlocks.MIXER);
 //        MIXER_TOP = registerBlockEntity("mixer_top", MixerTopBlockEntity::new, NMBlocks.MIXER_TOP);

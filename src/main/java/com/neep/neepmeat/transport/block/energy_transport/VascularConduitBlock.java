@@ -92,7 +92,6 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
         {
             // We are connected in this direction but the update does not originate from another conduit.
             // This means that an acceptor has just been destroyed or has emitted an update.
-
             updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
         }
 

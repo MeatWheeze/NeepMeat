@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
-import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
@@ -184,7 +183,7 @@ public class ConduitBloodNetwork implements BloodNetwork
     }
 
     @Override
-    public void unload(BlockPos pos, VascularConduitBlockEntity part)
+    public void unload(BlockPos pos, VascularConduitEntity part)
     {
         acceptors.remove(pos);
         conduits.remove(pos.asLong());

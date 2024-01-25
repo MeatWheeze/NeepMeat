@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
+import org.jetbrains.annotations.Nullable;
 
 public class VascularConduitBlockEntity extends BlockEntity implements VascularConduitEntity, BlockEntityUnloadListener
 {
@@ -26,13 +27,13 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     }
 
     @Override
-    public BloodNetwork getNetwork()
+    public @Nullable BloodNetwork getNetwork()
     {
         return network;
     }
 
     @Override
-    public void setNetwork(BloodNetwork network)
+    public void setNetwork(@Nullable BloodNetwork network)
     {
         this.network = network;
         markDirty();

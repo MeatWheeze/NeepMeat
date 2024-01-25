@@ -4,8 +4,11 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMFluids;
+import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
+import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
@@ -20,10 +23,11 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidExciterBlockEntity extends SyncableBlockEntity
+public class FluidExciterBlockEntity extends SyncableBlockEntity implements BlockEntityUnloadListener, RememberMyNetwork
 {
     protected long output;
 
@@ -63,7 +67,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         }
     };
 
-    BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
+    private final BloodAcceptor bloodAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public long getOutput()
@@ -81,9 +85,12 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
         }
     };
 
+    private final FluidExciterConduitEntity conduitEntity;
+
     public FluidExciterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        conduitEntity = new FluidExciterConduitEntity(this.pos);
     }
 
     protected void updateCache()
@@ -103,5 +110,29 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity
             return be.bloodAcceptor;
         }
         return null;
+    }
+
+    public FluidExciterConduitEntity getConduitEntity(Void unused)
+    {
+        return conduitEntity;
+    }
+
+    @Override
+    public void markRemoved()
+    {
+        conduitEntity.onRemove();
+        super.markRemoved();
+    }
+
+    @Override
+    public void onUnload(WorldChunk chunk)
+    {
+        conduitEntity.onUnload(chunk);
+    }
+
+    @Override
+    public VascularConduitEntity get()
+    {
+        return conduitEntity;
     }
 }
