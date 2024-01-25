@@ -61,7 +61,7 @@ public class BigBlockPattern
 
     /**
      * The block entity at the specified location will be flagged with the given API lookup's ID.
-     * The block entity's API provider still needs to be registered elsewhere.
+     * The structure block entity's API provider still needs to be registered elsewhere.
      */
     public <T, C> BigBlockPattern enableApi(int x, int y, int z, BlockApiLookup<T, C> lookup)
     {
@@ -105,19 +105,24 @@ public class BigBlockPattern
     public BigBlockPattern rotateY(float degrees)
     {
         BigBlockPattern newVolume = new BigBlockPattern();
-        for (Map.Entry<Vec3i, BlockState> entry : stateMap.entrySet())
-        {
-            Vec3i offset = entry.getKey();
 
-            double s = Math.round(Math.sin(Math.toRadians(degrees)));
-            double c = Math.round(Math.cos(Math.toRadians(degrees)));
-            newVolume.set(
-                    (int) Math.round(offset.getX() * c - offset.getZ() * s),
-                    offset.getY(),
-                    (int) Math.round(offset.getX() * s + offset.getZ() * c),
-                    entry.getValue()
-            );
-        }
+        double s = Math.round(Math.sin(Math.toRadians(degrees)));
+        double c = Math.round(Math.cos(Math.toRadians(degrees)));
+
+        stateMap.forEach((offset, state) ->
+        {
+            int newX = (int) Math.round(offset.getX() * c - offset.getZ() * s);
+            int newZ = (int) Math.round(offset.getX() * s + offset.getZ() * c);
+            newVolume.set( newX, offset.getY(), newZ, state);
+        });
+
+        apiMap.forEach((offset, api) ->
+        {
+            int newX = (int) Math.round(offset.getX() * c - offset.getZ() * s);
+            int newZ = (int) Math.round(offset.getX() * s + offset.getZ() * c);
+            newVolume.enableApi(newX, offset.getY(), newZ, api);
+        });
+
         return newVolume;
     }
 

@@ -271,6 +271,7 @@
   "block.neepmeat.motor_unit.lore_1": "Runs on Ethereal Fuel.",
   "block.neepmeat.advanced_motor": "Advanced Motor",
   "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks. Takes power from a connected vascular network.",
+  "block.neepmeat.large_motor": "Large Motor",
 
   "block.neepmeat.stirling_engine": "Stirling Engine",
   "block.neepmeat.agitator": "Fluid Agitator",
