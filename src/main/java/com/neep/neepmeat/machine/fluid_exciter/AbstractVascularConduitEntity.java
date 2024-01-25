@@ -6,13 +6,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 
-public class FluidExciterConduitEntity implements VascularConduitEntity
+public class AbstractVascularConduitEntity implements VascularConduitEntity
 {
     private final BlockPos pos;
     @Nullable private BloodNetwork network;
     private boolean unloaded;
 
-    public FluidExciterConduitEntity(BlockPos pos)
+    public AbstractVascularConduitEntity(BlockPos pos)
     {
         this.pos = pos;
     }
@@ -37,7 +37,7 @@ public class FluidExciterConduitEntity implements VascularConduitEntity
         }
     }
 
-    public void onUnload(WorldChunk chunk)
+    public void onUnload()
     {
         if (network != null)
         {

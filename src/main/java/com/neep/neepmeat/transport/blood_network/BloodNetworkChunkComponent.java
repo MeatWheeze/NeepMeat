@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.*;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntityProvider;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
@@ -10,11 +10,9 @@ import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtElement;
 import net.minecraft.nbt.NbtList;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ProtoChunk;
-import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -126,7 +124,7 @@ public class BloodNetworkChunkComponent implements Component, ServerTickingCompo
             while (!pipesToLoad.isEmpty())
             {
                 var pair = pipesToLoad.poll();
-                var entity = ((RememberMyNetwork) chunk.getBlockEntity(pair.second())).get();
+                var entity = ((VascularConduitEntityProvider) chunk.getBlockEntity(pair.second())).get();
 
                 // Invalid NBT or saving weirdness can cause this.
                 if (entity == null)

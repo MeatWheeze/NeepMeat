@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.TransportComponents;
 import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
-import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntityProvider;
 import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -111,7 +111,7 @@ public class BloodNetworkManager extends PersistentState
     {
         WorldChunkEvents.BE_SET_WORLD.register((chunk, be) ->
         {
-            if (be instanceof RememberMyNetwork conduit)
+            if (be instanceof VascularConduitEntityProvider conduit)
             {
                 BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
                 component.register(conduit.get());
@@ -120,7 +120,7 @@ public class BloodNetworkManager extends PersistentState
 
         WorldChunkEvents.BE_MANUAL_REMOVE.register(((chunk, be) ->
         {
-            if (be instanceof RememberMyNetwork conduit)
+            if (be instanceof VascularConduitEntityProvider conduit)
             {
                 BloodNetworkChunkComponent component = chunk.getComponent(TransportComponents.BLOOD_NETWORK);
                 component.unregister(conduit.get());

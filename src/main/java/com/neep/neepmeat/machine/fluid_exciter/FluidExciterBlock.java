@@ -89,19 +89,19 @@ public class FluidExciterBlock extends TallBlock implements BlockEntityProvider
             }
         }
 
-        @Override
-        public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-        {
-            if (player.getStackInHand(hand).isEmpty())
-            {
-                if (!world.isClient() && world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity be)
-                {
-                    System.out.println(be.getConduitEntity(null).getNetwork());
-                }
-                return ActionResult.SUCCESS;
-            }
-            return super.onUse(state, world, pos, player, hand, hit);
-        }
+//        @Override
+//        public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+//        {
+//            if (player.getStackInHand(hand).isEmpty())
+//            {
+//                if (!world.isClient() && world.getBlockEntity(pos.down()) instanceof FluidExciterBlockEntity be)
+//                {
+//                    System.out.println(be.getConduitEntity(null).getNetwork());
+//                }
+//                return ActionResult.SUCCESS;
+//            }
+//            return super.onUse(state, world, pos, player, hand, hit);
+//        }
 
         @Override
         public void updatePosition(World world, BlockPos pos, BlockState state, VascularConduitEntity.UpdateReason reason)

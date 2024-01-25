@@ -7,7 +7,7 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.transport.api.BlockEntityUnloadListener;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
-import com.neep.neepmeat.transport.api.pipe.RememberMyNetwork;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntityProvider;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -27,7 +27,7 @@ import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class FluidExciterBlockEntity extends SyncableBlockEntity implements BlockEntityUnloadListener, RememberMyNetwork
+public class FluidExciterBlockEntity extends SyncableBlockEntity implements BlockEntityUnloadListener, VascularConduitEntityProvider
 {
     protected long output;
 
@@ -85,12 +85,12 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity implements Bloc
         }
     };
 
-    private final FluidExciterConduitEntity conduitEntity;
+    private final AbstractVascularConduitEntity conduitEntity;
 
     public FluidExciterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        conduitEntity = new FluidExciterConduitEntity(this.pos);
+        conduitEntity = new AbstractVascularConduitEntity(this.pos);
     }
 
     protected void updateCache()
@@ -112,7 +112,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity implements Bloc
         return null;
     }
 
-    public FluidExciterConduitEntity getConduitEntity(Void unused)
+    public AbstractVascularConduitEntity getConduitEntity(Void unused)
     {
         return conduitEntity;
     }
@@ -127,7 +127,7 @@ public class FluidExciterBlockEntity extends SyncableBlockEntity implements Bloc
     @Override
     public void onUnload(WorldChunk chunk)
     {
-        conduitEntity.onUnload(chunk);
+        conduitEntity.onUnload();
     }
 
     @Override

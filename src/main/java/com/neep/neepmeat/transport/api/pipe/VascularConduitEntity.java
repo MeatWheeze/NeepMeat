@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.function.Function;
 
-public interface VascularConduitEntity extends RememberMyNetwork
+public interface VascularConduitEntity extends VascularConduitEntityProvider
 {
     BlockApiLookup<VascularConduitEntity, Void> LOOKUP = BlockApiLookup.get(
             new Identifier(NeepMeat.NAMESPACE, "vascular_conduit_entity"),

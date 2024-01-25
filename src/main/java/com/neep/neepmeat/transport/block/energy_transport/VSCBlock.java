@@ -4,7 +4,10 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.api.pipe.VascularConduit;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -13,6 +16,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -45,4 +50,20 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
     {
         return NMBlockEntities.VSC.instantiate(pos, state);
     }
+
+//    @Override
+//    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+//    {
+//        super.onBlockAdded(state, world, pos, oldState, notify);
+//        updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.ADDED);
+//    }
+//
+//    @Override
+//    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
+//    {
+//        if (VascularConduit.find(world, sourcePos, world.getBlockState(sourcePos)) == null && !sourceBlock.equals(this))
+//        {
+//            updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
+//        }
+//    }
 }

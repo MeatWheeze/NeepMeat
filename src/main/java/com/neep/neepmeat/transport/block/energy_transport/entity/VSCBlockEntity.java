@@ -2,9 +2,9 @@ package com.neep.neepmeat.transport.block.energy_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.machine.fluid_exciter.AbstractVascularConduitEntity;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
@@ -23,12 +23,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory, VascularConduitEntity
+public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
     protected long influx;
-    @Nullable private BloodNetwork network;
+    private final AbstractVascularConduitEntity conduitEntity;
 
-    protected final AbstractBloodAcceptor backAcceptor = new AbstractBloodAcceptor()
+    protected final AbstractBloodAcceptor sinkAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public Mode getMode()
@@ -52,7 +52,7 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         }
     };
 
-    protected final BloodAcceptor frontAcceptor = new AbstractBloodAcceptor()
+    protected final BloodAcceptor sourceAcceptor = new AbstractBloodAcceptor()
     {
         @Override
         public Mode getMode()
@@ -74,15 +74,16 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     public VSCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        conduitEntity = new AbstractVascularConduitEntity(this.pos);
     }
 
     public BloodAcceptor getBloodAcceptor(Direction face)
     {
         if (getCachedState().get(VSCBlock.FACING) == face.getOpposite())
         {
-            return backAcceptor;
+            return sourceAcceptor;
         }
-        return frontAcceptor;
+        return sinkAcceptor;
     }
 
     public void setDesiredPower(int power)
@@ -90,10 +91,10 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         if (desiredPower != power)
         {
             desiredPower = power;
-            BloodNetwork network = backAcceptor.getNetwork();
+            BloodNetwork network = sinkAcceptor.getNetwork();
             if (network != null)
             {
-                network.updateTransfer(backAcceptor);
+                network.updateTransfer(sourceAcceptor);
             }
         }
     }
@@ -132,15 +133,10 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     }
 
     @Override
-    public @Nullable BloodNetwork getNetwork()
+    public void markRemoved()
     {
-        return network;
-    }
-
-    @Override
-    public void setNetwork(@Nullable BloodNetwork network)
-    {
-        this.network = network;
+        conduitEntity.onRemove();
+        super.markRemoved();
     }
 
     public class VSCDelegate implements PropertyDelegate
