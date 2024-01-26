@@ -70,7 +70,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
     {
         super.renderBackground(matrices);
         GUIUtil.renderBorder(matrices, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
-        GUIUtil.drawVerticalLine1(matrices, x + entryWidth + 2, y, y + backgroundHeight, PLCCols.BORDER.col);
+        GUIUtil.drawVerticalLine1(matrices, x + entryWidth + 4, y, y + backgroundHeight, PLCCols.BORDER.col);
     }
 
     @Override
@@ -208,7 +208,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
             GUIUtil.renderBorder(matrices, x, y, width, height, textCol, 0);
 
             Text name = ImplantAttributes.getName(id);
-            textRenderer.draw(matrices, name, x + 2, y + 1, textCol);
+            textRenderer.draw(matrices, name, x + 2, y + 2, textCol);
         }
 
         @Override

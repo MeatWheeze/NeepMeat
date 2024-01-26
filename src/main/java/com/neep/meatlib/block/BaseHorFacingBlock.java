@@ -27,9 +27,10 @@ public class BaseHorFacingBlock extends HorizontalFacingBlock implements Meatlib
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-//        return context.getSide().getAxis().isVertical() ? getDefaultState() :
-//                this.getDefaultState().with(FACING, context.getSide().getOpposite());
-        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        if (context.getPlayer() == null)
+            return getDefaultState();
+
+        return getDefaultState().with(FACING, context.getPlayer().isSneaking() ? context.getPlayerFacing().getOpposite() : context.getPlayerFacing());
     }
 
     @Override

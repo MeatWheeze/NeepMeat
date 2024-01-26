@@ -36,7 +36,8 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry)
     {
-        registry.registerForPlayers(IMPLANT_MANAGER, PlayerImplantManager::new, RespawnCopyStrategy.LOSSLESS_ONLY);
+        registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.LOSSLESS_ONLY).end(PlayerImplantManager::new);
+//        registry.registerForPlayers(IMPLANT_MANAGER, PlayerImplantManager::new, RespawnCopyStrategy.LOSSLESS_ONLY);
         registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(PlayerEntity.class, WORKPIECE, PlayerWorkpiece::new);
     }
@@ -52,7 +53,8 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
         registry.register(NMItems.MEAT_STEEL, WORKPIECE, ItemWorkpiece::new);
         registry.register(NMItems.MEAT_STEEL_COMPONENT, WORKPIECE, ItemWorkpiece::new);
         registry.register(NMItems.TRANSFORMING_TOOL_BASE, WORKPIECE, ItemWorkpiece::new);
-        registry.register(Items.MINECART.asItem(), WORKPIECE, ItemWorkpiece::new);
+        registry.register(NMItems.INTERNAL_COMPONENTS, WORKPIECE, ItemWorkpiece::new);
+        registry.register(Items.MINECART, WORKPIECE, ItemWorkpiece::new);
 
         registry.register(MWItems.ASSAULT_DRILL, IMPLANT_MANAGER, ItemImplantManager::new);
     }

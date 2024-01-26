@@ -14,6 +14,12 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
+/**
+ * A mundane item that conveniently stores an externally registered implant.
+ * Useful if you want to make an item that represents a specific implant type.
+ * This must be registered under {@link ItemImplantInstaller} elsewhere.
+ * A JSON recipe is required for the referenced implant to be installed on an entity.
+ */
 public class ItemImplantItem extends BaseItem implements ItemImplantInstaller
 {
     protected final Identifier implantId;
@@ -51,7 +57,7 @@ public class ItemImplantItem extends BaseItem implements ItemImplantInstaller
             for (int i = 0; i < lines; ++i)
             {
                 var txt = Text.translatable("implant." + NeepMeat.NAMESPACE + "." + name + ".desc_" + i).formatted(Formatting.GOLD);
-                tooltip.add(txt);
+                TooltipSupplier.wrapLines(tooltip, txt);
             }
         }
     }

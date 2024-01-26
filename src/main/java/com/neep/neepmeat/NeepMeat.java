@@ -130,11 +130,14 @@ public class NeepMeat implements ModInitializer
 //			PlayerAttachmentManager.registerAttachment(PlayerImplantManager.ID, PlayerImplantManager::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
 //			Registry.register(PlayerImplantRegistry.REGISTRY, SkeltalImplant.ID, SkeltalImplant::new);
+
 			Registry.register(ImplantRegistry.REGISTRY, ExtraKneeImplant.ID, ExtraKneeImplant::new);
 			Registry.register(ImplantRegistry.REGISTRY, PinealEyeImplant.ID, PinealEyeImplant::new);
+			Registry.register(ImplantRegistry.REGISTRY, ExtraMouthImplant.ID, ExtraMouthImplant::new);
 
 			Registry.register(EntityImplantInstaller.REGISTRY, PinealEyeImplant.ID, NMItems.PINEAL_EYE);
 			Registry.register(EntityImplantInstaller.REGISTRY, ExtraKneeImplant.ID, NMItems.EXTRA_KNEES);
+			Registry.register(EntityImplantInstaller.REGISTRY, ExtraMouthImplant.ID, NMItems.EXTRA_MOUTH);
 			Registry.register(EntityImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
 
 			NMCommonNetwork.init();

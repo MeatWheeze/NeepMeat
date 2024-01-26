@@ -25,6 +25,9 @@ public class BaseFacingBlock extends FacingBlock implements MeatlibBlock
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
+        if (context.getPlayer() == null)
+            return getDefaultState();
+
         return this.getDefaultState().with(FACING, context.getPlayer().isSneaking() ? context.getPlayerLookDirection().getOpposite() : context.getPlayerLookDirection());
     }
 

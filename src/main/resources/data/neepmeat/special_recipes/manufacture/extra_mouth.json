@@ -1,0 +1,24 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:internal_components"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:enlightened_brain"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:iron_nugget"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "minecraft:iron_nugget"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:extra_mouth",
+    "amount": 1
+  }
+}

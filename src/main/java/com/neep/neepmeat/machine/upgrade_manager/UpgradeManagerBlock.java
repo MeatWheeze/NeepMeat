@@ -23,12 +23,6 @@ public class UpgradeManagerBlock extends BaseHorFacingBlock implements BlockEnti
     }
 
     @Override
-    public BlockState getPlacementState(ItemPlacementContext context)
-    {
-        return super.getPlacementState(context);
-    }
-
-    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         if (world.getBlockEntity(pos) instanceof UpgradeManagerBlockEntity be)

@@ -51,7 +51,7 @@ public class PlayerImplantItem extends BaseItem implements EntityImplantInstalle
             for (int i = 0; i < lines; ++i)
             {
                 var txt = Text.translatable("implant." + NeepMeat.NAMESPACE + "." + name + ".desc_" + i).formatted(Formatting.GOLD);
-                tooltip.add(txt);
+                TooltipSupplier.wrapLines(tooltip, txt);
             }
         }
     }

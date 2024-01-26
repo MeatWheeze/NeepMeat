@@ -6,11 +6,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.SimpleRegistry;
 
+/**
+ * An implant installer that operates on an Entity.
+ */
 public interface EntityImplantInstaller
 {
     SimpleRegistry<EntityImplantInstaller> REGISTRY = FabricRegistryBuilder.createSimple(
             EntityImplantInstaller.class, new Identifier(NeepMeat.NAMESPACE, "implant_installer")).buildAndRegister();
 
     void install(Entity entity);
-
 }

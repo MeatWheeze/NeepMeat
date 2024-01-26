@@ -6,6 +6,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.SimpleRegistry;
 
+/**
+ * An implant installer that operates on an ItemStack.
+ */
 public interface ItemImplantInstaller
 {
     SimpleRegistry<ItemImplantInstaller> REGISTRY = FabricRegistryBuilder.createSimple(

@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:entity_manufacture",
+  "base": {
+    "id": "minecraft:player"
+  },
+  "steps": [
+    {
+      "id": "neepmeat:implant",
+      "resource": "neepmeat:extra_mouth"
+    }
+  ],
+  "implant_installer": {
+    "id": "neepmeat:extra_mouth"
+  }
+}

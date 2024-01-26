@@ -1,5 +1,6 @@
 package com.neep.meatlib.item;
 
+import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -28,32 +29,29 @@ public interface TooltipSupplier
         {
             for (int lineNumber = 0; lineNumber < lines; ++lineNumber)
             {
-                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                 var txt = Text.translatable(item.getTranslationKey() + ".lore_" + lineNumber).formatted(Formatting.GRAY);
-                List<OrderedText> newText = textRenderer.wrapLines(txt, 200);
-
-                for (var line : newText)
-                {
-                    MutableText textLine = Text.empty();
-
-                    line.accept((index, style, codePoint) ->
-                    {
-                        textLine.append(Text.literal(Character.toString(codePoint)).setStyle(style));
-                        return true;
-                    });
-
-                    list.add(textLine);
-                }
+                wrapLines(list, txt);
             }
         };
     }
 
-    class RangedVisitor implements CharacterVisitor
+    static void wrapLines(List<Text> list, Text text)
     {
-        @Override
-        public boolean accept(int index, Style style, int codePoint)
+        TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+
+        List<OrderedText> newText = textRenderer.wrapLines(text, 200);
+
+        for (var line : newText)
         {
-            return false;
+            MutableText textLine = Text.empty();
+
+            line.accept((index, style, codePoint) ->
+            {
+                textLine.append(Text.literal(Character.toString(codePoint)).setStyle(style));
+                return true;
+            });
+
+            list.add(textLine);
         }
     }
 
@@ -92,22 +90,8 @@ public interface TooltipSupplier
         {
             if (lines != 0 && Screen.hasShiftDown())
             {
-                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
                 var txt = Text.translatable(item.getTranslationKey() + ".lore_0").formatted(Formatting.GRAY);
-                List<OrderedText> newText = textRenderer.wrapLines(txt, 200);
-
-                for (var line : newText)
-                {
-                    MutableText textLine = Text.empty();
-
-                    line.accept((index, style, codePoint) ->
-                    {
-                        textLine.append(Text.literal(Character.toString(codePoint)).setStyle(style.withColor(Formatting.YELLOW)));
-                        return true;
-                    });
-
-                    tooltip.add(textLine);
-                }
+                wrapLines(tooltip, txt);
             }
             else
             {
