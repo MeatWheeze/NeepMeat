@@ -32,9 +32,10 @@
         {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"}
     ]},
-    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Energetic Fluid Machines", "entries": [
+    {"type": "menu", "id": "fluid_machines", "icon": "neepmeat:motor_unit", "text": "Vascular Power Machines", "entries": [
       {"type": "page", "id": "assembler", "icon": "neepmeat:assembler", "text": "Assembler"},
-      {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"}
+      {"type": "page", "id": "heater", "icon": "neepmeat:heater", "text": "Heater"},
+      {"type": "page", "id": "phage_ray", "icon": "neepmeat:phage_ray", "text": "Phage Ray"}
     ]},
     {"type": "menu", "id": "plc", "icon": "neepmeat:plc", "text": "PLC and Manufacturing", "entries": [
       {"type": "page", "id": "plc", "icon": "neepmeat:plc", "text": "PLC"},
@@ -370,15 +371,11 @@
       {"type": "text", "text": "Fluid Heating\n", "bold": true},
       {"type": "text", "text": "When facing a Multi-Tank, fluids can be heated. This can be used to pasteurise Milk or to cook Meat Slurry. The power output of the heater influences the processing rate.\n"}
     ]},
-    {"id": "surgery", "contents": [
-      {"type": "text", "text": "Machine Surgery\n", "bold": true},
-      {"type": "text", "text": "A workbench may be sufficient for cobbling together rudimentary machines, but a finer touch is required to assemble more delicate cybernetic organisms.\n"},
-      {"type": "text", "text": "Assembly\n", "bold": true},
-      {"type": "image", "width": 224, "height": 158, "path": "neepmeat:guide/images/surgery_2.png"},
-      {"type": "text", "text": "To assemble the machine, a Surgery Controller must be placed one block below and facing a 3x3 grid of supported inventories, as shown above. \nRecipes can take both items and fluids as ingredients, so the inventory at the corresponding position should match the required resource.\n"},
-      {"type": "text", "text": [{"text": "Supported inventories:\n"},{"text": " - Display Platform (item)\n - Fluid Buffer (fluid)\n - Glass Tank (fluid)\n"}]},
+    {"id": "phage_ray", "contents": [
+      {"type": "text", "text": "Phage Ray\n", "bold": true},
+      {"type": "text", "text": "The Phage Ray unleashes a concentrated beam of destruction.\n"},
       {"type": "text", "text": "Usage\n", "bold": true},
-      {"type": "text", "text": "Replicate the pattern shown in the recipe on the table by placing items and fluids into the corresponding containers. On the rising edge of a redstone signal, the Surgery Controller will detect a valid pattern and begin assembling. If successful, the output item will be ejected into a pipe or inventory directly behind the Surgery controller.\n"}
+      {"type": "text", "text": "100eJ/t [note: this will change] must be supplied. Right-click the barrel assembly to mount it. Once mounted, right-clicking will activate the ray. \n"}
     ]},
 
     {"id": "cloning", "contents": [
