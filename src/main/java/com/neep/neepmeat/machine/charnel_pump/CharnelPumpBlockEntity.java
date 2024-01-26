@@ -104,6 +104,9 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
     // Check for existing sprouts. If none are found, spawn a new one.
     private void spawnSpouts()
     {
+        if (!world.getBlockState(pos.down()).isOf(NMBlocks.WRITHING_STONE))
+            world.setBlockState(pos.down(), NMBlocks.WRITHING_STONE.getDefaultState(), Block.NOTIFY_ALL);
+
         var writhing = writhingSpoutFinder.get();
 
         if (writhing.notDirty() && writhing.result().isEmpty())

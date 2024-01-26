@@ -48,7 +48,7 @@
       {"type": "page", "id": "crucible", "icon": "neepmeat:crucible", "text": "Rendering Basin"},
       {"type": "page", "id": "collector", "icon": "neepmeat:collector", "text": "Fat Collector"},
       {"type": "page", "id": "press", "icon": "neepmeat:hydraulic_press", "text": "Hydraulic Press"},
-      {"type": "page", "id": "charnel_pump", "icon": "neepmeat:rusty_metal", "text": "Charnel Pump"}
+      {"type": "page", "id": "charnel_pump", "icon": "neepmeat:charnel_pump", "text": "Charnel Pump"}
     ]},
     {"type": "menu", "id": "meat_processing", "icon": "neepmeat:raw_meat_brick", "text": "Meat Processing", "entries": [
       {"type": "page", "id": "meat", "icon": "neepmeat:raw_meat_brick", "text": "Meat"},
@@ -241,9 +241,9 @@
     ]},
     {"id": "charnel_pump", "contents": [
       {"type": "text", "text": "Charnel Pump\n", "bold": true},
-      {"type": "text", "text": "Work Fluid can be induced to seek out precious minerals and engulf them. When injected at high pressure into a rock formation, the fluid will force apart minute fractures, allowing it animalcules to digest the newly exposed mineral deposits. The Charnel Pump performs these functions and encourages the fluid to return to the surface once saturated"},
+      {"type": "text", "text": "Work Fluid can be induced to seek out precious minerals and engulf them. When injected at high pressure into a rock formation, the fluid will force apart minute fractures, allowing it animalcules to digest the newly exposed mineral deposits. \n\nThe Charnel Pump performs these functions and encourages the fluid to return to the surface once saturated."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "The Charnel pump is a structure six blocks tall with a nominal diameter of three blocks. A motor can connect to the protrusion on the left side and work fluid is input through the port at the rear. The motor must deliver over 1000eJ/t for the Charnel Pump to run. Each pumping cycle will consume one bucket of Work Fluid."},
+      {"type": "text", "text": "The Charnel pump is a structure six blocks tall with a nominal diameter of three blocks. A motor can connect to the protrusion on the left side and work fluid is inserted through the port at the rear. \n\nThe motor must deliver over 1000eJ/t for the Charnel Pump to run. Each pumping cycle will consume one bucket of Work Fluid."},
       {"type": "text", "text": "\nWhen the pump is first turned on, the surface will be breached by a spout of writhing earth nearby. A Well Head must be placed on this to receive the resources liberated from the earth."}
     ]},
 
