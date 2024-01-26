@@ -156,7 +156,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
             {
                 NbtCompound nbt = stack.getOrCreateSubNbt(KEY_CHARGE);
                 int charge = nbt.getInt("charge");
-                float power = charge / 2f;
+                float power = charge;
 
                 fireShell(world, player, stack, 2, (world1, x, y, z, vx, vy, vz) -> new FusionBlastEntity(world1, x, y, z, vx, vy, vz, power));
                 if (!player.isCreative()) stack.setDamage(stack.getDamage() + 2);

@@ -187,14 +187,13 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     {
         float r = 2.5f;
         Box box = getBoundingBox().expand(r);
-        Vec3d centre = box.getCenter();
         List<Entity> entities = world.getOtherEntities(null, box);
         entities.forEach(e ->
         {
             // Damage reduces linearly with distance
-            double d = getDamage() * (centre.distanceTo(e.getPos()) / r);
+//            double d = getDamage() * (centre.distanceTo(e.getPos()) / r);
 //            e.damage(world.getDamageSources().mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
-            e.damage(DamageSource.mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
+            e.damage(DamageSource.mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) getDamage());
         });
     }
 
