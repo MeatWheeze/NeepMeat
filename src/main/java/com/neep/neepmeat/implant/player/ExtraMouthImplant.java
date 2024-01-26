@@ -82,7 +82,6 @@ public class ExtraMouthImplant implements EntityImplant
             }
         }
 
-
         // If no small items are available, wait for empty hunger to drop below half of the smallest item's hunger.
         ItemStack smallest = foodStacks.get(foodStacks.size() - 1);
         if (emptyHunger > smallest.getItem().getFoodComponent().getHunger() / 2)

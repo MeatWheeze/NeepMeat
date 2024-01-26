@@ -530,6 +530,9 @@
   "item.neepmeat.extra_knees": "Powered Knees",
   "implant.neepmeat.extra_knee": "Powered Knees",
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
+  "item.neepmeat.lung_extensions": "Lung Extensions",
+  "implant.neepmeat.lung_extensions": "Lung Extensions",
+  "implant.neepmeat.lung_extensions.desc_0": "Scream LONGER. Breathe HARDER. Brag about EXTENDED LUNGS.",
 
   "item.neepmeat.shield": "Shield Attachment",
   "implant.neepmeat.shield": "Shield Attachment",

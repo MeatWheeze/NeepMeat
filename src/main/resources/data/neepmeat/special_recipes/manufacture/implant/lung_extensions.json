@@ -1,0 +1,15 @@
+{
+  "type": "neepmeat:entity_manufacture",
+  "base": {
+    "id": "minecraft:player"
+  },
+  "steps": [
+    {
+      "id": "neepmeat:implant",
+      "resource": "neepmeat:lung_extensions"
+    }
+  ],
+  "implant_installer": {
+    "id": "neepmeat:lung_extensions"
+  }
+}

@@ -83,7 +83,8 @@ public class RemoveInstruction implements Instruction
             Workpiece workpiece = NMComponents.WORKPIECE.getNullable(object);
             if (workpiece != null)
             {
-                workpiece.removeStep(workpiece.getSteps().size() - 1);
+                if (workpiece.getSteps().size() > 1)
+                    workpiece.removeStep(workpiece.getSteps().size() - 1);
             }
 
             ((MutateInPlace<Object>) mip).set(object);
