@@ -24,6 +24,12 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel PHAGE_RAY_BASE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray.obj"));
     public static final PartialModel PHAGE_RAY_BARREL = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray_barrel.obj"));
 
+    public static final PartialModel COW_LIMB = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_limb"));
+    public static final PartialModel COW_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_head"));
+    public static final PartialModel UNKNOWN_LIMB_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_limb_1"));
+    public static final PartialModel UNKNOWN_LIMB_2 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_limb_2"));
+    public static final PartialModel UNKNOWN_BODY_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_body_1"));
+
     public static NMExtraModels EXTRA_MODELS = new NMExtraModels();
 
     public static Identifier BIG_LEVER_HANDLE = new Identifier(NeepMeat.NAMESPACE, "block/big_lever_handle");

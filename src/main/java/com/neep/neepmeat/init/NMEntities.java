@@ -4,6 +4,7 @@ import com.neep.meatlib.registry.EntityRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import com.neep.neepmeat.entity.GlomeEntity;
+import com.neep.neepmeat.entity.LimbEntity;
 import com.neep.neepmeat.entity.bovine_horror.AcidSprayEntity;
 import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.entity.hound.HoundEntity;
@@ -28,6 +29,7 @@ public class NMEntities
     public static EntityType<BovineHorrorEntity> BOVINE_HORROR;
     public static EntityType<AcidSprayEntity> ACID_SPRAY;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
+    public static EntityType<LimbEntity> LIMB;
 
     public static EntityType<PhageRayEntity> PHAGE_RAY;
 
@@ -64,5 +66,8 @@ public class NMEntities
 
         PHAGE_RAY = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "phage_ray", FabricEntityTypeBuilder.create(SpawnGroup.MISC, PhageRayEntity::new)
                 .dimensions(EntityDimensions.fixed(2.8f, 2.8f)).trackedUpdateRate(3).build());
+
+        LIMB = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "limb", FabricEntityTypeBuilder.create(SpawnGroup.MISC, LimbEntity::new)
+                .dimensions(EntityDimensions.fixed(0.5f, 0.6f)).trackedUpdateRate(3).build());
     }
 }

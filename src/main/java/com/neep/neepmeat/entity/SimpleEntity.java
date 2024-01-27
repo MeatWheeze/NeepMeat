@@ -1,6 +1,5 @@
 package com.neep.neepmeat.entity;
 
-import com.neep.meatweapons.damage.MWDamageSources;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;

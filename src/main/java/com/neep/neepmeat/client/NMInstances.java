@@ -2,6 +2,7 @@ package com.neep.neepmeat.client;
 
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
+import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.machine.advanced_motor.AdvancedMotorInstance;
@@ -40,5 +41,7 @@ public class NMInstances
         InstancedRenderRegistry.configure(NMBlockEntities.LINEAR_OSCILLATOR).alwaysSkipRender().factory(LinearOscillatorInstance::new).apply();
 
         InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
+
+        InstancedRenderRegistry.configure(NMEntities.LIMB).alwaysSkipRender().factory(LimbEntityInstance::new).apply();
     }
 }
