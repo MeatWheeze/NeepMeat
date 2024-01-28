@@ -42,6 +42,6 @@ public class NMInstances
 
         InstancedRenderRegistry.configure(NMEntities.PHAGE_RAY).alwaysSkipRender().factory(PhageRayInstance::new).apply();
 
-        InstancedRenderRegistry.configure(NMEntities.LIMB).alwaysSkipRender().factory(LimbEntityInstance::new).apply();
+        InstancedRenderRegistry.configure(NMEntities.LIMB).factory(LimbEntityInstance::new).apply();
     }
 }

@@ -1,5 +1,8 @@
 package com.neep.neepmeat.entity;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
@@ -12,12 +15,19 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.tag.BlockTags;
 import net.minecraft.tag.FluidTags;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.GameRules;
+import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.List;
 
@@ -170,7 +180,7 @@ public abstract class SimpleEntity extends Entity
             this.setVelocity(this.getVelocity().add(0.0, -d / 4.0, 0.0));
         }
         vec3d3 = this.getVelocity();
-        if (this.horizontalCollision && this.doesNotCollide(vec3d3.x, vec3d3.y + (double)0.6f - this.getY() + e, vec3d3.z))
+        if (this.horizontalCollision && this.doesNotCollide(vec3d3.x, vec3d3.y + 0.6f - this.getY() + e, vec3d3.z))
         {
             this.setVelocity(vec3d3.x, 0.3f, vec3d3.z);
         }
@@ -248,9 +258,8 @@ public abstract class SimpleEntity extends Entity
             if (i > 0 && list.size() > i - 1 && this.random.nextInt(4) == 0)
             {
                 j = 0;
-                for (int k = 0; k < list.size(); k++)
+                for (Entity entity : list)
                 {
-                    Entity entity = list.get(k);
                     if (entity.hasVehicle()) continue;
                     ++j;
                 }

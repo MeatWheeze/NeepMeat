@@ -8,19 +8,15 @@ import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.PartialModel;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.entity.LimbEntity;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
 
 import java.util.List;
 
 public class LimbEntityInstance extends EntityInstance<LimbEntity> implements DynamicInstance
 {
-    private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/entity/limbs/limbs.png");
-
     private final ModelData model;
     private final MatrixStack matrices = new MatrixStack();
 
