@@ -18,7 +18,7 @@ import net.minecraft.util.Identifier;
 
 public class EnlightenmentEventPacket
 {
-    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "enlightenment_evernt");
+    public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "enlightenment_event");
 
     public static void send(EnlightenmentEvent.Factory factory, ServerWorld world, ServerPlayerEntity player)
     {
@@ -40,9 +40,9 @@ public class EnlightenmentEventPacket
     @Environment(value= EnvType.CLIENT)
     public static class Client
     {
-        public static void registerReceiver()
+        public static void init()
         {
-            ClientPlayNetworking.registerGlobalReceiver(MWNetwork.EFFECT_ID, (client, handler, byteBuf, responseSender) ->
+            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, byteBuf, responseSender) ->
             {
                 EnlightenmentEvent.Factory factory = EnlightenmentEventManager.EVENTS.get(byteBuf.readVarInt());
                 Identifier worldId = byteBuf.readIdentifier();

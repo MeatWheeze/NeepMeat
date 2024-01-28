@@ -5,6 +5,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.DataVariant;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.sound.PylonSoundInstance;
@@ -17,12 +18,14 @@ import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.machine.well_head.BlockEntityFinder;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
@@ -103,6 +106,13 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
                     i.getDataStorage().insert(DataVariant.NORMAL, 1, transaction);
                 });
                 transaction.commit();
+
+                int enlightenment = (int) (speed / (RUNNING_SPEED * 2) * 5);
+                Vec3d centre = Vec3d.ofCenter(pos);
+                PlayerLookup.around((ServerWorld) world, centre, radius).forEach(p ->
+                {
+                    EnlightenmentUtil.applyDose(p, enlightenment, p.squaredDistanceTo(centre), 1 / 50.0);
+                });
             }
         }
 

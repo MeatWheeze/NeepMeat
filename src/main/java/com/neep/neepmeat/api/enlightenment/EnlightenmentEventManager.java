@@ -45,7 +45,7 @@ public class EnlightenmentEventManager
     {
         ++counter;
 
-        if (counter >= 20)
+        if (counter >= 40)
         {
             chooseEvent(world);
             counter  = 0;
@@ -55,19 +55,25 @@ public class EnlightenmentEventManager
 
     protected void tickEvents()
     {
-        tickingEvents.removeIf(EnlightenmentEvent::isRemoved);
         tickingEvents.forEach(EnlightenmentEvent::tick);
+        tickingEvents.removeIf(EnlightenmentEvent::isRemoved);
     }
 
     protected void chooseEvent(ServerWorld world)
     {
         for (ServerPlayerEntity player : world.getPlayers())
         {
-            float p = EnlightenmentUtil.getEventProbability(player);
-            random.setSeed(world.getTime());
-            if (random.nextDouble() < p)
+            float thing = EnlightenmentUtil.getEventProbability(player);
+            float p = random.nextFloat();
+
+//            double eventsPerHour = (60 * 60) / 2.0 * thing;
+//            double eventsPer4Hour = 8 * (60 * 60) / 2.0 * thing;
+//            NeepMeat.LOGGER.info("Events per hour: " + eventsPerHour + ", Events per 8 hours: " + eventsPer4Hour);
+
+            if (p < thing)
             {
-                if (EVENTS.isEmpty()) return;
+                if (EVENTS.isEmpty())
+                    return;
 
                 // Choose a random factory. If it can't spawn, find one that does.
                 List<EnlightenmentEvent.Factory> factories = EVENTS.stream().collect(Collectors.toList());
@@ -76,7 +82,8 @@ public class EnlightenmentEventManager
                 while (!factories.get(i).willSpawn(world, player))
                 {
                     ++i;
-                    if (i >= factories.size()) return;
+                    if (i >= factories.size())
+                        return;
                 }
                 EnlightenmentEvent.Factory factory = factories.get(i);
                 spawnFactory(world, player, factory);

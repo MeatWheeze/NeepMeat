@@ -2,11 +2,16 @@ package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.api.Burner;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
 import com.neep.neepmeat.datagen.NMRecipes;
 import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.enlightenment.LimbEnlightenmentEvent;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
 import com.neep.neepmeat.entity.worm.WormActions;
 import com.neep.neepmeat.guide.GuideReloadListener;
@@ -47,6 +52,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
+
+import javax.print.attribute.standard.MediaSize;
 
 public class NeepMeat implements ModInitializer
 {
@@ -142,7 +149,12 @@ public class NeepMeat implements ModInitializer
 			Registry.register(EntityImplantInstaller.REGISTRY, LungExtensionsImplant.ID, NMItems.LUNG_EXTENSIONS);
 			Registry.register(EntityImplantInstaller.REGISTRY, new Identifier(NeepMeat.NAMESPACE, "chrysalis"), NMItems.CHRYSALIS);
 
+			Registry.register(EnlightenmentEventManager.EVENTS, new Identifier(NAMESPACE, "limb_spawn"), new EnlightenmentEvent.SimpleFactory(LimbEnlightenmentEvent::new));
+
 			NMCommonNetwork.init();
+
+			EnlightenmentEventManager.init();
+			EnlightenmentUtil.init();
 		}
 	}
 

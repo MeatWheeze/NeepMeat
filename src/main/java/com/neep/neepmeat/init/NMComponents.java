@@ -2,6 +2,8 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
+import com.neep.neepmeat.enlightenment.PlayerEnlightenmentManager;
 import com.neep.neepmeat.implant.item.ItemImplantManager;
 import com.neep.neepmeat.implant.player.ImplantManager;
 import com.neep.neepmeat.implant.player.PlayerImplantManager;
@@ -33,11 +35,16 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
                     new Identifier(NeepMeat.NAMESPACE, "workpiece"),
                     Workpiece.class);
 
+    public static final ComponentKey<EnlightenmentManager> ENLIGHTENMENT_MANAGER =
+            ComponentRegistry.getOrCreate(
+                    new Identifier(NeepMeat.NAMESPACE, "enlightenment_manager"),
+                    EnlightenmentManager.class);
+
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry)
     {
         registry.beginRegistration(PlayerEntity.class, IMPLANT_MANAGER).impl(PlayerImplantManager.class).respawnStrategy(RespawnCopyStrategy.LOSSLESS_ONLY).end(PlayerImplantManager::new);
-//        registry.registerForPlayers(IMPLANT_MANAGER, PlayerImplantManager::new, RespawnCopyStrategy.LOSSLESS_ONLY);
+        registry.beginRegistration(PlayerEntity.class, ENLIGHTENMENT_MANAGER).impl(PlayerEnlightenmentManager.class).respawnStrategy(RespawnCopyStrategy.ALWAYS_COPY).end(PlayerEnlightenmentManager::new);
         registry.registerFor(CowEntity.class, WORKPIECE, MobWorkpiece::new);
         registry.registerFor(PlayerEntity.class, WORKPIECE, PlayerWorkpiece::new);
     }

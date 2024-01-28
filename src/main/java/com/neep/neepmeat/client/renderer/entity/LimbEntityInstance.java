@@ -30,6 +30,8 @@ public class LimbEntityInstance extends EntityInstance<LimbEntity> implements Dy
     {
         LIMBS.add(NMExtraModels.COW_LIMB);
         LIMBS.add(NMExtraModels.COW_HEAD);
+        LIMBS.add(NMExtraModels.PIG_HEAD);
+        LIMBS.add(NMExtraModels.PIG_HEAD_1);
         LIMBS.add(NMExtraModels.UNKNOWN_LIMB_1);
         LIMBS.add(NMExtraModels.UNKNOWN_LIMB_2);
         LIMBS.add(NMExtraModels.UNKNOWN_BODY_1);

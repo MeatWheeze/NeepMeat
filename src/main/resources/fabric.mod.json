@@ -79,6 +79,7 @@
     "cardinal-components": [
       "neepmeat:blood_network_chunk",
       "neepmeat:implant_manager",
+      "neepmeat:enlightenment_manager",
       "neepmeat:workpiece"
     ]
   },

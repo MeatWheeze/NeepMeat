@@ -26,6 +26,8 @@ public class NMExtraModels implements ExtraModelProvider
 
     public static final PartialModel COW_LIMB = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_limb"));
     public static final PartialModel COW_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_head"));
+    public static final PartialModel PIG_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/pig_head"));
+    public static final PartialModel PIG_HEAD_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/pig_head_1"));
     public static final PartialModel UNKNOWN_LIMB_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_limb_1"));
     public static final PartialModel UNKNOWN_LIMB_2 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_limb_2"));
     public static final PartialModel UNKNOWN_BODY_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/unknown_body_1"));
