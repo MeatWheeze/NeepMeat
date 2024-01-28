@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " i ",
+    "bwb"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:vascular_conduit"
+    },
+    "i": {
+      "item": "neepmeat:control_unit"
+    },
+    "w": {
+      "item": "neepmeat:meat_steel_component"
+    }
+  },
+  "result": {
+    "item": "neepmeat:vsc",
+    "count": 1
+  }
+}

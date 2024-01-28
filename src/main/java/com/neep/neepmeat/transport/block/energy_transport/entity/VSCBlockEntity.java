@@ -79,7 +79,7 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
 
     public BloodAcceptor getBloodAcceptor(Direction face)
     {
-        if (getCachedState().get(VSCBlock.FACING) == face.getOpposite())
+        if (getCachedState().get(VSCBlock.FACING) == face)
         {
             return sourceAcceptor;
         }

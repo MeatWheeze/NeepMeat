@@ -23,5 +23,10 @@ public class LimbEntity extends SimpleEntity
         }
 
         tickMovement();
+
+        if (age > 300)
+        {
+            remove(RemovalReason.DISCARDED);
+        }
     }
 }

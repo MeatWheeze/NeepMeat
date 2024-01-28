@@ -5,6 +5,7 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
@@ -47,7 +48,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
     {
         super(settings);
         this.name = name;
-        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, name, ItemSettings.block()));
+        ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, name, ItemSettings.block().requiresVascular().tooltip(TooltipSupplier.hidden(1))));
         volume = BigBlockPattern.oddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
