@@ -1,8 +1,6 @@
 package com.neep.neepmeat.enlightenment;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
-import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.minecraft.entity.player.PlayerEntity;
@@ -35,6 +33,12 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
         chronicEnlightenment += corrected * split;
 
 //        NeepMeat.LOGGER.info("added: " + corrected + ", acute: " + acuteEnlightenment + " chronic: " + chronicEnlightenment);
+    }
+
+    @Override
+    public void addChronic(float amount)
+    {
+
     }
 
     @Override

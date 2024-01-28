@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class BlockEntityFinder<T extends BlockEntity>
 {
@@ -18,6 +19,7 @@ public class BlockEntityFinder<T extends BlockEntity>
     private final Set<ChunkPos> positions;
     private final Set<T> result = Sets.newHashSet();
     private final BlockEntityType<T> type;
+    private Predicate<BlockEntity> predicate = b -> true;
 
     private final int updateInterval;
     private long lastUpdate = 0;
@@ -51,6 +53,12 @@ public class BlockEntityFinder<T extends BlockEntity>
         return this;
     }
 
+    public BlockEntityFinder<T> predicate(Predicate<BlockEntity> predicate)
+    {
+        this.predicate = predicate;
+        return this;
+    }
+
     public void tick()
     {
         result.removeIf(BlockEntity::isRemoved);
@@ -71,6 +79,7 @@ public class BlockEntityFinder<T extends BlockEntity>
             {
                 chunk.getBlockEntities().values().stream()
                         .filter(be -> be.getType().equals(type))
+                        .filter(predicate)
                         .forEach(be -> result.add((T) be));
             }
             catch (ClassCastException e)

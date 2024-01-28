@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.item.BaseCraftingItem;
 import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.item.EnlightenmentFoodItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
@@ -54,7 +55,7 @@ public class NMItems
 //    public static Item GANGLIAL_CENTRE = new BaseCraftingItem("ganglial_cluster", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item ENLIGHTENED_BRAIN = new BaseCraftingItem("enlightened_brain", 2, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.ENLIGHTENED_BRAIN));
+    public static Item ENLIGHTENED_BRAIN = new EnlightenmentFoodItem("enlightened_brain", 2, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.ENLIGHTENED_BRAIN));
 
 //    public static Item DIVINE_ORGAN = new BaseCraftingItem("divine_organ", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item OPEN_EYE = new BaseCraftingItem("open_eye", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
@@ -66,7 +67,7 @@ public class NMItems
 
     public static Item WHISPER_WHEAT = new BaseCraftingItem("whisper_wheat", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
-    public static Item WHISPER_BREAD = new BaseCraftingItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
+    public static Item WHISPER_BREAD = new EnlightenmentFoodItem("whisper_bread", 0, new FabricItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
 
     public static Item TABLET = ItemRegistry.queue(new ProjectorItem("projector", new FabricItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 

@@ -35,7 +35,7 @@ public class EnlightenmentUtil
 
         float p1 = MathHelper.clamp(enlightenment / getMaxEnlightenment(player), 0, 1);
 
-        return p1 / 50;
+        return p1 / 100;
     }
 
     public static float getEnlightenment(ServerPlayerEntity player)

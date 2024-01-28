@@ -46,7 +46,9 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     private final SimpleDataPort port = new SimpleDataPort(this);
 
     private final LazySupplier<BlockEntityFinder<AdvancedIntegratorBlockEntity>> integratorFinder = LazySupplier.of(() ->
-            new BlockEntityFinder<>(getWorld(), NMBlockEntities.ADVANCED_INTEGRATOR, 40).addAll(chunkRange(getPos())));
+            new BlockEntityFinder<>(getWorld(), NMBlockEntities.ADVANCED_INTEGRATOR, 40)
+                    .addAll(chunkRange(getPos()))
+                    .predicate(be -> be.getPos().isWithinDistance(getPos(), radius * 2)));
 
     protected final Random random = new Random(0);
 
