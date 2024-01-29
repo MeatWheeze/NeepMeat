@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.pylon;
 
-import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.api.DataPort;
@@ -29,8 +28,8 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
 import java.util.Random;
 
 import static com.neep.neepmeat.machine.well_head.BlockEntityFinder.chunkRange;
@@ -69,22 +68,6 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     public boolean isRunning()
     {
         return getSpeed() >= RUNNING_SPEED;
-    }
-
-    public void clientTick()
-    {
-        float clamped = MathHelper.clamp(getSpeed() - RUNNING_SPEED, 0, RUNNING_SPEED * 2) / (RUNNING_SPEED * 2);
-        float threshold = MathHelper.lerp(clamped, 0f, 0.6f);
-        float p = random.nextFloat();
-        if (p < threshold)
-        {
-            world.getNonSpectatingEntities(PlayerEntity.class, getBox()).stream().findFirst().ifPresent(pl ->
-            {
-                Client.causeVignette();
-            });
-        }
-
-        client.tick();
     }
 
     @Override
@@ -176,24 +159,43 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
         return port;
     }
 
+
+    // --- Client things ---
+
     @Environment(value=EnvType.CLIENT)
-    private final Client client = new Client(this, getPos());
+    @Nullable
+    private Client client;
+
+    @Environment(EnvType.CLIENT)
+    public void clientTick()
+    {
+        float clamped = MathHelper.clamp(getSpeed() - RUNNING_SPEED, 0, RUNNING_SPEED * 2) / (RUNNING_SPEED * 2);
+        float threshold = MathHelper.lerp(clamped, 0f, 0.6f);
+        float p = random.nextFloat();
+        if (p < threshold)
+        {
+            world.getNonSpectatingEntities(PlayerEntity.class, getBox()).stream().findFirst().ifPresent(pl ->
+            {
+                Client.causeVignette();
+            });
+        }
+
+        if (client == null)
+            client = new Client(this, pos);
+        client.tick();
+    }
 
     @Environment(value=EnvType.CLIENT)
     private static class Client
     {
-        static Map<PylonBlockEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
-
         private final PylonBlockEntity be;
-        private final BlockPos pos;
         private final MinecraftClient client = MinecraftClient.getInstance();
-        private PylonSoundInstance mainSound;
-        private PylonSoundInstance runningSound;
+        private final PylonSoundInstance mainSound;
+        private final PylonSoundInstance runningSound;
 
         Client(PylonBlockEntity be, BlockPos pos)
         {
             this.be = be;
-            this.pos = pos;
             this.mainSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_START, SoundCategory.BLOCKS);
             this.runningSound = new PylonSoundInstance(be, pos, NMSounds.PYLON_ACTIVE, SoundCategory.BLOCKS);
         }

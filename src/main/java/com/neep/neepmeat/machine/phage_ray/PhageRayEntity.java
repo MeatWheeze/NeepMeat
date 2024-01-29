@@ -11,6 +11,7 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -440,10 +441,30 @@ public class PhageRayEntity extends Entity
     // --- Client things ---
 
     @Environment(EnvType.CLIENT)
-    private final TrackingSoundInstance runningInstance = new TrackingSoundInstance(
-            NMSounds.PHAGE_RAY_RUNNING, SoundCategory.BLOCKS,
-            16, 1,
-            this);
+    @Nullable
+    private Client client;
+
+    @Environment(EnvType.CLIENT)
+    public void clientTick()
+    {
+        if (client == null)
+            client = new Client(this);
+
+        SoundManager manager = MinecraftClient.getInstance().getSoundManager();
+        if (isRunning() && trigger && triggerTicks == 0)
+        {
+            manager.play(new EntityTrackingSoundInstance(NMSounds.PHAGE_RAY_CHARGE, SoundCategory.BLOCKS, 16, 1, this, 0));
+        }
+
+        if (isRunning() && triggerTicks >= 20 && !manager.isPlaying(client.runningInstance))
+        {
+            manager.play(client.runningInstance);
+        }
+        else if (triggerTicks == 0 && manager.isPlaying(client.runningInstance))
+        {
+            manager.stop(client.runningInstance);
+        }
+    }
 
     @Environment(EnvType.CLIENT)
     private static class TrackingSoundInstance extends EntityTrackingSoundInstance
@@ -453,25 +474,6 @@ public class PhageRayEntity extends Entity
             super(sound, category, volume, pitch, entity, 0);
             this.repeat = true;
             this.repeatDelay = 0;
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    public void clientTick()
-    {
-        SoundManager manager = MinecraftClient.getInstance().getSoundManager();
-        if (isRunning() && trigger && triggerTicks == 0)
-        {
-            manager.play(new EntityTrackingSoundInstance(NMSounds.PHAGE_RAY_CHARGE, SoundCategory.BLOCKS, 16, 1, this, 0));
-        }
-
-        if (isRunning() && triggerTicks >= 20 && !manager.isPlaying(runningInstance))
-        {
-            manager.play(runningInstance);
-        }
-        else if (triggerTicks == 0 && manager.isPlaying(runningInstance))
-        {
-            manager.stop(runningInstance);
         }
     }
 
@@ -486,6 +488,16 @@ public class PhageRayEntity extends Entity
     public static class Client
     {
         private static boolean prevUse;
+
+        private final TrackingSoundInstance runningInstance;
+
+        public Client(PhageRayEntity parent)
+        {
+            runningInstance = new TrackingSoundInstance(
+                    NMSounds.PHAGE_RAY_RUNNING, SoundCategory.BLOCKS,
+                    16, 1,
+                    parent);
+        }
 
         public static void init()
         {
@@ -537,11 +549,5 @@ public class PhageRayEntity extends Entity
             ClientPlayNetworking.send(CHANNEL_ID, buf);
         }
 
-        static Map<PhageRayEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
-
-        public static Client get(PhageRayEntity entity)
-        {
-            return MAP.computeIfAbsent(entity, e -> new Client());
-        }
     }
 }
