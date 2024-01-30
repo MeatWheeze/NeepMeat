@@ -1,6 +1,7 @@
 package com.neep.meatlib.recipe;
 
 import com.neep.meatlib.inventory.ImplementedInventory;
+import com.neep.neepmeat.NeepMeat;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.collection.DefaultedList;
@@ -14,7 +15,7 @@ public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInvento
     @Override
     public ItemStack craft(T inventory)
     {
-        throw new UnsupportedOperationException("Vanilla crafting methods are not supported");
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -26,7 +27,8 @@ public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInvento
     @Override
     public ItemStack getOutput()
     {
-        throw new UnsupportedOperationException("Vanilla crafting methods are not supported");
+        // TODO: Migrate to MeatlibRecipe
+        return ItemStack.EMPTY;
     }
 
     public interface DummyInventory extends ImplementedInventory

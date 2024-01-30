@@ -86,7 +86,8 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     @Override
     public ItemStack getOutput()
     {
-        throw new UnsupportedOperationException("use getItemOutput instead");
+        // TODO: Migrate to MeatlibRecipe
+        return ItemStack.EMPTY;
     }
 
     public RecipeInput<Item> getItemInput1()
