@@ -1,6 +1,6 @@
 package com.neep.neepmeat.machine.grinder;
 
-import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
@@ -71,7 +71,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     {
         if (world != null)
         {
-            Optional<? extends MeatRecipe<?>> optional = MeatRecipeManager.getInstance().get(currentRecipeId);
+            Optional<? extends MeatlibRecipe<?>> optional = MeatRecipeManager.getInstance().get(currentRecipeId);
             optional.ifPresentOrElse(recipe -> this.currentRecipe = (GrindingRecipe) recipe,
                     () -> this.currentRecipe = null);
         }

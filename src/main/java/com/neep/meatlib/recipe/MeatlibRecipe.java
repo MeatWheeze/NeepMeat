@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.Identifier;
 
 @SuppressWarnings("UnstableApiUsage")
-public interface MeatRecipe<C>
+public interface MeatlibRecipe<C>
 {
     boolean matches(C context);
 

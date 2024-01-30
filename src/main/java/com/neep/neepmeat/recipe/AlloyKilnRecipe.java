@@ -1,6 +1,9 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
+import com.neep.meatlib.recipe.MeatRecipeSerialiser;
+import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
@@ -13,15 +16,10 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleSlotStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
-import net.minecraft.recipe.RecipeType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.world.World;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -29,7 +27,7 @@ import java.util.ListIterator;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
+public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput1;
@@ -47,11 +45,11 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     }
 
     @Override
-    public boolean matches(AlloyKilnStorage inventory, World world)
+    public boolean matches(AlloyKilnStorage context)
     {
         List<SingleSlotStorage<ItemVariant>> slots = List.of(
-                inventory.getSlot(AlloyKilnStorage.INPUT_1),
-                inventory.getSlot(AlloyKilnStorage.INPUT_2));
+                context.getSlot(AlloyKilnStorage.INPUT_1),
+                context.getSlot(AlloyKilnStorage.INPUT_2));
 
         List<RecipeInput<Item>> queue = new LinkedList<>(List.of(itemInput1, itemInput2));
 
@@ -69,25 +67,6 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
             }
         }
         return queue.size() == 0;
-    }
-
-    @Override
-    public ItemStack craft(AlloyKilnStorage inventory)
-    {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public boolean fits(int width, int height)
-    {
-        return false;
-    }
-
-    @Override
-    public ItemStack getOutput()
-    {
-        // TODO: Migrate to MeatlibRecipe
-        return ItemStack.EMPTY;
     }
 
     public RecipeInput<Item> getItemInput1()
@@ -117,15 +96,15 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
     }
 
     @Override
-    public RecipeSerializer<?> getSerializer()
+    public MeatRecipeType<?> getType()
     {
-        return NMrecipeTypes.ALLOY_KILN_SERIALIZER;
+        return NMrecipeTypes.ALLOY_SMELTING;
     }
 
     @Override
-    public RecipeType<?> getType()
+    public MeatRecipeSerialiser<?> getSerialiser()
     {
-        return NMrecipeTypes.ALLOY_SMELTING;
+        return NMrecipeTypes.ALLOY_KILN_SERIALIZER;
     }
 
     public int getTime()
@@ -160,6 +139,12 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         return false;
     }
 
+    @Override
+    public boolean ejectOutputs(AlloyKilnStorage context, TransactionContext transaction)
+    {
+        return false;
+    }
+
     public boolean ejectOutput(AlloyKilnStorage storage, TransactionContext transaction)
     {
         try (Transaction inner = transaction.openNested())
@@ -179,7 +164,7 @@ public class AlloyKilnRecipe implements Recipe<AlloyKilnStorage>
         return false;
     }
 
-    public static class Serializer implements RecipeSerializer<AlloyKilnRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<AlloyKilnRecipe>
     {
         RecipeFactory<AlloyKilnRecipe> factory;
         int processTIme;

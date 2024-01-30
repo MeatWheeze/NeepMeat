@@ -83,10 +83,6 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(TROMMEL, TROMMEL_WORKSTATION);
 
         RecipeManager manager = registry.getRecipeManager();
-        manager.listAllOfType(NMrecipeTypes.ALLOY_SMELTING)
-                .stream()
-                .map(AlloySmeltingEmiRecipe::new)
-                .forEach(registry::addRecipe);
         manager.listAllOfType(NMrecipeTypes.ENLIGHTENING)
                 .stream()
                 .map(EnlighteningEmiRecipe::new)
@@ -100,6 +96,11 @@ public class NMEmiPlugin implements EmiPlugin {
                 .map(PressingEmiRecipe::new)
                 .forEach(registry::addRecipe);
 
+        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.ALLOY_SMELTING)
+                .values()
+                .stream()
+                .map(AlloySmeltingEmiRecipe::new)
+                .forEach(registry::addRecipe);
         MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.GRINDING)
                 .values()
                 .stream()

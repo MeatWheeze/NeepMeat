@@ -1,7 +1,7 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TrommelRecipe implements MeatRecipe<TrommelStorage>
+public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
 {
     protected final Identifier id;
     protected final RecipeInput<Fluid> fluidInput;

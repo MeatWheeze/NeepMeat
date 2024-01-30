@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.alloy_kiln;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -152,13 +153,12 @@ public class AlloyKilnBlockEntity extends SyncableBlockEntity implements Heatabl
 
     protected boolean detectRecipe()
     {
-        return this.currentRecipe != null
-                || world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world).isPresent();
+        return this.currentRecipe != null || MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage).isPresent();
     }
 
     protected void startCooking()
     {
-        AlloyKilnRecipe recipe = world.getRecipeManager().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage, world).orElse(null);
+        AlloyKilnRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.ALLOY_SMELTING, storage).orElse(null);
         if (canAcceptRecipeOutput(recipe, storage.inventory.getItems()))
         {
             try (Transaction transaction = Transaction.openOuter())

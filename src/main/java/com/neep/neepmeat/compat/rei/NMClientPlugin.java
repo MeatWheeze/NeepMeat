@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.rei;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
-import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.neepmeat.compat.rei.category.*;
@@ -44,8 +44,8 @@ import java.util.stream.Collectors;
 
 public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 {
-    private static final Comparator<MeatRecipe<?>> RECIPE_COMPARATOR = Comparator.comparing((MeatRecipe<?> o) -> o.getId().getNamespace()).thenComparing(o -> o.getId().getPath());
-    private List<MeatRecipe<?>> sortedRecipes = null;
+    private static final Comparator<MeatlibRecipe<?>> RECIPE_COMPARATOR = Comparator.comparing((MeatlibRecipe<?> o) -> o.getId().getNamespace()).thenComparing(o -> o.getId().getPath());
+    private List<MeatlibRecipe<?>> sortedRecipes = null;
     DisplayAdditionReason SPECIAL_RECIPE_MANAGER = DisplayAdditionReason.simple();
 
     @Override
@@ -56,8 +56,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);
+        registerRecipeFiller(registry, AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
-        registry.registerRecipeFiller(AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
         registry.registerRecipeFiller(EnlighteningRecipe.class, NMrecipeTypes.ENLIGHTENING, EnlighteningDisplay::new);
         registry.registerRecipeFiller(PressingRecipe.class, NMrecipeTypes.PRESSING, PressingDisplay::new);
 
@@ -125,18 +125,18 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
             this.sortedRecipes = MeatRecipeManager.getInstance().values().parallelStream().sorted(RECIPE_COMPARATOR).collect(Collectors.toList());
             for (int i = sortedRecipes.size() - 1; i >= 0; i--)
             {
-                MeatRecipe<?> recipe = sortedRecipes.get(i);
+                MeatlibRecipe<?> recipe = sortedRecipes.get(i);
                 DisplayRegistry.getInstance().addWithReason(recipe, SPECIAL_RECIPE_MANAGER);
             }
         }
         lastStage = stage;
     }
 
-    public static <T extends MeatRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, MeatRecipeType<? super T> recipeType, Function<? extends T, @Nullable D> filler) {
+    public static <T extends MeatlibRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, MeatRecipeType<? super T> recipeType, Function<? extends T, @Nullable D> filler) {
         registerRecipeFiller(registry, typeClass, type -> Objects.equals(recipeType, type), t -> true, filler);
     }
 
-    public static <T extends MeatRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, Predicate<MeatRecipeType<? super T>> type, Predicate<? extends T> predicate, Function<? extends T, @Nullable D> filler)
+    public static <T extends MeatlibRecipe<?>, D extends Display> void registerRecipeFiller(DisplayRegistry registry, Class<T> typeClass, Predicate<MeatRecipeType<? super T>> type, Predicate<? extends T> predicate, Function<? extends T, @Nullable D> filler)
     {
         registry.registerFiller(typeClass, recipe -> type.test((MeatRecipeType<? super T>) recipe.getType()) && ((Predicate<T>) predicate).test(recipe), filler);
     }

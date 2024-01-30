@@ -1,11 +1,11 @@
 package com.neep.neepmeat.recipe;
 
-import com.neep.meatlib.recipe.MeatRecipe;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.neepmeat.machine.bottler.BottlerStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.Identifier;
 
-public abstract class AbstractBottlingRecipe implements MeatRecipe<BottlerStorage>
+public abstract class AbstractBottlingRecipe implements MeatlibRecipe<BottlerStorage>
 {
     protected final Identifier id;
     protected final int processTime;

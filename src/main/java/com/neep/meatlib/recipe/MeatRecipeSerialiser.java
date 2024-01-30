@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Identifier;
 
-public interface MeatRecipeSerialiser<T extends MeatRecipe<?>>
+public interface MeatRecipeSerialiser<T extends MeatlibRecipe<?>>
 {
     T read(Identifier var1, JsonObject var2);
 

@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.TypeFilter;
@@ -24,9 +23,9 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     private static final MeatRecipeManager INSTANCE = new MeatRecipeManager();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private Map<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> recipes = ImmutableMap.of();
-    private Map<Class<?>, Set<MeatRecipe<?>>> recipesByClass = ImmutableMap.of();
-    private Map<Identifier, MeatRecipe<?>> recipesById = ImmutableMap.of();
+    private Map<MeatRecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> recipes = ImmutableMap.of();
+    private Map<Class<?>, Set<MeatlibRecipe<?>>> recipesByClass = ImmutableMap.of();
+    private Map<Identifier, MeatlibRecipe<?>> recipesById = ImmutableMap.of();
 
     public MeatRecipeManager()
     {
@@ -39,27 +38,27 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return INSTANCE;
     }
 
-    public Optional<? extends MeatRecipe<?>> get(Identifier id)
+    public Optional<? extends MeatlibRecipe<?>> get(Identifier id)
     {
         return Optional.ofNullable(this.recipesById.get(id));
     }
 
-    public <C, T extends MeatRecipe<C>> Optional<T> get(MeatRecipeType<T> type, Identifier id)
+    public <C, T extends MeatlibRecipe<C>> Optional<T> get(MeatRecipeType<T> type, Identifier id)
     {
-        MeatRecipe<?> recipe = this.recipesById.get(id);
+        MeatlibRecipe<?> recipe = this.recipesById.get(id);
         if (recipe == null || recipe.getType() != type) return Optional.empty();
         return Optional.of((T) recipe);
     }
 
-    public <C, T extends MeatRecipe<C>, E extends T> Optional<T> get(TypeFilter<T, E> filter, Identifier id)
+    public <C, T extends MeatlibRecipe<C>, E extends T> Optional<T> get(TypeFilter<T, E> filter, Identifier id)
     {
-        MeatRecipe<?> recipe = this.recipesById.get(id);
+        MeatlibRecipe<?> recipe = this.recipesById.get(id);
 
         if (recipe == null || filter.downcast((T) recipe) == null) return Optional.empty();
         return Optional.of((T) recipe);
     }
 
-    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
+    public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
     {
         return getAllOfType(type).values()
                 .stream()
@@ -73,7 +72,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
 //                .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
 //    }
 
-    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(Class<T> clazz, C context)
+    public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(Class<T> clazz, C context)
     {
 //        return this.recipesByClass.entrySet().stream().filter(e -> e.getKey().isAssignableFrom(clazz)).filter()
         return getAllOfType(clazz)
@@ -81,13 +80,13 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
                 .filter(recipe -> recipe.matches(context)).findFirst();
     }
 
-    public <C, T extends MeatRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
+    public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
     {
         // Say goodbye to type safety
         return (Map<Identifier, T>) this.recipes.getOrDefault(type, Collections.emptyMap());
     }
 
-    private <C, T extends MeatRecipe<C>> Set<T> getAllOfType(Class<T> type)
+    private <C, T extends MeatlibRecipe<C>> Set<T> getAllOfType(Class<T> type)
     {
         // Say goodbye to type safety
         return (Set<T>) this.recipesByClass.entrySet().stream()
@@ -98,14 +97,14 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler)
     {
-        HashMap<MeatRecipeType<?>, ImmutableMap.Builder<Identifier, MeatRecipe<?>>> map2 = Maps.newHashMap();
-        ImmutableMap.Builder<Identifier, MeatRecipe<?>> builder = ImmutableMap.builder();
+        HashMap<MeatRecipeType<?>, ImmutableMap.Builder<Identifier, MeatlibRecipe<?>>> map2 = Maps.newHashMap();
+        ImmutableMap.Builder<Identifier, MeatlibRecipe<?>> builder = ImmutableMap.builder();
         for (Map.Entry<Identifier, JsonElement> entry2 : prepared.entrySet())
         {
             Identifier identifier = entry2.getKey();
             try
             {
-                MeatRecipe<?> recipe = deserialize(identifier, JsonHelper.asObject(entry2.getValue(), "top element"));
+                MeatlibRecipe<?> recipe = deserialize(identifier, JsonHelper.asObject(entry2.getValue(), "top element"));
                 map2.computeIfAbsent(recipe.getType(), recipeType -> ImmutableMap.builder()).put(identifier, recipe);
                 builder.put(identifier, recipe);
             }
@@ -120,7 +119,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
 
     }
 
-    public static MeatRecipe<?> deserialize(Identifier id, JsonObject json)
+    public static MeatlibRecipe<?> deserialize(Identifier id, JsonObject json)
     {
         String string = JsonHelper.getString(json, "type");
         return RecipeRegistry.RECIPE_SERIALISER.getOrEmpty(new Identifier(string)).orElseThrow(() ->
@@ -128,17 +127,17 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
                 .read(id, json);
     }
 
-    public Collection<MeatRecipe<?>> values()
+    public Collection<MeatlibRecipe<?>> values()
     {
         return this.recipes.values().stream().flatMap(map -> map.values().stream()).collect(Collectors.toSet());
     }
 
-    public void setRecipes(Iterable<MeatRecipe<?>> recipes)
+    public void setRecipes(Iterable<MeatlibRecipe<?>> recipes)
     {
-        HashMap<MeatRecipeType<?>, Map<Identifier, MeatRecipe<?>>> typeMap = Maps.newHashMap();
-        HashMap<Class<?>, Set<MeatRecipe<?>>> clazzMap = Maps.newHashMap();
+        HashMap<MeatRecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> typeMap = Maps.newHashMap();
+        HashMap<Class<?>, Set<MeatlibRecipe<?>>> clazzMap = Maps.newHashMap();
 
-        ImmutableMap.Builder<Identifier, MeatRecipe<?>> builder = ImmutableMap.builder();
+        ImmutableMap.Builder<Identifier, MeatlibRecipe<?>> builder = ImmutableMap.builder();
         recipes.forEach(recipe ->
         {
             if (recipe == null) throw new IllegalStateException("Received recipe is null on the client. Is serialisation correctly implemented?");
@@ -147,7 +146,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
             var clazzSet = clazzMap.computeIfAbsent(recipe.getClass(), c -> Sets.newHashSet());
 
             Identifier identifier = recipe.getId();
-            MeatRecipe<?> recipe2 = typeSubMap.put(identifier, recipe);
+            MeatlibRecipe<?> recipe2 = typeSubMap.put(identifier, recipe);
             boolean recipe3 = clazzSet.add(recipe);
 
             builder.put(identifier, recipe);

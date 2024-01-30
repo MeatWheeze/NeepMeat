@@ -1,11 +1,8 @@
 package com.neep.meatlib.recipe;
 
-import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
-
 import java.util.Optional;
 
-public interface MeatRecipeType<T extends MeatRecipe<?>>
+public interface MeatRecipeType<T extends MeatlibRecipe<?>>
 {
 //    static <T extends MeatRecipe<?>> MeatRecipeType<T> register(final String id)
 //    {
@@ -19,7 +16,7 @@ public interface MeatRecipeType<T extends MeatRecipe<?>>
 //        });
 //    }
 
-    default <C> Optional<T> match(MeatRecipe<C> recipe, C context)
+    default <C> Optional<T> match(MeatlibRecipe<C> recipe, C context)
     {
         return recipe.matches(context) ? Optional.of((T) recipe) : Optional.empty();
     }
