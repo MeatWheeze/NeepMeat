@@ -10,6 +10,7 @@ import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
@@ -37,10 +38,12 @@ import static com.neep.neepmeat.machine.well_head.BlockEntityFinder.chunkRange;
 public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     public static final float RUNNING_SPEED = 16;
+    public static final float MAX_SPEED = 40;
 
-    protected final int radius = 7;
+    protected final int radius = 7; // Enlightenment and glome radius
     public float angle;
     private float speed;
+    private float level;
 
     private final SimpleDataPort port = new SimpleDataPort(this);
 
@@ -82,17 +85,24 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
 
         if (isRunning())
         {
+            if (world.getTime() % 80 == 0)
+            {
+                level = updateLevel(world, pos.getX(), pos.getY(), pos.getZ());
+            }
+
             spawnGlomes();
 
             try (Transaction transaction = Transaction.openOuter())
             {
+                float f = effectMultiplier();
                 integratorFinder.get().result().forEach(i ->
                 {
-                    i.getDataStorage().insert(DataVariant.NORMAL, 1, transaction);
+                    if (random.nextBoolean())
+                        i.getDataStorage().insert(DataVariant.NORMAL, (long) (1 + effectMultiplier() * 20), transaction);
                 });
                 transaction.commit();
 
-                int enlightenment = (int) (speed / (RUNNING_SPEED * 2) * 5);
+                int enlightenment = (int) (effectMultiplier() * 10);
                 Vec3d centre = Vec3d.ofCenter(pos);
                 PlayerLookup.around((ServerWorld) world, centre, radius).forEach(p ->
                 {
@@ -102,6 +112,26 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
         }
 
         return false;
+    }
+
+    private static float updateLevel(World world, int x, int y, int z)
+    {
+        int level = 0;
+
+        for (int depth = 1; depth <= 4; depth++)
+        {
+            int j = y - depth;
+            for (int i = x - depth; i <= x + depth; ++i)
+            {
+                for (int k = z - depth; k <= z + depth; ++k)
+                {
+                    if (world.getBlockState(new BlockPos(i, j, k)).isOf(NMBlocks.MEAT_STEEL_BLOCK))
+                        level++;
+                }
+            }
+        }
+
+        return level / 164f;
     }
 
     protected Box getBox()
@@ -115,7 +145,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     {
         BlockPos volumeStart = getPos().subtract(new Vec3i(radius, radius, radius));
         int end = 2 * radius + 1;
-        if (random.nextFloat() < 0.05)
+        if (random.nextFloat() < 0.05 * (1 - effectMultiplier()))
         {
             BlockPos entityBlockPos = volumeStart.add(random.nextInt(end), random.nextInt(end), random.nextInt(end));
             Vec3d entityPos = Vec3d.ofCenter(entityBlockPos);
@@ -125,6 +155,11 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
                 world.spawnEntity(entity);
             }
         }
+    }
+
+    private float effectMultiplier()
+    {
+        return MathHelper.clamp(speed / MAX_SPEED, 0, 1) * level;
     }
 
     @Override

@@ -46,7 +46,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
     {
         acuteEnlightenment = Math.max(0, acuteEnlightenment - 1);
 //        chronicEnlightenment += acuteEnlightenment / EnlightenmentUtil.THRESHOLD_NEGLIGIBLE / 50;
-        chronicEnlightenment -= 0.001;
+        chronicEnlightenment = Math.max(0, chronicEnlightenment - 0.001);
     }
 
     @Override
