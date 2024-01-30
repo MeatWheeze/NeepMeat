@@ -30,7 +30,7 @@ public class FluidFactory
     protected FlowableFluid still;
     protected FlowableFluid flowing;
     protected Block block;
-    protected Item bucketItem;
+    protected Item bucketItem = Items.AIR;
 
     protected final boolean isInfinite;
     protected final int tickRate;
@@ -63,9 +63,10 @@ public class FluidFactory
 
     public Item registerItem()
     {
-        if (bucketItem != null) throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
+        if (bucketItem != Items.AIR)
+            throw new IllegalStateException("A bucket item is already registered for fluid '" + baseName + "'");
+
         bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).recipeRemainder(Items.BUCKET).group(NMItemGroups.GENERAL));
-//        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
         return bucketItem;
     }
 

@@ -13,6 +13,7 @@ import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
@@ -30,7 +31,7 @@ public class OreFatFluidFactory
     protected FlowableFluid still;
     protected FlowableFluid flowing;
     protected Block block;
-    protected Item bucketItem;
+    protected Item bucketItem = Items.AIR;
 
     protected final boolean isInfinite;
     protected final int tickRate;
@@ -59,14 +60,6 @@ public class OreFatFluidFactory
     {
         flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
-    }
-
-    public Item registerItem()
-    {
-        bucketItem = new BaseBucketItem(namespace, bucketName, still, new FabricItemSettings().maxCount(1).group(NMItemGroups.GENERAL));
-//        MeatItemGroups.queueItem(NMItemGroups.GENERAL, bucketItem);
-
-        return bucketItem;
     }
 
     public Block registerBlock()
