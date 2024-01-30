@@ -57,8 +57,9 @@ public class NMItems
     public static Item ROUGH_BRAIN = new BaseCraftingItem("brain_rough", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ENLIGHTENED_BRAIN = new EnlightenmentFoodItem("enlightened_brain", 2, new FabricItemSettings().group(NMItemGroups.INGREDIENTS).food(NMFoodComponents.ENLIGHTENED_BRAIN));
 
-//    public static Item DIVINE_ORGAN = new BaseCraftingItem("divine_organ", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item OPEN_EYE = new BaseCraftingItem("open_eye", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+//    public static Item PROCESSOR_BOARD = new BaseCraftingItem("processor_board", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
+    public static Item DIVINE_ORGAN = new BaseCraftingItem("divine_organ", 0, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
 
     public static Item CRUDE_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_crude", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item ADV_INTEGRATION_CHARGE = new BaseCraftingItem("integration_charge_adv", 1, new FabricItemSettings().group(NMItemGroups.INGREDIENTS));
