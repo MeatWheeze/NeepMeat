@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ic ",
+    "ibo",
+    "im "
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "b": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "o": {
+      "item": "neepmeat:copper_coil"
+    },
+    "c": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:dosimeter",
+    "count": 1
+  }
+}

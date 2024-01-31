@@ -9,4 +9,6 @@ public interface EnlightenmentManager extends Component
     void exposeDose(float base, double sqDistance, double split);
 
     void addChronic(float amount);
+
+    double lastDose();
 }

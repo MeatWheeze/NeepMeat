@@ -21,6 +21,7 @@ import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.item.DosimeterItem;
 import com.neep.neepmeat.item.NetworkingToolItem;
 import com.neep.neepmeat.machine.assembler.AssemblerRenderer;
 import com.neep.neepmeat.machine.bottler.BottlerRenderer;
@@ -104,6 +105,7 @@ public class NeepMeatClient implements ClientModInitializer
         PLCClient.init();
 
         NetworkingToolItem.Client.init();
+        DosimeterItem.Client.init();
 
         PhageRayEntity.Client.init();
 

@@ -1,17 +1,23 @@
 package com.neep.neepmeat.enlightenment;
 
 import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
+import com.neep.neepmeat.init.NMComponents;
+import dev.onyxstudios.cca.api.v3.component.sync.AutoSyncedComponent;
+import dev.onyxstudios.cca.api.v3.component.tick.ClientTickingComponent;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import dev.onyxstudios.cca.api.v3.entity.RespawnCopyStrategy;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;
 
-public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerTickingComponent
+public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientTickingComponent, ServerTickingComponent, AutoSyncedComponent
 {
     private final PlayerEntity player;
     double acuteEnlightenment;
     double chronicEnlightenment;
+
+    double lastDose;
+    double dose = 0;
 
     public PlayerEnlightenmentManager(PlayerEntity player)
     {
@@ -28,11 +34,21 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
     @Override
     public void exposeDose(float base, double sqDistance, double split)
     {
-        double corrected = base * Math.exp(-Math.sqrt(sqDistance));
+        // TODO: half chronic with preventatives
+
+        double corrected = expDistance(base, sqDistance);
         acuteEnlightenment += (1 + corrected) * (1 - split);
         chronicEnlightenment += corrected * split;
 
+        dose += corrected;
+
+
 //        NeepMeat.LOGGER.info("added: " + corrected + ", acute: " + acuteEnlightenment + " chronic: " + chronicEnlightenment);
+    }
+
+    public static double expDistance(float base, double sqDistance)
+    {
+        return base * Math.exp(-Math.sqrt(sqDistance));
     }
 
     @Override
@@ -42,11 +58,30 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
     }
 
     @Override
+    public double lastDose()
+    {
+        return lastDose;
+    }
+
+    @Override
     public void serverTick()
     {
         acuteEnlightenment = Math.max(0, acuteEnlightenment - 1);
 //        chronicEnlightenment += acuteEnlightenment / EnlightenmentUtil.THRESHOLD_NEGLIGIBLE / 50;
         chronicEnlightenment = Math.max(0, chronicEnlightenment - 0.001);
+
+        lastDose = dose;
+        dose = 0;
+
+        if (player.world.getTime() % 10 == 0 && lastDose != dose)
+            NMComponents.ENLIGHTENMENT_MANAGER.sync(player);
+    }
+
+    @Override
+    public void clientTick()
+    {
+//        lastDose = dose;
+//        dose = 0;
     }
 
     @Override
@@ -54,6 +89,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
     {
         this.acuteEnlightenment = tag.getDouble("acute");
         this.chronicEnlightenment = tag.getDouble("chronic");
+        this.lastDose = tag.getDouble("last");
     }
 
     @Override
@@ -61,6 +97,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ServerT
     {
         tag.putDouble("acute", acuteEnlightenment);
         tag.putDouble("chronic", chronicEnlightenment);
+        tag.putDouble("last", lastDose);
     }
 
     public static RespawnCopyStrategy<PlayerEnlightenmentManager> RESPAWN_STRATEGY = (from, to, lossless, keepInventory, sameCharacter) ->

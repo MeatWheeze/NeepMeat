@@ -394,6 +394,8 @@
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
   "item.neepmeat.networking_tool": "Networking Tool",
+  "item.neepmeat.dosimeter": "Enlightenment Dosimeter",
+  "item.neepmeat.dosimeter.lore_0": "Determines the instantaneous dose of Enlightenment at the current position. Cannot determine the acute and chronic effects.",
   "item.neepmeat.networking_tool.from": "Selected: %s %s %s",
   "item.neepmeat.networking_tool.connected": "Connected %s %s %s to %s %s %s",
   "item.neepmeat.networking_tool.lore_0": "Connects data ports together.",
