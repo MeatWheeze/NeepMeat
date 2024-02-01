@@ -532,7 +532,7 @@
 
   "item.neepmeat.extra_mouth": "Extra Mouth",
   "implant.neepmeat.extra_mouth": "Extra Mouth",
-  "implant.neepmeat.extra_mouth.desc_0": "Automatically consumes food from one's inventory. Tries not to waste food, but prioritises high saturation when more than two or more hearts are lost.",
+  "implant.neepmeat.extra_mouth.desc_0": "Automatically consumes food from one's inventory. Tries not to waste food, but prioritises high saturation when two or more hearts are lost.",
   "item.neepmeat.extra_knees": "Powered Knees",
   "implant.neepmeat.extra_knee": "Powered Knees",
   "implant.neepmeat.extra_knees.desc_0": "Increases step height to one block.",
