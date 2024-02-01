@@ -17,6 +17,7 @@ public interface InstructionProvider
     int maxArguments();
 
     Text getShortName();
+    String getParseName();
 
     Instruction createFromNbt(Supplier<World> world, NbtCompound nbt);
 

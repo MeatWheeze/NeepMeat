@@ -1,0 +1,13 @@
+package com.neep.neepmeat.neepasm.program;
+
+public class Label
+{
+    private final String name;
+    private final int index;
+
+    public Label(String name, int index)
+    {
+        this.name = name;
+        this.index = index;
+    }
+}

@@ -47,6 +47,10 @@ public class SimpleInstructionProvider implements InstructionProvider
         return shortName;
     }
 
+    public String getParseName()
+    {
+        return shortName.getString();
+    }
 
     @FunctionalInterface
     public interface Constructor
