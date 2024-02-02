@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
+import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
@@ -23,4 +24,5 @@ public interface InstructionProvider
 
     Instruction create(World world, List<Argument> arguments);
 
+    InstructionParser getParser();
 }

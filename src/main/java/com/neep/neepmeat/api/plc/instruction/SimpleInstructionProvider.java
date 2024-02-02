@@ -1,5 +1,7 @@
 package com.neep.neepmeat.api.plc.instruction;
 
+import com.neep.neepmeat.neepasm.compiler.parser.DefaultInstructionParser;
+import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.plc.instruction.*;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
@@ -17,6 +19,7 @@ public class SimpleInstructionProvider implements InstructionProvider
     protected final NbtConstructor nbtConstructor;
     protected final Text shortName;
     protected InstructionBuilderFactory factory = SimpleInstructionBuilder::new;
+    protected InstructionParser parser = new DefaultInstructionParser(this);
 
     public SimpleInstructionProvider(Constructor constructor, NbtConstructor nbtConstructor, int arguments, Text shortName)
     {
@@ -29,6 +32,12 @@ public class SimpleInstructionProvider implements InstructionProvider
     public SimpleInstructionProvider factory(InstructionBuilderFactory factory)
     {
         this.factory = factory;
+        return this;
+    }
+
+    public SimpleInstructionProvider parser(InstructionParser parser)
+    {
+        this.parser = parser;
         return this;
     }
 
@@ -68,6 +77,12 @@ public class SimpleInstructionProvider implements InstructionProvider
     public Instruction create(World world, List<Argument> arguments)
     {
         return constructor.create(() -> world, arguments);
+    }
+
+    @Override
+    public InstructionParser getParser()
+    {
+        return parser;
     }
 
     @Override

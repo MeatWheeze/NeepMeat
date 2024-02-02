@@ -1,9 +1,9 @@
 package com.neep.neepmeat.neepasm.compiler;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.neepasm.NeepASM;
-import com.neep.neepmeat.neepasm.PreInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
@@ -13,7 +13,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
 
 public class Parser
@@ -35,25 +34,38 @@ public class Parser
         parsedSource = new ParsedSource();
 
         int line1 = 0;
-        for (var line : source.split("\n"))
-        {
-            TokenView view = new TokenView(line);
+        TokenView view = new TokenView(source);
 
-            try
+        try
+        {
+            while (!view.eof())
             {
                 parseLine(view);
+                view.nextLine();
+                line1++;
             }
-            catch (NeepASM.ParseException e)
-            {
-                throw new NeepASM.ProgramBuildException(line1, view.pos(), e.getMessage());
-            }
-            line1++;
+        }
+        catch (NeepASM.ParseException e)
+        {
+            throw new NeepASM.ProgramBuildException(line1, view.pos(), e.getMessage());
         }
         return parsedSource;
     }
 
     private void parseLine(TokenView view) throws NeepASM.ParseException
     {
+        if (view.peekThing() == '%')
+        {
+            view.next();
+            String id = view.nextIdentifier();
+            if (id.equals("macro"))
+            {
+                parseMacro(view);
+                return;
+            }
+            throw new NeepASM.ParseException("unexpected directive '" + id + "'");
+        }
+
         String token;
         char follow;
         try (var entry = view.save())
@@ -70,52 +82,75 @@ public class Parser
                 }
 
                 entry.commit();
-                return;
             }
         }
 
-        parseInstruction(view);
+        ParsedInstruction instruction = parseInstruction(view);
+        if (instruction != null)
+            parsedSource.instruction(instruction);
     }
 
-    private void parseInstruction(TokenView view) throws NeepASM.ParseException
+    private void parseMacro(TokenView view) throws NeepASM.ParseException
+    {
+        String name = view.nextIdentifier();
+        if (name.isEmpty())
+            throw new NeepASM.ParseException("");
+
+        if (!view.lineEnded() && !isComment(view))
+            throw new NeepASM.ParseException("unexpected token");
+
+        view.nextLine();
+
+        ParsedMacro macro = new ParsedMacro();
+
+        view.fastForward();
+        while (view.peek() != '%')
+        {
+            parseMacroLine(macro, view);
+            view.nextLine();
+        }
+        parsedSource.macro(macro);
+    }
+
+    private void parseMacroLine(ParsedMacro macro, TokenView view) throws NeepASM.ParseException
+    {
+        String token;
+        char follow;
+        try (var entry = view.save())
+        {
+            token = view.nextIdentifier();
+            follow = view.nextThing();
+            if (follow == ':')
+            {
+                macro.label(new Label(token, macro.size()));
+                view.fastForward();
+                if (!view.lineEnded() && !isComment(view))
+                {
+                    throw new NeepASM.ParseException("unexpected token after '" + token + "'");
+                }
+
+                entry.commit();
+            }
+        }
+
+        ParsedInstruction instruction = parseInstruction(view);
+        if (instruction != null)
+            macro.instruction(instruction);
+    }
+
+    @Nullable
+    private ParsedInstruction parseInstruction(TokenView view) throws NeepASM.ParseException
     {
         view.fastForward();
         if (view.lineEnded())
-            return;
-
-        List<Argument> arguments = Lists.newArrayList();
-        List<KeyValue> kvs = Lists.newArrayList();
+            return null;
 
         String id = view.nextIdentifier();
         InstructionProvider provider = readInstruction(id);
         if (provider != null)
         {
-            boolean readLine = true;
-            while (readLine)
-            {
-                Argument a;
-                KeyValue kv;
-                view.fastForward();
-                if (isComment(view) || view.lineEnded())
-                {
-                    readLine = false;
-                }
-                else if ((a = parseArgument(view)) != null)
-                {
-                    arguments.add(a);
-                }
-                else if ((kv = parseKV(view)) != null)
-                {
-                    kvs.add(kv);
-                }
-                else
-                {
-                    throw new NeepASM.ParseException("unexpected token", view.peek());
-                }
-                view.fastForward();
-            }
-
-            parsedSource.instruction(new PreInstruction(provider, arguments, kvs));
+            InstructionParser parser = provider.getParser();
+            return parser.parse(view, parsedSource, this);
         }
         else
         {
@@ -130,7 +165,7 @@ public class Parser
     }
 
     @Nullable
-    private Argument parseArgument(TokenView view) throws NeepASM.ParseException
+    public Argument parseArgument(TokenView view) throws NeepASM.ParseException
     {
         try (var entry = view.save())
         {
@@ -219,7 +254,7 @@ public class Parser
     }
 
     @Nullable
-    private KeyValue parseKV(TokenView view) throws NeepASM.ParseException
+    public KeyValue parseKV(TokenView view) throws NeepASM.ParseException
     {
         try (var entry = view.save())
         {
@@ -246,7 +281,7 @@ public class Parser
         return c == '-' || Character.isDigit(c);
     }
 
-    private boolean isComment(TokenView view)
+    public boolean isComment(TokenView view)
     {
         try (var ignored = view.save())
         {

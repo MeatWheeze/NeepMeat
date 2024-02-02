@@ -10,4 +10,14 @@ public class Label
         this.name = name;
         this.index = index;
     }
+
+    public String name()
+    {
+        return name;
+    }
+
+    public int index()
+    {
+        return index;
+    }
 }

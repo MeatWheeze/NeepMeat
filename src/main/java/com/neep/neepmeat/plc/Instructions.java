@@ -2,6 +2,7 @@ package com.neep.neepmeat.plc;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.instruction.*;
+import com.neep.neepmeat.neepasm.compiler.parser.JumpInstructionParser;
 import com.neep.neepmeat.plc.instruction.*;
 import com.neep.neepmeat.plc.instruction.CombineInstruction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -33,6 +34,8 @@ public class Instructions
     public static final InstructionProvider END = register("end", new SimpleInstructionProvider((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
     public static final InstructionProvider GOTO_START = register("goto_start", new SimpleInstructionProvider((w, a) -> RestartInstruction.INSTANCE, (w, n) -> RestartInstruction.INSTANCE, 0, Text.of("RESTART")));
     public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
+    public static final InstructionProvider JUMP = register("jump", new SimpleInstructionProvider(JumpInstruction::new, JumpInstruction::new, 0, Text.of("JMP")))
+            .parser(new JumpInstructionParser());
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
             .factory(PredicatedInstructionBuilder.create()

@@ -23,6 +23,14 @@ public class TokenView
         return line.charAt(offset++);
     }
 
+    public void nextLine()
+    {
+        while (peek() != '\n' && offset < line.length())
+            next();
+
+        next();
+    }
+
     public char nextThing()
     {
         fastForward();
@@ -53,7 +61,7 @@ public class TokenView
 
     public void fastForward()
     {
-        while (peek() != 0 && Character.isWhitespace(peek()))
+        while (peek() != 0 && isNotLineEnd(peek()))
             next();
     }
 
@@ -62,7 +70,7 @@ public class TokenView
         fastForward();
         int n = 0;
         StringBuilder builder = new StringBuilder();
-        while (peek(n) != 0 && !Character.isWhitespace(peek(n)))
+        while (peek(n) != 0 && !isNotLineEnd(peek(n)))
         {
             builder.append(peek(n++));
         }
@@ -101,12 +109,23 @@ public class TokenView
 
     public boolean lineEnded()
     {
-        return peek() == 0;
+        return peek() == '\n' || peek() == 0;
+    }
+
+    private boolean isNotLineEnd(char c)
+    {
+        return c != '\n' && Character.isWhitespace(c) || c == 0;
+    }
+
+    public boolean eof()
+    {
+        return offset >= line.length();
     }
 
     public class Entry implements AutoCloseable
     {
         int saved;
+        boolean commit = false;
 
         public Entry(int saved)
         {
@@ -115,13 +134,14 @@ public class TokenView
 
         public void commit()
         {
-            saved = offset;
+            commit = true;
         }
 
         @Override
         public void close()
         {
-            offset = saved;
+            if (!commit)
+                offset = saved;
         }
     }
 }

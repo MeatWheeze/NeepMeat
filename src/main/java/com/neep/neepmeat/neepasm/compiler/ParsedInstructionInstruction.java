@@ -1,10 +1,11 @@
-package com.neep.neepmeat.neepasm;
+package com.neep.neepmeat.neepasm.compiler;
 
 import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
 import com.neep.neepmeat.api.plc.instruction.InstructionException;
-import com.neep.neepmeat.neepasm.compiler.ParsedSource;
+import com.neep.neepmeat.api.plc.program.MutableProgram;
+import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.KeyValue;
-import com.neep.neepmeat.neepasm.program.Program;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
@@ -13,20 +14,21 @@ import net.minecraft.server.world.ServerWorld;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class PreInstruction
+public class ParsedInstructionInstruction implements ParsedInstruction
 {
     private final InstructionProvider provider;
     private final List<Argument> arguments;
     private final List<KeyValue> kvs;
 
-    public PreInstruction(InstructionProvider provider, List<Argument> arguments, List<KeyValue> kvs)
+    public ParsedInstructionInstruction(InstructionProvider provider, List<Argument> arguments, List<KeyValue> kvs)
     {
         this.provider = provider;
         this.arguments = arguments;
         this.kvs = kvs;
     }
 
-    public Instruction build(ServerWorld world, ParsedSource parsedSource, Program program) throws NeepASM.CompilationException
+    @Override
+    public void build(ServerWorld world, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
     {
         try
         {
@@ -44,7 +46,7 @@ public class PreInstruction
 
             if (instruction.get() != null)
             {
-                return instruction.get();
+                program.addBack(instruction.get());
             }
             else
             {
