@@ -59,8 +59,16 @@ public class PLCSyncProgram
                 case RUN -> applyRun(copy, player.world);
                 case STOP -> applyStop(copy, player.world);
                 case MODE -> applyMode(copy, player.world);
+                case TEXT -> applyText(copy, player.world);
             }
         });
+    }
+
+    private static void applyText(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        plc.setProgramSource(buf.readString());
     }
 
     private static void applyMode(PacketByteBuf buf, World world)
@@ -135,7 +143,8 @@ public class PLCSyncProgram
         RUN,
         PAUSE,
         STOP,
-        MODE
+        MODE,
+        TEXT
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -238,6 +247,16 @@ public class PLCSyncProgram
             putPlc(buf, plc);
 
             buf.writeInt(mode.ordinal());
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendText(PLCBlockEntity plc, String text)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.TEXT.ordinal());
+            putPlc(buf, plc);
+            buf.writeString(text);
 
             ClientPlayNetworking.send(ID, buf);
         }

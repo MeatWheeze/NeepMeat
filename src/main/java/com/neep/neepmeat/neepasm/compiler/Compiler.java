@@ -10,6 +10,7 @@ import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.neepasm.program.MutableProgram;
 import com.neep.neepmeat.plc.ArgumentPredicates;
+import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.instruction.MoveInstruction;
@@ -35,12 +36,12 @@ public class Compiler
 
     public Compiler()
     {
-//        Instructions.REGISTRY.forEach(provider ->
-//        {
-//            instructionMap.put(provider.getParseName(), provider);
-//        });
+        Instructions.REGISTRY.forEach(provider ->
+        {
+            instructionMap.put(provider.getParseName(), provider);
+        });
 
-        instructionMap.put(MOVE.getParseName(), MOVE);
+//        instructionMap.put(MOVE.getParseName(), MOVE);
     }
 
     public void compile(String source)
@@ -51,9 +52,16 @@ public class Compiler
         parse(source);
 
         MutableProgram program = new MutableProgram();
-        for (PreInstruction preInstruction : instructions)
+        try
         {
-            program.put(preInstruction.build());
+            for (PreInstruction preInstruction : instructions)
+            {
+                program.put(preInstruction.build());
+            }
+        }
+        catch (NeepASM.CompilationException e)
+        {
+            e.printStackTrace();
         }
     }
 
@@ -80,7 +88,7 @@ public class Compiler
             }
     }
 
-    private void parseLine(TokenView view) throws NeepASM.NeepASMParseException
+    private void parseLine(TokenView view) throws NeepASM.ParseException
     {
         String token;
         char follow;
@@ -94,7 +102,7 @@ public class Compiler
                 view.fastForward();
                 if (!view.lineEnded() && !isComment(view))
                 {
-                    throw new NeepASM.NeepASMParseException("unexpected token after '" + token + "'");
+                    throw new NeepASM.ParseException("unexpected token after '" + token + "'");
                 }
 
                 entry.commit();
@@ -105,7 +113,7 @@ public class Compiler
         parseInstruction(view);
     }
 
-    private void parseInstruction(TokenView view) throws NeepASM.NeepASMParseException
+    private void parseInstruction(TokenView view) throws NeepASM.ParseException
     {
         List<Argument> arguments = Lists.newArrayList();
         List<KeyValue> kvs = Lists.newArrayList();
@@ -133,7 +141,7 @@ public class Compiler
                 }
                 else
                 {
-                    throw new NeepASM.NeepASMParseException("unexpected token", view.peek());
+                    throw new NeepASM.ParseException("unexpected token", view.peek());
                 }
             }
 
@@ -141,7 +149,7 @@ public class Compiler
         }
         else
         {
-            throw new NeepASM.NeepASMParseException(id, "unrecognised operation '" + id + "'");
+            throw new NeepASM.ParseException(id, "unrecognised operation '" + id + "'");
         }
     }
 
@@ -152,7 +160,7 @@ public class Compiler
     }
 
     @Nullable
-    private Argument parseArgument(TokenView view) throws NeepASM.NeepASMParseException
+    private Argument parseArgument(TokenView view) throws NeepASM.ParseException
     {
         try (var entry = view.save())
         {
@@ -189,7 +197,7 @@ public class Compiler
                         return new Argument(new BlockPos(x, y, z), direction);
                     }
                 }
-                throw new NeepASM.NeepASMParseException("malformed argument\n Arguments should be of the form '#(<x> <y> <z> <direction>)");
+                throw new NeepASM.ParseException("malformed argument\n Arguments should be of the form '#(<x> <y> <z> <direction>)");
             }
         }
         return null;
@@ -197,10 +205,10 @@ public class Compiler
 
     /**
      * @return Direction or null if none found.
-     * @throws NeepASM.NeepASMParseException if direction name is invalid
+     * @throws NeepASM.ParseException if direction name is invalid
      */
     @Nullable
-    private Direction parseDirection(TokenView view) throws NeepASM.NeepASMParseException
+    private Direction parseDirection(TokenView view) throws NeepASM.ParseException
     {
         String name = view.nextIdentifier();
         if (!name.isEmpty())
@@ -208,7 +216,7 @@ public class Compiler
             Direction direction = directionByName(name);
             if (direction == null)
             {
-                throw new NeepASM.NeepASMParseException("no such direction '" + name + "'\n Directions are specified with the full name or first letter (north or n)");
+                throw new NeepASM.ParseException("no such direction '" + name + "'\n Directions are specified with the full name or first letter (north or n)");
             }
             return direction;
         }
@@ -241,7 +249,7 @@ public class Compiler
     }
 
     @Nullable
-    private KeyValue parseKV(TokenView view) throws NeepASM.NeepASMParseException
+    private KeyValue parseKV(TokenView view) throws NeepASM.ParseException
     {
         try (var entry = view.save())
         {
@@ -256,7 +264,7 @@ public class Compiler
                 }
                 else
                 {
-                    throw new NeepASM.NeepASMParseException("malformed key-value pair");
+                    throw new NeepASM.ParseException("malformed key-value pair");
                 }
             }
         }

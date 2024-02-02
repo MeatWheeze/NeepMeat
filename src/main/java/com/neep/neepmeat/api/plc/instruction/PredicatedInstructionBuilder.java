@@ -1,6 +1,7 @@
 package com.neep.neepmeat.api.plc.instruction;
 
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionBuilderFactory;
@@ -38,6 +39,12 @@ public class PredicatedInstructionBuilder implements InstructionBuilder
             finished.accept(build());
             arguments.clear();
         }
+        return this;
+    }
+
+    @Override
+    public InstructionBuilder keyValue(KeyValue kv) throws InstructionException
+    {
         return this;
     }
 

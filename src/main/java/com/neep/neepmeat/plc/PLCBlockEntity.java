@@ -55,6 +55,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private Error error;
 
     private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
+    private String programSource = ""; // TODO: save
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -315,13 +316,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new PLCScreenHandler(syncId, this, delegate);
+        return new PLCScreenHandler(syncId, this, delegate, programSource);
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
     {
         buf.writeBlockPos(pos);
+        buf.writeString(programSource);
     }
 
     public void runProgram(PlcProgram program)
@@ -357,6 +359,16 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void pause()
     {
         paused = true;
+    }
+
+    public void setProgramSource(String text)
+    {
+        this.programSource = text;
+    }
+
+    public String getProgramSource()
+    {
+        return programSource;
     }
 
     public class PLCPropertyDelegate implements PropertyDelegate

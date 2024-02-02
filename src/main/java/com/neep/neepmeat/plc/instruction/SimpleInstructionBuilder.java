@@ -2,6 +2,8 @@ package com.neep.neepmeat.plc.instruction;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
+import com.neep.neepmeat.api.plc.instruction.InstructionException;
+import com.neep.neepmeat.neepasm.program.KeyValue;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -35,6 +37,12 @@ public class SimpleInstructionBuilder implements InstructionBuilder
             arguments.clear();
         }
         return this;
+    }
+
+    @Override
+    public InstructionBuilder keyValue(KeyValue kv) throws InstructionException
+    {
+        return null;
     }
 
     public boolean isComplete()

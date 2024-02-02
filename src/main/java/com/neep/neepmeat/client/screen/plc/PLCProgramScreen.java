@@ -50,7 +50,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
 
     protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
-    protected final PLCProgramOutline outline;
+    protected final PLCEditor editor;
+//    protected final PLCProgramOutline outline;
 
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
@@ -66,7 +67,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.handler = handler;
         this.passEvents = true;
         this.plc = handler.getPlc();
-        this.outline = new PLCProgramOutline(plc.getEditor(), this);
+        this.editor = new PLCEditor(this);
     }
 
     @Override
@@ -83,11 +84,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         operationSelector.init(client, width, height);
         operationSelector.setDimensions(width, height);
 
-        addDrawableChild(outline);
-        outline.init(client, width, height);
-        outline.setDimensions(width, height);
+        addDrawableChild(editor);
+        editor.init(client, width, height);
+        editor.setDimensions(width, height);
 
-        addDrawableChild(new StopButton(width - 1 * 17, 2, 16, 16, Text.of("Stop")));
+        addDrawableChild(new StopButton(width - 17, 2, 16, 16, Text.of("Stop")));
         addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
         addDrawableChild(new ModeSwitchButton(width - 3 * 17, 2, 16, 16));
 
@@ -98,6 +99,19 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super.tick();
         tickTooltip(mouseX, mouseY);
+        editor.tick();
+    }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (editor.isTextSelected())
+        {
+            editor.keyPressed(keyCode, scanCode, modifiers);
+            return true;
+        }
+
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override

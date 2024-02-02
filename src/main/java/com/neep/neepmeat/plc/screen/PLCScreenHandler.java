@@ -16,22 +16,25 @@ public class PLCScreenHandler extends ScreenHandler
 {
     private final PropertyDelegate delegate;
     private final PLCBlockEntity plc;
+    private final String initialText;
 
     // Client
     public PLCScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
         this(syncId,
                 (PLCBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()),
-                new ArrayPropertyDelegate(PLCBlockEntity.PLCPropertyDelegate.SIZE)
+                new ArrayPropertyDelegate(PLCBlockEntity.PLCPropertyDelegate.SIZE),
+                buf.readString()
         );
     }
 
     // Server
-    public PLCScreenHandler(int syncId, PLCBlockEntity plc, PropertyDelegate delegate)
+    public PLCScreenHandler(int syncId, PLCBlockEntity plc, PropertyDelegate delegate, String source)
     {
         super(ScreenHandlerInit.PLC, syncId);
         this.plc = plc;
         this.delegate = delegate;
+        this.initialText = source;
         addProperties(delegate);
     }
 
@@ -87,5 +90,10 @@ public class PLCScreenHandler extends ScreenHandler
     public int getSelectedInstruction()
     {
         return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.SELECTED_INSTRUCTION.ordinal());
+    }
+
+    public String getInitialText()
+    {
+        return initialText;
     }
 }
