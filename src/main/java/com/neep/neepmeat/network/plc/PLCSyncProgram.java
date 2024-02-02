@@ -54,21 +54,29 @@ public class PLCSyncProgram
             {
                 case ARGUMENT -> applyArgument(copy, player.world);
                 case OPERATION -> applyInstruction(copy, player.world);
-                case DELETE -> applyDelete(copy, player.world);
+//                case DELETE -> applyDelete(copy, player.world);
                 case PAUSE -> applyPause(copy, player.world);
                 case RUN -> applyRun(copy, player.world);
                 case STOP -> applyStop(copy, player.world);
                 case MODE -> applyMode(copy, player.world);
                 case TEXT -> applyText(copy, player.world);
+                case COMPILE -> applyCompile(copy, player.world);
             }
         });
+    }
+
+    private static void applyCompile(PacketByteBuf buf, World world)
+    {
+        PLCBlockEntity plc = getPlc(buf, world);
+
+        plc.getProgramEditor().compile();
     }
 
     private static void applyText(PacketByteBuf buf, World world)
     {
         PLCBlockEntity plc = getPlc(buf, world);
 
-        plc.setProgramSource(buf.readString());
+        plc.getProgramEditor().setProgramSource(buf.readString());
     }
 
     private static void applyMode(PacketByteBuf buf, World world)
@@ -81,7 +89,7 @@ public class PLCSyncProgram
     private static void applyRun(PacketByteBuf buf, World world)
     {
         PLCBlockEntity plc = getPlc(buf, world);
-        plc.runProgram(plc.getEditor().getProgram());
+        plc.runProgram(plc.getProgramEditor().getProgram());
     }
 
     private static void applyStop(PacketByteBuf buf, World world)
@@ -96,11 +104,11 @@ public class PLCSyncProgram
         plc.pause();
     }
 
-    private static void applyDelete(PacketByteBuf buf, World world)
-    {
-        PLCBlockEntity plc = getPlc(buf, world);
-        plc.getEditor().delete(buf.readInt());
-    }
+//    private static void applyDelete(PacketByteBuf buf, World world)
+//    {
+//        PLCBlockEntity plc = getPlc(buf, world);
+//        plc.getEditor().delete(buf.readInt());
+//    }
 
     private static void applyInstruction(PacketByteBuf buf, World world)
     {
@@ -144,7 +152,8 @@ public class PLCSyncProgram
         PAUSE,
         STOP,
         MODE,
-        TEXT
+        TEXT,
+        COMPILE;
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -162,7 +171,7 @@ public class PLCSyncProgram
                 {
                     switch (action)
                     {
-                        case PROGRAM -> applySyncProgram(copy, client.world);
+//                        case PROGRAM -> applySyncProgram(copy, client.world);
                     }
                 });
             });
@@ -170,11 +179,11 @@ public class PLCSyncProgram
 
         private static void applySyncProgram(PacketByteBuf buf, World world)
         {
-            PLCBlockEntity plc = getPlc(buf, world);
+//            PLCBlockEntity plc = getPlc(buf, world);
 
-            NbtCompound nbt = buf.readNbt();
+//            NbtCompound nbt = buf.readNbt();
 
-            plc.getEditor().receiveProgram(nbt);
+//            plc.getEditor().receiveProgram(nbt);
         }
 
         public static void sendArgument(Argument argument, PLCBlockEntity plc)
@@ -257,6 +266,15 @@ public class PLCSyncProgram
             buf.writeInt(Action.TEXT.ordinal());
             putPlc(buf, plc);
             buf.writeString(text);
+
+            ClientPlayNetworking.send(ID, buf);
+        }
+
+        public static void sendCompile(PLCBlockEntity plc)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeInt(Action.COMPILE.ordinal());
+            putPlc(buf, plc);
 
             ClientPlayNetworking.send(ID, buf);
         }

@@ -26,6 +26,7 @@ import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.render.*;
 import net.minecraft.client.sound.PositionedSoundInstance;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
@@ -90,7 +91,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         addDrawableChild(new StopButton(width - 17, 2, 16, 16, Text.of("Stop")));
         addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
-        addDrawableChild(new ModeSwitchButton(width - 3 * 17, 2, 16, 16));
+        addDrawableChild(new CompileButton(width - 3 * 17, 2, 16, 16, Text.of("Compile")));
+        addDrawableChild(new ModeSwitchButton(width - 4 * 17, 2, 16, 16));
 
     }
 
@@ -486,6 +488,12 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             }
         }
 
+        @Override
+        public void playDownSound(SoundManager soundManager)
+        {
+            soundManager.play(PositionedSoundInstance.master(NMSounds.PLC_SELECT, 1.0F));
+            soundManager.play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0F));
+        }
 
         protected int getU()
         {
@@ -533,6 +541,26 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
     }
 
+    class CompileButton extends SaveButton
+    {
+        public CompileButton(int x, int y, int width, int height, Text message)
+        {
+            super(x, y, width, height, message);
+        }
+
+        @Override
+        protected int getU()
+        {
+            return 96;
+        }
+
+        @Override
+        public void onClick(double mouseX, double mouseY)
+        {
+            PLCSyncProgram.Client.sendCompile(plc);
+        }
+    }
+
     class StopButton extends SaveButton
     {
         public StopButton(int x, int y, int width, int height, Text message)
@@ -544,6 +572,19 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         protected int getU()
         {
             return 80;
+        }
+
+        @Override
+        protected int getYImage(boolean hovered)
+        {
+            if (handler.hasProgram() > 0)
+            {
+                if (isHovered())
+                    return 2;
+                else
+                    return 1;
+            }
+            return 0;
         }
 
         @Override

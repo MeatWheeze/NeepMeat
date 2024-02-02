@@ -20,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class ProgramEditorState implements PLCState
+public class CompiledProgramEditorState implements PLCState
 {
     private final PLCBlockEntity parent;
     private MutableProgram program;
@@ -29,7 +29,7 @@ public class ProgramEditorState implements PLCState
     private final List<Listener> listeners = Lists.newArrayList();
     private int selected;
 
-    public ProgramEditorState(PLCBlockEntity parent)
+    public CompiledProgramEditorState(PLCBlockEntity parent)
     {
         this.parent = parent;
         program = new PLCProgramImpl(parent::getWorld);

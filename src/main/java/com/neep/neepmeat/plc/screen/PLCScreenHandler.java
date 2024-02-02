@@ -96,4 +96,9 @@ public class PLCScreenHandler extends ScreenHandler
     {
         return initialText;
     }
+
+    public int hasProgram()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.HAS_PROGRAM.ordinal());
+    }
 }

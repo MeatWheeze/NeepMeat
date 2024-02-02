@@ -84,7 +84,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
                 ParsedSource parsedSource = parser.parse(textField.getText());
                 textField.setError("Parsed successfully", 0x44AA00);
             }
-            catch (NeepASM.ProgramException e)
+            catch (NeepASM.ProgramBuildException e)
             {
                 textField.setError(e.getMessage(), 0xFF0000);
             }

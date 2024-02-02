@@ -8,7 +8,7 @@ import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
-import com.neep.neepmeat.plc.editor.ProgramEditorState;
+import com.neep.neepmeat.plc.editor.CompiledProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
@@ -33,11 +33,11 @@ import java.util.stream.Collectors;
 public class PLCProgramOutline extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;
-    private final ProgramEditorState editor;
+    private final CompiledProgramEditorState editor;
 
     private final List<InstructionWidget> instructions = Lists.newArrayList();
 
-    public PLCProgramOutline(ProgramEditorState editor, PLCProgramScreen parent)
+    public PLCProgramOutline(CompiledProgramEditorState editor, PLCProgramScreen parent)
     {
         this.editor = editor;
         this.parent = parent;

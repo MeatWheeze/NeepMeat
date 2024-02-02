@@ -3,14 +3,14 @@ package com.neep.neepmeat.plc;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
+import com.neep.neepmeat.plc.editor.ProgramEditor;
 import com.neep.neepmeat.plc.editor.ShellState;
-import com.neep.neepmeat.plc.editor.ProgramEditorState;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -48,14 +48,15 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     protected final SurgicalRobot robot = new SurgicalRobot(this);
     protected boolean overrideController;
 
-    protected final ProgramEditorState editor = new ProgramEditorState(this);
     protected final ShellState shell = new ShellState(this);
     private PLCState state;
 
+    private final ProgramEditor programEditor = new ProgramEditor(this);
+    
     private Error error;
 
     private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
-    private String programSource = ""; // TODO: save
+    
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -254,7 +255,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         nbt.putInt("counter", counter);
         nbt.putBoolean("paused", paused);
 
-        nbt.put("editor", editor.writeNbt(new NbtCompound()));
+//        nbt.put("editor", editor.writeNbt(new NbtCompound()));
 
         nbt.putBoolean("has_program", programSupplier.get() != null);
     }
@@ -268,22 +269,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         this.counter = nbt.getInt("counter");
         this.paused = nbt.getBoolean("paused");
 
-        editor.readNbt(nbt.getCompound("editor"));
+//        editor.readNbt(nbt.getCompound("editor"));
 
         if (nbt.getBoolean("has_program"))
         {
-            programSupplier = editor::getProgram;
+//            programSupplier = editor::getProgram;
         }
     }
 
     public void exit()
     {
         getRobot().setController(null);
-    }
-
-    public ProgramEditorState getEditor()
-    {
-        return editor;
     }
 
     public PLCState getState()
@@ -301,7 +297,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         switch (value)
         {
             case IMMEDIATE -> state = shell;
-            case RECORD -> state = editor;
+//            case RECORD -> state = editor;
         }
         markDirty();
     }
@@ -316,17 +312,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new PLCScreenHandler(syncId, this, delegate, programSource);
+        return new PLCScreenHandler(syncId, this, delegate, programEditor.getSource());
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
     {
         buf.writeBlockPos(pos);
-        buf.writeString(programSource);
+        buf.writeString(programEditor.getSource());
     }
 
-    public void runProgram(PlcProgram program)
+    public void runProgram(@Nullable PlcProgram program)
     {
         resetError();
         currentInstruction = null;
@@ -361,14 +357,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         paused = true;
     }
 
-    public void setProgramSource(String text)
+    public ProgramEditor getProgramEditor()
     {
-        this.programSource = text;
-    }
-
-    public String getProgramSource()
-    {
-        return programSource;
+        return programEditor;
     }
 
     public class PLCPropertyDelegate implements PropertyDelegate
@@ -381,11 +372,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             return switch (Names.values()[index])
             {
                 case PROGRAM_COUNTER -> counter;
+                case HAS_PROGRAM -> programSupplier.get() != null ? 1 : 0;
                 case EDIT_MODE -> state.getMode().ordinal();
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
                 case ARGUMENT -> state.getArgumentCount();
                 case MAX_ARGUMENTS -> state.getMaxArguments();
-                case SELECTED_INSTRUCTION -> editor.getSelected();
+                case SELECTED_INSTRUCTION -> 0;
             };
         }
 
@@ -396,7 +388,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter = value;
                 case EDIT_MODE -> setMode(RecordMode.values()[MathHelper.clamp(value, 0, RecordMode.values().length)]);
-                case SELECTED_INSTRUCTION -> editor.setSelected(value);
+                case SELECTED_INSTRUCTION -> {}
             }
         }
 
@@ -409,6 +401,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         public enum Names
         {
             PROGRAM_COUNTER,
+            HAS_PROGRAM,
             EDIT_MODE,
             RUNNING,
             ARGUMENT,

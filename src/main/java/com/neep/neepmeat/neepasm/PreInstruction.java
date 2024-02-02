@@ -4,10 +4,11 @@ import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
 import com.neep.neepmeat.api.plc.instruction.InstructionException;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.program.KeyValue;
-import com.neep.neepmeat.neepasm.program.MutableProgram;
+import com.neep.neepmeat.neepasm.program.Program;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -25,12 +26,12 @@ public class PreInstruction
         this.kvs = kvs;
     }
 
-    public Instruction build(ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
+    public Instruction build(ServerWorld world, ParsedSource parsedSource, Program program) throws NeepASM.CompilationException
     {
         try
         {
             AtomicReference<Instruction> instruction = new AtomicReference<>();
-            InstructionBuilder builder = provider.start(null, instruction::set);
+            InstructionBuilder builder = provider.start(world, instruction::set);
             for (var argument : arguments)
             {
                 builder = builder.argument(argument);
@@ -45,11 +46,14 @@ public class PreInstruction
             {
                 return instruction.get();
             }
+            else
+            {
+                throw new NeepASM.CompilationException("Insufficient arguments or key-values provided");
+            }
         }
         catch (InstructionException e)
         {
-            throw new NeepASM.CompilationException("ooer");
+            throw new NeepASM.CompilationException(e.getMessage());
         }
-        return null;
     }
 }

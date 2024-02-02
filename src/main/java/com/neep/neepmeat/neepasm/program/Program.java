@@ -2,10 +2,9 @@ package com.neep.neepmeat.neepasm.program;
 
 import com.neep.neepmeat.plc.instruction.Instruction;
 
-public class MutableProgram
+public interface Program
 {
-    public void put(Instruction instruction)
-    {
+    Instruction get(int index);
 
-    }
+    int size();
 }

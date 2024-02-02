@@ -30,8 +30,7 @@ public class Parser
         });
     }
 
-    @Nullable
-    public ParsedSource parse(String source) throws NeepASM.ProgramException
+    public ParsedSource parse(String source) throws NeepASM.ProgramBuildException
     {
         parsedSource = new ParsedSource();
 
@@ -46,7 +45,7 @@ public class Parser
             }
             catch (NeepASM.ParseException e)
             {
-                throw new NeepASM.ProgramException(line1, view.pos(), e.getMessage());
+                throw new NeepASM.ProgramBuildException(line1, view.pos(), e.getMessage());
             }
             line1++;
         }
@@ -120,7 +119,7 @@ public class Parser
         }
         else
         {
-            throw new NeepASM.ParseException(id, "unrecognised operation '" + id + "'");
+            throw new NeepASM.ParseException("unrecognised operation '" + id + "'");
         }
     }
 

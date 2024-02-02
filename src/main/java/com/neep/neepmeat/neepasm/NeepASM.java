@@ -1,7 +1,5 @@
 package com.neep.neepmeat.neepasm;
 
-import com.neep.neepmeat.neepasm.compiler.TokenView;
-
 public class NeepASM
 {
     private static final String SOURCE = "main:\n MOVE @(1 2 3 N) @(4 5 6) oggins=ooe # Cromment";
@@ -12,12 +10,12 @@ public class NeepASM
 //        compiler.compile(SOURCE);
     }
 
-    public static class ProgramException extends Exception
+    public static class ProgramBuildException extends Exception
     {
         public final int line;
         public final int pos;
 
-        public ProgramException(int line, int pos, String message)
+        public ProgramBuildException(int line, int pos, String message)
         {
             super(message);
             this.line = line;
