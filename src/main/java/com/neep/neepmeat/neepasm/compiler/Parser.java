@@ -31,7 +31,7 @@ public class Parser
     }
 
     @Nullable
-    public ParsedSource parse(String source)
+    public ParsedSource parse(String source) throws NeepASM.ProgramException
     {
         parsedSource = new ParsedSource();
 
@@ -44,11 +44,9 @@ public class Parser
             {
                 parseLine(view);
             }
-            catch (Exception e)
+            catch (NeepASM.ParseException e)
             {
-                System.out.println("Error at " + line1 + ":" + view.pos() + ": " + e.getMessage());
-//                e.printStackTrace();
-                return null;
+                throw new NeepASM.ProgramException(line1, view.pos(), e.getMessage());
             }
             line1++;
         }
@@ -98,6 +96,7 @@ public class Parser
             {
                 Argument a;
                 KeyValue kv;
+                view.fastForward();
                 if (isComment(view) || view.lineEnded())
                 {
                     readLine = false;
@@ -231,13 +230,13 @@ public class Parser
                 if (view.nextThing() == '=')
                 {
                     String val = view.nextIdentifier();
-                    entry.commit();
-                    return new KeyValue(key, val);
+                    if (!val.isEmpty())
+                    {
+                        entry.commit();
+                        return new KeyValue(key, val);
+                    }
                 }
-                else
-                {
-                    throw new NeepASM.ParseException("malformed key-value pair");
-                }
+                throw new NeepASM.ParseException("malformed key-value pair");
             }
         }
         return null;

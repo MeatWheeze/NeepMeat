@@ -303,7 +303,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     protected void addArgument(BlockHitResult result)
     {
-//        PLCSyncProgram.Client.sendArgument(new Argument(result.getBlockPos(), result.getSide()), plc);
         editor.argument(new Argument(result.getBlockPos(), result.getSide()));
     }
 

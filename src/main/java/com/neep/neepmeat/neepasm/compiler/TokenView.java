@@ -1,15 +1,13 @@
 package com.neep.neepmeat.neepasm.compiler;
 
-class TokenView
+public class TokenView
 {
     private final String line;
     private int offset = 0;
 
     public TokenView(String line)
     {
-//            var st = new StringTokenizer(line);
         this.line = line;
-//            this.tokens = line.strip().split("[^\\S\\r\\n]");
     }
 
     public int pos()

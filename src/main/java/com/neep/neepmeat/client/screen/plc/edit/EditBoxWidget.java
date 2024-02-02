@@ -31,6 +31,10 @@ public class EditBoxWidget extends ScrollableWidget
     private final Text placeholder;
     private final EditBox editBox;
     private int tick;
+
+    private String errorMessage;
+    private int errorCol = 0xFFFFFFFF;
+
     private float scale = 0.8f;
 
     public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text placeholder, Text message)
@@ -146,7 +150,9 @@ public class EditBoxWidget extends ScrollableWidget
     protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         matrices.push();
-        matrices.scale(scale, scale, 1);
+
+        float bottom = (float) (y + height - lineHeight() - getPadding());
+        textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
 
         String string = this.editBox.getText();
         if (string.isEmpty() && !this.isFocused())
@@ -158,46 +164,60 @@ public class EditBoxWidget extends ScrollableWidget
             int i = this.editBox.getCursor();
             boolean bl = this.isFocused() && this.tick / 6 % 2 == 0;
             boolean bl2 = i < string.length();
-            int j = 0;
-            int k = 0;
-            int l = this.y + this.getPadding();
+            float j = 0;
+            float k = 0;
+            float l = this.y + this.getPadding();
 
             int var10002;
-            int var10004;
-            for (Iterator<EditBox.Substring> it = this.editBox.getLines().iterator(); it.hasNext(); l += 9)
+            for (Iterator<EditBox.Substring> it = this.editBox.getLines().iterator(); it.hasNext(); l += lineHeight())
             {
+                matrices.push();
                 EditBox.Substring substring = it.next();
                 Objects.requireNonNull(this.textRenderer);
-                boolean bl3 = this.isVisible((int) (l * scale), (int) (l * scale + lineHeight()));
+                boolean bl3 = this.isVisible((int) (l), (int) (l + lineHeight()));
+
+                matrices.translate(x + getPadding(), l, 0);
+
                 if (bl && bl2 && i >= substring.beginIndex() && i <= substring.endIndex())
                 {
+                    // render line with cursor
                     if (bl3)
                     {
-                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), (float) (this.x + this.getPadding()), (float) l, -2039584) - 1;
-                        var10002 = l - 1;
-                        int var10003 = j + 1;
-                        var10004 = l + 1;
-                        Objects.requireNonNull(this.textRenderer);
-                        DrawableHelper.fill(matrices, j, var10002, var10003, var10004 + 9, -3092272);
-                        this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), (float) j, (float) l, -2039584);
+                        matrices.push();
+                        matrices.scale(scale, scale, 1);
+                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), 0, 0, -2039584);
+
+                        DrawableHelper.fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight, -3092272);
+                        this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), j - 1, 0, -2039584);
+                        matrices.pop();
                     }
                 }
                 else
                 {
+                    // Render normal line
                     if (bl3)
                     {
-                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), substring.endIndex()), (float) (this.x + this.getPadding()), (float) l, -2039584) - 1;
+                        matrices.push();
+                        matrices.scale(scale, scale, 1);
+                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), substring.endIndex()), 0, 0, -2039584) - 1;
+                        matrices.pop();
                     }
 
                     k = l;
                 }
+                matrices.pop();
             }
 
             if (bl && !bl2)
             {
-                if (this.isVisible(k, k + 9))
+                if (this.isVisible((int) k, (int) (k + lineHeight())))
                 {
-                    this.textRenderer.drawWithShadow(matrices, "_", (float) j, (float) k, -3092272);
+                    matrices.push();
+                    matrices.translate(0, k, 0);
+                    matrices.scale(scale, scale, 1);
+//                    this.textRenderer.drawWithShadow(matrices, "_", j + 5, 0, -3092272);
+                    DrawableHelper.fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight, -3092272);
+                    matrices.pop();
                 }
             }
 
@@ -216,9 +236,9 @@ public class EditBoxWidget extends ScrollableWidget
                             break;
                         }
 
-                        if (this.isVisible(l, l + 9))
+                        if (this.isVisible((int) l, (int) (l + lineHeight())))
                         {
-                            int n = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
+                            int selWidth = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
                             int o;
                             if (substring2.endIndex() > substring3.endIndex())
                             {
@@ -229,15 +249,15 @@ public class EditBoxWidget extends ScrollableWidget
                                 o = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), substring2.endIndex()));
                             }
 
-                            var10002 = m + n;
-                            var10004 = m + o;
-                            Objects.requireNonNull(this.textRenderer);
-                            this.drawSelection(matrices, var10002, l, var10004, l + 9);
+                            var10002 = m + selWidth;
+                            matrices.push();
+                            matrices.translate(0, l, 0);
+                            this.drawSelection(matrices, var10002, 0, m + o, 9);
+                            matrices.pop();
                         }
 
                     }
-                    Objects.requireNonNull(this.textRenderer);
-                    l += 9;
+                    l += lineHeight();
                 }
             }
 
@@ -247,14 +267,13 @@ public class EditBoxWidget extends ScrollableWidget
 
     protected void renderOverlay(MatrixStack matrices)
     {
-        super.renderOverlay(matrices);
-        if (this.editBox.hasMaxLength())
-        {
-            int i = this.editBox.getMaxLength();
-            Text text = Text.translatable("gui.multiLineEditBox.character_limit", this.editBox.getText().length(), i);
-            drawTextWithShadow(matrices, this.textRenderer, text, this.x + this.width - this.textRenderer.getWidth(text), this.y + this.height + 4, 10526880);
-        }
-
+//        super.renderOverlay(matrices);
+//        if (this.editBox.hasMaxLength())
+//        {
+//            int i = this.editBox.getMaxLength();
+//            Text text = Text.translatable("gui.multiLineEditBox.character_limit", this.editBox.getText().length(), i);
+//            drawTextWithShadow(matrices, this.textRenderer, text, this.x + this.width - this.textRenderer.getWidth(text), this.y + this.height + 4, 10526880);
+//        }
     }
 
     public int getContentsHeight()
@@ -276,6 +295,9 @@ public class EditBoxWidget extends ScrollableWidget
 
     private void drawSelection(MatrixStack matrices, int left, int top, int right, int bottom)
     {
+        matrices.push();
+        matrices.scale(scale, scale, 1);
+
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
@@ -293,6 +315,8 @@ public class EditBoxWidget extends ScrollableWidget
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();
+
+        matrices.pop();
     }
 
     private void onCursorChange()
@@ -341,6 +365,17 @@ public class EditBoxWidget extends ScrollableWidget
 
     private double lineHeight()
     {
-        return textRenderer.fontHeight * scale;
+        return (textRenderer.fontHeight) * scale;
+    }
+
+    public void setHeight(int height)
+    {
+        this.height = height;
+    }
+
+    public void setError(String message, int col)
+    {
+        this.errorMessage = message;
+        this.errorCol = col;
     }
 }

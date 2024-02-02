@@ -2,11 +2,11 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.plc.edit.EditBoxWidget;
+import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -68,6 +68,8 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
             textField.setWidth(300);
         else
             textField.setWidth(100);
+
+        textField.setHeight(height);
     }
 
     @Override
@@ -77,7 +79,15 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
 
         if (client.world.getTime() % 10 == 0 && changed)
         {
-            ParsedSource parsedSource = parser.parse(textField.getText());
+            try
+            {
+                ParsedSource parsedSource = parser.parse(textField.getText());
+                textField.setError("Parsed successfully", 0x44AA00);
+            }
+            catch (NeepASM.ProgramException e)
+            {
+                textField.setError(e.getMessage(), 0xFF0000);
+            }
 
             PLCSyncProgram.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
             changed = false;
