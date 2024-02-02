@@ -2,7 +2,9 @@ package com.neep.neepmeat.neepasm;
 
 import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
 import com.neep.neepmeat.api.plc.instruction.InstructionException;
+import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.program.KeyValue;
+import com.neep.neepmeat.neepasm.program.MutableProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
@@ -23,7 +25,7 @@ public class PreInstruction
         this.kvs = kvs;
     }
 
-    public Instruction build() throws NeepASM.CompilationException
+    public Instruction build(ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
     {
         try
         {

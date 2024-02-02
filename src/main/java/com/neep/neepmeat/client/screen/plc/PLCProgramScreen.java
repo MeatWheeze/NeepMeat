@@ -49,7 +49,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
 
-    protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
+//    protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
     protected final PLCEditor editor;
 //    protected final PLCProgramOutline outline;
 
@@ -80,9 +80,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     protected void init()
     {
         super.init();
-        addDrawableChild(operationSelector);
-        operationSelector.init(client, width, height);
-        operationSelector.setDimensions(width, height);
+//        addDrawableChild(operationSelector);
+//        operationSelector.init(client, width, height);
+//        operationSelector.setDimensions(width, height);
 
         addDrawableChild(editor);
         editor.init(client, width, height);
@@ -303,7 +303,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     protected void addArgument(BlockHitResult result)
     {
-        PLCSyncProgram.Client.sendArgument(new Argument(result.getBlockPos(), result.getSide()), plc);
+//        PLCSyncProgram.Client.sendArgument(new Argument(result.getBlockPos(), result.getSide()), plc);
+        editor.argument(new Argument(result.getBlockPos(), result.getSide()));
     }
 
     protected BlockHitResult raycastClick(double mouseX, double mouseY, double range)
@@ -344,6 +345,12 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public void mouseMoved(double mouseX, double mouseY)
     {
         super.mouseMoved(mouseX, mouseY);
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    {
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     @Override

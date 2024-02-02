@@ -88,7 +88,7 @@ class TokenView
     {
         fastForward();
         StringBuilder builder = new StringBuilder();
-        while (Character.isDigit(peek()))
+        while (peek() == '-' || Character.isDigit(peek()))
         {
             builder.append(next());
         }

@@ -31,6 +31,7 @@ public class EditBoxWidget extends ScrollableWidget
     private final Text placeholder;
     private final EditBox editBox;
     private int tick;
+    private float scale = 0.8f;
 
     public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text placeholder, Text message)
     {
@@ -54,6 +55,16 @@ public class EditBoxWidget extends ScrollableWidget
     public String getText()
     {
         return this.editBox.getText();
+    }
+
+    public void insert(String s)
+    {
+        EditBox.Substring selection = editBox.getSelection();
+        if (!editBox.getText().isEmpty() && !Character.isWhitespace(editBox.getText().charAt(selection.beginIndex() - 1)))
+        {
+            s = " " + s;
+        }
+        editBox.replaceSelection(s);
     }
 
     public void setText(String text)
@@ -87,6 +98,12 @@ public class EditBoxWidget extends ScrollableWidget
         {
             return false;
         }
+    }
+
+    @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button)
+    {
+        return super.mouseReleased(mouseX, mouseY, button);
     }
 
     public boolean mouseDragged(double mouseX, double mouseY, int button, double deltaX, double deltaY)
@@ -128,6 +145,9 @@ public class EditBoxWidget extends ScrollableWidget
 
     protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
+        matrices.push();
+        matrices.scale(scale, scale, 1);
+
         String string = this.editBox.getText();
         if (string.isEmpty() && !this.isFocused())
         {
@@ -144,11 +164,11 @@ public class EditBoxWidget extends ScrollableWidget
 
             int var10002;
             int var10004;
-            for (Iterator<EditBox.Substring> var12 = this.editBox.getLines().iterator(); var12.hasNext(); l += 9)
+            for (Iterator<EditBox.Substring> it = this.editBox.getLines().iterator(); it.hasNext(); l += 9)
             {
-                EditBox.Substring substring = (EditBox.Substring) var12.next();
+                EditBox.Substring substring = it.next();
                 Objects.requireNonNull(this.textRenderer);
-                boolean bl3 = this.isVisible(l, l + 9);
+                boolean bl3 = this.isVisible((int) (l * scale), (int) (l * scale + lineHeight()));
                 if (bl && bl2 && i >= substring.beginIndex() && i <= substring.endIndex())
                 {
                     if (bl3)
@@ -171,13 +191,10 @@ public class EditBoxWidget extends ScrollableWidget
 
                     k = l;
                 }
-
-                Objects.requireNonNull(this.textRenderer);
             }
 
             if (bl && !bl2)
             {
-                Objects.requireNonNull(this.textRenderer);
                 if (this.isVisible(k, k + 9))
                 {
                     this.textRenderer.drawWithShadow(matrices, "_", (float) j, (float) k, -3092272);
@@ -192,19 +209,13 @@ public class EditBoxWidget extends ScrollableWidget
 
                 for (EditBox.Substring substring3 : this.editBox.getLines())
                 {
-                    if (substring2.beginIndex() > substring3.endIndex())
-                    {
-                        Objects.requireNonNull(this.textRenderer);
-                        l += 9;
-                    }
-                    else
+                    if (substring2.beginIndex() <= substring3.endIndex())
                     {
                         if (substring3.beginIndex() > substring2.endIndex())
                         {
                             break;
                         }
 
-                        Objects.requireNonNull(this.textRenderer);
                         if (this.isVisible(l, l + 9))
                         {
                             int n = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
@@ -224,13 +235,14 @@ public class EditBoxWidget extends ScrollableWidget
                             this.drawSelection(matrices, var10002, l, var10004, l + 9);
                         }
 
-                        Objects.requireNonNull(this.textRenderer);
-                        l += 9;
                     }
+                    Objects.requireNonNull(this.textRenderer);
+                    l += 9;
                 }
             }
 
         }
+        matrices.pop();
     }
 
     protected void renderOverlay(MatrixStack matrices)
@@ -248,7 +260,7 @@ public class EditBoxWidget extends ScrollableWidget
     public int getContentsHeight()
     {
         Objects.requireNonNull(this.textRenderer);
-        return 9 * this.editBox.getLineCount();
+        return (int) (lineHeight() * this.editBox.getLineCount());
     }
 
     protected boolean overflows()
@@ -259,7 +271,7 @@ public class EditBoxWidget extends ScrollableWidget
     protected double getDeltaYPerScroll()
     {
         Objects.requireNonNull(this.textRenderer);
-        return 9.0 / 2.0;
+        return lineHeight() / 2.0;
     }
 
     private void drawSelection(MatrixStack matrices, int left, int top, int right, int bottom)
@@ -288,26 +300,26 @@ public class EditBoxWidget extends ScrollableWidget
         double d = this.getScrollY();
         EditBox var10000 = this.editBox;
         Objects.requireNonNull(this.textRenderer);
-        EditBox.Substring substring = var10000.getLine((int) (d / 9.0));
+        EditBox.Substring substring = var10000.getLine((int) (d / lineHeight()));
         int var5;
         if (this.editBox.getCursor() <= substring.beginIndex())
         {
             var5 = this.editBox.getCurrentLineIndex();
             Objects.requireNonNull(this.textRenderer);
-            d = var5 * 9;
+            d = var5 * lineHeight();
         }
         else
         {
             double var10001 = d + (double) this.height;
             Objects.requireNonNull(this.textRenderer);
-            EditBox.Substring substring2 = var10000.getLine((int) (var10001 / 9.0) - 1);
+            EditBox.Substring substring2 = var10000.getLine((int) (var10001 / lineHeight()) - 1);
             if (this.editBox.getCursor() > substring2.endIndex())
             {
                 var5 = this.editBox.getCurrentLineIndex();
                 Objects.requireNonNull(this.textRenderer);
-                var5 = var5 * 9 - this.height;
+                var5 = (int) (var5 * lineHeight() - this.height);
                 Objects.requireNonNull(this.textRenderer);
-                d = var5 + 9 + this.getPaddingDoubled();
+                d = var5 + lineHeight() + this.getPaddingDoubled();
             }
         }
 
@@ -316,15 +328,19 @@ public class EditBoxWidget extends ScrollableWidget
 
     private double getMaxLinesWithoutOverflow()
     {
-        double var10000 = this.height - this.getPaddingDoubled();
-        Objects.requireNonNull(this.textRenderer);
-        return var10000 / 9.0;
+        double height1 = this.height - this.getPaddingDoubled();
+        return height1 / lineHeight();
     }
 
     private void moveCursor(double mouseX, double mouseY)
     {
         double d = mouseX - (double) this.x - (double) this.getPadding();
         double e = mouseY - (double) this.y - (double) this.getPadding() + this.getScrollY();
-        this.editBox.moveCursor(d, e);
+        this.editBox.moveCursor(d / scale, e / scale);
+    }
+
+    private double lineHeight()
+    {
+        return textRenderer.fontHeight * scale;
     }
 }
