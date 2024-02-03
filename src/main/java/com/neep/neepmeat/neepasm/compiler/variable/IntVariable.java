@@ -7,4 +7,14 @@ public record IntVariable(Integer value) implements Variable<Integer>
     {
         return Integer.class;
     }
+
+    @Override
+    public int compare(Variable<?> v2)
+    {
+        if (v2 instanceof IntVariable iv2)
+        {
+            return value.compareTo(iv2.value);
+        }
+        return -2;
+    }
 }

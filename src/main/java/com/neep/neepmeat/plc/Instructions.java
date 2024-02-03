@@ -43,7 +43,11 @@ public class Instructions
     public static final SimplerInstructionProvider PUSH = register("push", new SimplerInstructionProvider(PushInstruction::new, new PushInstruction.Parser(), Text.of("PUSH")));
     public static final SimplerInstructionProvider POP = register("pop", new SimplerInstructionProvider(PopInstruction::new, parseNoArguments(PopInstruction::new), Text.of("POP")));
 
-    public static final SimplerInstructionProvider EQUAL = register("eq", new SimplerInstructionProvider(EqualsInstruction::new, parseNoArguments(EqualsInstruction::new), Text.of("EQ")));
+    public static final SimplerInstructionProvider EQ = register("eq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.Equals(), parseNoArguments(ComparisonInstruction.Equals::new), Text.of("EQ")));
+    public static final SimplerInstructionProvider LT = register("lt", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.LessThan(), parseNoArguments(ComparisonInstruction.LessThan::new), Text.of("LT")));
+    public static final SimplerInstructionProvider LTEQ = register("lteq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.LessThanEqual(), parseNoArguments(ComparisonInstruction.LessThanEqual::new), Text.of("LTEQ")));
+    public static final SimplerInstructionProvider GT = register("gt", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThan(), parseNoArguments(ComparisonInstruction.GreaterThan::new), Text.of("GT")));
+    public static final SimplerInstructionProvider GTEQ = register("gteq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThanEqual(), parseNoArguments(ComparisonInstruction.GreaterThanEqual::new), Text.of("GTEQ")));
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));

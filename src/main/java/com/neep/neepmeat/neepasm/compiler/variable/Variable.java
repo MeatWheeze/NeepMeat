@@ -6,6 +6,8 @@ public interface Variable<T>
 
     Class<T> type();
 
+    int compare(Variable<?> v2);
+
     default boolean notEmpty()
     {
         return !type().equals(Void.class);
@@ -23,6 +25,12 @@ public interface Variable<T>
         public Class<Void> type()
         {
             return Void.class;
+        }
+
+        @Override
+        public int compare(Variable<?> v2)
+        {
+            return -2;
         }
     };
 }
