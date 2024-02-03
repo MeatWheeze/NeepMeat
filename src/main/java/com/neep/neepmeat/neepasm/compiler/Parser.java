@@ -2,9 +2,11 @@ package com.neep.neepmeat.neepasm.compiler;
 
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.alias.ParsedAlias;
+import com.neep.neepmeat.neepasm.compiler.alias.ParsedArgumentAlias;
 import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
-import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedFunctionCallInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
@@ -78,6 +80,11 @@ public class Parser
                 parseFunction(view);
                 return;
             }
+            else if (id.equals("alias"))
+            {
+                parseAlias(view);
+                return;
+            }
             throw new NeepASM.ParseException("unexpected directive '" + id + "'");
         }
 
@@ -103,6 +110,25 @@ public class Parser
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
             parsedSource.instruction(instruction);
+    }
+
+    private void parseAlias(TokenView view) throws NeepASM.ParseException
+    {
+        String name = view.nextIdentifier();
+        if (name.isEmpty())
+            throw new NeepASM.ParseException("expected identifier after alias");
+
+        if (view.nextThing() != '=')
+            throw new NeepASM.ParseException("expected = after alias name");
+
+        Argument argument;
+        if ((argument = parseArgument(view)) != null)
+        {
+            parsedSource.alias(new ParsedArgumentAlias(name, argument));
+            return;
+        }
+
+        throw new NeepASM.ParseException("invalid value for alias '" + name + "'");
     }
 
     private void parseFunction(TokenView view) throws NeepASM.ParseException
@@ -193,8 +219,28 @@ public class Parser
     {
         try (var entry = view.save())
         {
+            if (view.next() == '$')
+            {
+                entry.commit();
+
+                String name = view.nextIdentifier();
+                if (name.isEmpty())
+                    throw new NeepASM.ParseException("expected alias name");
+
+                ParsedAlias alias = parsedSource.findAlias(name);
+                if (alias == null)
+                    throw new NeepASM.ParseException("alias '" + name + "' not found");
+
+                if (alias.type() != ParsedAlias.Type.ARGUMENT)
+                    throw new NeepASM.ParseException("alias '" + name + "' is not a world position");
+
+                return ((ParsedArgumentAlias) alias).argument();
+            }
+
             if (view.nextThing() == '@')
             {
+                entry.commit();
+
                 b1: if (view.nextThing() == '(')
                 {
                     int x, y, z;
@@ -222,7 +268,6 @@ public class Parser
 
                     if (view.nextThing() == ')')
                     {
-                        entry.commit();
                         return new Argument(new BlockPos(x, y, z), direction);
                     }
                 }
