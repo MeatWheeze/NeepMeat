@@ -7,8 +7,8 @@ import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.PLCCompiler;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import net.minecraft.nbt.NbtCompound;
-import org.jetbrains.annotations.Nullable;
 
 public class ProgramEditor implements NbtSerialisable
 {
@@ -18,12 +18,12 @@ public class ProgramEditor implements NbtSerialisable
     private final PLCCompiler compiler;
     private final PLCBlockEntity plc;
 
-    @Nullable
     private PlcProgram program;
 
     public ProgramEditor(PLCBlockEntity plc)
     {
         compiler = new PLCCompiler(WorldSupplier.of(plc));
+        this.program = new PLCProgramImpl(plc::getWorld);
         this.plc = plc;
     }
 
@@ -61,12 +61,16 @@ public class ProgramEditor implements NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        return null;
+        nbt.putString("source", programSource);
+        nbt.put("program", program.writeNbt(new NbtCompound()));
+
+        return nbt;
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
-
+        this.programSource = nbt.getString("source");
+        this.program.readNbt(nbt.getCompound("program"));
     }
 }

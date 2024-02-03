@@ -14,7 +14,7 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntStack;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -53,7 +53,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     protected final ShellState shell = new ShellState(this);
     private PLCState state;
 
-    private final ProgramEditor programEditor = new ProgramEditor(this);
+    private final ProgramEditor editor = new ProgramEditor(this);
     
     private Error error;
 
@@ -61,7 +61,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     // For function calls only
     private final IntArrayList callStack = new IntArrayList();
-    private final int maxStackSize = 64;
+    private final int maxStackSize = 32;
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -292,9 +292,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         nbt.putInt("counter", counter);
         nbt.putBoolean("paused", paused);
 
-//        nbt.put("editor", editor.writeNbt(new NbtCompound()));
+        nbt.put("editor", editor.writeNbt(new NbtCompound()));
 
         nbt.putBoolean("has_program", programSupplier.get() != null);
+
+        nbt.putIntArray("call_stack", callStack);
     }
 
     @Override
@@ -306,11 +308,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         this.counter = nbt.getInt("counter");
         this.paused = nbt.getBoolean("paused");
 
-//        editor.readNbt(nbt.getCompound("editor"));
+        editor.readNbt(nbt.getCompound("editor"));
+
+        callStack.clear();
+        callStack.addAll(IntList.of(nbt.getIntArray("call_stack")));
 
         if (nbt.getBoolean("has_program"))
         {
-//            programSupplier = editor::getProgram;
+            programSupplier = editor::getProgram;
         }
     }
 
@@ -349,14 +354,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new PLCScreenHandler(syncId, this, delegate, programEditor.getSource());
+        return new PLCScreenHandler(syncId, this, delegate, editor.getSource());
     }
 
     @Override
     public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
     {
         buf.writeBlockPos(pos);
-        buf.writeString(programEditor.getSource());
+        buf.writeString(editor.getSource());
     }
 
     public void runProgram(@Nullable PlcProgram program)
@@ -397,7 +402,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public ProgramEditor getProgramEditor()
     {
-        return programEditor;
+        return editor;
     }
 
     public class PLCPropertyDelegate implements PropertyDelegate

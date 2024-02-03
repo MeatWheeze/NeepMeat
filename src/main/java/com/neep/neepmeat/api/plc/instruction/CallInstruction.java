@@ -7,7 +7,6 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
@@ -16,14 +15,22 @@ public class CallInstruction implements Instruction
 {
     private final Label label;
 
-    public CallInstruction(Supplier<World> worldSupplier, NbtCompound nbtCompound)
+    public CallInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
     {
-        throw new NotImplementedException("Implement me!");
+        this.label = new Label(nbt.getString("name"), nbt.getInt("target"));
     }
 
     public CallInstruction(@NotNull Label label)
     {
         this.label = label;
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        nbt.putString("name", label.name());
+        nbt.putInt("target", label.index());
+        return nbt;
     }
 
     @Override

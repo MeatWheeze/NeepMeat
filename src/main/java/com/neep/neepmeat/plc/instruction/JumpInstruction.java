@@ -25,15 +25,17 @@ public class JumpInstruction implements Instruction
         throw new NotImplementedException();
     }
 
-    public JumpInstruction(Supplier<World> worldSupplier, NbtCompound nbtCompound)
+    public JumpInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
     {
-        throw new NotImplementedException("Implement me!");
+        this.label = new Label(nbt.getString("name"), nbt.getInt("target"));
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        return null;
+        nbt.putString("name", label.name());
+        nbt.putInt("target", label.index());
+        return nbt;
     }
 
     @Override
