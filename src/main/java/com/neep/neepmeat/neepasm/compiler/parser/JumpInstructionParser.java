@@ -5,6 +5,7 @@ import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
+import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.instruction.JumpInstruction;
 import net.minecraft.server.world.ServerWorld;
 
@@ -38,7 +39,11 @@ public class JumpInstructionParser implements InstructionParser
         @Override
         public void build(ServerWorld world, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
         {
-            program.addBack(new JumpInstruction(parsedSource.findLabel(label)));
+            Label l = parsedSource.findLabel(label);
+            if (l == null)
+                throw new NeepASM.CompilationException("label '" + label + "' does not exist");
+
+            program.addBack(new JumpInstruction(l));
         }
     }
 }

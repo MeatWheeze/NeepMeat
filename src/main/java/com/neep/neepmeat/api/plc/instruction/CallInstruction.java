@@ -9,6 +9,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 public class CallInstruction implements Instruction
@@ -22,6 +23,7 @@ public class CallInstruction implements Instruction
 
     public CallInstruction(@NotNull Label label)
     {
+        Objects.requireNonNull(label);
         this.label = label;
     }
 
