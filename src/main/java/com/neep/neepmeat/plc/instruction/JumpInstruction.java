@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 public class JumpInstruction implements Instruction
 {
-    private Label label;
+    private final Label label;
 
     public JumpInstruction(Label label)
     {

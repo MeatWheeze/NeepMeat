@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedFunctionCallInstruction;
 import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
@@ -15,6 +16,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
+/**
+ * It's the worst lexer/parser ever!
+ * We don't need all those silly things like operator precedence, nested scopes blah blah blah. It's all bloat.
+ * Abstract symbol tree? What's that?
+ */
 public class Parser
 {
     private final Map<String, InstructionProvider> instructionMap = Maps.newHashMap();
@@ -44,6 +50,12 @@ public class Parser
                 view.nextLine();
                 line1++;
             }
+
+            // Expand the macros (which seem to have turned into functions) at the end with their labels.
+            for (var func : parsedSource.functions())
+            {
+                func.expand(parsedSource);
+            }
         }
         catch (NeepASM.ParseException e)
         {
@@ -58,9 +70,9 @@ public class Parser
         {
             view.next();
             String id = view.nextIdentifier();
-            if (id.equals("macro"))
+            if (id.equals("func"))
             {
-                parseMacro(view);
+                parseFunction(view);
                 return;
             }
             throw new NeepASM.ParseException("unexpected directive '" + id + "'");
@@ -90,7 +102,7 @@ public class Parser
             parsedSource.instruction(instruction);
     }
 
-    private void parseMacro(TokenView view) throws NeepASM.ParseException
+    private void parseFunction(TokenView view) throws NeepASM.ParseException
     {
         String name = view.nextIdentifier();
         if (name.isEmpty())
@@ -101,18 +113,20 @@ public class Parser
 
         view.nextLine();
 
-        ParsedMacro macro = new ParsedMacro();
-
+        ParsedFunction function = new ParsedFunction(name);
         view.fastForward();
         while (view.peek() != '%')
         {
-            parseMacroLine(macro, view);
+            parseFunctionLine(function, view);
             view.nextLine();
+
+            if (view.eof())
+                throw new NeepASM.ParseException("reached end of file while parsing function '" + name + "'");
         }
-        parsedSource.macro(macro);
+        parsedSource.function(function);
     }
 
-    private void parseMacroLine(ParsedMacro macro, TokenView view) throws NeepASM.ParseException
+    private void parseFunctionLine(ParsedFunction function, TokenView view) throws NeepASM.ParseException
     {
         String token;
         char follow;
@@ -122,7 +136,7 @@ public class Parser
             follow = view.nextThing();
             if (follow == ':')
             {
-                macro.label(new Label(token, macro.size()));
+                function.label(new Label(token, function.size()));
                 view.fastForward();
                 if (!view.lineEnded() && !isComment(view))
                 {
@@ -135,7 +149,7 @@ public class Parser
 
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
-            macro.instruction(instruction);
+            function.instruction(instruction);
     }
 
     @Nullable
@@ -146,16 +160,19 @@ public class Parser
             return null;
 
         String id = view.nextIdentifier();
+
         InstructionProvider provider = readInstruction(id);
         if (provider != null)
         {
             InstructionParser parser = provider.getParser();
             return parser.parse(view, parsedSource, this);
         }
-        else
-        {
-            throw new NeepASM.ParseException("unrecognised operation '" + id + "'");
-        }
+
+        ParsedFunction function = parsedSource.findFunction(id);
+        if (function != null)
+            return new ParsedFunctionCallInstruction(id);
+
+        throw new NeepASM.ParseException("unrecognised operation '" + id + "'");
     }
 
     @Nullable

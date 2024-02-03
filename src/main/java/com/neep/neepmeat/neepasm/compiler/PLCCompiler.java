@@ -1,5 +1,6 @@
 package com.neep.neepmeat.neepasm.compiler;
 
+import com.neep.neepmeat.api.plc.instruction.InstructionException;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.storage.WorldSupplier;
@@ -20,19 +21,6 @@ public class PLCCompiler
     {
         MutableProgram program = new PLCProgramImpl(world.as());
 
-//        for (ParsedMacro macro : parsedSource.macros())
-//        {
-//            try
-//            {
-//                macro.build(world.get(), parsedSource, program);
-//            }
-//            catch (NeepASM.CompilationException e)
-//            {
-//                // TODO: line information in parsed source
-//                throw new NeepASM.ProgramBuildException(0, 0, e.getMessage());
-//            }
-//        }
-
         for (ParsedInstruction preInstruction : parsedSource.instructions())
         {
             try
@@ -45,6 +33,19 @@ public class PLCCompiler
                 throw new NeepASM.ProgramBuildException(0, 0, e.getMessage());
             }
         }
+
+//        for (ParsedMacro macro : parsedSource.macros())
+//        {
+//            try
+//            {
+//                macro.build(world.get(), parsedSource, program);
+//            }
+//            catch (NeepASM.CompilationException e)
+//            {
+//                throw new NeepASM.ProgramBuildException(0, 0, e.getMessage());
+//            }
+//        }
+
         return program;
     }
 }

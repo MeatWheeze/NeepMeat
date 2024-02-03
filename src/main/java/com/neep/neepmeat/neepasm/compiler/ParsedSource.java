@@ -11,7 +11,7 @@ public class ParsedSource
 {
     private final List<ParsedInstruction> instructions = Lists.newArrayList();
     private final List<Label> labels = Lists.newArrayList();
-    private final List<ParsedMacro> macros = Lists.newArrayList();
+    private final List<ParsedFunction> functions = Lists.newArrayList();
 
     public void instruction(ParsedInstruction preInstruction)
     {
@@ -23,9 +23,9 @@ public class ParsedSource
         labels.add(label);
     }
 
-    public void macro(ParsedMacro macro)
+    public void function(ParsedFunction function)
     {
-        macros.add(macro);
+        functions.add(function);
     }
 
     public int size()
@@ -38,14 +38,20 @@ public class ParsedSource
         return instructions;
     }
 
-    public Iterable<ParsedMacro> macros()
+    public Iterable<ParsedFunction> functions()
     {
-        return macros;
+        return functions;
     }
 
     @Nullable
     public Label findLabel(String label)
     {
         return labels.stream().filter(l -> l.name().equals(label)).findFirst().orElse(null);
+    }
+
+    @Nullable
+    public ParsedFunction findFunction(String name)
+    {
+        return functions.stream().filter(m -> m.name().equals(name)).findFirst().orElse(null);
     }
 }

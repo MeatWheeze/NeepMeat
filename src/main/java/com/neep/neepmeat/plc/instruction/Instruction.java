@@ -10,11 +10,17 @@ import org.jetbrains.annotations.Nullable;
 
 public interface Instruction extends NbtSerialisable
 {
-    boolean canStart(PLC plc);
+    default boolean canStart(PLC plc) { return true; };
 
     void start(PLC plc);
 
     void cancel(PLC plc);
+
+    @Override
+    default NbtCompound writeNbt(NbtCompound nbt) { return nbt; };
+
+    @Override
+    default void readNbt(NbtCompound nbt) {};
 
     InstructionProvider getProvider();
 

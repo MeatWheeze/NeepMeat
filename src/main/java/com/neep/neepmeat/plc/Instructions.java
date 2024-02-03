@@ -1,10 +1,18 @@
 package com.neep.neepmeat.plc;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.plc.instruction.*;
+import com.neep.neepmeat.api.plc.instruction.CallInstruction;
+import com.neep.neepmeat.api.plc.instruction.PredicatedInstructionBuilder;
+import com.neep.neepmeat.api.plc.instruction.SimpleInstructionProvider;
+import com.neep.neepmeat.api.plc.instruction.SimplerInstructionProvider;
+import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.ParsedSource;
+import com.neep.neepmeat.neepasm.compiler.Parser;
+import com.neep.neepmeat.neepasm.compiler.TokenView;
+import com.neep.neepmeat.neepasm.compiler.parser.CallInstructionParser;
+import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.JumpInstructionParser;
 import com.neep.neepmeat.plc.instruction.*;
-import com.neep.neepmeat.plc.instruction.CombineInstruction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -26,16 +34,13 @@ public class Instructions
             InstructionProvider.class,
             new Identifier(NeepMeat.NAMESPACE, "instruction_provider")).buildAndRegister();
 
-//    public static final Registry<ImmediateInstructionProvider> IMMEDIATE = FabricRegistryBuilder.createSimple(
-//            ImmediateInstructionProvider.class,
-//            new Identifier(NeepMeat.NAMESPACE, "immediate_instruction_provider")).buildAndRegister();
-
-
     public static final InstructionProvider END = register("end", new SimpleInstructionProvider((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
     public static final InstructionProvider GOTO_START = register("goto_start", new SimpleInstructionProvider((w, a) -> RestartInstruction.INSTANCE, (w, n) -> RestartInstruction.INSTANCE, 0, Text.of("RESTART")));
     public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
     public static final InstructionProvider JUMP = register("jump", new SimpleInstructionProvider(JumpInstruction::new, JumpInstruction::new, 0, Text.of("JMP")))
             .parser(new JumpInstructionParser());
+    public static final SimplerInstructionProvider RET = register("ret", new SimplerInstructionProvider(ReturnInstruction::new, parseNoArguments(ReturnInstruction::new), Text.of("RET")));
+    public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
             .factory(PredicatedInstructionBuilder.create()
@@ -63,6 +68,23 @@ public class Instructions
 //            return Registry.register(IMMEDIATE, new Identifier(NeepMeat.NAMESPACE, path), immediate);
 //        }
         return Registry.register(REGISTRY, new Identifier(NeepMeat.NAMESPACE, path), provider);
+    }
+
+    /**
+     * @param supplier Constructor of the desired instruction
+     * @return An InstructionParser that expects a blank line (disregarding comments) after the operation.
+     */
+    static InstructionParser parseNoArguments(Supplier<Instruction> supplier)
+    {
+        return (TokenView view, ParsedSource parsedSource, Parser parser) ->
+        {
+            view.fastForward();
+            if (!view.lineEnded() && !parser.isComment(view))
+                throw new NeepASM.ParseException("unexpected token '" + view.nextBlob() + "'");
+
+            return (world, source, program) ->
+                    program.addBack(supplier.get());
+        };
     }
 
     public static ResourceAmount<ItemVariant> takeItem(Argument target, Supplier<World> world, int count)

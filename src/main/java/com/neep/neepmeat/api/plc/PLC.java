@@ -12,9 +12,15 @@ public interface PLC
 
     SurgicalRobot getRobot();
 
+    int counter();
+
     void advanceCounter();
 
     void advanceCounter(int increment);
+    void pushCall(int data);
+
+    int popCall();
+
     void setCounter(int counter);
 
     void raiseError(Error error);

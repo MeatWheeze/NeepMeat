@@ -13,6 +13,8 @@ import com.neep.neepmeat.plc.editor.ShellState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntStack;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -56,7 +58,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private Error error;
 
     private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
-    
+
+    // For function calls only
+    private final IntStack callStack = new IntArrayList();
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -76,6 +80,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public SurgicalRobot getRobot()
     {
         return robot;
+    }
+
+    @Override
+    public int counter()
+    {
+        return counter;
     }
 
     public void enter(PlayerEntity player)
@@ -101,6 +111,18 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void advanceCounter(int increment)
     {
         counter += increment;
+    }
+
+    @Override
+    public void pushCall(int data)
+    {
+        callStack.push(data);
+    }
+
+    @Override
+    public int popCall()
+    {
+        return callStack.popInt();
     }
 
     @Override
