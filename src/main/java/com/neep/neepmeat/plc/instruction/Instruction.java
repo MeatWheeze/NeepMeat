@@ -15,7 +15,7 @@ public interface Instruction extends NbtSerialisable
 
     void start(PLC plc);
 
-    void cancel(PLC plc);
+    default void cancel(PLC plc) {};
 
     @Override
     default NbtCompound writeNbt(NbtCompound nbt) { return nbt; };

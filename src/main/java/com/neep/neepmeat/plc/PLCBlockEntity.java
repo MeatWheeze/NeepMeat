@@ -7,12 +7,15 @@ import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
+import com.neep.neepmeat.neepasm.compiler.variable.Variable;
+import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ProgramEditor;
 import com.neep.neepmeat.plc.editor.ShellState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.Stack;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -59,9 +62,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
 
-    // For function calls only
-    private final IntArrayList callStack = new IntArrayList();
     private final int maxStackSize = 32;
+    private final IntArrayList callStack = new IntArrayList(); // For function level
+    private final VariableStack variableStack = new VariableStack(this, maxStackSize); // TODO: save
+    private int flag; // TODO: save
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -72,10 +76,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     }
 
     @Override
-    public RobotAction addRobotAction(RobotAction action, Consumer<PLC> callback)
+    public void addRobotAction(RobotAction action, Consumer<PLC> callback)
     {
         robotActions.add(Pair.of(action, callback));
-        return action;
     }
 
     public SurgicalRobot getRobot()
@@ -109,17 +112,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     }
 
     @Override
-    public void advanceCounter(int increment)
-    {
-        counter += increment;
-    }
-
-    @Override
     public void pushCall(int data)
     {
         if (callStack.size() >= maxStackSize)
         {
-            raiseError(new Error("Stack overflow"));
+            raiseError(new Error("Call stack overflow"));
             return;
         }
 
@@ -131,11 +128,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     {
         if (callStack.isEmpty())
         {
-            raiseError(new Error("Stack underflow"));
+            raiseError(new Error("Calls stack underflow"));
             return 0;
         }
 
         return callStack.popInt();
+    }
+
+    @Override
+    public Stack<Variable<?>> variableStack()
+    {
+        return variableStack;
     }
 
     @Override
@@ -170,6 +173,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             serverWorld.spawnParticles(ParticleTypes.SMOKE, robot.getX(), robot.getY(), robot.getZ(), 20, 0.25, 0.25, 0.25, 0.1);
         }
     }
+
+    @Override
+    public void flag(int i) { this.flag = i; }
+
+    @Override
+    public int flag() { return flag; }
 
     public void resetError()
     {

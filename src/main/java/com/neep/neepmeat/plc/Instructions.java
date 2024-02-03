@@ -37,12 +37,19 @@ public class Instructions
 
     public static final InstructionProvider END = register("end", new SimpleInstructionProvider((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
     public static final InstructionProvider GOTO_START = register("goto_start", new SimpleInstructionProvider((w, a) -> RestartInstruction.INSTANCE, (w, n) -> RestartInstruction.INSTANCE, 0, Text.of("RESTART")));
-    public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
-    public static final InstructionProvider JUMP = register("jump", new SimpleInstructionProvider(JumpInstruction::new, JumpInstruction::new, 0, Text.of("JMP")))
-            .parser(new JumpInstructionParser());
+
     public static final SimplerInstructionProvider RET = register("ret", new SimplerInstructionProvider(ReturnInstruction::new, parseNoArguments(ReturnInstruction::new), Text.of("RET")));
     public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
+    public static final SimplerInstructionProvider PUSH = register("push", new SimplerInstructionProvider(PushInstruction::new, new PushInstruction.Parser(), Text.of("PUSH")));
+    public static final SimplerInstructionProvider POP = register("pop", new SimplerInstructionProvider(PopInstruction::new, parseNoArguments(PopInstruction::new), Text.of("POP")));
+
+    public static final SimplerInstructionProvider EQUAL = register("eq", new SimplerInstructionProvider(EqualsInstruction::new, parseNoArguments(EqualsInstruction::new), Text.of("EQ")));
+
+    public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
+    public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
+
     public static final SimplerInstructionProvider SAY = register("say", new SimplerInstructionProvider(SayInstruction::new, new SayInstruction.Parser(), Text.of("SAY")));
+    public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
             .factory(PredicatedInstructionBuilder.create()

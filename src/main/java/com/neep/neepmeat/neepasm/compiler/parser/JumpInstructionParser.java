@@ -6,11 +6,20 @@ import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.program.Label;
-import com.neep.neepmeat.plc.instruction.JumpInstruction;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import net.minecraft.server.world.ServerWorld;
+
+import java.util.function.Function;
 
 public class JumpInstructionParser implements InstructionParser
 {
+    private final Function<Label, Instruction> constructor;
+
+    public JumpInstructionParser(Function<Label, Instruction> constructor)
+    {
+        this.constructor = constructor;
+    }
+
     @Override
     public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
@@ -24,15 +33,17 @@ public class JumpInstructionParser implements InstructionParser
         if (!parser.isComment(view) && !view.lineEnded())
             throw new NeepASM.ParseException("unexpected token '" + view.nextBlob() + "'");
 
-        return new ParsedJumpInstruction(label);
+        return new ParsedJumpInstruction(constructor, label);
     }
 
     public static class ParsedJumpInstruction implements ParsedInstruction
     {
+        private final Function<Label, Instruction> constructor;
         private final String label;
 
-        public ParsedJumpInstruction(String label)
+        public ParsedJumpInstruction(Function<Label, Instruction> constructor, String label)
         {
+            this.constructor = constructor;
             this.label = label;
         }
 
@@ -43,7 +54,7 @@ public class JumpInstructionParser implements InstructionParser
             if (l == null)
                 throw new NeepASM.CompilationException("label '" + label + "' does not exist");
 
-            program.addBack(new JumpInstruction(l));
+            program.addBack(constructor.apply(l));
         }
     }
 }

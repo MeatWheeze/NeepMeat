@@ -2,6 +2,7 @@ package com.neep.neepmeat.api.plc;
 
 import software.bernie.geckolib3.core.util.Color;
 
+// I use the word 'col' because I don't want to give in and start using 'color'
 public enum PLCCols
 {
     INVALID(Color.ofRGBA(100, 30, 30, 255).getColor()),

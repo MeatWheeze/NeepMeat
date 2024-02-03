@@ -2,13 +2,16 @@ package com.neep.neepmeat.api.plc;
 
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
+import com.neep.neepmeat.neepasm.compiler.variable.Variable;
+import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
+import it.unimi.dsi.fastutil.Stack;
 import net.minecraft.text.Text;
 
 import java.util.function.Consumer;
 
 public interface PLC
 {
-    RobotAction addRobotAction(RobotAction action, Consumer<PLC> callback);
+    void addRobotAction(RobotAction action, Consumer<PLC> callback);
 
     SurgicalRobot getRobot();
 
@@ -16,15 +19,17 @@ public interface PLC
 
     void advanceCounter();
 
-    void advanceCounter(int increment);
     void pushCall(int data);
-
     int popCall();
+
+    Stack<Variable<?>> variableStack();
 
     void setCounter(int counter);
 
     void raiseError(Error error);
 
+    void flag(int i);
+    int flag();
 
     class Error
     {

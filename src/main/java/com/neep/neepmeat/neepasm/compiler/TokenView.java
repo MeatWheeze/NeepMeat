@@ -133,6 +133,11 @@ public class TokenView
         return c == '_' || Character.isAlphabetic(c) || (index != 0 && (Character.isDigit(c)));
     }
 
+    public static boolean isDigit(char c)
+    {
+        return  c == '-' || Character.isDigit(c);
+    }
+
     public boolean lineEnded()
     {
         return peek() == '\n' || peek() == 0;
