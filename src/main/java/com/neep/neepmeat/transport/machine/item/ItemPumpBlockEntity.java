@@ -3,14 +3,13 @@ package com.neep.neepmeat.transport.machine.item;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
+import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
-import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -25,6 +24,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,10 +45,13 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     public double offset;
 
     protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
-    protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
-    protected List<ResourceAmount<ItemVariant>> extractionQueue = new ArrayList<>();
+    protected LazyBlockApiCache<Storage<ItemVariant>, Direction> insertionCache = LazyBlockApiCache.of(ItemStorage.SIDED,
+            pos.offset(getCachedState().get(ItemPumpBlock.FACING)),
+            this::getWorld,
+            () -> getCachedState().get(ItemPumpBlock.FACING).getOpposite());
 
-    public static final long USE_AMOUNT = FluidConstants.BUCKET / 150;
+    @Nullable
+    protected ResourceAmount<ItemVariant> stored;
 
     public ItemPumpBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -67,23 +70,47 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         if (be.needsRefresh)
         {
             Direction face = state.get(ItemPumpBlock.FACING).getOpposite();
-            updateRetrievalCache((ServerWorld) world, pos, face, be);
+            be.updateRetrievalCache((ServerWorld) world, pos, face, be);
         }
 
         if (be.shuttle > 0)
         {
             --be.shuttle;
-            be.sync();
+            if (be.shuttle == 0)
+                be.sync();
         }
 
-        if (be.cooldown == 0 && be.active)
+        be.eject();
+
+        if (be.cooldown == 0 && be.active && be.stored == null)
         {
             be.cooldown = 10;
             be.transferTick();
         }
+
     }
 
-    public boolean transferTick()
+    protected void eject()
+    {
+        if (stored == null)
+            return;
+
+        try (Transaction transaction = Transaction.openOuter())
+        {
+            long forwarded = forwardItem(new ResourceAmount<>(stored.resource(), Math.min(16, stored.amount())), transaction);
+            if (forwarded == stored.amount())
+            {
+                stored = null;
+            }
+            else
+            {
+                stored = new ResourceAmount<>(stored.resource(), stored.amount() - forwarded);
+            }
+            transaction.commit();
+        }
+    }
+
+    private void transferTick()
     {
         BlockState state = getCachedState();
         Direction facing = state.get(BaseFacingBlock.FACING);
@@ -97,16 +124,20 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             if (extractable == null)
             {
                 transaction.abort();
-                return false;
+                return;
             }
 
-            long forwarded = forwardItem(new ResourceAmount<>(extractable.resource(), Math.min(16, extractable.amount())), transaction);
-            long transferred = storage.extract(extractable.resource(), forwarded, transaction);
-            if (transferred < 1)
+            long transferred = storage.extract(extractable.resource(), 16, transaction);
+            if (transferred <= 0)
             {
                 transaction.abort();
-                return false;
+                return;
             }
+            else
+            {
+                stored = new ResourceAmount<>(extractable.resource(), transferred);
+            }
+
             succeed();
             transaction.commit();
         }
@@ -124,7 +155,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
                 transaction.abort();
             }
         }
-        return true;
     }
 
     // Takes items from connected storages
@@ -134,7 +164,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 
         boolean success = false;
 
-        Storage<ItemVariant> facingStorage = insertionCache.find(facing);
+        Storage<ItemVariant> facingStorage = insertionCache.find();
 
         for (RetrievalTarget<ItemVariant> target : retrievalCache)
         {
@@ -210,7 +240,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
 
         Storage<ItemVariant> storage;
-        if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
+        if (insertionCache != null && (storage = insertionCache.find()) != null)
         {
             Transaction nested = transaction.openNested();
             long transferred = storage.insert(item.resource(), item.amount(), nested);
@@ -218,10 +248,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
             return transferred;
         }
         return ItemPipeUtil.pipeToAny(item, getPos(), facing, getWorld(), transaction, true);
-//        if (state.getBlock() instanceof IItemPipe pipe)
-//        {
-//            return pipe.insert(world, newPos, state, facing.getOpposite(), new ItemInPipe(amount, world.getTime()));
-//        }
     }
 
     public long forwardRetrieval(ResourceAmount<ItemVariant> amount, RetrievalTarget<ItemVariant> target, TransactionContext transaction)
@@ -236,18 +262,17 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
 //        }
     }
 
-    public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
+    private void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, ItemPumpBlockEntity be)
     {
-        be.retrievalCache = ItemPipeUtil.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
-        be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
-        be.needsRefresh = false;
+        retrievalCache = ItemPipeUtil.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
+        needsRefresh = false;
     }
 
     public long canForward(ResourceAmount<ItemVariant> amount, Transaction transaction)
     {
         Direction facing = getCachedState().get(ItemPumpBlock.FACING);
         Storage<ItemVariant> storage;
-        if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
+        if (insertionCache != null && (storage = insertionCache.find()) != null)
         {
             return MeatlibStorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
         }
@@ -273,14 +298,18 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         super.writeNbt(tag);
         tag.putBoolean(NBT_ACTIVE, active);
         tag.putInt(NBT_COOLDOWN, cooldown);
+        if (stored != null)
+            tag.put("stored", MeatlibStorageUtil.amountToNbt(stored));
     }
 
     @Override
-    public void readNbt(NbtCompound tag)
+    public void readNbt(NbtCompound nbt)
     {
-        super.readNbt(tag);
-        this.active = tag.getBoolean(NBT_ACTIVE);
-        this.cooldown = tag.getInt(NBT_COOLDOWN);
+        super.readNbt(nbt);
+        this.active = nbt.getBoolean(NBT_ACTIVE);
+        this.cooldown = nbt.getInt(NBT_COOLDOWN);
+        if (nbt.contains("stored"))
+            this.stored = MeatlibStorageUtil.amountFromNbt(nbt.getCompound("stored"));
     }
 
 }

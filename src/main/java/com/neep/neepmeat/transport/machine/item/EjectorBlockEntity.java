@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.machine.item;
 
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
+import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +33,12 @@ import java.util.List;
 @SuppressWarnings("UnstableApiUsage")
 public class EjectorBlockEntity extends ItemPumpBlockEntity
 {
-    protected List<RetrievalTarget<ItemVariant>> retrievalCache = new ArrayList<>();
-    protected BlockApiCache<Storage<ItemVariant>, Direction> insertionCache;
-    protected BlockApiCache<Storage<ItemVariant>, Direction> extractionCache;
+    protected LazyBlockApiCache<Storage<ItemVariant>, Direction> insertionCache = LazyBlockApiCache.of(ItemStorage.SIDED,
+            pos.offset(getCachedState().get(ItemPumpBlock.FACING).getOpposite()), this::getWorld,
+            () -> getCachedState().get(ItemPumpBlock.FACING));
+    protected LazyBlockApiCache<Storage<ItemVariant>, Direction> extractionCache = LazyBlockApiCache.of(ItemStorage.SIDED,
+            pos.offset(getCachedState().get(ItemPumpBlock.FACING).getOpposite()), this::getWorld,
+            () -> getCachedState().get(ItemPumpBlock.FACING));
 
     public EjectorBlockEntity(BlockPos pos, BlockState state)
     {
@@ -44,28 +49,28 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
     {
         be.cooldown = Math.max(be.cooldown - 1, 0);
 
-        if (be.needsRefresh)
-        {
-            Direction face = state.get(ItemPumpBlock.FACING).getOpposite();
-            updateRetrievalCache((ServerWorld) world, pos, face, be);
-        }
-
         if (be.shuttle > 0)
         {
             --be.shuttle;
             be.sync();
         }
 
-        if (be.cooldown == 0 && be.active)
+        be.eject();
+
+        if (be.cooldown == 0 && be.active && be.stored == null)
         {
             be.cooldown = 10;
+            be.transferTick();
+        }
+    }
 
-            Direction facing = state.get(BaseFacingBlock.FACING);
-            Storage<ItemVariant> storage;
-
-            if ((storage = be.extractionCache.find(facing)) != null)
+    private void transferTick()
+    {
+        Storage<ItemVariant> storage;
+        if ((storage = extractionCache.find()) != null)
+        {
+            try (Transaction transaction = Transaction.openOuter())
             {
-                Transaction transaction = Transaction.openOuter();
                 ResourceAmount<ItemVariant> extractable = StorageUtil.findExtractableContent(storage, transaction);
 
                 if (extractable == null)
@@ -76,25 +81,15 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
 
                 long extracted = storage.extract(extractable.resource(), 1, transaction);
 
-                long forwarded;
-                ResourceAmount<ItemVariant> resourceAmount = new ResourceAmount<>(extractable.resource(), extracted);
 
-                // Try pipes
-                forwarded = be.forwardItem(resourceAmount, transaction);
-
-                // Try entities
-                if (forwarded != resourceAmount.amount())
+                if (extracted >= 1)
                 {
-                    forwarded = be.forwardToEntity(resourceAmount, transaction);
-                }
-
-                if (forwarded != resourceAmount.amount())
-                {
-                    transaction.abort();
+                    succeed();
+                    stored = new ResourceAmount<>(extractable.resource(), extracted);
+                    transaction.commit();
                     return;
                 }
-                be.succeed();
-                transaction.commit();
+                transaction.abort();
             }
         }
     }
@@ -116,32 +111,5 @@ public class EjectorBlockEntity extends ItemPumpBlockEntity
 
     public void markNeedsRefresh()
     {
-        this.needsRefresh = true;
     }
-
-    public void updateRedstone(boolean redstone)
-    {
-        this.active = redstone;
-    }
-
-    public static void updateRetrievalCache(ServerWorld world, BlockPos pos, Direction face, EjectorBlockEntity be)
-    {
-        be.retrievalCache = ItemPipeUtil.floodSearch(pos, face, world, pair -> ItemStorage.SIDED.find(world, pair.getLeft(), pair.getRight()) != null, 16);
-        be.insertionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face.getOpposite()));
-        be.extractionCache = BlockApiCache.create(ItemStorage.SIDED, world, pos.offset(face));
-        be.needsRefresh = false;
-    }
-
-    public long canForward(ResourceAmount<ItemVariant> amount, TransactionContext transaction)
-    {
-        Direction facing = getCachedState().get(ItemPumpBlock.FACING);
-        Storage<ItemVariant> storage;
-        if (insertionCache != null && (storage = insertionCache.find(facing)) != null)
-        {
-            return MeatlibStorageUtil.simulateInsert(storage, amount.resource(), amount.amount(), transaction);
-        }
-//        return TubeUtils.canEjectSimple(amount, world, pos.offset(facing), transaction);
-        return amount.amount();
-    }
-
 }

@@ -55,7 +55,6 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     {
         if (world.getBlockEntity(pos) instanceof ItemPumpBlockEntity be && !world.isClient)
         {
-            be.markNeedsRefresh();
             be.updateRedstone(world.isReceivingRedstonePower(pos));
         }
     }

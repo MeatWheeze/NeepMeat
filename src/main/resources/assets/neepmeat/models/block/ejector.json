@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"2": "neepmeat:block/ejector"
+		"2": "neepmeat:block/ejector",
+		"particle": "neepmeat:block/ejector"
 	},
 	"elements": [
 		{

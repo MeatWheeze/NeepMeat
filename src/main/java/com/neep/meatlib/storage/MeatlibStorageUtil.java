@@ -1,10 +1,12 @@
 package com.neep.meatlib.storage;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.nbt.NbtCompound;
 import org.apache.commons.lang3.function.TriFunction;
 import org.jetbrains.annotations.Nullable;
 
@@ -88,6 +90,19 @@ public class MeatlibStorageUtil
             }
         }
         return null;
+    }
+
+    public static NbtCompound amountToNbt(ResourceAmount<ItemVariant> resourceAmount)
+    {
+        NbtCompound nbt = resourceAmount.resource().toNbt();
+        nbt.putLong("amount", resourceAmount.amount());
+        return nbt;
+    }
+
+    public static ResourceAmount<ItemVariant> amountFromNbt(NbtCompound nbt)
+    {
+        ItemVariant variant = ItemVariant.fromNbt(nbt);
+        return new ResourceAmount<>(variant, nbt.getLong("amount"));
     }
 
 }
