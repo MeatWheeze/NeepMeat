@@ -11,6 +11,7 @@ import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -95,7 +96,7 @@ public class RemoveInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.REMOVE;
     }

@@ -1,6 +1,5 @@
 package com.neep.neepmeat.neepasm.compiler;
 
-import com.neep.neepmeat.api.plc.instruction.InstructionException;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.api.plc.program.PlcProgram;
 import com.neep.neepmeat.api.storage.WorldSupplier;

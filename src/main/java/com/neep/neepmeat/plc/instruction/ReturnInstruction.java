@@ -4,6 +4,7 @@ import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.plc.Instructions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -23,7 +24,7 @@ public class ReturnInstruction implements Instruction
     public void start(PLC plc)
     {
         int counter = plc.popCall();
-        plc.setCounter(counter);
+        plc.setCounter(counter + 1);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class ReturnInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.RET;
     }

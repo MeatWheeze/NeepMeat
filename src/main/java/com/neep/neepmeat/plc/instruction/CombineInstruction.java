@@ -30,6 +30,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -182,7 +183,7 @@ public class CombineInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.COMBINE;
     }

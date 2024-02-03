@@ -82,7 +82,7 @@ public class TokenView
         fastForward();
         int index = 0;
         StringBuilder builder = new StringBuilder();
-        while (Character.isAlphabetic(peek()) || (index != 0 && (Character.isDigit(peek()))))
+        while (isIdentifier(index, peek()))
         {
             builder.append(next());
             index++;
@@ -102,9 +102,35 @@ public class TokenView
         return Integer.parseInt(builder.toString());
     }
 
+    public String nextString()
+    {
+        while (peek() != '"')
+        {
+            if (lineEnded())
+                return "";
+            next();
+        }
+        next();
+
+        StringBuilder builder = new StringBuilder();
+        while (peek() != '"')
+        {
+            if (lineEnded())
+                return "";
+
+            builder.append(next());
+        }
+        return builder.toString();
+    }
+
     public Entry save()
     {
         return new Entry(offset);
+    }
+
+    public static boolean isIdentifier(int index, char c)
+    {
+        return c == '_' || Character.isAlphabetic(c) || (index != 0 && (Character.isDigit(c)));
     }
 
     public boolean lineEnded()

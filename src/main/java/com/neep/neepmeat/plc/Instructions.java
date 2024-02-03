@@ -13,6 +13,7 @@ import com.neep.neepmeat.neepasm.compiler.parser.CallInstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.JumpInstructionParser;
 import com.neep.neepmeat.plc.instruction.*;
+import com.neep.neepmeat.plc.instruction.SayInstruction;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -41,6 +42,7 @@ public class Instructions
             .parser(new JumpInstructionParser());
     public static final SimplerInstructionProvider RET = register("ret", new SimplerInstructionProvider(ReturnInstruction::new, parseNoArguments(ReturnInstruction::new), Text.of("RET")));
     public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
+    public static final SimplerInstructionProvider SAY = register("say", new SimplerInstructionProvider(SayInstruction::new, new SayInstruction.Parser(), Text.of("SAY")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
             .factory(PredicatedInstructionBuilder.create()
@@ -59,7 +61,7 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
-    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("AWAIT REDSTONE")));
+    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("R_WAIT")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {

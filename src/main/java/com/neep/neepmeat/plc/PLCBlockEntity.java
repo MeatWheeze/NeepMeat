@@ -60,7 +60,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private final PLCPropertyDelegate delegate = new PLCPropertyDelegate();
 
     // For function calls only
-    private final IntStack callStack = new IntArrayList();
+    private final IntArrayList callStack = new IntArrayList();
+    private final int maxStackSize = 64;
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -116,6 +117,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public void pushCall(int data)
     {
+        if (callStack.size() >= maxStackSize)
+            raiseError(new Error("Stack overflow"));
+
         callStack.push(data);
     }
 
@@ -372,6 +376,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         programSupplier = () -> null;
         counter = 0;
         paused = true;
+        callStack.clear();
     }
 
     public void pause()

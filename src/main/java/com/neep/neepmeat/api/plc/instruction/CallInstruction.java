@@ -40,7 +40,7 @@ public class CallInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.CALL;
     }

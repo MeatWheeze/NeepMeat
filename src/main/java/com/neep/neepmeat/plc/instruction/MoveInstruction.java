@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -46,7 +47,7 @@ public class MoveInstruction implements Instruction
 
     public MoveInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this(() -> (ServerWorld) world.get(), List.of(
+        this(world, List.of(
                 Argument.fromNbt(nbt.getCompound("from")),
                 Argument.fromNbt(nbt.getCompound("to"))
             ));
@@ -62,18 +63,6 @@ public class MoveInstruction implements Instruction
         nbt.put("action", group.writeNbt(new NbtCompound()));
         nbt.put("stored", Instruction.writeItem(stored));
         return new NbtCompound();
-    }
-
-    @Override
-    public void readNbt(NbtCompound nbt)
-    {
-
-    }
-
-    @Override
-    public boolean canStart(PLC plc)
-    {
-        return true;
     }
 
     @Override
@@ -95,7 +84,8 @@ public class MoveInstruction implements Instruction
         stored = Instructions.takeItem(from, world, 64);
         if (stored == null)
         {
-            plc.raiseError(new PLC.Error("No extractable resource found at " + from.pos() + ", " + from.face()));
+//            plc.raiseError(new PLC.Error("No extractable resource found at " + from.pos() + ", " + from.face()));
+            finish(plc);
         }
     }
 
@@ -130,7 +120,7 @@ public class MoveInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.MOVE;
     }

@@ -6,6 +6,7 @@ import com.neep.neepmeat.api.plc.PLC;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.nbt.NbtCompound;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface Instruction extends NbtSerialisable
@@ -22,6 +23,7 @@ public interface Instruction extends NbtSerialisable
     @Override
     default void readNbt(NbtCompound nbt) {};
 
+    @NotNull
     InstructionProvider getProvider();
 
     Instruction EMPTY = new EmptyInstruction();
@@ -61,7 +63,7 @@ public interface Instruction extends NbtSerialisable
         }
 
         @Override
-        public InstructionProvider getProvider()
+        public @NotNull InstructionProvider getProvider()
         {
             return Instructions.END;
         }

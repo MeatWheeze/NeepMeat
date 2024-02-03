@@ -42,6 +42,12 @@ public class ParsedFunction
         return "function#" + name;
     }
 
+    public String name()
+    {
+        return name;
+    }
+
+    // Executed during compilation
     public void call(ServerWorld world, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
     {
         Label label = parsedSource.findLabel(mangledName());
@@ -51,7 +57,7 @@ public class ParsedFunction
         program.addBack(new CallInstruction(label));
     }
 
-    // Executed after parsing everything
+    // Executed after parsing
     public void expand(ParsedSource parsedSource)
     {
         parsedSource.label(new Label(mangledName(), parsedSource.size()));
@@ -64,12 +70,7 @@ public class ParsedFunction
         {
             parsedSource.instruction(preInstruction);
         }
-        parsedSource.instruction(((world, source, program) -> new ReturnInstruction()));
-    }
-
-    public String name()
-    {
-        return name;
+        parsedSource.instruction(((world, source, program) -> program.addBack(new ReturnInstruction())));
     }
 
 //    public void build(ServerWorld serverWorld, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException

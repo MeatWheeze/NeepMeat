@@ -3,6 +3,7 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
 import net.minecraft.nbt.NbtCompound;
+import org.jetbrains.annotations.NotNull;
 
 public class RestartInstruction implements Instruction
 {
@@ -39,7 +40,7 @@ public class RestartInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.GOTO_START;
     }

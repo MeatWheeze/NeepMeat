@@ -6,6 +6,7 @@ import com.neep.neepmeat.plc.Instructions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.NotImplementedException;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -60,7 +61,7 @@ public class JumpInstruction implements Instruction
     }
 
     @Override
-    public InstructionProvider getProvider()
+    public @NotNull InstructionProvider getProvider()
     {
         return Instructions.JUMP;
     }
