@@ -9,6 +9,7 @@ import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -50,6 +51,8 @@ public class Parser
                 view.nextLine();
                 line1++;
             }
+
+            parsedSource.instruction(((world, s, program) -> program.addBack(Instruction.EMPTY)));
 
             // Expand the macros (which seem to have turned into functions) at the end with their labels.
             for (var func : parsedSource.functions())
@@ -115,7 +118,7 @@ public class Parser
 
         ParsedFunction function = new ParsedFunction(name);
         view.fastForward();
-        while (view.peek() != '%')
+        while (view.peekThing() != '%')
         {
             parseFunctionLine(function, view);
             view.nextLine();
@@ -123,6 +126,10 @@ public class Parser
             if (view.eof())
                 throw new NeepASM.ParseException("reached end of file while parsing function '" + name + "'");
         }
+        view.next();
+        if (!view.nextIdentifier().equals("end"))
+            throw new NeepASM.ParseException("in '" + name + "': directives not allowed in function");
+
         parsedSource.function(function);
     }
 

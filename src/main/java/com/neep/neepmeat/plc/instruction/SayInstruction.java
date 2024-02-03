@@ -36,11 +36,11 @@ public class SayInstruction implements Instruction
     public void start(PLC plc)
     {
         plc.addRobotAction(new SayAction(), this::finish);
-        plc.advanceCounter();
     }
 
     private void finish(PLC plc)
     {
+        plc.advanceCounter();
     }
 
     @Override

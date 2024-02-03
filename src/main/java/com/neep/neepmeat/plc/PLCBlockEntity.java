@@ -118,7 +118,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void pushCall(int data)
     {
         if (callStack.size() >= maxStackSize)
+        {
             raiseError(new Error("Stack overflow"));
+            return;
+        }
 
         callStack.push(data);
     }
@@ -126,6 +129,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public int popCall()
     {
+        if (callStack.isEmpty())
+        {
+            raiseError(new Error("Stack underflow"));
+            return 0;
+        }
+
         return callStack.popInt();
     }
 
@@ -153,6 +162,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             currentAction = null;
         }
         robot.stay();
+
+        callStack.clear();
 
         if (world instanceof ServerWorld serverWorld)
         {
