@@ -25,7 +25,7 @@ public class TokenView
 
     public void nextLine()
     {
-        while (peek() != '\n' && offset < line.length())
+        while (peek() != '\n' && peek() != ';' && offset < line.length())
             next();
 
         next();
@@ -140,12 +140,12 @@ public class TokenView
 
     public boolean lineEnded()
     {
-        return peek() == '\n' || peek() == 0;
+        return peek() == '\n' || peek() == ';' || peek() == 0;
     }
 
     private boolean isNotLineEnd(char c)
     {
-        return c != '\n' && Character.isWhitespace(c) || c == 0;
+        return (c != '\n' && c != ';') && Character.isWhitespace(c) || c == 0;
     }
 
     public boolean eof()

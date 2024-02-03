@@ -219,8 +219,9 @@ public class Parser
     {
         try (var entry = view.save())
         {
-            if (view.next() == '$')
+            if (view.peekThing() == '$')
             {
+                view.next();
                 entry.commit();
 
                 String name = view.nextIdentifier();
@@ -237,8 +238,9 @@ public class Parser
                 return ((ParsedArgumentAlias) alias).argument();
             }
 
-            if (view.nextThing() == '@')
+            if (view.peekThing() == '@')
             {
+                view.next();
                 entry.commit();
 
                 b1: if (view.nextThing() == '(')
