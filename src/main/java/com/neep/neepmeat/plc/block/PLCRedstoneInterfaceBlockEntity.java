@@ -21,6 +21,11 @@ public class PLCRedstoneInterfaceBlockEntity extends BlockEntity implements Reds
         return received;
     }
 
+    public int getEmittedStrength()
+    {
+        return outStrength;
+    }
+
     @Override
     public void setEmittedStrength(int strength)
     {

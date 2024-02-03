@@ -38,7 +38,7 @@ public class PLCRedstoneInterface extends BaseBlock implements BlockEntityProvid
     {
         if (world.getBlockEntity(pos) instanceof PLCRedstoneInterfaceBlockEntity be)
         {
-            return be.getReceivedStrength();
+            return be.getEmittedStrength();
         }
         return 0;
     }

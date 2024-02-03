@@ -6,7 +6,6 @@ import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.RedstoneInterface;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -26,14 +25,14 @@ public class WaitRedstoneInstruction implements Instruction
     {
         this.target = arguments.get(0);
         this.worldSupplier = worldSupplier;
-        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> (ServerWorld) worldSupplier.get(), target);
+        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> worldSupplier.get(), target);
     }
 
     public WaitRedstoneInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
     {
         this.target = Argument.fromNbt(nbt.getCompound("target"));
         this.worldSupplier = worldSupplier;
-        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> (ServerWorld) worldSupplier.get(), target);
+        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> worldSupplier.get(), target);
     }
 
     @Override
@@ -44,27 +43,9 @@ public class WaitRedstoneInstruction implements Instruction
     }
 
     @Override
-    public void readNbt(NbtCompound nbt)
-    {
-
-    }
-
-    @Override
-    public boolean canStart(PLC plc)
-    {
-        return true;
-    }
-
-    @Override
     public void start(PLC plc)
     {
         plc.addRobotAction(action, this::finish);
-    }
-
-    @Override
-    public void cancel(PLC plc)
-    {
-
     }
 
     private void finish(PLC plc)

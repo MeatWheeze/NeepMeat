@@ -273,7 +273,7 @@ public class Parser
                         return new Argument(new BlockPos(x, y, z), direction);
                     }
                 }
-                throw new NeepASM.ParseException("malformed argument\n Arguments should be of the form '@(<x> <y> <z> <direction>)");
+                throw new NeepASM.ParseException("malformed target\n Targets should be of the form '@(<x> <y> <z> <direction>)");
             }
         }
         return null;

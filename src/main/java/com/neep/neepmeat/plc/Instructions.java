@@ -72,7 +72,8 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
-    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("R_WAIT")));
+    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("RWAIT")));
+    public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, new EmitRedstoneInstruction.Parser(), Text.of("REMIT")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {
