@@ -43,6 +43,8 @@ public class Instructions
     public static final SimplerInstructionProvider PUSH = register("push", new SimplerInstructionProvider(PushInstruction::new, new PushInstruction.Parser(), Text.of("PUSH")));
     public static final SimplerInstructionProvider POP = register("pop", new SimplerInstructionProvider(PopInstruction::new, parseNoArguments(PopInstruction::new), Text.of("POP")));
 
+    public static final SimplerInstructionProvider DELAY = register("delay", new SimplerInstructionProvider(DelayInstruction::new, new DelayInstruction.Parse(), Text.of("DELAY")));
+
     public static final SimplerInstructionProvider EQ = register("eq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.Equals(), parseNoArguments(ComparisonInstruction.Equals::new), Text.of("EQ")));
     public static final SimplerInstructionProvider LT = register("lt", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.LessThan(), parseNoArguments(ComparisonInstruction.LessThan::new), Text.of("LT")));
     public static final SimplerInstructionProvider LTEQ = register("lteq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.LessThanEqual(), parseNoArguments(ComparisonInstruction.LessThanEqual::new), Text.of("LTEQ")));

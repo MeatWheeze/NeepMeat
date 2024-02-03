@@ -11,7 +11,6 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
     protected final List<RobotAction> actions;
     protected int index = 0;
     private boolean start;
-    private boolean justLoaded;
 
     public GroupedRobotAction(List<RobotAction> actions)
     {
@@ -88,6 +87,5 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
     public void readNbt(NbtCompound nbt)
     {
         this.index = nbt.getInt("index");
-        this.justLoaded = true;
     }
 }
