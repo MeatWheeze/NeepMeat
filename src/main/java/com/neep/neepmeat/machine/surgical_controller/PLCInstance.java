@@ -39,7 +39,7 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
     @Override
     public void beginFrame()
     {
-        var robot = blockEntity.getRobot();
+        var robot = blockEntity.getSurgeryRobot();
         robot.prevX = robot.clientX;
         robot.prevY = robot.clientY;
         robot.prevZ = robot.clientZ;

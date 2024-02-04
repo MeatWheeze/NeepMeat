@@ -56,6 +56,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/mob_egg");
     public static Identifier CRUSHER_JAW = new Identifier(NeepMeat.NAMESPACE, "block/grinder/jaw");
 
+    // I hindsight I should have called this a turntable, but words elude me when I am forced to quickly name a file.
     public static Identifier ROBOTIC_ARM_SPINNY_BIT = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/spinny_bit");
     public static Identifier ROBOTIC_ARM_SEGMENT_1 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_1");
     public static Identifier ROBOTIC_ARM_SEGMENT_2 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_2");

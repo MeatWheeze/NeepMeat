@@ -4,6 +4,7 @@ import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
+import com.neep.neepmeat.plc.robot.PLCActuator;
 import it.unimi.dsi.fastutil.Stack;
 import net.minecraft.text.Text;
 
@@ -13,7 +14,7 @@ public interface PLC
 {
     void addRobotAction(RobotAction action, Consumer<PLC> callback);
 
-    SurgicalRobot getRobot();
+    PLCActuator getRobot();
 
     int counter();
 

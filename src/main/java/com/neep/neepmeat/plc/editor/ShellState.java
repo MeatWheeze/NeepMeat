@@ -55,7 +55,7 @@ public class ShellState implements PLCState
             }
             catch (InstructionException e)
             {
-                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getRobot().getController(), e.getMessage());
+                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getSurgeryRobot().getController(), e.getMessage());
             }
         }
     }

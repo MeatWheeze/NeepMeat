@@ -2,11 +2,11 @@ package com.neep.neepmeat.client.renderer;
 
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.plc.arm.RoboticArmBlockEntity;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 import static java.lang.Math.cos;
@@ -22,13 +22,10 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
     @Override
     public void render(RoboticArmBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        float t = be.getWorld().getTime() + tickDelta;
-
-        var player = MinecraftClient.getInstance().player;
-
-        double targetX = player.prevX;
-        double targetY = player.prevY;
-        double targetZ = player.prevZ;
+        Vec3d tipTarget = be.getTarget(tickDelta);
+        double targetX = tipTarget.x;
+        double targetY = tipTarget.y;
+        double targetZ = tipTarget.z;
 
         double relX = targetX - (be.getPos().getX() + 0.5);
         double relY = targetY - (be.getPos().getY() + 1 + 2 / 16f);
@@ -58,18 +55,6 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         double x3 = l * (x2 * cos(a) - y2 * sin(a));
         double y3 = l * (x2 * sin(a) + y2 * cos(a));
 
-//        if (be.getWorld().getTime() % 4 == 0)
-//        {
-//            MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE,
-//                    be.getPos().getX() + lx + 0.5, (1 + 1 / 16f) + be.getPos().getY() + ly, be.getPos().getZ() + 0.5,
-//                    0, 0, 0);
-//
-//            MinecraftClient.getInstance().particleManager.addParticle(ParticleTypes.SMOKE,
-//                    be.getPos().getX() + x3 + 0.5, (1 + 1 / 16f) + be.getPos().getY() + y3, be.getPos().getZ() + 0.5,
-//                    0, 0, 0);
-//        }
-
-
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yaw));
@@ -86,7 +71,6 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_1, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
         matrices.pop();
 
-//        matrices.translate(0, 34 / 16f, 0);
         matrices.translate(0, y3 + 2 - 1 / 16f, x3);
         matrices.translate(0.5, -12 / 16f, 0.5);
         double angle2 = Math.atan2((lx - x3), (ly - y3));

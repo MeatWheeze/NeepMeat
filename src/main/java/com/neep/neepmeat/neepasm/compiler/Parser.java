@@ -189,7 +189,7 @@ public class Parser
     private ParsedInstruction parseInstruction(TokenView view) throws NeepASM.ParseException
     {
         view.fastForward();
-        if (view.lineEnded())
+        if (view.lineEnded() || isComment(view))
             return null;
 
         String id = view.nextIdentifier();

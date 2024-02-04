@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.surgical_controller;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.robot.PLCActuator;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -24,7 +25,7 @@ import java.util.Objects;
 import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_ACTIVE;
 import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_DOCKING;
 
-public class SurgicalRobot implements NbtSerialisable
+public class SurgicalRobot implements PLCActuator, NbtSerialisable
 {
     private final PLCBlockEntity parent;
     private MovementState movementState = MovementState.STATE_IDLE;
@@ -194,6 +195,7 @@ public class SurgicalRobot implements NbtSerialisable
         else return true;
     }
 
+    @Override
     public void setTarget(@Nullable BlockPos target)
     {
         if (target == null)
@@ -294,6 +296,7 @@ public class SurgicalRobot implements NbtSerialisable
         return movementState == STATE_ACTIVE;
     }
 
+    @Override
     public boolean reachedTarget()
     {
         return targetPos == null || targetPos.squaredDistanceTo(x, y, z) <= 0.1 * 0.1;
@@ -352,6 +355,18 @@ public class SurgicalRobot implements NbtSerialisable
             spawnItem(stored);
             stored = null;
         }
+    }
+
+    @Override
+    public void setStored(@Nullable ResourceAmount<ItemVariant> stored)
+    {
+        this.stored = stored;
+    }
+
+    @Override
+    public @Nullable ResourceAmount<ItemVariant> getStored()
+    {
+        return stored;
     }
 
     public void syncPosition(ServerWorld serverWorld)

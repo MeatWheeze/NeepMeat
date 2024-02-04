@@ -7,7 +7,6 @@ import com.neep.neepmeat.api.plc.robot.DelayAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.ParticleSpawnS2C;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.recipe.InjectStep;
@@ -20,11 +19,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.BlockStateParticleEffect;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -152,8 +148,8 @@ public class InjectInstruction implements Instruction
 
                 if (world.get() instanceof ServerWorld serverWorld)
                 {
-                    ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new BlockStateParticleEffect(ParticleTypes.BLOCK, stored.resource().getFluid().getDefaultState().getBlockState()),
-                            plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
+//                    ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new BlockStateParticleEffect(ParticleTypes.BLOCK, stored.resource().getFluid().getDefaultState().getBlockState()),
+//                            plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
                 }
 
                 stored = null;

@@ -23,7 +23,7 @@ public class RemoveInstruction implements Instruction
 
     public RemoveInstruction(Supplier<World> world, List<Argument> arguments)
     {
-        this.world = world::get;
+        this.world = world;
         this.from = arguments.get(0);
     }
 
@@ -38,17 +38,6 @@ public class RemoveInstruction implements Instruction
     {
         nbt.put("target", from.toNbt());
         return nbt;
-    }
-
-    @Override
-    public void readNbt(NbtCompound nbt)
-    {
-    }
-
-    @Override
-    public boolean canStart(PLC plc)
-    {
-        return true;
     }
 
     @Override

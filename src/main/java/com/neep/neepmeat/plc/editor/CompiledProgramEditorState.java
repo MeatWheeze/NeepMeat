@@ -64,7 +64,7 @@ public class CompiledProgramEditorState implements PLCState
             }
             catch (InstructionException e)
             {
-                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getRobot().getController(), e.getMessage());
+                PLCErrorMessageS2C.send((ServerPlayerEntity) parent.getSurgeryRobot().getController(), e.getMessage());
             }
         }
     }
@@ -108,9 +108,9 @@ public class CompiledProgramEditorState implements PLCState
 
     private void sendProgram()
     {
-        if (!parent.getWorld().isClient() && parent.getRobot().getController() != null)
+        if (!parent.getWorld().isClient() && parent.getSurgeryRobot().getController() != null)
         {
-            PLCSyncProgram.sendProgram((ServerPlayerEntity) parent.getRobot().getController(), parent, program);
+            PLCSyncProgram.sendProgram((ServerPlayerEntity) parent.getSurgeryRobot().getController(), parent, program);
         }
     }
 

@@ -13,6 +13,7 @@ import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.editor.ProgramEditor;
 import com.neep.neepmeat.plc.editor.ShellState;
 import com.neep.neepmeat.plc.instruction.Instruction;
+import com.neep.neepmeat.plc.robot.PLCActuator;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.Stack;
@@ -81,7 +82,16 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         robotActions.add(Pair.of(action, callback));
     }
 
-    public SurgicalRobot getRobot()
+    @Override
+    public PLCActuator getRobot()
+    {
+        if (world.getBlockEntity(pos.up()) instanceof PLCActuator actuator)
+            return actuator;
+
+        return robot;
+    }
+
+    public SurgicalRobot getSurgeryRobot()
     {
         return robot;
     }
@@ -330,7 +340,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public void exit()
     {
-        getRobot().setController(null);
+        robot.setController(null);
     }
 
     public PLCState getState()

@@ -30,12 +30,12 @@ public class PLCRobotC2S
         PacketByteBuf buf = PacketByteBufs.create();
 
         PacketBufUtil.writeBlockPos(buf, be.getPos());
-        buf.writeDouble(be.getRobot().getX());
-        buf.writeDouble(be.getRobot().getY());
-        buf.writeDouble(be.getRobot().getZ());
+        buf.writeDouble(be.getSurgeryRobot().getX());
+        buf.writeDouble(be.getSurgeryRobot().getY());
+        buf.writeDouble(be.getSurgeryRobot().getZ());
 
-        buf.writeFloat(be.getRobot().getPitch());
-        buf.writeFloat(be.getRobot().getYaw());
+        buf.writeFloat(be.getSurgeryRobot().getPitch());
+        buf.writeFloat(be.getSurgeryRobot().getYaw());
 
         PlayerLookup.around(world, be.getPos(), 30).forEach(e ->
         {
@@ -63,8 +63,8 @@ public class PLCRobotC2S
         {
             if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
             {
-                be.getRobot().setPos(x, y, z);
-                be.getRobot().setPitchYaw(pitch, yaw);
+                be.getSurgeryRobot().setPos(x, y, z);
+                be.getSurgeryRobot().setPitchYaw(pitch, yaw);
             }
         });
     }
@@ -77,12 +77,12 @@ public class PLCRobotC2S
             PacketByteBuf buf = PacketByteBufs.create();
 
             PacketBufUtil.writeBlockPos(buf, be.getPos());
-            buf.writeDouble(be.getRobot().getX());
-            buf.writeDouble(be.getRobot().getY());
-            buf.writeDouble(be.getRobot().getZ());
+            buf.writeDouble(be.getSurgeryRobot().getX());
+            buf.writeDouble(be.getSurgeryRobot().getY());
+            buf.writeDouble(be.getSurgeryRobot().getZ());
 
-            buf.writeFloat(be.getRobot().getPitch());
-            buf.writeFloat(be.getRobot().getYaw());
+            buf.writeFloat(be.getSurgeryRobot().getPitch());
+            buf.writeFloat(be.getSurgeryRobot().getYaw());
 
             ClientPlayNetworking.send(ID, buf);
         }
@@ -111,8 +111,8 @@ public class PLCRobotC2S
             {
                 if (world.getBlockEntity(pos) instanceof PLCBlockEntity be)
                 {
-                    be.getRobot().setPos(x, y, z);
-                    be.getRobot().setPitchYaw(pitch, yaw);
+                    be.getSurgeryRobot().setPos(x, y, z);
+                    be.getSurgeryRobot().setPitchYaw(pitch, yaw);
                 }
             });
         }

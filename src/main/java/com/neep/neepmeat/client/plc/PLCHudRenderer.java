@@ -51,9 +51,9 @@ public class PLCHudRenderer
     {
         this.client = MinecraftClient.getInstance();
         this.be = be;
-        this.robotClient = new SurgicalRobot.Client(be.getRobot(), be);
-        this.be.getRobot().setController(client.player);
-        this.controller = new PLCMotionController(be.getRobot());
+        this.robotClient = new SurgicalRobot.Client(be.getSurgeryRobot(), be);
+        this.be.getSurgeryRobot().setController(client.player);
+        this.controller = new PLCMotionController(be.getSurgeryRobot());
         this.camera = client.gameRenderer.getCamera();
     }
 
@@ -91,17 +91,11 @@ public class PLCHudRenderer
     {
         controller.update();
 
-        var robot = be.getRobot();
+        var robot = be.getSurgeryRobot();
 
-        be.getRobot().cameraX = MathHelper.lerp(0.1d, be.getRobot().cameraX, be.getRobot().getX());
-        be.getRobot().cameraY = MathHelper.lerp(0.1d, be.getRobot().cameraY, be.getRobot().getY());
-        be.getRobot().cameraZ = MathHelper.lerp(0.1d, be.getRobot().cameraZ, be.getRobot().getZ());
-
-//        ((CameraAccessor) camera).callSetPos(
-//                MathHelper.lerp(tickDelta, robot.prevX, robot.getX()),
-//                MathHelper.lerp(tickDelta, robot.prevY, robot.getY()),
-//                MathHelper.lerp(tickDelta, robot.prevZ, robot.getZ())
-//        );
+        be.getSurgeryRobot().cameraX = MathHelper.lerp(0.1d, be.getSurgeryRobot().cameraX, be.getSurgeryRobot().getX());
+        be.getSurgeryRobot().cameraY = MathHelper.lerp(0.1d, be.getSurgeryRobot().cameraY, be.getSurgeryRobot().getY());
+        be.getSurgeryRobot().cameraZ = MathHelper.lerp(0.1d, be.getSurgeryRobot().cameraZ, be.getSurgeryRobot().getZ());
 
         ((CameraAccessor) camera).callSetPos(robot.cameraX, robot.cameraY, robot.cameraZ);
 
