@@ -36,7 +36,7 @@ public abstract class ImplementedRecipe<T extends ImplementedRecipe.DummyInvento
         @Override
         default DefaultedList<ItemStack> getItems()
         {
-            throw new UnsupportedOperationException("This object is not a real inventory");
+            return DefaultedList.of();
         }
     }
 }
