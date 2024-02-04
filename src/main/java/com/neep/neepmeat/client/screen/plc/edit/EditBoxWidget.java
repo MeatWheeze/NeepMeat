@@ -2,6 +2,9 @@ package com.neep.neepmeat.client.screen.plc.edit;
 
 import com.mojang.blaze3d.platform.GlStateManager.LogicOp;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
+import me.shedaniel.autoconfig.annotation.Config;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
@@ -28,7 +31,6 @@ import java.util.function.Consumer;
 public class EditBoxWidget extends ScrollableWidget
 {
     private final TextRenderer textRenderer;
-    private final Text placeholder;
     private final EditBox editBox;
     private int tick;
 
@@ -37,11 +39,10 @@ public class EditBoxWidget extends ScrollableWidget
 
     private float scale = 0.8f;
 
-    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text placeholder, Text message)
+    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text message)
     {
         super(x, y, width, height, message);
         this.textRenderer = textRenderer;
-        this.placeholder = placeholder;
         this.editBox = new EditBox(textRenderer, width - this.getPaddingDoubled());
         this.editBox.setCursorChangeListener(this::onCursorChange);
     }
@@ -147,6 +148,46 @@ public class EditBoxWidget extends ScrollableWidget
         }
     }
 
+    private int textCol()
+    {
+        return PLCCols.TEXT.col;
+    }
+
+    private int selCol()
+    {
+        return PLCCols.SELECTED.col;
+    }
+
+    private int borderCol()
+    {
+        return PLCCols.BORDER.col;
+    }
+
+    private int cursorCol()
+    {
+        return PLCCols.SELECTED.col;
+    }
+
+    @Override
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    {
+        if (this.visible)
+        {
+            int col = !this.isFocused() ? PLCCols.INVALID.col : PLCCols.SELECTED.col;
+//            fill(matrices, this.x, this.y, this.x + this.width, this.y + this.height, col);
+            fill(matrices, this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1, 0x90000000);
+            GUIUtil.renderBorder(matrices, x, y, width - 1, height - 1, col, 0);
+
+            enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
+            matrices.push();
+            matrices.translate(0.0, -this.getScrollY(), 0.0);
+            this.renderContents(matrices, mouseX, mouseY, delta);
+            matrices.pop();
+            disableScissor();
+            this.renderOverlay(matrices);
+        }
+    }
+
     protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         matrices.push();
@@ -155,112 +196,110 @@ public class EditBoxWidget extends ScrollableWidget
         textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
 
         String string = this.editBox.getText();
-        if (string.isEmpty() && !this.isFocused())
+//        if (string.isEmpty() && !this.isFocused())
+//        {
+//            this.textRenderer.drawTrimmed(this.placeholder, this.x + this.getPadding(), this.y + this.getPadding(), this.width - this.getPaddingDoubled(), -857677600);
+//        }
+//        else
+
+        int i = this.editBox.getCursor();
+        boolean bl = this.isFocused() && this.tick / 6 % 2 == 0;
+        boolean bl2 = i < string.length();
+        float j = 0;
+        float k = 0;
+        float l = this.y + this.getPadding();
+
+        int var10002;
+        for (Iterator<EditBox.Substring> it = this.editBox.getLines().iterator(); it.hasNext(); l += lineHeight())
         {
-            this.textRenderer.drawTrimmed(this.placeholder, this.x + this.getPadding(), this.y + this.getPadding(), this.width - this.getPaddingDoubled(), -857677600);
-        }
-        else
-        {
-            int i = this.editBox.getCursor();
-            boolean bl = this.isFocused() && this.tick / 6 % 2 == 0;
-            boolean bl2 = i < string.length();
-            float j = 0;
-            float k = 0;
-            float l = this.y + this.getPadding();
+            matrices.push();
+            EditBox.Substring substring = it.next();
+            Objects.requireNonNull(this.textRenderer);
+            boolean bl3 = this.isVisible((int) (l), (int) (l + lineHeight()));
 
-            int var10002;
-            for (Iterator<EditBox.Substring> it = this.editBox.getLines().iterator(); it.hasNext(); l += lineHeight())
+            matrices.translate(x + getPadding(), l, 0);
+
+            if (bl && bl2 && i >= substring.beginIndex() && i <= substring.endIndex())
             {
-                matrices.push();
-                EditBox.Substring substring = it.next();
-                Objects.requireNonNull(this.textRenderer);
-                boolean bl3 = this.isVisible((int) (l), (int) (l + lineHeight()));
-
-                matrices.translate(x + getPadding(), l, 0);
-
-                if (bl && bl2 && i >= substring.beginIndex() && i <= substring.endIndex())
-                {
-                    // render line with cursor
-                    if (bl3)
-                    {
-                        matrices.push();
-                        matrices.scale(scale, scale, 1);
-                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), 0, 0, -2039584);
-
-                        DrawableHelper.fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight, -3092272);
-                        this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), j - 1, 0, -2039584);
-                        matrices.pop();
-                    }
-                }
-                else
-                {
-                    // Render normal line
-                    if (bl3)
-                    {
-                        matrices.push();
-                        matrices.scale(scale, scale, 1);
-                        j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), substring.endIndex()), 0, 0, -2039584) - 1;
-                        matrices.pop();
-                    }
-
-                    k = l;
-                }
-                matrices.pop();
-            }
-
-            if (bl && !bl2)
-            {
-                if (this.isVisible((int) k, (int) (k + lineHeight())))
+                // Render text line with cursor
+                if (bl3)
                 {
                     matrices.push();
-                    matrices.translate(0, k, 0);
                     matrices.scale(scale, scale, 1);
-//                    this.textRenderer.drawWithShadow(matrices, "_", j + 5, 0, -3092272);
-                    DrawableHelper.fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight, -3092272);
+                    j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), 0, 0, textCol());
+
+                    DrawableHelper.fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight, cursorCol());
+                    this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), j - 1, 0, textCol());
                     matrices.pop();
                 }
             }
-
-            if (this.editBox.hasSelection())
+            else
             {
-                EditBox.Substring substring2 = this.editBox.getSelection();
-                int m = this.x + this.getPadding();
-                l = this.y + this.getPadding();
-
-                for (EditBox.Substring substring3 : this.editBox.getLines())
+                // Render normal text line
+                if (bl3)
                 {
-                    if (substring2.beginIndex() <= substring3.endIndex())
-                    {
-                        if (substring3.beginIndex() > substring2.endIndex())
-                        {
-                            break;
-                        }
-
-                        if (this.isVisible((int) l, (int) (l + lineHeight())))
-                        {
-                            int selWidth = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
-                            int o;
-                            if (substring2.endIndex() > substring3.endIndex())
-                            {
-                                o = this.width - this.getPadding();
-                            }
-                            else
-                            {
-                                o = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), substring2.endIndex()));
-                            }
-
-                            var10002 = m + selWidth;
-                            matrices.push();
-                            matrices.translate(0, l, 0);
-                            this.drawSelection(matrices, var10002, 0, m + o, 9);
-                            matrices.pop();
-                        }
-
-                    }
-                    l += lineHeight();
+                    matrices.push();
+                    matrices.scale(scale, scale, 1);
+                    j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), substring.endIndex()), 0, 0, textCol()) - 1;
+                    matrices.pop();
                 }
-            }
 
+                k = l;
+            }
+            matrices.pop();
+        }
+
+        if (bl && !bl2)
+        {
+            if (this.isVisible((int) k, (int) (k + lineHeight())))
+            {
+                // Render end of text cursor
+                matrices.push();
+                matrices.translate(0, k, 0);
+                matrices.scale(scale, scale, 1);
+                DrawableHelper.fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight, cursorCol());
+                matrices.pop();
+            }
+        }
+
+        if (this.editBox.hasSelection())
+        {
+            EditBox.Substring substring2 = this.editBox.getSelection();
+            int m = this.x + this.getPadding();
+            l = this.y + this.getPadding();
+
+            for (EditBox.Substring substring3 : this.editBox.getLines())
+            {
+                if (substring2.beginIndex() <= substring3.endIndex())
+                {
+                    if (substring3.beginIndex() > substring2.endIndex())
+                    {
+                        break;
+                    }
+
+                    if (this.isVisible((int) l, (int) (l + lineHeight())))
+                    {
+                        int selWidth = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
+                        int o;
+                        if (substring2.endIndex() > substring3.endIndex())
+                        {
+                            o = this.width - this.getPadding();
+                        }
+                        else
+                        {
+                            o = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), substring2.endIndex()));
+                        }
+
+                        var10002 = m + selWidth;
+                        matrices.push();
+                        matrices.translate(0, l, 0);
+                        this.drawSelection(matrices, var10002, 0, m + o, 9);
+                        matrices.pop();
+                    }
+
+                }
+                l += lineHeight();
+            }
         }
         matrices.pop();
     }
@@ -312,6 +351,8 @@ public class EditBoxWidget extends ScrollableWidget
         bufferBuilder.vertex(matrix4f, (float) right, (float) top, 0.0F).next();
         bufferBuilder.vertex(matrix4f, (float) left, (float) top, 0.0F).next();
         tessellator.draw();
+//        int col = selCol();
+//        RenderSystem.setShaderColor(((col >> 24) & 0xFF) / 255f, ((col >> 16) & 0xFF) / 255f, ((col >> 8) & 0xFF) / 255f, (col & 0xFF) / 255f);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
         RenderSystem.disableColorLogicOp();
         RenderSystem.enableTexture();

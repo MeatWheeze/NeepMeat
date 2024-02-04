@@ -32,7 +32,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
         super.init();
         if (textField == null)
         {
-            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, Text.of("clom"), Text.of("gle"))
+            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, Text.of("gle"))
             {
                 @Override
                 protected void setFocused(boolean focused)

@@ -5,6 +5,7 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.plc.PLCBlockEntity;
@@ -70,7 +71,7 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
                     robot.clientY - blockEntity.getPos().getY() - 0.5,
                     robot.clientZ - blockEntity.getPos().getZ() - 0.5);
 
-            float tickDelta = MinecraftClient.getInstance().getTickDelta();
+            float tickDelta = AnimationTickHolder.getPartialTicks();
             matrixStack.translate(0, 0.5 + (robot.isActive() ? 0.05 * Math.sin((blockEntity.getWorld().getTime() + tickDelta) / 10f) : 0), 0);
 
             matrixStack.translate(0.5, 0.5, 0.5);
