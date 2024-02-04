@@ -1,8 +1,10 @@
 package com.neep.neepmeat.plc.arm;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.neepasm.compiler.variable.EmptyVariableStack;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.robot.PLCActuator;
@@ -22,17 +24,19 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLC.PLCProvider
+public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLC.PLCProvider, MotorisedBlock
 {
+    private float power;
+
     private @Nullable BlockPos target;
 
     private double tipX = getPos().getX() + 1;
     private double tipY = getPos().getY() + 1;
     private double tipZ = getPos().getZ();
 
-    private double prevX = tipX;
-    private double prevY = tipY;
-    private double prevZ = tipZ;
+    public double prevX = tipX;
+    public double prevY = tipY;
+    public double prevZ = tipZ;
 
     private Vec3d targetVec = new Vec3d(tipX, tipY, tipZ);
     @Nullable
@@ -57,6 +61,8 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
         nbt.putDouble("ty", targetVec.y);
         nbt.putDouble("tz", targetVec.z);
 
+        nbt.putFloat("power", power);
+
         if (target != null)
             nbt.put("target", NbtHelper.fromBlockPos(target));
     }
@@ -68,6 +74,8 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
         this.tipX = nbt.getDouble("rx");
         this.tipY = nbt.getDouble("ry");
         this.tipZ = nbt.getDouble("rz");
+
+        this.power = nbt.getFloat("power");
 
         this.targetVec = new Vec3d(
                 nbt.getDouble("tx"),
@@ -90,10 +98,6 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 
     public void clientTick()
     {
-        prevX = tipX;
-        prevY = tipY;
-        prevZ = tipZ;
-
         moveTo(targetVec);
     }
 
@@ -126,7 +130,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 
     private double getSpeed()
     {
-        return 0.1;
+        return MathHelper.clamp(power, 0, 1.5);
     }
 
     @Override
@@ -192,19 +196,32 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     @Override
     public double getZ() { return tipZ; }
 
-    public Vec3d getTarget(float tickDelta)
-    {
-        return new Vec3d(
-                MathHelper.lerp(tickDelta, prevX, tipX),
-                MathHelper.lerp(tickDelta, prevY, tipY),
-                MathHelper.lerp(tickDelta, prevZ, tipZ)
-        );
-    }
+//    public Vec3d getTarget(float tickDelta)
+//    {
+//        return new Vec3d(
+//                MathHelper.lerp(tickDelta, prevX, tipX),
+//                MathHelper.lerp(tickDelta, prevY, tipY),
+//                MathHelper.lerp(tickDelta, prevZ, tipZ)
+//        );
+//    }
 
     @Override
     public PLC get()
     {
         return plc;
+    }
+
+    @Override
+    public boolean tick(MotorEntity motor)
+    {
+        return false;
+    }
+
+    @Override
+    public void setInputPower(float power)
+    {
+        this.power = power;
+        sync();
     }
 
     private class PLCImpl implements PLC

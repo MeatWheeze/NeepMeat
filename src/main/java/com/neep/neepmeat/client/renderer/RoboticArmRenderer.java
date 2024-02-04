@@ -6,6 +6,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
@@ -22,10 +23,14 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
     @Override
     public void render(RoboticArmBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
-        Vec3d tipTarget = be.getTarget(tickDelta);
-        double targetX = tipTarget.x;
-        double targetY = tipTarget.y;
-        double targetZ = tipTarget.z;
+        be.prevX = MathHelper.lerp(0.2, be.prevX, be.getX());
+        be.prevY = MathHelper.lerp(0.2, be.prevY, be.getY());
+        be.prevZ = MathHelper.lerp(0.2, be.prevZ, be.getZ());
+
+//        Vec3d tipTarget = be.getTarget(tickDelta);
+        double targetX = be.prevX;
+        double targetY = be.prevY;
+        double targetZ = be.prevZ;
 
         double relX = targetX - (be.getPos().getX() + 0.5);
         double relY = targetY - (be.getPos().getY() + 1 + 2 / 16f);
