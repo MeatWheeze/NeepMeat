@@ -107,13 +107,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (editor.isTextSelected())
-        {
-            editor.keyPressed(keyCode, scanCode, modifiers);
-            return true;
-        }
+        if (!editor.isTextSelected() || keyCode == GLFW.GLFW_KEY_ESCAPE)
+            return super.keyPressed(keyCode, scanCode, modifiers);
 
-        return super.keyPressed(keyCode, scanCode, modifiers);
+        editor.keyPressed(keyCode, scanCode, modifiers);
+        return true;
     }
 
     @Override

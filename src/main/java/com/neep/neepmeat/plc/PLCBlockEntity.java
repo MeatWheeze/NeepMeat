@@ -334,8 +334,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
         nbt.putIntArray("call_stack", callStack);
 
-        if (selectedActuator != robot)
+        if (selectedActuator != robot && selectedActuator != null)
             nbt.put("actuator", NbtHelper.fromBlockPos(selectedActuator.getBasePos()));
+        else if (selectedActuator == null)
+            nbt.put("actuator", NbtHelper.fromBlockPos(actuatorPos));
     }
 
     @Override

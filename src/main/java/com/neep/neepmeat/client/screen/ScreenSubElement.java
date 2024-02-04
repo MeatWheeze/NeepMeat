@@ -26,6 +26,12 @@ public class ScreenSubElement extends Screen implements Drawable, Element
     }
 
     @Override
+    public boolean shouldCloseOnEsc()
+    {
+        return false;
+    }
+
+    @Override
     protected void init()
     {
         super.init();

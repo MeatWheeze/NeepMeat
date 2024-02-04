@@ -52,6 +52,13 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
     }
 
     @Override
+    public void close()
+    {
+//        super.close();
+
+    }
+
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button)
     {
         return super.mouseReleased(mouseX, mouseY, button);
