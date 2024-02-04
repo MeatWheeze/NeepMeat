@@ -282,7 +282,6 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     @Override
     public void fromClientTag(NbtCompound tag)
     {
-        shuttle = tag.getInt("shuttle_ticks");
     }
 
     @Override
@@ -306,6 +305,7 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.shuttle = nbt.getInt("shuttle_ticks");
         this.active = nbt.getBoolean(NBT_ACTIVE);
         this.cooldown = nbt.getInt(NBT_COOLDOWN);
         if (nbt.contains("stored"))
