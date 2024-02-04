@@ -1,6 +1,7 @@
 package com.neep.neepmeat.plc.arm;
 
 import com.neep.meatlib.block.BaseBlock;
+import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
@@ -19,9 +20,9 @@ import org.jetbrains.annotations.Nullable;
 public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
 {
 
-    public RoboticArmBlock(String registryName, Settings settings)
+    public RoboticArmBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, settings.nonOpaque());
+        super(registryName, itemSettings, settings.nonOpaque());
     }
 
     @Nullable

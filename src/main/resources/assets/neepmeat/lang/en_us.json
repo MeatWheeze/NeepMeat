@@ -309,6 +309,9 @@
   "block.neepmeat.surgery_platform": "Surgery Platform",
   "block.neepmeat.surgery_platform.lore_0": "Allows implants to be applied to entities.",
   "block.neepmeat.redstone_interface": "PLC Redstone Interface",
+  "block.neepmeat.robotic_arm": "PLC Robotic Arm",
+  "block.neepmeat.robotic_arm.lore_0": "A PLC actuator that can operate at high speed when given enough power.",
+
   "block.neepmeat.upgrade_manager": "Implant Manager",
   "block.neepmeat.upgrade_manager.lore_0": "Removes and tweaks item or entity implants.",
 

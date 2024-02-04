@@ -1,5 +1,7 @@
 package com.neep.neepmeat.plc;
 
+import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -14,13 +16,14 @@ import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.client.gui.widget.ButtonWidget;
 
 public class PLCBlocks
 {
     public static BlockEntityType<PLCRedstoneInterfaceBlockEntity> REDSTONE_INTERFACE_ENTITY;
     public static BlockEntityType<RoboticArmBlockEntity> ROBOTIC_ARM_ENTITY;
 
-    public static final Block ROBOTIC_ARM = BlockRegistry.queue(new RoboticArmBlock("robotic_arm", FabricBlockSettings.of(Material.METAL)));
+    public static final Block ROBOTIC_ARM = BlockRegistry.queue(new RoboticArmBlock("robotic_arm", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), FabricBlockSettings.of(Material.METAL)));;
     public static final Block REDSTONE_INTERFACE = BlockRegistry.queue(new PLCRedstoneInterface("redstone_interface", FabricBlockSettings.of(Material.METAL)));
     public static final Block PLC = BlockRegistry.queue(new PLCBlock("plc", NMBlocks.block(), FabricBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
     public static BlockEntityType<PLCBlockEntity> PLC_ENTITY;
