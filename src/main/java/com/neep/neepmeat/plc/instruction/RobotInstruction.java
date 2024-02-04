@@ -32,12 +32,22 @@ public class RobotInstruction implements Instruction
     }
 
     @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        if (target != null)
+            nbt.put("target", target.toNbt());
+        return nbt;
+    }
+
+    @Override
     public void start(PLC plc)
     {
         if (target != null)
             plc.selectActuator(target.pos());
         else
             plc.selectActuator(null);
+
+        plc.advanceCounter();
     }
 
     @Override

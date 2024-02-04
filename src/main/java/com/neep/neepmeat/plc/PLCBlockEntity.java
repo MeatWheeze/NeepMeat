@@ -198,7 +198,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public void selectActuator(@Nullable BlockPos pos)
     {
-        if (world.getBlockEntity(pos) instanceof PLCActuator actuator)
+        if (pos == null)
+        {
+            selectedActuator = robot;
+        }
+        else if (world.getBlockEntity(pos) instanceof PLCActuator actuator)
         {
             selectedActuator = actuator;
         }
