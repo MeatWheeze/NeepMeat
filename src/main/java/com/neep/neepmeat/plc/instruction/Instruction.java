@@ -6,8 +6,11 @@ import com.neep.neepmeat.api.plc.PLC;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public interface Instruction extends NbtSerialisable
 {
@@ -22,6 +25,11 @@ public interface Instruction extends NbtSerialisable
 
     @Override
     default void readNbt(NbtCompound nbt) {};
+
+    static  <T extends Instruction> T copy(Supplier<World> worldSupplier, T t)
+    {
+        return (T) t.getProvider().createFromNbt(worldSupplier, t.writeNbt(new NbtCompound()));
+    }
 
     @NotNull
     InstructionProvider getProvider();

@@ -41,7 +41,6 @@ public class CombineInstruction implements Instruction
     private final Supplier<World> worldSupplier;
     protected Argument from;
     protected Argument to;
-//    private ResourceAmount<ItemVariant> stored;
     private final GroupedRobotAction group;
 
     public CombineInstruction(Supplier<World> worldSupplier, List<Argument> arguments)
@@ -60,17 +59,11 @@ public class CombineInstruction implements Instruction
 
     public CombineInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this(() -> (ServerWorld) world.get(), List.of(
+        this(world, List.of(
                 Argument.fromNbt(nbt.getCompound("from")),
                 Argument.fromNbt(nbt.getCompound("to"))
         ));
         group.readNbt(nbt.getCompound("action"));
-    }
-
-    @Override
-    public boolean canStart(PLC plc)
-    {
-        return true;
     }
 
     @Override
@@ -88,7 +81,7 @@ public class CombineInstruction implements Instruction
 
     private void takeFirst(PLC plc)
     {
-        var stored = takeItem(LazyBlockApiCache.itemSided(from, () -> (ServerWorld) worldSupplier.get()));
+        var stored = takeItem(LazyBlockApiCache.itemSided(from, worldSupplier));
         if (stored == null)
         {
             plc.raiseError(new PLC.Error(Text.of("Oh noes!")));

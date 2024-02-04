@@ -1,5 +1,6 @@
 package com.neep.neepmeat.plc;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
@@ -37,6 +38,7 @@ import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -68,6 +70,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private final VariableStack variableStack = new VariableStack(this, maxStackSize); // TODO: save
     private int flag; // TODO: save
 
+    private PLCActuator selectedActuator = robot;
+    private final List<Pair<PLCActuator, Instruction>> activeActuators = Lists.newArrayList();
+
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -85,10 +90,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public PLCActuator getRobot()
     {
-        if (world.getBlockEntity(pos.up()) instanceof PLCActuator actuator)
-            return actuator;
+//        if (world.getBlockEntity(pos.up()) instanceof PLCActuator actuator)
+//            return actuator;
 
-        return robot;
+        return selectedActuator;
     }
 
     public SurgicalRobot getSurgeryRobot()
@@ -267,8 +272,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         }
 
         robot.tick();
-
-//        sync();
     }
 
     public boolean notExecuting()
