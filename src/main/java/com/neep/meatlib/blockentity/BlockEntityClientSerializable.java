@@ -7,6 +7,7 @@ import net.minecraft.nbt.NbtCompound;
 // I couldn't live without this interface
 public interface BlockEntityClientSerializable
 {
+    // Currently does nothing
     void fromClientTag(NbtCompound nbt);
 
     NbtCompound toClientTag(NbtCompound nbt);

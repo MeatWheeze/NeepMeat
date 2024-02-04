@@ -319,6 +319,16 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     }
 
     @Override
+    public NbtCompound toClientTag(NbtCompound nbt)
+    {
+        robot.writeNbt(nbt);
+        nbt.putBoolean("override_controller", overrideController);
+        nbt.putInt("counter", counter);
+        nbt.putBoolean("paused", paused);
+        return nbt;
+    }
+
+    @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
