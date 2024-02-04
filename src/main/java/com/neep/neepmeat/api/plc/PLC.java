@@ -37,6 +37,11 @@ public interface PLC
 
     int flag();
 
+    interface PLCProvider
+    {
+        PLC get();
+    }
+
     class Error
     {
         private final Text what;

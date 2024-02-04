@@ -26,6 +26,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.screen.PropertyDelegate;
@@ -71,7 +72,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private int flag; // TODO: save
 
     private PLCActuator selectedActuator = robot;
-    private final List<Pair<PLCActuator, Instruction>> activeActuators = Lists.newArrayList();
+    @Nullable private BlockPos actuatorPos = null; // Workaround for loading selected actuator from NBT
 
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -90,8 +91,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public PLCActuator getActuator()
     {
-//        if (world.getBlockEntity(pos.up()) instanceof PLCActuator actuator)
-//            return actuator;
+        if (actuatorPos != null && selectedActuator == null)
+            selectActuator(actuatorPos);
 
         return selectedActuator;
     }
@@ -332,6 +333,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         nbt.putBoolean("has_program", programSupplier.get() != null);
 
         nbt.putIntArray("call_stack", callStack);
+
+        if (selectedActuator != robot)
+            nbt.put("actuator", NbtHelper.fromBlockPos(selectedActuator.getBasePos()));
     }
 
     @Override
@@ -359,8 +363,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         callStack.addAll(IntList.of(nbt.getIntArray("call_stack")));
 
         if (nbt.getBoolean("has_program"))
-        {
             programSupplier = editor::getProgram;
+
+        if (nbt.contains("actuator"))
+        {
+            actuatorPos = NbtHelper.toBlockPos(nbt.getCompound("actuator"));
+            selectedActuator = null;
+        }
+        else
+        {
+            actuatorPos = null;
+            selectedActuator = robot;
         }
     }
 

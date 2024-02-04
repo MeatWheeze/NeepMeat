@@ -17,6 +17,8 @@ public interface PLCActuator
 
     void setStored(@Nullable ResourceAmount<ItemVariant> stored);
 
+    BlockPos getBasePos();
+
     @Nullable
     ResourceAmount<ItemVariant> getStored();
 

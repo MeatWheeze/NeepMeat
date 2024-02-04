@@ -364,6 +364,12 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     }
 
     @Override
+    public BlockPos getBasePos()
+    {
+        return parent.getPos();
+    }
+
+    @Override
     public @Nullable ResourceAmount<ItemVariant> getStored()
     {
         return stored;

@@ -1,7 +1,13 @@
 package com.neep.neepmeat.plc.arm;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.api.plc.robot.RobotAction;
+import com.neep.neepmeat.neepasm.compiler.variable.EmptyVariableStack;
+import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.robot.PLCActuator;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.Stack;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
@@ -14,7 +20,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
 
-public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator
+import java.util.function.Consumer;
+
+public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLC.PLCProvider
 {
     private @Nullable BlockPos target;
 
@@ -29,6 +37,8 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     private Vec3d targetVec = new Vec3d(tipX, tipY, tipZ);
     @Nullable
     private ResourceAmount<ItemVariant> stored;
+
+    private PLCImpl plc = new PLCImpl();
 
     public RoboticArmBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -124,7 +134,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     {
         this.target = target;
         if (target != null)
-            this.targetVec = Vec3d.ofCenter(target, 0.7);
+            this.targetVec = Vec3d.ofCenter(target, 0.0);
         else
             this.targetVec = new Vec3d(tipX, tipY, tipZ);
 
@@ -162,6 +172,12 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
+    public BlockPos getBasePos()
+    {
+        return pos;
+    }
+
+    @Override
     public @Nullable ResourceAmount<ItemVariant> getStored()
     {
         return stored;
@@ -183,5 +199,97 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
                 MathHelper.lerp(tickDelta, prevY, tipY),
                 MathHelper.lerp(tickDelta, prevZ, tipZ)
         );
+    }
+
+    @Override
+    public PLC get()
+    {
+        return plc;
+    }
+
+    private class PLCImpl implements PLC
+    {
+        @Nullable
+        private Pair<RobotAction, Consumer<PLC>> action;
+
+        private final EmptyVariableStack variableStack = new EmptyVariableStack();
+
+        @Override
+        public void addRobotAction(RobotAction action, Consumer<PLC> callback)
+        {
+            if (this.action != null)
+            {
+                this.action.first().cancel(this);
+                this.action.second().accept(this);
+            }
+
+            this.action = Pair.of(action, callback);
+        }
+
+        @Override
+        public PLCActuator getActuator()
+        {
+            return RoboticArmBlockEntity.this;
+        }
+
+        @Override
+        public void selectActuator(@Nullable BlockPos pos)
+        {
+
+        }
+
+        @Override
+        public int counter()
+        {
+            return 0;
+        }
+
+        @Override
+        public void advanceCounter()
+        {
+
+        }
+
+        @Override
+        public void pushCall(int data)
+        {
+
+        }
+
+        @Override
+        public int popCall()
+        {
+            return 0;
+        }
+
+        @Override
+        public Stack<Variable<?>> variableStack()
+        {
+            return variableStack;
+        }
+
+        @Override
+        public void setCounter(int counter)
+        {
+
+        }
+
+        @Override
+        public void raiseError(Error error)
+        {
+
+        }
+
+        @Override
+        public void flag(int i)
+        {
+
+        }
+
+        @Override
+        public int flag()
+        {
+            return 0;
+        }
     }
 }
