@@ -88,7 +88,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     }
 
     @Override
-    public PLCActuator getRobot()
+    public PLCActuator getActuator()
     {
 //        if (world.getBlockEntity(pos.up()) instanceof PLCActuator actuator)
 //            return actuator;
@@ -194,6 +194,15 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     @Override
     public int flag() { return flag; }
+
+    @Override
+    public void selectActuator(@Nullable BlockPos pos)
+    {
+        if (world.getBlockEntity(pos) instanceof PLCActuator actuator)
+        {
+            selectedActuator = actuator;
+        }
+    }
 
     public void resetError()
     {

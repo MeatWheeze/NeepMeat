@@ -1,12 +1,12 @@
 package com.neep.neepmeat.api.plc;
 
-import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
-import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import it.unimi.dsi.fastutil.Stack;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -14,13 +14,18 @@ public interface PLC
 {
     void addRobotAction(RobotAction action, Consumer<PLC> callback);
 
-    PLCActuator getRobot();
+    PLCActuator getActuator();
+
+    /**
+     * @param pos Position to look for actuator. Pass null to select the default actuator.
+     */
+    void selectActuator(@Nullable BlockPos pos);
 
     int counter();
 
     void advanceCounter();
-
     void pushCall(int data);
+
     int popCall();
 
     Stack<Variable<?>> variableStack();
@@ -28,8 +33,8 @@ public interface PLC
     void setCounter(int counter);
 
     void raiseError(Error error);
-
     void flag(int i);
+
     int flag();
 
     class Error

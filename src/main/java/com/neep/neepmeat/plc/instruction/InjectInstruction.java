@@ -54,7 +54,7 @@ public class InjectInstruction implements Instruction
 
     private void playSound(PLC plc)
     {
-        var robot = plc.getRobot();
+        var robot = plc.getActuator();
         world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.INJECT_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
     }
 

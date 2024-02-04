@@ -62,7 +62,7 @@ public class ImplantInstruction implements Instruction
 
     private void playSound(PLC plc)
     {
-        var robot = plc.getRobot();
+        var robot = plc.getActuator();
         world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.IMPLANT_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
     }
 
@@ -106,7 +106,7 @@ public class ImplantInstruction implements Instruction
     @Override
     public void cancel(PLC plc)
     {
-        plc.getRobot().spawnItem(stored);
+        plc.getActuator().spawnItem(stored);
         group.end(plc);
         stored = null;
     }
@@ -145,7 +145,7 @@ public class ImplantInstruction implements Instruction
         }
 
         if (stored != null)
-            plc.getRobot().spawnItem(stored);
+            plc.getActuator().spawnItem(stored);
     }
 
     private void finish(PLC plc)
@@ -166,7 +166,7 @@ public class ImplantInstruction implements Instruction
         else
         {
             plc.raiseError(new PLC.Error("No entity station found"));
-            plc.getRobot().spawnItem(stored);
+            plc.getActuator().spawnItem(stored);
         }
         return toCache.pos();
     }
@@ -182,13 +182,13 @@ public class ImplantInstruction implements Instruction
         @Override
         public boolean finished(PLC plc)
         {
-            return plc.getRobot().reachedTarget();
+            return plc.getActuator().reachedTarget();
         }
 
         @Override
         public void start(PLC plc)
         {
-            plc.getRobot().setTarget(getEntityPos(plc));
+            plc.getActuator().setTarget(getEntityPos(plc));
         }
 
         @Override

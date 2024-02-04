@@ -73,7 +73,7 @@ public class MoveInstruction implements Instruction
     @Override
     public void cancel(PLC plc)
     {
-        plc.getRobot().spawnItem(stored);
+        plc.getActuator().spawnItem(stored);
         group.end(plc);
         stored = null;
     }
@@ -109,7 +109,7 @@ public class MoveInstruction implements Instruction
             }
         }
 
-        plc.getRobot().spawnItem(stored);
+        plc.getActuator().spawnItem(stored);
         stored = null;
     }
 

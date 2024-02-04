@@ -75,7 +75,7 @@ public class CombineInstruction implements Instruction
     @Override
     public void cancel(PLC plc)
     {
-        plc.getRobot().dumpStored();
+        plc.getActuator().dumpStored();
         group.end(plc);
     }
 
@@ -88,7 +88,7 @@ public class CombineInstruction implements Instruction
         }
         else
         {
-            plc.getRobot().setStored(stored);
+            plc.getActuator().setStored(stored);
             if (worldSupplier.get() instanceof ServerWorld serverWorld)
             {
                 ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
@@ -100,7 +100,7 @@ public class CombineInstruction implements Instruction
 
     private void complete(PLC plc)
     {
-        final var stored = plc.getRobot().getStored();
+        final var stored = plc.getActuator().getStored();
         var mip = MutateInPlace.ITEM.find(worldSupplier.get(), to.pos(), null);
         if (mip != null)
         {
@@ -112,7 +112,7 @@ public class CombineInstruction implements Instruction
             if (stored.resource().getObject() instanceof ItemImplantItem item)
             {
                 item.install(stack);
-                plc.getRobot().setStored(null);
+                plc.getActuator().setStored(null);
                 mip.set(stack);
             }
 
@@ -133,20 +133,20 @@ public class CombineInstruction implements Instruction
 
                 if (worldSupplier.get() instanceof ServerWorld serverWorld)
                 {
-                    var robot = plc.getRobot();
+                    var robot = plc.getActuator();
 //                    ParticleSpawnS2C.sendNearby(serverWorld, plc.getRobot().getBlockPos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
 //                            plc.getRobot().getPos(), new Vec3d(0, -0.4, 0), new Vec3d(0.1, 0.1, 0.1), 6);
 
                     serverWorld.playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.COMBINE_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
                 }
 
-                plc.getRobot().setStored(null);
+                plc.getActuator().setStored(null);
 
                 return;
             }
         }
 
-        plc.getRobot().dumpStored();
+        plc.getActuator().dumpStored();
     }
 
     private ResourceAmount<ItemVariant> takeItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)
