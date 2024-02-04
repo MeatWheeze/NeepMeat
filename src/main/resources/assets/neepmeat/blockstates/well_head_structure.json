@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/rusty_metal"
+      "model": "neepmeat:block/rusty_metal"
     }
   }
 }
