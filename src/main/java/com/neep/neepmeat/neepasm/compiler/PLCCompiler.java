@@ -1,7 +1,7 @@
 package com.neep.neepmeat.neepasm.compiler;
 
 import com.neep.neepmeat.api.plc.program.MutableProgram;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.api.storage.WorldSupplier;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
@@ -16,7 +16,7 @@ public class PLCCompiler
         this.world = world;
     }
 
-    public PlcProgram compile(ParsedSource parsedSource) throws NeepASM.ProgramBuildException
+    public PLCProgram compile(ParsedSource parsedSource) throws NeepASM.ProgramBuildException
     {
         MutableProgram program = new PLCProgramImpl(world.as());
 

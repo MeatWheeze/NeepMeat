@@ -4,10 +4,10 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -26,7 +26,7 @@ public class PLCSyncProgram
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "plc_sync_program");
 
-    public static void sendProgram(ServerPlayerEntity player, PLCBlockEntity be, PlcProgram program)
+    public static void sendProgram(ServerPlayerEntity player, PLCBlockEntity be, PLCProgram program)
     {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(Action.PROGRAM.ordinal());

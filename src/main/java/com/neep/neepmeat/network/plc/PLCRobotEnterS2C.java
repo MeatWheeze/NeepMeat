@@ -4,7 +4,7 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.network.S2CSender;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCBlocks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

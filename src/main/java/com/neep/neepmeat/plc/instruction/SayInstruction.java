@@ -60,9 +60,11 @@ public class SayInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            BlockEntity be = (BlockEntity) plc;
-            PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
-                    Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + message)));
+            if (plc instanceof BlockEntity be)
+            {
+                PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
+                        Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + message)));
+            }
         }
     }
 

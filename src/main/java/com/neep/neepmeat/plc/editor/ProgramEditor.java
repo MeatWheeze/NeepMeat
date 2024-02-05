@@ -1,12 +1,12 @@
 package com.neep.neepmeat.plc.editor;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.api.storage.WorldSupplier;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.PLCCompiler;
 import com.neep.neepmeat.neepasm.compiler.Parser;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import net.minecraft.nbt.NbtCompound;
 
@@ -18,7 +18,7 @@ public class ProgramEditor implements NbtSerialisable
     private final PLCCompiler compiler;
     private final PLCBlockEntity plc;
 
-    private PlcProgram program;
+    private PLCProgram program;
 
     public ProgramEditor(PLCBlockEntity plc)
     {
@@ -50,10 +50,10 @@ public class ProgramEditor implements NbtSerialisable
         }
     }
 
-    public PlcProgram getProgram()
+    public PLCProgram getProgram()
     {
         if (program == null)
-            return PlcProgram.EMPTY;
+            return PLCProgram.EMPTY;
 
         return program;
     }

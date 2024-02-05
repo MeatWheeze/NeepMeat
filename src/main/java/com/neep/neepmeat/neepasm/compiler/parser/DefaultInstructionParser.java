@@ -2,7 +2,7 @@ package com.neep.neepmeat.neepasm.compiler.parser;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.neepasm.NeepASM;
-import com.neep.neepmeat.neepasm.compiler.ParsedInstructionInstruction;
+import com.neep.neepmeat.neepasm.compiler.DefaultParsedInstruction;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
@@ -52,6 +52,6 @@ public class DefaultInstructionParser implements InstructionParser
             view.fastForward();
         }
 
-        return new ParsedInstructionInstruction(provider, arguments, kvs);
+        return new DefaultParsedInstruction(provider, arguments, kvs);
     }
 }

@@ -25,4 +25,67 @@ public interface PLCActuator
     double getX();
     double getY();
     double getZ();
+
+    PLCActuator EMPTY  = new PLCActuator()
+    {
+        @Override
+        public void setTarget(@Nullable BlockPos target)
+        {
+
+        }
+
+        @Override
+        public boolean reachedTarget()
+        {
+            return false;
+        }
+
+        @Override
+        public void spawnItem(ResourceAmount<ItemVariant> stored)
+        {
+
+        }
+
+        @Override
+        public void dumpStored()
+        {
+
+        }
+
+        @Override
+        public void setStored(@Nullable ResourceAmount<ItemVariant> stored)
+        {
+
+        }
+
+        @Override
+        public BlockPos getBasePos()
+        {
+            return BlockPos.ORIGIN;
+        }
+
+        @Override
+        public @Nullable ResourceAmount<ItemVariant> getStored()
+        {
+            return null;
+        }
+
+        @Override
+        public double getX()
+        {
+            return 0;
+        }
+
+        @Override
+        public double getY()
+        {
+            return 0;
+        }
+
+        @Override
+        public double getZ()
+        {
+            return 0;
+        }
+    };
 }

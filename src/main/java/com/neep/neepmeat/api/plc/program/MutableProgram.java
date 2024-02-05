@@ -3,7 +3,7 @@ package com.neep.neepmeat.api.plc.program;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.instruction.Instruction;
 
-public interface MutableProgram extends PlcProgram
+public interface MutableProgram extends PLCProgram
 {
     void addLabel(Label label);
 

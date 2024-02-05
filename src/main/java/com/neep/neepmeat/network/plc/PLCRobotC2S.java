@@ -2,7 +2,7 @@ package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

@@ -3,7 +3,7 @@ package com.neep.neepmeat.plc.screen;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;

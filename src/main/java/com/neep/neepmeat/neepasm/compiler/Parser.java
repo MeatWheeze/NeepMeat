@@ -186,7 +186,7 @@ public class Parser
     }
 
     @Nullable
-    private ParsedInstruction parseInstruction(TokenView view) throws NeepASM.ParseException
+    public ParsedInstruction parseInstruction(TokenView view) throws NeepASM.ParseException
     {
         view.fastForward();
         if (view.lineEnded() || isComment(view))

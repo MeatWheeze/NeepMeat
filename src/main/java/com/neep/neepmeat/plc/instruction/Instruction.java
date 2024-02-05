@@ -12,6 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
+/**
+ * Instructions are not ticked. They make changes via {@link com.neep.neepmeat.api.plc.robot.RobotAction} which are
+ * executed by the currently selected actuator in the PLC.
+ */
 public interface Instruction extends NbtSerialisable
 {
     default boolean canStart(PLC plc) { return true; };
@@ -34,11 +38,10 @@ public interface Instruction extends NbtSerialisable
     @NotNull
     InstructionProvider getProvider();
 
-    Instruction EMPTY = new EmptyInstruction();
 
     static Instruction end() { return EMPTY; }
 
-    class EmptyInstruction implements Instruction
+    Instruction EMPTY = new Instruction()
     {
         @Override
         public NbtCompound writeNbt(NbtCompound nbt)
@@ -75,7 +78,13 @@ public interface Instruction extends NbtSerialisable
         {
             return Instructions.END;
         }
-    }
+
+        @Override
+        public String toString()
+        {
+            return "Empty Instruction";
+        }
+    };
 
     static NbtCompound writeItem(@Nullable ResourceAmount<ItemVariant> amount)
     {

@@ -1,16 +1,16 @@
-package com.neep.neepmeat.plc;
+package com.neep.neepmeat.plc.block.entity;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Queues;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
+import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.editor.ProgramEditor;
 import com.neep.neepmeat.plc.editor.ShellState;
 import com.neep.neepmeat.plc.instruction.Instruction;
@@ -39,14 +39,13 @@ import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public class PLCBlockEntity extends SyncableBlockEntity implements PLC, ExtendedScreenHandlerFactory
 {
-    @NotNull protected Supplier<PlcProgram> programSupplier;
+    @NotNull protected Supplier<PLCProgram> programSupplier;
 
     protected Instruction currentInstruction;
     protected int counter;
@@ -221,7 +220,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public void tick()
     {
-        PlcProgram program = programSupplier.get();
+        PLCProgram program = programSupplier.get();
         if (!paused && counter != -1 && program != null && error == null)
         {
             Instruction instruction = program.get(counter);
@@ -424,7 +423,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         buf.writeString(editor.getSource());
     }
 
-    public void runProgram(@Nullable PlcProgram program)
+    public void runProgram(@Nullable PLCProgram program)
     {
         resetError();
         currentInstruction = null;

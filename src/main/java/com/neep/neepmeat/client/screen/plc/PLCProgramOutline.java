@@ -3,7 +3,7 @@ package com.neep.neepmeat.client.screen.plc;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.api.plc.PLCCols;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
@@ -71,7 +71,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     protected void addEntries()
     {
         instructions.clear();
-        PlcProgram program = editor.getProgram();
+        PLCProgram program = editor.getProgram();
 
         int entryHeight = 11;
         int gap = 1;
@@ -141,7 +141,7 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
         clearAndInit();
     }
 
-    private void onProgramChanged(PlcProgram program)
+    private void onProgramChanged(PLCProgram program)
     {
         clearAndInit();
     }

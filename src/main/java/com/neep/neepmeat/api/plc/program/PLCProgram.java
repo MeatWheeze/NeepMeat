@@ -7,11 +7,11 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.Nullable;
 
-public interface PlcProgram extends Program, NbtSerialisable
+public interface PLCProgram extends Program, NbtSerialisable
 {
     Empty EMPTY = new Empty();
 
-    class Empty implements PlcProgram
+    class Empty implements PLCProgram
     {
         @Override
         public NbtCompound writeNbt(NbtCompound nbt) { return nbt; }

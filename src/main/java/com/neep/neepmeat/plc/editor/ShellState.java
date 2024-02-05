@@ -3,7 +3,7 @@ package com.neep.neepmeat.plc.editor;
 import com.neep.neepmeat.api.plc.instruction.*;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;

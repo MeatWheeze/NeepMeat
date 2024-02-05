@@ -5,14 +5,14 @@ import com.neep.neepmeat.api.plc.instruction.*;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
-import com.neep.neepmeat.api.plc.program.PlcProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -124,7 +124,7 @@ public class CompiledProgramEditorState implements PLCState
         updateListeners();
     }
 
-    public PlcProgram getProgram()
+    public PLCProgram getProgram()
     {
         return program;
     }
@@ -168,6 +168,6 @@ public class CompiledProgramEditorState implements PLCState
     @FunctionalInterface
     public interface Listener
     {
-        void update(PlcProgram program);
+        void update(PLCProgram program);
     }
 }

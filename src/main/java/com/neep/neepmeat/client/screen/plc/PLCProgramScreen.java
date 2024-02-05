@@ -12,7 +12,7 @@ import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
-import com.neep.neepmeat.plc.PLCBlockEntity;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.block.BlockRenderType;

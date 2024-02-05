@@ -8,10 +8,12 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -43,6 +45,13 @@ public class LazyBlockApiCache<A, C>
     {
         validate();
         return cache.find(ctxSupplier.get());
+    }
+
+    @Nullable
+    public BlockEntity getBlockEntity()
+    {
+        validate();
+        return cache.getBlockEntity();
     }
 
     public void invalidate()

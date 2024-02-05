@@ -14,13 +14,13 @@ import net.minecraft.server.world.ServerWorld;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class ParsedInstructionInstruction implements ParsedInstruction
+public class DefaultParsedInstruction implements ParsedInstruction
 {
     private final InstructionProvider provider;
     private final List<Argument> arguments;
     private final List<KeyValue> kvs;
 
-    public ParsedInstructionInstruction(InstructionProvider provider, List<Argument> arguments, List<KeyValue> kvs)
+    public DefaultParsedInstruction(InstructionProvider provider, List<Argument> arguments, List<KeyValue> kvs)
     {
         this.provider = provider;
         this.arguments = arguments;
@@ -32,6 +32,7 @@ public class ParsedInstructionInstruction implements ParsedInstruction
     {
         try
         {
+            // InstructionBuilder emits instructions via a callback
             AtomicReference<Instruction> instruction = new AtomicReference<>();
             InstructionBuilder builder = provider.start(world, instruction::set);
             for (var argument : arguments)
