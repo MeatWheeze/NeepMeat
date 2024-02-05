@@ -35,6 +35,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
         super.init();
 
         browser.init(screenWidth, screenHeight);
+        addDrawable(new CurrentArgumentWidget(browser.getX(), browser.getY() - textRenderer.fontHeight - 2, parent.getScreenHandler()));
 
         addDrawableChild(browser);
     }

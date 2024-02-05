@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
+@Deprecated
 public class PLCOperationSelector extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;

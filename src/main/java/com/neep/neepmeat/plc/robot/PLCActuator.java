@@ -88,4 +88,9 @@ public interface PLCActuator
             return 0;
         }
     };
+
+    interface Provider
+    {
+        PLCActuator get();
+    }
 }

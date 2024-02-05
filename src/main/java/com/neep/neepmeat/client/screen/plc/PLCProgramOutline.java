@@ -30,6 +30,7 @@ import software.bernie.geckolib3.core.util.Color;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Deprecated
 public class PLCProgramOutline extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;

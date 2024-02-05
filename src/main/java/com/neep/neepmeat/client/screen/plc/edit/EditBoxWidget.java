@@ -19,6 +19,7 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 
@@ -39,10 +40,12 @@ public class EditBoxWidget extends ScrollableWidget
     private float scale = 0.8f;
     private int errorLine = -1;
     private int debugLine = -1;
+    private final Text placeholder;
 
-    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text message)
+    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text placeholder, Text message)
     {
         super(x, y, width, height, message);
+        this.placeholder = placeholder;
         this.textRenderer = textRenderer;
         this.editBox = new EditBox(textRenderer, width - this.getPaddingDoubled(), scale);
         this.editBox.setCursorChangeListener(this::onCursorChange);
@@ -208,11 +211,20 @@ public class EditBoxWidget extends ScrollableWidget
         textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
 
         String string = this.editBox.getText();
-//        if (string.isEmpty() && !this.isFocused())
-//        {
-//            this.textRenderer.drawTrimmed(this.placeholder, this.x + this.getPadding(), this.y + this.getPadding(), this.width - this.getPaddingDoubled(), -857677600);
-//        }
-//        else
+
+        if (string.isEmpty() && !this.isFocused())
+        {
+            int i = 0;
+            for (var line : textRenderer.wrapLines(placeholder, this.width))
+            {
+                matrices.push();
+                matrices.translate(0, i * lineHeight(), 0);
+                matrices.scale(scale, scale, 1);
+                textRenderer.draw(matrices, line, x + getPadding(), y + getPadding(), PLCCols.TEXT.col);
+                matrices.pop();
+                ++i;
+            }
+        }
 
         int i = this.editBox.getCursor();
         boolean bl = this.isFocused() && this.tick / 6 % 2 == 0;

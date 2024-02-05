@@ -98,11 +98,14 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
             addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
             addDrawableChild(new CompileButton(width - 4 * 17, 2, 16, 16, Text.of("Compile")));
+            state = editor;
         }
         else
         {
             addDrawableChild(shell);
             addDrawableChild(new ModeSwitchButton(width - 17, 2, 16, 16));
+            addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
+            state = shell;
         }
 
     }

@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, MotorisedBlock
+public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLCActuator.Provider, MotorisedBlock
 {
     private float power;
 
@@ -240,5 +240,11 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     {
         this.power = power;
         sync();
+    }
+
+    @Override
+    public PLCActuator get()
+    {
+        return this;
     }
 }

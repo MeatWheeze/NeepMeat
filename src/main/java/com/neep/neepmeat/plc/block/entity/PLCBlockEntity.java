@@ -45,7 +45,7 @@ import java.util.Queue;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class PLCBlockEntity extends SyncableBlockEntity implements PLC, ExtendedScreenHandlerFactory
+public class PLCBlockEntity extends SyncableBlockEntity implements PLC, ExtendedScreenHandlerFactory, PLCActuator.Provider
 {
     @NotNull protected Supplier<PLCProgram> programSupplier;
 
@@ -210,9 +210,13 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         {
             selectedActuator = robot;
         }
-        else if (world.getBlockEntity(pos) instanceof PLCActuator actuator)
+        else if (world.getBlockEntity(pos) instanceof PLCActuator.Provider actuator)
         {
-            selectedActuator = actuator;
+            selectedActuator = actuator.get();
+        }
+        else
+        {
+            raiseError(new Error("Block at " + pos.getX() + " " + pos.getY() + " " + pos.getZ() + " is not an actuator."));
         }
     }
 
@@ -471,6 +475,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         return editor;
     }
 
+    @Override
+    public PLCActuator get()
+    {
+        return robot;
+    }
+
     public class PLCPropertyDelegate implements PropertyDelegate
     {
         public static final int SIZE = Names.values().length;
@@ -481,7 +491,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             return switch (Names.values()[index])
             {
                 case PROGRAM_COUNTER -> counter;
-                case HAS_PROGRAM -> programSupplier.get() != null ? 1 : 0;
+                case HAS_PROGRAM -> programSupplier.get() != null || (currentInstruction != null && currentInstruction != Instruction.EMPTY) ? 1 : 0; // TODO: change to CAN_STOP
                 case EDIT_MODE -> mode.ordinal();
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
                 case ARGUMENT -> shell.getArgumentCount();

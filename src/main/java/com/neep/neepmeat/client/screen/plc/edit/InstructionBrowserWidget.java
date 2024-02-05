@@ -197,6 +197,16 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         return SelectionType.NONE;
     }
 
+    public int getX()
+    {
+        return x;
+    }
+
+    public int getY()
+    {
+        return y;
+    }
+
     public class OperationWidget extends DrawableHelper
     {
         private final InstructionProvider provider;
