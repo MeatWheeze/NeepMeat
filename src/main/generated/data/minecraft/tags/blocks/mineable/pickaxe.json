@@ -184,6 +184,7 @@
     "neepmeat:holding_track",
     "neepmeat:robotic_arm",
     "neepmeat:redstone_interface",
+    "neepmeat:executor",
     "neepmeat:plc",
     "neepmeat:fluid_pipe",
     "neepmeat:filter_pipe",

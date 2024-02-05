@@ -56,7 +56,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        fromClientTag(nbt);
         storage.readNbt(nbt);
         powered = nbt.getBoolean("powered");
     }
@@ -65,7 +64,6 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        toClientTag(nbt);
         storage.writeNbt(nbt);
         nbt.putBoolean("powered", powered);
     }
