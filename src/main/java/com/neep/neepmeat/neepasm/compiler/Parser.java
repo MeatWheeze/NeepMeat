@@ -65,7 +65,7 @@ public class Parser
         }
         catch (NeepASM.ParseException e)
         {
-            throw new NeepASM.ProgramBuildException(this.line, view.pos(), e.getMessage());
+            throw new NeepASM.ProgramBuildException(view.line(), view.pos(), e.getMessage());
         }
         return parsedSource;
     }
@@ -110,7 +110,7 @@ public class Parser
 
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
-            parsedSource.instruction(instruction, line);
+            parsedSource.instruction(instruction, view.line());
     }
 
     private void parseAlias(TokenView view) throws NeepASM.ParseException
@@ -183,7 +183,7 @@ public class Parser
 
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
-            function.instruction(instruction, line);
+            function.instruction(instruction, view.line());
     }
 
     @Nullable

@@ -2,12 +2,12 @@ package com.neep.neepmeat.neepasm.compiler;
 
 public class TokenView
 {
-    private final String line;
+    private final String string;
     private int offset = 0;
 
-    public TokenView(String line)
+    public TokenView(String string)
     {
-        this.line = line;
+        this.string = string;
     }
 
     public int pos()
@@ -15,17 +15,27 @@ public class TokenView
         return offset;
     }
 
+    public int line()
+    {
+        return (int) string.substring(0, offset).lines().count() - 1;
+    }
+
     public char next()
     {
-        if (offset >= line.length())
+        if (offset >= string.length())
             return 0;
 
-        return line.charAt(offset++);
+        char c = string.charAt(offset++);
+
+//        if (c == '\n')
+//            lines++;
+
+        return c;
     }
 
     public void nextLine()
     {
-        while (peek() != '\n' && peek() != ';' && offset < line.length())
+        while (peek() != '\n' && peek() != ';' && offset < string.length())
             next();
 
         next();
@@ -45,18 +55,18 @@ public class TokenView
 
     public char peek()
     {
-        if (offset >= line.length())
+        if (offset >= string.length())
             return 0;
 
-        return line.charAt(offset);
+        return string.charAt(offset);
     }
 
     public char peek(int n)
     {
-        if (offset + n >= line.length())
+        if (offset + n >= string.length())
             return 0;
 
-        return line.charAt(offset + n);
+        return string.charAt(offset + n);
     }
 
     public void fastForward()
@@ -94,10 +104,15 @@ public class TokenView
     {
         fastForward();
         StringBuilder builder = new StringBuilder();
-        while (peek() == '-' || Character.isDigit(peek()))
+        while (isDigit(peek()))
         {
             builder.append(next());
         }
+
+        String s = builder.toString();
+
+        if (s.equals("-"))
+            return 0;
 
         return Integer.parseInt(builder.toString());
     }
@@ -150,7 +165,7 @@ public class TokenView
 
     public boolean eof()
     {
-        return offset >= line.length();
+        return offset >= string.length();
     }
 
     public class Entry implements AutoCloseable
