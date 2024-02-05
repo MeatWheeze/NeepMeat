@@ -3,6 +3,11 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
+import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.ParsedSource;
+import com.neep.neepmeat.neepasm.compiler.Parser;
+import com.neep.neepmeat.neepasm.compiler.TokenView;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.RedstoneInterface;
 import net.minecraft.nbt.NbtCompound;
@@ -10,7 +15,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 public class WaitRedstoneInstruction implements Instruction
@@ -21,18 +25,18 @@ public class WaitRedstoneInstruction implements Instruction
 
     private final Argument target;
 
-    public WaitRedstoneInstruction(Supplier<World> worldSupplier, List<Argument> arguments)
+    public WaitRedstoneInstruction(Supplier<World> worldSupplier, Argument target)
     {
-        this.target = arguments.get(0);
+        this.target = target;
         this.worldSupplier = worldSupplier;
-        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> worldSupplier.get(), target);
+        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, worldSupplier, this.target);
     }
 
     public WaitRedstoneInstruction(Supplier<World> worldSupplier, NbtCompound nbt)
     {
         this.target = Argument.fromNbt(nbt.getCompound("target"));
         this.worldSupplier = worldSupplier;
-        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, () -> worldSupplier.get(), target);
+        this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, worldSupplier, target);
     }
 
     @Override
@@ -57,6 +61,17 @@ public class WaitRedstoneInstruction implements Instruction
     public @NotNull InstructionProvider getProvider()
     {
         return Instructions.WAIT_REDSTONE;
+    }
+
+    public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    {
+        view.fastForward();
+        Argument target = parser.parseArgument(view);
+        if (target == null)
+            throw new NeepASM.ParseException("expected redstone target");
+
+        return ((world, source, program) ->
+                program.addBack(new WaitRedstoneInstruction(() -> world, target)));
     }
 
     class WaitAction implements RobotAction

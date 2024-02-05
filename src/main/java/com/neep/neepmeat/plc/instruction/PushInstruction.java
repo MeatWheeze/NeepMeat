@@ -38,6 +38,12 @@ public class PushInstruction implements Instruction
     }
 
     @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        return nbt;
+    }
+
+    @Override
     public @NotNull InstructionProvider getProvider()
     {
         return Instructions.PUSH;

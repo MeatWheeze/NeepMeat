@@ -5,6 +5,8 @@ import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.plc.Instructions;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
@@ -297,8 +299,11 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         super.writeNbt(tag);
         tag.putBoolean(NBT_ACTIVE, active);
         tag.putInt(NBT_COOLDOWN, cooldown);
-        if (stored != null)
-            tag.put("stored", MeatlibStorageUtil.amountToNbt(stored));
+
+        tag.put("stored", Instruction.writeItem(stored));
+
+//        if (stored != null)
+//            tag.put("stored", MeatlibStorageUtil.amountToNbt(stored));
     }
 
     @Override
@@ -308,8 +313,9 @@ public class ItemPumpBlockEntity extends BloodMachineBlockEntity
         this.shuttle = nbt.getInt("shuttle_ticks");
         this.active = nbt.getBoolean(NBT_ACTIVE);
         this.cooldown = nbt.getInt(NBT_COOLDOWN);
-        if (nbt.contains("stored"))
-            this.stored = MeatlibStorageUtil.amountFromNbt(nbt.getCompound("stored"));
+        this.stored = Instruction.readItem(nbt.getCompound("stored"));
+//        if (nbt.contains("stored"))
+//            this.stored = MeatlibStorageUtil.amountFromNbt(nbt.getCompound("stored"));
     }
 
 }

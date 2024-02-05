@@ -26,6 +26,7 @@ public class PLCScreenHandler extends ScreenHandler
                 new ArrayPropertyDelegate(PLCBlockEntity.PLCPropertyDelegate.SIZE),
                 buf.readString()
         );
+        this.delegate.set(PLCBlockEntity.PLCPropertyDelegate.Names.EDIT_MODE.ordinal(), buf.readInt());
     }
 
     // Server

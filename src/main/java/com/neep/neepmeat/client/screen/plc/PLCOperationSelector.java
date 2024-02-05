@@ -30,16 +30,19 @@ import software.bernie.geckolib3.core.util.Color;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public class PLCOperationSelector extends ScreenSubElement implements Drawable, Element, Selectable
 {
     private final PLCProgramScreen parent;
+    private final Predicate<InstructionProvider> predicate;
     @Nullable
     protected InstructionProvider instructionProvider;
 
-    public PLCOperationSelector(PLCProgramScreen parent)
+    public PLCOperationSelector(PLCProgramScreen parent, Predicate<InstructionProvider> predicate)
     {
         this.parent = parent;
+        this.predicate = predicate;
         this.elementWidth = 100;
         this.elementHeight = 200;
         this.x = 0;
@@ -67,13 +70,6 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
     protected void addEntries()
     {
         List<? extends InstructionProvider> instructions;
-//        if (parent.mode == PLCProgramScreen.RecordMode.IMMEDIATE)
-//        {
-//            instructions = Instructions.IMMEDIATE.stream().toList();
-//        }
-//        else
-//        {
-//        }
         instructions = Instructions.REGISTRY.stream().toList();
 
         int entryHeight = 20;
@@ -83,6 +79,9 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
         int count = 0;
         for (var entry : instructions)
         {
+            if (!predicate.test(entry))
+                continue;
+
             addDrawableChild(new OperationWidget(x + 3, entryStride + y + 3 + (entryStride * count), elementWidth - 6, entryHeight, entry, this::onSelect));
             count++;
         }
@@ -150,6 +149,12 @@ public class PLCOperationSelector extends ScreenSubElement implements Drawable, 
     public void appendNarrations(NarrationMessageBuilder builder)
     {
 
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button)
+    {
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     public class OperationWidget extends ClickableWidget

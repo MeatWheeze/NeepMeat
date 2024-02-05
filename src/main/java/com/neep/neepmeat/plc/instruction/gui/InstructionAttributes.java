@@ -25,7 +25,7 @@ public class InstructionAttributes
     public static void init()
     {
         register(Instructions.END, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".end.desc")));
-        register(Instructions.GOTO_START, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".restart.desc")));
+        register(Instructions.RESTART, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".restart.desc")));
         register(Instructions.REMOVE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".remove.desc")));
         register(Instructions.COMBINE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".combine.desc")));
         register(Instructions.MOVE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".move.desc")));

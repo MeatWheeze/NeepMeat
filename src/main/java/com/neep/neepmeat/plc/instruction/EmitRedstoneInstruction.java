@@ -61,26 +61,22 @@ public class EmitRedstoneInstruction implements Instruction
         return Instructions.EMIT_REDSTONE;
     }
 
-    public static class Parser implements InstructionParser
+    public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException
     {
-        @Override
-        public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException
+        view.fastForward();
+        Argument target = parser.parseArgument(view);
+        if (target == null)
+            throw new NeepASM.ParseException("expected redstone target");
+
+        view.fastForward();
+        if (!TokenView.isDigit(view.peek()))
+            throw new NeepASM.ParseException("expected strength integer");
+
+        int strength = view.nextInteger();
+
+        return ((world, source, program) ->
         {
-            view.fastForward();
-            Argument target = parser.parseArgument(view);
-            if (target == null)
-                throw new NeepASM.ParseException("expected redstone target");
-
-            view.fastForward();
-            if (!TokenView.isDigit(view.peek()))
-                throw new NeepASM.ParseException("expected strength integer");
-
-            int strength = view.nextInteger();
-
-            return ((world, source, program) ->
-            {
-                program.addBack(new EmitRedstoneInstruction(() -> world, target, strength));
-            });
-        }
+            program.addBack(new EmitRedstoneInstruction(() -> world, target, strength));
+        });
     }
 }

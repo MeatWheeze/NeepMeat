@@ -50,9 +50,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
 
-//    protected final PLCOperationSelector operationSelector = new PLCOperationSelector(this);
-    protected final PLCEditor editor;
-//    protected final PLCProgramOutline outline;
+    protected final PLCScreenEditorState editor;
+    protected final PLCScreenShellState shell;
+    protected PLCScreenState state;
 
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
@@ -61,6 +61,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     private final List<Text> tooltipText = Lists.newArrayList();
     private double mouseX;
     private double mouseY;
+    private RecordMode mode;
 
     public PLCProgramScreen(PLCScreenHandler handler, PlayerInventory playerInventory, Text unused)
     {
@@ -68,7 +69,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.handler = handler;
         this.passEvents = true;
         this.plc = handler.getPlc();
-        this.editor = new PLCEditor(this);
+
+        this.editor = new PLCScreenEditorState(this);
+        this.shell = new PLCScreenShellState(this);
+        this.state = shell;
+        this.mode = handler.getMode();
     }
 
     @Override
@@ -81,18 +86,24 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     protected void init()
     {
         super.init();
-//        addDrawableChild(operationSelector);
-//        operationSelector.init(client, width, height);
-//        operationSelector.setDimensions(width, height);
 
-        addDrawableChild(editor);
         editor.init(client, width, height);
-        editor.setDimensions(width, height);
+        shell.init(client, width, height);
+        if (mode == RecordMode.EDIT)
+        {
+            addDrawableChild(editor);
+            editor.setDimensions(width, height);
 
-        addDrawableChild(new StopButton(width - 17, 2, 16, 16, Text.of("Stop")));
-        addDrawableChild(new RunButton(width - 2 * 17, 2, 16, 16, Text.of("Run")));
-        addDrawableChild(new CompileButton(width - 3 * 17, 2, 16, 16, Text.of("Compile")));
-        addDrawableChild(new ModeSwitchButton(width - 4 * 17, 2, 16, 16));
+            addDrawableChild(new ModeSwitchButton(width - 17, 2, 16, 16));
+            addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
+            addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
+            addDrawableChild(new CompileButton(width - 4 * 17, 2, 16, 16, Text.of("Compile")));
+        }
+        else
+        {
+            addDrawableChild(shell);
+            addDrawableChild(new ModeSwitchButton(width - 17, 2, 16, 16));
+        }
 
     }
 
@@ -101,16 +112,17 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super.tick();
         tickTooltip(mouseX, mouseY);
+
         editor.tick();
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
-        if (!editor.isTextSelected() || keyCode == GLFW.GLFW_KEY_ESCAPE)
+        if (!state.isSelected() || keyCode == GLFW.GLFW_KEY_ESCAPE)
             return super.keyPressed(keyCode, scanCode, modifiers);
 
-        editor.keyPressed(keyCode, scanCode, modifiers);
+        state.onKeyPressed(keyCode, scanCode, modifiers);
         return true;
     }
 
@@ -125,7 +137,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             // Fill screen with the block's particle sprite to prevent xray vision
             Sprite sprite = client.getBlockRenderManager().getModels().getModelParticleSprite(wallState);
-//            drawScreenTexture(matrices, sprite.getAtlas().getId(), sprite.getMinU(), sprite.getMinV(), sprite.getMaxU(), sprite.getMaxV(), 0.1f);
             renderInWallOverlay(sprite, matrices);
         }
         else
@@ -138,9 +149,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             renderTooltipText(matrices, tooltipText, true, mouseX, mouseY, 0);
         }
-
-        MatrixStack ms = new MatrixStack();
-        ms.multiplyPositionMatrix(PLCHudRenderer.MODEL_VIEW);
 
         super.render(matrices, mouseX, mouseY, delta);
     }
@@ -303,7 +311,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     protected void addArgument(BlockHitResult result)
     {
-        editor.argument(new Argument(result.getBlockPos(), result.getSide()));
+        state.argument(new Argument(result.getBlockPos(), result.getSide()));
     }
 
     protected BlockHitResult raycastClick(double mouseX, double mouseY, double range)
@@ -459,7 +467,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return handler;
     }
 
-    public PLCEditor getEditor()
+    public PLCScreenEditorState getEditor()
     {
         return editor;
     }
@@ -607,8 +615,14 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void onClick(double mouseX, double mouseY)
         {
-            RecordMode newMode = RecordMode.cycle(handler.getMode());
-            PLCSyncProgram.Client.sendMode(plc, newMode);
+            mode = RecordMode.cycle(handler.getMode());
+            PLCSyncProgram.Client.sendMode(plc, mode);
+            if (mode == RecordMode.IMMEDIATE)
+                state = shell;
+            else
+                state = editor;
+
+            clearAndInit();
         }
 
         @Override
@@ -616,7 +630,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             return switch (handler.getMode())
             {
-                case RECORD -> Text.of("Record Mode: Instructions will be added to the current program");
+                case EDIT -> Text.of("Edit Mode");
                 case IMMEDIATE -> Text.of("Shell Mode: Instructions will be executed immediately");
             };
         }
@@ -626,7 +640,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             return switch(handler.getMode())
             {
-                case RECORD -> 64;
+                case EDIT -> 64;
                 case IMMEDIATE -> 48;
             };
         }

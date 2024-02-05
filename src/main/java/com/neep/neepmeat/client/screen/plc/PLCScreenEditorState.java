@@ -8,13 +8,14 @@ import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
+import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
 
-public class PLCEditor extends ScreenSubElement implements Drawable, Element, Selectable
+public class PLCScreenEditorState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
     private final PLCProgramScreen parent;
     private EditBoxWidget textField;
@@ -23,10 +24,15 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
 
     private final Parser parser = new Parser();
 
-    public PLCEditor(PLCProgramScreen parent)
+    public PLCScreenEditorState(PLCProgramScreen parent)
     {
         this.parent = parent;
-        browser = new InstructionBrowserWidget(this.parent);
+        browser = new InstructionBrowserWidget(this.parent, () -> null, p -> true, this::selectProvider);
+    }
+
+    private void selectProvider(InstructionProvider provider)
+    {
+        // TODO: add text to thingy
     }
 
     @Override
@@ -137,7 +143,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
         return SelectionType.FOCUSED;
     }
 
-    public boolean isTextSelected()
+    public boolean isSelected()
     {
         return textField.isFocused();
     }
@@ -146,4 +152,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
     {
         textField.insert("@(" + argument.pos().getX() + " " + argument.pos().getY() + " " + argument.pos().getZ() + " " + argument.face().name().toUpperCase().charAt(0) + ")");
     }
+
+    @Override
+    public void onKeyPressed(int keyCode, int scanCode, int modifiers) { keyPressed(keyCode, scanCode, modifiers); }
 }

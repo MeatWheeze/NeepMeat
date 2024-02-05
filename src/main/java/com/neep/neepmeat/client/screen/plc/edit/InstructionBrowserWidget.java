@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
+import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
@@ -22,24 +23,33 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 public class InstructionBrowserWidget implements Element, Drawable, ParentElement, Selectable
 {
     private final MinecraftClient client = MinecraftClient.getInstance();
     private final TextRenderer textRenderer = client.textRenderer;
     private final PLCProgramScreen parent;
+    private final Supplier<InstructionProvider> selected;
+    private final Predicate<InstructionProvider> predicate;
+    private final Consumer<InstructionProvider> action;
 
     private float scrollAmount = 0;
 
     private int x, y;
     private int width, height;
     private int screenWidth, screenHeight;
+    private final int pad = 1;
 
     private final List<OperationWidget> entries = Lists.newArrayList();
 
-    public InstructionBrowserWidget(PLCProgramScreen parent)
+    public InstructionBrowserWidget(PLCProgramScreen parent, Supplier<InstructionProvider> selected, Predicate<InstructionProvider> predicate, Consumer<InstructionProvider> action)
     {
         this.parent = parent;
+        this.selected = selected;
+        this.predicate = predicate;
+        this.action = action;
     }
 
     public void init(int screenWidth, int screenHeight)
@@ -65,11 +75,15 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
         for (var provider : instructions)
         {
+            if (!predicate.test(provider))
+                continue;
+
             int elementWidth = width - 3;
-            OperationWidget widget = new OperationWidget(elementWidth - 4, provider, p -> {});
+            OperationWidget widget = new OperationWidget(elementWidth - 4, provider, action);
             entries.add(widget);
         }
     }
+
 
     @Override
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
@@ -83,11 +97,17 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
         for (var entry : entries)
         {
-            if (yOffset >= y && yOffset + entry.height < y + height)
+            if (shouldRender(entry, yOffset))
                 entry.render(matrices, xOffset, yOffset, mouseX, mouseY, delta);
-            yOffset += entry.height();
+
+            yOffset += entry.height() + pad;
         }
         matrices.pop();
+    }
+
+    boolean shouldRender(OperationWidget entry, int yOffset)
+    {
+        return yOffset >= y && yOffset + entry.height < y + height;
     }
 
     @Override
@@ -107,7 +127,14 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
     {
         if (isInBounds(mouseX, mouseY))
         {
-            ParentElement.super.mouseClicked(mouseX, mouseY, button);
+            int yOffset = (int) (y + 2 + scrollAmount);
+            for (var entry : entries)
+            {
+                if (shouldRender(entry, yOffset) && mouseY >= yOffset && mouseY <= yOffset + entry.height + pad)
+                    entry.onClick(mouseX, mouseY);
+
+                yOffset += entry.height() + pad;
+            }
             return true;
         }
         return false;
@@ -179,7 +206,6 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
         public OperationWidget(int width, InstructionProvider provider, Consumer<InstructionProvider> action)
         {
-//            super(x, y, width, textRenderer.fontHeight + 1, provider.getShortName());
             this.message = provider.getShortName();
             this.width = width; this.height = textRenderer.fontHeight + 1;
             this.provider = provider;
@@ -188,9 +214,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
         public void render(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta)
         {
-//            int col = PLCOperationSelector.this.instructionProvider == provider ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
-            int col = PLCCols.BORDER.col;
-//            GUIUtil.renderBorder(matrices, x, y, width, height - 1, col, 0);
+            int col = selected.get() == provider ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
             GUIUtil.drawHorizontalLine1(matrices, x, x + width, y, col);
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
@@ -221,13 +245,13 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
         public void onClick(double mouseX, double mouseY)
         {
-//            super.onClick(mouseX, mouseY);
             action.accept(provider);
+            playDownSound(client.getSoundManager());
         }
 
         public void playDownSound(SoundManager soundManager)
         {
-            client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0f));
+            soundManager.play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0f));
         }
 
         public int height()

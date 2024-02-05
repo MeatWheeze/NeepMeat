@@ -89,7 +89,7 @@ public class PLCSyncProgram
     {
         PLCBlockEntity plc = getPlc(buf, world);
 
-        plc.getProgramEditor().setProgramSource(buf.readString());
+        plc.getProgramEditor().setProgramSource(buf.readString(10000));
     }
 
     private static void applyMode(PacketByteBuf buf, World world)
@@ -200,15 +200,6 @@ public class PLCSyncProgram
             {
                 programScreen.getEditor().setCompileMessage(message, success, line);
             }
-        }
-
-        private static void applySyncProgram(PacketByteBuf buf, World world)
-        {
-//            PLCBlockEntity plc = getPlc(buf, world);
-
-//            NbtCompound nbt = buf.readNbt();
-
-//            plc.getEditor().receiveProgram(nbt);
         }
 
         public static void sendArgument(Argument argument, PLCBlockEntity plc)

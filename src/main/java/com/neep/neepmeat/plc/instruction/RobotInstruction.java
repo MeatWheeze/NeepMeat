@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 public class RobotInstruction implements Instruction
@@ -29,6 +30,11 @@ public class RobotInstruction implements Instruction
             this.target = Argument.fromNbt(nbt.getCompound("target"));
         else
             this.target = null;
+    }
+
+    public RobotInstruction(Supplier<World> worldSupplier, List<Argument> arguments)
+    {
+        this.target = arguments.get(0);
     }
 
     @Override

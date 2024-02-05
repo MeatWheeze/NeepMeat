@@ -35,8 +35,8 @@ public class Instructions
             InstructionProvider.class,
             new Identifier(NeepMeat.NAMESPACE, "instruction_provider")).buildAndRegister();
 
-    public static final InstructionProvider END = register("end", new SimpleInstructionProvider((w, a) -> Instruction.end(), (w, n) -> Instruction.end(), 0, Text.of("END")));
-    public static final InstructionProvider GOTO_START = register("goto_start", new SimpleInstructionProvider((w, a) -> RestartInstruction.INSTANCE, (w, n) -> RestartInstruction.INSTANCE, 0, Text.of("RESTART")));
+    public static final InstructionProvider END = register("end", new SimplerInstructionProvider((w, a) -> Instruction.end(), parseNoArguments(Instruction::end), Text.of("END")));
+    public static final InstructionProvider RESTART = register("restart", new SimplerInstructionProvider((w, a) -> RestartInstruction.INSTANCE, parseNoArguments(() -> RestartInstruction.INSTANCE), Text.of("RESTART")));
 
     public static final SimplerInstructionProvider RET = register("ret", new SimplerInstructionProvider(ReturnInstruction::new, parseNoArguments(ReturnInstruction::new), Text.of("RET")));
     public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
@@ -60,7 +60,7 @@ public class Instructions
     public static final SimplerInstructionProvider SAY = register("say", new SimplerInstructionProvider(SayInstruction::new, new SayInstruction.Parser(), Text.of("SAY")));
     public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
 
-    public static final InstructionProvider ROBOT = register("robot", new SimplerInstructionProvider(RobotInstruction::new, new RobotInstruction.Parser(), Text.of("ROBOT")));
+    public static final InstructionProvider ROBOT = register("robot", new SimpleInstructionProvider(RobotInstruction::new, RobotInstruction::new, 1, Text.of("ROBOT")));
     public static final InstructionProvider EXEC = register("exec", new SimplerInstructionProvider(ExecInstruction::new, ExecInstruction::parser, Text.of("EXEC")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))
@@ -80,8 +80,8 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
-    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimpleInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::new, 1, Text.of("RWAIT")));
-    public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, new EmitRedstoneInstruction.Parser(), Text.of("REMIT")));
+    public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::parser, Text.of("RWAIT")));
+    public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, EmitRedstoneInstruction::parser, Text.of("REMIT")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {

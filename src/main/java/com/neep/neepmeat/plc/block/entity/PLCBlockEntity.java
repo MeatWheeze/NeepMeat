@@ -59,7 +59,6 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     protected boolean overrideController;
 
     protected final ShellState shell = new ShellState(this);
-    private PLCState state;
 
     private final ProgramEditor editor = new ProgramEditor(this);
     
@@ -75,11 +74,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     private PLCActuator selectedActuator = robot;
     @Nullable private BlockPos actuatorPos = null; // Workaround for loading selected actuator from NBT
 
+    private RecordMode mode = RecordMode.IMMEDIATE;
+
     public PLCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
 
-        this.state = shell;
         this.programSupplier = () -> null;
     }
 
@@ -334,6 +334,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         nbt.putBoolean("override_controller", overrideController);
         nbt.putInt("counter", counter);
         nbt.putBoolean("paused", paused);
+        nbt.putShort("mode", (short) mode.ordinal());
 
         nbt.put("editor", editor.writeNbt(new NbtCompound()));
 
@@ -365,6 +366,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         this.overrideController = nbt.getBoolean("override_controller");
         this.counter = nbt.getInt("counter");
         this.paused = nbt.getBoolean("paused");
+        this.mode = RecordMode.values()[nbt.getShort("mode")];
 
         editor.readNbt(nbt.getCompound("editor"));
 
@@ -393,7 +395,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public PLCState getState()
     {
-        return state;
+        return shell;
     }
 
     public boolean actionBlocksController()
@@ -403,11 +405,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
     public void setMode(RecordMode value)
     {
-        switch (value)
-        {
-            case IMMEDIATE -> state = shell;
-//            case RECORD -> state = editor;
-        }
+        this.mode = value;
         markDirty();
     }
 
@@ -429,6 +427,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     {
         buf.writeBlockPos(pos);
         buf.writeString(editor.getSource());
+        buf.writeInt(mode.ordinal());
     }
 
     public void runProgram(@Nullable PLCProgram program)
@@ -483,10 +482,10 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             {
                 case PROGRAM_COUNTER -> counter;
                 case HAS_PROGRAM -> programSupplier.get() != null ? 1 : 0;
-                case EDIT_MODE -> state.getMode().ordinal();
+                case EDIT_MODE -> mode.ordinal();
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
-                case ARGUMENT -> state.getArgumentCount();
-                case MAX_ARGUMENTS -> state.getMaxArguments();
+                case ARGUMENT -> shell.getArgumentCount();
+                case MAX_ARGUMENTS -> shell.getMaxArguments();
                 case DEBUG_LINE -> getDebugLine();
                 case SELECTED_INSTRUCTION -> 0;
             };

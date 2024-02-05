@@ -42,6 +42,6 @@ public class RestartInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return Instructions.GOTO_START;
+        return Instructions.RESTART;
     }
 }

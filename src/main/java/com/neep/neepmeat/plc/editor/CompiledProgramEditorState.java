@@ -72,7 +72,7 @@ public class CompiledProgramEditorState implements PLCState
     @Override
     public RecordMode getMode()
     {
-        return RecordMode.RECORD;
+        return RecordMode.EDIT;
     }
 
     @Override

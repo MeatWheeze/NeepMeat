@@ -3,12 +3,12 @@ package com.neep.neepmeat.client.screen.plc;
 public enum RecordMode
 {
     IMMEDIATE,
-    RECORD;
+    EDIT;
 
     public static RecordMode cycle(RecordMode mode)
     {
         if (mode == IMMEDIATE)
-            return RECORD;
+            return EDIT;
         else
             return IMMEDIATE;
     }
