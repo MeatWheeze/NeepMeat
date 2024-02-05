@@ -22,13 +22,14 @@ import java.util.Map;
 /**
  * It's the worst lexer/parser ever!
  * We don't need all those silly things like operator precedence, nested scopes blah blah blah. It's all bloat.
- * Abstract symbol tree? What's that?
+ * Abstract syntax tree? What's that?
  */
 public class Parser
 {
     private final Map<String, InstructionProvider> instructionMap = Maps.newHashMap();
 
     private ParsedSource parsedSource;
+    private int line = 0;
 
     public Parser()
     {
@@ -42,19 +43,19 @@ public class Parser
     {
         parsedSource = new ParsedSource();
 
-        int line1 = 0;
         TokenView view = new TokenView(source);
 
         try
         {
+            this.line = 0;
             while (!view.eof())
             {
                 parseLine(view);
                 view.nextLine();
-                line1++;
+                this.line++;
             }
 
-            parsedSource.instruction(((world, s, program) -> program.addBack(Instruction.EMPTY)));
+            parsedSource.instruction(((world, s, program) -> program.addBack(Instruction.EMPTY)), -1);
 
             // Expand the macros (which seem to have turned into functions) at the end with their labels.
             for (var func : parsedSource.functions())
@@ -64,7 +65,7 @@ public class Parser
         }
         catch (NeepASM.ParseException e)
         {
-            throw new NeepASM.ProgramBuildException(line1, view.pos(), e.getMessage());
+            throw new NeepASM.ProgramBuildException(this.line, view.pos(), e.getMessage());
         }
         return parsedSource;
     }
@@ -109,7 +110,7 @@ public class Parser
 
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
-            parsedSource.instruction(instruction);
+            parsedSource.instruction(instruction, line);
     }
 
     private void parseAlias(TokenView view) throws NeepASM.ParseException
@@ -182,7 +183,7 @@ public class Parser
 
         ParsedInstruction instruction = parseInstruction(view);
         if (instruction != null)
-            function.instruction(instruction);
+            function.instruction(instruction, line);
     }
 
     @Nullable

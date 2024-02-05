@@ -9,6 +9,5 @@ public interface Program
 
     int size();
 
-    @Nullable
-    Label findLabel(String label);
+    int getDebugLine(int counter);
 }

@@ -8,7 +8,6 @@ import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
-import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.block.entity.PLCExecutor;
@@ -125,12 +124,6 @@ public class ExecInstruction implements Instruction
         }
 
         @Override
-        public void addLabel(Label label)
-        {
-
-        }
-
-        @Override
         public void addBack(Instruction instruction)
         {
             instructions.add(instruction);
@@ -162,6 +155,12 @@ public class ExecInstruction implements Instruction
         }
 
         @Override
+        public void setDebugLine(int line)
+        {
+
+        }
+
+        @Override
         public Instruction get(int index)
         {
             if (index < instructions.size())
@@ -178,9 +177,9 @@ public class ExecInstruction implements Instruction
         }
 
         @Override
-        public @Nullable Label findLabel(String label)
+        public int getDebugLine(int counter)
         {
-            return null;
+            return -1;
         }
     }
 }

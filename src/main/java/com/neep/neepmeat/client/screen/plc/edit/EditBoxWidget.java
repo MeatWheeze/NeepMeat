@@ -21,7 +21,6 @@ import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
-import software.bernie.geckolib3.core.util.Color;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -39,6 +38,7 @@ public class EditBoxWidget extends ScrollableWidget
 
     private float scale = 0.8f;
     private int errorLine = -1;
+    private int debugLine = -1;
 
     public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text message)
     {
@@ -182,7 +182,8 @@ public class EditBoxWidget extends ScrollableWidget
             enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
             matrices.push();
             matrices.translate(0.0, -this.getScrollY(), 0.0);
-            renderErrorLine(matrices);
+            renderHighlightLine(matrices, errorLine, PLCCols.ERROR_LINE.col);
+            renderHighlightLine(matrices, debugLine, PLCCols.DEBUG_LINE.col);
             renderContents(matrices, mouseX, mouseY, delta);
             matrices.pop();
             disableScissor();
@@ -190,13 +191,13 @@ public class EditBoxWidget extends ScrollableWidget
         }
     }
 
-    protected void renderErrorLine(MatrixStack matrices)
+    protected void renderHighlightLine(MatrixStack matrices, int line, int col)
     {
-        if (errorLine < 0)
-            return;
-
-        double lineStart = y + getPadding() + errorLine * lineHeight();
-        fill(matrices, x + getPadding(), (int) lineStart, x + width - getPadding(), (int) (lineStart + lineHeight()), Color.ofRGBA(200, 30, 30, 100).getColor());
+        if (line >= 0)
+        {
+            double lineStart = y + getPadding() + line * lineHeight();
+            fill(matrices, x + getPadding(), (int) lineStart, x + width - getPadding(), (int) (lineStart + lineHeight()), col);
+        }
     }
 
     protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
@@ -434,5 +435,10 @@ public class EditBoxWidget extends ScrollableWidget
     public void setErrorLine(int line)
     {
         this.errorLine = line;
+    }
+
+    public void setDebugLine(int line)
+    {
+        this.debugLine = line;
     }
 }

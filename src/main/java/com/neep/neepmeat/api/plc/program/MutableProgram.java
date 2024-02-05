@@ -5,7 +5,6 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 
 public interface MutableProgram extends PLCProgram
 {
-    void addLabel(Label label);
 
     void addBack(Instruction instruction);
 
@@ -14,4 +13,6 @@ public interface MutableProgram extends PLCProgram
     void remove(int index);
 
     void add(int selected, Instruction instruction);
+
+    void setDebugLine(int line);
 }

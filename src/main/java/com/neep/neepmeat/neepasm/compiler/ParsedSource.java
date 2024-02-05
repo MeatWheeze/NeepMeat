@@ -5,20 +5,24 @@ import com.neep.neepmeat.neepasm.compiler.alias.ParsedAlias;
 import com.neep.neepmeat.neepasm.compiler.alias.ParsedArgumentAlias;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.Label;
+import it.unimi.dsi.fastutil.Pair;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class ParsedSource
 {
-    private final List<ParsedInstruction> instructions = Lists.newArrayList();
+    private final List<ObjectIntPair<ParsedInstruction>> instructions = Lists.newArrayList();
     private final List<Label> labels = Lists.newArrayList();
     private final List<ParsedFunction> functions = Lists.newArrayList();
     private final List<ParsedAlias> aliases = Lists.newArrayList();
 
-    public void instruction(ParsedInstruction preInstruction)
+    public void instruction(ParsedInstruction preInstruction, int line)
     {
-        instructions.add(preInstruction);
+        instructions.add(ObjectIntPair.of(preInstruction, line));
     }
 
     public void label(Label label)
@@ -41,7 +45,7 @@ public class ParsedSource
         return instructions.size();
     }
 
-    public Iterable<ParsedInstruction> instructions()
+    public Iterable<ObjectIntPair<ParsedInstruction>> instructions()
     {
         return instructions;
     }

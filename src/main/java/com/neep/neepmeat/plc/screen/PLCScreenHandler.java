@@ -101,4 +101,9 @@ public class PLCScreenHandler extends ScreenHandler
     {
         return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.HAS_PROGRAM.ordinal());
     }
+
+    public int debugLine()
+    {
+        return delegate.get(PLCBlockEntity.PLCPropertyDelegate.Names.DEBUG_LINE.ordinal());
+    }
 }

@@ -1,11 +1,9 @@
 package com.neep.neepmeat.api.plc.program;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.neepasm.program.Program;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import net.minecraft.nbt.NbtCompound;
-import org.jetbrains.annotations.Nullable;
 
 public interface PLCProgram extends Program, NbtSerialisable
 {
@@ -26,9 +24,10 @@ public interface PLCProgram extends Program, NbtSerialisable
         public int size() { return 0; }
 
         @Override
-        public @Nullable Label findLabel(String label)
+        public int getDebugLine(int counter)
         {
-            return null;
+            return -1;
         }
+
     }
 }

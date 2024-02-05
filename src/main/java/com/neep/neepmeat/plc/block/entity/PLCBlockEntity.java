@@ -9,6 +9,7 @@ import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
+import com.neep.neepmeat.neepasm.program.Program;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.plc.editor.ProgramEditor;
@@ -486,6 +487,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
                 case RUNNING -> (programSupplier.get() != null && !paused) ? 1 : 0;
                 case ARGUMENT -> state.getArgumentCount();
                 case MAX_ARGUMENTS -> state.getMaxArguments();
+                case DEBUG_LINE -> getDebugLine();
                 case SELECTED_INSTRUCTION -> 0;
             };
         }
@@ -516,6 +518,17 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             ARGUMENT,
             MAX_ARGUMENTS,
             SELECTED_INSTRUCTION,
+            DEBUG_LINE,
         }
+    }
+
+    private int getDebugLine()
+    {
+        Program program = programSupplier.get();
+        if (program != null)
+        {
+            return program.getDebugLine(counter);
+        }
+        return -1;
     }
 }

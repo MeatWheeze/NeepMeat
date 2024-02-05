@@ -7,6 +7,7 @@ import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.instruction.ReturnInstruction;
+import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.server.world.ServerWorld;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public class ParsedFunction
 {
     private final String name;
-    private final List<ParsedInstruction> instructions = Lists.newArrayList();
+    private final List<ObjectIntPair<ParsedInstruction>> instructions = Lists.newArrayList();
     private final List<Label> labels = Lists.newArrayList();
 
     public ParsedFunction(String name)
@@ -22,9 +23,9 @@ public class ParsedFunction
         this.name = name;
     }
 
-    public void instruction(ParsedInstruction instruction)
+    public void instruction(ParsedInstruction instruction, int line)
     {
-        instructions.add(instruction);
+        instructions.add(ObjectIntPair.of(instruction, line));
     }
 
     public void label(Label label)
@@ -66,11 +67,13 @@ public class ParsedFunction
             parsedSource.label(new Label(label.name(), parsedSource.size() + label.index()));
         }
 
-        for (ParsedInstruction preInstruction : instructions)
+        int line = -1;
+        for (var pair : instructions)
         {
-            parsedSource.instruction(preInstruction);
+            parsedSource.instruction(pair.key(), pair.valueInt());
+            line = pair.valueInt();
         }
-        parsedSource.instruction(((world, source, program) -> program.addBack(new ReturnInstruction())));
+        parsedSource.instruction(((world, source, program) -> program.addBack(new ReturnInstruction())), line);
     }
 
 //    public void build(ServerWorld serverWorld, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException

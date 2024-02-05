@@ -49,7 +49,7 @@ public class ProgramEditor implements NbtSerialisable
         }
         catch (NeepASM.ProgramBuildException e)
         {
-            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), e.getMessage(), false, -1);
+            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), e.getMessage(), false, e.line());
         }
     }
 

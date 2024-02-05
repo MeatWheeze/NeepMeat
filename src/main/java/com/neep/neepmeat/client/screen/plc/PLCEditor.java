@@ -87,6 +87,8 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
             PLCSyncProgram.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
             changed = false;
         }
+
+        textField.setDebugLine(parent.getScreenHandler().debugLine());
     }
 
     public void setCompileMessage(String message, boolean success, int line)
