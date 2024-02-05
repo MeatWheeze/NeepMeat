@@ -39,12 +39,13 @@ public class PLCSyncProgram
         ServerPlayNetworking.send(player, ID, buf);
     }
 
-    public static void sendCompileStatus(ServerPlayerEntity player, PLCBlockEntity be, String message, boolean success)
+    public static void sendCompileStatus(ServerPlayerEntity player, String message, boolean success, int line)
     {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeInt(Action.COMPILE.ordinal());
         buf.writeString(message);
         buf.writeBoolean(success);
+        buf.writeVarInt(line);
 
         ServerPlayNetworking.send(player, ID, buf);
     }
@@ -193,10 +194,11 @@ public class PLCSyncProgram
         {
             String message = buf.readString();
             boolean success = buf.readBoolean();
+            int line = buf.readVarInt();
 
             if (client.currentScreen instanceof PLCProgramScreen programScreen)
             {
-                programScreen.getEditor().setCompileMessage(message, success);
+                programScreen.getEditor().setCompileMessage(message, success, line);
             }
         }
 

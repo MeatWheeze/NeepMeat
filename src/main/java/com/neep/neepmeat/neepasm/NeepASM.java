@@ -27,6 +27,11 @@ public class NeepASM
         {
             return "At line " + line + ", char " + pos + ": " + super.getMessage();
         }
+
+        public int line()
+        {
+            return line;
+        }
     }
 
     public static class ParseException extends Exception

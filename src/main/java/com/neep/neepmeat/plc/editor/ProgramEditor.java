@@ -45,11 +45,11 @@ public class ProgramEditor implements NbtSerialisable
         {
             var parsed = parser.parse(programSource);
             this.program = compiler.compile(parsed);
-            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), plc, "Compiled successfully", true);
+            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), "Compiled successfully", true, -1);
         }
         catch (NeepASM.ProgramBuildException e)
         {
-            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), plc, e.getMessage(), false);
+            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), e.getMessage(), false, -1);
         }
     }
 

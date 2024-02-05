@@ -408,9 +408,7 @@ public class EditBox
     private int getWordEndIndex(int startIndex)
     {
         int i;
-        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i)
-        {
-        }
+        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i);
 
         return i;
     }

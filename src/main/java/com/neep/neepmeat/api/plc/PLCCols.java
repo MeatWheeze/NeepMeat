@@ -5,6 +5,7 @@ import software.bernie.geckolib3.core.util.Color;
 // I use the word 'col' because I don't want to give in and start using 'color'
 public enum PLCCols
 {
+    ERROR(Color.ofRGBA(200, 30, 30, 100).getColor()),
     INVALID(Color.ofRGBA(100, 30, 30, 255).getColor()),
     BORDER(Color.ofRGBA(255, 94, 33, 255).getColor()),
     TEXT(Color.ofRGBA(255, 94, 33, 255).getColor()),

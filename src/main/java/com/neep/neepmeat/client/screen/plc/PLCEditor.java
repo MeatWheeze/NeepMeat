@@ -77,11 +77,11 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
             try
             {
                 ParsedSource parsedSource = parser.parse(textField.getText());
-                setCompileMessage("Parsed Successfully", true);
+                setCompileMessage("Parsed Successfully", true, -1);
             }
             catch (NeepASM.ProgramBuildException e)
             {
-                setCompileMessage(e.getMessage(), false);
+                setCompileMessage(e.getMessage(), false, e.line());
             }
 
             PLCSyncProgram.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
@@ -89,9 +89,10 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
         }
     }
 
-    public void setCompileMessage(String message, boolean success)
+    public void setCompileMessage(String message, boolean success, int line)
     {
         textField.setError(message, success ? 0x44AA00 : 0xFF0000);
+        textField.setErrorLine(line);
     }
 
     @Override
