@@ -77,16 +77,21 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
             try
             {
                 ParsedSource parsedSource = parser.parse(textField.getText());
-                textField.setError("Parsed successfully", 0x44AA00);
+                setCompileMessage("Parsed Successfully", true);
             }
             catch (NeepASM.ProgramBuildException e)
             {
-                textField.setError(e.getMessage(), 0xFF0000);
+                setCompileMessage(e.getMessage(), false);
             }
 
             PLCSyncProgram.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
             changed = false;
         }
+    }
+
+    public void setCompileMessage(String message, boolean success)
+    {
+        textField.setError(message, success ? 0x44AA00 : 0xFF0000);
     }
 
     @Override

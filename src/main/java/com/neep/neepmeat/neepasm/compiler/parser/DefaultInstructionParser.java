@@ -49,6 +49,10 @@ public class DefaultInstructionParser implements InstructionParser
             {
                 throw new NeepASM.ParseException("unexpected token", view.peek());
             }
+
+            if (arguments.size() > provider.maxArguments())
+                throw new NeepASM.ParseException("too many targets provided");
+
             view.fastForward();
         }
 

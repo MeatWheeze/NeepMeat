@@ -6,9 +6,11 @@ import com.neep.neepmeat.api.storage.WorldSupplier;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.PLCCompiler;
 import com.neep.neepmeat.neepasm.compiler.Parser;
+import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class ProgramEditor implements NbtSerialisable
 {
@@ -43,10 +45,11 @@ public class ProgramEditor implements NbtSerialisable
         {
             var parsed = parser.parse(programSource);
             this.program = compiler.compile(parsed);
+            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), plc, "Compiled successfully", true);
         }
         catch (NeepASM.ProgramBuildException e)
         {
-            e.printStackTrace();
+            PLCSyncProgram.sendCompileStatus((ServerPlayerEntity) plc.getSurgeryRobot().getController(), plc, e.getMessage(), false);
         }
     }
 

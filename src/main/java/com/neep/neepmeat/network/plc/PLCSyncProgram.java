@@ -2,6 +2,7 @@ package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
@@ -14,6 +15,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
@@ -33,6 +35,16 @@ public class PLCSyncProgram
         putPlc(buf, be);
 
         buf.writeNbt(program.writeNbt(new NbtCompound()));
+
+        ServerPlayNetworking.send(player, ID, buf);
+    }
+
+    public static void sendCompileStatus(ServerPlayerEntity player, PLCBlockEntity be, String message, boolean success)
+    {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(Action.COMPILE.ordinal());
+        buf.writeString(message);
+        buf.writeBoolean(success);
 
         ServerPlayNetworking.send(player, ID, buf);
     }
@@ -171,10 +183,21 @@ public class PLCSyncProgram
                 {
                     switch (action)
                     {
-//                        case PROGRAM -> applySyncProgram(copy, client.world);
+                        case COMPILE -> Client.applyCompileMessage(copy, client);
                     }
                 });
             });
+        }
+
+        private static void applyCompileMessage(PacketByteBuf buf, MinecraftClient client)
+        {
+            String message = buf.readString();
+            boolean success = buf.readBoolean();
+
+            if (client.currentScreen instanceof PLCProgramScreen programScreen)
+            {
+                programScreen.getEditor().setCompileMessage(message, success);
+            }
         }
 
         private static void applySyncProgram(PacketByteBuf buf, World world)
