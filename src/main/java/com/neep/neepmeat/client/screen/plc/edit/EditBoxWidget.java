@@ -43,7 +43,7 @@ public class EditBoxWidget extends ScrollableWidget
     {
         super(x, y, width, height, message);
         this.textRenderer = textRenderer;
-        this.editBox = new EditBox(textRenderer, width - this.getPaddingDoubled());
+        this.editBox = new EditBox(textRenderer, width - this.getPaddingDoubled(), scale);
         this.editBox.setCursorChangeListener(this::onCursorChange);
     }
 

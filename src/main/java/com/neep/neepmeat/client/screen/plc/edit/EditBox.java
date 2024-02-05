@@ -33,11 +33,13 @@ public class EditBox
 
     private Consumer<String> changeListener = (text) -> {};
     private Runnable cursorChangeListener = () -> {};
+    private float scale;
 
-    public EditBox(TextRenderer textRenderer, int width)
+    public EditBox(TextRenderer textRenderer, int width, float scale)
     {
         this.textRenderer = textRenderer;
         this.width = width;
+        this.scale = scale;
     }
 
     public int getMaxLength()
@@ -429,7 +431,7 @@ public class EditBox
         }
         else
         {
-            this.textRenderer.getTextHandler().wrapLines(this.text, this.width, Style.EMPTY, false, (style, start, end) ->
+            this.textRenderer.getTextHandler().wrapLines(this.text, Math.round(this.width / this.scale), Style.EMPTY, false, (style, start, end) ->
             {
                 this.lines.add(new Substring(start, end));
             });

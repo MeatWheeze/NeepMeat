@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.plc;
 
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.plc.edit.EditBoxWidget;
+import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
@@ -17,6 +18,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
 {
     private final PLCProgramScreen parent;
     private EditBoxWidget textField;
+    private final InstructionBrowserWidget browser;
     private boolean changed;
 
     private final Parser parser = new Parser();
@@ -24,6 +26,7 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
     public PLCEditor(PLCProgramScreen parent)
     {
         this.parent = parent;
+        browser = new InstructionBrowserWidget(this.parent);
     }
 
     @Override
@@ -42,31 +45,16 @@ public class PLCEditor extends ScreenSubElement implements Drawable, Element, Se
                 }
             };
             textField.setText(parent.getScreenHandler().getInitialText());
-            textField.setChangeListener(this::setChanged);
+            textField.setChangeListener(s -> this.changed = true);
 
         }
 
         updateEditorWidth();
 
+        browser.init(screenWidth, screenHeight);
+
         addDrawableChild(textField);
-    }
-
-    @Override
-    public void close()
-    {
-//        super.close();
-
-    }
-
-    @Override
-    public boolean mouseReleased(double mouseX, double mouseY, int button)
-    {
-        return super.mouseReleased(mouseX, mouseY, button);
-    }
-
-    private void setChanged(String s)
-    {
-        changed = true;
+        addDrawableChild(browser);
     }
 
     private void updateEditorWidth()

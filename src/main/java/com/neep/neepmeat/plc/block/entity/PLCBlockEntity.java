@@ -20,6 +20,7 @@ import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.Stack;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -143,7 +144,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     {
         if (callStack.isEmpty())
         {
-            raiseError(new Error("Calls stack underflow"));
+            raiseError(new Error("Call stack underflow"));
             return 0;
         }
 
@@ -165,10 +166,16 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             this.counter = counter;
     }
 
+    private void say(Text what)
+    {
+        PlayerLookup.around((ServerWorld) getWorld(), getPos(), 20).forEach(p -> p.sendMessage(
+                Text.of("[PLC at " + getPos().getX() + " " + getPos().getY() + " " + getPos().getZ() + "] ").copy().append(what)));
+    }
+
     @Override
     public void raiseError(Error error)
     {
-        getWorld().getPlayers().forEach(p -> p.sendMessage(error.what()));
+        say(error.what());
         this.error = error;
 
         paused = true;
