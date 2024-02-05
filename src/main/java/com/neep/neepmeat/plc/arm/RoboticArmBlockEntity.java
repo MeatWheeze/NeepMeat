@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.neepasm.compiler.variable.EmptyVariableStack;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
+import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import it.unimi.dsi.fastutil.Pair;
 import it.unimi.dsi.fastutil.Stack;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLC.PLCProvider, MotorisedBlock
+public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, MotorisedBlock
 {
     private float power;
 
@@ -38,11 +39,11 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     public double prevY = tipY;
     public double prevZ = tipZ;
 
+    private final double range = 4.5;
+
     private Vec3d targetVec = new Vec3d(tipX, tipY, tipZ);
     @Nullable
     private ResourceAmount<ItemVariant> stored;
-
-    private PLCImpl plc = new PLCImpl();
 
     public RoboticArmBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -62,6 +63,8 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
         nbt.putDouble("tz", targetVec.z);
 
         nbt.putFloat("power", power);
+
+        nbt.put("stored", Instruction.writeItem(stored));
 
         if (target != null)
             nbt.put("target", NbtHelper.fromBlockPos(target));
@@ -83,6 +86,8 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
                 nbt.getDouble("tz")
         );
 
+        this.stored = Instruction.readItem(nbt.getCompound("stored"));
+
         if (nbt.contains("target"))
             this.target = NbtHelper.toBlockPos(nbt.getCompound("target"));
     }
@@ -93,11 +98,22 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
         prevY = tipY;
         prevZ = tipZ;
 
+//        if (targetVec != null)
+//        {
+//            double distance = targetVec.distanceTo(new Vec3d(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ()));
+//            if (distance < range)
+//        }
+
         moveTo(targetVec);
     }
 
     public void clientTick()
     {
+//        if (targetVec != null)
+//        {
+//            double distance = targetVec.distanceTo(new Vec3d(pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ()));
+//            if (distance < range)
+//        }
         moveTo(targetVec);
     }
 
@@ -105,6 +121,9 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     {
         if (!reachedTarget())
         {
+            if (origin().squaredDistanceTo(tipX, tipY, tipZ) >= range * range)
+                return;
+
             double dx = (toPos.x - tipX);
             double dy = (toPos.y - tipY);
             double dz = (toPos.z - tipZ);
@@ -126,6 +145,11 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
             tipY += vy;
             tipZ += vz;
         }
+    }
+
+    private Vec3d origin()
+    {
+        return new Vec3d(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
     }
 
     private double getSpeed()
@@ -206,12 +230,6 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 //    }
 
     @Override
-    public PLC get()
-    {
-        return plc;
-    }
-
-    @Override
     public boolean tick(MotorEntity motor)
     {
         return false;
@@ -222,91 +240,5 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     {
         this.power = power;
         sync();
-    }
-
-    private class PLCImpl implements PLC
-    {
-        @Nullable
-        private Pair<RobotAction, Consumer<PLC>> action;
-
-        private final EmptyVariableStack variableStack = new EmptyVariableStack();
-
-        @Override
-        public void addRobotAction(RobotAction action, Consumer<PLC> callback)
-        {
-            if (this.action != null)
-            {
-                this.action.first().cancel(this);
-                this.action.second().accept(this);
-            }
-
-            this.action = Pair.of(action, callback);
-        }
-
-        @Override
-        public PLCActuator getActuator()
-        {
-            return RoboticArmBlockEntity.this;
-        }
-
-        @Override
-        public void selectActuator(@Nullable BlockPos pos)
-        {
-
-        }
-
-        @Override
-        public int counter()
-        {
-            return 0;
-        }
-
-        @Override
-        public void advanceCounter()
-        {
-
-        }
-
-        @Override
-        public void pushCall(int data)
-        {
-
-        }
-
-        @Override
-        public int popCall()
-        {
-            return 0;
-        }
-
-        @Override
-        public Stack<Variable<?>> variableStack()
-        {
-            return variableStack;
-        }
-
-        @Override
-        public void setCounter(int counter)
-        {
-
-        }
-
-        @Override
-        public void raiseError(Error error)
-        {
-
-        }
-
-        @Override
-        public void flag(int i)
-        {
-
-        }
-
-        @Override
-        public int flag()
-        {
-            return 0;
-        }
     }
 }
