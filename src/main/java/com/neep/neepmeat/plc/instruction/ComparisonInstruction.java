@@ -19,8 +19,8 @@ public abstract class ComparisonInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            Variable<?> v2 = plc.variableStack().pop();;
-            Variable<?> v1 = plc.variableStack().pop();
+            Variable<?> v2 = plc.variableStack().peek(0);;
+            Variable<?> v1 = plc.variableStack().peek(1);
 
             if (v1.notEmpty() && v1.equals(v2))
                 plc.flag(1);
@@ -39,8 +39,8 @@ public abstract class ComparisonInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            Variable<?> v2 = plc.variableStack().pop();;
-            Variable<?> v1 = plc.variableStack().pop();
+            Variable<?> v2 = plc.variableStack().peek(0);;
+            Variable<?> v1 = plc.variableStack().peek(1);
 
             if (v1.notEmpty() && v1.type().equals(v2.type()))
             {
@@ -64,8 +64,8 @@ public abstract class ComparisonInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            Variable<?> v2 = plc.variableStack().pop();;
-            Variable<?> v1 = plc.variableStack().pop();
+            Variable<?> v2 = plc.variableStack().peek(0);;
+            Variable<?> v1 = plc.variableStack().peek(1);
 
             if (v1.notEmpty() && v1.type().equals(v2.type()))
             {
@@ -89,8 +89,8 @@ public abstract class ComparisonInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            Variable<?> v2 = plc.variableStack().pop();;
-            Variable<?> v1 = plc.variableStack().pop();
+            Variable<?> v2 = plc.variableStack().peek(0);;
+            Variable<?> v1 = plc.variableStack().peek(1);
 
             if (v1.notEmpty() && v1.type().equals(v2.type()))
             {
@@ -115,8 +115,8 @@ public abstract class ComparisonInstruction implements Instruction
         @Override
         public void start(PLC plc)
         {
-            Variable<?> v2 = plc.variableStack().pop();;
-            Variable<?> v1 = plc.variableStack().pop();
+            Variable<?> v2 = plc.variableStack().peek(0);
+            Variable<?> v1 = plc.variableStack().peek(1);
 
             if (v1.notEmpty() && v1.type().equals(v2.type()))
             {

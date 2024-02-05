@@ -51,6 +51,9 @@ public class Instructions
     public static final SimplerInstructionProvider GT = register("gt", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThan(), parseNoArguments(ComparisonInstruction.GreaterThan::new), Text.of("GT")));
     public static final SimplerInstructionProvider GTEQ = register("gteq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThanEqual(), parseNoArguments(ComparisonInstruction.GreaterThanEqual::new), Text.of("GTEQ")));
 
+    public static final SimplerInstructionProvider INC = register("inc", new SimplerInstructionProvider((w, n) -> new IncInstruction(), parseNoArguments(IncInstruction::new), Text.of("INC")));
+    public static final SimplerInstructionProvider DEC = register("dec", new SimplerInstructionProvider((w, n) -> new DecInstruction(), parseNoArguments(DecInstruction::new), Text.of("DEC")));
+
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
 
