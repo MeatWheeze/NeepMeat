@@ -5,6 +5,7 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
+import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.fabricmc.api.EnvType;
@@ -43,12 +44,13 @@ public class MotorInstance extends BlockEntityInstance<MotorBlockEntity> impleme
         matrices.push();
         Direction facing = blockEntity.getCachedState().get(BaseFacingBlock.FACING);
 
-        float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
+        float delta = AnimationTickHolder.getPartialTicks();
         blockEntity.currentSpeed = (float) (blockEntity.rotorSpeed * MathHelper.lerp(0.1, blockEntity.currentSpeed, blockEntity.getSpeed()));
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.currentSpeed * delta);
 
         rotor.loadIdentity().translate(getInstancePosition()).centre()
             .multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()))
+            .multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(facing == Direction.UP ? 90 : facing == Direction.DOWN ? -90 : 0))
             .multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle))
             .unCentre();
     }

@@ -253,6 +253,7 @@
   "block.neepmeat.casting_basin": "Pressing Basin",
   "block.neepmeat.hydraulic_press": "Hydraulic Press",
   "block.neepmeat.heater": "Heater",
+  "block.neepmeat.heater.lore_0": "Heats the furnace or furnace-like block it faces. Cooking speed is proportional to the power supplied. Can also oxidise copper that is exposed to Patina Treatment.",
   "block.neepmeat.trommel": "Blasphemous Trommel",
   "block.neepmeat.integrator_egg": "Integrator Egg",
   "block.neepmeat.integrator_egg.lore_0": "It pulsates, inexplicably communicating a desire for blood.",
@@ -268,11 +269,11 @@
   "block.neepmeat.breaker": "Motorised Breaker",
 
   "block.neepmeat.motor_unit": "Motor",
-  "block.neepmeat.motor_unit.lore_0": "Powers mechanical blocks.",
-  "block.neepmeat.motor_unit.lore_1": "Runs on Ethereal Fuel.",
+  "block.neepmeat.motor_unit.lore_0": "Powers mechanical blocks. Runs on Ethereal Fuel.\nMax output power: 1000eJ/t",
   "block.neepmeat.advanced_motor": "Advanced Motor",
-  "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks. Takes power from a connected vascular network.",
+  "block.neepmeat.advanced_motor.lore_0": "Powers mechanical blocks. Takes power from a connected vascular network.\nMax output power: 4000eJ/t",
   "block.neepmeat.large_motor": "Large Motor",
+  "block.neepmeat.large_motor.lore_0": "Powers mechanical blocks.\nMax output power: 8000eJ/t",
 
   "block.neepmeat.stirling_engine": "Stirling Engine",
   "block.neepmeat.agitator": "Fluid Agitator",

@@ -180,11 +180,11 @@ public class NMBlocks
 
 //    public static Block CENTRIFUGE = BlockRegistry.queue(new CentrifugeBlock("centrifuge", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block().requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block HEATER = BlockRegistry.queue(new HeaterBlock("heater", block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block LINEAR_OSCILLATOR = BlockRegistry.queue(new LinearOscillatorBlock("breaker", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block MOTOR = BlockRegistry.queue(new MotorBlock("motor_unit", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ADVANCED_MOTOR = BlockRegistry.queue(new AdvancedMotorBlock("advanced_motor", block().tooltip(TooltipSupplier.hidden(2)).requiresVascular(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static LargeMotorBlock LARGE_MOTOR = BlockRegistry.queue(new LargeMotorBlock("large_motor", block().tooltip(TooltipSupplier.hidden(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static LargeMotorBlock LARGE_MOTOR = BlockRegistry.queue(new LargeMotorBlock("large_motor", block().requiresVascular().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block FLYWHEEL = BlockRegistry.queue(new FlywheelBlock("large_flywheel", block().tooltip(TooltipSupplier.simple(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
