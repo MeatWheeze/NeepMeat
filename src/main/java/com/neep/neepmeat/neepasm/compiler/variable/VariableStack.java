@@ -1,12 +1,18 @@
 package com.neep.neepmeat.neepasm.compiler.variable;
 
+import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.api.plc.PLC;
-import it.unimi.dsi.fastutil.Stack;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+import it.unimi.dsi.fastutil.ints.IntStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtInt;
+import net.minecraft.nbt.NbtList;
 
-public class VariableStack implements Stack<Variable<?>>
+public class VariableStack implements IntStack, NbtSerialisable
 {
-    private final ObjectArrayList<Variable<?>> entries = new ObjectArrayList<>();
+//    private final ObjectArrayList<Variable<?>> entries = new ObjectArrayList<>();
+    private final IntArrayList entries = new IntArrayList();
 
     private final PLC plc;
     private final int maxSize;
@@ -18,7 +24,7 @@ public class VariableStack implements Stack<Variable<?>>
     }
 
     @Override
-    public void push(Variable<?> entry)
+    public void push(int entry)
     {
         if (size() >= maxSize)
         {
@@ -30,14 +36,14 @@ public class VariableStack implements Stack<Variable<?>>
     }
 
     @Override
-    public Variable<?> pop()
+    public int popInt()
     {
         if (isEmpty())
         {
             plc.raiseError(new PLC.Error("Variable stack underflow"));
-            return Variable.EMPTY;
+            return 0;
         }
-        return entries.pop();
+        return entries.popInt();
     }
 
     @Override
@@ -47,13 +53,13 @@ public class VariableStack implements Stack<Variable<?>>
     }
 
     @Override
-    public Variable<?> top()
+    public int topInt()
     {
         return entries.top();
     }
 
     @Override
-    public Variable<?> peek(int i)
+    public int peekInt(int i)
     {
         return entries.peek(i);
     }
@@ -61,5 +67,37 @@ public class VariableStack implements Stack<Variable<?>>
     public int size()
     {
         return entries.size();
+    }
+
+    @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+//        NbtList list = new NbtList();
+//        for (int i : entries)
+//        {
+//            list.add(NbtInt.of(i));
+//        }
+//        nbt.put("entries", list);
+        nbt.putIntArray("entries", entries);
+        return nbt;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+//        NbtList list = nbt.getList("entries", NbtElement.INT_TYPE);
+//        for (int i = 0; i < list.size(); ++i)
+//        {
+//            entries.add(i, list.getInt(i));
+//        }
+        entries.clear();
+        int[] ints = nbt.getIntArray("entries");
+        entries.size(ints.length);
+        entries.setElements(ints);
+    }
+
+    public void clear()
+    {
+        entries.clear();
     }
 }

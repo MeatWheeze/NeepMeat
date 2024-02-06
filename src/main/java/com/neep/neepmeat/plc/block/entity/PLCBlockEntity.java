@@ -7,7 +7,6 @@ import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.neepasm.program.Program;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
@@ -18,9 +17,9 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.Stack;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntList;
+import it.unimi.dsi.fastutil.ints.IntStack;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
@@ -126,6 +125,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void advanceCounter()
     {
         counter++;
+        markDirty();
     }
 
     @Override
@@ -138,6 +138,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         }
 
         callStack.push(data);
+        markDirty();
     }
 
     @Override
@@ -149,12 +150,14 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             return 0;
         }
 
+        markDirty();
         return callStack.popInt();
     }
 
     @Override
-    public Stack<Variable<?>> variableStack()
+    public IntStack variableStack()
     {
+        markDirty();
         return variableStack;
     }
 
@@ -165,6 +168,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
             stop();
         else
             this.counter = counter;
+
+        markDirty();
     }
 
     private void say(Text what)
@@ -198,7 +203,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     }
 
     @Override
-    public void flag(int i) { this.flag = i; }
+    public void flag(int i) { this.flag = i; markDirty(); }
 
     @Override
     public int flag() { return flag; }
@@ -209,10 +214,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         if (pos == null)
         {
             selectedActuator = robot;
+            markDirty();
         }
         else if (world.getBlockEntity(pos) instanceof PLCActuator.Provider actuator)
         {
             selectedActuator = actuator.get();
+            markDirty();
         }
         else
         {
@@ -345,6 +352,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         nbt.putBoolean("has_program", programSupplier.get() != null);
 
         nbt.putIntArray("call_stack", callStack);
+        nbt.put("variable_stack", variableStack.writeNbt(new NbtCompound()));
+        nbt.putInt("flag", flag);
 
         if (selectedActuator != robot && selectedActuator != null)
             nbt.put("actuator", NbtHelper.fromBlockPos(selectedActuator.getBasePos()));
@@ -376,6 +385,8 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
 
         callStack.clear();
         callStack.addAll(IntList.of(nbt.getIntArray("call_stack")));
+        variableStack.readNbt(nbt.getCompound("variable_stack"));
+        flag = nbt.getInt("flag");
 
         if (nbt.getBoolean("has_program"))
             programSupplier = editor::getProgram;
@@ -437,6 +448,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public void runProgram(@Nullable PLCProgram program)
     {
         resetError();
+        variableStack.clear();
         currentInstruction = null;
         paused = false;
         this.programSupplier = () -> program;

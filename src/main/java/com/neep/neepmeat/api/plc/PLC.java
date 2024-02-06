@@ -4,6 +4,7 @@ import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import it.unimi.dsi.fastutil.Stack;
+import it.unimi.dsi.fastutil.ints.IntStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +29,7 @@ public interface PLC
 
     int popCall();
 
-    Stack<Variable<?>> variableStack();
+    IntStack variableStack();
 
     void setCounter(int counter);
 

@@ -30,7 +30,7 @@ public class PopInstruction implements Instruction
     @Override
     public void start(PLC plc)
     {
-        plc.variableStack().pop();
+        plc.variableStack().popInt();
         plc.advanceCounter();
     }
 

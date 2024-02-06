@@ -5,7 +5,6 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.ExecutorBlock;
@@ -13,7 +12,7 @@ import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.robot.PLCActuator;
 import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.Stack;
+import it.unimi.dsi.fastutil.ints.IntStack;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -40,7 +39,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
     private Instruction currentInstruction;
 
     private int flag;
-    private final Stack<Variable<?>> variableStack = new VariableStack(this, 8); // TODO: save
+    private final IntStack variableStack = new VariableStack(this, 8); // TODO: save
     @Nullable private Error error;
 
     public ExecutorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -153,7 +152,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
     public int popCall() { return 0; }
 
     @Override
-    public Stack<Variable<?>> variableStack()
+    public IntStack variableStack()
     {
         return variableStack;
     }

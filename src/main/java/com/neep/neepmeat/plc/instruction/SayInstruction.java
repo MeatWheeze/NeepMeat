@@ -33,6 +33,13 @@ public class SayInstruction implements Instruction
     }
 
     @Override
+    public NbtCompound writeNbt(NbtCompound nbt)
+    {
+        nbt.putString("message", message);
+        return nbt;
+    }
+
+    @Override
     public void start(PLC plc)
     {
         plc.addRobotAction(new SayAction(), this::finish);

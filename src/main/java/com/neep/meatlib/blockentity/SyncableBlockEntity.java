@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 public abstract class SyncableBlockEntity extends BlockEntity implements BlockEntityClientSerializable
 {
     private boolean updateComparators;
+    private boolean dirty;
 
     public SyncableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -78,6 +79,7 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
             world.markDirty(pos);
             this.updateComparators = true;
             BlockEntity.markDirty(this.world, this.pos, this.getCachedState());
+//            dirty = true;
         }
     }
 
