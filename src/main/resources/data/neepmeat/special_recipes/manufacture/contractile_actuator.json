@@ -1,0 +1,20 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "minecraft:bone"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:internal_components"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:contractile_actuator",
+    "amount": 1
+  }
+}

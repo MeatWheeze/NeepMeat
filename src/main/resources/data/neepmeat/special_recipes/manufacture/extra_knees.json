@@ -6,15 +6,15 @@
   "steps":[
     {
       "id": "neepmeat:combine",
-      "resource": "minecraft:bone"
+      "resource": "neepmeat:contractile_actuator"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "minecraft:bone"
+      "resource": "neepmeat:contractile_actuator"
     },
     {
       "id": "neepmeat:combine",
-      "resource": "minecraft:bone"
+      "resource": "neepmeat:contractile_actuator"
     }
   ],
   "result": {

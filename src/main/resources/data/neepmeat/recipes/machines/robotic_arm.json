@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "b b",
+    "bob",
+    "ccc"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:contractile_actuator"
+    },
+    "c": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "o": {
+      "item": "neepmeat:control_unit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:robotic_arm",
+    "count": 1
+  }
+}

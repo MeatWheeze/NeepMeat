@@ -339,7 +339,7 @@
   "item.neepmeat.control_unit.lore_0": "So that meat and machine may think as one.",
 
   "item.neepmeat.internal_components": "Biomechanical Components",
-  "item.neepmeat.internal_components.lore_0": "Arcane mechanisms, sealed in skin never to see the light of day.",
+  "item.neepmeat.contractile_actuator": "Contractile Actuator",
 
   "item.neepmeat.bioelectric_organ": "Bioelectric Organ",
 
@@ -464,8 +464,8 @@
 
   "message.neepmeat.synthesiser.template": "Current template organism: %s",
 
-  "block.neepmeat.work_fluid": "Work Fluid",
-  "item.neepmeat.work_fluid_bucket": "Work Fluid Bucket",
+  "block.neepmeat.work_fluid": "Integration Fluid",
+  "item.neepmeat.work_fluid_bucket": "Integration Fluid Bucket",
 
   "block.neepmeat.charged_work_fluid": "Charged Work Fluid",
   "item.neepmeat.charged_work_fluid_bucket": "Charged Work Fluid Bucket",

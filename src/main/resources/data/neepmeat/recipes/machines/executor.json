@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "co "
+  ],
+  "key": {
+    "c": {
+      "item": "neepmeat:control_unit"
+    },
+    "o": {
+      "item": "neepmeat:plc"
+    }
+  },
+  "result": {
+    "item": "neepmeat:executor",
+    "count": 2
+  }
+}
