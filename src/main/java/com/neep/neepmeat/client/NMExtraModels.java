@@ -24,6 +24,11 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel PHAGE_RAY_BASE = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray.obj"));
     public static final PartialModel PHAGE_RAY_BARREL = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/phage_ray/phage_ray_barrel.obj"));
 
+    // I hindsight I should have called this a turntable, but words elude me when I am forced to quickly name a file.
+    public static PartialModel ROBOTIC_ARM_SPINNY_BIT = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/spinny_bit"));
+    public static PartialModel ROBOTIC_ARM_SEGMENT_1 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_1"));
+    public static PartialModel ROBOTIC_ARM_SEGMENT_2 = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_2"));
+
     public static final PartialModel COW_LIMB = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_limb"));
     public static final PartialModel COW_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/cow_head"));
     public static final PartialModel PIG_HEAD = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "entity/parts/pig_head"));
@@ -56,10 +61,6 @@ public class NMExtraModels implements ExtraModelProvider
     public static Identifier EGG = new Identifier(NeepMeat.NAMESPACE, "block/mob_egg");
     public static Identifier CRUSHER_JAW = new Identifier(NeepMeat.NAMESPACE, "block/grinder/jaw");
 
-    // I hindsight I should have called this a turntable, but words elude me when I am forced to quickly name a file.
-    public static Identifier ROBOTIC_ARM_SPINNY_BIT = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/spinny_bit");
-    public static Identifier ROBOTIC_ARM_SEGMENT_1 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_1");
-    public static Identifier ROBOTIC_ARM_SEGMENT_2 = new Identifier(NeepMeat.NAMESPACE, "block/robotic_arm/segment_2");
 
 
     @Override
@@ -86,10 +87,6 @@ public class NMExtraModels implements ExtraModelProvider
         out.accept(SURGERY_ROBOT);
         out.accept(EGG);
         out.accept(CRUSHER_JAW);
-
-        out.accept(ROBOTIC_ARM_SPINNY_BIT);
-        out.accept(ROBOTIC_ARM_SEGMENT_1);
-        out.accept(ROBOTIC_ARM_SEGMENT_2);
     }
 
     public static void init()

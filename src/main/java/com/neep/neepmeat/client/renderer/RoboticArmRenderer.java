@@ -1,13 +1,11 @@
 package com.neep.neepmeat.client.renderer;
 
-import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.plc.arm.RoboticArmBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3f;
 
 import static java.lang.Math.cos;
@@ -65,7 +63,7 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yaw));
         matrices.translate(-0.5, -0.5, -0.5);
 
-        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SPINNY_BIT, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
+//        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SPINNY_BIT, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
 
         matrices.push();
         matrices.translate(0, 2 - 1 / 16f, 0);
@@ -73,7 +71,7 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         double angle1 = Math.atan2(x3, y3);
         matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) angle1));
         matrices.translate(-0.5, 12 / 16f, -0.5);
-        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_1, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
+//        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_1, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
         matrices.pop();
 
         matrices.translate(0, y3 + 2 - 1 / 16f, x3);
@@ -81,7 +79,7 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         double angle2 = Math.atan2((lx - x3), (ly - y3));
         matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) angle2));
         matrices.translate(-0.5, 12 / 16f, -0.5);
-        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_2, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
+//        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_2, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
         matrices.pop();
 
     }
