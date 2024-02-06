@@ -155,4 +155,23 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     @Override
     public void onKeyPressed(int keyCode, int scanCode, int modifiers) { keyPressed(keyCode, scanCode, modifiers); }
+
+    @Override
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        if (keyCode == 258 && !isSelected())
+        {
+            boolean bl = !hasShiftDown();
+            if (!this.changeFocus(bl))
+            {
+                this.changeFocus(bl);
+            }
+
+            return false;
+        }
+        else
+        {
+            return this.getFocused() != null && this.getFocused().keyPressed(keyCode, scanCode, modifiers);
+        }
+    }
 }

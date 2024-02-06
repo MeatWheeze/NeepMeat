@@ -12,6 +12,7 @@ import net.minecraft.client.input.CursorMovement;
 import net.minecraft.text.Style;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.Objects;
@@ -31,8 +32,12 @@ public class EditBox
     private boolean selecting;
     private int maxLength = Integer.MAX_VALUE;
 
-    private Consumer<String> changeListener = (text) -> {};
-    private Runnable cursorChangeListener = () -> {};
+    private Consumer<String> changeListener = (text) ->
+    {
+    };
+    private Runnable cursorChangeListener = () ->
+    {
+    };
     private float scale;
 
     public EditBox(TextRenderer textRenderer, int width, float scale)
@@ -223,11 +228,13 @@ public class EditBox
             Substring substring;
             switch (keyCode)
             {
-                case 257:
-                case 335:
+                case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER ->
+                {
                     this.replaceSelection("\n");
                     return true;
-                case 259:
+                }
+                case GLFW.GLFW_KEY_BACKSPACE ->
+                {
                     if (Screen.hasControlDown())
                     {
                         substring = this.getPreviousWordAtCursor();
@@ -237,9 +244,10 @@ public class EditBox
                     {
                         this.delete(-1);
                     }
-
                     return true;
-                case 261:
+                }
+                case GLFW.GLFW_KEY_DELETE ->
+                {
                     if (Screen.hasControlDown())
                     {
                         substring = this.getNextWordAtCursor();
@@ -249,9 +257,10 @@ public class EditBox
                     {
                         this.delete(1);
                     }
-
                     return true;
-                case 262:
+                }
+                case GLFW.GLFW_KEY_RIGHT ->
+                {
                     if (Screen.hasControlDown())
                     {
                         substring = this.getNextWordAtCursor();
@@ -261,9 +270,10 @@ public class EditBox
                     {
                         this.moveCursor(CursorMovement.RELATIVE, 1);
                     }
-
                     return true;
-                case 263:
+                }
+                case GLFW.GLFW_KEY_LEFT ->
+                {
                     if (Screen.hasControlDown())
                     {
                         substring = this.getPreviousWordAtCursor();
@@ -273,29 +283,36 @@ public class EditBox
                     {
                         this.moveCursor(CursorMovement.RELATIVE, -1);
                     }
-
                     return true;
-                case 264:
+                }
+                case GLFW.GLFW_KEY_DOWN ->
+                {
                     if (!Screen.hasControlDown())
                     {
                         this.moveCursorLine(1);
                     }
-
                     return true;
-                case 265:
+                }
+                case GLFW.GLFW_KEY_UP ->
+                {
                     if (!Screen.hasControlDown())
                     {
                         this.moveCursorLine(-1);
                     }
-
                     return true;
-                case 266:
+                }
+                case GLFW.GLFW_KEY_PAGE_UP ->
+                {
                     this.moveCursor(CursorMovement.ABSOLUTE, 0);
                     return true;
-                case 267:
+                }
+                case GLFW.GLFW_KEY_PAGE_DOWN ->
+                {
                     this.moveCursor(CursorMovement.END, 0);
                     return true;
-                case 268:
+                }
+                case GLFW.GLFW_KEY_HOME ->
+                {
                     if (Screen.hasControlDown())
                     {
                         this.moveCursor(CursorMovement.ABSOLUTE, 0);
@@ -304,9 +321,10 @@ public class EditBox
                     {
                         this.moveCursor(CursorMovement.ABSOLUTE, this.getCurrentLine().beginIndex);
                     }
-
                     return true;
-                case 269:
+                }
+                case GLFW.GLFW_KEY_END ->
+                {
                     if (Screen.hasControlDown())
                     {
                         this.moveCursor(CursorMovement.END, 0);
@@ -315,10 +333,17 @@ public class EditBox
                     {
                         this.moveCursor(CursorMovement.ABSOLUTE, this.getCurrentLine().endIndex);
                     }
-
                     return true;
-                default:
+                }
+                case GLFW.GLFW_KEY_TAB ->
+                {
+                    replaceSelection("  ");
+                    return true;
+                }
+                default ->
+                {
                     return false;
+                }
             }
         }
     }
@@ -408,7 +433,7 @@ public class EditBox
     private int getWordEndIndex(int startIndex)
     {
         int i;
-        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i);
+        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i) ;
 
         return i;
     }
