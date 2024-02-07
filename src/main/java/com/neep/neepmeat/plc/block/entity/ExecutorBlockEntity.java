@@ -67,6 +67,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
                 currentAction.first().end(this);
                 currentAction.second().accept(this);
                 currentAction = null;
+                markDirty();
             }
             else
                 currentAction.first().tick(this);
@@ -91,6 +92,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
                 currentAction.first().start(this);
             }
         }
+        markDirty();
     }
 
     private void say(Text what)
@@ -131,9 +133,10 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
     {
         currentInstruction = null;
         instructions.poll();
+        markDirty();
     }
 
-    private void stop()
+    public void stop()
     {
         currentInstruction = null;
         instructions.clear();
@@ -143,6 +146,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
             currentAction.first().cancel(this);
             currentAction = null;
         }
+        markDirty();
     }
 
     @Override
@@ -213,6 +217,7 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
     public void flag(int i)
     {
         this.flag = i;
+        markDirty();
     }
 
     @Override

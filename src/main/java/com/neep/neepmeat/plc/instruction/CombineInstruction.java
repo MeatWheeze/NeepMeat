@@ -102,7 +102,7 @@ public class CombineInstruction implements Instruction
     {
         final var stored = plc.getActuator().getStored();
         var mip = MutateInPlace.ITEM.find(worldSupplier.get(), to.pos(), null);
-        if (mip != null)
+        if (stored != null && mip != null)
         {
             ItemStack stack = mip.get();
 

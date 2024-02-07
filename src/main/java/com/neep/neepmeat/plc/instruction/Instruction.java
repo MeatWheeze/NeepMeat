@@ -3,6 +3,7 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.nbt.NbtCompound;
@@ -104,6 +105,28 @@ public interface Instruction extends NbtSerialisable
         {
             long amount = nbt.getLong("amount");
             return new ResourceAmount<>(ItemVariant.fromNbt(nbt), amount);
+        }
+        return null;
+    }
+
+    static NbtCompound writeFluid(@Nullable ResourceAmount<FluidVariant> amount)
+    {
+        if (amount != null)
+        {
+            var nbt = amount.resource().toNbt();
+            nbt.putLong("amount", amount.amount());
+            return nbt;
+        }
+        else return new NbtCompound();
+    }
+
+    @Nullable
+    static ResourceAmount<FluidVariant> readFluid(NbtCompound nbt)
+    {
+        if (nbt.contains("amount"))
+        {
+            long amount = nbt.getLong("amount");
+            return new ResourceAmount<>(FluidVariant.fromNbt(nbt), amount);
         }
         return null;
     }

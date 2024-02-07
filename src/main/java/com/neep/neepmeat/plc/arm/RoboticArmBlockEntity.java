@@ -121,8 +121,6 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     {
         if (!reachedTarget())
         {
-            if (origin().squaredDistanceTo(tipX, tipY, tipZ) >= range * range)
-                return;
 
             double dx = (toPos.x - tipX);
             double dy = (toPos.y - tipY);
@@ -139,6 +137,9 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
                 vy = vy / dist * getSpeed();
                 vz = vz / dist * getSpeed();
             }
+
+            if (origin().squaredDistanceTo(tipX + vx, tipY + vy, tipZ + vz) >= range * range)
+                return;
 
             // Step position
             tipX += vx;
@@ -190,6 +191,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
         {
             spawnItem(stored);
             stored = null;
+            markDirty();
         }
     }
 
@@ -197,6 +199,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     public void setStored(@Nullable ResourceAmount<ItemVariant> stored)
     {
         this.stored = stored;
+        markDirty();
     }
 
     @Override

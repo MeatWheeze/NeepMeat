@@ -4,12 +4,17 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.plc.PLCBlocks;
+import com.neep.neepmeat.plc.block.entity.ExecutorBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
@@ -26,6 +31,17 @@ public class ExecutorBlock extends BaseFacingBlock implements BlockEntityProvide
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
         return PLCBlocks.EXECUTOR_ENTITY.instantiate(pos, state);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (player.isSneaking() && world.getBlockEntity(pos) instanceof ExecutorBlockEntity be)
+        {
+            be.stop();
+            return ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hand, hit);
     }
 
     @Nullable

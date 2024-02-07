@@ -32,7 +32,7 @@ public class InjectInstruction implements Instruction
     private final Supplier<World> world;
     private final Argument from;
     private final Argument to;
-    private ResourceAmount<FluidVariant> stored;
+    private ResourceAmount<FluidVariant> stored; // TODO: save
 
     private final GroupedRobotAction group;
 
@@ -58,13 +58,14 @@ public class InjectInstruction implements Instruction
         world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.INJECT_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
     }
 
-    public InjectInstruction(Supplier<World> world, NbtCompound compound)
+    public InjectInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this(() -> (ServerWorld) world.get(), List.of(
-                Argument.fromNbt(compound.getCompound("from")),
-                Argument.fromNbt(compound.getCompound("to"))
+        this(world, List.of(
+                Argument.fromNbt(nbt.getCompound("from")),
+                Argument.fromNbt(nbt.getCompound("to"))
         ));
-        group.readNbt(compound.getCompound("action"));
+        group.readNbt(nbt.getCompound("action"));
+        this.stored = Instruction.readFluid(nbt.getCompound("stored"));
     }
 
     @Override
@@ -73,21 +74,10 @@ public class InjectInstruction implements Instruction
         nbt.put("from", from.toNbt());
         nbt.put("to", to.toNbt());
         nbt.put("action", group.writeNbt(new NbtCompound()));
+        nbt.put("stored", Instruction.writeFluid(stored));
+
         return nbt;
     }
-
-    @Override
-    public void readNbt(NbtCompound nbt)
-    {
-
-    }
-
-    @Override
-    public boolean canStart(PLC plc)
-    {
-        return true;
-    }
-
 
     @Override
     public void start(PLC plc)

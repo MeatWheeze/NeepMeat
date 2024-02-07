@@ -22,17 +22,20 @@ import java.util.function.Supplier;
 
 public class ExecInstruction implements Instruction
 {
+    private final Supplier<World> world;
     private final Argument target;
     private final Instruction instruction;
 
-    public ExecInstruction(@Nullable Argument target, Instruction instruction)
+    public ExecInstruction(Supplier<World> world, @Nullable Argument target, Instruction instruction)
     {
+        this.world = world;
         this.target = target;
         this.instruction = instruction;
     }
 
     public ExecInstruction(Supplier<World> world, NbtCompound nbt)
     {
+        this.world = world;
         this.target = Argument.fromNbt(nbt.getCompound("target"));
 
         NbtCompound instructionNbt = nbt.getCompound("instruction");
@@ -63,7 +66,8 @@ public class ExecInstruction implements Instruction
         {
             if (pbe.getWorld().getBlockEntity(target.pos()) instanceof PLCExecutor executor)
             {
-                executor.receiveInstruction(instruction);
+                // Execute a copy of this instruction
+                executor.receiveInstruction(instruction.getProvider().createFromNbt(world, instruction.writeNbt(new NbtCompound())));
             }
         }
         else
@@ -103,7 +107,7 @@ public class ExecInstruction implements Instruction
             if (instruction.getProvider().equals(Instructions.EXEC))
                 throw new NeepASM.CompilationException("nested exec instructions not allowed");
 
-            program.addBack(new ExecInstruction(target, instruction));
+            program.addBack(new ExecInstruction(() -> world, target, instruction));
         };
     }
 
