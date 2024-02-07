@@ -1,16 +1,25 @@
 package com.neep.neepmeat.client.screen.plc;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.instruction.SimpleInstructionProvider;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
+
+import java.util.List;
 
 public class PLCScreenShellState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
@@ -35,6 +44,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
         super.init();
 
         browser.init(screenWidth, screenHeight);
+        addDrawable(new HelpWidget(0, 0));
         addDrawable(new CurrentArgumentWidget(browser.getX(), browser.getY() - textRenderer.fontHeight - 2, parent.getScreenHandler()));
 
         addDrawableChild(browser);
@@ -83,5 +93,50 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     public boolean isSelected()
     {
         return false;
+    }
+
+    public class HelpWidget implements Drawable
+    {
+        private final int x;
+        private final int y;
+        private final int width = 16;
+        private final int height = 16;
+        private final Text text;
+
+        public HelpWidget(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+            this.text = Text.translatable("text." + NeepMeat.NAMESPACE + ".plc.interactive_help");
+        }
+
+        private boolean isMouseOver(double mx, double my)
+        {
+            return (mx > x && mx < x + width && my > y && my < y + height);
+        }
+
+        @Override
+        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        {
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, PLCProgramScreen.WIDGETS);
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.enableDepthTest();
+
+            int u = 112;
+            int v = isMouseOver(mouseX, mouseY) ? 32 : 16;
+            drawTexture(matrices, this.x, this.y, 0, u, v, width, height, 256, 256);
+
+            int maxWidth = 150;
+
+            List<OrderedText> lines = textRenderer.wrapLines(text, maxWidth);
+
+            if (isMouseOver(mouseX, mouseY))
+            {
+                parent.renderTooltipOrderedText(matrices, lines, false, mouseX, mouseY, maxWidth, PLCCols.TEXT.col);
+            }
+        }
     }
 }

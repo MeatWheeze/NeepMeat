@@ -634,7 +634,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             return switch (handler.getMode())
             {
                 case EDIT -> Text.of("Edit Mode");
-                case IMMEDIATE -> Text.of("Shell Mode: Instructions will be executed immediately");
+                case IMMEDIATE -> Text.of("Interactive Mode: Instructions will be executed immediately");
             };
         }
 

@@ -8,6 +8,7 @@
   "message.neepmeat.requires_vascular": "Requires a vascular network.",
   "message.neepmeat.plc_compatible": "Valid PLC workbench",
   "text.neepmeat.plc.arguments": "Argument: %s / %s",
+  "text.neepmeat.plc.interactive_help": "Click an instruction in the right panel to select it.\n\nClick a block in a the world to add its position as an argument.\n\nOnce the required number of arguments are filled, the instruction will be executed immediately.",
 
   "message.neepmeat.power": "Power: ",
   "message.neepmeat.power_unit": "eJ/t",
