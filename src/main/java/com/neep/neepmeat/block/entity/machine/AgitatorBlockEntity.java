@@ -15,11 +15,6 @@ public class AgitatorBlockEntity extends BlockEntity implements MotorisedBlock
         super(type, pos, state);
     }
 
-    public AgitatorBlockEntity(BlockPos pos, BlockState state)
-    {
-        this(NMBlockEntities.AGITATOR, pos, state);
-    }
-
     @Override
     public boolean tick(MotorEntity motor)
     {

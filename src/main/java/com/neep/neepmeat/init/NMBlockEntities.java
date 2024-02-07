@@ -126,12 +126,12 @@ public class NMBlockEntities
     public static BlockEntityType<AdvancedMotorBlockEntity> ADVANCED_MOTOR;
     public static BlockEntityType<LinearOscillatorBlockEntity> LINEAR_OSCILLATOR;
     public static BlockEntityType<DeployerBlockEntity> DEPLOYER;
-    public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
-    public static BlockEntityType<ItemPortBlock.BlockEntity> VAT_ITEM_PORT;
-    public static BlockEntityType<FluidPortBlock.BlockEntity> VAT_FLUID_PORT;
-    public static BlockEntityType<MultiBlock.Entity> VAT_CASING;
-    public static BlockEntityType<MultiBlock.Entity> VAT_WINDOW;
-    public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
+//    public static BlockEntityType<AgitatorBlockEntity> AGITATOR;
+//    public static BlockEntityType<ItemPortBlock.BlockEntity> VAT_ITEM_PORT;
+//    public static BlockEntityType<FluidPortBlock.BlockEntity> VAT_FLUID_PORT;
+//    public static BlockEntityType<MultiBlock.Entity> VAT_CASING;
+//    public static BlockEntityType<MultiBlock.Entity> VAT_WINDOW;
+//    public static BlockEntityType<VatControllerBlockEntity> VAT_CONTROLLER;
 
     public static BlockEntityType<ConverterBlockEntity> CONVERTER;
     public static BlockEntityType<ConverterBlockEntity> LARGE_CONVERTER;
@@ -316,7 +316,7 @@ public class NMBlockEntities
         LINEAR_OSCILLATOR = register("linear_oscillator", LinearOscillatorBlockEntity::new, NMBlocks.LINEAR_OSCILLATOR);
         DEPLOYER = register("deployer", (p, s) -> new DeployerBlockEntity(DEPLOYER, p, s), NMBlocks.DEPLOYER);
         ItemStorage.SIDED.registerSelf(DEPLOYER);
-        AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
+//        AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
         GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
         ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
@@ -356,11 +356,13 @@ public class NMBlockEntities
         PHAGE_RAY = register("phage_ray", (p, s) -> new PhageRayBlockEntity(PHAGE_RAY, p, s), NMBlocks.PHAGE_RAY);
         BloodAcceptor.SIDED.registerForBlockEntity(PhageRayBlock.PhageRayStructureBlockEntity::getAcceptor, NMBlocks.PHAGE_RAY.getStructure().getBlockEntityType());
 
-        VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
-        VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
-        VAT_ITEM_PORT = register("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
-        VAT_FLUID_PORT = register("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
-        VAT_CONTROLLER = register("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
+//        VAT_WINDOW = register("vat_window", (pos, state) -> new MultiBlock.Entity(VAT_WINDOW, pos, state), NMBlocks.VAT_WINDOW);
+//        VAT_CASING = register("vat_casing", (pos, state) -> new MultiBlock.Entity(VAT_CASING, pos, state), NMBlocks.VAT_CASING);
+//        VAT_ITEM_PORT = register("vat_item_port", ItemPortBlock.BlockEntity::new, NMBlocks.VAT_ITEM_PORT);
+//        VAT_FLUID_PORT = register("vat_fluid_port", FluidPortBlock.BlockEntity::new, NMBlocks.VAT_FLUID_PORT);
+//        VAT_CONTROLLER = register("vat_controller", VatControllerBlockEntity::new, NMBlocks.VAT_CONTROLLER);
+//        ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
+//        FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
         FLUID_EXCITER = register("fluid_exciter", (pos, state) -> new FluidExciterBlockEntity(FLUID_EXCITER, pos, state), NMBlocks.FLUID_EXCITER);
         FluidStorage.SIDED.registerForBlockEntity(FluidExciterBlockEntity::getInputStorage, FLUID_EXCITER);
@@ -424,8 +426,6 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);
         ItemStorage.SIDED.registerSelf(ITEM_DUCT_BLOCK_ENTITY);
 
-        ItemStorage.SIDED.registerSelf(VAT_ITEM_PORT);
-        FluidStorage.SIDED.registerSelf(VAT_FLUID_PORT);
 
 
         FluidStorage.SIDED.registerForBlockEntity(PumpBlockEntity::getBuffer, PUMP);

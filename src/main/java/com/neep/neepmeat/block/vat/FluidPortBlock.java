@@ -2,7 +2,6 @@ package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.multiblock.IPortBlock;
-import com.neep.neepmeat.api.multiblock.PortBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockEntityProvider;
@@ -27,7 +26,7 @@ public class FluidPortBlock extends VatCasingBlock implements IPortBlock<FluidVa
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof BlockEntity be && !world.isClient())
+        if (world.getBlockEntity(pos) instanceof PortBlockEntity be && !world.isClient())
         {
             System.out.println(be.getController());
         }
@@ -38,18 +37,19 @@ public class FluidPortBlock extends VatCasingBlock implements IPortBlock<FluidVa
     @Override
     public net.minecraft.block.entity.BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new BlockEntity(pos, state);
+//        return new PortBlockEntity(pos, state);
+        return null;
     }
 
     @SuppressWarnings("UnstableApiUsage")
-    public static class BlockEntity extends PortBlockEntity<FluidVariant> implements IPortBlock.Entity
+    public static class PortBlockEntity extends com.neep.neepmeat.api.multiblock.PortBlockEntity<FluidVariant> implements IPortBlock.Entity
     {
-        public BlockEntity(BlockPos pos, BlockState state)
+        public PortBlockEntity(BlockPos pos, BlockState state)
         {
-            this(NMBlockEntities.VAT_FLUID_PORT, pos, state);
+            this(null, pos, state);
         }
 
-        public BlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+        public PortBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state, FluidVariant.class);
         }

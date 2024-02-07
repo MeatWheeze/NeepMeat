@@ -177,8 +177,8 @@ public class NeepMeatClient implements ClientModInitializer
 //        BlockEntityRendererFactories.register(NMBlockEntities.CONVERTER, ConverterRenderer::new);
 //        BlockEntityRendererFactories.register(NMBlockEntities.ADVANCED_MOTOR, AdvancedMotorRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.DEPLOYER, DeployerRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
-        BlockEntityRendererFactories.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.AGITATOR, AgitatorRenderer::new);
+//        BlockEntityRendererFactories.register(NMBlockEntities.VAT_CONTROLLER, VatRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MIXER, MixerRenderer::new);
         BlockEntityRendererFactories.register(NMBlockEntities.MULTI_TANK, MultiTankRenderer::new);
 
@@ -278,7 +278,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) NMBlocks.YELLOW_SCAFFOLD.stairs);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) NMBlocks.YELLOW_SCAFFOLD.slab);
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.VAT_WINDOW);
+//        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.VAT_WINDOW);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.ADVANCED_INTEGRATOR);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.LARGE_MOTOR);

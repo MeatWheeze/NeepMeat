@@ -41,6 +41,7 @@ public class VatCasingBlock extends BaseBlock implements VatComponent, BlockEnti
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.VAT_CASING.instantiate(pos, state);
+//        return NMBlockEntities.VAT_CASING.instantiate(pos, state);
+        return null;
     }
 }

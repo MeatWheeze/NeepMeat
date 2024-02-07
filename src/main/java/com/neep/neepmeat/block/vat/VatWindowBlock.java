@@ -49,6 +49,7 @@ public class VatWindowBlock extends VatCasingBlock implements VatComponent
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.VAT_WINDOW.instantiate(pos, state);
+//        return NMBlockEntities.VAT_WINDOW.instantiate(pos, state);
+        return null;
     }
 }

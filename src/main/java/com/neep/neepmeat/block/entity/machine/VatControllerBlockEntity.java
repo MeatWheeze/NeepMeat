@@ -46,7 +46,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements Con
 
     public VatControllerBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.VAT_CONTROLLER, pos, state);
+        this(null, pos, state);
     }
 
     public VatControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -166,7 +166,7 @@ public class VatControllerBlockEntity extends SyncableBlockEntity implements Con
             valid = false;
         }
 
-        valid = valid && world.getBlockState(centre.add(0, 3, 0)).isOf(NMBlocks.AGITATOR);
+//        valid = valid && world.getBlockState(centre.add(0, 3, 0)).isOf(NMBlocks.AGITATOR);
 
         valid = valid && blocks.stream().filter(pos1 -> world.getBlockState(pos1).getBlock() instanceof VatControllerBlock).count() == 1;
 

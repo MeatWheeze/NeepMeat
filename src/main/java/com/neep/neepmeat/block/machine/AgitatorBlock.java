@@ -20,6 +20,7 @@ public class AgitatorBlock extends BaseVertFacingBlock implements BlockEntityPro
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return new AgitatorBlockEntity(pos, state);
+//        return new AgitatorBlockEntity(pos, state);
+        return null;
     }
 }

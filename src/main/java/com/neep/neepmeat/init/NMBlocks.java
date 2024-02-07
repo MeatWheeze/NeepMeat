@@ -85,7 +85,7 @@ public class NMBlocks
     public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
     public static final AbstractBlock.Settings VASCULAR_CONDUIT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
     public static final AbstractBlock.Settings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).nonOpaque().solidBlock(InventoryDetectorBlock::never);
-    public static final AbstractBlock.Settings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
+//    public static final AbstractBlock.Settings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final AbstractBlock.Settings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final AbstractBlock.Settings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
 
@@ -188,7 +188,7 @@ public class NMBlocks
     public static Block FLYWHEEL = BlockRegistry.queue(new FlywheelBlock("large_flywheel", block().tooltip(TooltipSupplier.simple(0)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block STIRLING_ENGINE = BlockRegistry.queue(new StirlingEngineBlock("stirling_engine", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+//    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block GRINDER = BlockRegistry.queue(new GrinderBlock("grinder", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", block(), FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
@@ -233,11 +233,11 @@ public class NMBlocks
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block UPGRADE_MANAGER = BlockRegistry.queue(new UpgradeManagerBlock("upgrade_manager", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));
-    public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", block(), VAT_SETTINGS));
-    public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", block(), VAT_SETTINGS));
-    public static Block VAT_FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("vat_fluid_port", block(), VAT_SETTINGS));
-    public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", block(), AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
+//    public static Block VAT_CASING = BlockRegistry.queue(new VatCasingBlock("vat_casing", block().tooltip(TooltipSupplier.simple(1)), VAT_SETTINGS));
+//    public static Block VAT_CONTROLLER = BlockRegistry.queue(new VatControllerBlock("vat_controller", block(), VAT_SETTINGS));
+//    public static Block VAT_ITEM_PORT = BlockRegistry.queue(new ItemPortBlock("vat_item_port", block(), VAT_SETTINGS));
+//    public static Block VAT_FLUID_PORT = BlockRegistry.queue(new FluidPortBlock("vat_fluid_port", block(), VAT_SETTINGS));
+//    public static Block VAT_WINDOW = BlockRegistry.queue(new VatWindowBlock("clear_tank_wall", block(), AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never)));
 
     public static Block FLAME_JET = BlockRegistry.queue(new FlameJetBlock("flame_jet", block().factory(FluidComponentItem::new), MACHINE_SETTINGS));
 
