@@ -1,0 +1,24 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:internal_components"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:fluid_buffer"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:fluid_buffer"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:contractile_actuator"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:lung_extensions",
+    "amount": 1
+  }
+}
