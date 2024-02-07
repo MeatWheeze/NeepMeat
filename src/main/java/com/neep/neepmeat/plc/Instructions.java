@@ -53,6 +53,14 @@ public class Instructions
 
     public static final SimplerInstructionProvider INC = register("inc", new SimplerInstructionProvider((w, n) -> new IncInstruction(), parseNoArguments(IncInstruction::new), Text.of("INC")));
     public static final SimplerInstructionProvider DEC = register("dec", new SimplerInstructionProvider((w, n) -> new DecInstruction(), parseNoArguments(DecInstruction::new), Text.of("DEC")));
+    public static final SimplerInstructionProvider ADD = register("add", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.ADD, Integer::sum),
+            parseNoArguments(() -> new ArithmeticInstruction(Instructions.ADD, Integer::sum)), Text.of("ADD")));
+    public static final SimplerInstructionProvider SUB = register("sub", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.SUB, (f, l) -> f - l),
+            parseNoArguments(() -> new ArithmeticInstruction(Instructions.SUB, (f, l) -> f - l)), Text.of("SUB")));
+    public static final SimplerInstructionProvider MUL = register("mul", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.MUL, (f, l) -> f * l),
+            parseNoArguments(() -> new ArithmeticInstruction(Instructions.MUL, (f, l) -> f * l)), Text.of("MUL")));
+    public static final SimplerInstructionProvider DIV = register("div", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.DIV, (f, l) -> f / l),
+            parseNoArguments(() -> new ArithmeticInstruction(Instructions.DIV, (f, l) -> f / l)), Text.of("DIV")));
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));

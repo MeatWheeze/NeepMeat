@@ -44,6 +44,10 @@ public class InstructionAttributes
         register(Instructions.GTEQ);
         register(Instructions.INC);
         register(Instructions.DEC);
+        register(Instructions.ADD);
+        register(Instructions.SUB);
+        register(Instructions.MUL);
+        register(Instructions.DIV);
         register(Instructions.JUMP);
         register(Instructions.BIT);
         register(Instructions.SAY);
