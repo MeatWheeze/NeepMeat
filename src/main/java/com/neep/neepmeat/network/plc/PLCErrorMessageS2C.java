@@ -1,6 +1,7 @@
 package com.neep.neepmeat.network.plc;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -40,7 +41,11 @@ public class PLCErrorMessageS2C
 
                 client.execute(() ->
                 {
-                    client.player.sendMessage(Text.of(message)); // Will not be visible inside robot. Oh well.
+                    if (client.currentScreen instanceof PLCProgramScreen programScreen)
+                    {
+                        programScreen.getInteractive().setError(Text.of(message));
+//                        client.player.sendMessage(Text.of(message)); // Will not be visible inside robot. Oh, well.
+                    }
                     client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.ERROR, 1.0f));
                 });
             });

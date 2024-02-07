@@ -94,17 +94,17 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             addDrawableChild(editor);
             editor.setDimensions(width, height);
 
-            addDrawableChild(new ModeSwitchButton(width - 17, 2, 16, 16));
-            addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
-            addDrawableChild(new RunButton(width - 3 * 17, 2, 16, 16, Text.of("Run")));
-            addDrawableChild(new CompileButton(width - 4 * 17, 2, 16, 16, Text.of("Compile")));
+            addDrawableChild(new ModeSwitchButton(width - 17, 1, 16, 16));
+            addDrawableChild(new StopButton(width - 2 * 17, 1, 16, 16, Text.of("Stop")));
+            addDrawableChild(new RunButton(width - 3 * 17, 1, 16, 16, Text.of("Run")));
+            addDrawableChild(new CompileButton(width - 4 * 17, 1, 16, 16, Text.of("Compile")));
             state = editor;
         }
         else
         {
             addDrawableChild(shell);
-            addDrawableChild(new ModeSwitchButton(width - 17, 2, 16, 16));
-            addDrawableChild(new StopButton(width - 2 * 17, 2, 16, 16, Text.of("Stop")));
+            addDrawableChild(new ModeSwitchButton(width - 17, 1, 16, 16));
+            addDrawableChild(new StopButton(width - 2 * 17, 1, 16, 16, Text.of("Stop")));
             state = shell;
         }
 
@@ -329,9 +329,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
                 nearPos.add(camPos),
                 newFar.add(camPos),
                 RaycastContext.ShapeType.VISUAL, RaycastContext.FluidHandling.NONE, client.player);
-        var result =  client.world.raycast(raycastContext);
 
-        return result;
+        return client.world.raycast(raycastContext);
     }
 
     public Vec3d screenToWorld(double mouseX, double mouseY, double z)
@@ -473,6 +472,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     public PLCScreenEditorState getEditor()
     {
         return editor;
+    }
+
+    public PLCScreenShellState getInteractive()
+    {
+        return shell;
     }
 
     class SaveButton extends ClickableWidget

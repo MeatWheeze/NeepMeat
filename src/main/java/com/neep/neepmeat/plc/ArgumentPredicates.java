@@ -3,8 +3,10 @@ package com.neep.neepmeat.plc;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.api.plc.instruction.ArgumentPredicate;
 import com.neep.neepmeat.api.plc.instruction.InstructionException;
+import com.neep.neepmeat.plc.robot.PLCActuator;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.minecraft.util.math.BlockPos;
 
 public class ArgumentPredicates
 {
@@ -40,5 +42,13 @@ public class ArgumentPredicates
             return true;
 
         throw new InstructionException("No entity workbench at " + argument.pos().getX() + ", " + argument.pos().getY() + ", " + argument.pos().getZ());
+    };
+
+    public static ArgumentPredicate IS_ACTUATOR = (world, argument) ->
+    {
+        if (world.getBlockEntity(argument.pos()) instanceof PLCActuator.Provider)
+            return true;
+
+        throw new InstructionException("No PLC actuator at " + argument.pos().getX() + ", " + argument.pos().getY() + ", " + argument.pos().getZ());
     };
 }

@@ -68,7 +68,10 @@ public class Instructions
     public static final SimplerInstructionProvider SAY = register("say", new SimplerInstructionProvider(SayInstruction::new, new SayInstruction.Parser(), Text.of("SAY")));
     public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
 
-    public static final InstructionProvider ROBOT = register("robot", new SimpleInstructionProvider(RobotInstruction::new, RobotInstruction::new, 1, Text.of("ROBOT")));
+    public static final InstructionProvider ROBOT = register("robot", new SimpleInstructionProvider(RobotInstruction::new, RobotInstruction::new, 1, Text.of("ROBOT")))
+            .factory(PredicatedInstructionBuilder.create()
+                    .arg(ArgumentPredicates.IS_ACTUATOR));
+
     public static final InstructionProvider EXEC = register("exec", new SimplerInstructionProvider(ExecInstruction::new, ExecInstruction::parser, Text.of("EXEC")));
 
     public static final InstructionProvider COMBINE = register("combine", new SimpleInstructionProvider(CombineInstruction::new, CombineInstruction::new, 2, Text.of("COMBINE"))

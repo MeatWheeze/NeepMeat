@@ -9,7 +9,6 @@ import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
 import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -18,6 +17,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -26,6 +26,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     private final PLCProgramScreen parent;
     private final InstructionBrowserWidget browser;
     private InstructionProvider selectedProvider;
+    private @Nullable Text error;
 
     public PLCScreenShellState(PLCProgramScreen parent)
     {
@@ -44,7 +45,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
         super.init();
 
         browser.init(screenWidth, screenHeight);
-        addDrawable(new HelpWidget(0, 0));
+        addDrawable(new HelpWidget(1, 1));
         addDrawable(new CurrentArgumentWidget(browser.getX(), browser.getY() - textRenderer.fontHeight - 2, parent.getScreenHandler()));
 
         addDrawableChild(browser);
@@ -52,6 +53,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
 
     private void selectProvider(InstructionProvider provider)
     {
+        setError(null);
         PLCSyncProgram.Client.switchOperation(provider, parent.getScreenHandler().getPlc());
         this.selectedProvider = provider;
     }
@@ -60,6 +62,13 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         super.render(matrices, mouseX, mouseY, delta);
+
+        if (error != null)
+        {
+            int ex = 2;
+            int ey = screenHeight - textRenderer.fontHeight - 2;
+            textRenderer.drawWithShadow(matrices, error, ex, ey, PLCCols.SELECTED.col);
+        }
     }
 
     @Override
@@ -83,6 +92,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     @Override
     public void argument(Argument argument)
     {
+        setError(null);
         PLCSyncProgram.Client.sendArgument(argument, parent.getScreenHandler().getPlc());
     }
 
@@ -93,6 +103,11 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     public boolean isSelected()
     {
         return false;
+    }
+
+    public void setError(@Nullable Text text)
+    {
+        this.error = text;
     }
 
     public class HelpWidget implements Drawable
