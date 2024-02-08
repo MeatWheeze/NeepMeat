@@ -61,7 +61,7 @@ public class MoveInstruction implements Instruction
         nbt.put("to", to.toNbt());
         nbt.put("action", group.writeNbt(new NbtCompound()));
         nbt.put("stored", Instruction.writeItem(stored));
-        return new NbtCompound();
+        return nbt;
     }
 
     @Override

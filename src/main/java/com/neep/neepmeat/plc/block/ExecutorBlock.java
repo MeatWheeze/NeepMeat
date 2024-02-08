@@ -38,7 +38,9 @@ public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProv
     {
         if (player.isSneaking() && world.getBlockEntity(pos) instanceof ExecutorBlockEntity be)
         {
-            be.stop();
+            if (!world.isClient())
+                be.stop();
+
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
