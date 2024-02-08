@@ -34,6 +34,7 @@ import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
+import com.neep.neepmeat.machine.surgical_controller.PLCBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
 import com.neep.neepmeat.machine.trough.TroughRenderer;
 import com.neep.neepmeat.network.*;
@@ -293,7 +294,7 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.FLUID_DRAIN);
 
-//        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.SLOPE_TEST);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), PLCBlocks.ROBOTIC_ARM);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.WINDOW_PIPE);
 

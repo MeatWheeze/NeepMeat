@@ -22,8 +22,8 @@ public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntit
     {
         super(materialManager, blockEntity);
         this.spinnyBit = materialManager.defaultSolid().material(Materials.TRANSFORMED).getModel(NMExtraModels.ROBOTIC_ARM_SPINNY_BIT).createInstance();
-        this.segment1 = materialManager.defaultSolid().material(Materials.TRANSFORMED).getModel(NMExtraModels.ROBOTIC_ARM_SEGMENT_1).createInstance();
-        this.segment2 = materialManager.defaultSolid().material(Materials.TRANSFORMED).getModel(NMExtraModels.ROBOTIC_ARM_SEGMENT_2).createInstance();
+        this.segment1 = materialManager.defaultCutout().material(Materials.TRANSFORMED).getModel(NMExtraModels.ROBOTIC_ARM_SEGMENT_1).createInstance();
+        this.segment2 = materialManager.defaultCutout().material(Materials.TRANSFORMED).getModel(NMExtraModels.ROBOTIC_ARM_SEGMENT_2).createInstance();
         matrices.translate(getInstancePosition().getX(), getInstancePosition().getY(), getInstancePosition().getZ());
     }
 
