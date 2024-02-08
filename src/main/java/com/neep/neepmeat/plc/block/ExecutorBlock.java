@@ -1,8 +1,8 @@
 package com.neep.neepmeat.plc.block;
 
 import com.neep.meatlib.block.BaseFacingBlock;
+import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.ExecutorBlockEntity;
 import com.neep.neepmeat.util.MiscUtils;
@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class ExecutorBlock extends BaseFacingBlock implements BlockEntityProvider
+public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
     public ExecutorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
