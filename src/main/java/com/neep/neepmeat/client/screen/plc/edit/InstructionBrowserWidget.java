@@ -243,7 +243,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         public void renderTooltip(MatrixStack matrices, int x, int y, int mouseX, int mouseY)
         {
             InstructionAttributes.InstructionTooltip tooltip = InstructionAttributes.get(provider);
-            int width = 100;
+            int width = 200;
             int tx = x - width - 5;
             int ty = y;
             if (tooltip != InstructionAttributes.InstructionTooltip.EMPTY)
