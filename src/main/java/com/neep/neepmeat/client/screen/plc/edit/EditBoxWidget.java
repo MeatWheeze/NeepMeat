@@ -184,10 +184,15 @@ public class EditBoxWidget extends ScrollableWidget
 
             enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
             matrices.push();
+
+            float bottom = (float) (y + height - lineHeight() - getPadding());
+            textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
+
             matrices.translate(0.0, -this.getScrollY(), 0.0);
             renderHighlightLine(matrices, errorLine, PLCCols.ERROR_LINE.col);
             renderHighlightLine(matrices, debugLine, PLCCols.DEBUG_LINE.col);
             renderContents(matrices, mouseX, mouseY, delta);
+
             matrices.pop();
             disableScissor();
             renderOverlay(matrices);
@@ -206,9 +211,6 @@ public class EditBoxWidget extends ScrollableWidget
     protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
         matrices.push();
-
-        float bottom = (float) (y + height - lineHeight() - getPadding());
-        textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
 
         String string = this.editBox.getText();
 
@@ -303,10 +305,10 @@ public class EditBoxWidget extends ScrollableWidget
                     if (this.isVisible((int) l, (int) (l + lineHeight())))
                     {
                         int selWidth = this.textRenderer.getWidth(string.substring(substring3.beginIndex(), Math.max(substring2.beginIndex(), substring3.beginIndex())));
-                        int o;
+                        float o;
                         if (substring2.endIndex() > substring3.endIndex())
                         {
-                            o = this.width - this.getPadding();
+                            o = this.width / scale - getPaddingDoubled();
                         }
                         else
                         {
@@ -316,7 +318,7 @@ public class EditBoxWidget extends ScrollableWidget
                         var10002 = m + selWidth;
                         matrices.push();
                         matrices.translate(0, l, 0);
-                        this.drawSelection(matrices, var10002, 0, m + o, 9);
+                        this.drawSelection(matrices, var10002, 0, (int) (m + o), 9);
                         matrices.pop();
                     }
 

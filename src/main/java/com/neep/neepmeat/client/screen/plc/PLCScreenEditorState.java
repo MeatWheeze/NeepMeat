@@ -32,7 +32,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     private void selectProvider(InstructionProvider provider)
     {
-        // TODO: add text to thingy
+        textField.insert(provider.getShortName().getString().toLowerCase());
     }
 
     @Override
