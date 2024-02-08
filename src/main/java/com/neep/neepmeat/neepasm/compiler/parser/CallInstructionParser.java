@@ -1,14 +1,11 @@
 package com.neep.neepmeat.neepasm.compiler.parser;
 
 import com.neep.neepmeat.api.plc.instruction.CallInstruction;
-import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
 import com.neep.neepmeat.neepasm.program.Label;
-import com.neep.neepmeat.plc.instruction.JumpInstruction;
-import net.minecraft.server.world.ServerWorld;
 
 public class CallInstructionParser implements InstructionParser
 {

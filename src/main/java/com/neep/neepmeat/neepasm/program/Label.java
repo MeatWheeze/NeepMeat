@@ -20,4 +20,11 @@ public class Label
     {
         return index;
     }
+
+    public enum Seek
+    {
+        FORWARDS,
+        BACKWARDS,
+        ABSOLUTE
+    }
 }

@@ -2,16 +2,14 @@ package com.neep.neepmeat.neepasm.compiler;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.neepasm.compiler.alias.ParsedAlias;
-import com.neep.neepmeat.neepasm.compiler.alias.ParsedArgumentAlias;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.neepasm.program.Label;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+
+import static com.neep.neepmeat.neepasm.program.Label.Seek.FORWARDS;
 
 public class ParsedSource
 {
@@ -59,6 +57,17 @@ public class ParsedSource
     public Label findLabel(String label)
     {
         return labels.stream().filter(l -> l.name().equals(label)).findFirst().orElse(null);
+    }
+
+    @Nullable
+    public Label findLabel(String label, int origin, Label.Seek seek)
+    {
+        return switch (seek)
+        {
+            case FORWARDS -> labels.stream().filter(l -> l.name().equals(label) && l.index() >= origin).findFirst().orElse(null);
+            case BACKWARDS -> labels.stream().filter(l -> l.name().equals(label) && l.index() <= origin).findFirst().orElse(null);
+            case ABSOLUTE -> findLabel(label);
+        };
     }
 
     @Nullable

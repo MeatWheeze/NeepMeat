@@ -29,9 +29,23 @@ public class JumpInstructionParser implements InstructionParser
 
         if (!label.isEmpty())
         {
+            view.fastForward();
+
+            char c = view.peek();
+            if (c == 'f')
+            {
+                view.next();
+                return new ParsedJumpInstruction(constructor, label, Label.Seek.FORWARDS);
+            }
+            else if (c == 'b')
+            {
+                view.next();
+                return new ParsedJumpInstruction(constructor, label, Label.Seek.BACKWARDS);
+            }
+
             parser.assureLineEnd(view);
 
-            return new ParsedJumpInstruction(constructor, label);
+            return new ParsedJumpInstruction(constructor, label, Label.Seek.ABSOLUTE);
         }
 
         if (TokenView.isDigit(view.peek()))
@@ -49,17 +63,20 @@ public class JumpInstructionParser implements InstructionParser
     {
         private final Function<Label, Instruction> constructor;
         private final String label;
+        private final Label.Seek seek;
 
-        public ParsedJumpInstruction(Function<Label, Instruction> constructor, String label)
+        public ParsedJumpInstruction(Function<Label, Instruction> constructor, String label, Label.Seek seek)
         {
             this.constructor = constructor;
             this.label = label;
+            this.seek = seek;
         }
 
         @Override
         public void build(ServerWorld world, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
         {
-            Label l = parsedSource.findLabel(label);
+//            int from = seek == Seek.ABSOLUTE ? 0 : seek == Seek.FORWARDS
+            Label l = parsedSource.findLabel(label, program.size(), seek);
             if (l == null)
                 throw new NeepASM.CompilationException("label '" + label + "' does not exist");
 
