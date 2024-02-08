@@ -3,6 +3,7 @@ package com.neep.neepmeat.client.screen.plc.edit;
 import com.mojang.blaze3d.platform.GlStateManager.LogicOp;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -19,35 +20,35 @@ import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.StringVisitable;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Matrix4f;
 
 import java.util.Iterator;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class EditBoxWidget extends ScrollableWidget
 {
-    private final TextRenderer textRenderer;
+//    private final TextRenderer textRenderer;
+    private final MonoTextRenderer textRenderer;
     private final EditBox editBox;
     private int tick;
 
     private String errorMessage;
     private int errorCol = 0xFFFFFFFF;
 
-    private float scale = 0.8f;
+    private final float scale;
     private int errorLine = -1;
     private int debugLine = -1;
     private final Text placeholder;
 
-    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, Text placeholder, Text message)
+    public EditBoxWidget(TextRenderer textRenderer, int x, int y, int width, int height, float scale, Text placeholder, Text message)
     {
         super(x, y, width, height, message);
+        this.scale = scale;
         this.placeholder = placeholder;
-        this.textRenderer = textRenderer;
-        this.editBox = new EditBox(textRenderer, width - this.getPaddingDoubled(), scale);
+        this.textRenderer = new MonoTextRenderer();
+        this.editBox = new EditBox(this.textRenderer, width - this.getPaddingDoubled(), scale);
         this.editBox.setCursorChangeListener(this::onCursorChange);
     }
 
@@ -178,7 +179,6 @@ public class EditBoxWidget extends ScrollableWidget
         if (this.visible)
         {
             int col = !this.isFocused() ? PLCCols.INVALID.col : PLCCols.SELECTED.col;
-//            fill(matrices, this.x, this.y, this.x + this.width, this.y + this.height, col);
             fill(matrices, this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1, 0x90000000);
             GUIUtil.renderBorder(matrices, x, y, width - 1, height - 1, col, 0);
 
@@ -238,7 +238,6 @@ public class EditBoxWidget extends ScrollableWidget
         {
             matrices.push();
             EditBox.Substring substring = it.next();
-            Objects.requireNonNull(this.textRenderer);
             boolean bl3 = this.isVisible((int) (l), (int) (l + lineHeight()));
 
             matrices.translate(x + getPadding(), l, 0);
@@ -252,7 +251,7 @@ public class EditBoxWidget extends ScrollableWidget
                     matrices.scale(scale, scale, 1);
                     j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), 0, 0, textCol());
 
-                    DrawableHelper.fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight, cursorCol());
+                    DrawableHelper.fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight(), cursorCol());
                     this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), j - 1, 0, textCol());
                     matrices.pop();
                 }
@@ -281,7 +280,7 @@ public class EditBoxWidget extends ScrollableWidget
                 matrices.push();
                 matrices.translate(0, k, 0);
                 matrices.scale(scale, scale, 1);
-                DrawableHelper.fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight, cursorCol());
+                DrawableHelper.fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight(), cursorCol());
                 matrices.pop();
             }
         }
@@ -341,7 +340,6 @@ public class EditBoxWidget extends ScrollableWidget
 
     public int getContentsHeight()
     {
-        Objects.requireNonNull(this.textRenderer);
         return (int) (lineHeight() * this.editBox.getLineCount());
     }
 
@@ -352,7 +350,6 @@ public class EditBoxWidget extends ScrollableWidget
 
     protected double getDeltaYPerScroll()
     {
-        Objects.requireNonNull(this.textRenderer);
         return lineHeight() / 2.0;
     }
 
@@ -388,26 +385,21 @@ public class EditBoxWidget extends ScrollableWidget
     {
         double d = this.getScrollY();
         EditBox var10000 = this.editBox;
-        Objects.requireNonNull(this.textRenderer);
         EditBox.Substring substring = var10000.getLine((int) (d / lineHeight()));
         int var5;
         if (this.editBox.getCursor() <= substring.beginIndex())
         {
             var5 = this.editBox.getCurrentLineIndex();
-            Objects.requireNonNull(this.textRenderer);
             d = var5 * lineHeight();
         }
         else
         {
             double var10001 = d + (double) this.height;
-            Objects.requireNonNull(this.textRenderer);
             EditBox.Substring substring2 = var10000.getLine((int) (var10001 / lineHeight()) - 1);
             if (this.editBox.getCursor() > substring2.endIndex())
             {
                 var5 = this.editBox.getCurrentLineIndex();
-                Objects.requireNonNull(this.textRenderer);
                 var5 = (int) (var5 * lineHeight() - this.height);
-                Objects.requireNonNull(this.textRenderer);
                 d = var5 + lineHeight() + this.getPaddingDoubled();
             }
         }
@@ -430,7 +422,7 @@ public class EditBoxWidget extends ScrollableWidget
 
     private double lineHeight()
     {
-        return (textRenderer.fontHeight) * scale;
+        return (textRenderer.fontHeight()) * scale;
     }
 
     public void setHeight(int height)

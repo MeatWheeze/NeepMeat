@@ -38,7 +38,7 @@ public class Article
             return new TextContent(text);
         }
         MutableText text = Text.Serializer.fromJson(object);
-//        text.setStyle(text.getStyle().withFont(FONT_ID));
+        text.setStyle(text.getStyle().withFont(FONT_ID));
         return new TextContent(text);
     });
 

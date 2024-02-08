@@ -41,7 +41,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
         super.init();
         if (textField == null)
         {
-            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
+            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
             {
                 @Override
                 protected void setFocused(boolean focused)
@@ -99,7 +99,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     public void setCompileMessage(String message, boolean success, int line)
     {
-        textField.setError(message, success ? 0x44AA00 : 0xFF0000);
+        textField.setError(message, success ? 0xFF44AA00 : 0xFFFF0000);
         textField.setErrorLine(line);
     }
 

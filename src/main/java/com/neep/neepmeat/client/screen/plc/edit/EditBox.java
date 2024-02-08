@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.plc.edit;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Lists;
+import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
@@ -21,11 +22,9 @@ import java.util.function.Consumer;
 @Environment(EnvType.CLIENT)
 public class EditBox
 {
-    public static final int UNLIMITED_LENGTH = Integer.MAX_VALUE;
-    private static final int CURSOR_WIDTH = 2;
-    private final TextRenderer textRenderer;
     private final List<Substring> lines = Lists.newArrayList();
     private final int width;
+    private final MonoTextRenderer textRenderer;
     private String text = "";
     private int cursor;
     private int selectionEnd;
@@ -40,7 +39,7 @@ public class EditBox
     };
     private float scale;
 
-    public EditBox(TextRenderer textRenderer, int width, float scale)
+    public EditBox(MonoTextRenderer textRenderer, int width, float scale)
     {
         this.textRenderer = textRenderer;
         this.width = width;
@@ -191,7 +190,6 @@ public class EditBox
     public void moveCursor(double x, double y)
     {
         int i = MathHelper.floor(x);
-        Objects.requireNonNull(this.textRenderer);
         int j = MathHelper.floor(y / 9.0);
         Substring substring = this.lines.get(MathHelper.clamp(j, 0, this.lines.size() - 1));
         int k = this.textRenderer.trimToWidth(this.text.substring(substring.beginIndex, substring.endIndex), i).length();

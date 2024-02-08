@@ -1,9 +1,18 @@
 {
     "providers": [
         {
+            "type": "space",
+            "advances": {
+                " ": 5,
+                "\u200c": 0
+            }
+        },
+        {
             "type": "ttf",
-            "file": "neepmeat:vt323_regular.ttf",
-            "oversample": 10
+            "file": "neepmeat:vt323.ttf",
+            "shift": [0, 0],
+            "size": 12,
+            "oversample": 20
 
         }
     ]
