@@ -592,6 +592,13 @@
   "instruction.neepmeat.wait_redstone.desc": "Waits for a signal strength above zero at the redstone interface ARG1.",
   "instruction.neepmeat.emit_redstone.desc": "Emits a redstone signal at ARG1 of strength ARG2.",
   "instruction.neepmeat.read_redstone.desc": "Reads the redstone signal strength at ARG1 and pushes it to the stack.",
+  "category.neepmeat.instruction.arithmetic": "Arithmetic",
+  "category.neepmeat.instruction.comparison": "Comparison",
+  "category.neepmeat.instruction.manufacture": "Manufacture",
+  "category.neepmeat.instruction.control": "Control",
+  "category.neepmeat.instruction.variable": "Memory",
+  "category.neepmeat.instruction.redstone": "Redstone",
+  "category.neepmeat.instruction.misc": "Misc",
 
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",

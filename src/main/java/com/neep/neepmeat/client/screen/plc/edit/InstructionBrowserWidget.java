@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class InstructionBrowserWidget implements Element, Drawable, ParentElement, Selectable
 {
@@ -42,7 +42,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
     private int screenWidth, screenHeight;
     private final int pad = 1;
 
-    private final List<OperationWidget> entries = Lists.newArrayList();
+    private final List<DropWidget> entries = Lists.newArrayList();
 
     public InstructionBrowserWidget(PLCProgramScreen parent, Supplier<InstructionProvider> selected, Predicate<InstructionProvider> predicate, Consumer<InstructionProvider> action)
     {
@@ -63,25 +63,25 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         this.height = 200;
         this.x = screenWidth - width;
         this.y = screenHeight - height;
-        addEntries();
+
+        if (entries.isEmpty())
+        {
+            addEntries();
+        }
     }
 
     protected void addEntries()
     {
         entries.clear();
 
-        List<? extends InstructionProvider> instructions;
-        instructions = Instructions.REGISTRY.stream().toList();
-
-        for (var provider : instructions)
+        int elementWidth = width - 3;
+        Instructions.REGISTRY.stream()
+                .filter(predicate)
+                .collect(Collectors.groupingBy(p -> InstructionAttributes.get(p).category()))
+                .forEach((category, list) ->
         {
-            if (!predicate.test(provider))
-                continue;
-
-            int elementWidth = width - 3;
-            OperationWidget widget = new OperationWidget(elementWidth - 4, provider, action);
-            entries.add(widget);
-        }
+            entries.add(new DropWidget(elementWidth, category, list.stream().map(p -> new OperationWidget(elementWidth - 2, p, action)).collect(Collectors.toList())));
+        });
     }
 
 
@@ -95,19 +95,13 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         int yOffset = (int) (y + 2 + scrollAmount);
         int xOffset = x + 2;
 
+        enableScissor();
         for (var entry : entries)
         {
-            if (shouldRender(entry, yOffset))
-                entry.render(matrices, xOffset, yOffset, mouseX, mouseY, delta);
-
-            yOffset += entry.height() + pad;
+            yOffset += entry.render(matrices, xOffset, yOffset, mouseX, mouseY, delta) + pad;
         }
+        disableScissor();
         matrices.pop();
-    }
-
-    boolean shouldRender(OperationWidget entry, int yOffset)
-    {
-        return yOffset >= y && yOffset + entry.height < y + height;
     }
 
     @Override
@@ -115,7 +109,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
     {
         if (isInBounds(mouseX, mouseY))
         {
-            scrollAmount = (float) Math.min(0.0f, scrollAmount + amount * 4f);
+            scrollAmount = (float) Math.min(0.0f, scrollAmount + amount * 6f);
 
             return true;
         }
@@ -127,13 +121,9 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
     {
         if (isInBounds(mouseX, mouseY))
         {
-            int yOffset = (int) (y + 2 + scrollAmount);
             for (var entry : entries)
             {
-                if (shouldRender(entry, yOffset) && mouseY >= yOffset && mouseY <= yOffset + entry.height + pad)
-                    entry.onClick(mouseX, mouseY);
-
-                yOffset += entry.height() + pad;
+                entry.onClick(mouseX, mouseY);
             }
             return true;
         }
@@ -197,6 +187,16 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         return SelectionType.NONE;
     }
 
+    private void enableScissor()
+    {
+        DrawableHelper.enableScissor(x + 1, y + 1, x + width - 1, y + height - 1);
+    }
+
+    private void disableScissor()
+    {
+        DrawableHelper.disableScissor();
+    }
+
     public int getX()
     {
         return x;
@@ -207,12 +207,78 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         return y;
     }
 
-    public class OperationWidget extends DrawableHelper
+    private class DropWidget extends DrawableHelper
+    {
+        private final InstructionAttributes.Category category;
+        private final List<OperationWidget> operationWidgets;
+        private final int width;
+        private final int headerHeight = textRenderer.fontHeight + 4;
+        private boolean unfolded = false;
+
+        private int prevX;
+        private int prevY;
+
+        public DropWidget(int elementWidth, InstructionAttributes.Category category, List<OperationWidget> operationWidgets)
+        {
+            this.width = elementWidth;
+            this.category = category;
+            this.operationWidgets = operationWidgets;
+        }
+
+        public float render(MatrixStack matrices, int x, int y, double mouseX, double mouseY, float delta)
+        {
+            prevX = x;
+            prevY = y;
+
+            String arrow = unfolded ? "↓" : "→";
+            textRenderer.draw(matrices, arrow, x + 2, y + 2, PLCCols.TEXT.col);
+            textRenderer.draw(matrices, category.name, x + 2 + 9, y + 2, PLCCols.TEXT.col);
+
+            int yOffset = headerHeight;
+            if (unfolded)
+            {
+                for (var widget : operationWidgets)
+                {
+                    widget.render(matrices, x, y + yOffset, mouseX, mouseY, delta);
+                    yOffset += widget.height + 1;
+                }
+            }
+            return yOffset;
+        }
+
+        private boolean isMouseOver(int x, int y, double mouseX, double mouseY)
+        {
+            return x <= mouseX && y <= mouseY && x + this.width >= mouseX && y + headerHeight >= mouseY;
+        }
+
+        public void onClick(double mouseX, double mouseY)
+        {
+            if (isMouseOver(prevX, prevY, mouseX, mouseY))
+            {
+                unfolded = !unfolded;
+                client.getSoundManager().play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1));
+            }
+
+            if (unfolded)
+            {
+                operationWidgets.forEach(w ->
+                {
+                    if (w.isMouseOver(mouseX, mouseY))
+                        w.onClick(mouseX, mouseY);
+                });
+            }
+        }
+    }
+
+    private class OperationWidget extends DrawableHelper
     {
         private final InstructionProvider provider;
         private final Consumer<InstructionProvider> action;
         private final int width, height;
         private final Text message;
+
+        private int prevX;
+        private int prevY;
 
         public OperationWidget(int width, InstructionProvider provider, Consumer<InstructionProvider> action)
         {
@@ -222,35 +288,40 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
             this.action = action;
         }
 
-        public void render(MatrixStack matrices, int x, int y, int mouseX, int mouseY, float delta)
+        public void render(MatrixStack matrices, int x, int y, double mouseX, double mouseY, float delta)
         {
+            this.prevX = x;
+            this.prevY = y;
+
             int col = selected.get() == provider ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
             GUIUtil.drawHorizontalLine1(matrices, x, x + width, y, col);
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
             textRenderer.draw(matrices, message, x + 2, y + 2, col);
-            if (isMouseOver(x, y, mouseX, mouseY))
+            if (isMouseOver(mouseX, mouseY))
             {
-                renderTooltip(matrices, x, y, mouseX, mouseY);
+                renderTooltip(matrices, x, y, (int) mouseX, (int) mouseY);
             }
         }
 
-        private boolean isMouseOver(int x, int y, int mouseX, int mouseY)
+        private boolean isMouseOver(double mouseX, double mouseY)
         {
-            return (x <= mouseX && y <= mouseY && x + this.width >= mouseX && y + this.height >= mouseY);
+            return InstructionBrowserWidget.this.isMouseOver(mouseX, mouseY) &&
+                    (prevX<= mouseX && prevY <= mouseY && prevX + this.width >= mouseX && prevY + this.height >= mouseY);
         }
 
         public void renderTooltip(MatrixStack matrices, int x, int y, int mouseX, int mouseY)
         {
+            InstructionBrowserWidget.this.disableScissor();
             InstructionAttributes.InstructionTooltip tooltip = InstructionAttributes.get(provider);
             int width = 200;
             int tx = x - width - 5;
-            int ty = y;
             if (tooltip != InstructionAttributes.InstructionTooltip.EMPTY)
             {
                 List<OrderedText> wrapped = textRenderer.wrapLines(tooltip.description(), width);
-                parent.renderTooltipOrderedText(matrices, wrapped, false, tx, ty, width, PLCCols.TEXT.col);
+                parent.renderTooltipOrderedText(matrices, wrapped, false, tx, y, width, PLCCols.TEXT.col);
             }
+            InstructionBrowserWidget.this.enableScissor();
         }
 
         public void onClick(double mouseX, double mouseY)
