@@ -40,6 +40,9 @@
     ]},
     {"type": "menu", "id": "plc", "icon": "neepmeat:plc", "text": "PLC and Manufacturing", "entries": [
       {"type": "page", "id": "plc", "icon": "neepmeat:plc", "text": "PLC"},
+      {"type": "page", "id": "neepasm", "icon": "neepmeat:plc", "text": "NEEPASM"},
+      {"type": "page", "id": "stack", "icon": "neepmeat:plc", "text": "Stack Operations and Arithmetic"},
+      {"type": "page", "id": "labels", "icon": "neepmeat:plc", "text": "Labels and Branches"},
       {"type": "page", "id": "plc_instructions", "icon": "neepmeat:plc", "text": "Instructions"},
       {"type": "page", "id": "plc_workbenches", "icon": "neepmeat:surgery_platform", "text": "PLC Workbenches"},
       {"type": "page", "id": "implants", "icon": "neepmeat:pineal_eye", "text": "Implants"}
@@ -406,15 +409,14 @@
 
     {"id": "plc", "contents": [
       {"type": "text", "text": "Programmable Logic Controller\n", "bold": true},
-      {"type": "text", "text": "The PLC executes a series of instructions that define a manufacturing process. Instructions can be executed immediately or saved in a program. Instructions take blocks in the world as arguments."},
-      {"type": "text", "text": "\nThe robot and its user interface can be controlled by right-clicking on the main block. "},
+      {"type": "text", "text": "The PLC is a computer specialised for industrial automation. It can run user-defined programs and can operate in interactive mode. Its clock speed is a lightning fast 20Hz."},
+      {"type": "text", "text": "\nRight-clicking on the PLC gives control over its robot."},
       {"type": "text", "text": "\nUser Interface\n", "bold": true},
-      {"type": "text", "text": "Movement is accomplished using the normal keys. Middle click-dragging rotates the camera."},
-      {"type": "text", "text": "\nAvailable operations are displayed in the bottom right of the screen. To emit an instruction, select an operation and click the blocks in the world that are to be its arguments."},
-      {"type": "text", "text": "\nThe panel on the left outlines the currently stored program. In Record mode, new instructions will be created after the currently highlighted instruction. Instructions can be deleted with the backspace key. A box is drawn around the number of the instruction that is currently being executed."},
-      {"type": "text", "text": "\nThe buttons at the top right of the screen allow programs to be started and stopped and for the mode to be switched between Shell and Record."},
-
-      {"type": "text", "text": "\nNote: We are currently slightly limited on the 'logic' part of 'programmable logic controller'. Comparisons and branching will hopefully be added in the future. However, the current instruction set is still capable of performing various open-loop processes."}
+      {"type": "text", "text": "When inside the robot, movement is accomplished using the normal keys. Middle click-dragging rotates the camera."},
+      {"type": "text", "text": "\nThe PLC has two modes: interactive mode and edit mode. This can be changed using the button on the top right of the screen."},
+      {"type": "text", "text": "\nTo execute an instruction in Interactive Mode, select the desired operation from the bottom right panel. Then, click blocks in the world to add them as arguments. When sufficient arguments are provided, the instruction will be executed."},
+      {"type": "text", "text": "\nIn Edit Mode, the program is written in the left panel in NEEPASM. More instructions are available in this mode and are outlined in the bottom right panel."},
+      {"type": "text", "text": "The buttons at the top right of the screen allow programs to be compiled, started and stopped."}
     ]},
     {"id": "plc_instructions", "contents": [
       {"type": "text", "text": "PLC Instructions\n", "bold": true},
@@ -431,13 +433,38 @@
       {"type": "text", "text": "- Surgery Platform (entity)"},
       {"type": "text", "text": "\nNot all instructions require workbenches. Some operate on normal item or fluid inventories."}
     ]},
+    {"id": "neepasm", "contents": [
+      {"type": "text", "text": "NEEPASM\n", "bold": true},
+      {"type": "text", "text": "NEEPASM is an assembly language for the NEEP PLC. Due to the PLC's Enlightened instruction set, the language can be slightly more user-friendly than most assembly languages."},
+      {"type": "text", "text": "\nGenerally, programs are lists of instructions that are executed one after the other.\nInstructions can take a variety of arguments, such as: \n- strings: \"a string\"\n- integers: 123\n- world targets: @(<x>, <y>, <z>, <direction>)."}
+    ]},
+    {"id": "stack", "contents": [
+      {"type": "text", "text": "The Stack\n", "bold": true},
+      {"type": "text", "text": "Integers variables can be stored in a stack structure. Elements can be added and removed only from the top of the stack using the PUSH and POP instructions respectively.\nThe comparison and arithmetic instructions take their arguments directly from the stack:"},
+      {"type": "text", "text": "\npush 1  # Place 1 on the stack"},
+      {"type": "text", "text": "push 2"},
+      {"type": "text", "text": "add     # Add the last two entries"},
+      {"type": "text", "text": "inc     # Increment the last stack entry"},
+      {"type": "text", "text": "push 4"},
+      {"type": "text", "text": "eq      # Test equality for 4 and 4"},
+      {"type": "text", "text": "say     # Say the result"}
+    ]},
+    {"id": "labels", "contents": [
+      {"type": "text", "text": "Labels and Branches\n", "bold": true},
+      {"type": "text", "text": "Labels are permanent marks in the program that can be returned to using the jump instructions: JMP, BIF and BIT.\nThe following enters an infinite loop."},
+      {"type": "text", "text": "\na_label:  # Define a label"},
+      {"type": "text", "text": "say \"loop\""},
+      {"type": "text", "text": "jmp a_label"}
+    ]},
     {"id": "implants", "contents": [
       {"type": "text", "text": "Implants\n", "bold": true},
       {"type": "text", "text": "Implants provide new abilities to organisms, elevating them beyond the fickle whims of nature."},
-      {"type": "text", "text": "\nExamples:"},
+      {"type": "text", "text": "\nExamples:\n"},
       {"type": "text", "text": "- Extra Knees"},
       {"type": "text", "text": "- Pineal Eye"},
       {"type": "text", "text": "- Divine Chrysalis", "strikethrough": true},
+      {"type": "text", "text": "- Lung Extensions"},
+      {"type": "text", "text": "- Extra Mouth"},
       {"type": "text", "text": "\nImplants are applied to entities using the IMPLANT instruction. The entity must be standing on a Surgery Platform."}
     ]},
 
