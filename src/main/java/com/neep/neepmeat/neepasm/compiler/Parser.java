@@ -65,7 +65,7 @@ public class Parser
         }
         catch (NeepASM.ParseException e)
         {
-            throw new NeepASM.ProgramBuildException(view.line(), view.pos(), e.getMessage());
+            throw new NeepASM.ProgramBuildException(view.line(), view.linePos(), e.getMessage());
         }
         return parsedSource;
     }
@@ -346,6 +346,13 @@ public class Parser
             }
         }
         return null;
+    }
+
+    public void assureLineEnd(TokenView view) throws NeepASM.ParseException
+    {
+        view.fastForward();
+        if (!isComment(view) && !view.lineEnded())
+            throw new NeepASM.ParseException("unexpected token '" + view.nextBlob() + "'");
     }
 
     private boolean isDigit(char c)

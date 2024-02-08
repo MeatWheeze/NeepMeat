@@ -42,6 +42,7 @@ public class Instructions
     public static final SimplerInstructionProvider CALL = register("call", new SimplerInstructionProvider(CallInstruction::new, new CallInstructionParser(), Text.of("CALL")));
     public static final SimplerInstructionProvider PUSH = register("push", new SimplerInstructionProvider(PushInstruction::new, new PushInstruction.Parser(), Text.of("PUSH")));
     public static final SimplerInstructionProvider POP = register("pop", new SimplerInstructionProvider(PopInstruction::new, parseNoArguments(PopInstruction::new), Text.of("POP")));
+    public static final SimplerInstructionProvider DUP = register("dup", new SimplerInstructionProvider(DupInstruction::new, parseNoArguments(DupInstruction::new), Text.of("DUP")));
 
     public static final SimplerInstructionProvider DELAY = register("delay", new SimplerInstructionProvider(DelayInstruction::new, new DelayInstruction.Parse(), Text.of("DELAY")));
 
@@ -64,6 +65,7 @@ public class Instructions
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
+    public static final SimplerInstructionProvider BIF = register("bif", new SimplerInstructionProvider(BIFInstruction::new, new JumpInstructionParser(BIFInstruction::new), Text.of("BIF")));
 
     public static final SimplerInstructionProvider SAY = register("say", new SimplerInstructionProvider(SayInstruction::new, new SayInstruction.Parser(), Text.of("SAY")));
     public static final InstructionProvider REMOVE = register("remove", new SimpleInstructionProvider(RemoveInstruction::new, RemoveInstruction::new, 1, Text.of("REMOVE")));
@@ -93,6 +95,7 @@ public class Instructions
 
     public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::parser, Text.of("RWAIT")));
     public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, EmitRedstoneInstruction::parser, Text.of("REMIT")));
+    public static final InstructionProvider READ_REDSTONE = register("read_redstone", new SimplerInstructionProvider(ReadRedstoneInstruction::new, ReadRedstoneInstruction::parser, Text.of("RREAD")));
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {

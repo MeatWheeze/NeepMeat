@@ -11,17 +11,17 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 // Branch if true
-public class BITInstruction implements Instruction
+public class BIFInstruction implements Instruction
 {
     private final Label label;
 
-    public BITInstruction(Label label)
+    public BIFInstruction(Label label)
     {
         Objects.requireNonNull(label);
         this.label = label;
     }
 
-    public BITInstruction(Supplier<World> world, NbtCompound nbt)
+    public BIFInstruction(Supplier<World> world, NbtCompound nbt)
     {
         this.label = new Label(nbt.getString("name"), nbt.getInt("target"));
     }
@@ -37,7 +37,7 @@ public class BITInstruction implements Instruction
     @Override
     public void start(PLC plc)
     {
-        if (plc.variableStack().popInt() > 0)
+        if (plc.variableStack().popInt() <= 0)
             plc.setCounter(label.index());
         else
             plc.advanceCounter();
@@ -46,6 +46,6 @@ public class BITInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return Instructions.BIT;
+        return Instructions.BIF;
     }
 }

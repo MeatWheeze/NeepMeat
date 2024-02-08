@@ -27,6 +27,11 @@ public class SayInstruction implements Instruction
         this.message = message;
     }
 
+    public SayInstruction()
+    {
+        this.message = "";
+    }
+
     public SayInstruction(Supplier<World> worldSupplier, NbtCompound nbtCompound)
     {
         this.message = nbtCompound.getString("message");
@@ -42,18 +47,13 @@ public class SayInstruction implements Instruction
     @Override
     public void start(PLC plc)
     {
-        plc.addRobotAction(new SayAction(), this::finish);
-    }
-
-    private void finish(PLC plc)
-    {
+        if (plc instanceof BlockEntity be)
+        {
+            String string = message.isEmpty() ? String.valueOf(plc.variableStack().popInt()) : message;
+            PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
+                    Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + string)));
+        }
         plc.advanceCounter();
-    }
-
-    @Override
-    public void cancel(PLC plc)
-    {
-
     }
 
     @Override
@@ -81,11 +81,23 @@ public class SayInstruction implements Instruction
         public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException
         {
             view.fastForward();
-            String message = view.nextString();
-            if (message.isEmpty())
-                throw new NeepASM.ParseException("invalid message string");
 
-            return ((world, source, program) -> program.addBack(new SayInstruction(message)));
+            char c = view.peek();
+
+            if (c == '"')
+            {
+                String message = view.nextString();
+                if (!message.isEmpty())
+                {
+                    view.next();
+                    parser.assureLineEnd(view);
+                    return ((world, source, program) -> program.addBack(new SayInstruction(message)));
+                }
+                throw new NeepASM.ParseException("expected message string");
+            }
+
+            parser.assureLineEnd(view);
+            return ((world, source, program) -> program.addBack(new SayInstruction()));
         }
     }
 }

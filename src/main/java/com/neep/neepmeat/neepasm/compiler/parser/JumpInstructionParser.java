@@ -24,16 +24,25 @@ public class JumpInstructionParser implements InstructionParser
     public ParsedInstruction parse(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
     {
         view.fastForward();
+
         String label = view.nextIdentifier();
 
-        if (label.isEmpty())
-            throw new NeepASM.ParseException("expected label");
+        if (!label.isEmpty())
+        {
+            parser.assureLineEnd(view);
 
-        view.fastForward();
-        if (!parser.isComment(view) && !view.lineEnded())
-            throw new NeepASM.ParseException("unexpected token '" + view.nextBlob() + "'");
+            return new ParsedJumpInstruction(constructor, label);
+        }
 
-        return new ParsedJumpInstruction(constructor, label);
+        if (TokenView.isDigit(view.peek()))
+        {
+            int jump = view.nextInteger();
+
+            parser.assureLineEnd(view);
+
+            return new ParsedRelJumpInstruction(constructor, jump);
+        }
+        throw new NeepASM.ParseException("expected label or relative jump");
     }
 
     public static class ParsedJumpInstruction implements ParsedInstruction
@@ -53,6 +62,26 @@ public class JumpInstructionParser implements InstructionParser
             Label l = parsedSource.findLabel(label);
             if (l == null)
                 throw new NeepASM.CompilationException("label '" + label + "' does not exist");
+
+            program.addBack(constructor.apply(l));
+        }
+    }
+
+    public static class ParsedRelJumpInstruction implements ParsedInstruction
+    {
+        private final Function<Label, Instruction> constructor;
+        private final int jump;
+
+        public ParsedRelJumpInstruction(Function<Label, Instruction> constructor, int jump)
+        {
+            this.constructor = constructor;
+            this.jump = jump;
+        }
+
+        @Override
+        public void build(ServerWorld world, ParsedSource parsedSource, MutableProgram program) throws NeepASM.CompilationException
+        {
+            Label l = new Label("relative", program.size() + jump);
 
             program.addBack(constructor.apply(l));
         }

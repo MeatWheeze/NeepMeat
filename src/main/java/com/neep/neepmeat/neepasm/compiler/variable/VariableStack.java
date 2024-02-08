@@ -5,9 +5,6 @@ import com.neep.neepmeat.api.plc.PLC;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.NbtInt;
-import net.minecraft.nbt.NbtList;
 
 public class VariableStack implements IntStack, NbtSerialisable
 {
@@ -55,13 +52,23 @@ public class VariableStack implements IntStack, NbtSerialisable
     @Override
     public int topInt()
     {
-        return entries.top();
+        if (isEmpty())
+        {
+            plc.raiseError(new PLC.Error("Variable stack underflow"));
+            return 0;
+        }
+        return entries.topInt();
     }
 
     @Override
     public int peekInt(int i)
     {
-        return entries.peek(i);
+        if (isEmpty())
+        {
+            plc.raiseError(new PLC.Error("Variable stack underflow"));
+            return 0;
+        }
+        return entries.peekInt(i);
     }
 
     public int size()

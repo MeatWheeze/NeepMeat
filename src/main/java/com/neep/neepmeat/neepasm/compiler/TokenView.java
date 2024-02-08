@@ -20,6 +20,12 @@ public class TokenView
         return (int) string.substring(0, offset).lines().count() - 1;
     }
 
+    public int linePos()
+    {
+        int lastLine = string.substring(0, offset).lastIndexOf('\n');
+        return offset - lastLine - 1;
+    }
+
     public char next()
     {
         if (offset >= string.length())

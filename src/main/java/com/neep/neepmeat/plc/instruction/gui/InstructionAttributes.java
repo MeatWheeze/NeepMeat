@@ -3,7 +3,6 @@ package com.neep.neepmeat.plc.instruction.gui;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.plc.Instructions;
-import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.text.Text;
 
@@ -36,6 +35,7 @@ public class InstructionAttributes
         register(Instructions.CALL, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".call.desc")));
         register(Instructions.PUSH);
         register(Instructions.POP);
+        register(Instructions.DUP);
         register(Instructions.DELAY);
         register(Instructions.EQ);
         register(Instructions.LT);
@@ -50,6 +50,7 @@ public class InstructionAttributes
         register(Instructions.DIV);
         register(Instructions.JUMP);
         register(Instructions.BIT);
+        register(Instructions.BIF);
         register(Instructions.SAY);
         register(Instructions.SAY);
         register(Instructions.REMOVE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".remove.desc")));
@@ -61,6 +62,7 @@ public class InstructionAttributes
         register(Instructions.INJECT, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".inject.desc")));
         register(Instructions.WAIT_REDSTONE, new InstructionTooltip(Text.translatable("instruction." + NeepMeat.NAMESPACE + ".wait_redstone.desc")));
         register(Instructions.EMIT_REDSTONE);
+        register(Instructions.READ_REDSTONE);
     }
 
     public record InstructionTooltip(Text description)

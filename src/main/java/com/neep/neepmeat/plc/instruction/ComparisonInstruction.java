@@ -27,10 +27,11 @@ public abstract class ComparisonInstruction implements Instruction
 //            else
 //                plc.flag(0);
 //
-            if (plc.variableStack().peekInt(1) == plc.variableStack().peekInt(0))
-                plc.flag(1);
+            var stack = plc.variableStack();
+            if (stack.popInt() == stack.popInt())
+                stack.push(1);
             else
-                plc.flag(0);
+                stack.push(0);
             plc.advanceCounter();
         }
 
@@ -57,10 +58,12 @@ public abstract class ComparisonInstruction implements Instruction
 //                }
 //            }
 //            plc.raiseError(new PLC.Error("Different variable types or invalid comparison"));
-            if (plc.variableStack().peekInt(1) < plc.variableStack().peekInt(0))
-                plc.flag(1);
+
+            var stack = plc.variableStack();
+            if (stack.popInt() > stack.popInt()) // (top -1) < (top)
+                stack.push(1);
             else
-                plc.flag(0);
+                stack.push(0);
             plc.advanceCounter();
         }
 
@@ -87,10 +90,11 @@ public abstract class ComparisonInstruction implements Instruction
 //                }
 //            }
 //            plc.raiseError(new PLC.Error("Different variable types or invalid comparison"));
-            if (plc.variableStack().peekInt(1) <= plc.variableStack().peekInt(0))
-                plc.flag(1);
+            var stack = plc.variableStack();
+            if (stack.popInt() >= stack.popInt()) // (top -1) <= (top)
+                stack.push(1);
             else
-                plc.flag(0);
+                stack.push(0);
             plc.advanceCounter();
         }
 
@@ -117,10 +121,11 @@ public abstract class ComparisonInstruction implements Instruction
 //                }
 //            }
 //            plc.raiseError(new PLC.Error("Different variable types or invalid comparison"));
-            if (plc.variableStack().peekInt(1) > plc.variableStack().peekInt(0))
-                plc.flag(1);
+            var stack = plc.variableStack();
+            if (stack.popInt() < stack.popInt())
+                stack.push(1);
             else
-                plc.flag(0);
+                stack.push(0);
             plc.advanceCounter();
 
         }
@@ -148,10 +153,11 @@ public abstract class ComparisonInstruction implements Instruction
 //                }
 //            }
 //            plc.raiseError(new PLC.Error("Different variable types or invalid comparison"));
-            if (plc.variableStack().peekInt(1) >= plc.variableStack().peekInt(0))
-                plc.flag(1);
+            var stack = plc.variableStack();
+            if (stack.popInt() <= stack.popInt())
+                stack.push(1);
             else
-                plc.flag(0);
+                stack.push(0);
             plc.advanceCounter();
         }
 
