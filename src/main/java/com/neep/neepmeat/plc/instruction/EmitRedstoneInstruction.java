@@ -9,6 +9,7 @@ import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.RedstoneInterface;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -42,6 +43,16 @@ public class EmitRedstoneInstruction implements Instruction
         nbt.put("target", target.toNbt());
         nbt.putInt("strength", strength);
         return nbt;
+    }
+
+    @Override
+    public boolean canStart(PLC plc)
+    {
+        if (plc instanceof BlockEntity be)
+        {
+            return be.getWorld().getTime() % 2 == 0;
+        }
+        return false;
     }
 
     @Override
