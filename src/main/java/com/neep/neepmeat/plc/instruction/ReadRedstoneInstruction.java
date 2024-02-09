@@ -53,7 +53,7 @@ public class ReadRedstoneInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return Instructions.EMIT_REDSTONE;
+        return Instructions.READ_REDSTONE;
     }
 
     public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, com.neep.neepmeat.neepasm.compiler.Parser parser) throws NeepASM.ParseException

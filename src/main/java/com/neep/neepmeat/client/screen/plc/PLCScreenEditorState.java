@@ -6,7 +6,7 @@ import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
@@ -20,6 +20,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     private final PLCProgramScreen parent;
     private EditBoxWidget textField;
     private final InstructionBrowserWidget browser;
+    private final PLCStackViewer viewer;
     private boolean changed;
 
     private final Parser parser = new Parser();
@@ -28,6 +29,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     {
         this.parent = parent;
         browser = new InstructionBrowserWidget(this.parent, () -> null, p -> true, this::selectProvider);
+        viewer = new PLCStackViewer(parent.getScreenHandler().getPlc());
     }
 
     private void selectProvider(InstructionProvider provider)
@@ -59,8 +61,11 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
         browser.init(screenWidth, screenHeight);
 
+        viewer.init(screenWidth - 100 - 40, browser.getY(), 40, screenHeight - browser.getY());
+
         addDrawableChild(textField);
         addDrawableChild(browser);
+        addDrawable(viewer);
     }
 
     private void updateEditorWidth()
@@ -90,7 +95,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
                 setCompileMessage(e.getMessage(), false, e.line());
             }
 
-            PLCSyncProgram.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
+            PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
             changed = false;
         }
 

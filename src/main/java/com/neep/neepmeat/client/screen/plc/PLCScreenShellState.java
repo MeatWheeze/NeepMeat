@@ -6,7 +6,7 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.instruction.SimpleInstructionProvider;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import net.minecraft.client.gui.Drawable;
@@ -54,7 +54,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     private void selectProvider(InstructionProvider provider)
     {
         setError(null);
-        PLCSyncProgram.Client.switchOperation(provider, parent.getScreenHandler().getPlc());
+        PLCSyncThings.Client.switchOperation(provider, parent.getScreenHandler().getPlc());
         this.selectedProvider = provider;
     }
 
@@ -93,7 +93,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     public void argument(Argument argument)
     {
         setError(null);
-        PLCSyncProgram.Client.sendArgument(argument, parent.getScreenHandler().getPlc());
+        PLCSyncThings.Client.sendArgument(argument, parent.getScreenHandler().getPlc());
     }
 
     @Override

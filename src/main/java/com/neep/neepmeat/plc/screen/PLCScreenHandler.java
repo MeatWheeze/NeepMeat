@@ -3,6 +3,7 @@ package com.neep.neepmeat.plc.screen;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.init.ScreenHandlerInit;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -11,10 +12,12 @@ import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class PLCScreenHandler extends ScreenHandler
 {
     private final PropertyDelegate delegate;
+    private final PlayerEntity player;
     private final PLCBlockEntity plc;
     private final String initialText;
 
@@ -22,7 +25,7 @@ public class PLCScreenHandler extends ScreenHandler
     public PLCScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
         this(syncId,
-                (PLCBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()),
+                playerInventory.player, (PLCBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()),
                 new ArrayPropertyDelegate(PLCBlockEntity.PLCPropertyDelegate.SIZE),
                 buf.readString()
         );
@@ -30,13 +33,33 @@ public class PLCScreenHandler extends ScreenHandler
     }
 
     // Server
-    public PLCScreenHandler(int syncId, PLCBlockEntity plc, PropertyDelegate delegate, String source)
+    public PLCScreenHandler(int syncId, PlayerEntity player, PLCBlockEntity plc, PropertyDelegate delegate, String source)
     {
         super(ScreenHandlerInit.PLC, syncId);
+        this.player = player;
         this.plc = plc;
         this.delegate = delegate;
         this.initialText = source;
         addProperties(delegate);
+    }
+
+    @Override
+    public void updateToClient()
+    {
+        super.updateToClient();
+    }
+
+    @Override
+    public void sendContentUpdates()
+    {
+        super.sendContentUpdates();
+        PLCSyncThings.sendStack((ServerPlayerEntity) player, plc.getVariableStack());
+    }
+
+    @Override
+    public void syncState()
+    {
+        super.syncState();
     }
 
     @Override

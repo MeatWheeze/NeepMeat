@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.instruction.*;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
 import com.neep.neepmeat.api.plc.program.MutableProgram;
@@ -110,7 +110,7 @@ public class CompiledProgramEditorState implements PLCState
     {
         if (!parent.getWorld().isClient() && parent.getSurgeryRobot().getController() != null)
         {
-            PLCSyncProgram.sendProgram((ServerPlayerEntity) parent.getSurgeryRobot().getController(), parent, program);
+            PLCSyncThings.sendProgram((ServerPlayerEntity) parent.getSurgeryRobot().getController(), parent, program);
         }
     }
 

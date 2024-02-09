@@ -108,13 +108,13 @@ public class SayInstruction implements Instruction
                     throw new NeepASM.ParseException("format must be 'd', 'h', or 'b'");
 
                 format = c;
+                view.next();
             }
             else
             {
                 format = 'd';
             }
 
-            view.next();
 
             parser.assureLineEnd(view);
             return ((world, source, program) -> program.addBack(new SayInstruction(format)));

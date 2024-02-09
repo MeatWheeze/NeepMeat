@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
@@ -11,7 +12,6 @@ import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.plc.PLCMotionController;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
@@ -309,7 +309,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     public void updateInstruction(InstructionProvider provider)
     {
-        PLCSyncProgram.Client.switchOperation(provider, plc);
+        PLCSyncThings.Client.switchOperation(provider, plc);
     }
 
     protected void addArgument(BlockHitResult result)
@@ -553,9 +553,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         public void onClick(double mouseX, double mouseY)
         {
             if (handler.isRunning())
-                PLCSyncProgram.Client.sendPause(plc);
+                PLCSyncThings.Client.sendPause(plc);
             else
-                PLCSyncProgram.Client.sendRun(plc);
+                PLCSyncThings.Client.sendRun(plc);
         }
     }
 
@@ -575,7 +575,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void onClick(double mouseX, double mouseY)
         {
-            PLCSyncProgram.Client.sendCompile(plc);
+            PLCSyncThings.Client.sendCompile(plc);
         }
     }
 
@@ -608,7 +608,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         public void onClick(double mouseX, double mouseY)
         {
-            PLCSyncProgram.Client.sendStop(plc);
+            PLCSyncThings.Client.sendStop(plc);
         }
     }
 
@@ -623,7 +623,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         public void onClick(double mouseX, double mouseY)
         {
             mode = RecordMode.cycle(handler.getMode());
-            PLCSyncProgram.Client.sendMode(plc, mode);
+            PLCSyncThings.Client.sendMode(plc, mode);
             if (mode == RecordMode.IMMEDIATE)
                 state = shell;
             else

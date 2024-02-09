@@ -7,7 +7,7 @@ import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.plc.PLCSyncProgram;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.editor.CompiledProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
@@ -104,11 +104,6 @@ public class PLCProgramOutline extends ScreenSubElement implements Drawable, Ele
     {
         if (keyCode == GLFW.GLFW_KEY_BACKSPACE || keyCode == GLFW.GLFW_KEY_DELETE)
         {
-            if (getSelected() != -1)
-            {
-                PLCSyncProgram.Client.sendDelete(getSelected(), parent.getScreenHandler().getPlc());
-                return true;
-            }
         }
         return super.keyPressed(keyCode, scanCode, modifiers);
     }

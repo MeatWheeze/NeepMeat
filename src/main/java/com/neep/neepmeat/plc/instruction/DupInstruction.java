@@ -29,6 +29,6 @@ public class DupInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return Instructions.POP;
+        return Instructions.DUP;
     }
 }

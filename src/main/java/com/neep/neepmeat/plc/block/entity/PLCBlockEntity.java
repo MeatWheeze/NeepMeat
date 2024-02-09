@@ -161,6 +161,11 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         return variableStack;
     }
 
+    public VariableStack getVariableStack()
+    {
+        return variableStack;
+    }
+
     @Override
     public void setCounter(int counter)
     {
@@ -433,7 +438,7 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     @Override
     public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
     {
-        return new PLCScreenHandler(syncId, this, delegate, editor.getSource());
+        return new PLCScreenHandler(syncId, player, this, delegate, editor.getSource());
     }
 
     @Override
@@ -490,6 +495,12 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
     public PLCActuator get()
     {
         return robot;
+    }
+
+    // For receiving the stack on the client when a screen handler is in use
+    public void updateVariableStack(NbtCompound nbt)
+    {
+        variableStack.readNbt(nbt);
     }
 
     public class PLCPropertyDelegate implements PropertyDelegate

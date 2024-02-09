@@ -6,6 +6,8 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntStack;
 import net.minecraft.nbt.NbtCompound;
 
+import java.util.Iterator;
+
 public class VariableStack implements IntStack, NbtSerialisable
 {
 //    private final ObjectArrayList<Variable<?>> entries = new ObjectArrayList<>();
@@ -79,12 +81,6 @@ public class VariableStack implements IntStack, NbtSerialisable
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-//        NbtList list = new NbtList();
-//        for (int i : entries)
-//        {
-//            list.add(NbtInt.of(i));
-//        }
-//        nbt.put("entries", list);
         nbt.putIntArray("entries", entries);
         return nbt;
     }
@@ -92,11 +88,6 @@ public class VariableStack implements IntStack, NbtSerialisable
     @Override
     public void readNbt(NbtCompound nbt)
     {
-//        NbtList list = nbt.getList("entries", NbtElement.INT_TYPE);
-//        for (int i = 0; i < list.size(); ++i)
-//        {
-//            entries.add(i, list.getInt(i));
-//        }
         entries.clear();
         int[] ints = nbt.getIntArray("entries");
         entries.size(ints.length);

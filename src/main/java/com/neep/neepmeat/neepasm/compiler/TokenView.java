@@ -180,7 +180,7 @@ public class TokenView
     private static boolean isDigit(int index, char c)
     {
         // Handle hex or bin prefixes
-        return (index == 1 && (c == 'x' || c == 'b')) || isDigit(c);
+        return (index == 1 && (c == 'x' || c == 'b')) || isDigit(c) || Character.digit(c, 16) != -1;
     }
 
     public boolean lineEnded()

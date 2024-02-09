@@ -4,11 +4,13 @@ import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
+import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.api.plc.program.PLCProgram;
+import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -24,7 +26,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
-public class PLCSyncProgram
+public class PLCSyncThings
 {
     public static final Identifier ID = new Identifier(NeepMeat.NAMESPACE, "plc_sync_program");
 
@@ -50,9 +52,18 @@ public class PLCSyncProgram
         ServerPlayNetworking.send(player, ID, buf);
     }
 
+    public static void sendStack(ServerPlayerEntity player, VariableStack stack)
+    {
+        PacketByteBuf buf = PacketByteBufs.create();
+        buf.writeInt(Action.STACK.ordinal());
+        buf.writeNbt(stack.writeNbt(new NbtCompound()));
+
+        ServerPlayNetworking.send(player, ID, buf);
+    }
+
     public static void init()
     {
-        ServerPlayNetworking.registerGlobalReceiver(ID, PLCSyncProgram::apply);
+        ServerPlayNetworking.registerGlobalReceiver(ID, PLCSyncThings::apply);
     }
 
     private static void apply(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender)
@@ -67,7 +78,6 @@ public class PLCSyncProgram
             {
                 case ARGUMENT -> applyArgument(copy, player.world);
                 case OPERATION -> applyInstruction(copy, player.world);
-//                case DELETE -> applyDelete(copy, player.world);
                 case PAUSE -> applyPause(copy, player.world);
                 case RUN -> applyRun(copy, player.world);
                 case STOP -> applyStop(copy, player.world);
@@ -166,7 +176,8 @@ public class PLCSyncProgram
         STOP,
         MODE,
         TEXT,
-        COMPILE;
+        COMPILE,
+        STACK;
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -185,9 +196,20 @@ public class PLCSyncProgram
                     switch (action)
                     {
                         case COMPILE -> Client.applyCompileMessage(copy, client);
+                        case STACK -> Client.applyStack(copy, client);
                     }
                 });
             });
+        }
+
+        private static void applyStack(PacketByteBuf buf, MinecraftClient client)
+        {
+            NbtCompound nbt = buf.readNbt();
+
+            if (client.player.currentScreenHandler instanceof PLCScreenHandler handler)
+            {
+                handler.getPlc().updateVariableStack(nbt);
+            }
         }
 
         private static void applyCompileMessage(PacketByteBuf buf, MinecraftClient client)
@@ -223,17 +245,6 @@ public class PLCSyncProgram
 
             String id = Instructions.REGISTRY.getId(provider).toString();
             buf.writeString(id);
-
-            ClientPlayNetworking.send(ID, buf);
-        }
-
-        public static void sendDelete(int index, PLCBlockEntity plc)
-        {
-            PacketByteBuf buf = PacketByteBufs.create();
-            buf.writeInt(Action.DELETE.ordinal());
-            putPlc(buf, plc);
-
-            buf.writeInt(index);
 
             ClientPlayNetworking.send(ID, buf);
         }
