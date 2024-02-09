@@ -155,7 +155,7 @@ public class CharnelPumpBlockEntity extends SyncableBlockEntity implements Motor
 
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         return false;
     }

@@ -99,6 +99,6 @@ public interface PLCActuator
 
     interface Provider
     {
-        PLCActuator get();
+        PLCActuator getPlcActuator();
     }
 }

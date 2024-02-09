@@ -26,7 +26,7 @@ public abstract class MotorisedMachineBlockEntity extends SyncableBlockEntity im
     }
 
     @Override
-    public MotorisedBlock.Diagnostics get()
+    public MotorisedBlock.Diagnostics getDiagnostics()
     {
         return MotorisedBlock.Diagnostics.insufficientPower(power < minPower, power, minPower);
     }

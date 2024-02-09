@@ -74,7 +74,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         integratorFinder.get().tick();
 

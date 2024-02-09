@@ -216,7 +216,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         tick();
         return currentRecipe != null;

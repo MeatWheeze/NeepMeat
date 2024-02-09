@@ -79,7 +79,7 @@ public class BottlerBlockEntity extends MotorisedMachineBlockEntity
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
 
         try (Transaction transaction = Transaction.openOuter())

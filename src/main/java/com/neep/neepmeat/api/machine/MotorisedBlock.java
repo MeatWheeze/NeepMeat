@@ -18,7 +18,7 @@ public interface MotorisedBlock
             MotorisedBlock.class, Void.class
     );
 
-    boolean tick(MotorEntity motor);
+    boolean motorTick(MotorEntity motor);
 
     void setInputPower(float power);
 
@@ -33,7 +33,7 @@ public interface MotorisedBlock
 
     interface DiagnosticsProvider
     {
-        Diagnostics get();
+        Diagnostics getDiagnostics();
 
         BlockApiLookup<DiagnosticsProvider, Void> LOOKUP = BlockApiLookup.get(
                 new Identifier(NeepMeat.NAMESPACE, "machine_diagnostics"),

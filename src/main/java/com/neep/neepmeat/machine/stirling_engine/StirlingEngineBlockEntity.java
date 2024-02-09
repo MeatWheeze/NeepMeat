@@ -137,7 +137,7 @@ public class StirlingEngineBlockEntity extends SyncableBlockEntity implements Na
         {
             motorised.setInputPower((float) getMechPUPower());
             doWork();
-            motorised.tick(this);
+            motorised.motorTick(this);
         }
 
         if (newThingyStored != thingyStored)

@@ -16,7 +16,7 @@ public class AgitatorBlockEntity extends BlockEntity implements MotorisedBlock
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         return false;
     }

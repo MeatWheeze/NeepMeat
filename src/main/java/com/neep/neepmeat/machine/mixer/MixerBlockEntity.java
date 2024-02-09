@@ -263,7 +263,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         tick();
         return true;

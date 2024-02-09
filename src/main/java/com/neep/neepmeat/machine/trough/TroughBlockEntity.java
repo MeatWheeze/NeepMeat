@@ -68,7 +68,7 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         ++age;
 

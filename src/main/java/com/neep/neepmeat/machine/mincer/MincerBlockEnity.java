@@ -160,7 +160,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         return false;
     }
@@ -191,7 +191,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     }
 
     @Override
-    public Diagnostics get()
+    public Diagnostics getDiagnostics()
     {
         return Diagnostics.insufficientPower(!running, power, 0.1f);
     }

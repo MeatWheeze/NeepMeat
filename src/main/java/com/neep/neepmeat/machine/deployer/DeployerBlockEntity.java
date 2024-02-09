@@ -156,7 +156,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         this.running = power > minPower;
 
@@ -197,7 +197,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     }
 
     @Override
-    public Diagnostics get()
+    public Diagnostics getDiagnostics()
     {
         return Diagnostics.insufficientPower(power < minPower, power, minPower);
     }

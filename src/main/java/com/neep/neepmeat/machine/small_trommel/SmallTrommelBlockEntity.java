@@ -146,7 +146,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         Direction facing = getCachedState().get(TrommelBlock.FACING);
         try (Transaction transaction = Transaction.openOuter())
@@ -191,7 +191,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     }
 
     @Override
-    public Diagnostics get()
+    public Diagnostics getDiagnostics()
     {
         return Diagnostics.insufficientPower(power < minPower, power, minPower);
     }

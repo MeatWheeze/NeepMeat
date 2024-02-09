@@ -51,7 +51,7 @@ public class MachineDiagnosticsRequest
 
     protected static void send(ServerPlayerEntity player, @NotNull MotorisedBlock.DiagnosticsProvider diagnosticsProvider)
     {
-        MotorisedBlock.Diagnostics diagnostics = diagnosticsProvider.get();
+        MotorisedBlock.Diagnostics diagnostics = diagnosticsProvider.getDiagnostics();
 
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeNbt(diagnostics.nbt());

@@ -62,7 +62,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         try (Transaction transaction = Transaction.openOuter())
         {
@@ -161,7 +161,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
     }
 
     @Override
-    public Diagnostics get()
+    public Diagnostics getDiagnostics()
     {
         return Diagnostics.insufficientPower(false, power, 0);
     }

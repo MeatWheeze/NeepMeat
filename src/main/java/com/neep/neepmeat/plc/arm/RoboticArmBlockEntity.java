@@ -25,11 +25,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLCActuator.Provider, MotorisedBlock
+public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLCActuator.Provider, MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
     private float power;
 
     private @Nullable BlockPos target;
+    private final float minPower = 0.05f;
 
     private double tipX = getPos().getX() + 1;
     private double tipY = getPos().getY() + 1;
@@ -155,6 +156,9 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 
     private double getSpeed()
     {
+        if (power < minPower)
+            return 0;
+
         return MathHelper.clamp(power, 0, 1.5);
     }
 
@@ -239,7 +243,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 //    }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         return false;
     }
@@ -252,8 +256,14 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public PLCActuator get()
+    public PLCActuator getPlcActuator()
     {
         return this;
+    }
+
+    @Override
+    public Diagnostics getDiagnostics()
+    {
+        return MotorisedBlock.Diagnostics.insufficientPower(power <= minPower, power, minPower);
     }
 }

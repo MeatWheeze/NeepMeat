@@ -41,7 +41,7 @@ public class DeathBladesBlockEntity extends MotorisedMachineBlockEntity
     }
 
     @Override
-    public boolean tick(MotorEntity motor)
+    public boolean motorTick(MotorEntity motor)
     {
         this.cooldown = Math.min(MAX_COOLDOWN, cooldown + progressIncrement);
 

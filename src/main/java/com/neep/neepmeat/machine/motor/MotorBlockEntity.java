@@ -53,7 +53,7 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
                 onPowerChange();
             }
 
-            motorised.tick(this);
+            motorised.motorTick(this);
         }
 
         try (Transaction transaction = Transaction.openOuter())
