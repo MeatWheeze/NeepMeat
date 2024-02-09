@@ -9,7 +9,7 @@
         },
         {
             "type": "ttf",
-            "file": "neepmeat:vt323.ttf",
+            "file": "neepmeat:vt323_regular.ttf",
             "shift": [0, 0],
             "size": 12,
             "oversample": 20

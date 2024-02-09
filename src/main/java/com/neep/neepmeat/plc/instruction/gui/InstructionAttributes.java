@@ -50,12 +50,15 @@ public class InstructionAttributes
         register(Instructions.SUB, Category.ARITHMETIC);
         register(Instructions.MUL, Category.ARITHMETIC);
         register(Instructions.DIV, Category.ARITHMETIC);
+        register(Instructions.NOT, Category.ARITHMETIC);
         register(Instructions.AND, Category.ARITHMETIC);
         register(Instructions.OR, Category.ARITHMETIC);
         register(Instructions.NAND, Category.ARITHMETIC);
         register(Instructions.NOR, Category.ARITHMETIC);
         register(Instructions.XOR, Category.ARITHMETIC);
         register(Instructions.XNOR, Category.ARITHMETIC);
+        register(Instructions.SHR, Category.ARITHMETIC);
+        register(Instructions.SHL, Category.ARITHMETIC);
 
         register(Instructions.JUMP, Category.CONTROL);
         register(Instructions.BIT, Category.CONTROL);

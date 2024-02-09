@@ -1,7 +1,6 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
@@ -21,26 +20,31 @@ import java.util.function.Supplier;
 public class SayInstruction implements Instruction
 {
     private final String message;
+    private final char format;
 
     public SayInstruction(String message)
     {
         this.message = message;
+        this.format = 'd';
     }
 
-    public SayInstruction()
+    public SayInstruction(char format)
     {
+        this.format = format;
         this.message = "";
     }
 
     public SayInstruction(Supplier<World> worldSupplier, NbtCompound nbtCompound)
     {
         this.message = nbtCompound.getString("message");
+        this.format = (char) nbtCompound.getShort("format");
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         nbt.putString("message", message);
+        nbt.putShort("format", (short) format);
         return nbt;
     }
 
@@ -49,9 +53,22 @@ public class SayInstruction implements Instruction
     {
         if (plc instanceof BlockEntity be)
         {
-            String string = message.isEmpty() ? String.valueOf(plc.variableStack().popInt()) : message;
-            PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
-                    Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + string)));
+            if (message.isEmpty())
+            {
+                int value = plc.variableStack().popInt();
+                String string = format == 'b' ? Integer.toBinaryString(value) :
+                        format == 'h' ? Integer.toHexString(value) :
+                        String.valueOf(value);
+
+                PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
+                        Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + string)));
+
+            }
+            else
+            {
+                PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
+                        Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + message)));
+            }
         }
         plc.advanceCounter();
     }
@@ -60,19 +77,6 @@ public class SayInstruction implements Instruction
     public @NotNull InstructionProvider getProvider()
     {
         return Instructions.SAY;
-    }
-
-    private class SayAction implements AtomicAction
-    {
-        @Override
-        public void start(PLC plc)
-        {
-            if (plc instanceof BlockEntity be)
-            {
-                PlayerLookup.around((ServerWorld) be.getWorld(), be.getPos(), 20).forEach(p -> p.sendMessage(
-                        Text.of("[PLC at " + be.getPos().getX() + " " + be.getPos().getY() + " " + be.getPos().getZ() + "] " + message)));
-            }
-        }
     }
 
     public static class Parser implements InstructionParser
@@ -96,8 +100,24 @@ public class SayInstruction implements Instruction
                 throw new NeepASM.ParseException("expected message string");
             }
 
+            char format;
+
+            if (TokenView.isIdentifier(0, c))
+            {
+                if (!(c == 'd' || c == 'h' || c == 'b'))
+                    throw new NeepASM.ParseException("format must be 'd', 'h', or 'b'");
+
+                format = c;
+            }
+            else
+            {
+                format = 'd';
+            }
+
+            view.next();
+
             parser.assureLineEnd(view);
-            return ((world, source, program) -> program.addBack(new SayInstruction()));
+            return ((world, source, program) -> program.addBack(new SayInstruction(format)));
         }
     }
 }

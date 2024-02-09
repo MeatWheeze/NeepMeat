@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.plc.instruction.CallInstruction;
 import com.neep.neepmeat.api.plc.instruction.PredicatedInstructionBuilder;
 import com.neep.neepmeat.api.plc.instruction.SimpleInstructionProvider;
 import com.neep.neepmeat.api.plc.instruction.SimplerInstructionProvider;
-import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
@@ -67,6 +66,9 @@ public class Instructions
     public static final SimplerInstructionProvider NOR = registeryBinary("nor", () -> Instructions.NOR, (f, l) -> ~(f | l));
     public static final SimplerInstructionProvider XOR = registeryBinary("xor", () -> Instructions.XOR, (f, l) -> f ^ l);
     public static final SimplerInstructionProvider XNOR = registeryBinary("xnor", () -> Instructions.XNOR, (f, l) -> ~(f ^ l));
+
+    public static final SimplerInstructionProvider SHR = register("shr", new SimplerInstructionProvider(SHRInstruction::new, SHRInstruction::parser, Text.of("SHR")));
+    public static final SimplerInstructionProvider SHL = register("shl", new SimplerInstructionProvider(SHLInstruction::new, SHLInstruction::parser, Text.of("SHL")));
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
