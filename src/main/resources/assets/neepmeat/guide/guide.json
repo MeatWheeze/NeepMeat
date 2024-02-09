@@ -439,49 +439,56 @@
     {"id": "neepasm", "contents": [
       {"type": "text", "text": "NEEPASM\n", "bold": true},
       {"type": "text", "text": "NEEPASM is an assembly language for the NEEP PLC. Due to the PLC's Enlightened instruction set, the language can be slightly more user-friendly than most assembly languages."},
-      {"type": "text", "text": "\nGenerally, programs are lists of instructions that are executed one after the other.\nInstructions can take a variety of arguments, such as: \n\n- strings: \"a string\"\n- integers: 123\n- world targets: @(<x>, <y>, <z>, <direction>)."},
-      {"type": "text", "text": "\nWorld targets represent a side on a block in the world and are used to tell instructions where to extract or insert fluids or items."},
+      {"type": "text", "text": "\nGenerally, programs are lists of instructions that are executed one after the other.\nInstructions can take a variety of arguments, such as: \n\n- Strings: \"a string\"\n- Integers: 123, 0x7B, 0b1111011\n- World targets: @(<x>, <y>, <z>, <direction>)."},
+      {"type": "text", "text": "\nWorld targets represent a block in the world and are used to tell instructions where to extract or insert fluids or items."},
       {"type": "text", "text": "\nAnything occurring after a '#' character on a line is treated as a comment:\n"},
-      {"type": "text", "text": "say \"Hello\"  # A comment"},
-      {"type": "text", "text": "\nFlow control is accomplished by jumping between labels."},
-      {"type": "text", "text": "\nCommonly used groups of instructions can be defined in functions and world targets can be named using aliases."}
+      {"type": "code", "text": "say \"Hello\"  # A comment"},
+      {"type": "text", "text": "\nFlow control is accomplished by jumping between labels:\n"},
+      {"type": "code", "text": "a_label:"},
+      {"type": "code", "text": "say \"Hello\""},
+      {"type": "code", "text": "jmp a_label"},
+      {"type": "text", "text": "\nCommonly used groups of instructions can be defined in functions and world targets can be named using aliases:\n"},
+      {"type": "code", "text": "%alias an_alias = @(1 2 3 NORTH)"},
+      {"type": "code", "text": "%func a_function"},
+      {"type": "code", "text": "\tsay \"A useful action\""},
+      {"type": "code", "text": "%end"}
 
     ]},
     {"id": "stack", "contents": [
       {"type": "text", "text": "The Stack\n", "bold": true},
-      {"type": "text", "text": "The PLC has a stack for storing integers. Elements can be added and removed only from the top of the stack using the PUSH and POP instructions respectively.\nThe comparison and arithmetic instructions take their arguments directly from the stack:"},
-      {"type": "text", "text": "\npush 1  # Place 1 on the stack"},
-      {"type": "text", "text": "push 2"},
-      {"type": "text", "text": "add     # Add the last two entries"},
-      {"type": "text", "text": "inc     # Increment the last stack entry"},
-      {"type": "text", "text": "push 4"},
-      {"type": "text", "text": "eq      # Test equality for 4 and 4"},
-      {"type": "text", "text": "say     # Say the result"}
+      {"type": "text", "text": "The PLC has a stack for storing integers. Elements can be added and removed only from the top of the stack using the PUSH and POP instructions respectively.\nThe comparison and arithmetic instructions take their arguments directly from the stack:\n"},
+      {"type": "code", "text": "push 1  # Place 1 on the stack"},
+      {"type": "code", "text": "push 2"},
+      {"type": "code", "text": "add     # Add the last two entries"},
+      {"type": "code", "text": "inc     # Increment the last stack entry"},
+      {"type": "code", "text": "push 4"},
+      {"type": "code", "text": "eq      # Test equality for 4 and 4"},
+      {"type": "code", "text": "say     # Say the result"}
     ]},
     {"id": "labels", "contents": [
       {"type": "text", "text": "Labels and Branches\n", "bold": true},
       {"type": "text", "text": "Labels are permanent marks in the program that can be returned to using the jump instructions: JMP, BIF and BIT.\nFor example, the following proram enters an infinite loop:\n"},
-      {"type": "text", "text": "a_label:  # Define a label"},
-      {"type": "text", "text": "say \"loop\""},
-      {"type": "text", "text": "jmp a_label"},
+      {"type": "code", "text": "a_label:  # Define a label"},
+      {"type": "code", "text": "say \"loop\""},
+      {"type": "code", "text": "jmp a_label"},
       {"type": "text", "text": "\nLabels can be reused. Adding 'f' or 'b' to the end of a branch instruction tries to find the label by looking forwards or backwards respectively:\n"},
-      {"type": "text", "text": "a_label:"},
-      {"type": "text", "text": "jmp a_label f  # Jump forwards"},
-      {"type": "text", "text": "say \"Skip this instruction\""},
-      {"type": "text", "text": "a_label:"},
-      {"type": "text", "text": "say \"Yay\""}
+      {"type": "code", "text": "a_label:"},
+      {"type": "code", "text": "jmp a_label f  # Jump forwards"},
+      {"type": "code", "text": "say \"Skip this instruction\""},
+      {"type": "code", "text": "a_label:"},
+      {"type": "code", "text": "say \"Yay\""}
     ]},
     {"id": "functions", "contents": [
       {"type": "text", "text": "Functions and Aliases\n", "bold": true},
       {"type": "text", "text": "Functions encapsulate procedures that can be executed multiple times."},
       {"type": "text", "text": "\nA function is declared by surrounding instructions with %func and %end directives:\n"},
-      {"type": "text", "text": "%func a_function"},
-      {"type": "text", "text": "say \"Inside the function\""},
-      {"type": "text", "text": "%end"},
-      {"type": "text", "text": "a_function  # Call the function"},
+      {"type": "code", "text": "%func a_function"},
+      {"type": "code", "text": "say \"Inside the function\""},
+      {"type": "code", "text": "%end"},
+      {"type": "code", "text": "a_function  # Call the function"},
       {"type": "text", "text": "\nAliases can be used to assign names to certain world targets. Aliases are recalled by prefixing their name with '$':\n"},
-      {"type": "text", "text": "%alias redstone_input = @(12 32 12 NORTH)"},
-      {"type": "text", "text": "rwait $redstone_input  # Wait for redstone"}
+      {"type": "code", "text": "%alias redstone_input = @(12 32 12 NORTH)"},
+      {"type": "code", "text": "rwait $redstone_input  # Wait for redstone"}
     ]},
 
     {"id": "implants", "contents": [

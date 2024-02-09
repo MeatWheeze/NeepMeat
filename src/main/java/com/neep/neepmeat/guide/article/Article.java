@@ -38,9 +38,26 @@ public class Article
             return new TextContent(text);
         }
         MutableText text = Text.Serializer.fromJson(object);
-        text.setStyle(text.getStyle().withFont(FONT_ID));
+//        text.setStyle(text.getStyle().withFont(FONT_ID));
         return new TextContent(text);
     });
+
+    public static final Function<JsonObject, Content> CODE = DESERIALISERS.put("code",
+            object ->
+            {
+                JsonElement textObject = object.get("text");
+                if (textObject.isJsonArray())
+                {
+                    MutableText text = MutableText.of(net.minecraft.text.TextContent.EMPTY);
+                    textObject.getAsJsonArray().forEach(element ->
+                    {
+                        text.append(Text.Serializer.fromJson(element));
+                    });
+                    return new CodeContent(text);
+                }
+                MutableText text = Text.Serializer.fromJson(object);
+                return new CodeContent(text);
+            });
 
     public static final Function<JsonObject, Content> CTEXT = DESERIALISERS.put("ctext",
             object ->
