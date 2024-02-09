@@ -13,16 +13,31 @@ import net.minecraft.util.registry.Registry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Mixin(EnchantmentHelper.class)
 public class EnchantmentHelperMixin
 {
-    @Inject(method = "getPossibleEntries", at  = @At(value = "HEAD"), cancellable = true)
-    private static void getEntries(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir)
+    @Inject(method = "getPossibleEntries", at = @At(value = "RETURN", target = "Lnet/minecraft/enchantment/Enchantment;isTreasure()Z"))
+    private static void onInvokeIsTreasure(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir)
+    {
+        // Remove Meatlib enchantments if the item is invalid.
+        // This prevents you from getting special enchantments that do nothing on a sword, for example.
+        if (!(stack.getItem() instanceof CustomEnchantable))
+        {
+            var list = cir.getReturnValue();
+            list.removeIf(e -> e.enchantment instanceof CustomEnchantment);
+        }
+    }
+
+    @Inject(method = "getPossibleEntries", at = @At(value = "HEAD"), cancellable = true)
+    private static void onGetEntries(int power, ItemStack stack, boolean treasureAllowed, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir)
     {
         // Diverge only if the item implements CustomEnchantable. Vanilla items will be untouched.
         Item item = stack.getItem();
