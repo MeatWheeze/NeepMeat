@@ -52,16 +52,21 @@ public class Instructions
     public static final SimplerInstructionProvider GT = register("gt", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThan(), parseNoArguments(ComparisonInstruction.GreaterThan::new), Text.of("GT")));
     public static final SimplerInstructionProvider GTEQ = register("gteq", new SimplerInstructionProvider((w, n) -> new ComparisonInstruction.GreaterThanEqual(), parseNoArguments(ComparisonInstruction.GreaterThanEqual::new), Text.of("GTEQ")));
 
-    public static final SimplerInstructionProvider INC = register("inc", new SimplerInstructionProvider((w, n) -> new IncInstruction(), parseNoArguments(IncInstruction::new), Text.of("INC")));
-    public static final SimplerInstructionProvider DEC = register("dec", new SimplerInstructionProvider((w, n) -> new DecInstruction(), parseNoArguments(DecInstruction::new), Text.of("DEC")));
-    public static final SimplerInstructionProvider ADD = register("add", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.ADD, Integer::sum),
-            parseNoArguments(() -> new ArithmeticInstruction(Instructions.ADD, Integer::sum)), Text.of("ADD")));
-    public static final SimplerInstructionProvider SUB = register("sub", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.SUB, (f, l) -> f - l),
-            parseNoArguments(() -> new ArithmeticInstruction(Instructions.SUB, (f, l) -> f - l)), Text.of("SUB")));
-    public static final SimplerInstructionProvider MUL = register("mul", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.MUL, (f, l) -> f * l),
-            parseNoArguments(() -> new ArithmeticInstruction(Instructions.MUL, (f, l) -> f * l)), Text.of("MUL")));
-    public static final SimplerInstructionProvider DIV = register("div", new SimplerInstructionProvider((w, n) -> new ArithmeticInstruction(Instructions.DIV, (f, l) -> f / l),
-            parseNoArguments(() -> new ArithmeticInstruction(Instructions.DIV, (f, l) -> f / l)), Text.of("DIV")));
+    public static final SimplerInstructionProvider INC = registeryUnary("inc", () -> Instructions.INC, l -> l + 1);
+    public static final SimplerInstructionProvider DEC = registeryUnary("dec", () -> Instructions.DEC, l -> l - 1);
+
+    public static final SimplerInstructionProvider ADD = registeryBinary("add", () -> Instructions.SUB, Integer::sum);
+    public static final SimplerInstructionProvider SUB = registeryBinary("sub", () -> Instructions.SUB, (f, l) -> f - l);
+    public static final SimplerInstructionProvider MUL = registeryBinary("mul", () -> Instructions.MUL, (f, l) -> f * l);
+    public static final SimplerInstructionProvider DIV = registeryBinary("div", () -> Instructions.DIV, (f, l) -> f / l);
+
+    public static final SimplerInstructionProvider NOT = registeryUnary("not", () -> Instructions.NOT, (l) -> ~l);
+    public static final SimplerInstructionProvider AND = registeryBinary("and", () -> Instructions.AND, (f, l) -> f & l);
+    public static final SimplerInstructionProvider OR = registeryBinary("or", () -> Instructions.OR, (f, l) -> f | l);
+    public static final SimplerInstructionProvider NAND = registeryBinary("nand", () -> Instructions.NAND, (f, l) -> ~(f & l));
+    public static final SimplerInstructionProvider NOR = registeryBinary("nor", () -> Instructions.NOR, (f, l) -> ~(f | l));
+    public static final SimplerInstructionProvider XOR = registeryBinary("xor", () -> Instructions.XOR, (f, l) -> f ^ l);
+    public static final SimplerInstructionProvider XNOR = registeryBinary("xnor", () -> Instructions.XNOR, (f, l) -> ~(f ^ l));
 
     public static final InstructionProvider JUMP = register("jump", new SimplerInstructionProvider(JumpInstruction::new, new JumpInstructionParser(JumpInstruction::new), Text.of("JMP")));
     public static final SimplerInstructionProvider BIT = register("bit", new SimplerInstructionProvider(BITInstruction::new, new JumpInstructionParser(BITInstruction::new), Text.of("BIT")));
@@ -99,11 +104,19 @@ public class Instructions
 
     private static <T extends InstructionProvider> T register(String path, T provider)
     {
-//        if (provider instanceof ImmediateInstructionProvider immediate)
-//        {
-//            return Registry.register(IMMEDIATE, new Identifier(NeepMeat.NAMESPACE, path), immediate);
-//        }
         return Registry.register(REGISTRY, new Identifier(NeepMeat.NAMESPACE, path), provider);
+    }
+
+    private static <T extends SimplerInstructionProvider> SimplerInstructionProvider registeryBinary(String path, Supplier<InstructionProvider> provider, BinaryInstruction.BinaryOperation operation)
+    {
+        return register(path, new SimplerInstructionProvider((w, n) -> new BinaryInstruction(provider, operation),
+                parseNoArguments(() -> new BinaryInstruction(provider, operation)), Text.of(path.toUpperCase())));
+    }
+
+    private static <T extends SimplerInstructionProvider> SimplerInstructionProvider registeryUnary(String path, Supplier<InstructionProvider> provider, UnaryInstruction.UnaryOperation operation)
+    {
+        return register(path, new SimplerInstructionProvider((w, n) -> new UnaryInstruction(provider, operation),
+                parseNoArguments(() -> new UnaryInstruction(provider, operation)), Text.of(path.toUpperCase())));
     }
 
     /**
@@ -115,8 +128,7 @@ public class Instructions
         return (TokenView view, ParsedSource parsedSource, Parser parser) ->
         {
             view.fastForward();
-            if (!view.lineEnded() && !parser.isComment(view))
-                throw new NeepASM.ParseException("unexpected token '" + view.nextBlob() + "'");
+            parser.assureLineEnd(view);
 
             return (world, source, program) ->
                     program.addBack(supplier.get());

@@ -1,5 +1,7 @@
 package com.neep.neepmeat.neepasm.compiler;
 
+import com.neep.neepmeat.neepasm.NeepASM;
+
 public class TokenView
 {
     private final String string;
@@ -106,13 +108,15 @@ public class TokenView
         return builder.toString();
     }
 
-    public Integer nextInteger()
+    public Integer nextInteger() throws NeepASM.ParseException
     {
         fastForward();
         StringBuilder builder = new StringBuilder();
-        while (isDigit(peek()))
+        int index = 0;
+        while (isDigit(index, peek()))
         {
             builder.append(next());
+            index++;
         }
 
         String s = builder.toString();
@@ -120,7 +124,21 @@ public class TokenView
         if (s.equals("-"))
             return 0;
 
-        return Integer.parseInt(builder.toString());
+        int radix = 10;
+        if (s.startsWith("0x"))
+            radix = 16;
+        else if (s.startsWith("0b"))
+            radix = 2;
+
+        // Not sure if this try-catch should be here or in the parser
+        try
+        {
+            return Integer.parseInt(radix == 10 ? builder.toString() : builder.substring(2), radix);
+        }
+        catch (NumberFormatException e)
+        {
+            throw new NeepASM.ParseException(e.getMessage());
+        }
     }
 
     public String nextString()
@@ -157,6 +175,12 @@ public class TokenView
     public static boolean isDigit(char c)
     {
         return  c == '-' || Character.isDigit(c);
+    }
+
+    private static boolean isDigit(int index, char c)
+    {
+        // Handle hex or bin prefixes
+        return (index == 1 && (c == 'x' || c == 'b')) || isDigit(c);
     }
 
     public boolean lineEnded()

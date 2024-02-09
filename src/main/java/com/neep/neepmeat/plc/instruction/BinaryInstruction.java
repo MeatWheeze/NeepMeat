@@ -3,12 +3,14 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.neepmeat.api.plc.PLC;
 import org.jetbrains.annotations.NotNull;
 
-public class ArithmeticInstruction implements Instruction
-{
-    private final InstructionProvider provider;
-    private final Operation operation;
+import java.util.function.Supplier;
 
-    public ArithmeticInstruction(InstructionProvider provider, Operation operation)
+public class BinaryInstruction implements Instruction
+{
+    private final Supplier<InstructionProvider> provider;
+    private final BinaryOperation operation;
+
+    public BinaryInstruction(Supplier<InstructionProvider> provider, BinaryOperation operation)
     {
         this.provider = provider;
         this.operation = operation;
@@ -26,11 +28,11 @@ public class ArithmeticInstruction implements Instruction
     @Override
     public @NotNull InstructionProvider getProvider()
     {
-        return provider;
+        return provider.get();
     }
     
     @FunctionalInterface
-    public interface Operation
+    public interface BinaryOperation
     {
         int apply(int first, int last);
     }

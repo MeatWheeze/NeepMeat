@@ -182,11 +182,15 @@ public class EditBoxWidget extends ScrollableWidget
             fill(matrices, this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1, 0x90000000);
             GUIUtil.renderBorder(matrices, x, y, width - 1, height - 1, col, 0);
 
+            matrices.push();
+            float bottom = (float) (y + height - lineHeight() - getPadding());
+            matrices.translate(0, bottom, 0);
+            matrices.scale(scale, scale, 1);
+            textRenderer.draw(matrices, errorMessage, x + getPadding(), 0, errorCol);
+            matrices.pop();
+
             enableScissor(this.x + 1, this.y + 1, this.x + this.width - 1, this.y + this.height - 1);
             matrices.push();
-
-            float bottom = (float) (y + height - lineHeight() - getPadding());
-            textRenderer.draw(matrices, errorMessage, x + getPadding(), bottom, errorCol);
 
             matrices.translate(0.0, -this.getScrollY(), 0.0);
             renderHighlightLine(matrices, errorLine, PLCCols.ERROR_LINE.col);

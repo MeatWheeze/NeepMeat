@@ -43,12 +43,20 @@ public class InstructionAttributes
         register(Instructions.LTEQ, Category.COMPARISON);
         register(Instructions.GT, Category.COMPARISON);
         register(Instructions.GTEQ, Category.COMPARISON);
+
         register(Instructions.INC, Category.ARITHMETIC);
         register(Instructions.DEC, Category.ARITHMETIC);
         register(Instructions.ADD, Category.ARITHMETIC);
         register(Instructions.SUB, Category.ARITHMETIC);
         register(Instructions.MUL, Category.ARITHMETIC);
         register(Instructions.DIV, Category.ARITHMETIC);
+        register(Instructions.AND, Category.ARITHMETIC);
+        register(Instructions.OR, Category.ARITHMETIC);
+        register(Instructions.NAND, Category.ARITHMETIC);
+        register(Instructions.NOR, Category.ARITHMETIC);
+        register(Instructions.XOR, Category.ARITHMETIC);
+        register(Instructions.XNOR, Category.ARITHMETIC);
+
         register(Instructions.JUMP, Category.CONTROL);
         register(Instructions.BIT, Category.CONTROL);
         register(Instructions.BIF, Category.CONTROL);
