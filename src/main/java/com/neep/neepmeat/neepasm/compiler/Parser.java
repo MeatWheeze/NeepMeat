@@ -136,7 +136,7 @@ public class Parser
     {
         String name = view.nextIdentifier();
         if (name.isEmpty())
-            throw new NeepASM.ParseException("");
+            throw new NeepASM.ParseException("expected function name");
 
         if (!view.lineEnded() && !isComment(view))
             throw new NeepASM.ParseException("unexpected token");

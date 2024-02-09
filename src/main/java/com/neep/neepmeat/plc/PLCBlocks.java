@@ -28,7 +28,7 @@ public class PLCBlocks
 
     public static final Block ROBOTIC_ARM = BlockRegistry.queue(new RoboticArmBlock("robotic_arm", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), FabricBlockSettings.of(Material.METAL)));;
     public static final Block REDSTONE_INTERFACE = BlockRegistry.queue(new PLCRedstoneInterface("redstone_interface", FabricBlockSettings.of(Material.METAL)));
-    public static final Block EXECUTOR = BlockRegistry.queue(new ExecutorBlock("executor", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL)));
+    public static final Block EXECUTOR = BlockRegistry.queue(new ExecutorBlock("executor", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).nonOpaque()));
     public static final Block PLC = BlockRegistry.queue(new PLCBlock("plc", NMBlocks.block(), FabricBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
     public static BlockEntityType<PLCBlockEntity> PLC_ENTITY;
 
