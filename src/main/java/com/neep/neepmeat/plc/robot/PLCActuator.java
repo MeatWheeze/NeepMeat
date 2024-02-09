@@ -87,7 +87,15 @@ public interface PLCActuator
         {
             return 0;
         }
+
+        @Override
+        public boolean actuatorRemoved()
+        {
+            return true;
+        }
     };
+
+    boolean actuatorRemoved();
 
     interface Provider
     {

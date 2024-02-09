@@ -244,6 +244,12 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
         return z;
     }
 
+    @Override
+    public boolean actuatorRemoved()
+    {
+        return parent.isRemoved();
+    }
+
     private static final String NBT_MOVEMENT_STATE = "movementState";
     private static final String NBT_NEXT_TYPE = "nextType";
 

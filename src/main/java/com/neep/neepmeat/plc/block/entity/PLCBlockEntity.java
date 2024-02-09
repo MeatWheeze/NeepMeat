@@ -94,6 +94,9 @@ public class PLCBlockEntity extends SyncableBlockEntity implements PLC, Extended
         if (actuatorPos != null && selectedActuator == null)
             selectActuator(actuatorPos);
 
+        if (selectedActuator.actuatorRemoved())
+            selectedActuator = robot;
+
         return selectedActuator;
     }
 

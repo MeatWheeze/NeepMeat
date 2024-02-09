@@ -223,6 +223,12 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     @Override
     public double getZ() { return tipZ; }
 
+    @Override
+    public boolean actuatorRemoved()
+    {
+        return isRemoved();
+    }
+
 //    public Vec3d getTarget(float tickDelta)
 //    {
 //        return new Vec3d(
