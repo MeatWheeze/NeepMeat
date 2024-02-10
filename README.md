@@ -1,6 +1,16 @@
-<img align="middle" src="https://raw.githubusercontent.com/MeatWheeze/NeepMeat/1.18-dev/logo/banner_low.png" alt="NeepMeat Banner" width="500"/>
-
+<p align=center>
+  <img src="https://cdn.modrinth.com/data/cached_images/5a1559777a3a0bc39d8861afc5386cc39506e719.png" alt="NeepMeat Banner"/>
+</p>
+<p align=center>
+  <a href=https://modrinth.com/mod/neepmeat/>
+    <img alt="Modrinth Downloads" src="https://img.shields.io/modrinth/dt/Hagcl1FT?style=flat&logo=modrinth&labelColor=7e110d&color=5f3537&link=https%3A%2F%2Fmodrinth.com%2Fmod%2Fneepmeat">
+  </a>
+  <a href=https://discord.gg/neqbG6FD5j>
+   <img alt="Discord" src="https://img.shields.io/discord/1188255362802000033?logo=discord&labelColor=7e110d&color=5f3537&link=https%3A%2F%2Fdiscord.gg%2FneqbG6FD5j">
+ </a>
+</p>
 NeepMeat is a Minecraft mod that adds various forms of darkly aesthetic automation.
+
 
 ## Features
 
