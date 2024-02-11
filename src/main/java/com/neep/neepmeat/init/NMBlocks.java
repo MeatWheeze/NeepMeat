@@ -50,6 +50,10 @@ import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerGrowthBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerSeedsBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
@@ -198,6 +202,10 @@ public class NMBlocks
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
+    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block(), FabricBlockSettings.of(Material.NETHER_SHOOTS)));
+    public static Block POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block(), FabricBlockSettings.of(Material.NETHER_SHOOTS)));
+    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 

@@ -4,14 +4,9 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.multiblock.MultiBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.HoldingTrackBlock;
 import com.neep.neepmeat.block.entity.*;
-import com.neep.neepmeat.block.entity.machine.AgitatorBlockEntity;
-import com.neep.neepmeat.block.entity.machine.VatControllerBlockEntity;
-import com.neep.neepmeat.block.vat.FluidPortBlock;
-import com.neep.neepmeat.block.vat.ItemPortBlock;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.HeatableFurnace;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
@@ -52,6 +47,8 @@ import com.neep.neepmeat.machine.multitank.MultiTankBlockEntity;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlock;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlockEntity;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
@@ -167,6 +164,8 @@ public class NMBlockEntities
     public static BlockEntityType<CrucibleBlockEntity> CRUCIBLE;
     public static BlockEntityType<AlembicBlockEntity> ALEMBIC;
     public static BlockEntityType<TransducerBlockEntity> TRANSDUCER;
+    public static BlockEntityType<PowerFlowerControllerBlockEntity> POWER_FLOWER_CONTROLLER;
+    public static BlockEntityType<PowerFlowerFluidPortBlock.PFPortBlockEntity> POWER_FLOWER_FLUID_PORT;
     public static BlockEntityType<DumperBlockEntity> DUMPER;
     public static BlockEntityType<TrommelStructureBlockEntity> TROMMEL_STRUCTURE;
     public static BlockEntityType<SmallTrommelBlockEntity> SMALL_TROMMEL;
@@ -380,7 +379,12 @@ public class NMBlockEntities
         TRANSDUCER = register("transducer", TransducerBlockEntity::new, NMBlocks.TRANSDUCER);
         FluidStorage.SIDED.registerForBlockEntity(TransducerBlockEntity::getStorage, TRANSDUCER);
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
-//        BloodAcceptor.SIDED.registerForBlockEntity(TransducerBlockEntity::getBloodAcceptor, TRANSDUCER);
+
+        POWER_FLOWER_CONTROLLER = register("power_flower_controller", (p, s) -> new PowerFlowerControllerBlockEntity(POWER_FLOWER_CONTROLLER, p, s), NMBlocks.POWER_FLOWER_CONTROLLER);
+        FluidPump.SIDED.registerForBlockEntity(PowerFlowerControllerBlockEntity::getFluidPump, POWER_FLOWER_CONTROLLER);
+        POWER_FLOWER_FLUID_PORT = register("power_flower_fluid_port", (p, s) -> new PowerFlowerFluidPortBlock.PFPortBlockEntity(POWER_FLOWER_FLUID_PORT, p, s), NMBlocks.POWER_FLOWER_FLUID_PORT);
+        FluidStorage.SIDED.registerForBlockEntity(PowerFlowerFluidPortBlock.PFPortBlockEntity::getStorage, POWER_FLOWER_FLUID_PORT);
+        FluidPump.SIDED.registerForBlockEntity(PowerFlowerFluidPortBlock.PFPortBlockEntity::getPump, POWER_FLOWER_FLUID_PORT);
 
         PEDESTAL = register("pedestal", PedestalBlockEntity::new, NMBlocks.PEDESTAL);
         ItemStorage.SIDED.registerForBlockEntity(PedestalBlockEntity::getStorage, PEDESTAL);

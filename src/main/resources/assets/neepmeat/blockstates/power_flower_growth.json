@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "age=0": [
+      {
+        "model": "neepmeat:block/power_flower/growth_age_1"
+      },
+      {
+        "model": "neepmeat:block/power_flower/growth_age_1_alt"
+      },
+      {
+        "model": "neepmeat:block/power_flower/growth_age_1_alt_2"
+      }
+    ],
+    "age=1": {
+      "model": "neepmeat:block/power_flower/growth_age_2"
+    }
+  }
+}

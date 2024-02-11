@@ -228,6 +228,10 @@
 
   "block.neepmeat.converter": "Fluid Charger",
   "block.neepmeat.transducer": "Fuel Transducer",
+  "block.neepmeat.power_flower_seeds": "Power Flower Seeds",
+  "block.neepmeat.power_flower_growth": "Power Flower Growth",
+  "block.neepmeat.power_flower_fluid_port": "Power Flower Fluid Port",
+  "block.neepmeat.power_flower_controller": "Power Flower Controller",
   "block.neepmeat.fluid_exciter": "Heart Machine",
   "block.neepmeat.fluid_exciter.lore_0": "Injects power into a vascular network connected to the upper dome when Ethereal Fuel is inserted into the bottom. Provides a 150% efficiency gain over standard motors.",
 

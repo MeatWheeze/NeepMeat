@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "neepmeat:block/power_flower/fluid_port"
+    }
+  }
+}
