@@ -41,7 +41,7 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
         textField.setChangedListener(s ->
         {
             int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
-            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), parsed));
+            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), parsed));
         });
         this.addDrawableChild(textField);
     }
