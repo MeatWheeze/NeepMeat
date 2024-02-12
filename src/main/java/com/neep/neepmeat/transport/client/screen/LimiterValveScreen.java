@@ -75,7 +75,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         textField.setChangedListener(s ->
         {
             int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
-            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(LimiterValveScreenHandler.PROP_MAX_AMOUNT, parsed));
+            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(LimiterValveScreenHandler.PROP_MAX_AMOUNT, parsed));
         });
         this.addDrawableChild(textField);
 
@@ -92,7 +92,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
                 setMessage(getButtonText());
 
                 // Update server
-                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(PROP_MB_MODE, newMode));
+                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(PROP_MB_MODE, newMode));
             }
 
             @Override

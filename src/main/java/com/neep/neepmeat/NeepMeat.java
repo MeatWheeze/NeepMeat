@@ -60,7 +60,7 @@ public class NeepMeat implements ModInitializer
 	public static final String NAMESPACE = "neepmeat";
 	public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
 
-	public static final String disableGeckoExamples = System.setProperty(GeckoLibMod.DISABLE_EXAMPLES_PROPERTY_KEY, "true");
+//	public static final String disableGeckoExamples = System.setProperty(GeckoLibMod.DISABLE_EXAMPLES_PROPERTY_KEY, "true");
 
 	@Override
 	public void onInitialize()

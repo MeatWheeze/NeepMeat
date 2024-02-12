@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.advanced_integrator;
 
-import com.google.common.collect.MapMaker;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.DataVariant;
@@ -21,8 +20,6 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.Map;
 
 public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 {
@@ -76,8 +73,8 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
     {
         if (client == null)
             client = new Client(this);
+
         client.tick();
-//        Client.get(this).tick();
     }
 
     public static class DataStorage extends SingleVariantStorage<DataVariant>

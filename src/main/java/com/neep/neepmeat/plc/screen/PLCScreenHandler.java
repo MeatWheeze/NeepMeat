@@ -108,7 +108,7 @@ public class PLCScreenHandler extends ScreenHandler
 
     public void setSelectedInstruction(int index)
     {
-        ScreenPropertyC2SPacket.send(PLCBlockEntity.PLCPropertyDelegate.Names.SELECTED_INSTRUCTION.ordinal(), index);
+        ScreenPropertyC2SPacket.Client.send(PLCBlockEntity.PLCPropertyDelegate.Names.SELECTED_INSTRUCTION.ordinal(), index);
     }
 
     public int getSelectedInstruction()

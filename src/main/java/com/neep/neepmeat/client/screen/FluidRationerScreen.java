@@ -57,7 +57,7 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
             int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
 //            this.client.getNetworkHandler().sendPacket(new BookUpdateC2SPacket());
 //            handler.setProperty(FluidRationerScreenHandler.PROP_TARGE_AMOUNT, parsed);
-            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.create(FluidRationerScreenHandler.PROP_TARGET_AMOUNT, parsed));
+            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(FluidRationerScreenHandler.PROP_TARGET_AMOUNT, parsed));
         });
         this.addDrawableChild(textField);
 
