@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,15 +20,23 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
-public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityProvider
+public class PowerFlowerFluidPortBlock extends BaseBlock implements BlockEntityProvider, PowerFlower
 {
     public PowerFlowerFluidPortBlock(String registryName, ItemSettings block, Settings settings)
     {
         super(registryName, block, settings.nonOpaque());
+    }
+
+    @Override
+    public TagKey<Block> getPreferredTool()
+    {
+        return BlockTags.AXE_MINEABLE;
     }
 
     @Override

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "www",
+    "pbw",
+    "www"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:fluid_buffer"
+    },
+    "w": {
+      "item": "neepmeat:blood_bubble_planks"
+    },
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:power_flower_fluid_port",
+    "count": 1
+  }
+}

@@ -68,8 +68,10 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
 
         try (Transaction transaction = Transaction.openOuter())
         {
+            int power = 2 * panels;
+
             // Calculate amount of fluid to be produced from current power output
-            long produceAmount = PowerUtils.absToAmount(NMFluids.STILL_ETHEREAL_FUEL, 20);
+            long produceAmount = PowerUtils.absToAmount(NMFluids.STILL_ETHEREAL_FUEL, power);
 
             // Extract from water tank
             long extracted = waterStorage.extract(INPUT_VARIANT, produceAmount, transaction);
@@ -120,7 +122,7 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
                         visited.add(mutable.toImmutable());
                         panels++;
 
-                        if (panels >= 40)
+                        if (panels >= 60)
                         {
                             return panels;
                         }

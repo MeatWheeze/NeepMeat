@@ -1,3 +1,6 @@
 {
-  "parent": "neepmeat:block/power_flower/growth_age_0"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "neepmeat:item/power_flower_seeds"
+  }
 }

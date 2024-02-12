@@ -13,11 +13,13 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntityProvider
+public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntityProvider, PowerFlower
 {
     public static final BooleanProperty VALID = BooleanProperty.of("valid");
 
@@ -25,6 +27,12 @@ public class PowerFlowerControllerBlock extends BaseBlock implements BlockEntity
     {
         super(registryName, block, settings.nonOpaque());
         setDefaultState(getDefaultState().with(VALID, true));
+    }
+
+    @Override
+    public TagKey<Block> getPreferredTool()
+    {
+        return BlockTags.AXE_MINEABLE;
     }
 
     @Override

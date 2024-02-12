@@ -700,6 +700,9 @@
   "advancements.neepmeat.main.obtain_meat_bucket.title": "Very Original",
   "advancements.neepmeat.main.obtain_meat_bucket.description": "Fill a bucket with meat.",
 
+  "advancements.neepmeat.main.obtain_power_flower_seeds.title": "The Seeds of Doom",
+  "advancements.neepmeat.main.obtain_power_flower_seeds.description": "Obtain Power Flower Seeds.",
+
   "key.neepmeat.category.neepmeat": "NEEPMeat",
   "key.neepmeat.transform": "Tool Transform"
 }

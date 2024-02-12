@@ -202,10 +202,11 @@ public class NMBlocks
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
-    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block(), FabricBlockSettings.of(Material.NETHER_SHOOTS)));
-    public static Block POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block(), FabricBlockSettings.of(Material.NETHER_SHOOTS)));
-    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final FabricBlockSettings POWER_FLOWER_SETTINGS = FabricBlockSettings.of(Material.NETHER_WOOD).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
+    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS).hardness(0.01f)));
+    public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth.json", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
 
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 

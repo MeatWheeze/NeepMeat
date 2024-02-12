@@ -2,15 +2,24 @@ package com.neep.neepmeat.machine.power_flower;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.client.NMInstances;
+import com.neep.neepmeat.datagen.tag.NMTags;
+import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.tag.ItemTags;
+import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -23,8 +32,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Pow;
 
-public class PowerFlowerGrowthBlock extends BaseBlock
+public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
 {
     public static final IntProperty GROWTH = Properties.AGE_1;
 
@@ -35,6 +45,18 @@ public class PowerFlowerGrowthBlock extends BaseBlock
     {
         super(registryName, itemSettings, settings.nonOpaque());
         this.setDefaultState(getDefaultState().with(GROWTH, 0));
+    }
+
+    @Override
+    public TagKey<Block> getPreferredTool()
+    {
+        return BlockTags.AXE_MINEABLE;
+    }
+
+    @Override
+    public boolean autoGenDrop()
+    {
+        return false;
     }
 
     @Override
@@ -69,32 +91,61 @@ public class PowerFlowerGrowthBlock extends BaseBlock
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.getStackInHand(hand).isEmpty())
+        ItemStack stack = player.getStackInHand(hand);
+        int tries = triesForItem(stack);
+
+        if (tries > 0)
         {
             if (!world.isClient())
             {
-                Random random = world.getRandom();
-                Direction direction = Direction.values()[random.nextInt(5) + 1];
-                BlockPos growPos = pos.offset(direction);
-
-                if (canGrowTo(world, growPos))
-                    world.setBlockState(growPos, getState(world, growPos));
+                for (int i = 0; i < tries; ++i)
+                {
+                    grow(world, pos, state);
+                }
             }
+            if (!player.isCreative())
+            {
+                stack.decrement(1);
+                player.setStackInHand(hand, stack);
+            }
+
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
+    public static int triesForItem(ItemStack stack)
+    {
+        if (stack.isIn(NMTags.CHARNEL_COMPACTOR))
+            return 2;
+
+        if (stack.isOf(Items.BONE_MEAL))
+            return 1;
+
+        return 0;
+    }
+
+    public void grow(World world, BlockPos pos, BlockState state)
+    {
+        Random random = world.getRandom();
+        Direction direction = Direction.values()[random.nextInt(5) + 1];
+        BlockPos growPos = pos.offset(direction);
+
+        if (canGrowTo(world, growPos))
+            world.setBlockState(growPos, getState(world, growPos));
+    }
+
     private boolean canGrowTo(World world, BlockPos pos)
     {
         BlockState downState = world.getBlockState(pos.down());
-        return downState.isOf(this) || downState.isSideSolidFullSquare(world, pos, Direction.UP);
+        BlockState nextState = world.getBlockState(pos);
+        return nextState.isAir() && (downState.isOf(this) || !downState.isAir());
     }
 
-    private BlockState getState(WorldAccess world, BlockPos pos)
+    public BlockState getState(WorldAccess world, BlockPos pos)
     {
         boolean upAir = world.isAir(pos.up());
-        boolean downThis = world.getBlockState(pos.down()).isOf(this);
+        boolean downThis = world.getBlockState(pos.down()).getBlock() instanceof PowerFlower;
 
         return getDefaultState().with(GROWTH, upAir && downThis ? 1 : 0);
     }
@@ -134,5 +185,13 @@ public class PowerFlowerGrowthBlock extends BaseBlock
     {
         super.appendProperties(builder);
         builder.add(GROWTH);
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
+    {
+        super.randomDisplayTick(state, world, pos, random);
+        world.addParticle(ParticleTypes.MYCELIUM, pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat(), pos.getZ() + random.nextFloat(),
+                random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5);
     }
 }
