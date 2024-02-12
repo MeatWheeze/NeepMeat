@@ -381,6 +381,7 @@ public class NMBlockEntities
         FluidPump.SIDED.registerForBlockEntity(TransducerBlockEntity::getPump, TRANSDUCER);
 
         POWER_FLOWER_CONTROLLER = register("power_flower_controller", (p, s) -> new PowerFlowerControllerBlockEntity(POWER_FLOWER_CONTROLLER, p, s), NMBlocks.POWER_FLOWER_CONTROLLER);
+        FluidStorage.SIDED.registerForBlockEntity(PowerFlowerControllerBlockEntity::getOutputStorage, POWER_FLOWER_CONTROLLER);
         FluidPump.SIDED.registerForBlockEntity(PowerFlowerControllerBlockEntity::getFluidPump, POWER_FLOWER_CONTROLLER);
         POWER_FLOWER_FLUID_PORT = register("power_flower_fluid_port", (p, s) -> new PowerFlowerFluidPortBlock.PFPortBlockEntity(POWER_FLOWER_FLUID_PORT, p, s), NMBlocks.POWER_FLOWER_FLUID_PORT);
         FluidStorage.SIDED.registerForBlockEntity(PowerFlowerFluidPortBlock.PFPortBlockEntity::getStorage, POWER_FLOWER_FLUID_PORT);

@@ -4,19 +4,23 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.tag.BlockTags;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
 
@@ -62,16 +66,50 @@ public class PowerFlowerGrowthBlock extends BaseBlock
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
     }
 
-    private boolean validBlock(Block state)
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        return state.getDefaultState().isIn(BlockTags.DIRT);
+        if (player.getStackInHand(hand).isEmpty())
+        {
+            if (!world.isClient())
+            {
+                Random random = world.getRandom();
+                Direction direction = Direction.values()[random.nextInt(5) + 1];
+                BlockPos growPos = pos.offset(direction);
+
+                if (canGrowTo(world, growPos))
+                    world.setBlockState(growPos, getState(world, growPos));
+            }
+            return ActionResult.SUCCESS;
+        }
+        return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    private boolean canGrowTo(World world, BlockPos pos)
+    {
+        BlockState downState = world.getBlockState(pos.down());
+        return downState.isOf(this) || downState.isSideSolidFullSquare(world, pos, Direction.UP);
+    }
+
+    private BlockState getState(WorldAccess world, BlockPos pos)
+    {
+        boolean upAir = world.isAir(pos.up());
+        boolean downThis = world.getBlockState(pos.down()).isOf(this);
+
+        return getDefaultState().with(GROWTH, upAir && downThis ? 1 : 0);
+    }
+
+    @Override
+    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction, BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos)
+    {
+        return getState(world, pos);
     }
 
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        return super.getPlacementState(ctx).with(GROWTH, 0);
+        return getState(ctx.getWorld(), ctx.getBlockPos());
     }
 
     @Override

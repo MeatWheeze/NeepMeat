@@ -58,7 +58,12 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
     {
         if (world.getTime() % 80 == 0)
         {
-            search(pos);
+            int newPanels = search(pos);
+            if (newPanels != panels)
+            {
+                this.panels = newPanels;
+            }
+            updateState();
         }
 
         try (Transaction transaction = Transaction.openOuter())
@@ -83,9 +88,14 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
         }
     }
 
-    private void search(BlockPos start)
+    protected void updateState()
     {
-        panels = 0;
+        world.setBlockState(pos, NMBlocks.POWER_FLOWER_CONTROLLER.getDefaultState().with(PowerFlowerControllerBlock.VALID, panels > 0));
+    }
+
+    private int search(BlockPos start)
+    {
+        int panels = 0;
 
         Set<BlockPos> visited = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -112,8 +122,12 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
 
                         if (panels >= 40)
                         {
-                            return;
+                            return panels;
                         }
+                    }
+                    else if (nextState.isOf(NMBlocks.POWER_FLOWER_CONTROLLER))
+                    {
+                        return 0;
                     }
                     else if (world.getBlockEntity(mutable) instanceof PowerFlowerFluidPortBlock.PFPortBlockEntity port)
                     {
@@ -122,6 +136,7 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
                 }
             }
         }
+        return panels;
     }
 
     @Override
@@ -150,5 +165,10 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
     public FluidPump getFluidPump(Direction direction)
     {
         return fluidPump;
+    }
+
+    public Storage<FluidVariant> getOutputStorage(Direction direction)
+    {
+        return outputStorage;
     }
 }

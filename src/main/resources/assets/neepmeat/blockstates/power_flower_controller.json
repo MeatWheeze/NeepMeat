@@ -1,7 +1,10 @@
 {
   "variants": {
-    "": {
+    "valid=true": {
       "model": "neepmeat:block/power_flower/controller"
+    },
+    "valid=false": {
+      "model": "neepmeat:block/power_flower/controller_invalid"
     }
   }
 }
