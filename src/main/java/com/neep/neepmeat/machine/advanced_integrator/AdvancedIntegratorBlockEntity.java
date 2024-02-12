@@ -74,6 +74,8 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
 
     public void clientTick()
     {
+        if (client == null)
+            client = new Client(this);
         client.tick();
 //        Client.get(this).tick();
     }
@@ -144,13 +146,11 @@ public class AdvancedIntegratorBlockEntity extends SyncableBlockEntity
     }
 
     @Environment(EnvType.CLIENT)
-    private final Client client = new Client(this);
+    private Client client;
 
     @Environment(EnvType.CLIENT)
     private static class Client
     {
-        private static final Map<AdvancedIntegratorBlockEntity, Client> MAP = new MapMaker().weakKeys().makeMap();
-
         private final MinecraftClient client = MinecraftClient.getInstance();
         private final BlockSoundInstance sound;
 
