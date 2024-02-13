@@ -44,7 +44,7 @@ public class MotorInstance extends BlockEntityInstance<MotorBlockEntity> impleme
         matrices.push();
         Direction facing = blockEntity.getCachedState().get(BaseFacingBlock.FACING);
 
-        float delta = AnimationTickHolder.getPartialTicks();
+        float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
         blockEntity.currentSpeed = (float) (blockEntity.rotorSpeed * MathHelper.lerp(0.1, blockEntity.currentSpeed, blockEntity.getSpeed()));
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.currentSpeed * delta);
 
