@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class MeatFluidHelper
+public class MeatFluidUtil
 {
     public static final String KEY_ROOT = NeepMeat.NAMESPACE + ":food";
     protected static final String KEY_HUNGER = "hunger";

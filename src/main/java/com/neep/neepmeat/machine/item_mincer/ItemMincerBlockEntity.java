@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.item_mincer;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -109,7 +109,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
             try (Transaction inner = context.openNested())
             {
                 FoodComponent food = storage.inputStorage.getResource().getObject().getFoodComponent();
-                FluidVariant outputVariant = MeatFluidHelper.getVariant(food);
+                FluidVariant outputVariant = MeatFluidUtil.getVariant(food);
                 storage.outputStorage.insert(outputVariant, FluidConstants.INGOT, inner);
                 storage.inputStorage.extract(storage.inputStorage.getResource(), 1, inner);
                 inner.commit();

@@ -295,6 +295,7 @@ public class NMBlockEntities
         SMALL_TROMMEL_STRUCTURE = register("small_trommel_structure", SmallTrommelBlockEntity.Structure::new, NMBlocks.SMALL_TROMMEL_STRUCTURE);
         FluidStorage.SIDED.registerForBlockEntity(SmallTrommelBlockEntity::getInputStorage, SMALL_TROMMEL);
         FluidStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getFluidStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
+        FluidPump.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getFluidPump, NMBlocks.SMALL_TROMMEL_STRUCTURE);
         ItemStorage.SIDED.registerForBlocks(SmallTrommelBlock.Structure::getItemStorage, NMBlocks.SMALL_TROMMEL_STRUCTURE);
 
         BIG_LEVER = register("big_lever", BigLeverBlockEntity::new, NMBlocks.BIG_LEVER);
@@ -408,6 +409,7 @@ public class NMBlockEntities
 
         MINCER = register("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
         FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
+        FluidPump.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidPump, MINCER);
 
         HOMOGENISER = register("homogeniser", (pos, state) -> new HomogeniserBlockEntity(HOMOGENISER, pos, state), NMBlocks.HOMOGENISER);
         ItemStorage.SIDED.registerForBlockEntity(HomogeniserBlockEntity::getItemStorage, HOMOGENISER);

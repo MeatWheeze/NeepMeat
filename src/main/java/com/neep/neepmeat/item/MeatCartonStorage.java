@@ -1,6 +1,6 @@
 package com.neep.neepmeat.item;
 
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -38,7 +38,7 @@ public class MeatCartonStorage implements InsertionOnlyStorage<FluidVariant>
 
         if (resource.isOf(insertableFluid) && maxAmount >= insertableAmount)
         {
-            NbtCompound nbt = MeatFluidHelper.copyRootRounded(new NbtCompound(), resource.getNbt());
+            NbtCompound nbt = MeatFluidUtil.copyRootRounded(new NbtCompound(), resource.getNbt());
             ItemVariant newVariant = ItemVariant.of(fullitem, nbt);
 
             long exc = context.exchange(newVariant, 1, transaction);

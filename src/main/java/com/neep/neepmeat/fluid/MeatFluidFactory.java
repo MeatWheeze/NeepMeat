@@ -1,6 +1,6 @@
 package com.neep.neepmeat.fluid;
 
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.minecraft.block.BlockState;
 import net.minecraft.fluid.FlowableFluid;
@@ -41,13 +41,13 @@ public class MeatFluidFactory extends FluidFactory
             NbtCompound nbt = new NbtCompound();
 
             // Treat hunger and saturation as intrinsic properties.
-            float hunger1 = MeatFluidHelper.getHunger(thisVariant);
-            float hunger2 = MeatFluidHelper.getHunger(otherVariant);
-            MeatFluidHelper.setHunger(nbt, ((hunger1 * thisAmount + hunger2 * otherAmount) / (float) (thisAmount + otherAmount)));
+            float hunger1 = MeatFluidUtil.getHunger(thisVariant);
+            float hunger2 = MeatFluidUtil.getHunger(otherVariant);
+            MeatFluidUtil.setHunger(nbt, ((hunger1 * thisAmount + hunger2 * otherAmount) / (float) (thisAmount + otherAmount)));
 
-            float sat1 = MeatFluidHelper.getSaturation(thisVariant);
-            float sat2 = MeatFluidHelper.getSaturation(otherVariant);
-            MeatFluidHelper.setSaturation(nbt, ((sat1 * thisAmount + sat2 * otherAmount) / (float) (thisAmount + otherAmount)));
+            float sat1 = MeatFluidUtil.getSaturation(thisVariant);
+            float sat2 = MeatFluidUtil.getSaturation(otherVariant);
+            MeatFluidUtil.setSaturation(nbt, ((sat1 * thisAmount + sat2 * otherAmount) / (float) (thisAmount + otherAmount)));
 
             return FluidVariant.of(this, nbt);
         }

@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.homogeniser;
 
 import com.google.common.collect.Maps;
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import com.neep.neepmeat.init.NMFluids;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -74,12 +74,12 @@ public class MeatAdditives
         public FluidVariant apply(FluidVariant variant)
         {
             NbtCompound newNbt = new NbtCompound();
-            if (MeatFluidHelper.getRoot(variant) != null)
+            if (MeatFluidUtil.getRoot(variant) != null)
             {
-                MeatFluidHelper.copyRoot(variant.getNbt(), newNbt);
+                MeatFluidUtil.copyRoot(variant.getNbt(), newNbt);
             }
 
-            MeatFluidHelper.setHunger(newNbt, MeatFluidHelper.getHunger(variant) + hunger);
+            MeatFluidUtil.setHunger(newNbt, MeatFluidUtil.getHunger(variant) + hunger);
 
 
             return FluidVariant.of(variant.getFluid(), newNbt);

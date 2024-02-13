@@ -3,8 +3,10 @@ package com.neep.neepmeat.machine.small_trommel;
 import com.neep.meatlib.block.BaseDummyBlock;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -143,6 +145,15 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
             if (direction == Direction.DOWN && world.getBlockEntity(offsetPos) instanceof SmallTrommelBlockEntity be)
             {
                 return be.getOutputFluidStorage();
+            }
+            return null;
+        }
+
+        public static FluidPump getFluidPump(World world, BlockPos pos, BlockState state, @Nullable BlockEntity entity, Direction direction)
+        {
+            if (direction == Direction.DOWN)
+            {
+                return FluidPump.of(-0.5f, () -> AcceptorModes.PUSH, true);
             }
             return null;
         }
