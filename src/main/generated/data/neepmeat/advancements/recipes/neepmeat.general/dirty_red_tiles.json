@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_blood_bucket": {
+    "has_blood_bubble": {
       "conditions": {
         "items": [
           {
             "items": [
-              "neepmeat:blood_bucket"
+              "neepmeat:blood_bubble"
             ]
           }
         ]
@@ -35,7 +35,7 @@
   "requirements": [
     [
       "has_terracotta",
-      "has_blood_bucket",
+      "has_blood_bubble",
       "has_the_recipe"
     ]
   ],

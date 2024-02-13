@@ -173,7 +173,7 @@
   "block.neepmeat.vsc.lore_0": "Consumes a configurable amount of power from a vascular network and emits it from the front. Useful for controlling the speed of motors.",
 
   "block.neepmeat.power_emitter": "Creative Power Emitter",
-  "block.neepmeat.power_emitter.lore_0": "Emits 100eJ into a vascular network.",
+  "block.neepmeat.power_emitter.lore_0": "Emits 100eJ/t into a vascular network.",
 
   "block.neepmeat.pump": "Redstone Pump",
   "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",

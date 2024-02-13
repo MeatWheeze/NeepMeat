@@ -118,9 +118,9 @@ public abstract class AbstractAxialFluidPipe extends BaseFacingBlock implements 
             {
                 if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
                 {
-                    System.out.println(vertex.getAmount());
-                    System.out.println(vertex.getVariant());
-                    System.out.println(vertex.getPumpHeight());
+//                    System.out.println(vertex.getAmount());
+//                    System.out.println(vertex.getVariant());
+//                    System.out.println(vertex.getPumpHeight());
                 }
             }
             return ActionResult.SUCCESS;
