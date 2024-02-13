@@ -84,7 +84,7 @@ public class ItemDuctBlockEntity extends BlockEntity implements Storage<ItemVari
         if (be.getResource().isBlank())
             return false;
 
-        Direction targetDirection = state.get(ItemDuctBlock.FACING);
+        Direction targetDirection = state.get(ItemDuctBlock.FACING).getOpposite();
         if (be.cache == null)
         {
             be.updateApiCache(pos, state);
