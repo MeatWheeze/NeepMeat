@@ -331,7 +331,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                 adjNbt.putBoolean("node", true);
             }
 
-            // During world loading, some mods (cough cough CCME) cause certain block entities
+            // During world loading, some mods (cough cough C2ME) cause certain block entities
             // to be created, serialised then created again from the new NBT.
             if (queuedPositions != null && queuedNodes != null)
             {
@@ -419,6 +419,7 @@ public class BlockPipeVertex extends SimplePipeVertex implements NbtSerialisable
                     }
                 }
             }
+            queuedNodes = null;
         }
     }
 }

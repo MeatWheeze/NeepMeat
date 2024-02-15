@@ -313,7 +313,11 @@ public class FluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extend
 
     public void tick()
     {
-        vertex.preTick();
-        vertex.tick();
+//        if (!vertex.canSimplify())
+        {
+            vertex.preTick();
+            vertex.tick();
+        }
+
     }
 }
