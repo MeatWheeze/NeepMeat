@@ -18,7 +18,7 @@ public interface Heatable
 
     static int getFurnaceTickIncrement(float heat)
     {
-        return (int) MathHelper.clamp(heat / (60f / 1000), 1, 8);
+        return (int) MathHelper.clamp(heat / (60f / 1000), 1, 128);
     }
 
     BlockApiLookup<Heatable, Void> LOOKUP = BlockApiLookup.get(
