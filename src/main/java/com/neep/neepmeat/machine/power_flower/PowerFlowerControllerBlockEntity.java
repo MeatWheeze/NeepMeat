@@ -78,7 +78,7 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
 
         if (fluid.isOf(NMFluids.STILL_C_MEAT))
         {
-            return IntIntPair.of((int) Math.ceil(MeatFluidUtil.getHunger(fluid)), 1);
+            return IntIntPair.of(2 + (int) Math.ceil(MeatFluidUtil.getHunger(fluid)), 1);
         }
 
         return IntIntPair.of(0, 0);

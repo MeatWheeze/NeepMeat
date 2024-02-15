@@ -74,10 +74,11 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
             {
                 case IDLE ->
                 {
-                    if (canStart())
+                    int energy = canStart();
+                    if (energy != 0)
                     {
                         state = State.PROCESSING;
-                        processEnergy = 15;
+                        processEnergy = energy;
                         sync();
                     }
                 }
@@ -96,19 +97,19 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
         return true;
     }
 
-    protected boolean canStart()
+    protected int canStart()
     {
         if (!storage.inputStorage.isEmpty())
         {
             FoodComponent food = storage.inputStorage.getResource().getObject().getFoodComponent();
-            return food != null;
+            return food != null ? food.isSnack() ? 8 : 16 : 0;
         }
-        return false;
+        return 0;
     }
 
     protected void produceOutput(TransactionContext context)
     {
-        if (canStart())
+        if (canStart() > 0)
         {
             try (Transaction inner = context.openNested())
             {
