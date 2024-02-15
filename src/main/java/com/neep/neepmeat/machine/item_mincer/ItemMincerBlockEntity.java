@@ -17,6 +17,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -49,6 +51,8 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
             return true;
         }
     };
+
+    private double angle;
 
     public ItemMincerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -117,6 +121,33 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
         }
     }
 
+    public void clientTick()
+    {
+        angle += 1.1;
+
+        if (state == State.PROCESSING && !storage.inputStorage.isEmpty())
+        {
+            double radius = 0.2;
+
+            double cx = getPos().getX() + 0.5;
+            double cy = getPos().getY() + 1;
+            double cz = getPos().getZ() + 0.5;
+
+            double px = cx + Math.sin(angle) * radius;
+            double pz = cz + Math.cos(angle) * radius;
+
+            double vx = (px - cx) * 0.5;
+            double vy = 0.35;
+            double vz = (pz - cz) * 0.5;
+
+            world.addParticle(
+                    new ItemStackParticleEffect(ParticleTypes.ITEM, storage.inputStorage.getAsStack()),
+                    px, cy, pz,
+                    vx, vy, vz
+            );
+        }
+    }
+
     @Override
     public void setInputPower(float power)
     {
@@ -145,7 +176,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
 
     public WritableStackStorage getInputStorage(Direction direction)
     {
-        return direction == Direction.UP ? storage.inputStorage : null;
+        return storage.inputStorage;
     }
 
     public WritableSingleFluidStorage getOutputStorage(Direction direction)

@@ -55,6 +55,7 @@ import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerGrowthBlock;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerSeedsBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
+import com.neep.neepmeat.machine.separator.SeparatorBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
@@ -229,6 +230,7 @@ public class NMBlocks
     public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block FEEDING_TROUGH = BlockRegistry.queue(new TroughBlock("feeding_trough", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(FLUID_MACHINE_SETTINGS)));
+    public static Block SEPARATOR = BlockRegistry.queue(new SeparatorBlock("separator", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
 //    public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 //    public static Block SIFTER_HOPPER = BlockRegistry.queue(new SifterHopperBlock("hopper", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

@@ -301,7 +301,9 @@
   "block.neepmeat.homogeniser": "Homogeniser",
 
   "block.neepmeat.feeding_trough": "Feeding Trough",
-  "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.",
+  "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.\nAttaching a motor increases breeding rate.",
+  "block.neepmeat.separator": "Chrono-Separator-Attractorobelisk-Omatic",
+  "block.neepmeat.separator.lore_0": "It's the Chronotyper from MFR. I couldn't think of a creative alternative that wasn't infuriating to use.",
 
   "block.neepmeat.pylon": "Pylon",
 

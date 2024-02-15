@@ -50,6 +50,7 @@ import com.neep.neepmeat.machine.phage_ray.PhageRayBlockEntity;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlockEntity;
 import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
+import com.neep.neepmeat.machine.separator.SeparatorBlockEntity;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlockEntity;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlockEntity;
@@ -196,6 +197,7 @@ public class NMBlockEntities
     public static BlockEntityType<VSCBlockEntity> VSC;
     public static BlockEntityType<LargeMotorBlockEntity> LARGE_MOTOR;
     public static BlockEntityType<FlywheelBlockEntity> FLYWHEEL;
+    public static BlockEntityType<SeparatorBlockEntity> SEPARATOR;
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
     {
@@ -406,6 +408,8 @@ public class NMBlockEntities
 
         FEEDING_TROUGH = register("feeding_trough", TroughBlockEntity::new, NMBlocks.FEEDING_TROUGH);
         FluidStorage.SIDED.registerForBlockEntity(TroughBlockEntity::getStorage, FEEDING_TROUGH);
+
+        SEPARATOR = register("separator", (p, s) -> new SeparatorBlockEntity(SEPARATOR, p, s), NMBlocks.SEPARATOR);
 
         MINCER = register("mincer", MincerBlockEnity::new, NMBlocks.MINCER);
         FluidStorage.SIDED.registerForBlockEntity(MincerBlockEnity::getFluidStorage, MINCER);
