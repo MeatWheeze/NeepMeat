@@ -13,6 +13,7 @@
     {"type": "menu", "id": "power", "icon": "neepmeat:motor_unit", "text": "Power", "entries": [
       {"type": "page", "id": "fluids", "icon": "neepmeat:ethereal_fuel_bucket", "text": "Energetic Fluids"},
       {"type": "page", "id": "fuel_transducer", "icon": "neepmeat:transducer", "text": "Fuel Transducer"},
+      {"type": "page", "id": "power_flower", "icon": "neepmeat:power_flower_growth", "text": "Power Flower"},
       {"type": "page", "id": "heart_machine", "icon": "neepmeat:fluid_exciter", "text": "Heart Machine"}
       ]},
     {"type": "menu", "id": "farming", "icon": "neepmeat:motor_unit", "text": "Farming", "entries": [
@@ -29,7 +30,7 @@
         {"type": "page", "id": "stirling_engine", "icon": "neepmeat:stirling_engine", "text": "Stirling Engine"},
         {"type": "page", "id": "grinder", "icon": "neepmeat:grinder", "text": "Crusher"},
         {"type": "page", "id": "bottler", "icon": "neepmeat:bottler", "text": "Bottler"},
-        {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Small Mincer"},
+        {"type": "page", "id": "item_mincer", "icon": "neepmeat:item_mincer", "text": "Item Mincer"},
         {"type": "page", "id": "large_mincer", "icon": "neepmeat:mincer", "text": "Large Mincer"},
         {"type": "page", "id": "pylon", "icon": "neepmeat:pylon", "text": "Pylon"}
     ]},
@@ -121,11 +122,21 @@
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "The Transducer must be incorporated into the structure shown below. It must be placed above a tank of water with a heat source below. Heat sources include lit furnaces, lava, lava cauldrons and magma blocks, although lit furnaces provide the most energy. \nEthereal fuel is ejected at pressure from the top of the dome.\nFor a steady source of water, try a Drain below a regenerating water source."},
       {"type": "image", "width": 32, "height": 98, "scale": 0.2, "path": "neepmeat:guide/images/transducer_usage.png"},
-      {"type": "text", "text": "\nHeat sources and power outputs:\n", "bold": true},
-      {"type": "text", "text": "Lava: 20eJ/t"},
-      {"type": "text", "text": "Lava Cauldron: 20eJ/t"},
-      {"type": "text", "text": "Magma Block: 20eJ/t"},
-      {"type": "text", "text": "Lit Furnace: 40eJ/t"}
+      {"type": "text", "text": "\nHeat sources and power outputs:", "bold": true},
+      {"type": "text", "text": "- Lava: 20eJ/t"},
+      {"type": "text", "text": "- Lava Cauldron: 20eJ/t"},
+      {"type": "text", "text": "- Magma Block: 20eJ/t"},
+      {"type": "text", "text": "- Lit Furnace: 40eJ/t"}
+    ]},
+    {"id": "power_flower", "contents": [
+      {"type": "text", "text": "Power Flower\n", "bold": true},
+      {"type": "text", "text": "The Power Flower is an organism that can synthesise Ethereal Fuel from sunlight and by digesting liquid food."},
+      {"type": "text", "text": "\nUsage\n", "bold": true},
+      {"type": "text", "text": "Power Flower Seeds can be placed on any dirt-like block and will eventually mature into a larger growth. \nWhen a growth block has air above it and one or more growth blocks below it, it will specialise into a photosynthetic organ and produce 20eJ/t constantly. Otherwise, it will increase the rate at which foods are digested."},
+      {"type": "text", "text": "\nFoods:"},
+      {"type": "text", "text": "- Meat: 3eJ/t per droplet per block"},
+      {"type": "text", "text": "- Animal Feed: 4eJ/t per droplet per block"},
+      {"type": "text", "text": "- Food: (1 + hunger) eJ/t per droplet per block"}
     ]},
     {"id": "heart_machine", "contents": [
       {"type": "text", "text": "Heart Machine\n", "bold": true},
@@ -171,10 +182,11 @@
       {"type": "text", "text": "When active, this machine will move fluid from a tank placed directly below into the item in its inventory. Fluid container items can be inserted or removed with hoppers or by right-clicking. Once filled, items will be ejected from the front of the machine into tubes or a container. A running motor must be connected for this machine to function."}
     ]},
     {"id": "item_mincer", "contents": [
-      {"type": "text", "text": "Small Mincer\n", "bold": true},
-      {"type": "text", "text": "The Item Mincer squeezes food items into a coarse meat slurry. The quality of the resulting substance is determined by the quality of the inserted meat."},
+      {"type": "text", "text": "Item Mincer\n", "bold": true},
+      {"type": "text", "text": "The Item Mincer squeezes food items into a Food slurry. The quality of the resulting Food is determined by the quality of the inserted food."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
-      {"type": "text", "text": "Items can be inserted through hoppers or pipes or by dropping them into the hopper. Coarse meat is accessible by pipes on the machine's front face. A running motor must be connected for this machine to function.\n\nEach meat item produces 111mb of Meat Slurry, but the hunger and saturation values of the food are retained by the fluid. Slurries of differing quality can be mixed in any NEEPMeat fluid tank."}
+      {"type": "text", "text": "Items can be inserted through hoppers or pipes or by dropping them into the hopper. Food is accessible by pipes on the machine's front face. A running motor must be connected for this machine to function.\n\nEach item produces 111mb of Food, but the hunger and saturation values of the food are retained by the fluid. Foods of differing quality can be mixed in any NEEPMeat fluid tank."},
+      {"type": "text", "text": "\nFood can be inserted into cartons for consumption or can be fed to a Power Flower for power generation."}
     ]},
     {"id": "large_mincer", "contents": [
       {"type": "text", "text": "Large Mincer\n", "bold": true},

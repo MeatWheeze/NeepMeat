@@ -204,10 +204,10 @@ public class NMBlocks
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
     public static final FabricBlockSettings POWER_FLOWER_SETTINGS = FabricBlockSettings.of(Material.NETHER_WOOD).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
-    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS).hardness(0.01f)));
-    public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
-    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
-    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block(), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS).hardness(0.01f)));
+    public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
 
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
@@ -238,7 +238,7 @@ public class NMBlocks
     public static Block PYLON = BlockRegistry.queue(new PylonBlock("pylon", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SYNTHESISER = BlockRegistry.queue(new SynthesiserBlock("synthesiser", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block MINCER = BlockRegistry.queue(new MincerBlock("mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

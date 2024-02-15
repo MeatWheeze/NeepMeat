@@ -47,7 +47,15 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
         }
     };
 
-    private final WritableSingleFluidStorage foodStorage = new WritableSingleFluidStorage(4 * FluidConstants.BUCKET, this::markDirty);
+    private final WritableSingleFluidStorage foodStorage = new WritableSingleFluidStorage(4 * FluidConstants.BUCKET, this::markDirty)
+    {
+        @Override
+        protected boolean canInsert(FluidVariant variant)
+        {
+            return foodEnergy(variant).firstInt() != 0;
+        }
+    };
+
 
     private final WritableSingleFluidStorage outputStorage = new WritableSingleFluidStorage(4 * FluidConstants.BUCKET, this::markDirty)
     {
@@ -78,7 +86,7 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
 
         if (fluid.isOf(NMFluids.STILL_C_MEAT))
         {
-            return IntIntPair.of(2 + (int) Math.ceil(MeatFluidUtil.getHunger(fluid)), 1);
+            return IntIntPair.of(1 + (int) Math.ceil(MeatFluidUtil.getHunger(fluid)), 1);
         }
 
         return IntIntPair.of(0, 0);
@@ -111,7 +119,7 @@ public class PowerFlowerControllerBlockEntity extends SyncableBlockEntity
             if (topPanels > 0)
             {
                 // The number of top blocks determines output power directly
-                int passivePower = 6 * topPanels;
+                int passivePower = 20 * topPanels;
 
                 // Calculate amount of fluid to be produced from current power output
                 long passiveAmount = PowerUtils.absToAmount(NMFluids.STILL_ETHEREAL_FUEL, passivePower);
