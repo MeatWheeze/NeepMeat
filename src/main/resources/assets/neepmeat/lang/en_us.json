@@ -302,8 +302,9 @@
 
   "block.neepmeat.feeding_trough": "Feeding Trough",
   "block.neepmeat.feeding_trough.lore_0": "Breeds nearby animals when filled with Animal Feed.\nAttaching a motor increases breeding rate.",
-  "block.neepmeat.separator": "Chrono-Separator-Attractorobelisk-Omatic",
-  "block.neepmeat.separator.lore_0": "It's the Chronotyper from MFR. I couldn't think of a creative alternative that wasn't infuriating to use.",
+  "block.neepmeat.separator": "Chrono-Separator-O-Matic",
+  "block.neepmeat.separator.lore_0": "Moves adult or baby animals from the 5x2x5 space it faces to the block directly behind it. Requires >0eJ/t to run.",
+  "block.neepmeat.separator.lore_1": "It's the Chronotyper from MFR. I couldn't think of a creative alternative.",
 
   "block.neepmeat.pylon": "Pylon",
 
@@ -628,6 +629,8 @@
   "screen.neepmeat.fluid_rationer.text.ingot": "Ingot",
   "screen.neepmeat.fluid_rationer.text.bucket": "Bucket",
   "screen.neepmeat.fluid_rationer.text.amount": "Amount (droplets)",
+
+  "screen.neepmeat.separator.text.remainder": "Number of animals to remain.",
 
   "screen.neepmeat.limiter_valve": "Limiter Valve",
   "screen.neepmeat.limiter_valve.text.rate": "Set maximum flow rate",

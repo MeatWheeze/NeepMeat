@@ -1,5 +1,6 @@
 package com.neep.meatlib.mixin;
 
+import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.impl.transfer.item.InventoryStorageImpl;
 import net.minecraft.inventory.Inventory;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ public interface InventoryStorageAccessor
     @Accessor("WRAPPERS")
     static Map<Inventory, InventoryStorageImpl> getWRAPPERS()
     {
-        throw new AssertionError();
+        NeepMeat.LOGGER.error("getWRAPPERS failed");
+        return Map.of();
     }
 }

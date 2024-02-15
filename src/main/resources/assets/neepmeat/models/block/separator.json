@@ -3,6 +3,8 @@
 	"textures": {
 		"0": "neepmeat:block/separator/front",
 		"1": "neepmeat:block/separator/side",
+		"2": "neepmeat:block/separator/back",
+		"3": "neepmeat:block/separator/top",
 		"particle": "neepmeat:block/separator/front"
 	},
 	"elements": [
@@ -12,10 +14,10 @@
 			"faces": {
 				"north": {"uv": [0, 0, 16, 16], "texture": "#0"},
 				"east": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#1"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#2"},
 				"west": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+				"up": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#3"}
 			}
 		}
 	],

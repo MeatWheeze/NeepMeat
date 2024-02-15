@@ -3,20 +3,30 @@ package com.neep.neepmeat.machine.separator;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.PacketByteBuf;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.Nullable;
 
-public class SeparatorBlockEntity extends SyncableBlockEntity implements MotorisedBlock
+public class SeparatorBlockEntity extends SyncableBlockEntity implements MotorisedBlock, ExtendedScreenHandlerFactory
 {
     private float power;
     private int remainder = 4;
     private boolean takeBabies = false;
+    private final Delegate delegate = new Delegate();
 
     public SeparatorBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -76,5 +86,68 @@ public class SeparatorBlockEntity extends SyncableBlockEntity implements Motoris
         this.power = nbt.getFloat("power");
         this.remainder = nbt.getInt("remainder");
         this.takeBabies = nbt.getBoolean("take_babies");
+    }
+
+    @Override
+    public void writeScreenOpeningData(ServerPlayerEntity player, PacketByteBuf buf)
+    {
+        buf.writeInt(remainder);
+        buf.writeInt(takeBabies ? 1 : 0);
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+        return Text.empty();
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory inv, PlayerEntity player)
+    {
+        return new SeparatorScreenHandler(inv, syncId, delegate);
+    }
+
+    public enum Properties
+    {
+        REMAINDER,
+        TAKE_BABIES
+    }
+
+    public class Delegate implements PropertyDelegate
+    {
+        public static int SIZE = Properties.values().length;
+
+        @Override
+        public int get(int index)
+        {
+            if (index >= size())
+                return 0;
+
+            return switch (Properties.values()[index])
+            {
+                case REMAINDER -> remainder;
+                case TAKE_BABIES -> takeBabies ? 1 : 0;
+            };
+        }
+
+        @Override
+        public void set(int index, int value)
+        {
+            if (index >= size())
+                return;
+
+            switch (Properties.values()[index])
+            {
+                case REMAINDER -> remainder = value;
+                case TAKE_BABIES -> takeBabies = value > 0;
+            }
+        }
+
+        @Override
+        public int size()
+        {
+            return SIZE;
+        }
     }
 }
