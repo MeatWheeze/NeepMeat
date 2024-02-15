@@ -133,6 +133,7 @@
       {"type": "text", "text": "The Power Flower is an organism that can synthesise Ethereal Fuel from sunlight and by digesting liquid food."},
       {"type": "text", "text": "\nUsage\n", "bold": true},
       {"type": "text", "text": "Power Flower Seeds can be placed on any dirt-like block and will eventually mature into a larger growth. \nWhen a growth block has air above it and one or more growth blocks below it, it will specialise into a photosynthetic organ and produce 20eJ/t constantly. Otherwise, it will increase the rate at which foods are digested."},
+      {"type": "text", "text": "Water inserted through a Power Flower Fluid Port is necessary for photosynthesis and digestion"},
       {"type": "text", "text": "\nFoods:"},
       {"type": "text", "text": "- Meat: 3eJ/t per droplet per block"},
       {"type": "text", "text": "- Animal Feed: 4eJ/t per droplet per block"},

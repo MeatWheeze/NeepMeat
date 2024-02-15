@@ -1,0 +1,28 @@
+{
+  "type": "neepmeat:manufacture",
+  "base": {
+    "id": "neepmeat:whisper_wheat_seeds"
+  },
+  "steps":[
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:meat_scrap"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:open_eye"
+    },
+    {
+      "id": "neepmeat:combine",
+      "resource": "neepmeat:raw_meat_brick"
+    },
+    {
+      "id": "neepmeat:inject",
+      "resource": "neepmeat:work_fluid"
+    }
+  ],
+  "result": {
+    "resource": "neepmeat:power_flower_seeds",
+    "amount": 1
+  }
+}

@@ -62,6 +62,11 @@ public class BaseCropBlock extends CropBlock implements MeatlibBlock
         return seedsItem;
     }
 
+    public Item getSeedsItemItem()
+    {
+        return seedsItem;
+    }
+
     @Override
     public String getRegistryName()
     {

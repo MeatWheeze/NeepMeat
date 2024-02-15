@@ -279,8 +279,8 @@ public class NMBlocks
     public static Block VSC = BlockRegistry.queue(new VSCBlock("vsc", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
 
     // --- Crops ---
-    public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
-    public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
+    public static BaseCropBlock WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    public static BaseCropBlock FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
     public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new BloodBubbleTreeGenerator(), block(), FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
 
