@@ -50,8 +50,8 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         return storage;
     }
 
-    int age = 0;
-    int waitTicks = 100;
+    private int age = 0;
+    private int waitTicks = 100;
 
     @Override
     public void writeNbt(NbtCompound nbt)
@@ -59,6 +59,7 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         super.writeNbt(nbt);
         storage.toNbt(nbt);
         nbt.putInt("wait_ticks", waitTicks);
+        nbt.putInt("age", age); // Save age so that all troughs with the same power will not activate simultaneously.
     }
 
     @Override
@@ -67,6 +68,7 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         super.readNbt(nbt);
         storage.readNbt(nbt);
         this.waitTicks = nbt.getInt("wait_ticks");
+        this.age = nbt.getInt("age");
     }
 
     @Override
@@ -99,6 +101,10 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
 
     public void feedAnimals()
     {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(ParticleTypes.COMPOSTER, pos.getX() + 0.5, pos.getY() + 0.6, pos.getZ() + 0.5, 4, 0.25, 0.25, 0.25, 0.1);
+        }
         try (Transaction transaction = Transaction.openOuter())
         {
             Box box = Box.from(new BlockBox(pos).expand(5));
