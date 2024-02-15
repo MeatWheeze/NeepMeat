@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public interface Heatable
@@ -17,7 +18,7 @@ public interface Heatable
 
     static int getFurnaceTickIncrement(float heat)
     {
-        return (int) Math.floor(heat * 3) + 1;
+        return (int) MathHelper.clamp(heat / (60f / 1000), 1, 8);
     }
 
     BlockApiLookup<Heatable, Void> LOOKUP = BlockApiLookup.get(
