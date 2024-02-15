@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.fluid;
 
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandler;
@@ -28,7 +28,7 @@ public class CoarseMeatVariantRenderHandler implements FluidVariantRenderHandler
     @Override
     public int getColor(FluidVariant fluidVariant, @Nullable BlockRenderView view, @Nullable BlockPos pos)
     {
-        return MeatFluidHelper.getColour(fluidVariant);
+        return MeatFluidUtil.getColour(fluidVariant);
     }
 
     @Override

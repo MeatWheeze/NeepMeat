@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " t ",
+    "isp",
+    "mmm"
+  ],
+  "key": {
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "s": {
+      "item": "minecraft:iron_sword"
+    },
+    "i": {
+      "item": "minecraft:iron_ingot"
+    },
+    "t": {
+      "item": "neepmeat:feeding_trough"
+    },
+    "p": {
+      "item": "neepmeat:fluid_pipe"
+    }
+  },
+  "result": {
+    "item": "neepmeat:item_mincer",
+    "count": 1
+  }
+}

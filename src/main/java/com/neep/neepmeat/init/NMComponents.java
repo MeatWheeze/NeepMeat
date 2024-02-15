@@ -63,6 +63,7 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
         registry.register(NMItems.INTERNAL_COMPONENTS, WORKPIECE, ItemWorkpiece::new);
         registry.register(Items.MINECART, WORKPIECE, ItemWorkpiece::new);
         registry.register(Items.BONE, WORKPIECE, ItemWorkpiece::new);
+        registry.register(NMBlocks.WHISPER_WHEAT.getSeedsItemItem(), WORKPIECE, ItemWorkpiece::new);
 
         registry.register(MWItems.ASSAULT_DRILL, IMPLANT_MANAGER, ItemImplantManager::new);
     }

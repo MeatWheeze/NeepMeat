@@ -18,6 +18,7 @@ import net.minecraft.util.math.ChunkSectionPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.logging.log4j.core.jmx.Server;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,17 +149,23 @@ public class FluidNodeManager
         }
 
         Map<NodePos, FluidNode> nodes = getOrCreateMap(pos.toChunkPos());
-        boolean newNode = false;
-        FluidNode node;
-        if (nodes.get(pos) == null)
+        FluidNode prevNode = nodes.get(pos);
+        if (prevNode == null)
         {
             // Create new node with params
+            FluidNode node;
             node = new FluidNode(pos, (ServerWorld) world);
             nodes.put(pos, node);
-            newNode = true;
+            return true;
+        }
+        else if (prevNode.getStorage((ServerWorld) world) != storage)
+        {
+            prevNode.findStorage((ServerWorld) world);
+            // No nodes have been added or removed, so we can return false.
+            return false;
         }
 
-        return newNode;
+        return false;
     }
 
     public List<FluidNode> getNodes(BlockPos pos)

@@ -149,10 +149,13 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     public boolean motorTick(MotorEntity motor)
     {
         Direction facing = getCachedState().get(TrommelBlock.FACING);
-        try (Transaction transaction = Transaction.openOuter())
+        if (!storage.itemOutput.isEmpty())
         {
-            ItemPipeUtil.storageToAny((ServerWorld) world, storage.itemOutput(), pos.offset(facing), facing, transaction);
-            transaction.commit();
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                ItemPipeUtil.storageToAny((ServerWorld) world, storage.itemOutput(), pos.offset(facing), facing, transaction);
+                transaction.commit();
+            }
         }
 
         totalProgress = 30;

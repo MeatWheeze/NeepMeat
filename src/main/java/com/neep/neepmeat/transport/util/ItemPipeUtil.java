@@ -118,7 +118,8 @@ public class ItemPipeUtil
     {
         transaction.addOuterCloseCallback(r ->
         {
-            if (!r.wasCommitted()) return;
+            if (!r.wasCommitted())
+                return;
 
             ItemEntity itemEntity = new ItemEntity(world,
                     toPos.getX() + 0.5 - offset * out.getOffsetX(),
@@ -188,7 +189,7 @@ public class ItemPipeUtil
         {
             if (facingState.isAir())
             {
-                transferred = itemToWorld(variant.toStack((int) amount), 0.5, 0.05f, world, offset, facing, nested);
+                transferred = itemToWorld(variant.toStack((int) amount), 0.2, 0.05f, world, offset, facing, nested);
                 nested.commit();
             }
             else if (facingState.getBlock() instanceof ItemPipe itemPipe)

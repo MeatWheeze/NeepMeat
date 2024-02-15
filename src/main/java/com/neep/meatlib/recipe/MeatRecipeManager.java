@@ -30,7 +30,6 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     public MeatRecipeManager()
     {
         super(new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create(), "special_recipes");
-        System.out.println(GSON);
     }
 
     public static MeatRecipeManager getInstance()

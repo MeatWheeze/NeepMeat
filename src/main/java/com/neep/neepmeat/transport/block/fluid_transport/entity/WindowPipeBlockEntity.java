@@ -74,23 +74,37 @@ public class WindowPipeBlockEntity extends FluidPipeBlockEntity<WindowPipeBlockE
     @Override
     public NbtCompound toClientTag(NbtCompound nbt)
     {
-        nbt.putLong("amount", vertex.getAmount());
-        nbt.put("variant", vertex.getVariant().toNbt());
+        nbt.putLong("amount", vertex.maxAmount);
+        nbt.put("variant", vertex.maxVariant.toNbt());
         return nbt;
     }
 
     public static class WindowPipeVertex extends BlockPipeVertex
     {
+        public int maxAmount;
+        public FluidVariant maxVariant = FluidVariant.blank();
+
         public WindowPipeVertex(FluidPipeBlockEntity<WindowPipeVertex> fluidPipeBlockEntity)
         {
             super(fluidPipeBlockEntity);
         }
 
         @Override
+        public void tick()
+        {
+            if (maxAmount != amount || maxVariant != variant)
+            {
+                maxAmount = (int) amount;
+                maxVariant = variant;
+                ((BlockEntityClientSerializable) parent).sync();
+            }
+            super.tick();
+        }
+
+        @Override
         protected void onFinalCommit()
         {
             super.onFinalCommit();
-            ((BlockEntityClientSerializable) parent).sync();
         }
 
         @Override

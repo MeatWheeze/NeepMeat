@@ -27,6 +27,8 @@ public interface PipeVertex extends PipeFlowComponent
 
     boolean canSimplify();
 
+    void tickDeferredLoad();
+
     void reset();
 
     void updateNodes(ServerWorld world, BlockPos pos, BlockState state);

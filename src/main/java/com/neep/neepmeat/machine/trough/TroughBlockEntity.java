@@ -15,6 +15,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.passive.AnimalEntity;
+import net.minecraft.entity.passive.PassiveEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
@@ -25,6 +26,7 @@ import net.minecraft.world.World;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
@@ -48,8 +50,8 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         return storage;
     }
 
-    int age = 0;
-    int waitTicks = 100;
+    private int age = 0;
+    private int waitTicks = 100;
 
     @Override
     public void writeNbt(NbtCompound nbt)
@@ -57,6 +59,7 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         super.writeNbt(nbt);
         storage.toNbt(nbt);
         nbt.putInt("wait_ticks", waitTicks);
+        nbt.putInt("age", age); // Save age so that all troughs with the same power will not activate simultaneously.
     }
 
     @Override
@@ -65,6 +68,7 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
         super.readNbt(nbt);
         storage.readNbt(nbt);
         this.waitTicks = nbt.getInt("wait_ticks");
+        this.age = nbt.getInt("age");
     }
 
     @Override
@@ -97,25 +101,55 @@ public class TroughBlockEntity extends SyncableBlockEntity implements MotorisedB
 
     public void feedAnimals()
     {
+        if (world instanceof ServerWorld serverWorld)
+        {
+            serverWorld.spawnParticles(ParticleTypes.COMPOSTER, pos.getX() + 0.5, pos.getY() + 0.6, pos.getZ() + 0.5, 4, 0.25, 0.25, 0.25, 0.1);
+        }
         try (Transaction transaction = Transaction.openOuter())
         {
             Box box = Box.from(new BlockBox(pos).expand(5));
-            List<AnimalEntity> entities = world.getEntitiesByType(
-                    TypeFilter.instanceOf(AnimalEntity.class), box, e -> e.getLoveTicks() == 0 && !e.isBaby());
+            var entities = world.getEntitiesByType(
+                    TypeFilter.instanceOf(AnimalEntity.class), box, e -> true)
+                    .stream().collect(Collectors.partitioningBy(PassiveEntity::isBaby));
 
-            Collections.shuffle(entities);
+            List<AnimalEntity> adults = entities.get(false);
+            List<AnimalEntity> babies = entities.get(true);
 
-            if (entities.size() > 1 && extractFeed(TroughBlockEntity.USE_AMOUNT, transaction))
+            Collections.shuffle(adults);
+            Collections.shuffle(babies);
+
+            try (Transaction sub1 = transaction.openNested())
             {
-                for (int i = 0; i < Math.min(2, entities.size()); ++i)
+                if (babies.size() > 0 && extractFeed(TroughBlockEntity.USE_AMOUNT / 2, sub1))
                 {
-                    AnimalEntity mob = entities.get(i);
-                    mob.setBreedingAge(0);
-                    mob.lovePlayer(null);
+                    babies.get(0).setBreedingAge(60);
+                    sub1.commit();
                 }
-                transaction.commit();
+                else
+                {
+                    sub1.abort();
+                }
             }
-            else transaction.abort();
+
+            try (Transaction inner = transaction.openNested())
+            {
+                if (adults.size() > 1 && extractFeed(TroughBlockEntity.USE_AMOUNT, inner))
+                {
+                    for (int i = 0; i < Math.min(2, adults.size()); ++i)
+                    {
+                        AnimalEntity mob = adults.get(i);
+                        mob.setBreedingAge(0);
+                        mob.lovePlayer(null);
+                    }
+                    inner.commit();
+                }
+                else
+                {
+                    inner.abort();
+                }
+            }
+
+            transaction.commit();
         }
     }
 

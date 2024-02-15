@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
+    "neepmeat:power_flower_growth",
+    "neepmeat:power_flower_controller",
+    "neepmeat:power_flower_fluid_port",
     "neepmeat:buffer",
     "neepmeat:dumper",
     "neepmeat:blood_bubble_log",

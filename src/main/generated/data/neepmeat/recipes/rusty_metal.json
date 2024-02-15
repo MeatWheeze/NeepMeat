@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "d": {
-      "item": "minecraft:water_bucket"
+      "item": "minecraft:dirt"
     },
     "i": {
       "item": "neepmeat:polished_metal"

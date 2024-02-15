@@ -8,10 +8,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TextFieldWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
@@ -22,7 +20,7 @@ import net.minecraft.util.Identifier;
 public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandler>
 {
     private static final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/fluid_rationer.png");
-    protected TextField textField;
+    protected NumberFieldWidget textField;
 
     protected static final Text BUCKET = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.bucket");
     protected static final Text INGOT = Text.translatable("screen." + NeepMeat.NAMESPACE + ".fluid_rationer.text.ingot");
@@ -49,7 +47,7 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
         this.amountX = slotX + 18 + 3;
         this.amountY = y + 33;
 
-        textField = new TextField(this.textRenderer, amountX, amountY, 3 * 18, 17, Text.of(""));
+        textField = new NumberFieldWidget(this.textRenderer, amountX, amountY, 3 * 18, 17, Text.of(""));
         textField.setText(Integer.toString(handler.getProperty(FluidRationerScreenHandler.PROP_TARGET_AMOUNT)));
 
         textField.setChangedListener(s ->
@@ -106,20 +104,5 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
     {
         this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
         this.textRenderer.draw(matrices, this.amountText, this.amountX, this.amountY - 10, 0x404040);
-    }
-
-    protected class TextField extends TextFieldWidget
-    {
-        public TextField(TextRenderer textRenderer, int x, int y, int width, int height, Text text)
-        {
-            super(textRenderer, x, y, width, height, text);
-        }
-
-        @Override
-        public void write(String text)
-        {
-            if (!text.matches("[0-9]*")) return;
-            super.write(text);
-        }
     }
 }

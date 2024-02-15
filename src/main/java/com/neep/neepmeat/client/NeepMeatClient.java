@@ -33,6 +33,7 @@ import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
+import com.neep.neepmeat.machine.separator.SeparatorScreen;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelRenderer;
 import com.neep.neepmeat.machine.surgical_controller.PLCBlock;
 import com.neep.neepmeat.machine.synthesiser.SynthesiserRenderer;
@@ -228,6 +229,7 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.WORKSTATION, WorkstationScreen::new);
 //        HandledScreens.register(ScreenHandlerInit.GUIDE, GuideMainScreen::new);
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
+        HandledScreens.register(ScreenHandlerInit.SEPARATOR, SeparatorScreen::new);
         HandledScreens.register(ScreenHandlerInit.UPGRADE_MANAGER, UpgradeManagerScreen::new);
         HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
     }
@@ -278,6 +280,8 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.YELLOW_SCAFFOLD);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) NMBlocks.YELLOW_SCAFFOLD.stairs);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), (Block) NMBlocks.YELLOW_SCAFFOLD.slab);
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.POWER_FLOWER_SEEDS);
 
 //        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.VAT_WINDOW);
 

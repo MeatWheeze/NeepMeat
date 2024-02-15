@@ -4,7 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
@@ -82,8 +82,8 @@ public class MeatCartonItem extends BaseItem
             if (user instanceof PlayerEntity player)
             {
                 NbtCompound nbt = stack.getOrCreateNbt();
-                int food = (int) MeatFluidHelper.getHunger(nbt);
-                float sat = MeatFluidHelper.getSaturation(nbt);
+                int food = (int) MeatFluidUtil.getHunger(nbt);
+                float sat = MeatFluidUtil.getSaturation(nbt);
                 player.getHungerManager().add(food, sat);
             }
 
@@ -110,8 +110,8 @@ public class MeatCartonItem extends BaseItem
     public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext)
     {
         NbtCompound nbt = itemStack.getNbt();
-        float hunger = MeatFluidHelper.getHunger(nbt);
-        float saturation = MeatFluidHelper.getSaturation(nbt);
+        float hunger = MeatFluidUtil.getHunger(nbt);
+        float saturation = MeatFluidUtil.getSaturation(nbt);
         tooltip.add(Text.translatable("item." + NeepMeat.NAMESPACE + ".meat_carton.hunger", hunger));
         tooltip.add(Text.translatable("item." + NeepMeat.NAMESPACE + ".meat_carton.saturation", saturation));
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);

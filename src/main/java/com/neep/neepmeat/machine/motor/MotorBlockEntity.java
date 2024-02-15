@@ -84,8 +84,8 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
         {
             // TODO: Decide on float or double
             motorised.setInputPower((float) this.getMechPUPower());
-            sync();
         }
+        sync();
     }
 
     @Override

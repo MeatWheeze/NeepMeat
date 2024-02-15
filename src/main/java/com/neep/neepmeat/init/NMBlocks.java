@@ -50,7 +50,12 @@ import com.neep.neepmeat.machine.mixer.MixerBlock;
 import com.neep.neepmeat.machine.motor.MotorBlock;
 import com.neep.neepmeat.machine.pedestal.PedestalBlock;
 import com.neep.neepmeat.machine.phage_ray.PhageRayBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerControllerBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerFluidPortBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerGrowthBlock;
+import com.neep.neepmeat.machine.power_flower.PowerFlowerSeedsBlock;
 import com.neep.neepmeat.machine.pylon.PylonBlock;
+import com.neep.neepmeat.machine.separator.SeparatorBlock;
 import com.neep.neepmeat.machine.small_trommel.SmallTrommelBlock;
 import com.neep.neepmeat.machine.solidity_detector.SolidityDetectorBlock;
 import com.neep.neepmeat.machine.stirling_engine.StirlingEngineBlock;
@@ -198,6 +203,11 @@ public class NMBlocks
     public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
+    public static final FabricBlockSettings POWER_FLOWER_SETTINGS = FabricBlockSettings.of(Material.NETHER_WOOD).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
+    public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS).hardness(0.01f)));
+    public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
+    public static Block POWER_FLOWER_FLUID_PORT = BlockRegistry.queue(new PowerFlowerFluidPortBlock("power_flower_fluid_port", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
 
     public static Block PEDESTAL = BlockRegistry.queue(new PedestalBlock("pedestal", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
@@ -220,6 +230,7 @@ public class NMBlocks
     public static Block DEATH_BLADES = BlockRegistry.queue(new DeathBladesBlock("death_blades", block().tooltip(TooltipSupplier.simple(1)).requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block FEEDING_TROUGH = BlockRegistry.queue(new TroughBlock("feeding_trough", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(FLUID_MACHINE_SETTINGS)));
+    public static Block SEPARATOR = BlockRegistry.queue(new SeparatorBlock("separator", block().tooltip(TooltipSupplier.hidden(2)).requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
 //    public static Block SIFTER = BlockRegistry.queue(new SifterBlock("sifter", block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 //    public static Block SIFTER_HOPPER = BlockRegistry.queue(new SifterHopperBlock("hopper", 64, true, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -227,7 +238,7 @@ public class NMBlocks
     public static Block PYLON = BlockRegistry.queue(new PylonBlock("pylon", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block SYNTHESISER = BlockRegistry.queue(new SynthesiserBlock("synthesiser", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block MINCER = BlockRegistry.queue(new MincerBlock("mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block ITEM_MINCER = BlockRegistry.queue(new ItemMincerBlock("item_mincer", block().tooltip(TooltipSupplier.hidden(1)).requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block HOMOGENISER = BlockRegistry.queue(new HomogeniserBlock("homogeniser", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block SURGERY_PLATFORM = BlockRegistry.queue(new SurgeryPlatformBlock("surgery_platform", block().plc(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
@@ -268,8 +279,8 @@ public class NMBlocks
     public static Block VSC = BlockRegistry.queue(new VSCBlock("vsc", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
 
     // --- Crops ---
-    public static Block WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
-    public static Block FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
+    public static BaseCropBlock WHISPER_WHEAT = BlockRegistry.queue(new BaseCropBlock("whisper_wheat", 64, 0, AbstractBlock.Settings.copy(Blocks.WHEAT)));
+    public static BaseCropBlock FLESH_POTATO = BlockRegistry.queue(new BaseCropBlock("flesh_potato", "flesh_potato", 64, 2, AbstractBlock.Settings.copy(Blocks.POTATOES)));
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
     public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new BloodBubbleTreeGenerator(), block(), FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
 

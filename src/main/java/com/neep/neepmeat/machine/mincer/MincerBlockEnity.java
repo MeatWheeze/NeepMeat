@@ -1,6 +1,7 @@
 package com.neep.neepmeat.machine.mincer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -8,6 +9,7 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.machine.death_blades.DeathBladesBlockEntity;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -137,6 +139,11 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
     public WritableSingleFluidStorage getFluidStorage(Direction direction)
     {
         return fluidStorage;
+    }
+
+    public FluidPump getFluidPump(Direction direction)
+    {
+        return FluidPump.of(-0.5f, () -> AcceptorModes.PUSH, true);
     }
 
     @Override

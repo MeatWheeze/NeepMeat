@@ -1,6 +1,8 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.machine.separator.SeparatorBlock;
+import com.neep.neepmeat.machine.separator.SeparatorScreenHandler;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.screen_handler.*;
 import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
@@ -23,6 +25,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<GuideScreenHandler> GUIDE;
     public static ScreenHandlerType<UpgradeManagerScreenHandler> UPGRADE_MANAGER;
     public static ExtendedScreenHandlerType<FluidRationerScreenHandler> FLUID_RATIONER = new ExtendedScreenHandlerType<>(FluidRationerScreenHandler::new);
+    public static ExtendedScreenHandlerType<SeparatorScreenHandler> SEPARATOR = new ExtendedScreenHandlerType<>(SeparatorScreenHandler::new);
 
     public static ScreenHandlerType<PLCScreenHandler> PLC;
 
@@ -38,6 +41,7 @@ public class ScreenHandlerInit
         GUIDE = register(NeepMeat.NAMESPACE, "guide", GuideScreenHandler::new);
         UPGRADE_MANAGER = registerExtended(NeepMeat.NAMESPACE, "upgrade_manager", UpgradeManagerScreenHandler::new);
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
+        SEPARATOR = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "separator"), SEPARATOR);
 
         PLC = registerExtended(NeepMeat.NAMESPACE, "plc", PLCScreenHandler::new);
 

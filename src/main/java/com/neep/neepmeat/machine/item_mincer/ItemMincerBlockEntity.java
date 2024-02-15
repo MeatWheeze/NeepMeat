@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.item_mincer;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.processing.MeatFluidHelper;
+import com.neep.neepmeat.api.processing.MeatFluidUtil;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -17,6 +17,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.FoodComponent;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -50,6 +52,8 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
         }
     };
 
+    private double angle;
+
     public ItemMincerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
@@ -70,10 +74,11 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
             {
                 case IDLE ->
                 {
-                    if (canStart())
+                    int energy = canStart();
+                    if (energy != 0)
                     {
                         state = State.PROCESSING;
-                        processEnergy = 15;
+                        processEnergy = energy;
                         sync();
                     }
                 }
@@ -92,28 +97,55 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
         return true;
     }
 
-    protected boolean canStart()
+    protected int canStart()
     {
         if (!storage.inputStorage.isEmpty())
         {
             FoodComponent food = storage.inputStorage.getResource().getObject().getFoodComponent();
-            return food != null;
+            return food != null ? food.isSnack() ? 8 : 16 : 0;
         }
-        return false;
+        return 0;
     }
 
     protected void produceOutput(TransactionContext context)
     {
-        if (canStart())
+        if (canStart() > 0)
         {
             try (Transaction inner = context.openNested())
             {
                 FoodComponent food = storage.inputStorage.getResource().getObject().getFoodComponent();
-                FluidVariant outputVariant = MeatFluidHelper.getVariant(food);
+                FluidVariant outputVariant = MeatFluidUtil.getVariant(food);
                 storage.outputStorage.insert(outputVariant, FluidConstants.INGOT, inner);
                 storage.inputStorage.extract(storage.inputStorage.getResource(), 1, inner);
                 inner.commit();
             }
+        }
+    }
+
+    public void clientTick()
+    {
+        angle += 1.1;
+
+        if (state == State.PROCESSING && !storage.inputStorage.isEmpty())
+        {
+            double radius = 0.2;
+
+            double cx = getPos().getX() + 0.5;
+            double cy = getPos().getY() + 1;
+            double cz = getPos().getZ() + 0.5;
+
+            double px = cx + Math.sin(angle) * radius;
+            double pz = cz + Math.cos(angle) * radius;
+
+            double vx = (px - cx) * 0.5;
+            double vy = 0.35;
+            double vz = (pz - cz) * 0.5;
+
+            world.addParticle(
+                    new ItemStackParticleEffect(ParticleTypes.ITEM, storage.inputStorage.getAsStack()),
+                    px, cy, pz,
+                    vx, vy, vz
+            );
         }
     }
 
@@ -145,7 +177,7 @@ public class ItemMincerBlockEntity extends SyncableBlockEntity implements Motori
 
     public WritableStackStorage getInputStorage(Direction direction)
     {
-        return direction == Direction.UP ? storage.inputStorage : null;
+        return storage.inputStorage;
     }
 
     public WritableSingleFluidStorage getOutputStorage(Direction direction)

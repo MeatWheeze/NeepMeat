@@ -52,6 +52,9 @@ public class PowerUtils
 
     public static long absToAmount(Fluid fluid, long energy)
     {
+        if (energy == 0)
+            return 0;
+
         FluidEnegyRegistry.Entry entry = FluidEnegyRegistry.getInstance().getOrEmpty(fluid);
         if (entry.baseEnergy() == 0) return 0;
         return (long) Math.floor(energy / entry.baseEnergy());

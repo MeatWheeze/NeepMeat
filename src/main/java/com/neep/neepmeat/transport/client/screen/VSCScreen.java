@@ -18,6 +18,7 @@ import net.minecraft.util.Identifier;
 public class VSCScreen extends HandledScreen<VSCScreenHandler>
 {
     private final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/vsc.png");
+    private static final Text TOOLTIP = Text.translatable("screen." + NeepMeat.NAMESPACE + ".vsc.text.power");
 
     private TextField textField;
 
@@ -34,7 +35,16 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
 
         super.init();
 
-        textField = new TextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""));
+        textField = new TextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""))
+        {
+            @Override
+            public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+            {
+                super.renderButton(matrices, mouseX, mouseY, delta);
+                if (isMouseOver(mouseX, mouseY))
+                    VSCScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+            }
+        };
         textField.setText(Integer.toString(handler.getProperty(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal())));
         textField.setDrawsBackground(false);
 

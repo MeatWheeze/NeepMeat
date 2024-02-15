@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/separator",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/separator",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/separator",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/separator",
+      "y": -90,
+      "x": 0
+    }
+  }
+}
