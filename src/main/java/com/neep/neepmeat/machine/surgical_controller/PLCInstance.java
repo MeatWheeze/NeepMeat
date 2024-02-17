@@ -71,7 +71,7 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
                     robot.clientZ - blockEntity.getPos().getZ() - 0.5);
 
             float tickDelta = AnimationTickHolder.getPartialTicks();
-            matrixStack.translate(0, 0.5 + (robot.isActive() ? 0.05 * Math.sin((blockEntity.getWorld().getTime() + tickDelta) / 10f) : 0), 0);
+            matrixStack.translate(0, 0.5 + (robot.isActive() ? 0.1 * Math.sin((blockEntity.getWorld().getTime() + tickDelta) / 10f) : 0), 0);
 
             matrixStack.translate(0.5, 0.5, 0.5);
             matrixStack.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(robot.clientYaw + 180));
