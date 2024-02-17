@@ -2,11 +2,17 @@ package com.neep.neepmeat.compat.kubejs;
 
 import com.neep.meatlib.recipe.MeatRecipeManager;
 import dev.latvian.mods.kubejs.KubeJSPlugin;
+import dev.latvian.mods.kubejs.event.EventGroup;
 import dev.latvian.mods.kubejs.recipe.RecipeJS;
+import dev.latvian.mods.kubejs.recipe.schema.RecipeSchema;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
+import net.minecraft.recipe.Recipe;
+import org.jetbrains.annotations.Nullable;
 
 public class NMKubeJSPlugin extends KubeJSPlugin
 {
+//    static final RecipeSchema ARGH = new RecipeSchema(MeatlibRecipeJS.class, MeatlibRecipeJS::new, )
+
     @Override
     public void registerRecipeSchemas(RegisterRecipeSchemasEvent event)
     {
@@ -15,7 +21,8 @@ public class NMKubeJSPlugin extends KubeJSPlugin
         }
     }
 
-    interface TestSchema
+    @Override
+    public void registerEvents()
     {
     }
 
@@ -24,6 +31,12 @@ public class NMKubeJSPlugin extends KubeJSPlugin
         public MeatlibRecipeJS()
         {
 
+        }
+
+        @Override
+        public @Nullable Recipe<?> createRecipe()
+        {
+            return null;
         }
     }
 }

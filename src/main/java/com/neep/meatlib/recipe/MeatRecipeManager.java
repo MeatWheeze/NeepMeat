@@ -8,6 +8,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.network.SyncMeatRecipesS2CPacket;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
+import net.minecraft.recipe.RecipeType;
 import net.minecraft.resource.JsonDataLoader;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.util.Identifier;
@@ -23,7 +24,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     private static final MeatRecipeManager INSTANCE = new MeatRecipeManager();
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private Map<MeatRecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> recipes = ImmutableMap.of();
+    private Map<RecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> recipes = ImmutableMap.of();
     private Map<Class<?>, Set<MeatlibRecipe<?>>> recipesByClass = ImmutableMap.of();
     private Map<Identifier, MeatlibRecipe<?>> recipesById = ImmutableMap.of();
 
@@ -42,7 +43,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return Optional.ofNullable(this.recipesById.get(id));
     }
 
-    public <C, T extends MeatlibRecipe<C>> Optional<T> get(MeatRecipeType<T> type, Identifier id)
+    public <C, T extends MeatlibRecipe<C>> Optional<T> get(RecipeType<T> type, Identifier id)
     {
         MeatlibRecipe<?> recipe = this.recipesById.get(id);
         if (recipe == null || recipe.getType() != type) return Optional.empty();
@@ -57,14 +58,15 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
         return Optional.of((T) recipe);
     }
 
-    public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(MeatRecipeType<T> type, C context)
+    public <C, T extends MeatlibRecipe<C>> Optional<T> getFirstMatch(RecipeType<T> type, C context)
     {
-        return getAllOfType(type).values()
-                .stream()
-                .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
+        return null;
+//        return getAllOfType(type).values()
+//                .stream()
+//                .flatMap(recipe -> type.match(recipe, context).stream()).findFirst();
     }
 
-//    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(C context, MeatRecipeType<T>... types)
+//    public <C, T extends MeatRecipe<C>> Optional<T> getFirstMatch(C context, RecipeType<T>... types)
 //    {
 //        return getAllOfType(type).values()
 //                .stream()
@@ -79,7 +81,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
                 .filter(recipe -> recipe.matches(context)).findFirst();
     }
 
-    public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfType(MeatRecipeType<T> type)
+    public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfType(RecipeType<T> type)
     {
         // Say goodbye to type safety
         return (Map<Identifier, T>) this.recipes.getOrDefault(type, Collections.emptyMap());
@@ -96,7 +98,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
     @Override
     protected void apply(Map<Identifier, JsonElement> prepared, ResourceManager manager, Profiler profiler)
     {
-        HashMap<MeatRecipeType<?>, ImmutableMap.Builder<Identifier, MeatlibRecipe<?>>> map2 = Maps.newHashMap();
+        HashMap<RecipeType<?>, ImmutableMap.Builder<Identifier, MeatlibRecipe<?>>> map2 = Maps.newHashMap();
         ImmutableMap.Builder<Identifier, MeatlibRecipe<?>> builder = ImmutableMap.builder();
         for (Map.Entry<Identifier, JsonElement> entry2 : prepared.entrySet())
         {
@@ -133,7 +135,7 @@ public class MeatRecipeManager extends JsonDataLoader implements IdentifiableRes
 
     public void setRecipes(Iterable<MeatlibRecipe<?>> recipes)
     {
-        HashMap<MeatRecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> typeMap = Maps.newHashMap();
+        HashMap<RecipeType<?>, Map<Identifier, MeatlibRecipe<?>>> typeMap = Maps.newHashMap();
         HashMap<Class<?>, Set<MeatlibRecipe<?>>> clazzMap = Maps.newHashMap();
 
         ImmutableMap.Builder<Identifier, MeatlibRecipe<?>> builder = ImmutableMap.builder();

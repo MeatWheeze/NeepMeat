@@ -34,7 +34,7 @@ public class SurgeryDisplay extends BasicDisplay implements SimpleGridMenuDispla
     public SurgeryDisplay(GeneralSurgeryRecipe recipe)
     {
         super(inputsToEntries(recipe.getInputs()),
-                Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getOutput().resource()), (int) recipe.getOutput().minAmount())));
+                Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getIOutput().resource()), (int) recipe.getIOutput().minAmount())));
         this.recipe = recipe;
     }
 

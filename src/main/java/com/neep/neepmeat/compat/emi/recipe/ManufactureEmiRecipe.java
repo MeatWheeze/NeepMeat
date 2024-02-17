@@ -46,7 +46,7 @@ public class ManufactureEmiRecipe implements EmiRecipe {
 
         this.id = recipe.getId();
         this.input = inputs;
-        this.output = List.of(EmiStack.of(recipe.getOutput().resource(), recipe.getOutput().minAmount()));
+        this.output = List.of(EmiStack.of(recipe.getRecipeOutput().resource(), recipe.getRecipeOutput().minAmount()));
     }
 
     @Override

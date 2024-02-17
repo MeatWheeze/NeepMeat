@@ -2,7 +2,6 @@ package com.neep.meatlib.network;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.recipe.MeatlibRecipe;
-import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.RecipeRegistry;
 import net.fabricmc.api.EnvType;
@@ -38,10 +37,10 @@ public class SyncMeatRecipesS2CPacket
 
     public static <T extends MeatlibRecipe<?>> void writeRecipe(PacketByteBuf buf, T recipe)
     {
-        MeatRecipeSerialiser<T> serialiser = (MeatRecipeSerialiser<T>) recipe.getSerialiser();
-        buf.writeIdentifier(RecipeRegistry.RECIPE_SERIALISER.getId(serialiser));
-        buf.writeIdentifier(recipe.getId());
-        serialiser.write(buf, recipe);
+//        MeatRecipeSerialiser<T> serialiser = (MeatRecipeSerialiser<T>) recipe.getSerialiser();
+//        buf.writeIdentifier(RecipeRegistry.RECIPE_SERIALISER.getId(serialiser));
+//        buf.writeIdentifier(recipe.getId());
+//        serialiser.write(buf, recipe);
     }
 
     @Environment(value= EnvType.CLIENT)
@@ -59,7 +58,7 @@ public class SyncMeatRecipesS2CPacket
 //                    return;
 //                }
 
-                MeatRecipeManager.getInstance().setRecipes(recipes);
+//                MeatRecipeManager.getInstance().setRecipes(recipes);
             });
         }
     }

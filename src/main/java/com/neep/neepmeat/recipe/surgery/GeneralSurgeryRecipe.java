@@ -134,7 +134,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.SURGERY_SERIALIZER;
     }
@@ -165,7 +165,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
         return 3;
     }
 
-    public RecipeOutputImpl<Item> getOutput()
+    public RecipeOutputImpl<Item> getIOutput()
     {
         return output;
     }

@@ -75,7 +75,7 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.TROMMEL_SERIALIZER;
     }

@@ -23,7 +23,7 @@ public class SurgeryEmiRecipe implements EmiRecipe {
     public SurgeryEmiRecipe(GeneralSurgeryRecipe recipe) {
         this.id = recipe.getId();
         this.input = EmiIngredientHelper.inputsToIngredients(recipe.getInputs());
-        this.output = List.of(EmiStack.of(recipe.getOutput().resource(), recipe.getOutput().minAmount()));
+        this.output = List.of(EmiStack.of(recipe.getIOutput().resource(), recipe.getIOutput().minAmount()));
     }
 
     @Override

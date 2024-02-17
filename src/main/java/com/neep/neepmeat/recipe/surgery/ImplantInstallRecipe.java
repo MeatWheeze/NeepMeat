@@ -82,7 +82,7 @@ public class ImplantInstallRecipe extends SurgeryRecipe
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.IMPLANT_INSTALL_SERIALIZER;
     }

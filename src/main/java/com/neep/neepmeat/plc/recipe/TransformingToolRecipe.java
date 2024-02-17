@@ -88,7 +88,7 @@ public class TransformingToolRecipe implements ManufactureRecipe<MutateInPlace<I
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         throw new NotImplementedException();
     }

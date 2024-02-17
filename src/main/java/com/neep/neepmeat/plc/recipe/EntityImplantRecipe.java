@@ -100,7 +100,7 @@ public class EntityImplantRecipe implements ManufactureRecipe<MutateInPlace<Enti
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return PLCRecipes.ENTITY_MANUFACTURE_SERIALISER;
     }

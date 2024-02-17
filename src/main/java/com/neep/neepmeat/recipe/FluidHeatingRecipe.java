@@ -67,7 +67,7 @@ public class FluidHeatingRecipe implements MeatlibRecipe<MultiTankBlockEntity>
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.HEATING_SERIALISER;
     }

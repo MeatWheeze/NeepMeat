@@ -93,7 +93,7 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
         return true;
     }
 
-    public RecipeOutput<Item> getOutput()
+    public RecipeOutput<Item> getRecipeOutput()
     {
         return output;
     }
@@ -105,7 +105,7 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return PLCRecipes.MANUFACTURE_SERIALISER;
     }

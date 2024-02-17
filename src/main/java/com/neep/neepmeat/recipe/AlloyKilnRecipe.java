@@ -102,7 +102,7 @@ public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.ALLOY_KILN_SERIALIZER;
     }

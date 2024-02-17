@@ -133,7 +133,7 @@ public class TransformingToolRecipe extends GeneralSurgeryRecipe
     }
 
     @Override
-    public MeatRecipeSerialiser<?> getSerialiser()
+    public MeatRecipeSerialiser<?> getSerializer()
     {
         return NMrecipeTypes.TRANSFORMING_TOOL_SERIALISER;
     }
