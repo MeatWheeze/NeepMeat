@@ -52,18 +52,19 @@ public class NMComponents implements EntityComponentInitializer, ItemComponentIn
     @Override
     public void registerItemComponentFactories(ItemComponentFactoryRegistry registry)
     {
-        registry.register(Items.IRON_BLOCK, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.OPEN_EYE, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.WHISPER_FLOUR, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMBlocks.MOTOR.asItem(), WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMBlocks.MEAT_STEEL_BLOCK.asItem(), WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.MEAT_STEEL, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.MEAT_STEEL_COMPONENT, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.TRANSFORMING_TOOL_BASE, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMItems.INTERNAL_COMPONENTS, WORKPIECE, ItemWorkpiece::new);
-        registry.register(Items.MINECART, WORKPIECE, ItemWorkpiece::new);
-        registry.register(Items.BONE, WORKPIECE, ItemWorkpiece::new);
-        registry.register(NMBlocks.WHISPER_WHEAT.getSeedsItemItem(), WORKPIECE, ItemWorkpiece::new);
+//        registry.register(Items.IRON_BLOCK, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.OPEN_EYE, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.WHISPER_FLOUR, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMBlocks.MOTOR.asItem(), WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMBlocks.MEAT_STEEL_BLOCK.asItem(), WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.MEAT_STEEL, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.MEAT_STEEL_COMPONENT, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.TRANSFORMING_TOOL_BASE, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMItems.INTERNAL_COMPONENTS, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(Items.MINECART, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(Items.BONE, WORKPIECE, ItemWorkpiece::new);
+//        registry.register(NMBlocks.WHISPER_WHEAT.getSeedsItemItem(), WORKPIECE, ItemWorkpiece::new);
+        registry.register(item -> true, WORKPIECE, ItemWorkpiece::new);
 
         registry.register(MWItems.ASSAULT_DRILL, IMPLANT_MANAGER, ItemImplantManager::new);
     }
