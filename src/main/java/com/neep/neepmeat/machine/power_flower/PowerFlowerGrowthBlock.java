@@ -191,7 +191,13 @@ public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
     {
         super.randomDisplayTick(state, world, pos, random);
-        world.addParticle(ParticleTypes.MYCELIUM, pos.getX() + random.nextFloat(), pos.getY() + random.nextFloat(), pos.getZ() + random.nextFloat(),
-                random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5);
+        if (random.nextInt(10) == 0)
+        {
+            world.addParticle(ParticleTypes.MYCELIUM,
+                    pos.getX() + random.nextFloat() * 1.4 - 0.2,
+                    pos.getY() + random.nextFloat() * 1.4 - 0.2,
+                    pos.getZ() + random.nextFloat() * 1.4 - 0.2,
+                    random.nextFloat() - 0.5, random.nextFloat() - 0.5, random.nextFloat() - 0.5);
+        }
     }
 }
