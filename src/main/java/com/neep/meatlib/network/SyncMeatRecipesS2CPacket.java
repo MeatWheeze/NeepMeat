@@ -15,6 +15,7 @@ import net.minecraft.util.Identifier;
 
 import java.util.Collection;
 
+@Deprecated
 public class SyncMeatRecipesS2CPacket
 {
     public static final Identifier ID = new Identifier(MeatLib.NAMESPACE, "recipe_sync");
@@ -32,7 +33,8 @@ public class SyncMeatRecipesS2CPacket
     {
         Identifier identifier = buf.readIdentifier();
         Identifier identifier2 = buf.readIdentifier();
-        return RecipeRegistry.RECIPE_SERIALISER.getOrEmpty(identifier).orElseThrow(() -> new IllegalArgumentException("Unknown special recipe serializer " + identifier)).read(identifier2, buf);
+        return null;
+//        return RecipeRegistry.RECIPE_SERIALISER.getOrEmpty(identifier).orElseThrow(() -> new IllegalArgumentException("Unknown special recipe serializer " + identifier)).read(identifier2, buf);
     }
 
     public static <T extends MeatlibRecipe<?>> void writeRecipe(PacketByteBuf buf, T recipe)
@@ -48,18 +50,18 @@ public class SyncMeatRecipesS2CPacket
     {
         public static void registerReceiver()
         {
-            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
-            {
-                Collection<MeatlibRecipe<?>> recipes = buf.readList(SyncMeatRecipesS2CPacket::readRecipe);
-
-                // We do not need to set the recipes on an integrated server
-//                if (client.getServer() != null)
-//                {
-//                    return;
-//                }
-
-//                MeatRecipeManager.getInstance().setRecipes(recipes);
-            });
+//            ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
+//            {
+//                Collection<MeatlibRecipe<?>> recipes = buf.readList(SyncMeatRecipesS2CPacket::readRecipe);
+//
+//                // We do not need to set the recipes on an integrated server
+////                if (client.getServer() != null)
+////                {
+////                    return;
+////                }
+//
+////                MeatRecipeManager.getInstance().setRecipes(recipes);
+//            });
         }
     }
 }

@@ -10,6 +10,7 @@
     "ItemMixin",
     "ItemStackMixin",
     "PlayerEntityMixin",
+    "RecipeManagerAccessor",
     "ServerEntityManagerMixin"
   ],
   "client": [

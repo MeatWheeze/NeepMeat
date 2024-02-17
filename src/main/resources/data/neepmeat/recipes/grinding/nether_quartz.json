@@ -1,7 +1,7 @@
 {
   "type": "neepmeat:grinding",
   "input": {
-    "tag": "minecraft:quartz_ores",
+    "tag": "c:quartz_ores",
     "amount": 1
   },
   "output": {

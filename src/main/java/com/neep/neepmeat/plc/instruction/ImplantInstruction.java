@@ -1,6 +1,6 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.recipe.Workpiece;
 import com.neep.neepmeat.api.plc.robot.DelayAction;
@@ -133,7 +133,7 @@ public class ImplantInstruction implements Instruction
             {
                 step.mutate(entity);
 
-                EntityImplantRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.ENTITY_MANUFACTURE, mip).orElse(null);
+                EntityImplantRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(PLCRecipes.ENTITY_MANUFACTURE, mip).orElse(null);
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);

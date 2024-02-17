@@ -1,6 +1,6 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.DelayAction;
@@ -119,7 +119,7 @@ public class InjectInstruction implements Instruction
 
                 mip.set(stack);
 
-                ItemManufactureRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(PLCRecipes.MANUFACTURE, mip).orElse(null);
+                ItemManufactureRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(PLCRecipes.MANUFACTURE, mip).orElse(null);
                 if (recipe != null)
                 {
                     recipe.ejectOutputs(mip, null);

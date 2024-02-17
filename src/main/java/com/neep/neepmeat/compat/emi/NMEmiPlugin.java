@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.emi;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.emi.helper.LazyEmiRecipeCategory;
 import com.neep.neepmeat.compat.emi.recipe.*;
@@ -96,29 +96,19 @@ public class NMEmiPlugin implements EmiPlugin {
                 .map(PressingEmiRecipe::new)
                 .forEach(registry::addRecipe);
 
-        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.ALLOY_SMELTING)
-                .values()
-                .stream()
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.ALLOY_SMELTING)
                 .map(AlloySmeltingEmiRecipe::new)
                 .forEach(registry::addRecipe);
-        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.GRINDING)
-                .values()
-                .stream()
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.GRINDING)
                 .map(GrindingEmiRecipe::new)
                 .forEach(registry::addRecipe);
-        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.HEATING)
-                .values()
-                .stream()
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.HEATING)
                 .map(HeatingEmiRecipe::new)
                 .forEach(registry::addRecipe);
-        MeatRecipeManager.getInstance().getAllOfType(PLCRecipes.MANUFACTURE)
-                .values()
-                .stream()
+        MeatlibRecipes.getInstance().getAllValuesOfType(PLCRecipes.MANUFACTURE)
                 .map(ManufactureEmiRecipe::new)
                 .forEach(registry::addRecipe);
-        MeatRecipeManager.getInstance().getAllOfType(NMrecipeTypes.TROMMEL)
-                .values()
-                .stream()
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.TROMMEL)
                 .map(TrommelEmiRecipe::new)
                 .forEach(registry::addRecipe);
 

@@ -1,14 +1,13 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.block.BaseHorFacingBlock;
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.api.machine.BloodMachineBlockEntity;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.recipe.surgery.*;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -22,13 +21,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
 @SuppressWarnings("UnstableApiUsage")
+@Deprecated
 public class TableControllerBlockEntity extends BloodMachineBlockEntity
 {
     protected int recipeProgress = 0;
@@ -65,7 +64,7 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 //
 //        if (robot.isActive() && counter == 10)
         {
-            MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(this::nextIngredient);
+//            MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(this::nextIngredient);
             counter = 0;
         }
 
@@ -109,21 +108,21 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     public void tryRecipe()
     {
-        GeneralSurgeryRecipe surgeryRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
+        GeneralSurgeryRecipe surgeryRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.SURGERY, context).orElse(null);
         if (surgeryRecipe != null)
         {
             startRecipe(surgeryRecipe);
             return;
         }
 
-        TransformingToolRecipe toolRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TRANSFORMING_TOOL, context).orElse(null);
+        TransformingToolRecipe toolRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TRANSFORMING_TOOL, context).orElse(null);
         if (toolRecipe != null)
         {
             startRecipe(toolRecipe);
             return;
         }
 
-        ImplantInstallRecipe mobRecipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.IMPLANT_INSTALL, context).orElse(null);
+        ImplantInstallRecipe mobRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.IMPLANT_INSTALL, context).orElse(null);
         if (mobRecipe != null)
         {
             startRecipe(mobRecipe);
@@ -149,16 +148,16 @@ public class TableControllerBlockEntity extends BloodMachineBlockEntity
 
     private void finishRecipe()
     {
-        MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(recipe ->
-        {
-            Direction facing = getCachedState().get(PLCBlock.FACING);
-            try (Transaction transaction = Transaction.openOuter())
-            {
-                recipe.ejectOutputs(context, transaction);
-                ItemPipeUtil.storageToAny((ServerWorld) getWorld(), context.getStorage(), pos, facing, transaction);
-                transaction.commit();
-            }
-        });
+//        MeatRecipeManager.getInstance().get(TypeFilter.instanceOf(SurgeryRecipe.class), currentRecipe).ifPresent(recipe ->
+//        {
+//            Direction facing = getCachedState().get(PLCBlock.FACING);
+//            try (Transaction transaction = Transaction.openOuter())
+//            {
+//                recipe.ejectOutputs(context, transaction);
+//                ItemPipeUtil.storageToAny((ServerWorld) getWorld(), context.getStorage(), pos, facing, transaction);
+//                transaction.commit();
+//            }
+//        });
 
         this.currentRecipe = null;
         this.recipeProgress = 0;

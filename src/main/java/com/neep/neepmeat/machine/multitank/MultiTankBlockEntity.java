@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.multitank;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.transfer.MultiFluidBuffer;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMrecipeTypes;
@@ -105,7 +105,7 @@ public class MultiTankBlockEntity extends SyncableBlockEntity implements Heatabl
             be.recipeProgress = Math.max(0, be.recipeProgress - be.increment);
             if (be.recipeProgress == 0)
             {
-                MeatRecipeManager.getInstance().get(NMrecipeTypes.HEATING, be.currentRecipeId).ifPresent(recipe ->
+                MeatlibRecipes.getInstance().get(NMrecipeTypes.HEATING, be.currentRecipeId).ifPresent(recipe ->
                 {
                     try (Transaction transaction = Transaction.openOuter())
                     {
@@ -123,7 +123,7 @@ public class MultiTankBlockEntity extends SyncableBlockEntity implements Heatabl
 
         if (be.heat > 0 && be.currentRecipeId == null)
         {
-            FluidHeatingRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.HEATING, be).orElse(null);
+            FluidHeatingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.HEATING, be).orElse(null);
             if (recipe != null)
             {
                 be.currentRecipeId = recipe.getId();

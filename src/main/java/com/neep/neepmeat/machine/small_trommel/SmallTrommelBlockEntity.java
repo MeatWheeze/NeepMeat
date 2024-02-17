@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.small_trommel;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.recipe.MeatRecipeManager;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
@@ -100,7 +100,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     {
         FluidVariant inputVariant = storage.input().getResource();
 
-        TrommelRecipe recipe = MeatRecipeManager.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
+        TrommelRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, storage).orElse(null);
         if (recipe != null)
         {
             try (Transaction transaction = Transaction.openOuter())

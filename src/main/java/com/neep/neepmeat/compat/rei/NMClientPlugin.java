@@ -3,7 +3,6 @@ package com.neep.neepmeat.compat.rei;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
 import com.neep.meatlib.recipe.MeatlibRecipe;
-import com.neep.meatlib.recipe.MeatRecipeManager;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.neepmeat.compat.rei.category.*;
 import com.neep.neepmeat.compat.rei.display.*;
@@ -40,7 +39,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 {
@@ -122,12 +120,12 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         if (stage == ReloadStage.END && lastStage == ReloadStage.START)
         {
             // Inject all Meatlib recipes
-            this.sortedRecipes = MeatRecipeManager.getInstance().values().parallelStream().sorted(RECIPE_COMPARATOR).collect(Collectors.toList());
-            for (int i = sortedRecipes.size() - 1; i >= 0; i--)
-            {
-                MeatlibRecipe<?> recipe = sortedRecipes.get(i);
-                DisplayRegistry.getInstance().addWithReason(recipe, SPECIAL_RECIPE_MANAGER);
-            }
+//            this.sortedRecipes = MeatRecipeManager.getInstance().values().parallelStream().sorted(RECIPE_COMPARATOR).collect(Collectors.toList());
+//            for (int i = sortedRecipes.size() - 1; i >= 0; i--)
+//            {
+//                MeatlibRecipe<?> recipe = sortedRecipes.get(i);
+//                DisplayRegistry.getInstance().addWithReason(recipe, SPECIAL_RECIPE_MANAGER);
+//            }
         }
         lastStage = stage;
     }
