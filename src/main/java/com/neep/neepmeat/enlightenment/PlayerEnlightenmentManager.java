@@ -60,7 +60,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     @Override
     public double lastDose()
     {
-        return lastDose;
+        return dose;
     }
 
     @Override
@@ -70,11 +70,12 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
 //        chronicEnlightenment += acuteEnlightenment / EnlightenmentUtil.THRESHOLD_NEGLIGIBLE / 50;
         chronicEnlightenment = Math.max(0, chronicEnlightenment - 0.001);
 
+//        if (player.world.getTime() % 10 == 0 && lastDose != dose)
+        if (lastDose != dose)
+            NMComponents.ENLIGHTENMENT_MANAGER.sync(player);
+
         lastDose = dose;
         dose = 0;
-
-        if (player.world.getTime() % 10 == 0 && lastDose != dose)
-            NMComponents.ENLIGHTENMENT_MANAGER.sync(player);
     }
 
     @Override
@@ -89,6 +90,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     {
         this.acuteEnlightenment = tag.getDouble("acute");
         this.chronicEnlightenment = tag.getDouble("chronic");
+        this.dose = tag.getDouble("dose");
         this.lastDose = tag.getDouble("last");
     }
 
@@ -97,6 +99,7 @@ public class PlayerEnlightenmentManager implements EnlightenmentManager, ClientT
     {
         tag.putDouble("acute", acuteEnlightenment);
         tag.putDouble("chronic", chronicEnlightenment);
+        tag.putDouble("dose", dose);
         tag.putDouble("last", lastDose);
     }
 

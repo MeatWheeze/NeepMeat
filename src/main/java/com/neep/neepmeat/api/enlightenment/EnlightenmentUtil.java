@@ -44,7 +44,7 @@ public class EnlightenmentUtil
 //        return player.getStatHandler().getStat(ENLIGHTENMENT);
     }
 
-    public static void applyDose(ServerPlayerEntity player, int baseAmount, double sqDistance, double split)
+    public static void applyDose(ServerPlayerEntity player, float baseAmount, double sqDistance, double split)
     {
         EnlightenmentManager manager = NMComponents.ENLIGHTENMENT_MANAGER.get(player);
         manager.exposeDose(baseAmount, sqDistance, split);

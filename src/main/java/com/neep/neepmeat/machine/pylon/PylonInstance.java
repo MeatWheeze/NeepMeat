@@ -12,6 +12,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3f;
+import net.minecraft.world.LightType;
 
 @Environment(value = EnvType.CLIENT)
 public class PylonInstance extends BlockEntityInstance<PylonBlockEntity> implements DynamicInstance
@@ -61,8 +62,11 @@ public class PylonInstance extends BlockEntityInstance<PylonBlockEntity> impleme
     @Override
     public void updateLight()
     {
-        relight(getInstancePosition(), rotor);
-        relight(getInstancePosition(), activeRotor);
+        int blight = world.getLightLevel(LightType.BLOCK, getInstancePosition());
+        int slight = world.getLightLevel(LightType.SKY, getInstancePosition());
+        relight(blight, slight, rotor, activeRotor);
+//        relight(getInstancePosition(), rotor);
+//        relight(getInstancePosition(), activeRotor);
     }
 
     @Override

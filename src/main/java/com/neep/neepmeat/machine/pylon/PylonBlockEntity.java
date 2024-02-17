@@ -102,7 +102,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
                 });
                 transaction.commit();
 
-                int enlightenment = (int) (effectMultiplier() * 10);
+                float enlightenment = (effectMultiplier() * 10);
                 Vec3d centre = Vec3d.ofCenter(pos);
                 PlayerLookup.around((ServerWorld) world, centre, radius).forEach(p ->
                 {
@@ -159,7 +159,7 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
 
     private float effectMultiplier()
     {
-        return MathHelper.clamp(speed / MAX_SPEED, 0, 1) * level;
+        return MathHelper.clamp(speed / MAX_SPEED, 0, 1) * Math.max(level, 0.01f);
     }
 
     @Override
