@@ -7,7 +7,7 @@ import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -156,7 +156,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, ItemPipeBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.PNEUMATIC_PIPE, ItemPipeBlockEntity::serverTick, null, world);
     }
 
     // Creates blockstate connections to fluid containers after placing

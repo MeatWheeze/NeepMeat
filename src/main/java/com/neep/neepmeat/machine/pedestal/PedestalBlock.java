@@ -8,7 +8,7 @@ import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.ItemUtils;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -115,7 +115,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, Dat
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.PEDESTAL, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.PEDESTAL, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
     }
 
     @Nullable

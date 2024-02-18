@@ -1,0 +1,30 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "neepmeat:block/chute/chute",
+		"particle": "neepmeat:block/chute/top"
+	},
+	"elements": [
+		{
+			"from": [5, 13, 2],
+			"to": [11, 13, 4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1, 15]},
+			"faces": {
+				"up": {"uv": [5, 2, 11, 0], "rotation": 180, "texture": "#particle"},
+				"down": {"uv": [5, 0, 11, 2], "rotation": 180, "texture": "#particle"}
+			}
+		},
+		{
+			"from": [1, 1, 0],
+			"to": [15, 15, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 1, 15]},
+			"faces": {
+				"east": {"uv": [1, 1, 3, 15], "texture": "#0"},
+				"south": {"uv": [1, 1, 15, 15], "texture": "#0"},
+				"west": {"uv": [3, 1, 1, 15], "texture": "#0"},
+				"up": {"uv": [1, 16, 15, 14], "rotation": 180, "texture": "#particle"},
+				"down": {"uv": [1, 14, 15, 16], "rotation": 180, "texture": "#particle"}
+			}
+		}
+	]
+}

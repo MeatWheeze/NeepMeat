@@ -1,11 +1,10 @@
 package com.neep.neepmeat.plc.block;
 
-import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.ExecutorBlockEntity;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -50,6 +49,6 @@ public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProv
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, PLCBlocks.EXECUTOR_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+        return MiscUtil.checkType(type, PLCBlocks.EXECUTOR_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
     }
 }

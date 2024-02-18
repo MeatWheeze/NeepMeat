@@ -1,7 +1,7 @@
 package com.neep.neepmeat.network;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
@@ -59,7 +59,7 @@ public class TankMessagePacket
                 }
                 else
                 {
-                    client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtils.dropletsToMb(amount) + "mb"), true);
+                    client.player.sendMessage(resource.isBlank() ? Text.of("Empty") : text.append(": " + MiscUtil.dropletsToMb(amount) + "mb"), true);
                 }
 
             });

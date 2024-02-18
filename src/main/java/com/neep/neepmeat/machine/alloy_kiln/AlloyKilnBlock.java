@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.alloy_kiln;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -154,7 +154,7 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ALLOY_KILN, AlloyKilnBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.ALLOY_KILN, AlloyKilnBlockEntity::serverTick, null, world);
     }
 
     @Nullable

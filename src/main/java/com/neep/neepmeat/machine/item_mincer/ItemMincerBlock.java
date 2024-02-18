@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtils;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockEntityProvider;
@@ -70,7 +70,7 @@ public class ItemMincerBlock extends BaseHorFacingBlock implements BlockEntityPr
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ITEM_MINCER, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
+        return MiscUtil.checkType(type, NMBlockEntities.ITEM_MINCER, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     @Nullable

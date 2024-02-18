@@ -184,6 +184,8 @@
   "block.neepmeat.ejector": "Ejector",
   "block.neepmeat.ejector.lore_0": "Ejects single items into connected pipes.",
   "block.neepmeat.buffer": "Buffer",
+  "block.neepmeat.chute": "Chute",
+  "block.neepmeat.chute.lore_0": "Deposits items thrown at it into the storage it faces when open.",
   "block.neepmeat.buffer.lore_0": "Holds nine stacks. Extraction can be disabled with redstone.",
   "block.neepmeat.metal_barrel": "Metal Barrel",
   "block.neepmeat.content_detector": "Item Detector",

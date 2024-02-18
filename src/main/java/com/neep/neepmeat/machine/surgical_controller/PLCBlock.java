@@ -5,7 +5,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -62,7 +62,7 @@ public class PLCBlock extends BaseHorFacingBlock implements BlockEntityProvider,
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, PLCBlocks.PLC_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
+        return MiscUtil.checkType(type, PLCBlocks.PLC_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.tick(), (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     @Nullable

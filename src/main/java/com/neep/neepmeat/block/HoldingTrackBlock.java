@@ -6,7 +6,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.AxialDirection;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -234,7 +234,7 @@ public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityP
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.HOLDING_TRACK, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.HOLDING_TRACK, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
     }
 
     public static class HoldingTrackBlockEntity extends BlockEntity

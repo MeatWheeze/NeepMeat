@@ -2,12 +2,8 @@ package com.neep.neepmeat.plc.arm;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.storage.MeatlibStorageUtil;
-import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.machine.motor.MotorEntity;
-import com.neep.neepmeat.machine.surgical_controller.PLCBlock;
 import com.neep.neepmeat.plc.PLCBlocks;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -46,7 +42,7 @@ public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, PLCBlocks.ROBOTIC_ARM_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(),
+        return MiscUtil.checkType(type, PLCBlocks.ROBOTIC_ARM_ENTITY, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(),
                 (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 }

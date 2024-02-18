@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.death_blades;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -53,7 +53,7 @@ public class DeathBladesBlock extends BaseFacingBlock implements BlockEntityProv
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.DEATH_BLADES, null, DeathBladesBlockEntity::clientTick, world);
+        return MiscUtil.checkType(type, NMBlockEntities.DEATH_BLADES, null, DeathBladesBlockEntity::clientTick, world);
     }
 
     @Nullable

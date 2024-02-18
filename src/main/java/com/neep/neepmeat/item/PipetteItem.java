@@ -3,7 +3,7 @@ package com.neep.neepmeat.item;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.lookup.v1.item.ItemApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
@@ -79,7 +79,7 @@ public class PipetteItem extends BaseItem
         long amount = StackStorage.getAmount(stack);
         if (amount > 0)
         {
-            return Text.translatable(getTranslationKey() + ".full", FluidVariantAttributes.getName(variant), MiscUtils.dropletsToMb(amount));
+            return Text.translatable(getTranslationKey() + ".full", FluidVariantAttributes.getName(variant), MiscUtil.dropletsToMb(amount));
         }
         return Text.translatable(getTranslationKey(stack));
     }

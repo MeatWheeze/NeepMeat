@@ -7,7 +7,7 @@ import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEnti
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
@@ -183,6 +183,6 @@ public class MergePipeBlock extends ItemPipeBlock
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, ItemPipeBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.MERGE_ITEM_PIPE, ItemPipeBlockEntity::serverTick, null, world);
     }
 }

@@ -4,7 +4,7 @@ import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -56,7 +56,7 @@ public class MincerBlock extends TallBlock implements BlockEntityProvider
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         BlockEntityTicker<MincerBlockEnity> clientTicker = state.get(RUNNING) ? (world1, pos, state1, be) -> be.clientTickRunning(world1) : null;
-        return MiscUtils.checkType(type, NMBlockEntities.MINCER, (world1, pos, state1, be) -> be.serverTick(world1), clientTicker, world);
+        return MiscUtil.checkType(type, NMBlockEntities.MINCER, (world1, pos, state1, be) -> be.serverTick(world1), clientTicker, world);
     }
 
     @Override

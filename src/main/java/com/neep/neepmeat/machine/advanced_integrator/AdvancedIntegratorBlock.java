@@ -11,7 +11,7 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -89,7 +89,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, NMBlockEntities.ADVANCED_INTEGRATOR,
+        return MiscUtil.checkType(type, NMBlockEntities.ADVANCED_INTEGRATOR,
                 (w, pos, state1, be) -> be.serverTick(),
                 (w, pos, state1, be) -> be.clientTick(),
                 world);

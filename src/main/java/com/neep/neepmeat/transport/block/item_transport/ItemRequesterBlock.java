@@ -4,7 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
-import com.neep.neepmeat.util.MiscUtils;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -65,7 +65,7 @@ public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProv
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtils.checkType(type, ItemTransport.ITEM_REQUESTER_BE, ItemRequesterBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, ItemTransport.ITEM_REQUESTER_BE, ItemRequesterBlockEntity::serverTick, null, world);
     }
 
     @Nullable

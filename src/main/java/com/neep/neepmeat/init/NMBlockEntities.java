@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
+import com.neep.neepmeat.block.ChuteBlock;
 import com.neep.neepmeat.block.HoldingTrackBlock;
 import com.neep.neepmeat.block.entity.*;
 import com.neep.neepmeat.machine.Heatable;
@@ -152,6 +153,7 @@ public class NMBlockEntities
     public static BlockEntityType<ItemPipeBlockEntity> PNEUMATIC_PIPE;
     public static BlockEntityType<MergePipeBlockEntity> MERGE_ITEM_PIPE;
     public static BlockEntityType<BufferBlockEntity> BUFFER;
+    public static BlockEntityType<ChuteBlock.ChuteBlockEntity> CHUTE;
     public static BlockEntityType<ItemPumpBlockEntity> ITEM_PUMP;
     public static BlockEntityType<EjectorBlockEntity> EJECTOR;
     public static BlockEntityType<RouterBlockEntity> ROUTER;
@@ -273,6 +275,7 @@ public class NMBlockEntities
         PNEUMATIC_PIPE = register("pneumatic_pipe", ItemPipeBlockEntity::new, NMBlocks.PNEUMATIC_TUBE);
         MERGE_ITEM_PIPE = register("merge_item_pipe", MergePipeBlockEntity::new, NMBlocks.MERGE_ITEM_PIPE);
         BUFFER = register("buffer", BufferBlockEntity::new, NMBlocks.BUFFER);
+        CHUTE = register("chute", (p, s) -> new ChuteBlock.ChuteBlockEntity(CHUTE, p, s), NMBlocks.CHUTE);
         INVENTORY_DETECTOR = register("content_detector", InventoryDetectorBlockEntity::new, NMBlocks.CONTENT_DETECTOR);
         SOLIDITY_DETECTOR = register("solidity_detector", SolidityDetectorBlockEntity::new, NMBlocks.SOLIDITY_DETECTOR);
         ItemStorage.SIDED.registerForBlockEntity(InventoryDetectorBlockEntity::getStorage, INVENTORY_DETECTOR);

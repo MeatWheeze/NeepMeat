@@ -267,6 +267,7 @@ public class NMBlocks
     public static Block EJECTOR = BlockRegistry.queue(new EjectorBlock("ejector", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ROUTER = BlockRegistry.queue(new RouterBlock("router", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block BUFFER = BlockRegistry.queue(new BufferBlock("buffer", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.CHEST)));
+    public static Block CHUTE = BlockRegistry.queue(new ChuteBlock("chute", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.HOPPER)));
     public static Block METAL_BARREL = BlockRegistry.queue(new MetalBarrelBlock("metal_barrel", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
     public static Block CONTENT_DETECTOR = BlockRegistry.queue(new InventoryDetectorBlock("content_detector", block().tooltip(TooltipSupplier.simple(2)), FabricBlockSettings.copy(Blocks.OBSERVER)));
     public static Block SOLIDITY_DETECTOR = BlockRegistry.queue(new SolidityDetectorBlock("solidity_detector", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copy(Blocks.OBSERVER)));
