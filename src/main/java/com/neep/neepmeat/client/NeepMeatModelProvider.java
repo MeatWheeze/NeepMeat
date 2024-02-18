@@ -1,11 +1,9 @@
 package com.neep.neepmeat.client;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.model.block.FluidPipeModel;
-import com.neep.neepmeat.client.model.block.ScaffoldBottomModel;
-import com.neep.neepmeat.client.model.block.ScaffoldTopModel;
-import com.neep.neepmeat.client.model.block.SlopeTest;
+import com.neep.neepmeat.client.model.block.*;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
 import com.neep.neepmeat.transport.client.model.VascularConduitModel;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;
@@ -79,6 +77,8 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_sides"), FluidPipeModel::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_sides"), VascularConduitModel::new);
+
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/encased"), EncasedConduitModel::new);
     }
 
     public static void putScaffoldModels(Identifier topId, Identifier bottomId, Identifier itemId, Identifier sideTexture, Identifier topTexture, Block block)

@@ -70,6 +70,7 @@ import com.neep.neepmeat.plc.component.TableComponent;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
@@ -196,6 +197,7 @@ public class NMBlockEntities
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
+    public static BlockEntityType<?> ENCASED_VASCULAR_CONDUIT;
     public static BlockEntityType<VSCBlockEntity> VSC;
     public static BlockEntityType<LargeMotorBlockEntity> LARGE_MOTOR;
     public static BlockEntityType<FlywheelBlockEntity> FLYWHEEL;
@@ -254,6 +256,7 @@ public class NMBlockEntities
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
         VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
+        ENCASED_VASCULAR_CONDUIT = register("encased_vascular_conduit", (pos, state) -> new EncasedConduitBlockEntity(ENCASED_VASCULAR_CONDUIT, pos, state), NMBlocks.ENCASED_VASCULAR_CONDUIT);
         VSC = register("vsc", (pos, state) -> new VSCBlockEntity(VSC, pos, state), NMBlocks.VSC);
         BloodAcceptor.SIDED.registerForBlockEntity(VSCBlockEntity::getBloodAcceptor, VSC);
 
