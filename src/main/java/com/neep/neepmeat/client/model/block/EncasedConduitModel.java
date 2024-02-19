@@ -65,7 +65,10 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
 
     /* FabricBakedModel */
     @Override
-    public boolean isVanillaAdapter() {return false;}
+    public boolean isVanillaAdapter()
+    {
+        return false;
+    }
 
     @Override
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
@@ -73,17 +76,17 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
         if (blockView.getBlockEntity(pos) instanceof EncasedConduitBlockEntity entity)
         {
             BlockState camoState = entity.getCamoState();
-            if (!camoState.isAir())
+            if (!camoState.isAir() && !camoState.isOf(state.getBlock()))
             {
                 BakedModel camoModel = MinecraftClient.getInstance().getBakedModelManager().getBlockModels().getModel(camoState);
                 if (camoModel instanceof FabricBakedModel fabricBakedModel)
                 {
-                    fabricBakedModel.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+                    fabricBakedModel.emitBlockQuads(blockView, camoState, pos, randomSupplier, context);
                 }
-                else
-                {
-                    context.bakedModelConsumer().accept(camoModel, camoState);
-                }
+//                else
+//                {
+//                    context.bakedModelConsumer().accept(camoModel, camoState);
+//                }
             }
         }
     }
@@ -104,7 +107,7 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
     @Override
     public boolean useAmbientOcclusion()
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -134,13 +137,13 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
     @Override
     public ModelTransformation getTransformation()
     {
-        return null;
+        return ModelTransformation.NONE;
     }
 
     @Override
     public ModelOverrideList getOverrides()
     {
-        return null;
+        return ModelOverrideList.EMPTY;
     }
 
 //    @Environment(value= EnvType.CLIENT)

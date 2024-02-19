@@ -1,6 +1,11 @@
 {
   "multipart": [
     {
+      "apply": {
+        "model": "neepmeat:block/vascular_conduit/encased"
+      }
+    },
+    {
       "when": {
         "OR": [
           {"up": "true", "north": "true"},
@@ -69,14 +74,6 @@
       "apply": {
         "model": "neepmeat:block/vascular_conduit/pipe_sides"
       }
-    },
-
-    {
-      "apply": {
-        "model": "neepmeat:block/vascular_conduit/encased"
-      }
     }
-
-
   ]
 }

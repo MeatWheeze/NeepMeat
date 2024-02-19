@@ -169,6 +169,7 @@
 
   "block.neepmeat.vascular_conduit": "Vascular Conduit",
   "block.neepmeat.vascular_conduit.lore_0": "Cycles blood through machines to give them power.",
+  "block.neepmeat.encased_vascular_conduit": "Encased Vascular Conduit",
   "block.neepmeat.vsc": "Vascular Source Converter",
   "block.neepmeat.vsc.lore_0": "Consumes a configurable amount of power from a vascular network and emits it from the front. Useful for controlling the speed of motors.",
   "screen.neepmeat.vsc.text.power": "Target output power",

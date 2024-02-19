@@ -6,6 +6,7 @@ import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
 import com.jozufozu.flywheel.util.AnimationTickHolder;
+import com.jozufozu.flywheel.util.box.ImmutableBox;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
@@ -28,6 +29,12 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
 
         robotModel = materialManager.defaultCutout().material(Materials.TRANSFORMED)
                 .getModel(NMExtraModels.P_PLC_ROBOT).createInstance();
+    }
+
+    @Override
+    public ImmutableBox getVolume()
+    {
+        return super.getVolume();
     }
 
     @Override

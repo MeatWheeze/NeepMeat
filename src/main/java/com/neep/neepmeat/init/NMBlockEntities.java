@@ -255,8 +255,8 @@ public class NMBlockEntities
         HEATER = register("heater", HeaterBlockEntity::new, NMBlocks.HEATER);
         BloodAcceptor.SIDED.registerSelf(HEATER);
 
-        VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
-        ENCASED_VASCULAR_CONDUIT = register("encased_vascular_conduit", (pos, state) -> new EncasedConduitBlockEntity(ENCASED_VASCULAR_CONDUIT, pos, state), NMBlocks.ENCASED_VASCULAR_CONDUIT);
+        VASCULAR_CONDUIT = register("vascular_conduit", (pos, state) -> new VascularConduitBlockEntity(NMBlockEntities.VASCULAR_CONDUIT, pos, state), NMBlocks.VASCULAR_CONDUIT);
+        ENCASED_VASCULAR_CONDUIT = register("encased_vascular_conduit", EncasedConduitBlockEntity::new, NMBlocks.ENCASED_VASCULAR_CONDUIT);
         VSC = register("vsc", (pos, state) -> new VSCBlockEntity(VSC, pos, state), NMBlocks.VSC);
         BloodAcceptor.SIDED.registerForBlockEntity(VSCBlockEntity::getBloodAcceptor, VSC);
 

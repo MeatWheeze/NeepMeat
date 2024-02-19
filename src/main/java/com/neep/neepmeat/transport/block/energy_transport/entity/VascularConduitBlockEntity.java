@@ -6,6 +6,7 @@ import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.WorldChunk;
@@ -30,6 +31,18 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     public @Nullable BloodNetwork getNetwork()
     {
         return network;
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt)
+    {
+        super.readNbt(nbt);
+    }
+
+    @Override
+    protected void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
     }
 
     @Override

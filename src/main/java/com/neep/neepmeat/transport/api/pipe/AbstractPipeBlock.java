@@ -39,7 +39,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
     public static final EnumProperty<PipeConnectionType> UP_CONNECTION = PipeProperties.UP_CONNECTION;
     public static final EnumProperty<PipeConnectionType> DOWN_CONNECTION = PipeProperties.DOWN_CONNECTION;
 
-    private static final Map<BlockState, VoxelShape> SHAPES = Maps.newHashMap();
+    private final Map<BlockState, VoxelShape> shapes = Maps.newHashMap();
 
     public static final Map<Direction, EnumProperty<PipeConnectionType>> DIR_TO_CONNECTION = (new ImmutableMap.Builder<Direction, EnumProperty<PipeConnectionType>>()
             .put(Direction.NORTH, NORTH_CONNECTION)
@@ -72,7 +72,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
 
         for (BlockState state : this.getStateManager().getStates())
         {
-            SHAPES.put(state, getShapeForState(state));
+            shapes.put(state, getShapeForState(state));
         }
     }
 
@@ -98,14 +98,14 @@ public abstract class AbstractPipeBlock extends BaseBlock
     @Override
     public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
-        return SHAPES.get(state);
+        return shapes.get(state);
     }
 
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
     {
 //        return VoxelShapes.cuboid(0f, 0f, 0f, 1f, 1.0f, 1f);
-        return SHAPES.get(state);
+        return shapes.get(state);
     }
 
     @Override
