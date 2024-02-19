@@ -34,18 +34,6 @@ public class VascularConduitBlockEntity extends BlockEntity implements VascularC
     }
 
     @Override
-    public void readNbt(NbtCompound nbt)
-    {
-        super.readNbt(nbt);
-    }
-
-    @Override
-    protected void writeNbt(NbtCompound nbt)
-    {
-        super.writeNbt(nbt);
-    }
-
-    @Override
     public void setNetwork(@Nullable BloodNetwork network)
     {
         this.network = network;

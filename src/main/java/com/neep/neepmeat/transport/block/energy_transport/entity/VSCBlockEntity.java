@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.energy_transport.entity;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
+import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.machine.fluid_exciter.AbstractVascularConduitEntity;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
@@ -26,7 +27,8 @@ import org.jetbrains.annotations.Nullable;
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
     protected long influx;
-    private final AbstractVascularConduitEntity conduitEntity;
+//    private final AbstractVascularConduitEntity conduitEntity;
+    private final LazyBlockApiCache<BloodAcceptor, Direction> cache;
 
     protected final AbstractBloodAcceptor sinkAcceptor = new AbstractBloodAcceptor()
     {
@@ -42,11 +44,13 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
             if (influx * PowerUtils.referencePower() >= desiredPower)
             {
                 VSCBlockEntity.this.influx = desiredPower;
+                updateThing();
                 return (float) desiredPower / PowerUtils.referencePower();
             }
             else
             {
                 VSCBlockEntity.this.influx = 0;
+                updateThing();
                 return 0;
             }
         }
@@ -74,7 +78,8 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     public VSCBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        conduitEntity = new AbstractVascularConduitEntity(this.pos);
+//        conduitEntity = new AbstractVascularConduitEntity(this.pos);
+        cache = LazyBlockApiCache.of(BloodAcceptor.SIDED, this.pos.offset(getCachedState().get(VSCBlock.FACING)), this::getWorld, () -> getCachedState().get(VSCBlock.FACING).getOpposite());
     }
 
     public BloodAcceptor getBloodAcceptor(Direction face)
@@ -135,8 +140,17 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
     @Override
     public void markRemoved()
     {
-        conduitEntity.onRemove();
+//        conduitEntity.onRemove();
         super.markRemoved();
+    }
+
+    public void updateThing()
+    {
+        BloodAcceptor found = cache.find();
+        if (found != null)
+        {
+            found.updateInflux((float) influx / PowerUtils.referencePower());
+        }
     }
 
     public class VSCDelegate implements PropertyDelegate

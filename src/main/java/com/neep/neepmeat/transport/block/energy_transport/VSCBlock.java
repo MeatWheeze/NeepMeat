@@ -51,19 +51,21 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
         return NMBlockEntities.VSC.instantiate(pos, state);
     }
 
-//    @Override
-//    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
-//    {
-//        super.onBlockAdded(state, world, pos, oldState, notify);
-//        updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.ADDED);
-//    }
-//
-//    @Override
-//    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
-//    {
-//        if (VascularConduit.find(world, sourcePos, world.getBlockState(sourcePos)) == null && !sourceBlock.equals(this))
-//        {
-//            updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
-//        }
-//    }
+    @Override
+    public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
+    {
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof VSCBlockEntity be)
+        {
+            be.updateThing();
+        }
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
+    {
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof VSCBlockEntity be)
+        {
+            be.updateThing();
+        }
+    }
 }
