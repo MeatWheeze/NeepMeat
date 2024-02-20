@@ -2,6 +2,7 @@ package com.neep.neepmeat.init;
 
 import com.neep.meatlib.registry.ParticleRegistry;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.particle.BloodDripParticleFactory;
 import com.neep.neepmeat.mixin.ParticleManagerMixin;
 import com.neep.neepmeat.particle.FallingParticle;
 import com.neep.neepmeat.particle.SwirlingParticle;
@@ -29,6 +30,7 @@ public class NMParticles
     public static DefaultParticleType MEAT_BIT = FabricParticleTypes.simple();
     public static DefaultParticleType MILK_SPLASH = FabricParticleTypes.simple();
     public static DefaultParticleType BODY_COMPOUND_SHOWER = FabricParticleTypes.simple();
+    public static DefaultParticleType BLOOD_DRIP = FabricParticleTypes.simple();
 
     public static void init()
     {
@@ -37,6 +39,7 @@ public class NMParticles
         MEAT_BIT = ParticleRegistry.register(NeepMeat.NAMESPACE, "meat_bit", MEAT_BIT);
         MILK_SPLASH = ParticleRegistry.register(NeepMeat.NAMESPACE, "milk_splash", MILK_SPLASH);
         BODY_COMPOUND_SHOWER = ParticleRegistry.register(NeepMeat.NAMESPACE, "body_compound_shower", BODY_COMPOUND_SHOWER);
+        BLOOD_DRIP = ParticleRegistry.register(NeepMeat.NAMESPACE, "blood_drip", BLOOD_DRIP);
     }
 
     @Environment(value = EnvType.CLIENT)
@@ -62,6 +65,7 @@ public class NMParticles
             ParticleFactoryRegistry.getInstance().register(MEAT_BIT, PortalParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(MILK_SPLASH, WaterSplashParticle.Factory::new);
             ParticleFactoryRegistry.getInstance().register(BODY_COMPOUND_SHOWER, FallingParticle.Factory::new);
+            ParticleFactoryRegistry.getInstance().register(BLOOD_DRIP, BloodDripParticleFactory::new);
 //            ParticleFactoryRegistry.getInstance().register(MEAT_DROP, FlameParticle.Factory::new);
         }
 

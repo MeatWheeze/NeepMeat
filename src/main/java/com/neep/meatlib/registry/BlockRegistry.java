@@ -4,6 +4,7 @@ import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.block.BaseLeavesBlock;
 import com.neep.meatlib.block.MeatlibBlock;
+import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
@@ -54,6 +55,14 @@ public class BlockRegistry
     {
         MeatLib.assertActive(block);
         BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
+        return block;
+    }
+
+    public static <T extends Block> T queueWithItem(T block, String registryName)
+    {
+        MeatLib.assertActive(block);
+        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, registryName), block);
+        ItemRegistry.queue(new BaseBlockItem(block, registryName, ItemSettings.block()));
         return block;
     }
 

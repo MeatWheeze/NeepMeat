@@ -1,0 +1,7 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/pressure_plate_up",
+  "textures": {
+    "texture": "neepmeat:block/blood_bubble_planks"
+  }
+}

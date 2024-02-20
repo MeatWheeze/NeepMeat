@@ -1,0 +1,8 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "parent": "block/door_top_left",
+  "textures": {
+    "top": "neepmeat:block/blood_bubble_planks_door_top",
+    "bottom": "neepmeat:block/blood_bubble_planks_door_bottom"
+  }
+}

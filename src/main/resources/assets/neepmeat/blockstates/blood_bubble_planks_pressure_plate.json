@@ -1,0 +1,11 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "powered=false": {
+      "model": "neepmeat:block/blood_bubble_planks_pressure_plate"
+    },
+    "powered=true": {
+      "model": "neepmeat:block/blood_bubble_planks_pressure_plate_down"
+    }
+  }
+}

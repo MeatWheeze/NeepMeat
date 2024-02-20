@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "neepmeat:blood_bubble_planks"
+    }
+  },
+  "pattern": [
+    "#  "
+  ],
+  "result": {
+    "count": 1,
+    "item": "neepmeat:blood_bubble_planks_button"
+  }
+}
