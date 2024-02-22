@@ -7,6 +7,7 @@ import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.item.TankItem;
 import com.neep.neepmeat.machine.multitank.MultiTankBlock;
+import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.*;
 import com.neep.neepmeat.transport.fluid_network.PipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -23,7 +24,10 @@ public class FluidTransport
     public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 
     // --- Fluid Pipes ---
-    public static Block PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", NMBlocks.block().factory(FluidComponentItem::new) , NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block RED_FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("red_fluid_pipe", FluidPipe.PipeCol.RED, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block BLUE_FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("blue_fluid_pipe", FluidPipe.PipeCol.BLUE, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+
     public static Block FILTER_PIPE = BlockRegistry.queue(new FilterPipeBlock("filter_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block CHECK_VALVE = BlockRegistry.queue(new CheckValveBlock("check_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));

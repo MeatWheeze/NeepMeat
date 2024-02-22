@@ -135,16 +135,16 @@ public class ItemDuctBlock extends AbstractPipeBlock implements BlockEntityProvi
     }
 
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
-        if (state.getBlock() instanceof ItemDuctBlock)
+        if (toState.getBlock() instanceof ItemDuctBlock)
         {
 //            return ((FluidAcceptor) state.getBlock()).connectInDirection(state, direction);
-            return state.get(FACING) == direction;
+            return toState.get(FACING) == toFace;
         }
-        else if (state.getBlock() instanceof HopperBlock)
+        else if (toState.getBlock() instanceof HopperBlock)
         {
-            return state.get(HopperBlock.FACING) == direction;
+            return toState.get(HopperBlock.FACING) == toFace;
         }
         return false;
     }

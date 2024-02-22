@@ -118,11 +118,11 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
 
     // Only takes into account other pipes, connections to storages are enforced later.
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
-        if (state.getBlock() instanceof FluidPipe)
+        if (toState.getBlock() instanceof FluidPipe)
         {
-            return ((FluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return ((FluidPipe) toState.getBlock()).connectInDirection(world, toPos, toState, toFace);
         }
         return false;
     }

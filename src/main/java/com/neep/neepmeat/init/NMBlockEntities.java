@@ -203,7 +203,7 @@ public class NMBlockEntities
     public static BlockEntityType<FlywheelBlockEntity> FLYWHEEL;
     public static BlockEntityType<SeparatorBlockEntity> SEPARATOR;
 
-    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block block)
+    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block... block)
     {
         return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                                  FabricBlockEntityTypeBuilder.create(factory, block).build());
@@ -234,7 +234,11 @@ public class NMBlockEntities
         Heatable.LOOKUP.registerSelf(MULTI_TANK);
         FLUID_BUFFER = register("fluid_buffer", FluidBufferBlockEntity::new, FluidTransport.FLUID_BUFFER);
         TableComponent.LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
-        FLUID_PIPE = register("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.PIPE);
+        FLUID_PIPE = register("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new),
+                FluidTransport.FLUID_PIPE,
+                FluidTransport.RED_FLUID_PIPE,
+                FluidTransport.BLUE_FLUID_PIPE
+        );
         STOP_VALVE = register("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
         CHECK_VALVE = register("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
         FILTER_PIPE = register("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);

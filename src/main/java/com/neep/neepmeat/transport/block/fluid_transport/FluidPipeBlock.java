@@ -4,10 +4,13 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
+import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -27,6 +30,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
@@ -34,9 +38,12 @@ import org.jetbrains.annotations.Nullable;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe
 {
-    public FluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    private final PipeCol col;
+
+    public FluidPipeBlock(String itemName, FluidPipe.PipeCol col, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
+        this.col = col;
     }
 
     @Override
@@ -52,16 +59,8 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         if (!state.isOf(newState.getBlock()))
         {
             removePipe((ServerWorld) world, state, pos);
-
         }
-        else
-        {
-//            FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateAdjacent(newState));
-        }
-
     }
-
-
 
     @Override
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
@@ -99,7 +98,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
     {
         BlockState updatedState = enforceApiConnections(world, pos, state);
-        world.setBlockState(pos, updatedState,  Block.NOTIFY_ALL);
+        world.setBlockState(pos, updatedState, Block.NOTIFY_ALL);
         if (!world.isClient())
         {
             createStorageNodes(world, pos, updatedState);
@@ -177,13 +176,20 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         return NMBlockEntities.FLUID_PIPE.instantiate(pos, state);
     }
 
+    @Override
+    public PipeCol getCol(World world, BlockPos pos, BlockState blockState)
+    {
+        return col;
+    }
+
     // Only takes into account other pipes, connections to storages are enforced later.
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
-        if (state.getBlock() instanceof FluidPipe)
+        if (toState.getBlock() instanceof FluidPipe otherPipe)
         {
-            return ((FluidPipe) state.getBlock()).connectInDirection(world, pos, state, direction);
+            return col.matches(otherPipe.getCol(world, toPos, toState))
+                    && otherPipe.connectInDirection(world, toPos, toState, toFace);
         }
         return false;
     }
@@ -217,5 +223,15 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUtil.checkType(type, NMBlockEntities.FLUID_PIPE, ((world1, pos, state1, blockEntity) -> blockEntity.tick()), null, world);
+    }
+
+    @Environment(value= EnvType.CLIENT)
+    public static int getTint(BlockState state, BlockRenderView world, BlockPos pos, int index)
+    {
+        if (state.getBlock() instanceof FluidPipeBlock fluidPipeBlock)
+        {
+            return fluidPipeBlock.col.hexCode();
+        }
+        return 0xFFFFFF;
     }
 }

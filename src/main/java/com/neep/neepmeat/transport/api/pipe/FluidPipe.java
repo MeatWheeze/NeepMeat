@@ -12,6 +12,7 @@ import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import it.unimi.dsi.fastutil.Pair;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -189,9 +190,10 @@ public interface FluidPipe
 
     default PipeVertex getPipeVertex(ServerWorld world, BlockPos pos, BlockState state)
     {
-        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
         {
             // TODO: remove this cast
+            // What cast?
             be.getPipeVertex().updateNodes(world, pos.toImmutable(), state);
             return be.getPipeVertex();
         }
@@ -201,5 +203,34 @@ public interface FluidPipe
     default int countConnections(BlockState blockState)
     {
         return Iterables.size(getConnections(blockState, d -> true));
+    }
+
+    default PipeCol getCol(World world, BlockPos pos, BlockState blockState)
+    {
+        return PipeCol.ANY;
+    }
+
+    enum PipeCol
+    {
+        ANY(DyeColor.WHITE),
+        RED(DyeColor.RED),
+        BLUE(DyeColor.BLUE);
+
+        private final DyeColor dyeColor;
+
+        PipeCol(DyeColor dyeColor)
+        {
+            this.dyeColor = dyeColor;
+        }
+
+        public boolean matches(PipeCol other)
+        {
+            return this == ANY || other == ANY || this == other;
+        }
+
+        public int hexCode()
+        {
+            return dyeColor.getFireworkColor();
+        }
     }
 }

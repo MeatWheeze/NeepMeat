@@ -41,6 +41,7 @@ import com.neep.neepmeat.network.*;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
 import dev.monarkhes.myron_neepmeat.api.Myron;
@@ -215,6 +216,13 @@ public class NeepMeatClient implements ClientModInitializer
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
         ColorProviderRegistry.BLOCK.register(FilterPipeBlock::getTint, FluidTransport.FILTER_PIPE);
+
+        ColorProviderRegistry.BLOCK.register(FluidPipeBlock::getTint,
+                FluidTransport.RED_FLUID_PIPE,
+                FluidTransport.BLUE_FLUID_PIPE
+        );
+
+
     }
 
     public static void registerScreens()
@@ -304,6 +312,11 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), PLCBlocks.ROBOTIC_ARM);
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.WINDOW_PIPE);
+
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
+                FluidTransport.RED_FLUID_PIPE,
+                FluidTransport.BLUE_FLUID_PIPE
+                );
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.HOLDING_TRACK);
     }

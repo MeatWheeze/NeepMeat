@@ -126,11 +126,11 @@ public class MergePipeBlock extends ItemPipeBlock
     }
 
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
-        if (state.getBlock() instanceof ItemPipe pipe)
+        if (toState.getBlock() instanceof ItemPipe pipe)
         {
-            return pipe.connectInDirection(world, pos, state, direction);
+            return pipe.connectInDirection(world, toPos, toState, toFace);
         }
         return false;
     }

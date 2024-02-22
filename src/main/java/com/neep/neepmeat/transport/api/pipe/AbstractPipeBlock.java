@@ -139,7 +139,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
         return state.with(DIR_TO_CONNECTION.get(direction), PipeConnectionType.NONE);
     }
 
-    public abstract boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos);
+    public abstract boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos);
 
     protected static boolean isNotConnected(BlockState state)
     {

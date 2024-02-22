@@ -19,11 +19,11 @@ public class DataCableBlock extends AbstractPipeBlock implements DataCable
     }
 
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
-        if (state.getBlock() instanceof DataCable cable)
+        if (toState.getBlock() instanceof DataCable cable)
         {
-            return cable.connectInDirection(world, pos, state, direction);
+            return cable.connectInDirection(world, toPos, toState, toFace);
         }
         return false;
     }

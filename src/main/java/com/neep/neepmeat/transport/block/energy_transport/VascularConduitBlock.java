@@ -34,16 +34,16 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
     }
 
     @Override
-    public boolean canConnectTo(BlockState state, Direction direction, World world, BlockPos pos)
+    public boolean canConnectTo(BlockState toState, Direction toFace, World world, BlockPos toPos)
     {
 //        var other = VascularConduitEntity.LOOKUP.find(world, pos, null);
 //        var other = VascularConduit.find(world, pos, state);
 //        return other != null;
-        if (state.getBlock() instanceof VascularConduit)
+        if (toState.getBlock() instanceof VascularConduit)
         {
             return true;
         }
-        else return BloodAcceptor.SIDED.find(world, pos, direction) != null;
+        else return BloodAcceptor.SIDED.find(world, toPos, toFace) != null;
     }
 
     @Override
