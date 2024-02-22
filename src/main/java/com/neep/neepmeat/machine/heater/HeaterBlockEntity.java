@@ -7,6 +7,7 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
+import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
@@ -25,7 +26,6 @@ import java.util.Random;
 public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAcceptor
 {
     private float influx;
-    private BloodNetwork network;
 
     private Heatable heatable;
     private int copperTime;
@@ -151,12 +151,6 @@ public class HeaterBlockEntity extends SyncableBlockEntity implements BloodAccep
     {
         this.influx = influx;
         return influx;
-    }
-
-    @Override
-    public void setNetwork(BloodNetwork network)
-    {
-        this.network = network;
     }
 
     @Override

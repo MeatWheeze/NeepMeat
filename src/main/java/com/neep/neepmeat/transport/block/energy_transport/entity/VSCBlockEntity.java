@@ -8,6 +8,7 @@ import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
+import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
@@ -23,6 +24,8 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
+
+import javax.swing.event.ChangeListener;
 
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
@@ -96,10 +99,10 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         if (desiredPower != power)
         {
             desiredPower = power;
-            BloodNetwork network = sinkAcceptor.getNetwork();
+            BloodTransferChangeListener network = sinkAcceptor.getNetwork();
             if (network != null)
             {
-                network.updateTransfer(sourceAcceptor);
+                network.updateTransfer(sinkAcceptor);
             }
         }
     }
@@ -150,6 +153,16 @@ public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScree
         if (found != null)
         {
             found.updateInflux((float) influx / PowerUtils.referencePower());
+            found.setChangeListener(this::changed);
+        }
+    }
+
+    public void changed(@Nullable BloodAcceptor changed)
+    {
+        BloodTransferChangeListener sinkListener = sinkAcceptor.getNetwork();
+        if (sinkListener != null)
+        {
+            sinkListener.updateTransfer(sinkAcceptor);
         }
     }
 

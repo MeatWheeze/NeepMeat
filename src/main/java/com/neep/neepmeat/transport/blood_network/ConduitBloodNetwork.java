@@ -28,6 +28,7 @@ public class ConduitBloodNetwork implements BloodNetwork
     protected AcceptorManager acceptors = new AcceptorManager(this);
 
     protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
+//    protected boolean updateSinks = false;
 
     protected long lastInternal = 0;
     protected boolean removed = false;
@@ -210,7 +211,7 @@ public class ConduitBloodNetwork implements BloodNetwork
             return;
 
         acceptor.updateInflux(0);
-        acceptor.setNetwork(null);
+        acceptor.setChangeListener(null);
     }
 
     public void mergeInto(BloodNetwork network)
@@ -318,7 +319,7 @@ public class ConduitBloodNetwork implements BloodNetwork
                     var a = entry.getValue();
 
                     if (a[dir] != null)
-                        a[dir].setNetwork(other.network);
+                        a[dir].setChangeListener(other.network);
 
                     other.acceptors.put(entry.getLongKey(), dir, a[dir]);
                 }
@@ -330,7 +331,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         public void add(long pos, int dir, BloodAcceptor acceptor)
         {
             acceptors.put(pos, dir, acceptor);
-            acceptor.setNetwork(ConduitBloodNetwork.this);
+            acceptor.setChangeListener(ConduitBloodNetwork.this);
             switch (acceptor.getMode())
             {
                 case SOURCE -> sources.put(pos, dir, acceptor);

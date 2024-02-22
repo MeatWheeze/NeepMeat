@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
+import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Direction;
@@ -21,7 +22,7 @@ public interface BloodAcceptor
     }
     default float updateInflux(float influx) { return influx; };
 
-    default void setNetwork(@Nullable BloodNetwork network) {};
+    default void setChangeListener(@Nullable BloodTransferChangeListener network) {};
 
     Mode getMode();
 
