@@ -72,17 +72,6 @@ public class FluidBufferBlockEntity extends SyncableBlockEntity implements Fluid
         return true;
     }
 
-    @Override
-    public void fromClientTag(NbtCompound tag)
-    {
-    }
-
-    @Override
-    public NbtCompound toClientTag(NbtCompound tag)
-    {
-        return tag;
-    }
-
     public TableComponent<FluidVariant> getTableComponent(Void v)
     {
         return tableComponent;
