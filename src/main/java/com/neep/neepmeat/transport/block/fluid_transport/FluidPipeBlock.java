@@ -22,6 +22,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
@@ -29,11 +30,13 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib3.core.util.Color;
 
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe
@@ -228,9 +231,40 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Environment(value= EnvType.CLIENT)
     public static int getTint(BlockState state, BlockRenderView world, BlockPos pos, int index)
     {
-        if (state.getBlock() instanceof FluidPipeBlock fluidPipeBlock)
+        if (index == 1 && state.getBlock() instanceof FluidPipeBlock fluidPipeBlock)
+        {
+            int col = fluidPipeBlock.col.hexCode();
+            Color first = Color.ofOpaque(col);
+            Color second = Color.ofOpaque(0x844b2f);
+
+            int d = 120;
+            int d1 = 255 - d;
+            Color mixed = Color.ofRGB(
+                    (d * first.getRed() + d1 * second.getRed()) / 255,
+                    (d * first.getGreen() + d1 * second.getGreen()) / 255,
+                    (d * first.getBlue() + d1 * second.getBlue()) / 255
+            );
+            return mixed.getColor();
+        }
+        return 0xFFFFFF;
+    }
+
+    public static int getItemTint(ItemStack stack, int i)
+    {
+        if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof FluidPipeBlock fluidPipeBlock)
         {
             return fluidPipeBlock.col.hexCode();
+//            Color first = Color.ofOpaque(col);
+//            Color second = Color.ofOpaque(0x844b2f);
+//
+//            int d = 120;
+//            int d1 = 255 - d;
+//            Color mixed = Color.ofRGB(
+//                    (d * first.getRed() + d1 * second.getRed()) / 255,
+//                    (d * first.getGreen() + d1 * second.getGreen()) / 255,
+//                    (d * first.getBlue() + d1 * second.getBlue()) / 255
+//            );
+//            return mixed.getColor();
         }
         return 0xFFFFFF;
     }

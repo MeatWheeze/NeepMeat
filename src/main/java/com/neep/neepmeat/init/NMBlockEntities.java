@@ -236,8 +236,22 @@ public class NMBlockEntities
         TableComponent.LOOKUP.registerForBlockEntity(FluidBufferBlockEntity::getTableComponent, FLUID_BUFFER);
         FLUID_PIPE = register("fluid_pipe", (pos, state) -> new FluidPipeBlockEntity<>(FLUID_PIPE, pos, state, BlockPipeVertex::new),
                 FluidTransport.FLUID_PIPE,
+                FluidTransport.WHITE_FLUID_PIPE,
+                FluidTransport.ORANGE_FLUID_PIPE,
+                FluidTransport.MAGENTA_FLUID_PIPE,
+                FluidTransport.LIGHT_BLUE_FLUID_PIPE,
+                FluidTransport.YELLOW_FLUID_PIPE,
+                FluidTransport.LIME_FLUID_PIPE,
+                FluidTransport.PINK_FLUID_PIPE,
+                FluidTransport.GRAY_FLUID_PIPE,
+                FluidTransport.LIGHT_GRAY_FLUID_PIPE,
+                FluidTransport.CYAN_FLUID_PIPE,
+                FluidTransport.PURPLE_FLUID_PIPE,
+                FluidTransport.BLUE_FLUID_PIPE,
+                FluidTransport.BROWN_FLUID_PIPE,
+                FluidTransport.GREEN_FLUID_PIPE,
                 FluidTransport.RED_FLUID_PIPE,
-                FluidTransport.BLUE_FLUID_PIPE
+                FluidTransport.BLACK_FLUID_PIPE
         );
         STOP_VALVE = register("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
         CHECK_VALVE = register("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);

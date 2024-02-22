@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport;
 
+import com.google.common.collect.Lists;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -19,14 +20,32 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class FluidTransport
 {
     public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 
+    public static final List<FluidPipeBlock> COLOURED_FLUID_PIPES = Lists.newArrayList();
+
     // --- Fluid Pipes ---
     public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
-    public static Block RED_FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("red_fluid_pipe", FluidPipe.PipeCol.RED, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
-    public static Block BLUE_FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("blue_fluid_pipe", FluidPipe.PipeCol.BLUE, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block WHITE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.WHITE);
+    public static Block ORANGE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.ORANGE);
+    public static Block MAGENTA_FLUID_PIPE = makePipe(FluidPipe.PipeCol.MAGENTA);
+    public static Block LIGHT_BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_BLUE);
+    public static Block YELLOW_FLUID_PIPE = makePipe(FluidPipe.PipeCol.YELLOW);
+    public static Block LIME_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIME);
+    public static Block PINK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PINK);
+    public static Block GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GRAY);
+    public static Block LIGHT_GRAY_FLUID_PIPE = makePipe(FluidPipe.PipeCol.LIGHT_GRAY);
+    public static Block CYAN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.CYAN);
+    public static Block PURPLE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.PURPLE);
+    public static Block BLUE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLUE);
+    public static Block BROWN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BROWN);
+    public static Block GREEN_FLUID_PIPE = makePipe(FluidPipe.PipeCol.GREEN);
+    public static Block RED_FLUID_PIPE = makePipe(FluidPipe.PipeCol.RED);
+    public static Block BLACK_FLUID_PIPE = makePipe(FluidPipe.PipeCol.BLACK);
 
     public static Block FILTER_PIPE = BlockRegistry.queue(new FilterPipeBlock("filter_pipe", NMBlocks.block().tooltip(TooltipSupplier.simple(2)), NMBlocks.FLUID_PIPE_SETTINGS));
     public static Block STOP_VALVE = BlockRegistry.queue(new StopValveBlock("stop_valve", NMBlocks.block().tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
@@ -67,6 +86,13 @@ public class FluidTransport
 
 //        PipeVertex.LOOKUP.registerForBlocks(FluidTransport::getVertex, PIPE);
         PipeVertex.LOOKUP.registerFallback(FluidTransport::getVertex);
+    }
+
+    private static FluidPipeBlock makePipe(FluidPipe.PipeCol col)
+    {
+        var pipe = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe_" + col.name().toLowerCase(), col, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+        COLOURED_FLUID_PIPES.add(pipe);
+        return pipe;
     }
 
     private static PipeVertex getVertex(World world, BlockPos blockPos, BlockState blockState, @Nullable BlockEntity blockEntity, Void unused)

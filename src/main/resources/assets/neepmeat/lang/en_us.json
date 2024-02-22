@@ -46,9 +46,9 @@
   "block.neepmeat.rusty_metal_slab": "Rusty Metal Slab",
   "block.neepmeat.rusty_metal_stairs": "Rusty Metal Stairs",
 
-  "block.neepmeat.grey_rough_concrete": "Grey Rough Concrete",
-  "block.neepmeat.grey_rough_concrete_stairs": "Grey Rough Concrete Stairs",
-  "block.neepmeat.grey_rough_concrete_slab": "Grey Rough Concrete Slab",
+  "block.neepmeat.grey_rough_concrete": "Gray Rough Concrete",
+  "block.neepmeat.grey_rough_concrete_stairs": "Gray Rough Concrete Stairs",
+  "block.neepmeat.grey_rough_concrete_slab": "Gray Rough Concrete Slab",
 
   "block.neepmeat.white_rough_concrete": "White Rough Concrete",
   "block.neepmeat.white_rough_concrete_stairs": "White Rough Concrete Stairs",
@@ -58,7 +58,7 @@
   "block.neepmeat.yellow_rough_concrete_stairs": "Yellow Rough Concrete Stairs",
   "block.neepmeat.yellow_rough_concrete_slab": "Yellow Rough Concrete Slab",
 
-  "block.neepmeat.smooth_tile_grey": "Grey Smooth Tile",
+  "block.neepmeat.smooth_tile_grey": "Gray Smooth Tile",
 
   "block.neepmeat.yellow_tiles": "Yellow Tiles",
   "block.neepmeat.yellow_tiles_stairs": "Yellow Tiles Stairs",
@@ -139,6 +139,23 @@
   "block.neepmeat.smooth_tile_white": "White Smooth Tile",
 
   "block.neepmeat.fluid_pipe": "Fluid Pipe",
+  "block.neepmeat.fluid_pipe_white": "White Fluid Pipe",
+  "block.neepmeat.fluid_pipe_orange": "Orange Fluid Pipe",
+  "block.neepmeat.fluid_pipe_magenta": "Magenta Fluid Pipe",
+  "block.neepmeat.fluid_pipe_light_blue": "Light Blue Fluid Pipe",
+  "block.neepmeat.fluid_pipe_yellow": "Yellow Fluid Pipe",
+  "block.neepmeat.fluid_pipe_lime": "Lime Fluid Pipe",
+  "block.neepmeat.fluid_pipe_pink": "Pink Fluid Pipe",
+  "block.neepmeat.fluid_pipe_gray": "Gray Fluid Pipe",
+  "block.neepmeat.fluid_pipe_light_gray": "Light Gray Fluid Pipe",
+  "block.neepmeat.fluid_pipe_cyan": "Cyan Fluid Pipe",
+  "block.neepmeat.fluid_pipe_purple": "Purple Fluid Pipe",
+  "block.neepmeat.fluid_pipe_blue": "Blue Fluid Pipe",
+  "block.neepmeat.fluid_pipe_brown": "Brown Fluid Pipe",
+  "block.neepmeat.fluid_pipe_green": "Green Fluid Pipe",
+  "block.neepmeat.fluid_pipe_red": "Red Fluid Pipe",
+  "block.neepmeat.fluid_pipe_black": "Black Fluid Pipe",
+
   "block.neepmeat.copper_pipe": "Copper Pipe",
   "block.neepmeat.stop_valve": "Stop Valve",
   "block.neepmeat.stop_valve.lore_0": "Prevents flow when closed. Responds to redstone.",

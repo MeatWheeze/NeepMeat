@@ -215,14 +215,15 @@ public class NeepMeatClient implements ClientModInitializer
             ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
             ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
+
+        // Pipes
+        for (var pipe : FluidTransport.COLOURED_FLUID_PIPES)
+        {
+            ColorProviderRegistry.BLOCK.register(FluidPipeBlock::getTint, pipe);
+            BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), pipe);
+            ColorProviderRegistry.ITEM.register(FluidPipeBlock::getItemTint, pipe.asItem());
+        }
         ColorProviderRegistry.BLOCK.register(FilterPipeBlock::getTint, FluidTransport.FILTER_PIPE);
-
-        ColorProviderRegistry.BLOCK.register(FluidPipeBlock::getTint,
-                FluidTransport.RED_FLUID_PIPE,
-                FluidTransport.BLUE_FLUID_PIPE
-        );
-
-
     }
 
     public static void registerScreens()
@@ -313,10 +314,6 @@ public class NeepMeatClient implements ClientModInitializer
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), FluidTransport.WINDOW_PIPE);
 
-        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(),
-                FluidTransport.RED_FLUID_PIPE,
-                FluidTransport.BLUE_FLUID_PIPE
-                );
 
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.HOLDING_TRACK);
     }
