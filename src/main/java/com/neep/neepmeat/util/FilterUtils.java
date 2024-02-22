@@ -22,12 +22,12 @@ public class FilterUtils
 
     public static Predicate<StorageView<ItemVariant>> matchVariant(List<StorageView<ItemVariant>> list)
     {
-        return view -> ItemUtils.containsResource(list, view.getResource());
+        return view -> ItemUtil.containsResource(list, view.getResource());
     }
 
     public static Predicate<StorageView<ItemVariant>> matchOperator(List<StorageView<ItemVariant>> list, Filter filter)
     {
-        return stack -> ItemUtils.contains(list, stack, filter);
+        return stack -> ItemUtil.contains(list, stack, filter);
     }
 
     public static boolean any(TransferVariant<?> variant)

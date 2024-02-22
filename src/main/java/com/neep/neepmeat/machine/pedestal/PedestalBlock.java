@@ -7,7 +7,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.particle.SwirlingParticleEffect;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -75,7 +75,7 @@ public class PedestalBlock extends BaseBlock implements BlockEntityProvider, Dat
     {
         if (world.getBlockEntity(pos) instanceof PedestalBlockEntity be)
         {
-            ItemUtils.scatterItems(world, pos, be.storage);
+            ItemUtil.scatterItems(world, pos, be.storage);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
     }

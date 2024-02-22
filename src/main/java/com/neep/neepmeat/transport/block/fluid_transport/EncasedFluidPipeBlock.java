@@ -1,13 +1,16 @@
-package com.neep.neepmeat.transport.block.energy_transport;
+package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlock;
-import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
-import net.minecraft.block.Block;
+import com.neep.neepmeat.transport.block.EncasedBlockEntity;
+import com.neep.neepmeat.util.ItemUtil;
+import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemStack;
@@ -20,11 +23,11 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-public class EncasedVascularConduitBlock extends VascularConduitBlock implements EncasedBlock
+public class EncasedFluidPipeBlock extends FluidPipeBlock implements EncasedBlock
 {
-    public EncasedVascularConduitBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public EncasedFluidPipeBlock(String itemName, PipeCol col, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, col, itemSettings, settings);
     }
 
     public VoxelShape getPipeOutlineShape(BlockState state, BlockView world, BlockPos pos)
@@ -35,32 +38,11 @@ public class EncasedVascularConduitBlock extends VascularConduitBlock implements
     @Override
     public VoxelShape getOutlineShape(BlockState state, BlockView view, BlockPos pos, ShapeContext context)
     {
-        if (view.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        if (view.getBlockEntity(pos) instanceof EncasedBlockEntity be)
         {
             return be.getCamoShape();
         }
         return super.getOutlineShape(state, view, pos, context);
-    }
-
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
-    {
-        super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
-        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
-        {
-            be.setCachedState(state);
-            be.onNeighbourUpdate();
-        }
-    }
-
-    @Override
-    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
-    {
-        super.onConnectionUpdate(world, state, newState, pos, entity);
-        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
-        {
-            be.onNeighbourUpdate();
-        }
     }
 
     @Override
@@ -70,18 +52,24 @@ public class EncasedVascularConduitBlock extends VascularConduitBlock implements
         {
             return ActionResult.SUCCESS;
         }
-        return super.onUse(state, world, pos, player, hand, hit);
+        return ActionResult.PASS;
     }
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return NMBlockEntities.ENCASED_VASCULAR_CONDUIT.instantiate(pos, state);
+        return NMBlockEntities.ENCASED_FLUID_PIPE.instantiate(pos, state);
+    }
+
+    @Override
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtil.checkType(type, NMBlockEntities.ENCASED_FLUID_PIPE, (world1, pos, state1, blockEntity) -> blockEntity.tick(), null, world);
     }
 
     @Override
     public boolean canReplace(ItemStack stack, BlockItem blockItem)
     {
-        return !(blockItem.getBlock() instanceof EncasedBlock) && !VascularConduitBlock.matches(stack);
+        return !(blockItem.getBlock() instanceof EncasedBlock) && !ItemUtil.checkFluidComponent(blockItem);
     }
 }

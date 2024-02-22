@@ -6,7 +6,7 @@ import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.machine.fluid.FluidBufferBlockEntity;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -93,7 +93,7 @@ public class FluidBufferBlock extends BaseFacingBlock implements BlockEntityProv
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand))
+        if (ItemUtil.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
 
         if (world.getBlockEntity(pos) instanceof FluidBufferBlockEntity tank && tank.onUse(player, hand))

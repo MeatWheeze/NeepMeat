@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.bottler;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -27,7 +27,7 @@ public class BottlerBlock extends BaseHorFacingBlock implements BlockEntityProvi
     {
         if (world.getBlockEntity(pos) instanceof BottlerBlockEntity be)
         {
-            if (ItemUtils.singleVariantInteract(player, hand, be.getItemStorage(null)))
+            if (ItemUtil.singleVariantInteract(player, hand, be.getItemStorage(null)))
             {
                 return ActionResult.SUCCESS;
             }

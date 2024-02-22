@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.synthesiser;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -40,7 +40,7 @@ public class SynthesiserBlock extends TallBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand)) return ActionResult.PASS;
+        if (ItemUtil.playerHoldingPipe(player, hand)) return ActionResult.PASS;
 
         if (!world.isClient() && world.getBlockEntity(pos) instanceof SynthesiserBlockEntity be)
         {

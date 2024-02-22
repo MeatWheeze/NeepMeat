@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
@@ -37,7 +38,7 @@ public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEnti
 {
     public FilterPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState());
     }
 

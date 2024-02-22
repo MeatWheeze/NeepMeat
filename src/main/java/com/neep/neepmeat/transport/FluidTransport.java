@@ -32,6 +32,8 @@ public class FluidTransport
 
     // --- Fluid Pipes ---
     public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
+    public static Block ENCASED_FLUID_PIPE = BlockRegistry.queue(new EncasedFluidPipeBlock("encased_fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new).tooltip(TooltipSupplier.simple(1)), NMBlocks.FLUID_PIPE_SETTINGS));
+
     public static Block WHITE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.WHITE);
     public static Block ORANGE_FLUID_PIPE = makePipe(FluidPipe.PipeCol.ORANGE);
     public static Block MAGENTA_FLUID_PIPE = makePipe(FluidPipe.PipeCol.MAGENTA);

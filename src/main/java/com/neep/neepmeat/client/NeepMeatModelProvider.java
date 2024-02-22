@@ -78,7 +78,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_sides"), FluidPipeModel::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_sides"), VascularConduitModel::new);
 
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/encased"), EncasedConduitModel::new);
+        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/encased_conduit"), EncasedConduitModel::new);
     }
 
     public static void putScaffoldModels(Identifier topId, Identifier bottomId, Identifier itemId, Identifier sideTexture, Identifier topTexture, Block block)

@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.homogeniser;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -37,7 +37,7 @@ public class HomogeniserBlock extends BaseHorFacingBlock implements BlockEntityP
         var be = world.getBlockEntity(pos, NMBlockEntities.HOMOGENISER).orElse(null);
         if (be != null)
         {
-            return ActionResult.success(ItemUtils.singleVariantInteract(player, hand, be.getItemStorage(null)));
+            return ActionResult.success(ItemUtil.singleVariantInteract(player, hand, be.getItemStorage(null)));
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }

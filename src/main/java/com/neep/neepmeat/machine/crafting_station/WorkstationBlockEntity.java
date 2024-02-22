@@ -7,7 +7,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.inventory.CombinedInventory;
 import com.neep.neepmeat.screen_handler.DummyScreenHandler;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
@@ -169,8 +169,8 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        nbt.put("input", ItemUtils.toNbt(input));
-        nbt.put("output", ItemUtils.toNbt(output));
+        nbt.put("input", ItemUtil.toNbt(input));
+        nbt.put("output", ItemUtil.toNbt(output));
         nbt.putBoolean("inputsTaken", output.inputsTaken);
     }
 
@@ -178,8 +178,8 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        ItemUtils.readInventory(nbt.getCompound("input"), input);
-        ItemUtils.readInventory(nbt.getCompound("output"), output);
+        ItemUtil.readInventory(nbt.getCompound("input"), input);
+        ItemUtil.readInventory(nbt.getCompound("output"), output);
         this.output.inputsTaken = nbt.getBoolean("inputsTaken");
     }
 

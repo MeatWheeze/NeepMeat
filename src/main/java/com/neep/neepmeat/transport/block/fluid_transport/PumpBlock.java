@@ -3,9 +3,10 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -31,7 +32,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 {
     public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override
@@ -79,7 +80,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand))
+        if (ItemUtil.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
 
         PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);

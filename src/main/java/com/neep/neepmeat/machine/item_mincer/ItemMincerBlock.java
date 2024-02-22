@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.item_mincer;
 import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -35,7 +35,7 @@ public class ItemMincerBlock extends BaseHorFacingBlock implements BlockEntityPr
     {
         if (world.getBlockEntity(pos) instanceof ItemMincerBlockEntity be)
         {
-            return ActionResult.success(ItemUtils.singleVariantInteract(player, hand, be.storage.inputStorage));
+            return ActionResult.success(ItemUtil.singleVariantInteract(player, hand, be.storage.inputStorage));
         }
         return super.onUse(state, world, pos, player, hand, hit);
     }

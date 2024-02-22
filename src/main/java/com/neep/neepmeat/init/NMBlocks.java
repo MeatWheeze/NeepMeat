@@ -276,7 +276,7 @@ public class NMBlocks
     // --- Data ---
     public static Block DATA_CABLE = BlockRegistry.queue(new DataCableBlock("data_cable", block(), VASCULAR_CONDUIT_SETTINGS));
     public static Block VASCULAR_CONDUIT = BlockRegistry.queue(new VascularConduitBlock("vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
-    public static Block ENCASED_VASCULAR_CONDUIT = BlockRegistry.queue(new EncasedVascularConduitBlock("encased_vascular_conduit", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
+    public static Block ENCASED_VASCULAR_CONDUIT = BlockRegistry.queue(new EncasedVascularConduitBlock("encased_vascular_conduit", block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS));
     public static Block POWER_EMITTER = BlockRegistry.queue(new BaseBlock("power_emitter", block().tooltip(TooltipSupplier.simple(1)), VASCULAR_CONDUIT_SETTINGS));
     public static Block VSC = BlockRegistry.queue(new VSCBlock("vsc", block().tooltip(TooltipSupplier.hidden(1)), VASCULAR_CONDUIT_SETTINGS));
 

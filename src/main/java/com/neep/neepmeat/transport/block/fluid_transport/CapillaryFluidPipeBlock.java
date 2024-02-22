@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
@@ -30,7 +31,7 @@ public class CapillaryFluidPipeBlock extends AbstractPipeBlock implements BlockE
 {
     public CapillaryFluidPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings);
     }
 
     public static void removeStorageNodes(World world, BlockPos pos)

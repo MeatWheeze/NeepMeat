@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.AcceptorModes;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
@@ -24,7 +25,7 @@ public class CheckValveBlock extends AbstractAxialFluidPipe implements BlockEnti
 {
     public CheckValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override

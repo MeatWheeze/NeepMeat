@@ -74,6 +74,7 @@ import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitB
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.EncasedFluidPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
@@ -100,6 +101,7 @@ import net.minecraft.util.registry.Registry;
 public class NMBlockEntities
 {
     public static BlockEntityType<FluidPipeBlockEntity<?>> FLUID_PIPE;
+    public static BlockEntityType<FluidPipeBlockEntity<?>> ENCASED_FLUID_PIPE;
     public static BlockEntityType<?> CHECK_VALVE;
     public static BlockEntityType<?> STOP_VALVE;
     public static BlockEntityType<FilterPipeBlockEntity> FILTER_PIPE;
@@ -253,6 +255,7 @@ public class NMBlockEntities
                 FluidTransport.RED_FLUID_PIPE,
                 FluidTransport.BLACK_FLUID_PIPE
         );
+        ENCASED_FLUID_PIPE = register("encased_fluid_pipe", (pos, state) -> new EncasedFluidPipeBlockEntity<>(ENCASED_FLUID_PIPE, pos, state, BlockPipeVertex::new), FluidTransport.ENCASED_FLUID_PIPE);
         STOP_VALVE = register("stop_valve", (pos, state) -> new FluidPipeBlockEntity<>(STOP_VALVE, pos, state, StopValveBlock.StopValvePipeVertex::new), FluidTransport.STOP_VALVE);
         CHECK_VALVE = register("check_valve", (pos, state) -> new FluidPipeBlockEntity<>(CHECK_VALVE, pos, state, CheckValveBlock.CheckValvePipeVertex::new), FluidTransport.CHECK_VALVE);
         FILTER_PIPE = register("filter_pipe", FilterPipeBlockEntity::new, FluidTransport.FILTER_PIPE);

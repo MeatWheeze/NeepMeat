@@ -2,8 +2,9 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -19,13 +20,13 @@ public class LimiterValveBlock extends AbstractAxialFluidPipe implements BlockEn
 {
     public LimiterValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand))
+        if (ItemUtil.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
 
         world.getBlockEntity(pos, NMBlockEntities.LIMITER_VALVE).ifPresent(player::openHandledScreen);

@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.DisplayPlatformBlockEntity;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.Block;
@@ -98,7 +98,7 @@ public class DisplayPlatformBlock extends BaseBlock implements BlockEntityProvid
 
             if (blockEntity instanceof DisplayPlatformBlockEntity be)
             {
-                ItemUtils.scatterItems(world, pos, be.getStorage(null));
+                ItemUtil.scatterItems(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
             }
             super.onStateReplaced(state, world, pos, newState, moved);

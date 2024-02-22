@@ -4,7 +4,7 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
 import com.neep.neepmeat.transport.machine.item.InventoryDetectorInventory;
 import com.neep.neepmeat.util.FilterUtils;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -168,7 +168,7 @@ public class InventoryDetectorBlockEntity extends BlockEntity implements NamedSc
 
             // Get a list of ItemVariants in the filter with no duplicates
             List<ItemVariant> variants = StreamSupport.stream(InventoryStorage.of(filterInventory, facing).spliterator(), false)
-                    .filter(ItemUtils::notBlank)
+                    .filter(ItemUtil::notBlank)
                     .map(StorageView::getResource)
                     .distinct()
                     .collect(Collectors.toList());
@@ -184,8 +184,8 @@ public class InventoryDetectorBlockEntity extends BlockEntity implements NamedSc
 
             List<?> filtered = variants.stream().filter(variant ->
             {
-                Optional<Long> observedView = ItemUtils.totalAmount(InventoryStorage.of(filterInventory, facing.getOpposite()), variant, transaction);
-                Optional<Long> filterView = ItemUtils.totalAmount(observedStorage, variant, transaction);
+                Optional<Long> observedView = ItemUtil.totalAmount(InventoryStorage.of(filterInventory, facing.getOpposite()), variant, transaction);
+                Optional<Long> filterView = ItemUtil.totalAmount(observedStorage, variant, transaction);
 
                 if (observedView.isPresent() && filterView.isPresent())
                 {

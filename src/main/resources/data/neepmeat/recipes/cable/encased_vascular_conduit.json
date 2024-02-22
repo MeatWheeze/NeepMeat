@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    "svs",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:stick"
+    },
+    "v": {
+      "item": "neepmeat:vascular_conduit"
+    }
+  },
+  "result": {
+    "item": "neepmeat:encased_vascular_conduit",
+    "count": 1
+  }
+}

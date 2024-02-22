@@ -1,32 +1,41 @@
-package com.neep.neepmeat.transport.block.energy_transport.entity;
+package com.neep.neepmeat.transport.block.fluid_transport.entity;
 
-import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.meatlib.util.NbtSerialisable;
 import com.neep.neepmeat.transport.block.EncasedBlockEntity;
-import com.neep.neepmeat.transport.block.energy_transport.EncasedVascularConduitBlock;
+import com.neep.neepmeat.transport.block.fluid_transport.EncasedFluidPipeBlock;
+import com.neep.neepmeat.transport.fluid_network.PipeVertex;
+import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
+import org.jetbrains.annotations.Nullable;
 
-public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implements EncasedBlockEntity
+public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable> extends FluidPipeBlockEntity<T> implements EncasedBlockEntity
 {
     private BlockState camoState = Blocks.AIR.getDefaultState();
-    private VoxelShape cachedShape = null;
+    @Nullable private VoxelShape cachedShape;
 
-    public EncasedConduitBlockEntity(BlockPos pos, BlockState state)
+    public EncasedFluidPipeBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state, PipeConstructor<T> constructor)
     {
-        super(NMBlockEntities.ENCASED_VASCULAR_CONDUIT, pos, state);
+        super(type, pos, state, constructor);
     }
 
     @Override
-    public NbtCompound toInitialChunkDataNbt()
+    public void tick()
     {
-        var nbt = super.toInitialChunkDataNbt();
-        writeNbt(nbt);
-        return nbt;
+        super.tick();
+    }
+
+    @Override
+    public void writeNbt(NbtCompound nbt)
+    {
+        super.writeNbt(nbt);
+        nbt.put("camo_state", NbtHelper.fromBlockState(camoState));
     }
 
     @Override
@@ -34,13 +43,6 @@ public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implem
     {
         super.readNbt(nbt);
         this.camoState = NbtHelper.toBlockState(nbt.getCompound("camo_state"));
-    }
-
-    @Override
-    protected void writeNbt(NbtCompound nbt)
-    {
-        super.writeNbt(nbt);
-        nbt.put("camo_state", NbtHelper.fromBlockState(camoState));
     }
 
     @Override
@@ -53,13 +55,6 @@ public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implem
     public void setCamoState(BlockState camoState)
     {
         this.camoState = camoState;
-        cachedShape = null;
-        markDirty();
-    }
-
-    public void onNeighbourUpdate()
-    {
-        cachedShape = null;
     }
 
     @Override
@@ -74,7 +69,7 @@ public class EncasedConduitBlockEntity extends VascularConduitBlockEntity implem
             }
             else
             {
-                if (getCachedState().getBlock() instanceof EncasedVascularConduitBlock block)
+                if (getCachedState().getBlock() instanceof EncasedFluidPipeBlock block)
                 {
                     cachedShape = block.getPipeOutlineShape(getCachedState(), world, getPos());
                 }

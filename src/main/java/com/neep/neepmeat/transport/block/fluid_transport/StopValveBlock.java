@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.AbstractAxialFluidPipe;
 import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
@@ -29,7 +30,7 @@ public class StopValveBlock extends AbstractAxialFluidPipe implements BlockEntit
 
     public StopValveBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
         this.setDefaultState(this.getStateManager().getDefaultState()
                 .with(OPEN, true)
                 .with(POWERED, false));

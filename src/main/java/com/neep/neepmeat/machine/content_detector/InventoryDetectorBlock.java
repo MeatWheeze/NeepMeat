@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.content_detector;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -86,7 +86,7 @@ public class InventoryDetectorBlock extends BaseFacingBlock implements BlockEnti
         if (!newState.isOf(state.getBlock()))
         {
             world.getBlockEntity(pos, NMBlockEntities.INVENTORY_DETECTOR).ifPresent(be ->
-                    ItemUtils.scatterItems(world, pos, be.getStorage(null)));
+                    ItemUtil.scatterItems(world, pos, be.getStorage(null)));
         }
 
         super.onStateReplaced(state, world, pos, newState, moved);

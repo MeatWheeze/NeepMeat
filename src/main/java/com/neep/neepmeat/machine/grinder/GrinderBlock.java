@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBlock;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -49,7 +49,7 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
                 be.ejectXP();
                 return ActionResult.SUCCESS;
             }
-            return ActionResult.success(ItemUtils.singleVariantInteract(player, hand, be.getStorage().getInputStorage()));
+            return ActionResult.success(ItemUtil.singleVariantInteract(player, hand, be.getStorage().getInputStorage()));
         }
         return ActionResult.SUCCESS;
     }

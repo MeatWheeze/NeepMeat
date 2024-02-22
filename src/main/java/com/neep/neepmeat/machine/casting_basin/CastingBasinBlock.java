@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.casting_basin;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -41,7 +41,7 @@ public class CastingBasinBlock extends BaseBlock implements BlockEntityProvider
     {
         if (world.getBlockEntity(pos) instanceof CastingBasinBlockEntity be)
         {
-            ItemUtils.singleVariantInteract(player, hand, be.getStorage().outputStorage);
+            ItemUtil.singleVariantInteract(player, hand, be.getStorage().outputStorage);
         }
         return ActionResult.SUCCESS;
     }

@@ -11,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.nbt.NbtList;
@@ -24,20 +25,8 @@ import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemUtils
+public class ItemUtil
 {
-    public static boolean containsStack(List<ItemStack> list, ItemStack stack)
-    {
-        for (ItemStack itemStack : list)
-        {
-            if (ItemStack.areEqual(stack, itemStack))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static boolean containsResource(List<StorageView<ItemVariant>> list, ItemVariant stack)
     {
         for (StorageView<ItemVariant> patternStack : list)
@@ -61,11 +50,6 @@ public class ItemUtils
             }
         }
         return false;
-    }
-
-    public static boolean notBlank(ItemStack stack)
-    {
-        return !stack.isEmpty();
     }
 
     public static boolean notBlank(StorageView<ItemVariant> view)
@@ -129,74 +113,9 @@ public class ItemUtils
                 || blockItem instanceof FluidComponentItem);
     }
 
-    public static boolean insertItem(ItemStack stack, Inventory inventory, int startIndex, int endIndex, boolean fromLast)
+    public static boolean checkFluidComponent(Item item)
     {
-        ItemStack itemStack;
-        boolean bl = false;
-        int i = startIndex;
-        if (fromLast)
-        {
-            i = endIndex - 1;
-        }
-        if (stack.isStackable())
-        {
-            while (!stack.isEmpty() && (fromLast ? i >= startIndex : i < endIndex))
-            {
-                itemStack = inventory.getStack(i);
-                if (!itemStack.isEmpty() && ItemStack.canCombine(stack, itemStack))
-                {
-                    int j = itemStack.getCount() + stack.getCount();
-                    if (j <= stack.getMaxCount())
-                    {
-                        stack.setCount(0);
-                        itemStack.setCount(j);
-                        inventory.markDirty();
-                        bl = true;
-                    } else if (itemStack.getCount() < stack.getMaxCount())
-
-                    {
-                        stack.decrement(stack.getMaxCount() - itemStack.getCount());
-                        itemStack.setCount(stack.getMaxCount());
-                        inventory.markDirty();
-                        bl = true;
-                    }
-                }
-                if (fromLast)
-                {
-                    --i;
-                    continue;
-                }
-                ++i;
-            }
-        }
-        if (!stack.isEmpty())
-        {
-            i = fromLast ? endIndex - 1 : startIndex;
-            while (fromLast ? i >= startIndex : i < endIndex)
-            {
-                itemStack = inventory.getStack(i);
-                if (itemStack.isEmpty()) // Removed canInsert call
-                {
-//                    if (stack.getCount() > slot.getMaxItemCount())
-//                    {
-//                        slot.setStack(stack.split(slot.getMaxItemCount()));
-//                    }
-                    {
-                        inventory.setStack(i, stack.split(stack.getCount()));
-                    }
-                    inventory.markDirty();
-                    bl = true;
-                    break;
-                }
-                if (fromLast)
-                {
-                    --i;
-                    continue;
-                }
-                ++i;
-            }
-        }
-        return bl;
+        return item instanceof BlockItem bi && bi instanceof FluidComponentItem;
     }
 
     public static NbtCompound toNbt(Inventory inventory)

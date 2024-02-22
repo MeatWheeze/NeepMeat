@@ -4,7 +4,7 @@ import com.neep.meatlib.block.BaseColumnBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.block.BlockEntityProvider;
@@ -77,7 +77,7 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (ItemUtils.playerHoldingPipe(player, hand))
+        if (ItemUtil.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
 
         if (world.getBlockEntity(pos) instanceof TankBlockEntity tank && tank.onUse(player, hand))

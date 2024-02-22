@@ -28,19 +28,20 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_centre"
+        "model": "neepmeat:block/rusty_pipe/pipe_centre"
       }
     },
+
     {
       "when": {
         "OR": [
-            {"north": "true", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
-            {"north": "true", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
-            {"north": "false|forced", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"}
-          ]
+          {"north": "true", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
+          {"north": "true", "south": "false|forced", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"},
+          {"north": "false|forced", "south": "true", "up": "false|forced", "down": "false|forced", "east": "false|forced", "west": "false|forced"}
+        ]
       },
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_centre_ns"
+        "model": "neepmeat:block/rusty_pipe/pipe_centre_ns"
       }
     },
     {
@@ -52,8 +53,7 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_centre_ew",
-        "y": 180
+        "model": "neepmeat:block/rusty_pipe/pipe_centre_ew"
       }
     },
     {
@@ -65,14 +65,14 @@
         ]
       },
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_centre_ns",
-        "x": -90
+        "model": "neepmeat:block/rusty_pipe/pipe_centre_ns",
+        "x": 90
       }
     },
 
     {
       "apply": {
-        "model": "neepmeat:block/vascular_conduit/pipe_sides"
+        "model": "neepmeat:block/rusty_pipe/pipe_sides"
       }
     }
   ]

@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.dumper;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.util.ItemUtils;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -69,7 +69,7 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof DumperBlockEntity be)
             {
-                ItemUtils.scatterItems(world, pos, be.getStorage(null));
+                ItemUtil.scatterItems(world, pos, be.getStorage(null));
                 world.updateComparators(pos,this);
             }
         }
@@ -91,7 +91,7 @@ public class DumperBlock extends BaseBlock implements BlockEntityProvider
     {
         if (world.getBlockEntity(pos) instanceof DumperBlockEntity be && !world.isClient)
         {
-            ItemUtils.singleVariantInteract(player, hand, be.getStorage(null));
+            ItemUtil.singleVariantInteract(player, hand, be.getStorage(null));
         }
         return ActionResult.SUCCESS;
     }
