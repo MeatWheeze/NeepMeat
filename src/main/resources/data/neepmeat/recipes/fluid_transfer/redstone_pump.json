@@ -13,7 +13,7 @@
       "item": "minecraft:iron_ingot"
     },
     "I": {
-      "item": "neepmeat:fluid_pipe"
+      "tag": "neepmeat:fluid_pipes"
     },
     "s": {
       "item": "minecraft:piston"

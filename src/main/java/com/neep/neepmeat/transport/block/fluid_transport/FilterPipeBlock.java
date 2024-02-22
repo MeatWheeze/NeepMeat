@@ -122,8 +122,7 @@ public class FilterPipeBlock extends AbstractAxialFluidPipe implements BlockEnti
     {
         if (world.getBlockEntity(pos) instanceof FilterPipeBlockEntity be)
         {
-            int c = FluidVariantRendering.getColor(be.getFilterVariant());
-            return c;
+            return FluidVariantRendering.getColor(be.getFilterVariant());
         }
         return 0;
     }

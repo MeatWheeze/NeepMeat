@@ -6,10 +6,9 @@ import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.api.processing.OreFatRegistry;
 import com.neep.neepmeat.block.entity.FurnaceBurnerImpl;
-import com.neep.neepmeat.datagen.NMRecipes;
+import com.neep.neepmeat.datagen.NMRecipeGenerator;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.enlightenment.LimbEnlightenmentEvent;
 import com.neep.neepmeat.entity.effect.NMStatusEffects;
@@ -50,10 +49,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.example.GeckoLibMod;
 import software.bernie.geckolib3.GeckoLib;
-
-import javax.print.attribute.standard.MediaSize;
 
 public class NeepMeat implements ModInitializer
 {
@@ -73,7 +69,7 @@ public class NeepMeat implements ModInitializer
 			GeckoLib.initialize();
 
 			NMrecipeTypes.init();
-			NMRecipes.init();
+			NMRecipeGenerator.init();
 			new NMBlocks();
 			new NMItems();
 			NMLootTables.init();

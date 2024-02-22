@@ -1,6 +1,7 @@
 package com.neep.neepmeat.transport;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -21,12 +22,13 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 public class FluidTransport
 {
     public static long MAX_TRANSFER = FluidConstants.BUCKET / 8;
 
-    public static final List<FluidPipeBlock> COLOURED_FLUID_PIPES = Lists.newArrayList();
+    public static final Map<FluidPipe.PipeCol, FluidPipeBlock> COLOURED_FLUID_PIPES = Maps.newEnumMap(FluidPipe.PipeCol.class);
 
     // --- Fluid Pipes ---
     public static Block FLUID_PIPE = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe", FluidPipe.PipeCol.ANY, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
@@ -91,7 +93,7 @@ public class FluidTransport
     private static FluidPipeBlock makePipe(FluidPipe.PipeCol col)
     {
         var pipe = BlockRegistry.queue(new FluidPipeBlock("fluid_pipe_" + col.name().toLowerCase(), col, NMBlocks.block().factory(FluidComponentItem::new), NMBlocks.FLUID_PIPE_SETTINGS));
-        COLOURED_FLUID_PIPES.add(pipe);
+        COLOURED_FLUID_PIPES.put(col, pipe);
         return pipe;
     }
 

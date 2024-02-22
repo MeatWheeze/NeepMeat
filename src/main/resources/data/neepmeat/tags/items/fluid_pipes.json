@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "neepmeat:fluid_pipe",
+    "neepmeat:fluid_pipe_white",
+    "neepmeat:fluid_pipe_orange",
+    "neepmeat:fluid_pipe_magenta",
+    "neepmeat:fluid_pipe_light_blue",
+    "neepmeat:fluid_pipe_yellow",
+    "neepmeat:fluid_pipe_lime",
+    "neepmeat:fluid_pipe_pink",
+    "neepmeat:fluid_pipe_gray",
+    "neepmeat:fluid_pipe_light_gray",
+    "neepmeat:fluid_pipe_cyan",
+    "neepmeat:fluid_pipe_purple",
+    "neepmeat:fluid_pipe_blue",
+    "neepmeat:fluid_pipe_brown",
+    "neepmeat:fluid_pipe_green",
+    "neepmeat:fluid_pipe_red",
+    "neepmeat:fluid_pipe_black"
+  ]
+}

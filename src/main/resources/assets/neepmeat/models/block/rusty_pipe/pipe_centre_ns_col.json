@@ -2,6 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"1": "neepmeat:block/rusty_pipe/rusty_pipe_centre",
+		"2": "neepmeat:block/rusty_pipe/rusty_pipe_col",
 		"particle": "neepmeat:block/rusty_pipe/rusty_pipe_centre"
 	},
 	"elements": [
@@ -19,21 +20,14 @@
 			}
 		},
 		{
-			"from": [4.975, 6, 6],
-			"to": [11.025, 10, 10],
+			"from": [4.975, 4.975, 6],
+			"to": [11.025, 11.025, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
-				"east": {"uv": [8, 12, 12, 16], "texture": "#1", "tintindex": 1},
-				"west": {"uv": [8, 12, 12, 16], "texture": "#1", "tintindex": 1}
-			}
-		},
-		{
-			"from": [6, 4.975, 6],
-			"to": [10, 11.025, 10],
-			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
-			"faces": {
-				"up": {"uv": [8, 12, 12, 16], "rotation": 90, "texture": "#1", "tintindex": 1},
-				"down": {"uv": [8, 12, 12, 16], "rotation": 90, "texture": "#1", "tintindex": 1}
+				"east": {"uv": [0, 0, 4, 6], "texture": "#2", "tintindex": 1},
+				"west": {"uv": [0, 0, 4, 6], "texture": "#2", "tintindex": 1},
+				"up": {"uv": [0, 0, 4, 6], "rotation": 90, "texture": "#2", "tintindex": 1},
+				"down": {"uv": [0, 0, 4, 6], "rotation": 270, "texture": "#2", "tintindex": 1}
 			}
 		}
 	]

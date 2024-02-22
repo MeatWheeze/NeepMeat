@@ -7,7 +7,7 @@
   ],
   "key": {
     "p": {
-      "item": "neepmeat:fluid_pipe"
+      "tag": "neepmeat:fluid_pipes"
     },
     "c": {
       "item": "minecraft:iron_ingot"

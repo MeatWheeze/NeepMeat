@@ -2,6 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"1": "neepmeat:block/rusty_pipe/rusty_pipe_centre",
+		"2": "neepmeat:block/rusty_pipe/rusty_pipe_col",
 		"particle": "neepmeat:block/rusty_pipe/rusty_pipe_centre"
 	},
 	"elements": [
@@ -22,8 +23,8 @@
 			"from": [6, 6, 4.975],
 			"to": [10, 10, 11.025],
 			"faces": {
-				"north": {"uv": [12, 12, 16, 16], "texture": "#1", "tintindex": 1},
-				"south": {"uv": [12, 12, 16, 16], "texture": "#1", "tintindex": 1}
+				"north": {"uv": [12, 12, 16, 16], "texture": "#2", "tintindex": 1},
+				"south": {"uv": [12, 12, 16, 16], "texture": "#2", "tintindex": 1}
 			}
 		},
 		{
@@ -31,8 +32,8 @@
 			"to": [11.025, 10, 10],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 8]},
 			"faces": {
-				"east": {"uv": [12, 12, 16, 16], "texture": "#1", "tintindex": 1},
-				"west": {"uv": [12, 12, 16, 16], "texture": "#1", "tintindex": 1}
+				"east": {"uv": [12, 12, 16, 16], "texture": "#2", "tintindex": 1},
+				"west": {"uv": [12, 12, 16, 16], "texture": "#2", "tintindex": 1}
 			}
 		},
 		{
@@ -40,8 +41,8 @@
 			"to": [10, 11.025, 10],
 			"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
 			"faces": {
-				"up": {"uv": [12, 12, 16, 16], "rotation": 90, "texture": "#1", "tintindex": 1},
-				"down": {"uv": [12, 12, 16, 16], "rotation": 90, "texture": "#1", "tintindex": 1}
+				"up": {"uv": [12, 12, 16, 16], "rotation": 90, "texture": "#2", "tintindex": 1},
+				"down": {"uv": [12, 12, 16, 16], "rotation": 90, "texture": "#2", "tintindex": 1}
 			}
 		}
 	]

@@ -230,11 +230,16 @@ public interface FluidPipe
         RED(DyeColor.RED),
         BLACK(DyeColor.BLACK) ;
 
-        private final DyeColor dyeColor;
+        public final DyeColor dyeCol;
 
-        PipeCol(DyeColor dyeColor)
+        PipeCol(DyeColor dyeCol)
         {
-            this.dyeColor = dyeColor;
+            this.dyeCol = dyeCol;
+        }
+
+        public static PipeCol get(DyeColor dyeCol)
+        {
+            return values()[dyeCol.ordinal() + 1];
         }
 
         public boolean matches(PipeCol other)
@@ -244,7 +249,7 @@ public interface FluidPipe
 
         public int hexCode()
         {
-            return dyeColor.getFireworkColor();
+            return dyeCol.getFireworkColor();
         }
     }
 }

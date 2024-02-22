@@ -217,7 +217,7 @@ public class NeepMeatClient implements ClientModInitializer
         }
 
         // Pipes
-        for (var pipe : FluidTransport.COLOURED_FLUID_PIPES)
+        for (var pipe : FluidTransport.COLOURED_FLUID_PIPES.values())
         {
             ColorProviderRegistry.BLOCK.register(FluidPipeBlock::getTint, pipe);
             BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), pipe);

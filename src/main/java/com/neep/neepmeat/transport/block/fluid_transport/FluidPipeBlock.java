@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FilterPipeBlockEntity;
@@ -23,10 +24,14 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.DyeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DyeColor;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -41,7 +46,7 @@ import software.bernie.geckolib3.core.util.Color;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe
 {
-    private final PipeCol col;
+    public final PipeCol col;
 
     public FluidPipeBlock(String itemName, FluidPipe.PipeCol col, ItemSettings itemSettings, Settings settings)
     {
@@ -152,9 +157,11 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         return state.with(DIR_TO_CONNECTION.get(direction), finalConnection);
     }
 
+    @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.getStackInHand(hand).isOf(Items.STICK))
+        ItemStack stack = player.getStackInHand(hand);
+        if (stack.isOf(Items.STICK))
         {
             if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
             {
@@ -168,6 +175,22 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
             }
             return ActionResult.SUCCESS;
         }
+        else if (stack.getItem() instanceof DyeItem dyeItem)
+        {
+            PipeCol newCol = PipeCol.get(dyeItem.getColor());
+            if (newCol != col)
+            {
+                FluidPipeBlock newPipe = FluidTransport.COLOURED_FLUID_PIPES.get(newCol);
+                world.setBlockState(pos, newPipe.getStateWithProperties(state));
+                world.playSound(player, pos, SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.BLOCKS, 1, 1);
+                return ActionResult.SUCCESS;
+            }
+            else
+            {
+                return ActionResult.FAIL;
+            }
+        }
+
         return super.onUse(state, world, pos, player, hand, hit);
     }
 
@@ -249,6 +272,7 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         return 0xFFFFFF;
     }
 
+    @Environment(value= EnvType.CLIENT)
     public static int getItemTint(ItemStack stack, int i)
     {
         if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof FluidPipeBlock fluidPipeBlock)
