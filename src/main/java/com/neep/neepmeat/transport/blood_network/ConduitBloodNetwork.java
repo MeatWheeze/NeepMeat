@@ -27,8 +27,8 @@ public class ConduitBloodNetwork implements BloodNetwork
     protected final BloodNetGraph conduits;
     protected AcceptorManager acceptors = new AcceptorManager(this);
 
-    protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
-//    protected boolean updateSinks = false;
+//    protected LinkedHashSet<BloodAcceptor> sinkUpdateQueue = Sets.newLinkedHashSet();
+    protected boolean updateSinks = false;
 
     protected long lastInternal = 0;
     protected boolean removed = false;
@@ -61,7 +61,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         acceptors.stream().forEach(this::removeAcceptor);
 
         acceptors.clear();
-        sinkUpdateQueue.clear();
+        updateSinks = false;
 
         // Rediscover conduits and acceptors, leaving disconnected branches with null network.
         conduits.rebuild(pos);
@@ -102,12 +102,13 @@ public class ConduitBloodNetwork implements BloodNetwork
 
         if (internal != lastInternal)
         {
-            sinkUpdateQueue.addAll(acceptors.sinks().asList());
-            sinkUpdateQueue.addAll(acceptors.activeSinks().asList());
+            updateSinks = true;
+//            sinkUpdateQueue.addAll(acceptors.sinks().asList());
+//            sinkUpdateQueue.addAll(acceptors.activeSinks().asList());
             lastInternal = internal;
         }
 
-        if (!sinkUpdateQueue.isEmpty())
+        if (updateSinks)
         {
             float outputPU = ((float) (internal)) / PowerUtils.referencePower();
             for (var consumer : acceptors.activeSinks().asList())
@@ -123,7 +124,7 @@ public class ConduitBloodNetwork implements BloodNetwork
                 sink.updateInflux(perSink);
             }
 
-            sinkUpdateQueue.clear();
+            updateSinks = false;
         }
 
 //        var sit = sinkUpdateQueue.iterator();
@@ -139,8 +140,7 @@ public class ConduitBloodNetwork implements BloodNetwork
     @Override
     public void updateTransfer(@Nullable BloodAcceptor changed)
     {
-        // TODO: replace with boolean flag
-        sinkUpdateQueue.add(() -> null);
+        updateSinks = true;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         conduits.insert(pos, newPart); // Acceptors will be detected automatically
         newPart.setNetwork(this);
 
-        sinkUpdateQueue.addAll(acceptors.sinks().asList());
+        updateSinks = true;
         dirty = true;
     }
 
@@ -177,7 +177,7 @@ public class ConduitBloodNetwork implements BloodNetwork
 
         conduits.remove(pos.asLong());
 
-        sinkUpdateQueue.addAll(acceptors.sinks().asList());
+        updateSinks = true;
 
         validate();
         dirty = true;
@@ -199,7 +199,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         conduits.remove(pos.asLong());
         conduits.insert(pos.asLong(), part);
 
-        sinkUpdateQueue.addAll(acceptors.sinks().asList());
+        updateSinks = true;
 
         validate();
         dirty = true;
@@ -238,7 +238,7 @@ public class ConduitBloodNetwork implements BloodNetwork
         }
 
         acceptors.sort();
-        sinkUpdateQueue.addAll(acceptors.sinks().asList());
+        updateSinks = true;
 
         dirty = true;
     }
@@ -295,7 +295,7 @@ public class ConduitBloodNetwork implements BloodNetwork
                 if (acceptor != null)
                 {
                     add(pos.asLong(), direction.getId(), acceptor);
-                    sinkUpdateQueue.add(acceptor);
+                    updateSinks = true;
                 }
             }
         }
