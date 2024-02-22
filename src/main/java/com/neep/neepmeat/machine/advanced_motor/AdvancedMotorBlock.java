@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.motor.MotorEntity;
+import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
@@ -35,7 +36,7 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.getStackInHand(hand).isOf(NMBlocks.VASCULAR_CONDUIT.asItem()))
+        if (VascularConduitBlock.matches(player.getStackInHand(hand)))
         {
             return ActionResult.PASS;
         }

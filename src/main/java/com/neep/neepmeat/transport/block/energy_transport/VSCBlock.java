@@ -32,7 +32,7 @@ public class VSCBlock extends BaseFacingBlock implements BlockEntityProvider
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.getStackInHand(hand).isOf(NMBlocks.VASCULAR_CONDUIT.asItem()))
+        if (VascularConduitBlock.matches(player.getStackInHand(hand)))
             return super.onUse(state, world, pos, player, hand, hit);
 
         if (world.getBlockEntity(pos) instanceof VSCBlockEntity be)

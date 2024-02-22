@@ -9,6 +9,7 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -48,6 +49,7 @@ public class EncasedVascularConduitBlock extends VascularConduitBlock
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
         if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
         {
+            be.setCachedState(state);
             be.onNeighbourUpdate();
         }
     }
@@ -66,7 +68,10 @@ public class EncasedVascularConduitBlock extends VascularConduitBlock
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
         ItemStack stack = player.getStackInHand(hand);
-        if (stack.getItem() instanceof BlockItem bi && world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        Item item = stack.getItem();
+        if (!VascularConduitBlock.matches(stack)
+                && item instanceof BlockItem bi
+                && world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
         {
             BlockState camoState = bi.getBlock().getPlacementState(new ItemPlacementContext(player, hand, stack, hit));
             be.setCamoState(camoState);
