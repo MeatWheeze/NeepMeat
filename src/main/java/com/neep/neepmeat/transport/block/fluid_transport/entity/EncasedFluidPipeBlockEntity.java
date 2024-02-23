@@ -55,6 +55,7 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     public void setCamoState(BlockState camoState)
     {
         this.camoState = camoState;
+        this.cachedShape = null;
     }
 
     @Override

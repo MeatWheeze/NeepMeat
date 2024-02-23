@@ -4,8 +4,10 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.EncasedBlock;
 import com.neep.neepmeat.transport.block.EncasedBlockEntity;
+import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
@@ -43,6 +45,27 @@ public class EncasedFluidPipeBlock extends FluidPipeBlock implements EncasedBloc
             return be.getCamoShape();
         }
         return super.getOutlineShape(state, view, pos, context);
+    }
+
+    @Override
+    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block sourceBlock, BlockPos sourcePos, boolean notify)
+    {
+        super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
+        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        {
+            be.setCachedState(state);
+            be.onNeighbourUpdate();
+        }
+    }
+
+    @Override
+    public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
+    {
+        super.onConnectionUpdate(world, state, newState, pos, entity);
+        if (world.getBlockEntity(pos) instanceof EncasedConduitBlockEntity be)
+        {
+            be.onNeighbourUpdate();
+        }
     }
 
     @Override
