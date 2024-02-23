@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_red_concrete": {
+    "has_blue_concrete": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:red_concrete"
+              "minecraft:blue_concrete"
             ]
           }
         ]
@@ -34,7 +34,7 @@
   },
   "requirements": [
     [
-      "has_red_concrete",
+      "has_blue_concrete",
       "has_sand",
       "has_the_recipe"
     ]

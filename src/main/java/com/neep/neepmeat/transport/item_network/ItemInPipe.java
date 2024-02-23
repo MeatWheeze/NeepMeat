@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.item_network;
 
+import com.google.common.collect.Lists;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
@@ -11,6 +12,8 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -204,6 +207,9 @@ public class ItemInPipe
         newItem.speed = speed;
         newItem.tickEnd = tickEnd;
         newItem.pipeTicks = pipeTicks;
+
+        newItem.route = new ArrayList<>(route.size());
+        newItem.route.addAll(route);
 
         return newItem;
     }

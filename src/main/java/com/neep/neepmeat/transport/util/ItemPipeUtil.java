@@ -231,34 +231,37 @@ public class ItemPipeUtil
 
             visited.add(current.asLong());
 
-            if (!currentPipe.singleOutput() && currentPipe.getConnections(currentState, v -> true).size() > 2)
+            var connections = currentPipe.getConnections(currentState, v -> v != currentDir);
+            if (!currentPipe.singleOutput() && connections.size() > 1)
             {
                 return item.amount();
             }
-
-            for (Direction direction : Direction.values())
+            if (connections.isEmpty())
             {
-                if (direction == currentDir) continue;
+                return 0;
+            }
 
-                BlockPos offset = current.offset(direction);
-                BlockState offsetState = world.getBlockState(offset);
-                if (currentPipe.canItemLeave(item, world, current, currentState, direction))
+            Direction direction = connections.get(0);
+
+            BlockPos offset = current.offset(direction);
+            BlockState offsetState = world.getBlockState(offset);
+            if (currentPipe.canItemLeave(item, world, current, currentState, direction))
+            {
+                if (offsetState.isAir())
+                    return item.amount();
+
+                Storage<ItemVariant> storage;
+                if (offsetState.getBlock() instanceof ItemPipe pipe
+                                && pipe.canItemEnter(item, world, offset, offsetState, direction.getOpposite())
+                                && !visited.contains(offset.asLong()))
                 {
-                    if (offsetState.isAir()) return item.amount();
-
-                    Storage<ItemVariant> storage;
-                    if (offsetState.getBlock() instanceof ItemPipe pipe
-                                    && pipe.canItemEnter(item, world, offset, offsetState, direction.getOpposite())
-                                    && !visited.contains(offset.asLong()))
-                    {
-                        queue.add(offset);
-                        pipeQueue.add(pipe);
-                        dirQueue.add(direction.getOpposite());
-                    }
-                    else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
-                    {
-                        return MeatlibStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
-                    }
+                    queue.add(offset);
+                    pipeQueue.add(pipe);
+                    dirQueue.add(direction.getOpposite());
+                }
+                else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
+                {
+                    return MeatlibStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
                 }
             }
         }
