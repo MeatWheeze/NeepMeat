@@ -24,7 +24,8 @@ public class MeatLib implements ModInitializer
 
     public static void assertActive(Object object)
     {
-        if (CURRENT_NAMESPACE == null) throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
+        if (CURRENT_NAMESPACE == null)
+            throw new IllegalStateException("MeatLib: Object '" + object + "' was queued for registration without a namespace");
     }
 
     public static Context getContext(String namespace)

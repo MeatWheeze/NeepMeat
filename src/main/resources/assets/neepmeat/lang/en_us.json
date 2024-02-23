@@ -422,6 +422,7 @@
   "block.neepmeat.blood_bubble_planks_trapdoor": "Blood Bubble Planks Trapdoor",
   "block.neepmeat.blood_bubble_planks_fence_gate": "Blood Bubble Planks Fence Gate",
   "block.neepmeat.blood_bubble_planks_pressure_plate": "Blood Bubble Planks Pressure Plate",
+  "block.neepmeat.blood_bubble_planks_pressure_plate.lore_0": "Only emits a signal into the block below.",
 
   "block.neepmeat.statue": "Mysterious Statue",
 
