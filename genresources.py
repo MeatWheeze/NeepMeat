@@ -8,6 +8,8 @@ blocks = [
     'grey_rough_concrete',
     'yellow_rough_concrete',
     'white_rough_concrete',
+    'red_rough_concrete',
+    'blue_rough_concrete',
     'yellow_tiles',
     'filled_scaffold',
     'caution_block',
@@ -23,7 +25,7 @@ blocks = [
 ]
 
 wood_blocks = [
-    'blood_bubble_planks',
+    # 'blood_bubble_planks',
 ]
 
 for name in blocks:

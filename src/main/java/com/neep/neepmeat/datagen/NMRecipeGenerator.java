@@ -30,6 +30,8 @@ public class NMRecipeGenerator
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.WHITE_ROUGH_CONCRETE, Items.SAND, Blocks.WHITE_CONCRETE);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.GREY_ROUGH_CONCRETE, Items.SAND, Blocks.GRAY_CONCRETE);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.YELLOW_ROUGH_CONCRETE, Items.SAND, Blocks.YELLOW_CONCRETE);
+        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.RED_ROUGH_CONCRETE, Items.SAND, Blocks.RED_CONCRETE);
+        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.BLUE_ROUGH_CONCRETE, Items.SAND, Blocks.BLUE_CONCRETE);
 
 //        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.BLUE_SCAFFOLD, Items.BLUE_DYE, NMTags.METAL_SCAFFOLDING);
 //        MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.YELLOW_SCAFFOLD, Items.YELLOW_DYE, NMTags.METAL_SCAFFOLDING);

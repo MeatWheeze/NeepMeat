@@ -1,0 +1,14 @@
+{
+  "__comment__": "This file was automatically created by mcresources",
+  "variants": {
+    "type=bottom": {
+      "model": "neepmeat:block/blue_rough_concrete_slab"
+    },
+    "type=top": {
+      "model": "neepmeat:block/blue_rough_concrete_slab_top"
+    },
+    "type=double": {
+      "model": "neepmeat:block/blue_rough_concrete"
+    }
+  }
+}
