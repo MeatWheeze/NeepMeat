@@ -112,6 +112,6 @@ public class MWClient implements ClientModInitializer
             }
         });
 
-        PlayerAttachmentManager.registerAttachment(DrillSoundInstance.ATTACHMENT_ID, DrillSoundInstance::new);
+//        PlayerAttachmentManager.registerAttachment(DrillSoundInstance.ATTACHMENT_ID, DrillSoundInstance::new);
     }
 }

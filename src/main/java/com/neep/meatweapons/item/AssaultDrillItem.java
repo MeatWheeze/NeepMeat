@@ -7,12 +7,15 @@ import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.sound.DrillSoundInstance;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.transfer.v1.context.ContainerItemContext;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -28,6 +31,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.sound.SoundManager;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityGroup;
@@ -39,6 +43,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -240,9 +245,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
 
     public static boolean using(ItemStack stack)
     {
-        if (stack.getItem() instanceof AssaultDrillItem)
+        if (stack.getItem() instanceof AssaultDrillItem && stack.hasNbt())
         {
-            return stack.getOrCreateNbt().getBoolean("using");
+            NbtCompound nbt = stack.getNbt();
+            return nbt.getBoolean("using") || nbt.getBoolean("attacking");
         }
         return false;
     }
@@ -436,8 +442,12 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     @Environment(EnvType.CLIENT)
     public static class Client
     {
+        private static final DrillSoundInstance soundInstance = new DrillSoundInstance();
+
         public static void init()
         {
+            ClientTickEvents.START_CLIENT_TICK.register(Client::tick);
+
             InputEvents.POST_INPUT.register((window, key, scancode, action, modifiers) ->
             {
                 MinecraftClient client = MinecraftClient.getInstance();
@@ -461,6 +471,28 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
                     }
                 }
             });
+
+        }
+
+        public static void tick(MinecraftClient client)
+        {
+            SoundManager manager = client.getSoundManager();
+            PlayerEntity player = client.player;
+            if (player != null)
+            {
+                if (player.getStackInHand(Hand.MAIN_HAND).isOf(MWItems.ASSAULT_DRILL))
+                {
+                    if (!manager.isPlaying(soundInstance))
+                    {
+                        soundInstance.setPlayer(player);
+                        manager.play(soundInstance);
+                    }
+                }
+                else if (manager.isPlaying(soundInstance))
+                {
+                    manager.stop(soundInstance);
+                }
+            }
         }
     }
 }
