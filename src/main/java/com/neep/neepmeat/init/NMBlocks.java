@@ -292,7 +292,7 @@ public class NMBlocks
     public static Block BLOOD_BUBBLE_LOG = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_log", TooltipSupplier.blank()));
     public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_wood", TooltipSupplier.blank()));
     public static Block BLOOD_BUBBLE_LEAVES = BlockRegistry.queue(new BloodBubbleLeavesBlock("blood_bubble_leaves", FabricBlockSettings.copyOf(Blocks.AZALEA_LEAVES).sounds(BlockSoundGroup.AZALEA_LEAVES)));
-    public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = BlockRegistry.queue(new BloodBubbleLeavesBlock("blood_bubble_leaves_flowering", FabricBlockSettings.copyOf(Blocks.AZALEA_LEAVES).sounds(BlockSoundGroup.SLIME)));
+    public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = BlockRegistry.queue(new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock("blood_bubble_leaves_flowering", FabricBlockSettings.copyOf(Blocks.AZALEA_LEAVES).sounds(BlockSoundGroup.SLIME)));
     public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock("blood_bubble_planks", true, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD));
     public static Block BLOOD_BUBBLE_TRAPDOOR = BlockRegistry.queueWithItem(new TrapdoorBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_trapdoor");
     public static Block BLOOD_BUBBLE_DOOR = BlockRegistry.queueWithItem(new DoorBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_door");

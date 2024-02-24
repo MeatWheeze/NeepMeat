@@ -25,7 +25,8 @@ public class BlockLootTableProvider extends FabricBlockLootTableProvider
             if (entry.getValue() instanceof MeatlibBlock meatBlock)
             {
                 ItemConvertible like = meatBlock.dropsLike();
-                if (meatBlock.autoGenDrop() && like != null) this.addDrop(entry.getValue(), like);
+                if (meatBlock.autoGenDrop() && like != null)
+                    this.addDrop(entry.getValue(), like);
             }
         }
     }
