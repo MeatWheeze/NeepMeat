@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.util;
 
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
+import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
 import com.neep.neepmeat.transport.machine.item.ItemPumpBlock;
@@ -144,7 +145,7 @@ public class ItemPipeUtil
             if (simpleCheck)
             {
                 // Limit maximum transfer amount to this
-                long simpleAmount = canEjectSimple(item.toResourceAmount(), world, toPos, out, transaction);
+                long simpleAmount = singleRouteCapacity(item.toResourceAmount(), world, toPos, out, transaction);
                 maxAmount = Math.min(maxAmount, simpleAmount);
             }
             if (maxAmount != 0)
@@ -210,7 +211,7 @@ public class ItemPipeUtil
     /** Simple route detection that does not take branches into account.
      * @return Number of items that can be safely transferred. Takes max value if a branch is met.
      */
-    public static long canEjectSimple(ResourceAmount<ItemVariant> item, World world, BlockPos startPipe, Direction exit, @Nullable TransactionContext transaction)
+    public static long singleRouteCapacity(ResourceAmount<ItemVariant> item, World world, BlockPos startPipe, Direction exit, @Nullable TransactionContext transaction)
     {
         Queue<BlockPos> queue = new LinkedList<>();
         Queue<ItemPipe> pipeQueue = new LinkedList<>();
@@ -221,6 +222,8 @@ public class ItemPipeUtil
         pipeQueue.add((ItemPipe) world.getBlockState(startPipe).getBlock());
         dirQueue.add(exit.getOpposite());
         visited.add(startPipe.offset(exit.getOpposite()).asLong());
+
+        long alreadyInTransit = 0;
 
         while (!queue.isEmpty())
         {
@@ -245,6 +248,16 @@ public class ItemPipeUtil
 
             BlockPos offset = current.offset(direction);
             BlockState offsetState = world.getBlockState(offset);
+
+            if (world.getBlockEntity(current) instanceof ItemPipeBlockEntity be)
+            {
+                for (var i : be.getItems())
+                {
+                    if (i.resource().equals(item.resource()))
+                        alreadyInTransit += i.amount();
+                }
+            }
+
             if (currentPipe.canItemLeave(item, world, current, currentState, direction))
             {
                 if (offsetState.isAir())
@@ -261,7 +274,8 @@ public class ItemPipeUtil
                 }
                 else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                 {
-                    return MeatlibStorageUtil.simulateInsert(storage, item.resource(), item.amount(), transaction);
+                    return MeatlibStorageUtil.simulateInsert(storage, item.resource(), Long.MAX_VALUE, transaction)
+                            - alreadyInTransit;
                 }
             }
         }
