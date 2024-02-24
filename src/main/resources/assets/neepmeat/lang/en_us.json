@@ -186,7 +186,7 @@
   "block.neepmeat.pipe_driver": "Pipe Driver",
   "block.neepmeat.pipe_driver.lore_0": "Permits advanced item routing in connected item pipes. One Driver is allowed per network.",
   "block.neepmeat.item_requester": "Manual Requester",
-  "block.neepmeat.item_requester.lore_0": "Lists all available items in a connected item pipe network. Requested items will be routed towards this pipe.",
+  "block.neepmeat.item_requester.lore_0": "Lists all available items in a connected item pipe network. Requested items will be routed towards this pipe. A Pipe Driver must be part of the network.",
   "block.neepmeat.storage_bus": "Storage Driver",
   "block.neepmeat.storage_bus.lore_0": "Allows adjacent inventories to fulfil item requests.",
   "block.neepmeat.dumper": "Smart Dumper",

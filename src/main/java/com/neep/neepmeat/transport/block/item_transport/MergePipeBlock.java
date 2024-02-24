@@ -44,7 +44,7 @@ public class MergePipeBlock extends ItemPipeBlock
     @Override
     public VoxelShape getShapeForState(BlockState state)
     {
-        VoxelShape shape = Block.createCuboidShape(4, 4, 4, 12, 12, 12);
+        VoxelShape shape = getCentreShape();
         Direction facing = state.get(FACING);
         for (Direction direction : Direction.values())
         {

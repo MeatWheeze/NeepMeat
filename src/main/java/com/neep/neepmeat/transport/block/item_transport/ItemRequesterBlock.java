@@ -13,21 +13,26 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("UnstableApiUsage")
-public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProvider, ItemPipe
+public class ItemRequesterBlock extends MergePipeBlock implements BlockEntityProvider, ItemPipe
 {
     public ItemRequesterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings);
+        this.setDefaultState(super.getDefaultState().with(FACING, Direction.NORTH));
     }
 
     @Override
@@ -37,30 +42,15 @@ public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProv
     }
 
     @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack)
+    public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        super.onPlaced(world, pos, state, placer, itemStack);
+        BlockState state = this.getConnectedState(ctx.getWorld(), this.getDefaultState(), ctx.getBlockPos());
+        return state.with(FACING, ctx.getPlayer().isSneaking() ? ctx.getPlayerLookDirection() : ctx.getPlayerLookDirection().getOpposite());
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-//        if (!world.isClient()) world.getBlockEntity(pos, ItemTransport.ITEM_REQUESTER_BE).ifPresent(be ->
-//        {
-//            RoutingNetworkDFSFinder finder = new RoutingNetworkDFSFinder(world);
-//            finder.pushBlock(pos, Direction.UP);
-//            finder.loop(50);
-//            if (finder.hasResult())
-//            {
-//                try (Transaction transaction = Transaction.openOuter())
-//                {
-//                    finder.getResult().right().find(null)
-//                            .request(new ResourceAmount<>(ItemVariant.of(Items.COBBLESTONE), 1), pos, null, RoutingNetwork.RequestType.ANY_AMOUNT, transaction);
-//
-//                    transaction.commit();
-//                }
-//            }
-//        });
         if (world.getBlockEntity(pos) instanceof ItemRequesterBlockEntity be)
         {
             player.openHandledScreen(be);
