@@ -76,7 +76,7 @@
     {"type": "menu", "id": "item_transport", "icon": "neepmeat:motor_unit", "text": "Item Transport", "entries": [
       {"type": "page", "id": "item_pipe", "icon": "neepmeat:item_pipe", "text": "Item Pipes"},
       {"type": "page", "id": "ejector", "icon": "neepmeat:ejector", "text": "Item Extraction"},
-      {"type": "page", "id": "router", "icon": "neepmeat:router", "text": "Item Router"},
+      {"type": "page", "id": "router", "icon": "neepmeat:router", "text": "Item Sorter"},
       {"type": "page", "id": "dumper", "icon": "neepmeat:dumper", "text": "Smart Dumper"}
     ]},
     {"type": "menu", "id": "misc", "icon": "neepmeat:essential_saltes", "text": "Misc", "entries": [
@@ -376,7 +376,15 @@
     ]},
     {"id": "router", "contents": [
       {"type": "text", "text": "Item Router\n", "bold": true},
-      {"type": "text", "text": "The Item Router distributes incoming items to neighbouring pipes. In the GUI, each coloured filter slot corresponds to an output direction."}
+      {"type": "text", "text": "The Item Sorter distributes incoming items to neighbouring pipes. In the GUI, each coloured filter slot corresponds to an output direction."}
+    ]},
+    {"id": "pipe_driver", "contents": [
+      {"type": "text", "text": "Pipe Driver\n", "bold": true},
+      {"type": "text", "text": "The Pipe Driver enables advanced routing in a pipe network when connected. This allows item requests to be sent by PLCs and Manual Requesters to be fulfilled by enabled pipes elsewhere in a network. Only one Pipe Driver can be present in a single pipe network."}
+    ]},
+    {"id": "storage_driver", "contents": [
+      {"type": "text", "text": "Storage Driver\n", "bold": true},
+      {"type": "text", "text": "The Storage Driver allows adjacent item storages to fulfil item requests sent through a pipe network. A single Pipe Driver must be connected to the network to function."}
     ]},
     {"id": "dumper", "contents": [
       {"type": "text", "text": "Smart Dumper\n", "bold": true},

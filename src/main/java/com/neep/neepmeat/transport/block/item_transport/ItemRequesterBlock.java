@@ -5,6 +5,7 @@ import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemRequesterBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -17,6 +18,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +28,12 @@ public class ItemRequesterBlock extends ItemPipeBlock implements BlockEntityProv
     public ItemRequesterBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
         super(registryName, itemSettings, settings);
+    }
+
+    @Override
+    protected VoxelShape getCentreShape()
+    {
+        return Block.createCuboidShape(3, 3, 3, 13, 13, 13);
     }
 
     @Override

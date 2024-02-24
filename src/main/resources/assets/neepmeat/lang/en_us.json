@@ -665,7 +665,7 @@
   "container.neepmeat.workstation": "Persistent Crafting Table",
   "container.neepmeat.assembler.display": "Assembler",
   "container.neepmeat.stirling_engine": "Stirling Engine",
-  "container.neepmeat.router": "Item Router",
+  "container.neepmeat.router": "Item Sorter",
   "container.neepmeat.alloy_kiln": "Alloy Kiln",
 
   "button.neepmeat.assembler.select": "Select Output Slots",

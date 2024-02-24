@@ -1,5 +1,5 @@
 {
-	"parent": "neepmeat:block/pneumatic_pipe/item"
+	"parent": "neepmeat:block/pneumatic_pipe/storage_driver_item"
 }
 
 

@@ -76,9 +76,14 @@ public abstract class AbstractPipeBlock extends BaseBlock
         }
     }
 
+    protected VoxelShape getCentreShape()
+    {
+        return Block.createCuboidShape(4, 4, 4, 12, 12, 12);
+    }
+
     public VoxelShape getShapeForState(BlockState state)
     {
-        VoxelShape shape = Block.createCuboidShape(4, 4, 4, 12, 12, 12);
+        VoxelShape shape = getCentreShape();
         for (Direction direction : Direction.values())
         {
             if (state.get(DIR_TO_CONNECTION.get(direction)) == PipeConnectionType.SIDE)
