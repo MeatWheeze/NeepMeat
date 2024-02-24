@@ -1,24 +1,45 @@
 {
   "variants": {
-    "facing=east": {
-      "model": "neepmeat:block/executor/main",
+    "facing=east,on=false": {
+      "model": "neepmeat:block/executor/off",
       "y": 90,
       "x": 0
     },
-    "facing=north": {
-      "model": "neepmeat:block/executor/main",
+    "facing=north,on=false": {
+      "model": "neepmeat:block/executor/off",
       "y": 0,
       "x": 0
     },
-    "facing=south": {
-      "model": "neepmeat:block/executor/main",
+    "facing=south,on=false": {
+      "model": "neepmeat:block/executor/off",
       "y": 180,
       "x": 0
     },
-    "facing=west": {
-      "model": "neepmeat:block/executor/main",
+    "facing=west,on=false": {
+      "model": "neepmeat:block/executor/off",
+      "y": -90,
+      "x": 0
+    },
+    "facing=east,on=true": {
+      "model": "neepmeat:block/executor/on",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north,on=true": {
+      "model": "neepmeat:block/executor/on",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south,on=true": {
+      "model": "neepmeat:block/executor/on",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west,on=true": {
+      "model": "neepmeat:block/executor/on",
       "y": -90,
       "x": 0
     }
+
   }
 }

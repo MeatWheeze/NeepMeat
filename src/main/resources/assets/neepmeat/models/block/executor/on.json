@@ -3,7 +3,7 @@
 	"textures": {
 		"1": "neepmeat:block/executor/front",
 		"2": "neepmeat:block/executor/main",
-		"3": "neepmeat:block/executor/main1",
+		"3": "neepmeat:block/executor/main1_on",
 		"particle": "neepmeat:block/executor/front"
 	},
 	"elements": [

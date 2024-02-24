@@ -5,12 +5,15 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.plc.PLCBlocks;
 import com.neep.neepmeat.plc.block.entity.ExecutorBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -20,9 +23,12 @@ import org.jetbrains.annotations.Nullable;
 
 public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProvider
 {
+    public static final BooleanProperty ON = BooleanProperty.of("on");
+
     public ExecutorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings, settings);
+        setDefaultState(getDefaultState().with(ON, false));
     }
 
     @Nullable
@@ -43,6 +49,13 @@ public class ExecutorBlock extends BaseHorFacingBlock implements BlockEntityProv
             return ActionResult.SUCCESS;
         }
         return super.onUse(state, world, pos, player, hand, hit);
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(ON);
     }
 
     @Nullable

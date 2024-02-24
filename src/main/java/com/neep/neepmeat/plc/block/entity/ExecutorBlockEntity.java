@@ -70,7 +70,20 @@ public class ExecutorBlockEntity extends SyncableBlockEntity implements PLC, PLC
                 markDirty();
             }
             else
+            {
                 currentAction.first().tick(this);
+            }
+        }
+        updateState();
+    }
+
+    private void updateState()
+    {
+        BlockState state = getCachedState();
+        boolean prev = state.get(ExecutorBlock.ON);
+        if ((!instructions.isEmpty() || currentInstruction != null) != prev)
+        {
+            world.setBlockState(pos, state.with(ExecutorBlock.ON, !instructions.isEmpty()));
         }
     }
 
