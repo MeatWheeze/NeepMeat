@@ -4,6 +4,7 @@ import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
+import com.neep.neepmeat.api.plc.robot.SoundAction;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMSounds;
@@ -26,6 +27,7 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
@@ -43,14 +45,15 @@ public class CombineInstruction implements Instruction
     protected Argument to;
     private final GroupedRobotAction group;
 
-    public CombineInstruction(Supplier<World> worldSupplier, List<Argument> arguments)
+    public CombineInstruction(Supplier<World> world, List<Argument> arguments)
     {
-        this.worldSupplier = worldSupplier;
+        this.worldSupplier = world;
         this.from = arguments.get(0);
         this.to = arguments.get(1);
 
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),
+                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_EXIT),
                 AtomicAction.of(this::takeFirst),
                 new RobotMoveToAction(to.pos()),
                 AtomicAction.of(this::complete)

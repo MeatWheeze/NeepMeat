@@ -3,6 +3,7 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
+import com.neep.neepmeat.api.plc.robot.SoundAction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -10,6 +11,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,8 +41,10 @@ public class MoveInstruction implements Instruction
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),
                 AtomicAction.of(this::takeFirst),
+                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_EXIT),
                 new RobotMoveToAction(to.pos()),
-                AtomicAction.of(this::complete)
+                AtomicAction.of(this::complete),
+                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_ENTER)
         );
     }
 

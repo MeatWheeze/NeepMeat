@@ -21,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,7 @@ public class InjectInstruction implements Instruction
 
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),
+                AtomicAction.of(this::playTakeSound),
                 AtomicAction.of(this::takeFrom),
                 new RobotMoveToAction(to.pos()),
                 AtomicAction.of(this::playSound),
@@ -52,10 +54,16 @@ public class InjectInstruction implements Instruction
         );
     }
 
+    private void playTakeSound(PLC plc)
+    {
+        var robot = plc.getActuator();
+        world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), SoundEvents.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 1, 1, 1);
+    }
+
     private void playSound(PLC plc)
     {
         var robot = plc.getActuator();
-        world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.INJECT_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
+        world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.INJECT_INSTRUCTION_APPLY, SoundCategory.BLOCKS, 1, 1, 1);
     }
 
     public InjectInstruction(Supplier<World> world, NbtCompound nbt)
