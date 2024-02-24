@@ -37,7 +37,7 @@ public class ItemTransport
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
     public static BlockEntityType<ItemRequesterBlockEntity> ITEM_REQUESTER_BE;
 
-    public static final Block PIPE_DRIVER = BlockRegistry.queue(new PipeDriverBlock("pipe_driver", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
+    public static final Block PIPE_DRIVER = BlockRegistry.queue(new PipeDriverBlock("pipe_driver", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
     public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
 

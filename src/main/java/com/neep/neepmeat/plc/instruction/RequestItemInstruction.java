@@ -62,14 +62,23 @@ public class RequestItemInstruction implements Instruction
 
         plc.addRobotAction(AtomicAction.of(p ->
         {
-            int amount = p.variableStack().popInt();
+            var stack = p.variableStack();
+
+            int amount = 0;
+            if (stack.isEmpty())
+                amount = 1;
+            else
+                amount = p.variableStack().popInt();
+
             if (plc.getActuator() instanceof PipeDriverBlock.PipeDriverBlockEntity be)
             {
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     ResourceAmount<ItemVariant> ra = new ResourceAmount<>(item, amount);
-                    be.getNetwork(null).request(ra, to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
+                    boolean satisfied = be.getNetwork(null).request(ra, to.pos(), to.face(), RoutingNetwork.RequestType.EXACT_AMOUNT, transaction);
                     transaction.commit();
+
+                    p.variableStack().push(satisfied ? 1 : 0);
                 }
             }
             else

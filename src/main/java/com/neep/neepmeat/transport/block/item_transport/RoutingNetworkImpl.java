@@ -130,7 +130,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
         return new ResourceAmount<>(am1.resource(), am1.amount() + am2.amount());
     }
 
-    public void request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
+    public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction)
     {
         StoragePreconditions.notBlankNotNegative(stack.resource(), stack.amount());
 
@@ -149,9 +149,12 @@ public class RoutingNetworkImpl implements RoutingNetwork
                 worldSupplier.get().spawnParticles(ParticleTypes.SMOKE, this.pos.getX() + 0.5, this.pos.getY() + 1, this.pos.getZ() + 0.5, 20, 0.1, 0, 0.1, 0.01);
                 worldSupplier.get().playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), SoundEvents.ENTITY_PIGLIN_CELEBRATE, SoundCategory.BLOCKS, 1, 1);
                 inner.commit();
+                return satisfied;
             }
             else inner.abort();
         }
+
+        return false;
     }
 
     protected class GroupFinder extends BFSGroupFinder<BlockApiCache<RoutablePipe, Direction>>

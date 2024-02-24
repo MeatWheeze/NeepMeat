@@ -17,7 +17,7 @@ public interface RoutingNetwork
     BlockApiLookup<RoutingNetwork, Void> LOOKUP = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "routing_network"), RoutingNetwork.class, Void.class);
 
     List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction);
-    void request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction);
+    boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction);
 
     void invalidate();
 
@@ -35,7 +35,7 @@ public interface RoutingNetwork
         public List<ResourceAmount<ItemVariant>> getAllAvailable(TransactionContext transaction) { return Collections.emptyList(); }
 
         @Override
-        public void request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) {}
+        public boolean request(ResourceAmount<ItemVariant> stack, BlockPos pos, Direction outDir, RequestType type, TransactionContext transaction) { return false; }
 
         @Override
         public void invalidate() {}
