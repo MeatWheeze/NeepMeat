@@ -182,13 +182,13 @@ public class ImplantInstruction implements Instruction
         @Override
         public boolean finished(PLC plc)
         {
-            return plc.getActuator().reachedTarget();
+            return plc.getActuator().reachedTarget(plc);
         }
 
         @Override
         public void start(PLC plc)
         {
-            plc.getActuator().setTarget(getEntityPos(plc));
+            plc.getActuator().setTarget(plc, getEntityPos(plc));
         }
 
         @Override

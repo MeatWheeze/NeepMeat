@@ -1,9 +1,10 @@
 package com.neep.neepmeat.machine.surgical_controller;
 
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.network.plc.PLCRobotC2S;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
-import com.neep.neepmeat.plc.robot.PLCActuator;
+import com.neep.neepmeat.plc.robot.PLCRobot;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -25,7 +26,7 @@ import java.util.Objects;
 import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_ACTIVE;
 import static com.neep.neepmeat.machine.surgical_controller.SurgicalRobot.MovementState.STATE_DOCKING;
 
-public class SurgicalRobot implements PLCActuator, NbtSerialisable
+public class SurgicalRobot implements PLCRobot, NbtSerialisable
 {
     private final PLCBlockEntity parent;
     private MovementState movementState = MovementState.STATE_IDLE;
@@ -196,7 +197,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     }
 
     @Override
-    public void setTarget(@Nullable BlockPos target)
+    public void setTarget(@Nullable PLC plc, @Nullable BlockPos target)
     {
         if (target == null)
         {
@@ -303,7 +304,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     }
 
     @Override
-    public boolean reachedTarget()
+    public boolean reachedTarget(PLC plc)
     {
         return targetPos == null || targetPos.squaredDistanceTo(x, y, z) <= 0.1 * 0.1;
     }
@@ -311,7 +312,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     public void returnToBase()
     {
         movementState = MovementState.STATE_RETURNING;
-        setTarget(basePos);
+        setTarget(null, basePos);
     }
 
     public void setPos(double x, double y, double z)
@@ -328,7 +329,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
 
     public void stay()
     {
-        this.setTarget(null);
+        this.setTarget(null, null);
     }
 
     public float getPitch()
@@ -347,14 +348,14 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
         this.yaw = yaw;
     }
 
-    public void spawnItem(ResourceAmount<ItemVariant> stored)
+    public void spawnItem(@Nullable ResourceAmount<ItemVariant> stored)
     {
         if (stored == null)
             return;
         ItemScatterer.spawn(parent.getWorld(), x, y, z, stored.resource().toStack((int) stored.amount()));
     }
 
-    public void dumpStored()
+    public void dumpStored(PLC plc)
     {
         if (stored != null)
         {
@@ -364,7 +365,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     }
 
     @Override
-    public void setStored(@Nullable ResourceAmount<ItemVariant> stored)
+    public void setStored(PLC plc, @Nullable ResourceAmount<ItemVariant> stored)
     {
         this.stored = stored;
     }
@@ -376,7 +377,7 @@ public class SurgicalRobot implements PLCActuator, NbtSerialisable
     }
 
     @Override
-    public @Nullable ResourceAmount<ItemVariant> getStored()
+    public @Nullable ResourceAmount<ItemVariant> getStored(PLC plc)
     {
         return stored;
     }

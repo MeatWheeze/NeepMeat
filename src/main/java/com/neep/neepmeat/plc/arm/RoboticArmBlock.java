@@ -33,7 +33,7 @@ public class RoboticArmBlock extends BaseBlock implements BlockEntityProvider
     {
         if (!newState.isOf(this) && world.getBlockEntity(pos) instanceof RoboticArmBlockEntity be)
         {
-            be.dumpStored();
+            be.dumpStored(null);
         }
         super.onStateReplaced(state, world, pos, newState, moved);
     }

@@ -3,14 +3,9 @@ package com.neep.neepmeat.plc.arm;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.api.plc.robot.RobotAction;
 import com.neep.neepmeat.machine.motor.MotorEntity;
-import com.neep.neepmeat.neepasm.compiler.variable.EmptyVariableStack;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.robot.PLCActuator;
-import it.unimi.dsi.fastutil.Pair;
-import it.unimi.dsi.fastutil.Stack;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.BlockState;
@@ -22,8 +17,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.Consumer;
 
 public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCActuator, PLCActuator.Provider, MotorisedBlock, MotorisedBlock.DiagnosticsProvider
 {
@@ -120,7 +113,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
 
     private void moveTo(Vec3d toPos)
     {
-        if (!reachedTarget())
+        if (!reachedTarget(null))
         {
 
             double dx = (toPos.x - tipX);
@@ -163,7 +156,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public void setTarget(@Nullable BlockPos target)
+    public void setTarget(PLC plc, @Nullable BlockPos target)
     {
         this.target = target;
         if (target != null)
@@ -175,13 +168,13 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public boolean reachedTarget()
+    public boolean reachedTarget(@Nullable PLC plc)
     {
         return target == null || targetVec.squaredDistanceTo(tipX, tipY,tipZ) <= 0.1 * 0.1;
     }
 
     @Override
-    public void spawnItem(ResourceAmount<ItemVariant> stored)
+    public void spawnItem(@Nullable ResourceAmount<ItemVariant> stored)
     {
         if (stored == null)
             return;
@@ -189,7 +182,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public void dumpStored()
+    public void dumpStored(PLC plc)
     {
         if (stored != null)
         {
@@ -200,7 +193,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public void setStored(@Nullable ResourceAmount<ItemVariant> stored)
+    public void setStored(PLC plc, @Nullable ResourceAmount<ItemVariant> stored)
     {
         this.stored = stored;
         markDirty();
@@ -213,7 +206,7 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     }
 
     @Override
-    public @Nullable ResourceAmount<ItemVariant> getStored()
+    public @Nullable ResourceAmount<ItemVariant> getStored(PLC plc)
     {
         return stored;
     }

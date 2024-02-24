@@ -16,13 +16,13 @@ public class RobotMoveToAction implements RobotAction
     @Override
     public boolean finished(PLC plc)
     {
-        return plc.getActuator().reachedTarget();
+        return plc.getActuator().reachedTarget(plc);
     }
 
     @Override
     public void start(PLC plc)
     {
-        plc.getActuator().setTarget(target.up());
+        plc.getActuator().setTarget(plc, target.up());
     }
 
     @Override

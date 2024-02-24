@@ -75,7 +75,7 @@ public class CombineInstruction implements Instruction
     @Override
     public void cancel(PLC plc)
     {
-        plc.getActuator().dumpStored();
+        plc.getActuator().dumpStored(plc);
         group.end(plc);
     }
 
@@ -88,7 +88,7 @@ public class CombineInstruction implements Instruction
         }
         else
         {
-            plc.getActuator().setStored(stored);
+            plc.getActuator().setStored(plc, stored);
             if (worldSupplier.get() instanceof ServerWorld serverWorld)
             {
                 ParticleSpawnS2C.sendNearby(serverWorld, from.pos(), new ItemStackParticleEffect(ParticleTypes.ITEM, stored.resource().toStack()),
@@ -100,7 +100,7 @@ public class CombineInstruction implements Instruction
 
     private void complete(PLC plc)
     {
-        final var stored = plc.getActuator().getStored();
+        final var stored = plc.getActuator().getStored(plc);
         var mip = MutateInPlace.ITEM.find(worldSupplier.get(), to.pos(), null);
         if (stored != null && mip != null)
         {
@@ -112,7 +112,7 @@ public class CombineInstruction implements Instruction
             if (stored.resource().getObject() instanceof ItemImplantItem item)
             {
                 item.install(stack);
-                plc.getActuator().setStored(null);
+                plc.getActuator().setStored(plc, null);
                 mip.set(stack);
             }
 
@@ -140,13 +140,13 @@ public class CombineInstruction implements Instruction
                     serverWorld.playSound(null, robot.getX(), robot.getY(), robot.getZ(), NMSounds.COMBINE_INSTRUCTION_APPLY, SoundCategory.NEUTRAL, 1, 1, 1);
                 }
 
-                plc.getActuator().setStored(null);
+                plc.getActuator().setStored(plc, null);
 
                 return;
             }
         }
 
-        plc.getActuator().dumpStored();
+        plc.getActuator().dumpStored(plc);
     }
 
     private ResourceAmount<ItemVariant> takeItem(LazyBlockApiCache<Storage<ItemVariant>, Direction> target)

@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.plc.robot.PLCActuator;
 import com.neep.neepmeat.transport.ItemTransport;
 import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
@@ -20,6 +21,7 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -83,7 +85,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
         super.onStateReplaced(state, world, pos, newState, moved);
         if (world instanceof ServerWorld serverWorld)
         {
-            PDBlockEntity.emitUpdate(serverWorld, pos, ItemTransport.BFS_MAX_DEPTH);
+            PipeDriverBlockEntity.emitUpdate(serverWorld, pos, ItemTransport.BFS_MAX_DEPTH);
         }
     }
 
@@ -98,7 +100,7 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, ItemTransport.PIPE_DRIVER_BE, PDBlockEntity::serverTick, null, world);
+        return MiscUtil.checkType(type, ItemTransport.PIPE_DRIVER_BE, PipeDriverBlockEntity::serverTick, null, world);
     }
 
     @Nullable
@@ -108,16 +110,16 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
         return ItemTransport.PIPE_DRIVER_BE.instantiate(pos, state);
     }
 
-    public static class PDBlockEntity extends SyncableBlockEntity
+    public static class PipeDriverBlockEntity extends SyncableBlockEntity implements PLCActuator, PLCActuator.Provider
     {
         protected final RoutingNetwork network = new RoutingNetworkImpl(pos, () -> (ServerWorld) this.getWorld());
 
-        public PDBlockEntity(BlockPos pos, BlockState state)
+        public PipeDriverBlockEntity(BlockPos pos, BlockState state)
         {
             this(ItemTransport.PIPE_DRIVER_BE, pos, state);
         }
 
-        public PDBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
+        public PipeDriverBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
         {
             super(type, pos, state);
         }
@@ -163,13 +165,39 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
             }
         }
 
-        public static void serverTick(World world, BlockPos pos, BlockState state, PDBlockEntity be)
+        public static void serverTick(World world, BlockPos pos, BlockState state, PipeDriverBlockEntity be)
         {
             if (be.network.needsUpdate())
             {
                 be.network.update();
                 world.setBlockState(pos, state.with(VALID, be.network.isValid()));
             }
+        }
+
+        @Override
+        public PLCActuator getPlcActuator()
+        {
+            return this;
+        }
+
+        @Override
+        public BlockPos getBasePos()
+        {
+            return pos;
+        }
+
+        @Override
+        public void spawnItem(@Nullable ResourceAmount<ItemVariant> stored)
+        {
+            if (stored == null)
+                return;
+            ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 1.25, pos.getZ() + 0.5, stored.resource().toStack((int) stored.amount()));
+        }
+
+        @Override
+        public boolean actuatorRemoved()
+        {
+            return isRemoved();
         }
     }
 }

@@ -33,7 +33,7 @@ public class ItemTransport
 
     public static BlockApiLookup<ItemPipe, Direction> ITEM_PIPE = BlockApiLookup.get(new Identifier(NeepMeat.NAMESPACE, "item_pipe"), ItemPipe.class, Direction.class);
 
-    public static BlockEntityType<PipeDriverBlock.PDBlockEntity> PIPE_DRIVER_BE;
+    public static BlockEntityType<PipeDriverBlock.PipeDriverBlockEntity> PIPE_DRIVER_BE;
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
     public static BlockEntityType<ItemRequesterBlockEntity> ITEM_REQUESTER_BE;
 
@@ -43,8 +43,8 @@ public class ItemTransport
 
     public static void init()
     {
-        PIPE_DRIVER_BE = NMBlockEntities.register("pipe_driver", PipeDriverBlock.PDBlockEntity::new, PIPE_DRIVER);
-        RoutingNetwork.LOOKUP.registerForBlockEntity(PipeDriverBlock.PDBlockEntity::getNetwork, PIPE_DRIVER_BE);
+        PIPE_DRIVER_BE = NMBlockEntities.register("pipe_driver", PipeDriverBlock.PipeDriverBlockEntity::new, PIPE_DRIVER);
+        RoutingNetwork.LOOKUP.registerForBlockEntity(PipeDriverBlock.PipeDriverBlockEntity::getNetwork, PIPE_DRIVER_BE);
         STORAGE_BUS_BE = NMBlockEntities.register("storage_bus", StorageBusBlockEntity::new, STORAGE_BUS);
         RoutablePipe.LOOKUP.registerSelf(STORAGE_BUS_BE);
         ITEM_REQUESTER_BE = NMBlockEntities.register("item_requester", ItemRequesterBlockEntity::new, ITEM_REQUESTER);
