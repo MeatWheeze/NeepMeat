@@ -5,6 +5,9 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collections;
+import java.util.EnumSet;
+
 public interface PLCActuator
 {
     void setTarget(@Nullable BlockPos target);
@@ -97,8 +100,19 @@ public interface PLCActuator
 
     boolean actuatorRemoved();
 
+    default EnumSet<Capability> capabilities()
+    {
+        return EnumSet.noneOf(Capability.class);
+    }
+
     interface Provider
     {
         PLCActuator getPlcActuator();
+    }
+
+    enum Capability
+    {
+        MOVE_ROBOT,
+        ROUTE_ITEM,
     }
 }

@@ -31,7 +31,7 @@ public class InstructionAttributes
     public static void init()
     {
         register(Instructions.END, Category.CONTROL);
-        register(Instructions.RESTART, Category.COMPARISON);
+        register(Instructions.RESTART, Category.CONTROL);
         register(Instructions.RET, Category.CONTROL);
         register(Instructions.CALL, Category.CONTROL);
         register(Instructions.PUSH, Category.VARIABLE);
@@ -74,6 +74,8 @@ public class InstructionAttributes
         register(Instructions.WAIT_REDSTONE, Category.REDSTONE);
         register(Instructions.EMIT_REDSTONE, Category.REDSTONE);
         register(Instructions.READ_REDSTONE, Category.REDSTONE);
+
+        register(Instructions.REQUEST, Category.ROUTING);
     }
 
     public static class InstructionTooltip
@@ -119,6 +121,7 @@ public class InstructionAttributes
         CONTROL(Text.translatable("category.neepmeat.instruction.control")),
         VARIABLE(Text.translatable("category.neepmeat.instruction.variable")),
         REDSTONE(Text.translatable("category.neepmeat.instruction.redstone")),
+        ROUTING(Text.translatable("category.neepmeat.instruction.routing")),
         MISC(Text.translatable("category.neepmeat.instruction.misc"));
 
         public final Text name;

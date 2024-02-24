@@ -5,7 +5,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public interface ItemNetwork
+public interface PipeCache
 {
     boolean retrieve(BlockPos to, Direction in, ItemVariant variant, long amount, TransactionContext transaction);
 

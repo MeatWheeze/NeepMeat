@@ -2,12 +2,10 @@ package com.neep.neepmeat.transport.block.item_transport.entity;
 
 import com.google.common.collect.Streams;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.api.item_network.RoutingNetwork;
 import com.neep.neepmeat.transport.api.item_network.StorageBus;
 import com.neep.neepmeat.transport.fluid_network.node.NodePos;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.RetrievalTarget;
-import com.neep.neepmeat.transport.item_network.RoutingNetworkDFSFinder;
 import it.unimi.dsi.fastutil.Pair;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -30,7 +28,6 @@ import java.util.stream.Stream;
 @SuppressWarnings("UnstableApiUsage")
 public class StorageBusBlockEntity extends ItemPipeBlockEntity implements StorageBus
 {
-    protected BlockApiCache<RoutingNetwork, Void> controller;
     protected final List<RetrievalTarget<ItemVariant>> targets = new ArrayList<>(6);
     protected boolean needsUpdate = true;
 
@@ -42,17 +39,6 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     public StorageBusBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-    }
-
-    public void setController(BlockApiCache<RoutingNetwork, Void> controller)
-    {
-        this.controller = controller;
-    }
-
-    public RoutingNetwork getController()
-    {
-        if (controller == null) controller = BlockApiCache.create(RoutingNetwork.LOOKUP, (ServerWorld) world, pos);
-        return controller.find(null);
     }
 
     protected void updateTargets()
@@ -94,14 +80,6 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
     @Override
     public void update(ServerWorld world, BlockPos pos)
     {
-        RoutingNetworkDFSFinder finder = new RoutingNetworkDFSFinder(world);
-        finder.pushBlock(pos, Direction.UP);
-        finder.loop(50);
-        if (finder.hasResult())
-        {
-            setController(finder.getResult().right());
-        }
-
         updateTargets();
     }
 
@@ -134,9 +112,11 @@ public class StorageBusBlockEntity extends ItemPipeBlockEntity implements Storag
 
             long extracted = storage.extract(variant, remaining, transaction);
             remaining -= extracted;
-            if (extracted > 0) foundTargets.add(Pair.of(target, extracted));
+            if (extracted > 0)
+                foundTargets.add(Pair.of(target, extracted));
 
-            if (remaining <= 0) break;
+            if (remaining <= 0)
+                break;
         }
 
         foundTargets.forEach(p ->

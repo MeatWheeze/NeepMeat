@@ -3,7 +3,7 @@ package com.neep.neepmeat.transport.interfaces;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
-import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
+import com.neep.neepmeat.transport.item_network.PipeCacheImpl;
 
 public interface IServerWorld
 {
@@ -13,7 +13,7 @@ public interface IServerWorld
         return null;
     }
 
-    default ItemNetworkImpl getItemNetwork()
+    default PipeCacheImpl getItemNetwork()
     {
         return null;
     }

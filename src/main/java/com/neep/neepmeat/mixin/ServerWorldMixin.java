@@ -6,7 +6,7 @@ import com.neep.neepmeat.transport.blood_network.BloodNetworkManager;
 import com.neep.neepmeat.transport.event.WorldChunkEvents;
 import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
-import com.neep.neepmeat.transport.item_network.ItemNetworkImpl;
+import com.neep.neepmeat.transport.item_network.PipeCacheImpl;
 import net.minecraft.entity.Entity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
@@ -27,7 +27,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     @Shadow public abstract PersistentStateManager getPersistentStateManager();
 
     @Unique public FluidNodeManager neepmeat$nodeManager = new FluidNodeManager((ServerWorld) (Object) this);
-    @Unique public ItemNetworkImpl neepmeat$itemNetwork = new ItemNetworkImpl((ServerWorld) (Object) this);
+    @Unique public PipeCacheImpl neepmeat$itemNetwork = new PipeCacheImpl((ServerWorld) (Object) this);
     @Unique public EnlightenmentEventManager neepmeat$enlightenmentEventManager = new EnlightenmentEventManager();
 
 //    @Unique private BloodNetworkManager neepmeat$bloodNetworkManager = new BloodNetworkManager((ServerWorld) (Object) this);
@@ -49,7 +49,7 @@ public abstract class ServerWorldMixin implements IServerWorld
     }
 
     @Override
-    public ItemNetworkImpl getItemNetwork()
+    public PipeCacheImpl getItemNetwork()
     {
         return neepmeat$itemNetwork;
     }

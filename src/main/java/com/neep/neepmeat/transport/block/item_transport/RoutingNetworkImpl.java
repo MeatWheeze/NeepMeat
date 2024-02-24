@@ -139,7 +139,7 @@ public class RoutingNetworkImpl implements RoutingNetwork
             AtomicLong amount = new AtomicLong(stack.amount());
             boolean satisfied = routablePipes.stream().anyMatch(e ->
             {
-                long retrieved = e.find(null).requestItem(stack.resource(), amount.get(), new NodePos(pos, Direction.UP), inner);
+                long retrieved = e.find(null).requestItem(stack.resource(), amount.get(), new NodePos(pos, outDir), inner);
                 amount.addAndGet(-retrieved);
                 return amount.get() <= 0;
             });

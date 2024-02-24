@@ -49,17 +49,6 @@ public class StorageBusBlock extends ItemPipeBlock implements ItemPipe
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-        if (!world.isClient() && world.getBlockEntity(pos) instanceof StorageBusBlockEntity be)
-        {
-            System.out.println(be.getController());
-        }
-
-        return ActionResult.SUCCESS;
-    }
-
-    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
         return MiscUtil.checkType(type, ItemTransport.STORAGE_BUS_BE, StorageBusBlockEntity::serverTick, null, world);

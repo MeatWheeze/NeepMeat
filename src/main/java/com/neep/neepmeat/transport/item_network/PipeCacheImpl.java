@@ -1,10 +1,8 @@
 package com.neep.neepmeat.transport.item_network;
 
-import com.neep.neepmeat.transport.api.ItemNetwork;
+import com.neep.neepmeat.transport.api.PipeCache;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
-import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
@@ -12,18 +10,15 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
 
-public class ItemNetworkImpl implements ItemNetwork
+public class PipeCacheImpl implements PipeCache
 {
     protected final ServerWorld world;
 
-    protected final Long2ObjectMap<ItemPipeState> pipes = new Long2ObjectArrayMap<>();
+    protected final Map<BlockPos, ItemPipeInstance> pipes = new WeakHashMap<>();
 
-    public ItemNetworkImpl(ServerWorld world)
+    public PipeCacheImpl(ServerWorld world)
     {
         this.world = world;
     }
@@ -49,25 +44,24 @@ public class ItemNetworkImpl implements ItemNetwork
         return ItemPipeUtil.pipeToAny(item, from, in, world, transaction, false);
     }
 
-    public ItemPipeState getPipe(BlockPos pos)
+    public ItemPipeInstance getPipe(BlockPos pos)
     {
-        return pipes.compute(pos.asLong(), (k, v) ->
-                v != null ? v : createPipe(pos, world.getBlockState(pos)));
+        return pipes.computeIfAbsent(pos, v -> createPipe(pos, world.getBlockState(pos)));
     }
 
-    protected ItemPipeState createPipe(BlockPos pos, BlockState state)
+    protected ItemPipeInstance createPipe(BlockPos pos, BlockState state)
     {
         if (state.getBlock() instanceof ItemPipe pipe)
         {
-            ItemPipeState pipeState = new ItemPipeState(pipe);
+            ItemPipeInstance pipeState = new ItemPipeInstance(pipe);
             return pipeState;
         }
         return null;
     }
 
-    public ItemPipeState putPipe(BlockPos pos, ItemPipeState pipe)
+    public ItemPipeInstance putPipe(BlockPos pos, ItemPipeInstance pipe)
     {
-        return pipes.put(pos.asLong(), pipe);
+        return pipes.put(pos, pipe);
     }
 
     public void removePipe(BlockPos pos)
@@ -79,7 +73,7 @@ public class ItemNetworkImpl implements ItemNetwork
      */
     public void onPipeAdded(ItemPipe pipe, BlockPos pos, BlockState state)
     {
-        ItemPipeState pipeState = new ItemPipeState(pipe);
+        ItemPipeInstance pipeState = new ItemPipeInstance(pipe);
         putPipe(pos, pipeState);
 //
 //        List<Direction> connections = pipe.getConnections(state, d -> true);
@@ -114,10 +108,10 @@ public class ItemNetworkImpl implements ItemNetwork
 
         while (!current.equals(endPos))
         {
-            ItemPipeState pipe = getPipe(current);
+            ItemPipeInstance pipe = getPipe(current);
 
             boolean nodeFound = false;
-            List<Direction> connections = pipe.getPipe().getConnections(world.getBlockState(current), d -> true);
+            List<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> true);
             for (Direction direction : connections)
             {
                 BlockPos nextPos = nextNode(current, visited, direction, endPos, endDir);
@@ -138,7 +132,8 @@ public class ItemNetworkImpl implements ItemNetwork
             }
             if (nodeFound) continue;
 
-            if (route.empty()) return route;
+            if (route.empty())
+                return route;
 
             // Remove from stack if stepping back
             current = posRoute.pop();
@@ -161,13 +156,13 @@ public class ItemNetworkImpl implements ItemNetwork
         {
             if (visited.contains(current.asLong())) return null;
 
-            ItemPipeState pipe = getPipe(current);
+            ItemPipeInstance pipe = getPipe(current);
 
             if (pipe == null) return null;
 
             visited.add(current.asLong());
             Direction excluded = face.getOpposite();
-            List<Direction> connections = pipe.getPipe().getConnections(world.getBlockState(current), d -> d != excluded);
+            List<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> d != excluded);
 
             if (connections.size() == 0) return null;
             if (connections.size() > 1 || current.equals(endPos)) return current;
@@ -178,39 +173,7 @@ public class ItemNetworkImpl implements ItemNetwork
         return null;
     }
 
-    private static class ItemPipeState
+    private record ItemPipeInstance(ItemPipe pipe)
     {
-        private final ItemPipe pipe;
-//        private final ItemPipeState[] connected = new ItemPipeState[6];
-
-        public ItemPipeState(ItemPipe pipe)
-        {
-            this.pipe = pipe;
-        }
-
-        public ItemPipe getPipe()
-        {
-            return pipe;
-        }
-    }
-
-    public static class Route
-    {
-        public static final byte NORTH = (byte) Direction.NORTH.getId();
-        public static final byte EAST = (byte) Direction.EAST.getId();
-        public static final byte SOUTH = (byte) Direction.SOUTH.getId();
-        public static final byte WEST = (byte) Direction.WEST.getId();
-        public static final byte UP = (byte) Direction.UP.getId();
-        public static final byte DOWN = (byte) Direction.DOWN.getId();
-
-        public static final byte[] DIRECTIONS = {NORTH, EAST, SOUTH, WEST, UP, DOWN};
-
-        protected final Stack<Byte> path;
-
-        protected Route(Stack<Direction> pathIn)
-        {
-            this.path = new Stack<>();
-            pathIn.forEach(d -> path.add((byte) d.getId()));
-        }
     }
 }

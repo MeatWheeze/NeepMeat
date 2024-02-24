@@ -100,6 +100,8 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_FLUID_STORAGE)
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
+    public static final SimplerInstructionProvider REQUEST = register("request", new SimplerInstructionProvider(RequestItemInstruction::new, RequestItemInstruction::parser, Text.of("REQUEST")));
+
     public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::parser, Text.of("RWAIT")));
     public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, EmitRedstoneInstruction::parser, Text.of("REMIT")));
     public static final InstructionProvider READ_REDSTONE = register("read_redstone", new SimplerInstructionProvider(ReadRedstoneInstruction::new, ReadRedstoneInstruction::parser, Text.of("RREAD")));
