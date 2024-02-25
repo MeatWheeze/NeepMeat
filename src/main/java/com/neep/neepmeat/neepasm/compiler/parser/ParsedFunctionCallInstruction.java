@@ -4,13 +4,14 @@ import com.neep.neepmeat.api.plc.program.MutableProgram;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedFunction;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
+import com.neep.neepmeat.neepasm.compiler.TokenView;
 import net.minecraft.server.world.ServerWorld;
 
 public class ParsedFunctionCallInstruction implements ParsedInstruction
 {
     private final String name;
 
-    public ParsedFunctionCallInstruction(String name)
+    public ParsedFunctionCallInstruction(String name, TokenView view)
     {
         this.name = name;
     }

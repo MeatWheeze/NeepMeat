@@ -166,12 +166,13 @@ public class GuideMainScreen extends Screen implements GuideScreen
         super.init();
         addDrawableChild(leftPane);
         addDrawableChild(rightPane);
-        contentWidth = (int) (1920 * 0.2);
-        contentHeight = (int) (1080 * 0.2);
+        float aspectRatio = 1920f / 1080;
+        contentHeight = client.getWindow().getScaledHeight() - 40;
+        contentWidth = (int) (aspectRatio * contentHeight);
+//        contentWidth = (int) (1920 * 0.23);
+//        contentHeight = (int) (1080 * 0.23);
         this.x = (this.width - contentWidth) / 2;
         this.y = (this.height - contentHeight) / 2;
-        int backgroundWidth = contentWidth;
-        int backgroundHeight = contentHeight;
 
         float ratio = 0.4f;
         int leftWidth = (int) (ratio * contentWidth);

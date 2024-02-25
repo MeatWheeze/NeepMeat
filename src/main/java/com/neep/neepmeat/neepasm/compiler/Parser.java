@@ -204,7 +204,7 @@ public class Parser
 
         ParsedFunction function = parsedSource.findFunction(id);
         if (function != null)
-            return new ParsedFunctionCallInstruction(id);
+            return new ParsedFunctionCallInstruction(id, view);
 
         throw new NeepASM.ParseException("unrecognised operation '" + id + "'");
     }
