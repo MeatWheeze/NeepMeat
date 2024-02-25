@@ -3,7 +3,6 @@ package com.neep.meatlib.recipe;
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.recipe.RecipeManager;
@@ -13,6 +12,7 @@ import net.minecraft.util.Identifier;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,7 +31,7 @@ public interface MeatlibRecipes
     {
         ServerLifecycleEvents.SERVER_STARTING.register(server ->
         {
-            MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(server.getRecipeManager());
+            MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(server::getRecipeManager);
         });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server ->
@@ -47,7 +47,7 @@ public interface MeatlibRecipes
         {
             if (!client.isIntegratedServerRunning())
             {
-                MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(client.getNetworkHandler().getRecipeManager());
+                MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(() -> client.getNetworkHandler().getRecipeManager());
             }
         });
 
@@ -113,17 +113,17 @@ public interface MeatlibRecipes
     {
 
         public static MeatlibRecipes INSTANCE = EMPTY;
-        private final RecipeManager recipeManager;
+        private final Supplier<RecipeManager> recipeManager;
 
-        private MeatlibRecipesImpl(RecipeManager recipeManager)
+        private MeatlibRecipesImpl(Supplier<RecipeManager> recipeManagerSupplier)
         {
-            this.recipeManager = recipeManager;
+            this.recipeManager = recipeManagerSupplier;
         }
 
         @Override
         public Optional<? extends MeatlibRecipe<?>> get(Identifier id)
         {
-            var recipe = recipeManager.get(id);
+            var recipe = recipeManager.get().get(id);
             if (recipe.isPresent() && recipe.get() instanceof MeatlibRecipe<?> mlr)
             {
                 return Optional.of(mlr);
@@ -135,7 +135,7 @@ public interface MeatlibRecipes
         @Override
         public <C, T extends MeatlibRecipe<C>> Optional<T> get(RecipeType<T> type, Identifier id)
         {
-            var recipe = ((RecipeManagerAccessor) recipeManager).getRecipesById().get(id);
+            var recipe = ((RecipeManagerAccessor) recipeManager.get()).getRecipesById().get(id);
             if (recipe == null || recipe.getType() != type)
                 return Optional.empty();
 
@@ -152,7 +152,7 @@ public interface MeatlibRecipes
         @Override
         public <C, T extends MeatlibRecipe<C>> Map<Identifier, T> getAllOfTypeSafe(MeatRecipeType<T> type)
         {
-            var map = ((RecipeManagerAccessor) recipeManager).getRecipes().getOrDefault(type, Collections.emptyMap());
+            var map = ((RecipeManagerAccessor) recipeManager.get()).getRecipes().getOrDefault(type, Collections.emptyMap());
 
             return map.entrySet().stream()
                     .filter(e -> e.getValue() instanceof MeatlibRecipe<?>)
@@ -162,7 +162,7 @@ public interface MeatlibRecipes
         @Override
         public <C, T extends MeatlibRecipe<C>> Stream<T> getAllValuesOfType(MeatRecipeType<T> type)
         {
-            var map = ((RecipeManagerAccessor) recipeManager).getRecipes().getOrDefault(type, Collections.emptyMap());
+            var map = ((RecipeManagerAccessor) recipeManager.get()).getRecipes().getOrDefault(type, Collections.emptyMap());
 
             return map.values().stream()
                     .filter(recipe -> recipe instanceof MeatlibRecipe<?>) // Just in case something wEiRd has been done by another mod
