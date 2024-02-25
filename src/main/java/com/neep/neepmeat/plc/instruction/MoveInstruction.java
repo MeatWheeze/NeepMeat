@@ -3,7 +3,6 @@ package com.neep.neepmeat.plc.instruction;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
-import com.neep.neepmeat.api.plc.robot.SoundAction;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
@@ -16,6 +15,7 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -48,10 +48,10 @@ public class MoveInstruction implements Instruction
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),
                 AtomicAction.of(this::takeFirst),
-                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_EXIT),
+//                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_EXIT),
                 new RobotMoveToAction(to.pos()),
-                AtomicAction.of(this::complete),
-                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_ENTER)
+                AtomicAction.of(this::complete)
+//                new SoundAction(world, SoundEvents.BLOCK_BEEHIVE_ENTER)
         );
     }
 
@@ -93,12 +93,17 @@ public class MoveInstruction implements Instruction
 
     private void takeFirst(PLC plc)
     {
-        stored = Instructions.takeItem(from, world, 64);
+        stored = Instructions.takeItem(from, world, amount);
         if (stored == null)
         {
 //            plc.raiseError(new PLC.Error("No extractable resource found at " + from.pos() + ", " + from.face()));
             cancel(plc);
             finish(plc);
+        }
+        else
+        {
+            var robot = plc.getActuator();
+            world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), SoundEvents.BLOCK_BEEHIVE_EXIT, SoundCategory.BLOCKS, 1, 1, 1);
         }
     }
 
@@ -113,6 +118,8 @@ public class MoveInstruction implements Instruction
                 if (inserted == stored.amount())
                 {
                     transaction.commit();
+                    var robot = plc.getActuator();
+                    world.get().playSound(null, robot.getX(), robot.getY(), robot.getZ(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.BLOCKS, 1, 1, 1);
                     stored = null;
                     return;
                 }

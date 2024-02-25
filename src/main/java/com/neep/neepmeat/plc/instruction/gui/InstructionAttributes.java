@@ -76,6 +76,7 @@ public class InstructionAttributes
         register(Instructions.READ_REDSTONE, Category.REDSTONE);
 
         register(Instructions.REQUEST, Category.ROUTING);
+        register(Instructions.COUNT, Category.ROUTING);
     }
 
     public static class InstructionTooltip

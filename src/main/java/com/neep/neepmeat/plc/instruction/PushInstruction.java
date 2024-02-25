@@ -57,6 +57,8 @@ public class PushInstruction implements Instruction
         {
             Variable<?> variable = parseImmediate(view);
 
+            parser.assureLineEnd(view);
+
             return (((world, source, program) ->
                     program.addBack(new PushInstruction((Integer) variable.value()))));
         }

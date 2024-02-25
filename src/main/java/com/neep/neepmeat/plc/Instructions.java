@@ -102,6 +102,7 @@ public class Instructions
                     .arg(ArgumentPredicates.IS_ITEM_MIP)));
 
     public static final SimplerInstructionProvider REQUEST = register("request", new SimplerInstructionProvider(RequestItemInstruction::new, RequestItemInstruction::parser, Text.of("REQUEST")));
+    public static final SimplerInstructionProvider COUNT = register("count", new SimplerInstructionProvider(CountInstruction::new, CountInstruction::parser, Text.of("COUNT")));
 
     public static final InstructionProvider WAIT_REDSTONE = register("wait_redstone", new SimplerInstructionProvider(WaitRedstoneInstruction::new, WaitRedstoneInstruction::parser, Text.of("RWAIT")));
     public static final InstructionProvider EMIT_REDSTONE = register("emit_redstone", new SimplerInstructionProvider(EmitRedstoneInstruction::new, EmitRedstoneInstruction::parser, Text.of("REMIT")));
@@ -150,7 +151,7 @@ public class Instructions
                 ResourceAmount<ItemVariant> found = StorageUtil.findExtractableContent(storage, transaction);
                 if (found != null)
                 {
-                    long extracted = storage.extract(found.resource(), Math.min(found.amount(), 64), transaction);
+                    long extracted = storage.extract(found.resource(), Math.min(found.amount(), count), transaction);
                     if (extracted > 0)
                     {
                         var res = new ResourceAmount<>(found.resource(), extracted);

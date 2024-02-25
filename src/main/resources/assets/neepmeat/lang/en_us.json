@@ -653,6 +653,7 @@
   "instruction.neepmeat.emit_redstone.desc": "Emits a redstone signal at ARG1 of strength ARG2.",
   "instruction.neepmeat.read_redstone.desc": "Reads the redstone signal strength at ARG1 and pushes it to the stack.",
   "instruction.neepmeat.request.desc": "Uses a Pipe Driver (currently selected as the actuator) to request the item with the given name. \nThe item is routed through a pipe network to the specified §6pipe§f and §6output direction§f. The count is read from the stack and the success of the request is pushed to the stack.\n §6ARG1§f: output pipe (world target)\n §6ARG2§f item ID (string)",
+  "instruction.neepmeat.count.desc": "Counts the items at the given world target and pushes the result to the stack. If an item ID is provided, only items of that type will be counted.\n §6ARG1§f: inventory (world target)\n §6ARG2§f: item ID (string, optional)",
 
   "category.neepmeat.instruction.arithmetic": "Arithmetic",
   "category.neepmeat.instruction.comparison": "Comparison",
