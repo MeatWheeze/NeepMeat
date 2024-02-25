@@ -1,10 +1,13 @@
 package com.neep.meatlib.recipe;
 
 import com.neep.meatlib.mixin.RecipeManagerAccessor;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Identifier;
 
 import java.util.Collections;
@@ -28,12 +31,32 @@ public interface MeatlibRecipes
     {
         ServerLifecycleEvents.SERVER_STARTING.register(server ->
         {
-            MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(server);
+            MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(server.getRecipeManager());
         });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server ->
         {
             MeatlibRecipesImpl.INSTANCE = EMPTY;
+        });
+    }
+
+    @Environment(EnvType.CLIENT)
+    static void initClient()
+    {
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) ->
+        {
+            if (!client.isIntegratedServerRunning())
+            {
+                MeatlibRecipesImpl.INSTANCE = new MeatlibRecipesImpl(client.getNetworkHandler().getRecipeManager());
+            }
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) ->
+        {
+            if (!client.isInSingleplayer())
+            {
+                MeatlibRecipesImpl.INSTANCE = EMPTY;
+            }
         });
     }
 
@@ -92,9 +115,9 @@ public interface MeatlibRecipes
         public static MeatlibRecipes INSTANCE = EMPTY;
         private final RecipeManager recipeManager;
 
-        private MeatlibRecipesImpl(MinecraftServer server)
+        private MeatlibRecipesImpl(RecipeManager recipeManager)
         {
-            recipeManager = server.getRecipeManager();
+            this.recipeManager = recipeManager;
         }
 
         @Override
