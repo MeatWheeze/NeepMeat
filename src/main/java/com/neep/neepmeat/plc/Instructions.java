@@ -90,7 +90,8 @@ public class Instructions
     public static final InstructionProvider MOVE = register("move", new SimpleInstructionProvider(MoveInstruction::new, MoveInstruction::new, 2, Text.of("MOVE"))
             .factory(PredicatedInstructionBuilder.create()
                     .arg(ArgumentPredicates.IS_ITEM_STORAGE)
-                    .arg(ArgumentPredicates.IS_ITEM_STORAGE)));
+                    .arg(ArgumentPredicates.IS_ITEM_STORAGE)))
+            .parser(MoveInstruction::parser);
     public static final InstructionProvider IMPLANT = register("implant", new SimpleInstructionProvider(ImplantInstruction::new, ImplantInstruction::new, 2, Text.of("IMPLANT"))
             .factory(PredicatedInstructionBuilder.create()
                     .arg(ArgumentPredicates.IS_ITEM_STORAGE)

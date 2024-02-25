@@ -4,6 +4,11 @@ import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
 import com.neep.neepmeat.api.plc.robot.GroupedRobotAction;
 import com.neep.neepmeat.api.plc.robot.SoundAction;
+import com.neep.neepmeat.neepasm.NeepASM;
+import com.neep.neepmeat.neepasm.compiler.ParsedSource;
+import com.neep.neepmeat.neepasm.compiler.Parser;
+import com.neep.neepmeat.neepasm.compiler.TokenView;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.robot.RobotMoveToAction;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -24,19 +29,21 @@ public class MoveInstruction implements Instruction
     private final GroupedRobotAction group;
     private final Argument from;
     private final Argument to;
+    private final int amount;
 
     private ResourceAmount<ItemVariant> stored;
 
     public MoveInstruction(Supplier<World> world, List<Argument> arguments)
     {
-        if (arguments.size() != 2)
-        {
-            throw new IllegalStateException();
-        }
+        this(world, arguments.get(0), arguments.get(1), 64);
+    }
 
+    public MoveInstruction(Supplier<World> world, Argument from, Argument to, int count)
+    {
         this.world = world;
-        this.from = arguments.get(0);
-        this.to = arguments.get(1);
+        this.from = from;
+        this.to = to;
+        this.amount = count;
 
         group = GroupedRobotAction.of(
                 new RobotMoveToAction(from.pos()),
@@ -50,10 +57,11 @@ public class MoveInstruction implements Instruction
 
     public MoveInstruction(Supplier<World> world, NbtCompound nbt)
     {
-        this(world, List.of(
+        this(world,
                 Argument.fromNbt(nbt.getCompound("from")),
-                Argument.fromNbt(nbt.getCompound("to"))
-            ));
+                Argument.fromNbt(nbt.getCompound("to")),
+                nbt.getInt("amount")
+            );
         group.readNbt(nbt.getCompound("action"));
         this.stored = Instruction.readItem(nbt.getCompound("stored"));
     }
@@ -65,6 +73,7 @@ public class MoveInstruction implements Instruction
         nbt.put("to", to.toNbt());
         nbt.put("action", group.writeNbt(new NbtCompound()));
         nbt.put("stored", Instruction.writeItem(stored));
+        nbt.putInt("amount", amount);
         return nbt;
     }
 
@@ -127,5 +136,32 @@ public class MoveInstruction implements Instruction
     public @NotNull InstructionProvider getProvider()
     {
         return Instructions.MOVE;
+    }
+
+    public static ParsedInstruction parser(TokenView view, ParsedSource parsedSource, Parser parser) throws NeepASM.ParseException
+    {
+        view.fastForward();
+        Argument from = parser.parseArgument(view);
+        if (from == null)
+            throw new NeepASM.ParseException("expected source world target");
+
+        view.fastForward();
+        Argument to = parser.parseArgument(view);
+        if (to == null)
+            throw new NeepASM.ParseException("expected destination world target");
+
+        view.fastForward();
+
+        int count;
+        if (TokenView.isDigit(view.peek()))
+            count = view.nextInteger();
+        else
+            count = 64;
+
+        parser.assureLineEnd(view);
+        return (world, parsedSource1, program) ->
+        {
+            program.addBack(new MoveInstruction(() -> world, from, to, count));
+        };
     }
 }
