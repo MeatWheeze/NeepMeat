@@ -74,7 +74,7 @@ public class NMLootTables
             {
                 LootPool.Builder builder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(0.125f))
+                        .conditionally(RandomChanceLootCondition.builder(0.025f))
                         .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.WHISPER_WHEAT).getSeedsItem()).weight(1));
 
                 tableBuilder.pool(builder);
@@ -83,7 +83,7 @@ public class NMLootTables
             {
                 LootPool.Builder builder = LootPool.builder()
                         .rolls(ConstantLootNumberProvider.create(1))
-                        .conditionally(RandomChanceLootCondition.builder(0.125f))
+                        .conditionally(RandomChanceLootCondition.builder(0.025f))
                         .with(ItemEntry.builder(((BaseCropBlock) NMBlocks.WHISPER_WHEAT).getSeedsItem()).weight(1));
 
                 tableBuilder.pool(builder);
