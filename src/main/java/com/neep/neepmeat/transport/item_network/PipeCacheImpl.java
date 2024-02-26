@@ -111,7 +111,7 @@ public class PipeCacheImpl implements PipeCache
             ItemPipeInstance pipe = getPipe(current);
 
             boolean nodeFound = false;
-            List<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> true);
+            Set<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> true);
             for (Direction direction : connections)
             {
                 BlockPos nextPos = nextNode(current, visited, direction, endPos, endDir);
@@ -162,12 +162,12 @@ public class PipeCacheImpl implements PipeCache
 
             visited.add(current.asLong());
             Direction excluded = face.getOpposite();
-            List<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> d != excluded);
+            Set<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> d != excluded);
 
             if (connections.size() == 0) return null;
             if (connections.size() > 1 || current.equals(endPos)) return current;
 
-            face = connections.get(0);
+            face = connections.iterator().next();
             current = current.offset(face);
         }
         return null;

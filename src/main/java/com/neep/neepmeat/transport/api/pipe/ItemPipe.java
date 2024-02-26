@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.api.pipe;
 
+import com.google.common.collect.Iterables;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import com.neep.neepmeat.transport.item_network.ItemInPipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -13,7 +14,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
 public interface ItemPipe
@@ -31,9 +34,9 @@ public interface ItemPipe
         return false;
     }
 
-    default List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    default Set<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
-        List<Direction> set = new ArrayList<>();
+        Set<Direction> set = new HashSet<>();
         for (Direction direction : Direction.values())
         {
             if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected()
@@ -69,7 +72,7 @@ public interface ItemPipe
 
     default Direction getOutputDirection(ItemInPipe item, BlockState state, World world, Direction in)
     {
-        List<Direction> connections = ((ItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
+        Set<Direction> connections = ((ItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
         Direction out = item.getPreferredOutputDirection(state, in, this);
         if (out != null && connections.contains(out)) return out;
@@ -77,7 +80,8 @@ public interface ItemPipe
         var rand = world.getRandom();
         if (!connections.isEmpty())
         {
-            out = connections.get(rand.nextInt(connections.size()));
+            out = Iterables.get(connections, rand.nextInt(connections.size()));
+//            out = connections.get(rand.nextInt(connections.size()));
         }
         else
         {

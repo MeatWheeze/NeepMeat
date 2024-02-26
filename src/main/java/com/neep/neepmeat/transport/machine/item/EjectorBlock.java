@@ -27,8 +27,10 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider, ItemPipe
 {
@@ -90,9 +92,9 @@ public class EjectorBlock extends BaseFacingBlock implements BlockEntityProvider
     }
 
     @Override
-    public List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    public Set<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
         Direction facing = state.get(FACING);
-        return List.of(facing, facing.getOpposite()).stream().filter(forbidden).collect(Collectors.toList());
+        return Stream.of(facing, facing.getOpposite()).filter(forbidden).collect(Collectors.toSet());
     }
 }

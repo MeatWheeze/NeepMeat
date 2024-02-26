@@ -60,9 +60,9 @@ public class PipeDriverBlock extends BaseBlock implements BlockEntityProvider, I
     }
 
     @Override
-    public List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    public Set<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
-        return List.of(Direction.values());
+        return Set.of(Direction.values());
     }
 
     @Override

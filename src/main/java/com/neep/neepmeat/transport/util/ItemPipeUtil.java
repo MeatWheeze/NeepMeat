@@ -1,5 +1,6 @@
 package com.neep.neepmeat.transport.util;
 
+import com.google.common.collect.Iterables;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
@@ -161,12 +162,12 @@ public class ItemPipeUtil
         Direction out;
         Direction in = item.out;
 
-        List<Direction> connections = ((ItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
+        Set<Direction> connections = ((ItemPipe) state.getBlock()).getConnections(state, direction -> direction != in);
 
         var rand = world.getRandom();
         if (!connections.isEmpty())
         {
-            out = connections.get(rand.nextInt(connections.size()));
+            out = Iterables.get(connections, rand.nextInt(connections.size()));
         }
         else
         {
@@ -244,7 +245,7 @@ public class ItemPipeUtil
                 return 0;
             }
 
-            Direction direction = connections.get(0);
+            Direction direction = connections.iterator().next();
 
             BlockPos offset = current.offset(direction);
             BlockState offsetState = world.getBlockState(offset);

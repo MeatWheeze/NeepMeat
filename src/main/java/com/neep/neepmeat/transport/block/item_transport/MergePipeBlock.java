@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.block.item_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemPipeBlockEntity;
 import com.neep.neepmeat.transport.block.item_transport.entity.MergePipeBlockEntity;
@@ -30,6 +31,12 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Predicate;
 
 public class MergePipeBlock extends ItemPipeBlock
 {
@@ -153,6 +160,22 @@ public class MergePipeBlock extends ItemPipeBlock
     {
         super.appendProperties(builder);
         builder.add(FACING);
+    }
+
+    @Override
+    public Set<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    {
+        Set<Direction> set = new HashSet<>();
+        for (Direction direction : Direction.values())
+        {
+            if (state.get(AbstractPipeBlock.DIR_TO_CONNECTION.get(direction)).isConnected()
+                    && forbidden.test(direction))
+            {
+                set.add(direction);
+            }
+            set.add(state.get(FACING));
+        }
+        return set;
     }
 
     @Override

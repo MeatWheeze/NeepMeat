@@ -13,6 +13,7 @@ import net.minecraft.util.math.Vec3d;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -69,7 +70,7 @@ public class ItemInPipe
 
     public Direction getPreferredOutputDirection(BlockState state, Direction in, ItemPipe pipe)
     {
-        List<Direction> options = pipe.getConnections(state, d -> d != in);
+        Set<Direction> options = pipe.getConnections(state, d -> d != in);
         if (options.size() > 1 && route != null && !route.isEmpty())
         {
             return route.remove(0);

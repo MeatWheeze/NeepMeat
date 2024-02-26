@@ -23,7 +23,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class RouterBlock extends BaseBlock implements BlockEntityProvider, ItemPipe
 {
@@ -77,9 +79,9 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, ItemP
     }
 
     @Override
-    public List<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
+    public Set<Direction> getConnections(BlockState state, Predicate<Direction> forbidden)
     {
-        return Arrays.stream(Direction.values()).toList();
+        return Arrays.stream(Direction.values()).collect(Collectors.toSet());
     }
 
     @Nullable
