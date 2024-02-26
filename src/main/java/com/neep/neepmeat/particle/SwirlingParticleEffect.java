@@ -20,7 +20,7 @@ public class SwirlingParticleEffect implements ParticleEffect
         public SwirlingParticleEffect read(ParticleType<SwirlingParticleEffect> particleType, StringReader stringReader) throws CommandSyntaxException
         {
             stringReader.expect(' ');
-            BlockState state = (BlockArgumentParser.block(Registry.BLOCK, stringReader, false)).blockState();
+            BlockState state = (BlockArgumentParser.block(Registries.BLOCK, stringReader, false)).blockState();
             stringReader.expect(' ');
             double radius = stringReader.readDouble();
             stringReader.expect(' ');
@@ -75,7 +75,7 @@ public class SwirlingParticleEffect implements ParticleEffect
     @Override
     public String asString()
     {
-        return Registry.PARTICLE_TYPE.getId(this.getType()) + " " + BlockArgumentParser.stringifyBlockState(this.blockState);
+        return Registries.PARTICLE_TYPE.getId(this.getType()) + " " + BlockArgumentParser.stringifyBlockState(this.blockState);
     }
 
     public BlockState getBlockState()

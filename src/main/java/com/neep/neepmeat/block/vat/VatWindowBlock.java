@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block.vat;
 
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;

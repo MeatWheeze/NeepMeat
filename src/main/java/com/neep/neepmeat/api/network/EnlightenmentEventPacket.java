@@ -1,6 +1,5 @@
 package com.neep.neepmeat.api.network;
 
-import com.neep.meatweapons.network.MWNetwork;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;

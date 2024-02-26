@@ -133,7 +133,7 @@ public class EggEntity extends SimpleEntity
     public NbtCompound writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
-        if (hatchType != null) nbt.putString("hatchType", Registry.ENTITY_TYPE.getId(hatchType).toString());
+        if (hatchType != null) nbt.putString("hatchType", Registries.ENTITY_TYPE.getId(hatchType).toString());
         return nbt;
     }
 
@@ -141,7 +141,7 @@ public class EggEntity extends SimpleEntity
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
-        this.hatchType = nbt.contains("hatchType") ? Registry.ENTITY_TYPE.get(new Identifier(nbt.getString("hatchType"))) : null;
+        this.hatchType = nbt.contains("hatchType") ? Registries.ENTITY_TYPE.get(new Identifier(nbt.getString("hatchType"))) : null;
     }
 
     @Override

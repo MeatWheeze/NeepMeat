@@ -1,18 +1,19 @@
 package com.neep.neepmeat.plc.editor;
 
 import com.google.common.collect.Lists;
-import com.neep.neepmeat.api.plc.instruction.*;
+import com.neep.neepmeat.api.plc.instruction.InstructionBuilder;
+import com.neep.neepmeat.api.plc.instruction.InstructionException;
+import com.neep.neepmeat.api.plc.program.MutableProgram;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.network.plc.PLCErrorMessageS2C;
 import com.neep.neepmeat.network.plc.PLCSyncThings;
-import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.PLCState;
-import com.neep.neepmeat.api.plc.program.MutableProgram;
+import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.program.PLCProgramImpl;
-import com.neep.neepmeat.api.plc.program.PLCProgram;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;

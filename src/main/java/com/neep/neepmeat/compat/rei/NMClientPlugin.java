@@ -2,8 +2,8 @@ package com.neep.neepmeat.compat.rei;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.UnmodifiableIterator;
-import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.neepmeat.compat.rei.category.*;
 import com.neep.neepmeat.compat.rei.display.*;
 import com.neep.neepmeat.datagen.tag.NMTags;
@@ -61,7 +61,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 
         // Charnel Compactor recipes
         int page = 0;
-        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registry.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(RegistryEntry::value).iterator(), 35);
+        UnmodifiableIterator<List<Item>> iterator = Iterators.partition(Registries.ITEM.getEntryList(NMTags.RAW_MEAT).orElseThrow().stream().map(RegistryEntry::value).iterator(), 35);
         while (iterator.hasNext())
         {
             List<Item> entries = iterator.next();

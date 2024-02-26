@@ -51,13 +51,13 @@ public class FluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 
@@ -78,7 +78,7 @@ public class FluidFactory
 
     public Block registerBlock()
     {
-        block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
+        block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
         return block;
     }
 

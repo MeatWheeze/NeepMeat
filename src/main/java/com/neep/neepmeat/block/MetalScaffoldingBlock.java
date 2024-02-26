@@ -6,7 +6,7 @@ import com.neep.meatlib.block.BaseStairsBlock;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.Registries.BLOCKRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;

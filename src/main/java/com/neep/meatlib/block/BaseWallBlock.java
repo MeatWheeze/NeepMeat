@@ -4,8 +4,8 @@ import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.WallBlock;
 import net.minecraft.item.BlockItem;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 
 public class BaseWallBlock extends WallBlock implements MeatlibBlock
 {

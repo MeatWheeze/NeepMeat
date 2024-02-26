@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.advanced_motor;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
-import com.neep.neepmeat.machine.motor.MotorBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;

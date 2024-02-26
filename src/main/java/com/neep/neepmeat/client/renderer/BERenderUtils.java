@@ -28,7 +28,6 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 
-
 import java.util.BitSet;
 import java.util.List;
 

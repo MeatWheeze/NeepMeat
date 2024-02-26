@@ -94,7 +94,7 @@ public class CountInstruction implements Instruction
         ItemVariant variant;
         if (!name.isEmpty())
         {
-            Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(name)).orElse(null);
+            Item item = Registries.ITEM.getOrEmpty(Identifier.tryParse(name)).orElse(null);
             if (item == null)
                 throw new NeepASM.ParseException("item '" + name + "' not known");
 

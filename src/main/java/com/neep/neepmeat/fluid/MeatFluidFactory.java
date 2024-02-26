@@ -23,13 +23,13 @@ public class MeatFluidFactory extends FluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 

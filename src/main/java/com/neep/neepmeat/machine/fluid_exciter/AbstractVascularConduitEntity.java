@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.fluid_exciter;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
 import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.WorldChunk;
 import org.jetbrains.annotations.Nullable;
 
 public class AbstractVascularConduitEntity implements VascularConduitEntity

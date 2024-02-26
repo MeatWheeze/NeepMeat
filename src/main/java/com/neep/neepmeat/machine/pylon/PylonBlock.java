@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.pylon;
 
 import com.neep.meatlib.block.multi.TallBlock;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.Registries.BLOCKRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import com.neep.neepmeat.util.MiscUtil;

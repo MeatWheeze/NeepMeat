@@ -2,7 +2,7 @@ package com.neep.meatlib.recipe.ingredient;
 
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registry;
 
 public interface RecipeOutput<T>
 {

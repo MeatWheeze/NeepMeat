@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.fabricmc.fabric.mixin.client.particle.ParticleManagerAccessor;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.particle.*;
-import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
@@ -73,8 +72,8 @@ public class NMParticles
         {
             ParticleManager manager = MinecraftClient.getInstance().particleManager;
             ParticleManager.SimpleSpriteProvider simpleSpriteProvider = ParticleManagerMixin.invokeConstructor();
-            ((ParticleManagerAccessor) manager).getSpriteAwareFactories().put(Registry.PARTICLE_TYPE.getId(type), simpleSpriteProvider);
-            ((ParticleManagerAccessor) manager).getFactories().put(Registry.PARTICLE_TYPE.getRawId(type), factory.create(simpleSpriteProvider));
+            ((ParticleManagerAccessor) manager).getSpriteAwareFactories().put(Registries.PARTICLE_TYPE.getId(type), simpleSpriteProvider);
+            ((ParticleManagerAccessor) manager).getFactories().put(Registries.PARTICLE_TYPE.getRawId(type), factory.create(simpleSpriteProvider));
         }
 
         @FunctionalInterface

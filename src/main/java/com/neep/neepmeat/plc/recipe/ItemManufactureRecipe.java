@@ -173,15 +173,15 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
             JsonObject baseElement = JsonHelper.getObject(json, "base");
             String idString = JsonHelper.getString(baseElement, "id");
             Identifier baseId = Identifier.tryParse(idString);
-            Item base = Registry.ITEM.get(baseId);
+            Item base = Registries.ITEM.get(baseId);
 
             List<ManufactureStep<?>> steps = readSteps(json);
 
 //            JsonObject outputObject = JsonHelper.getObject(json, "output");
 //            Identifier outputId = Identifier.tryParse(JsonHelper.getString(outputObject, "resource"));
-//            Item output = Registry.ITEM.get(outputId);
+//            Item output = Registries.ITEM.get(outputId);
 
-            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, JsonHelper.getObject(json, "result"));
 
             return new ItemManufactureRecipe(id, base, output, steps);
         }
@@ -189,11 +189,11 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
         @Override
         public ItemManufactureRecipe read(Identifier id, PacketByteBuf buf)
         {
-            Item base = buf.readRegistryValue(Registry.ITEM);
+            Item base = buf.readRegistryValue(Registries.ITEM);
 
             List<ManufactureStep<?>> steps = readSteps(buf);
 
-            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
             return new ItemManufactureRecipe(id, base, output, steps);
         }
@@ -201,11 +201,11 @@ public class ItemManufactureRecipe implements ManufactureRecipe<MutateInPlace<It
         @Override
         public void write(PacketByteBuf buf, ItemManufactureRecipe recipe)
         {
-            buf.writeRegistryValue(Registry.ITEM, recipe.base);
+            buf.writeRegistryValue(Registries.ITEM, recipe.base);
 
             writeSteps(recipe.getSteps(), buf);
 
-            recipe.output.write(Registry.ITEM, buf);
+            recipe.output.write(Registries.ITEM, buf);
         }
     }
 }

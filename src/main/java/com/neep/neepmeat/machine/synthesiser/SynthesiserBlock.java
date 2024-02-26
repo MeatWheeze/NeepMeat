@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.synthesiser;
 
 import com.neep.meatlib.block.multi.TallBlock;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.Registries.BLOCKRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;

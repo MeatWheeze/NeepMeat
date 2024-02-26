@@ -1,8 +1,7 @@
 package com.neep.meatlib.item;
 
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.neepmeat.NMItemGroups;
-import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.block.Block;
 import net.minecraft.client.item.TooltipContext;

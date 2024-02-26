@@ -1,15 +1,8 @@
 package com.neep.neepmeat.api.enlightenment;
 
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMComponents;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.Stat;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.StatHandler;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.registry.Registry;
 
 public class EnlightenmentUtil
 {

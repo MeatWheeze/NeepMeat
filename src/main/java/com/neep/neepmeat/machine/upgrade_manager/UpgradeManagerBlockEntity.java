@@ -2,17 +2,15 @@ package com.neep.neepmeat.machine.upgrade_manager;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.network.PacketBufUtil;
-import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.implant.player.ImplantManager;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.screen_handler.UpgradeManagerScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.network.ServerPlayerEntity;

@@ -1,9 +1,9 @@
 package com.neep.neepmeat.recipe;
 
 import com.google.gson.JsonObject;
-import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
+import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
@@ -14,7 +14,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.registry.Registry;
@@ -152,14 +151,14 @@ public class GrindingRecipe implements MeatlibRecipe<GrinderStorage>
             RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, outputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, outputElement);
 
             // Extra output is optional in recipe json
             RecipeOutputImpl<Item> extraOutput = null;
             if (json.has("extra"))
             {
                 JsonObject extraElement = JsonHelper.getObject(json, "extra");
-                extraOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, extraElement);
+                extraOutput = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, extraElement);
             }
 
             float experience = JsonHelper.getFloat(json, "experience", 0);
@@ -172,12 +171,12 @@ public class GrindingRecipe implements MeatlibRecipe<GrinderStorage>
         public GrindingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
             RecipeOutputImpl<Item> extraOutput = null;
             if (buf.readBoolean())
             {
-                extraOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+                extraOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
             }
 
             float experience = buf.readFloat();
@@ -190,13 +189,13 @@ public class GrindingRecipe implements MeatlibRecipe<GrinderStorage>
         public void write(PacketByteBuf buf, GrindingRecipe recipe)
         {
             recipe.itemInput.write(buf);
-            recipe.itemOutput.write(Registry.ITEM, buf);
+            recipe.itemOutput.write(Registries.ITEM, buf);
 
             // Include extra only if present
             if (recipe.extraOutput != null)
             {
                 buf.writeBoolean(true);
-                recipe.extraOutput.write(Registry.ITEM, buf);
+                recipe.extraOutput.write(Registries.ITEM, buf);
             }
             else buf.writeBoolean(false);
 

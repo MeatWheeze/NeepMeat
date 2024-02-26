@@ -74,7 +74,6 @@ import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitB
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VascularConduitBlockEntity;
 import com.neep.neepmeat.transport.block.fluid_transport.CheckValveBlock;
-import com.neep.neepmeat.transport.block.fluid_transport.EncasedFluidPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.StopValveBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.*;
 import com.neep.neepmeat.transport.block.item_transport.entity.ItemDuctBlockEntity;
@@ -207,7 +206,7 @@ public class NMBlockEntities
 
     public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, FabricBlockEntityTypeBuilder.Factory<T> factory, Block... block)
     {
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
                                  FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 

@@ -1,6 +1,5 @@
 package com.neep.neepmeat.transport.blood_network;
 
-import com.google.common.collect.Sets;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
@@ -14,7 +13,6 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;

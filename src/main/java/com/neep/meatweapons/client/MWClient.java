@@ -2,14 +2,12 @@ package com.neep.meatweapons.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
-import com.neep.meatlib.attachment.player.PlayerAttachmentManager;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.*;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
-import com.neep.meatweapons.client.sound.DrillSoundInstance;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;

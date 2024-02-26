@@ -7,7 +7,6 @@ import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.editor.CompiledProgramEditorState;
 import com.neep.neepmeat.plc.instruction.Instruction;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;

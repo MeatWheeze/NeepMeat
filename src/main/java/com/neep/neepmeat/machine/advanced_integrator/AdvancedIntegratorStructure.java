@@ -28,7 +28,7 @@ public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedInteg
     @Override
     protected BlockEntityType<AdvancedIntegratorStructureBlockEntity> registerBlockEntity()
     {
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "advanced_integrator_structure"),
+        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "advanced_integrator_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new AdvancedIntegratorStructureBlockEntity(getBlockEntityType(), p, s),
                         this).build());

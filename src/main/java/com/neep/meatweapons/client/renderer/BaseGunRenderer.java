@@ -1,7 +1,7 @@
 package com.neep.meatweapons.client.renderer;
 
-import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.item.Aimable;
+import com.neep.meatweapons.item.BaseGunItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-
 import net.minecraft.util.math.Vec3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;

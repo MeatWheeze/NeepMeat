@@ -3,7 +3,6 @@ package com.neep.neepmeat.client.renderer.entity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;
 import com.neep.neepmeat.entity.hound.HoundEntity;
-import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;

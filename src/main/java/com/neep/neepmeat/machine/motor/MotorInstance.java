@@ -5,7 +5,6 @@ import com.jozufozu.flywheel.api.instance.DynamicInstance;
 import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
 import com.jozufozu.flywheel.core.Materials;
 import com.jozufozu.flywheel.core.materials.model.ModelData;
-import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.neepmeat.client.NMExtraModels;
 import net.fabricmc.api.EnvType;

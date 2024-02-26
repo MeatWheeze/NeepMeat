@@ -1,7 +1,7 @@
 package com.neep.meatlib.datagen.loot;
 
 import com.neep.meatlib.block.MeatlibBlock;
-import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.Registries.BLOCKRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 import net.minecraft.block.Block;

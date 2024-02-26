@@ -9,6 +9,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.DyeItem;
 import net.minecraft.item.Items;
+import net.minecraft.recipe.book.RecipeCategory;
 
 import java.util.function.Consumer;
 
@@ -21,7 +22,7 @@ public class NMRecipeGenerator
 
     protected static void generateRecipes(Consumer<RecipeJsonProvider> exporter)
     {
-        MeatRecipeProvider.offerReversibleCompactingRecipes(exporter, NMItems.MEAT_STEEL, NMBlocks.MEAT_STEEL_BLOCK);
+        MeatRecipeProvider.offerReversibleCompactingRecipes(exporter, RecipeCategory.BUILDING_BLOCKS, NMItems.MEAT_STEEL, RecipeCategory.BUILDING_BLOCKS, NMBlocks.MEAT_STEEL_BLOCK);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.RUSTY_METAL_BLOCK, Items.DIRT, NMBlocks.POLISHED_METAL);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_RED_TILES, NMItems.BLOOD_BUBBLE, Blocks.TERRACOTTA);
         MeatRecipeProvider.offerEightDyeingRecipe(exporter, NMBlocks.DIRTY_WHITE_TILES, Blocks.DIRT, Blocks.TERRACOTTA);

@@ -6,7 +6,6 @@ import com.neep.neepmeat.api.processing.FluidEnegyRegistry;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
-import com.neep.neepmeat.transport.fluid_network.FluidNodeManager;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;

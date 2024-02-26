@@ -3,7 +3,6 @@ package com.neep.neepmeat.client;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.model.block.*;
 import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.transport.block.energy_transport.entity.EncasedConduitBlockEntity;
 import com.neep.neepmeat.transport.client.model.VascularConduitModel;
 import net.fabricmc.fabric.api.client.model.ExtraModelProvider;
 import net.fabricmc.fabric.api.client.model.ModelProviderContext;

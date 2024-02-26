@@ -1,8 +1,8 @@
 package com.neep.neepmeat.client.renderer.block;
 
-import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
+import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;

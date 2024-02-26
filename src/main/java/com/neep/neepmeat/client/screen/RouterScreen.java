@@ -2,7 +2,6 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.screen_handler.BufferScreenHandler;
 import com.neep.neepmeat.screen_handler.RouterScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

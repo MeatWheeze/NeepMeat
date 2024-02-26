@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.integrator;
 
 import com.neep.meatweapons.particle.MWGraphicsEffects;
-import com.neep.neepmeat.api.DataType;
 import com.neep.neepmeat.api.DataVariant;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;

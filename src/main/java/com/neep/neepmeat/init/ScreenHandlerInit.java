@@ -1,7 +1,6 @@
 package com.neep.neepmeat.init;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.machine.separator.SeparatorBlock;
 import com.neep.neepmeat.machine.separator.SeparatorScreenHandler;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import com.neep.neepmeat.screen_handler.*;

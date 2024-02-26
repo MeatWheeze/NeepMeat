@@ -14,7 +14,7 @@
 //        Identifier id = Identifier.tryParse(nbt.getString("id"));
 //        if (id != null)
 //        {
-//            item = Registry.ITEM.get(id);
+//            item = Registries.ITEM.get(id);
 //        }
 //        else
 //            item = Items.AIR;
@@ -24,7 +24,7 @@
 //    {
 //        String idString = JsonHelper.getString(jsonObject, "resource");
 //        Identifier id = Identifier.tryParse(idString);
-//        this.item = Registry.ITEM.get(id);
+//        this.item = Registries.ITEM.get(id);
 //    }
 //
 //    @Override

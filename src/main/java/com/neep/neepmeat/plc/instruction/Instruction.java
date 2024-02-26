@@ -1,8 +1,8 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.plc.Instructions;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;

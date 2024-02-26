@@ -1,9 +1,7 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.api.plc.PLC;
 import com.neep.neepmeat.api.plc.robot.AtomicAction;
-import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.Parser;
@@ -17,7 +15,6 @@ import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtHelper;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
@@ -112,7 +109,7 @@ public class RequestItemInstruction implements Instruction
 
         view.fastForward();
 
-        Item item = Registry.ITEM.getOrEmpty(Identifier.tryParse(string)).orElse(null);
+        Item item = Registries.ITEM.getOrEmpty(Identifier.tryParse(string)).orElse(null);
         if (item == null)
             throw new NeepASM.ParseException("item '" + string + "' not known");
         ItemVariant itemVariant = ItemVariant.of(item);

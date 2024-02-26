@@ -18,8 +18,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.Function;
 
-import static net.minecraft.client.render.RenderPhase.BEACON_BEAM_SHADER;
-
 public class BeamEffect extends BeamGraphicsEffect
 {
     public BeamEffect(World world, UUID uuid, PacketByteBuf buf)

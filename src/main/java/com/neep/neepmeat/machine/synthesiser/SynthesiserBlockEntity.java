@@ -16,12 +16,12 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -131,7 +131,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
         nbt.putFloat("increment", increment);
         nbt.putInt("state", state.ordinal());
         nbt.putLong("requiredAmount", requiredAmount);
-        if (entityType != null) nbt.putString("entityType", Registry.ENTITY_TYPE.getId(entityType).toString());
+        if (entityType != null) nbt.putString("entityType", Registries.ENTITY_TYPE.getId(entityType).toString());
         storage.writeNbt(nbt);
     }
 
@@ -144,7 +144,7 @@ public class SynthesiserBlockEntity extends SyncableBlockEntity
         this.increment = nbt.getFloat("increment");
         this.state = State.values()[nbt.getInt("state")];
         this.requiredAmount = nbt.getLong("requiredAmount");
-        this.entityType = nbt.contains("entityType") ? Registry.ENTITY_TYPE.get(new Identifier(nbt.getString("entityType"))) : null;
+        this.entityType = nbt.contains("entityType") ? Registries.ENTITY_TYPE.get(new Identifier(nbt.getString("entityType"))) : null;
         storage.readNbt(nbt);
     }
 

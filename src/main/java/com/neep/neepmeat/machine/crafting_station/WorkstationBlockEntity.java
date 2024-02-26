@@ -157,7 +157,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
         {
             if (recipe != null)
             {
-                output.reset(recipe.craft(input));
+                output.reset(recipe.craft(input, world.getRegistryManager()));
             }
             else output.setStack(0, ItemStack.EMPTY);
         }

@@ -1,6 +1,6 @@
 package com.neep.neepmeat.init;
 
-import com.neep.meatlib.registry.SoundRegistry;
+import com.neep.meatlib.Registries.SOUNDRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.sound.SoundEvent;

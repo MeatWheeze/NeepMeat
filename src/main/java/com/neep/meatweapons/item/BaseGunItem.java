@@ -1,7 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.BulletDamageSource;
@@ -9,7 +9,6 @@ import com.neep.neepmeat.api.item.OverrideSwingItem;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
-import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

@@ -5,8 +5,8 @@ import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
-import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.implant.player.EntityImplantInstaller;
+import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.Entity;
@@ -117,11 +117,11 @@ public class EntityImplantRecipe implements ManufactureRecipe<MutateInPlace<Enti
         public EntityImplantRecipe read(Identifier id, JsonObject json)
         {
 //            Identifier baseId = Identifier.tryParse(JsonHelper.getString(json , "base"));
-//            EntityType<?> base = Registry.ENTITY_TYPE.get(baseId);
+//            EntityType<?> base = Registries.ENTITY_TYPE.get(baseId);
 
             JsonObject baseElement = JsonHelper.getObject(json, "base");
             String idString = JsonHelper.getString(baseElement, "id");
-            EntityType<?> base = Registry.ENTITY_TYPE.get(Identifier.tryParse(idString));
+            EntityType<?> base = Registries.ENTITY_TYPE.get(Identifier.tryParse(idString));
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(json);
 
@@ -141,7 +141,7 @@ public class EntityImplantRecipe implements ManufactureRecipe<MutateInPlace<Enti
         @Override
         public EntityImplantRecipe read(Identifier id, PacketByteBuf buf)
         {
-            EntityType<?> base = buf.readRegistryValue(Registry.ENTITY_TYPE);
+            EntityType<?> base = buf.readRegistryValue(Registries.ENTITY_TYPE);
 
             List<ManufactureStep<?>> steps = ItemManufactureRecipe.Serialiser.readSteps(buf);
 
@@ -153,7 +153,7 @@ public class EntityImplantRecipe implements ManufactureRecipe<MutateInPlace<Enti
         @Override
         public void write(PacketByteBuf buf, EntityImplantRecipe recipe)
         {
-            buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.base);
+            buf.writeRegistryValue(Registries.ENTITY_TYPE, recipe.base);
 
             ItemManufactureRecipe.Serialiser.writeSteps(recipe.getSteps(), buf);
 

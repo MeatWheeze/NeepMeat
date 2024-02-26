@@ -38,7 +38,7 @@ public class InjectStep implements ManufactureStep<ItemStack>
     {
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
-        this.fluid = FluidVariant.of(Registry.FLUID.get(id));
+        this.fluid = FluidVariant.of(Registries.FLUID.get(id));
         if (this.fluid.isBlank())
             throw new JsonParseException("Unknown fluid " + id);
     }

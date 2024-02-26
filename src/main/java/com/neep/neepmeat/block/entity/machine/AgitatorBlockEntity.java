@@ -1,7 +1,6 @@
 package com.neep.neepmeat.block.entity.machine;
 
 import com.neep.neepmeat.api.machine.MotorisedBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;

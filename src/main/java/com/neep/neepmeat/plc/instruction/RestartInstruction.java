@@ -1,7 +1,7 @@
 package com.neep.neepmeat.plc.instruction;
 
-import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.api.plc.PLC;
+import com.neep.neepmeat.plc.Instructions;
 import net.minecraft.nbt.NbtCompound;
 import org.jetbrains.annotations.NotNull;
 

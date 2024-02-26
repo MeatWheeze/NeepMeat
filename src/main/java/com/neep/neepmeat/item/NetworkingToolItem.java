@@ -4,7 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.neepmeat.api.DataPort;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMItems;

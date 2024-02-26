@@ -1,9 +1,6 @@
 package com.neep.neepmeat.fluid.ore_fat;
 
-import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.fluid.BaseFluid;
-import com.neep.neepmeat.item.BaseBucketItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -52,19 +49,19 @@ public class OreFatFluidFactory
 
     public FlowableFluid registerStill()
     {
-        still = Registry.register(Registry.FLUID, new Identifier(namespace, stillName), new Still());
+        still = Registry.register(Registries.FLUID, new Identifier(namespace, stillName), new Still());
         return still;
     }
 
     public FlowableFluid registerFlowing()
     {
-        flowing = Registry.register(Registry.FLUID, new Identifier(namespace, flowingName), new Flowing());
+        flowing = Registry.register(Registries.FLUID, new Identifier(namespace, flowingName), new Flowing());
         return flowing;
     }
 
     public Block registerBlock()
     {
-        block = Registry.register(Registry.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
+        block = Registry.register(Registries.BLOCK, new Identifier(namespace, baseName), new FluidBlock(still, FabricBlockSettings.copy(Blocks.WATER)){});
         return block;
     }
 

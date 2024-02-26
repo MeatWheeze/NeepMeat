@@ -1,17 +1,17 @@
 package com.neep.neepmeat.init;
 
 import com.neep.meatlib.item.BaseCraftingItem;
-import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.item.EnlightenmentFoodItem;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.item.TooltipSupplier;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.implant.item.ShieldUpgrade;
+import com.neep.neepmeat.implant.player.ExtraKneeImplant;
 import com.neep.neepmeat.implant.player.ExtraMouthImplant;
 import com.neep.neepmeat.implant.player.LungExtensionsImplant;
-import com.neep.neepmeat.item.*;
-import com.neep.neepmeat.implant.player.ExtraKneeImplant;
 import com.neep.neepmeat.implant.player.PinealEyeImplant;
+import com.neep.neepmeat.item.*;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterials;

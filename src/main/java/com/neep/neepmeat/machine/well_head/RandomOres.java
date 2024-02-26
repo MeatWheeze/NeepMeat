@@ -2,12 +2,8 @@ package com.neep.neepmeat.machine.well_head;
 
 import com.google.common.collect.Lists;
 import net.fabricmc.fabric.api.tag.convention.v1.ConventionalBlockTags;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.loot.LootTable;
@@ -85,7 +81,7 @@ public class RandomOres
                     .<Predicate<Block>>map(tag -> (block -> block.getRegistryEntry().isIn(tag)))
                     .reduce(Predicate::or)
                     .orElse(b -> false);
-            MATCHING = Registry.BLOCK.stream().filter(tags).toArray(Block[]::new);
+            MATCHING = Registries.BLOCK.stream().filter(tags).toArray(Block[]::new);
         }
         return MATCHING;
     }

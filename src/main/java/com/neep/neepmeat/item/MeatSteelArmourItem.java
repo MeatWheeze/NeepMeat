@@ -1,7 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterial;

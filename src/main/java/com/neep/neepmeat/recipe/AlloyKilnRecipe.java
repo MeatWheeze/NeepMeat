@@ -185,7 +185,7 @@ public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
             RecipeInput<Item> itemInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement2);
 
             JsonObject outputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, outputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, outputElement);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput1, itemInput2, itemOutput, time);
@@ -196,7 +196,7 @@ public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
         {
             RecipeInput<Item> itemInput1 = RecipeInput.fromBuffer(buf);
             RecipeInput<Item> itemInput2 = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
             int time = buf.readVarInt();
 
@@ -208,7 +208,7 @@ public class AlloyKilnRecipe implements MeatlibRecipe<AlloyKilnStorage>
         {
             recipe.itemInput1.write(buf);
             recipe.itemInput2.write(buf);
-            recipe.itemOutput.write(Registry.ITEM, buf);
+            recipe.itemOutput.write(Registries.ITEM, buf);
 
             buf.writeVarInt(recipe.processTime);
         }

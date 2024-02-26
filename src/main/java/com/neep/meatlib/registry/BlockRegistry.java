@@ -11,13 +11,13 @@ import net.fabricmc.fabric.api.mininglevel.v1.FabricMineableTags;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.item.ItemConvertible;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.sound.BlockSoundGroup;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class BlockRegistry
     {
         for (Map.Entry<Identifier, Block> entry : BLOCKS.entrySet())
         {
-            Registry.register(Registry.BLOCK, entry.getKey(), entry.getValue());
+            Registry.register(Registries.BLOCK, entry.getKey(), entry.getValue());
 
             REGISTERED_BLOCKS.put(entry.getKey(), entry.getValue());
         }
@@ -87,7 +87,7 @@ public class BlockRegistry
 
     public static BaseColumnBlock createLogBlock(String name, TooltipSupplier tooltipSupplier)
     {
-        return new BaseColumnBlock(name, ItemSettings.block(), FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD))
+        return new BaseColumnBlock(name, ItemSettings.block(), FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD))
         {
             @Override
             public TagKey<Block> getPreferredTool()
@@ -99,7 +99,7 @@ public class BlockRegistry
 
     public static BaseLeavesBlock createLeavesBlock(String name, BlockSoundGroup soundGroup)
     {
-        return new BaseLeavesBlock(name, AbstractBlock.Settings.of(Material.LEAVES)
+        return new BaseLeavesBlock(name, AbstractBlock.Settings.create()
                 .strength(0.2f)
                 .ticksRandomly()
                 .sounds(soundGroup)

@@ -6,8 +6,6 @@ import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
-import com.neep.neepmeat.transport.blood_network.BloodNetwork;
-import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
@@ -18,7 +16,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.Random;

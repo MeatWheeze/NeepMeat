@@ -3,7 +3,6 @@ package com.neep.neepmeat.machine.charnel_compactor;
 import com.google.common.collect.MapMaker;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.integrator.Integrator;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StoragePreconditions;

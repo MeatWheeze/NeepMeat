@@ -2,8 +2,6 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseSwordItem;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterial;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.network.ISyncable;

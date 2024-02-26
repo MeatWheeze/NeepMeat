@@ -17,7 +17,6 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 public class EnlighteningCategory implements DisplayCategory<EnlighteningDisplay>

@@ -6,8 +6,8 @@ import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -107,7 +107,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
         protected BlockEntityType<PhageRayStructureBlockEntity> registerBlockEntity()
         {
             return Registry.register(
-                    Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "phage_ray_structure"),
+                    Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "phage_ray_structure"),
                     FabricBlockEntityTypeBuilder.create(
                             (p, s) -> new PhageRayStructureBlockEntity(getBlockEntityType(), p, s),
                             this).build());

@@ -1,7 +1,6 @@
 package com.neep.neepmeat.transport.api.pipe;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.minecraft.util.Identifier;

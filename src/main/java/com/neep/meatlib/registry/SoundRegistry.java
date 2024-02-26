@@ -1,8 +1,9 @@
 package com.neep.meatlib.registry;
 
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ public class SoundRegistry
     public static SoundEvent registerSound(String namespace, String path)
     {
         Identifier id = new Identifier(namespace, path);
-        SoundEvent event = new SoundEvent(id);
+        SoundEvent event = SoundEvent.of(id);
         SOUNDS.put(id, event);
         return event;
     }
@@ -23,7 +24,7 @@ public class SoundRegistry
     {
         for (Map.Entry<Identifier, SoundEvent> entry : SOUNDS.entrySet())
         {
-            Registry.register(Registry.SOUND_EVENT, entry.getKey(), entry.getValue());
+            Registry.register(Registries.SOUND_EVENT, entry.getKey(), entry.getValue());
         }
     }
 }

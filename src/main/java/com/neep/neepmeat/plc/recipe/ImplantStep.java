@@ -31,7 +31,7 @@ public class ImplantStep implements ManufactureStep<Entity>
     {
         Identifier id = Identifier.tryParse(nbt.getString("id"));
         if (id != null)
-            item = Registry.ITEM.get(id);
+            item = Registries.ITEM.get(id);
         else
             item = Items.AIR;
     }
@@ -40,7 +40,7 @@ public class ImplantStep implements ManufactureStep<Entity>
     {
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
-        this.item = Registry.ITEM.get(id);
+        this.item = Registries.ITEM.get(id);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ImplantStep implements ManufactureStep<Entity>
     public NbtCompound toNbt()
     {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("id", Registry.ITEM.getId(item).toString());
+        nbt.putString("id", Registries.ITEM.getId(item).toString());
         return nbt;
     }
 

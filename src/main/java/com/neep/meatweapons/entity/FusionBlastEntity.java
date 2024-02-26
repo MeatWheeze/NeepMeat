@@ -2,8 +2,6 @@ package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.FusionCannonItem;
-import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.Entity;
@@ -16,13 +14,11 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.Packet;
-import net.minecraft.network.listener.ClientPlayPacketListener;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 import java.util.List;

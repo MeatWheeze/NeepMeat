@@ -9,8 +9,6 @@ import com.neep.neepmeat.api.storage.MultiItemBuffer;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.vat.VatComponent;
 import com.neep.neepmeat.block.vat.VatControllerBlock;
-import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;

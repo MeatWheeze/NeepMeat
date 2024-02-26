@@ -1,6 +1,5 @@
 package com.neep.neepmeat.machine.phage_ray;
 
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.neep.meatlib.api.event.InputEvents;
@@ -11,7 +10,6 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.init.NMGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
-import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

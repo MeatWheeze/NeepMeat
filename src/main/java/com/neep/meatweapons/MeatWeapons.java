@@ -41,7 +41,7 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id),
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                                    builder
                         .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
@@ -50,7 +50,7 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, EntityType<T> type)
     {
-        return Registry.register(Registry.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
+        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id), type);
     }
 
     @Override

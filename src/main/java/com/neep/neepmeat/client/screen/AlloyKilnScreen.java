@@ -3,7 +3,6 @@ package com.neep.neepmeat.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.screen_handler.AlloyKilnScreenHandler;
-import com.neep.neepmeat.screen_handler.StirlingEngineScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;

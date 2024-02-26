@@ -4,8 +4,8 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.SpawnEggItem;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +16,7 @@ public class MobSynthesisRegistry
 
     public static void register(EntityType<?> type, long meat, int time)
     {
-        Identifier id = Registry.ENTITY_TYPE.getId(type);
+        Identifier id = Registries.ENTITY_TYPE.getId(type);
 //        if (id == null) throw new IllegalArgumentException("The given EntityType has not been registered");
 
         map.put(type, new Entry(type, id, meat, time));

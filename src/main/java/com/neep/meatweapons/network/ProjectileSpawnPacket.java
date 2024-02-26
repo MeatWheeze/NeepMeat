@@ -12,9 +12,9 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 
 import java.util.UUID;
 
@@ -26,7 +26,7 @@ public class ProjectileSpawnPacket
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
 
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());
-        byteBuf.writeVarInt(Registry.ENTITY_TYPE.getRawId(e.getType()));
+        byteBuf.writeVarInt(Registries.ENTITY_TYPE.getRawId(e.getType()));
         byteBuf.writeUuid(e.getUuid());
         byteBuf.writeVarInt(e.getId());
 
@@ -44,7 +44,7 @@ public class ProjectileSpawnPacket
         {
             ClientPlayNetworking.registerGlobalReceiver(MWNetwork.SPAWN_ID, (client, handler, byteBuf, responseSender) ->
             {
-                EntityType<?> et = Registry.ENTITY_TYPE.get(byteBuf.readVarInt());
+                EntityType<?> et = Registries.ENTITY_TYPE.get(byteBuf.readVarInt());
                 UUID uuid = byteBuf.readUuid();
                 int entityId = byteBuf.readVarInt();
                 Vec3d pos = PacketBufUtil.readVec3d(byteBuf);
@@ -56,7 +56,7 @@ public class ProjectileSpawnPacket
                         throw new IllegalStateException("Tried to spawn entity in a null world!");
                     Entity e = et.create(MinecraftClient.getInstance().world);
                     if (e == null)
-                        throw new IllegalStateException("Failed to create instance of entity \"" + Registry.ENTITY_TYPE.getId(et) + "\"!");
+                        throw new IllegalStateException("Failed to create instance of entity \"" + Registries.ENTITY_TYPE.getId(et) + "\"!");
                     e.updateTrackedPosition(pos.z, pos.y, pos.z);
                     e.setPos(pos.x, pos.y, pos.z);
                     e.setPitch(pitch);

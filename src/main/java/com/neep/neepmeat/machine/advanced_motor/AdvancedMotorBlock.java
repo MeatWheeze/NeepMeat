@@ -5,7 +5,6 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.block.energy_transport.VascularConduitBlock;
 import com.neep.neepmeat.util.MiscUtil;

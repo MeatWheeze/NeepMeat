@@ -1,6 +1,5 @@
 package com.neep.neepmeat.network;
 
-import com.ibm.icu.text.MessagePattern;
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.EnvType;
@@ -12,12 +11,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 
 public class ParticleSpawnS2C
 {
@@ -40,7 +39,7 @@ public class ParticleSpawnS2C
         PacketBufUtil.writeVec3d(buf, spread);
         buf.writeInt(count);
 
-        buf.writeRegistryValue(Registry.PARTICLE_TYPE, particle.getType());
+        buf.writeRegistryValue(Registries.PARTICLE_TYPE, particle.getType());
         particle.write(buf);
 
         ServerPlayNetworking.send(player, PARTICLE_SPAWN, buf);
@@ -58,7 +57,7 @@ public class ParticleSpawnS2C
                 Vec3d spread = PacketBufUtil.readVec3d(buf);
                 int count = buf.readInt();
 
-                ParticleType<?> type = buf.readRegistryValue(Registry.PARTICLE_TYPE);
+                ParticleType<?> type = buf.readRegistryValue(Registries.PARTICLE_TYPE);
                 if (type != null)
                 {
                     ParticleEffect effect = readParameters(type, buf);

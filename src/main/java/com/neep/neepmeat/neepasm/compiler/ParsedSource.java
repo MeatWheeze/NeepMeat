@@ -10,8 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static com.neep.neepmeat.neepasm.program.Label.Seek.FORWARDS;
-
 public class ParsedSource
 {
     private final List<ObjectIntPair<ParsedInstruction>> instructions = Lists.newArrayList();

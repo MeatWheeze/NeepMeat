@@ -37,7 +37,7 @@ public class VivisectionEmiRecipe implements EmiRecipe {
     public VivisectionEmiRecipe(Item input, Item output) {
         this.entities = List.of();
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+Registry.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+Registries.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
         this.input = List.of(EmiIngredient.of(Ingredient.ofItems(input)));
         this.output = List.of(EmiStack.of(output));
     }

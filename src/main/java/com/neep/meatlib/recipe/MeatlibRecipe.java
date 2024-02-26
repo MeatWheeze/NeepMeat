@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.Ingredient;
 import net.minecraft.recipe.Recipe;
-import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
@@ -51,7 +51,7 @@ public interface MeatlibRecipe<C> extends Recipe<ImplementedRecipe.DummyInventor
     }
 
     @Override
-    default ItemStack craft(ImplementedRecipe.DummyInventory inventory)
+    default ItemStack craft(ImplementedRecipe.DummyInventory inventory, DynamicRegistryManager dynamicRegistryManager)
     {
         return ItemStack.EMPTY;
     }
@@ -69,7 +69,7 @@ public interface MeatlibRecipe<C> extends Recipe<ImplementedRecipe.DummyInventor
     }
 
     @Override
-    default ItemStack getOutput()
+    default ItemStack getOutput(DynamicRegistryManager registryManager)
     {
         return ItemStack.EMPTY;
     }

@@ -1,12 +1,13 @@
 package com.neep.meatlib.item;
 
-import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.Item;
-import net.minecraft.text.*;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 
 import java.util.List;

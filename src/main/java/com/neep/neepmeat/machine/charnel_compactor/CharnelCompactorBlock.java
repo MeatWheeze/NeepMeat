@@ -5,7 +5,6 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.datagen.tag.NMTags;
 import com.neep.neepmeat.machine.integrator.Integrator;
-import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.transport.api.pipe.DataCable;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;

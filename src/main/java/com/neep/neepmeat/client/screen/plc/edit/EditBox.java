@@ -7,7 +7,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.input.CursorMovement;
 import net.minecraft.text.Style;
@@ -16,7 +15,6 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)

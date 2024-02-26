@@ -4,11 +4,8 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-
-import java.util.List;
 
 /**
  * An parameter container similar to Item.Settings for use in Block and BlockItem constructors.

@@ -2,7 +2,6 @@ package com.neep.neepmeat.guide.article;
 
 import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;

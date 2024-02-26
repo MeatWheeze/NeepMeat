@@ -1,7 +1,9 @@
 package com.neep.neepmeat.client.sound;
 
 import com.neep.neepmeat.machine.pylon.PylonBlockEntity;
-import net.minecraft.client.sound.*;
+import net.minecraft.client.sound.AbstractSoundInstance;
+import net.minecraft.client.sound.Sound;
+import net.minecraft.client.sound.TickableSoundInstance;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;

@@ -79,7 +79,7 @@ public class ManufactureDisplay implements Display
         public NbtCompound save(NbtCompound tag, ManufactureDisplay display)
         {
             tag.put("output", EntryIngredients.save(getOutputIngredients(display)));
-            tag.putString("base", Registry.ITEM.getId(base).toString());
+            tag.putString("base", Registries.ITEM.getId(base).toString());
             NbtList steps = new NbtList();
 
             for (var step : display.getSteps())
@@ -104,7 +104,7 @@ public class ManufactureDisplay implements Display
         {
             List<EntryIngredient> output = EntryIngredients.read(tag.getList("output", NbtElement.COMPOUND_TYPE));
 
-            Item base = Registry.ITEM.get(Identifier.tryParse(tag.getString("base")));
+            Item base = Registries.ITEM.get(Identifier.tryParse(tag.getString("base")));
 
             List<ManufactureStep<?>> steps = Lists.newArrayList();
             NbtList nbtSteps = tag.getList("steps", NbtElement.COMPOUND_TYPE);

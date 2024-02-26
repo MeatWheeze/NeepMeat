@@ -263,7 +263,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
             int w = strings[0].length();
             int h = strings.length;
             DefaultedList<RecipeInput<?>> inputs = createPatternMatrix(strings, map, w, h);
-            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "result"));
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, JsonHelper.getObject(json, "result"));
             return new GeneralSurgeryRecipe(id, w, h, inputs, output);
         }
 
@@ -277,7 +277,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
 
             inputs.replaceAll(ignored -> RecipeInput.fromBuffer(buf));
 
-            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
             return new GeneralSurgeryRecipe(id, width, height, inputs, output);
         }
 
@@ -292,7 +292,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
                 input.write(buf);
             }
 
-            recipe.output.write(Registry.ITEM, buf);
+            recipe.output.write(Registries.ITEM, buf);
         }
     }
 }

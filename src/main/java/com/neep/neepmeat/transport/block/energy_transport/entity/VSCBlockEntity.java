@@ -3,11 +3,9 @@ package com.neep.neepmeat.transport.block.energy_transport.entity;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.api.storage.LazyBlockApiCache;
-import com.neep.neepmeat.machine.fluid_exciter.AbstractVascularConduitEntity;
 import com.neep.neepmeat.transport.api.pipe.AbstractBloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.block.energy_transport.VSCBlock;
-import com.neep.neepmeat.transport.blood_network.BloodNetwork;
 import com.neep.neepmeat.transport.blood_network.BloodTransferChangeListener;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
@@ -24,8 +22,6 @@ import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
-
-import javax.swing.event.ChangeListener;
 
 public class VSCBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {

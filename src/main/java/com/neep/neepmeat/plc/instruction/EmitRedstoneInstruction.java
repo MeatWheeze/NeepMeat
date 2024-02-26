@@ -5,7 +5,6 @@ import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.ParsedSource;
 import com.neep.neepmeat.neepasm.compiler.TokenView;
-import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
 import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.RedstoneInterface;

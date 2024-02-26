@@ -8,7 +8,7 @@ public interface MeatRecipeType<T extends MeatlibRecipe<?>> extends RecipeType<T
 {
 //    static <T extends MeatRecipe<?>> MeatRecipeType<T> register(final String id)
 //    {
-//        return Registry.register(RecipeRegistry.RECIPE_TYPE, new Identifier(id), new MeatRecipeType<T>()
+//        return Registry.register(RecipeRegistries.RECIPE_TYPE, new Identifier(id), new MeatRecipeType<T>()
 //        {
 //
 //            public String toString()

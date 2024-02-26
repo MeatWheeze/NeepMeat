@@ -2,6 +2,7 @@ package com.neep.neepmeat.network.plc;
 
 import com.neep.meatlib.network.PacketBufUtil;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.screen.plc.RecordMode;
 import com.neep.neepmeat.neepasm.compiler.variable.VariableStack;
@@ -9,7 +10,6 @@ import com.neep.neepmeat.plc.Instructions;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
-import com.neep.neepmeat.api.plc.program.PLCProgram;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

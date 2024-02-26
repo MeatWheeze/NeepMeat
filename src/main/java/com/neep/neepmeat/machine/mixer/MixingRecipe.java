@@ -188,7 +188,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             RecipeInput<Fluid> fluidInput2 = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidElement2);
 
             JsonObject fluidElement3 = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registry.FLUID, fluidElement3);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromJsonRegistry(Registries.FLUID, fluidElement3);
 
             int time = JsonHelper.getInt(json, "processtime", this.processTIme);
             return this.factory.create(id, itemInput, fluidInput1, fluidInput2, fluidOutput, time);
@@ -200,7 +200,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             RecipeInput<Item> ingredient = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput1 = RecipeInput.fromBuffer(buf);
             RecipeInput<Fluid> fluidInput2 = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
+            RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registries.FLUID, buf);
             int time = buf.readVarInt();
 
             return this.factory.create(id, ingredient, fluidInput1, fluidInput2, fluidOutput, time);
@@ -212,7 +212,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             recipe.itemInput.write(buf);
             recipe.fluidInput1.write(buf);
             recipe.fluidInput2.write(buf);
-            recipe.fluidOutput.write(Registry.FLUID, buf);
+            recipe.fluidOutput.write(Registries.FLUID, buf);
             buf.writeVarInt(recipe.processTime);
         }
 

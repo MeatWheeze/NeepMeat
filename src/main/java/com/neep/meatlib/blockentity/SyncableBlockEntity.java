@@ -5,8 +5,8 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
 import net.minecraft.util.math.BlockPos;
 
@@ -114,7 +114,7 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
 //        public SyncPacket(PacketByteBuf buf)
 //        {
 //            this.pos = buf.readBlockPos();
-//            this.type = buf.readRegistryValue(Registry.BLOCK_ENTITY_TYPE);
+//            this.type = buf.readRegistryValue(Registries.BLOCK_ENTITY_TYPE);
 //            this.nbt = buf.readNbt();
 //        }
 //
@@ -122,7 +122,7 @@ public abstract class SyncableBlockEntity extends BlockEntity implements BlockEn
 //        public void write(PacketByteBuf buf)
 //        {
 //            buf.writeBlockPos(this.pos);
-//            buf.writeRegistryValue(Registry.BLOCK_ENTITY_TYPE, this.type);
+//            buf.writeRegistryValue(Registries.BLOCK_ENTITY_TYPE, this.type);
 //            buf.writeNbt(this.nbt);
 //        }
 //

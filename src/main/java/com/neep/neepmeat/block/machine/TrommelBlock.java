@@ -4,7 +4,6 @@ import com.neep.meatlib.block.BaseHorFacingBlock;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.trommel.TrommelBlockEntity;
 import com.neep.neepmeat.machine.trommel.TrommelStructureBlockEntity;
 import net.minecraft.block.*;

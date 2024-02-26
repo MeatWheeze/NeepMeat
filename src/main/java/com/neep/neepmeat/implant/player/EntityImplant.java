@@ -2,7 +2,6 @@ package com.neep.neepmeat.implant.player;
 
 import com.neep.meatlib.util.NbtSerialisable;
 import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
 
 public interface EntityImplant extends NbtSerialisable
 {

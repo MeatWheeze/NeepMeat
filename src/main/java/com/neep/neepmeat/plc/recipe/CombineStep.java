@@ -41,7 +41,7 @@ public class CombineStep implements ManufactureStep<ItemStack>
     {
         String idString = JsonHelper.getString(jsonObject, "resource");
         Identifier id = Identifier.tryParse(idString);
-        var item = Registry.ITEM.get(id);
+        var item = Registries.ITEM.get(id);
 
         if (item == Items.AIR)
             throw new JsonParseException("Unknown item " + id);

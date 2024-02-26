@@ -2,8 +2,8 @@ package com.neep.neepmeat.transport.blood_network;
 
 import com.google.common.collect.*;
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.transport.api.pipe.VascularConduitEntityProvider;
 import com.neep.neepmeat.transport.api.pipe.VascularConduitEntity;
+import com.neep.neepmeat.transport.api.pipe.VascularConduitEntityProvider;
 import dev.onyxstudios.cca.api.v3.component.Component;
 import dev.onyxstudios.cca.api.v3.component.tick.ServerTickingComponent;
 import it.unimi.dsi.fastutil.Pair;

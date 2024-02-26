@@ -1,17 +1,9 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.neepasm.NeepASM;
-import com.neep.neepmeat.neepasm.compiler.ParsedSource;
-import com.neep.neepmeat.neepasm.compiler.TokenView;
-import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
-import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
-import com.neep.neepmeat.neepasm.compiler.variable.StringVariable;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.Instructions;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;

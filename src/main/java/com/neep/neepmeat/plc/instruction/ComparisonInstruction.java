@@ -1,7 +1,6 @@
 package com.neep.neepmeat.plc.instruction;
 
 import com.neep.neepmeat.api.plc.PLC;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.Instructions;
 import org.jetbrains.annotations.NotNull;
 

@@ -3,7 +3,6 @@ package com.neep.neepmeat.client.screen.plc;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
-import io.netty.channel.pool.ChannelHealthChecker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.Drawable;

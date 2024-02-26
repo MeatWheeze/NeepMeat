@@ -179,7 +179,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         for (int i = 0; filtered.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)
         {
             GuideNode node = filtered.next();
-            ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
+            ItemStack icon = new ItemStack(Registries.ITEM.get(node.getIcon()));
             entries.add(new EntryWidget(i,
                     screenOffsetX + this.x,
                     screenOffsetY + this.y + (i) * entryHeight,
@@ -206,7 +206,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         for (int i = 0; i < nodes.size(); ++i)
         {
             GuideNode node = nodes.get(i);
-            ItemStack icon = new ItemStack(Registry.ITEM.get(node.getIcon()));
+            ItemStack icon = new ItemStack(Registries.ITEM.get(node.getIcon()));
             entries.add(new EntryWidget(i + 1,
                     screenOffsetX + this.x,
                     screenOffsetY + this.y + (i + 1) * entryHeight,

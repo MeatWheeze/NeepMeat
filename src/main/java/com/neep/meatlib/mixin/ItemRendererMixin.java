@@ -3,7 +3,6 @@ package com.neep.meatlib.mixin;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

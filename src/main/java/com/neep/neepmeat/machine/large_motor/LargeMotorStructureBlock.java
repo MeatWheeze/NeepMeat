@@ -19,7 +19,7 @@ public class LargeMotorStructureBlock extends BigBlockStructure<LargeMotorStruct
     protected BlockEntityType<LargeMotorStructureEntity> registerBlockEntity()
     {
         return Registry.register(
-                Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_motor_structure"),
+                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "large_motor_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new LargeMotorStructureEntity(getBlockEntityType(), p, s),
                         this).build());

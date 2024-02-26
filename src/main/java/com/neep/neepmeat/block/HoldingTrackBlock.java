@@ -3,7 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.AxialDirection;
 import com.neep.neepmeat.util.MiscUtil;

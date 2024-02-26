@@ -6,8 +6,6 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.ints.IntStack;
 import net.minecraft.nbt.NbtCompound;
 
-import java.util.Iterator;
-
 public class VariableStack implements IntStack, NbtSerialisable
 {
 //    private final ObjectArrayList<Variable<?>> entries = new ObjectArrayList<>();

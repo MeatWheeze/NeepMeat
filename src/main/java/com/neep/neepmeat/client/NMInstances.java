@@ -3,7 +3,6 @@ package com.neep.neepmeat.client;
 import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.neepmeat.client.instance.RoboticArmInstance;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
-import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
 import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMEntities;

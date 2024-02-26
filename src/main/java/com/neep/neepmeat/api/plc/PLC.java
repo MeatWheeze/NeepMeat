@@ -1,9 +1,7 @@
 package com.neep.neepmeat.api.plc;
 
 import com.neep.neepmeat.api.plc.robot.RobotAction;
-import com.neep.neepmeat.neepasm.compiler.variable.Variable;
 import com.neep.neepmeat.plc.robot.PLCActuator;
-import it.unimi.dsi.fastutil.Stack;
 import it.unimi.dsi.fastutil.ints.IntStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;

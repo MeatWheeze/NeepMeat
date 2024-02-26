@@ -1,7 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.DispenserBlock;

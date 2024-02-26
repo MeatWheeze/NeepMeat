@@ -7,8 +7,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.mixer.MixingRecipe;
 import com.neep.neepmeat.recipe.*;
 import com.neep.neepmeat.recipe.surgery.GeneralSurgeryRecipe;
-import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import com.neep.neepmeat.recipe.surgery.ImplantInstallRecipe;
+import com.neep.neepmeat.recipe.surgery.TransformingToolRecipe;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
 

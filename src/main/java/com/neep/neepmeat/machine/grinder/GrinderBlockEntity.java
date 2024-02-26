@@ -1,7 +1,7 @@
 package com.neep.neepmeat.machine.grinder;
 
-import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.recipe.MeatlibRecipe;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.block.entity.MotorisedMachineBlockEntity;

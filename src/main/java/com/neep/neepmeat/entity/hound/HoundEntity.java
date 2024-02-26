@@ -1,6 +1,5 @@
 package com.neep.neepmeat.entity.hound;
 
-import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.entity.EntityType;

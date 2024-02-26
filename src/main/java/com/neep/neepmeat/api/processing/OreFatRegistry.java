@@ -9,13 +9,11 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -31,11 +29,11 @@ public class OreFatRegistry
 
         if (FabricLoader.getInstance().isModLoaded("modern_industrialization"))
         {
-            register(TagKey.of(Registry.ITEM.getKey(), new Identifier("c:raw_lead_ores")), "Lead", 0x7188ca, Registry.ITEM.get(new Identifier("modern_industrialization:lead_ingot")));
-            register(TagKey.of(Registry.ITEM.getKey(), new Identifier("c:raw_nickel_ores")), "Nickel", 0xe5e5b7, Registry.ITEM.get(new Identifier("modern_industrialization:nickel_ingot")));
-            register(TagKey.of(Registry.ITEM.getKey(), new Identifier("c:raw_silver_ores")), "Silver", 0x94aad3, Registry.ITEM.get(new Identifier("modern_industrialization:silver_ingot")));
-            register(TagKey.of(Registry.ITEM.getKey(), new Identifier("c:raw_tin_ores")), "Tin", 0xe2d9f2, Registry.ITEM.get(new Identifier("modern_industrialization:tin_ingot")));
-            register(TagKey.of(Registry.ITEM.getKey(), new Identifier("c:raw_antimony_ores")), "Antimony", 0x80808c, Registry.ITEM.get(new Identifier("modern_industrialization:antimony_ingot")));
+            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_lead_ores")), "Lead", 0x7188ca, Registries.ITEM.get(new Identifier("modern_industrialization:lead_ingot")));
+            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_nickel_ores")), "Nickel", 0xe5e5b7, Registries.ITEM.get(new Identifier("modern_industrialization:nickel_ingot")));
+            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_silver_ores")), "Silver", 0x94aad3, Registries.ITEM.get(new Identifier("modern_industrialization:silver_ingot")));
+            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_tin_ores")), "Tin", 0xe2d9f2, Registries.ITEM.get(new Identifier("modern_industrialization:tin_ingot")));
+            register(TagKey.of(Registries.ITEM.getKey(), new Identifier("c:raw_antimony_ores")), "Antimony", 0x80808c, Registries.ITEM.get(new Identifier("modern_industrialization:antimony_ingot")));
         }
     }
 
@@ -62,12 +60,12 @@ public class OreFatRegistry
 
     public static Entry getFromOutput(Identifier id)
     {
-        return ENTRIES.stream().filter(e -> e.result.equals(Registry.ITEM.get(id))).findFirst().orElse(null);
+        return ENTRIES.stream().filter(e -> e.result.equals(Registries.ITEM.get(id))).findFirst().orElse(null);
     }
 
     public static Entry getFromInput(Identifier id)
     {
-        return getFromInput(Registry.ITEM.get(id));
+        return getFromInput(Registries.ITEM.get(id));
     }
 
     public static Entry getFromVariant(FluidVariant variant)
@@ -90,7 +88,7 @@ public class OreFatRegistry
         NbtCompound nbt = variant.getNbt();
         if (variant.getObject() instanceof OreFatFluidFactory.Main && nbt != null)
         {
-            return Registry.ITEM.get(new Identifier((nbt.getString("item"))));
+            return Registries.ITEM.get(new Identifier((nbt.getString("item"))));
         }
         return null;
     }
@@ -98,14 +96,14 @@ public class OreFatRegistry
     public static FluidVariant getDirty(Item ore)
     {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("item", Registry.ITEM.getId(ore).toString());
+        nbt.putString("item", Registries.ITEM.getId(ore).toString());
         return FluidVariant.of(NMFluids.STILL_DIRTY_ORE_FAT, nbt);
     }
 
     public static FluidVariant getClean(Item ore)
     {
         NbtCompound nbt = new NbtCompound();
-        nbt.putString("item", Registry.ITEM.getId(ore).toString());
+        nbt.putString("item", Registries.ITEM.getId(ore).toString());
         return FluidVariant.of(NMFluids.STILL_CLEAN_ORE_FAT, nbt);
     }
 
@@ -114,7 +112,7 @@ public class OreFatRegistry
         public NbtCompound toNbt()
         {
             NbtCompound nbt = new NbtCompound();
-            nbt.putString("item", Registry.ITEM.getId(result).toString());
+            nbt.putString("item", Registries.ITEM.getId(result).toString());
             return nbt;
         }
     }

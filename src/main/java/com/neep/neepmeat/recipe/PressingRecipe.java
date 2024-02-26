@@ -16,9 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeSerializer;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
@@ -122,7 +122,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
 
             JsonObject itemOutputElement = JsonHelper.getObject(json, "output");
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, itemOutputElement);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, itemOutputElement);
 
             return this.factory.create(id, fluidInput, itemOutput);
         }
@@ -131,7 +131,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         public PressingRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
-            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
+            RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
             return this.factory.create(id, fluidInput, itemOutput);
         }
@@ -140,7 +140,7 @@ public class PressingRecipe extends AbstractPressingRecipe<CastingBasinStorage>
         public void write(PacketByteBuf buf, PressingRecipe recipe)
         {
             recipe.fluidInput.write(buf);
-            recipe.itemOutput.write(Registry.ITEM, buf);
+            recipe.itemOutput.write(Registries.ITEM, buf);
         }
 
         @FunctionalInterface

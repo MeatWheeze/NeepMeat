@@ -2,7 +2,6 @@ package com.neep.neepmeat.transport.block.energy_transport;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.BloodAcceptor;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
@@ -25,8 +24,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-
-import java.sql.SQLSyntaxErrorException;
 
 public class VascularConduitBlock extends AbstractPipeBlock implements BlockEntityProvider, VascularConduit
 {

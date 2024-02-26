@@ -2,9 +2,7 @@ package com.neep.neepmeat.machine.power_flower;
 
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.neepmeat.client.NMInstances;
 import com.neep.neepmeat.datagen.tag.NMTags;
-import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -18,7 +16,6 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.ItemTags;
 import net.minecraft.tag.TagKey;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -32,7 +29,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import net.minecraft.world.WorldView;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.shadowed.eliotlash.mclib.math.functions.classic.Pow;
 
 public class PowerFlowerGrowthBlock extends BaseBlock implements PowerFlower
 {

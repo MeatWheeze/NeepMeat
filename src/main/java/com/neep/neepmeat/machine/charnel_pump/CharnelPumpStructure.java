@@ -37,7 +37,7 @@ public class CharnelPumpStructure extends BigBlockStructure<CharnelPumpStructure
     protected BlockEntityType<CPSBlockEntity> registerBlockEntity()
     {
         return Registry.register(
-                Registry.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "charnel_pump_structure"),
+                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "charnel_pump_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new CharnelPumpStructure.CPSBlockEntity(getBlockEntityType(), p, s),
                         this).build());

@@ -1,16 +1,13 @@
 package com.neep.neepmeat.transport.client;
 
 import com.neep.neepmeat.client.renderer.ItemPipeRenderer;
-import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.ItemTransport;
-import com.neep.neepmeat.transport.client.renderer.FluidGaugeBlockRenderer;
 import com.neep.neepmeat.transport.client.screen.ItemRequesterScreen;
 import com.neep.neepmeat.transport.client.screen.LimiterValveScreen;
 import com.neep.neepmeat.transport.client.screen.VSCScreen;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;
 import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactories;

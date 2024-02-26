@@ -1,6 +1,6 @@
 package com.neep.meatlib.item;
 
-import com.neep.meatlib.registry.ItemRegistry;
+import com.neep.meatlib.Registries.ITEMRegistry;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.SwordItem;
 import net.minecraft.item.ToolMaterial;
