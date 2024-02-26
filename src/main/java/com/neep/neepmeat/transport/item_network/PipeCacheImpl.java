@@ -165,15 +165,19 @@ public class PipeCacheImpl implements PipeCache
             if (pipe == null)
                 return null;
 
-            if (!pipe.pipe().supportsRouting())
-                return null;
 
             visited.add(current.asLong());
             Direction excluded = face.getOpposite();
             Set<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> d != excluded);
 
-            if (connections.size() == 0) return null;
-            if (connections.size() > 1 || current.equals(endPos))
+            // Ignore routing support if we have reached the end pos.
+            if (current.equals(endPos))
+                return current.toImmutable();
+
+            if (!pipe.pipe().supportsRouting() || connections.size() == 0)
+                return null;
+
+            if (connections.size() > 1)
                 return current.toImmutable();
 
             face = connections.iterator().next();
