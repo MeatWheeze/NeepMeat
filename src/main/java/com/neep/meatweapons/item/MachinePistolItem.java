@@ -11,6 +11,9 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
@@ -18,7 +21,10 @@ import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class MachinePistolItem extends BaseGunItem implements IAnimatable, Aimable
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+public class MachinePistolItem extends BaseGunItem implements GeoItem, Aimable
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
@@ -107,5 +113,29 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, Aimab
             controller.markNeedsReload();
             controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
         }
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer)
+    {
+
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider()
+    {
+        return null;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return null;
     }
 }

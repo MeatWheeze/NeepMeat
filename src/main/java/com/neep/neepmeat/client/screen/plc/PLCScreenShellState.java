@@ -6,15 +6,16 @@ import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.plc.instruction.SimpleInstructionProvider;
 import com.neep.neepmeat.client.screen.ScreenSubElement;
 import com.neep.neepmeat.client.screen.plc.edit.InstructionBrowserWidget;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.instruction.Argument;
 import com.neep.neepmeat.plc.instruction.InstructionProvider;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -59,7 +60,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         super.render(matrices, mouseX, mouseY, delta);
 
@@ -67,7 +68,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
         {
             int ex = 2;
             int ey = screenHeight - textRenderer.fontHeight - 2;
-            textRenderer.drawWithShadow(matrices, error, ex, ey, PLCCols.SELECTED.col);
+            GUIUtil.drawText(matrices, textRenderer, error, ex, ey, PLCCols.SELECTED.col, true);
         }
     }
 
@@ -131,9 +132,9 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
             RenderSystem.setShaderTexture(0, PLCProgramScreen.WIDGETS);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
             RenderSystem.enableBlend();
@@ -142,7 +143,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
 
             int u = 112;
             int v = isMouseOver(mouseX, mouseY) ? 32 : 16;
-            drawTexture(matrices, this.x, this.y, 0, u, v, width, height, 256, 256);
+            MonoTextRenderer.drawTexture(matrices.getMatrices().peek().getPositionMatrix(), this.x, this.y, 0, u, v, width, height, 256, 256);
 
             int maxWidth = 150;
 

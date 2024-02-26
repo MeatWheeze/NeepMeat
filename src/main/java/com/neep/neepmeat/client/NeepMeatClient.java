@@ -45,7 +45,6 @@ import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
-import dev.monarkhes.myron_neepmeat.api.Myron;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -78,7 +77,7 @@ public class NeepMeatClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-        Myron.registerNamespace(NeepMeat.NAMESPACE);
+//        Myron.registerNamespace(NeepMeat.NAMESPACE);
 
         registerRenderers();
         registerLayers();
@@ -214,18 +213,18 @@ public class NeepMeatClient implements ClientModInitializer
         // Coloured blocks
         for (BasePaintedBlock.PaintedBlock block : BasePaintedBlock.COLOURED_BLOCKS)
         {
-            ColorProviderRegistries.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
-            ColorProviderRegistries.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
+            ColorProviderRegistry.BLOCK.register((state, view, pos, tintIndex) -> block.getRawCol(), block);
+            ColorProviderRegistry.ITEM.register((stack, tintIndex) -> block.getRawCol(), block.asItem());
         }
 
         // Pipes
         for (var pipe : FluidTransport.COLOURED_FLUID_PIPES.values())
         {
-            ColorProviderRegistries.BLOCK.register(FluidPipeBlock::getTint, pipe);
+            ColorProviderRegistry.BLOCK.register(FluidPipeBlock::getTint, pipe);
             BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), pipe);
-            ColorProviderRegistries.ITEM.register(FluidPipeBlock::getItemTint, pipe.asItem());
+            ColorProviderRegistry.ITEM.register(FluidPipeBlock::getItemTint, pipe.asItem());
         }
-        ColorProviderRegistries.BLOCK.register(FilterPipeBlock::getTint, FluidTransport.FILTER_PIPE);
+        ColorProviderRegistry.BLOCK.register(FilterPipeBlock::getTint, FluidTransport.FILTER_PIPE);
     }
 
     public static void registerScreens()

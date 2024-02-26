@@ -1,10 +1,10 @@
 package com.neep.neepmeat.client.model;
 
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.model.GeoModel;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.model.GeoModel;
 
-public class GenericModel<T extends IAnimatable> extends GeoModel<T>
+public class GenericModel<T extends GeoAnimatable> extends GeoModel<T>
 {
     public final String namespace;
     public final String modelPath;
@@ -20,19 +20,19 @@ public class GenericModel<T extends IAnimatable> extends GeoModel<T>
     }
 
     @Override
-    public Identifier getModelResource(IAnimatable object)
+    public Identifier getModelResource(GeoAnimatable object)
     {
         return new Identifier(namespace, modelPath);
     }
 
     @Override
-    public Identifier getTextureResource(IAnimatable object)
+    public Identifier getTextureResource(GeoAnimatable object)
     {
         return new Identifier(namespace, texturePath);
     }
 
     @Override
-    public Identifier getAnimationResource(IAnimatable animatable)
+    public Identifier getAnimationResource(GeoAnimatable animatable)
     {
         return new Identifier(namespace, animPath);
     }

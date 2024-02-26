@@ -20,10 +20,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.shape.VoxelShape;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 @Environment(value = EnvType.CLIENT)
 public class PLCHudRenderer
@@ -158,8 +158,8 @@ public class PLCHudRenderer
     {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
         {
-            PROJECTION = context.projectionMatrix().copy();
-            MODEL_VIEW = context.matrixStack().peek().getPositionMatrix().copy();
+            PROJECTION = context.projectionMatrix();
+            MODEL_VIEW = context.matrixStack().peek().getPositionMatrix();
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(client ->

@@ -1,9 +1,9 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.entity.CannonBulletEntity;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +14,9 @@ import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
 import software.bernie.geckolib3.core.manager.AnimationData;
@@ -22,7 +24,10 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 import software.bernie.geckolib3.network.GeckoLibNetwork;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
-public class HandCannonItem extends BaseGunItem implements IAnimatable, Aimable
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+public class HandCannonItem extends BaseGunItem implements GeoItem, Aimable
 {
     public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
@@ -138,5 +143,29 @@ public class HandCannonItem extends BaseGunItem implements IAnimatable, Aimable
             controller.markNeedsReload();
             controller.setAnimation(new AnimationBuilder().addAnimation("animation.hand_cannon.reload_r"));
         }
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer)
+    {
+
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider()
+    {
+        return null;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return null;
     }
 }

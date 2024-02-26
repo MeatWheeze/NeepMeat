@@ -73,7 +73,7 @@ public class NeepMeatModelProvider implements ModelResourceProvider, ExtraModelP
                 CLEAR_TANK_TOP,
                 NMBlocks.YELLOW_SCAFFOLD);
 
-        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
+//        MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/slope_test"), SlopeTest::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/rusty_pipe/pipe_sides"), FluidPipeModel::new);
         MODELS.put(new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_sides"), VascularConduitModel::new);
 

@@ -52,14 +52,14 @@ public class ScaffoldBottomModel implements UnbakedModel, BakedModel, FabricBake
     }
 
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+    public void setParents(Function<Identifier, UnbakedModel> modelLoader)
     {
-        return Arrays.asList(SPRITE_IDS);
+
     }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
+    public BakedModel bake(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
 
         SPRITES[0] = textureGetter.apply(SPRITE_IDS[0]);

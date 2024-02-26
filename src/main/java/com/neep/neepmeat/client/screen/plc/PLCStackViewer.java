@@ -5,9 +5,8 @@ import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 
 public class PLCStackViewer implements Drawable
@@ -28,7 +27,7 @@ public class PLCStackViewer implements Drawable
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         var stack = plc.getVariableStack();
 
@@ -46,18 +45,18 @@ public class PLCStackViewer implements Drawable
         }
 
         int adjustedX = x - adjustedWidth + width;
-        DrawableHelper.fill(matrices, adjustedX, y + height - lastHeight, x + width, y + height, 0x90000000);
+        matrices.fill(adjustedX, y + height - lastHeight, x + width, y + height, 0x90000000);
         GUIUtil.renderBorder(matrices, adjustedX, y + height - lastHeight, adjustedWidth, lastHeight - 1, PLCCols.BORDER.col, 0);
 
         int textY = this.y + height - 1 - textRenderer.fontHeight;
 
-        textRenderer.draw(matrices, "Stack", adjustedX + 1 + (adjustedWidth - nameWidth) / 2f, textY, PLCCols.TEXT.col);
+        GUIUtil.drawText(matrices, textRenderer, "Stack", adjustedX + 1 + (adjustedWidth - nameWidth) / 2f, textY, PLCCols.TEXT.col, false);
         textY -= stride;
         for (int i = stack.size() - 1; i >= 0; --i)
         {
             int entry = stack.peekInt(i);
 //            textRenderer.draw(matrices, Integer.toString(i, 10), x + 2, y + 2 + i * stride, PLCCols.BORDER.col);
-            textRenderer.drawWithShadow(matrices, Integer.toString(entry, 10), adjustedX + 2, textY, PLCCols.TEXT.col);
+            GUIUtil.drawText(matrices, textRenderer, Integer.toString(entry, 10), adjustedX + 2, textY, PLCCols.TEXT.col, true);
             textY -= stride;
         }
     }

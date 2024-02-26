@@ -1,13 +1,11 @@
 package com.neep.neepmeat.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -43,15 +41,15 @@ public class CyclingButtonWidget extends ButtonWidget
     }
 
     @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-        RenderSystem.setShaderTexture(0, this.texture);
-        RenderSystem.enableDepthTest();
-        TexturedButtonWidget.drawTexture(matrices, this.x, this.y, this.u, this.v + this.vOffset * this.index, this.width, this.height, this.tw, this.th);
+//        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+//        RenderSystem.setShaderTexture(0, this.texture);
+//        RenderSystem.enableDepthTest();
+        drawTexture(matrices, this.texture, getX(), getY(), this.u, this.v, this.vOffset * this.index, this.width, this.height, this.tw, this.th);
         if (this.isHovered())
         {
-            super.renderTooltip(matrices, mouseX, mouseY);
+//            super.renderTooltip(matrices, mouseX, mouseY);
         }
     }
 

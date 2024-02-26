@@ -3,17 +3,13 @@ package com.neep.neepmeat.client.screen.plc;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import net.minecraft.client.font.TextHandler;
-import net.minecraft.client.font.TextVisitFactory;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.CharacterVisitor;
-import net.minecraft.text.OrderedText;
-import net.minecraft.text.StringVisitable;
-import net.minecraft.text.Style;
+import net.minecraft.text.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Language;
-import net.minecraft.util.math.Matrix4f;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
 
 import java.util.List;
 
@@ -68,8 +64,8 @@ public class MonoTextRenderer
 
     private float drawLayer(String text, float x, float y, int color, Matrix4f matrix)
     {
-        RenderSystem.enableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+//        RenderSystem.texture
+        RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         RenderSystem.setShaderTexture(0, TEXTURE);
         Drawer drawer = new Drawer(x, y, color, matrix);
         TextVisitFactory.visitFormatted(text, Style.EMPTY, drawer);
@@ -78,8 +74,8 @@ public class MonoTextRenderer
 
     private float drawLayer(OrderedText text, float x, float y, int color, Matrix4f matrix)
     {
-        RenderSystem.enableTexture();
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+//        RenderSystem.enableTexture();
+        RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         RenderSystem.setShaderTexture(0, TEXTURE);
         Drawer drawer = new Drawer(x, y, color, matrix);
         text.accept(drawer);
@@ -204,7 +200,7 @@ public class MonoTextRenderer
 
         public float draw()
         {
-            BufferRenderer.drawWithShader(bufferBuilder.end());
+            BufferRenderer.draw(bufferBuilder.end());
             return x + 1;
         }
     }

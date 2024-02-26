@@ -9,7 +9,7 @@ import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.plc.arm.RoboticArmBlockEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntity> implements DynamicInstance
 {

@@ -6,7 +6,10 @@ import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
 
 
 @Environment(value= EnvType.CLIENT)
@@ -30,7 +33,7 @@ public class BeamRenderer
 
         matrices.multiply(RotationAxis.POSITIVE_Y.rotation((float) pitch));
         matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) yaw));
-        Matrix3f normal = matrices.peek().getNormalMatrix().copy();
+        Matrix3f normal = matrices.peek().getNormalMatrix();
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rollDegrees));
 
         MatrixStack.Entry entry = matrices.peek();

@@ -46,7 +46,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
             textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
             {
                 @Override
-                protected void setFocused(boolean focused)
+                public void setFocused(boolean focused)
                 {
                     super.setFocused(focused);
                     updateEditorWidth();
@@ -166,11 +166,12 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     {
         if (keyCode == 258 && !isSelected())
         {
-            boolean bl = !hasShiftDown();
-            if (!this.changeFocus(bl))
-            {
-                this.changeFocus(bl);
-            }
+            parent.setFocused(this);
+//            boolean bl = !hasShiftDown();
+//            if (!this.changeFocus(bl))
+//            {
+//                this.changeFocus(bl);
+//            }
 
             return false;
         }

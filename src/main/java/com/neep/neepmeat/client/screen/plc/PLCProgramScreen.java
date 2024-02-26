@@ -43,10 +43,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.neep.neepmeat.client.screen.tablet.GUIUtil.drawHorizontalLine1;
+import static com.neep.neepmeat.client.screen.tablet.GUIUtil.drawVerticalLine1;
 
 public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>
 {
@@ -70,7 +75,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super(unused);
         this.handler = handler;
-        this.passEvents = true;
         this.plc = handler.getPlc();
 
         this.editor = new PLCScreenEditorState(this);
@@ -133,7 +137,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
@@ -143,12 +147,12 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             // Fill screen with the block's particle sprite to prevent xray vision
             Sprite sprite = client.getBlockRenderManager().getModels().getModelParticleSprite(wallState);
-            renderInWallOverlay(sprite, matrices);
+            renderInWallOverlay(sprite, matrices.getMatrices());
         }
         else
         {
             // Red fleshy vignette
-            drawScreenTexture(matrices, VIGNETTE, 0, 0, 1, 1, 0.9f);
+            drawScreenTexture(matrices.getMatrices(), VIGNETTE, 0, 0, 1, 1, 0.9f);
         }
 
         if (!tooltipText.isEmpty())
@@ -184,7 +188,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
         var matrix = matrices.peek().getPositionMatrix();
         RenderSystem.setShaderTexture(0, texture);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.enableBlend();
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
@@ -192,14 +196,14 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         bufferBuilder.vertex(matrix, x1, y1, z).color(light, light, light, 1).texture(u1, v1).next();
         bufferBuilder.vertex(matrix, x1, y0, z).color(light, light, light, 1).texture(u1, v0).next();
         bufferBuilder.vertex(matrix, x0, y0, z).color(light, light, light, 1).texture(u0, v0).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.draw(bufferBuilder.end());
     }
 
     private void renderInWallOverlay(Sprite sprite, MatrixStack matrices)
     {
         float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
-        RenderSystem.setShaderTexture(0, sprite.getAtlas().getId());
-        RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
+        RenderSystem.setShaderTexture(0, sprite.getAtlasId());
+        RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
         float l = sprite.getMinU();
         float m = sprite.getMaxU();
@@ -211,7 +215,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         bufferBuilder.vertex(matrix4f, x1, y1, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, o).next();
         bufferBuilder.vertex(matrix4f, x1, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, n).next();
         bufferBuilder.vertex(matrix4f, x0, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(m, n).next();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
+        BufferRenderer.draw(bufferBuilder.end());
     }
 
     private void tickTooltip(double mouseX, double mouseY)
@@ -230,7 +234,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
                 if (stack == null || stack.isEmpty())
                     return;
 
-                tooltipText.addAll(mip1.get().getTooltip(client.player, TooltipContext.Default.NORMAL));
+                tooltipText.addAll(mip1.get().getTooltip(client.player, TooltipContext.Default.BASIC));
             }
             else if (mip2 != null)
             {
@@ -336,21 +340,23 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return client.world.raycast(raycastContext);
     }
 
+
+
     public Vec3d screenToWorld(double mouseX, double mouseY, double z)
     {
         float fx = (float) (mouseX / client.getWindow().getScaledWidth()) * 2 - 1;
         float fy = (float) -((mouseY / client.getWindow().getScaledHeight()) * 2 - 1); // Screen coords are vertically inverted
 
-        var modelView = PLCHudRenderer.MODEL_VIEW.copy();
-        var projection = PLCHudRenderer.PROJECTION.copy();
-        projection.multiply(modelView);
+        var modelView = PLCHudRenderer.MODEL_VIEW;
+        var projection = PLCHudRenderer.PROJECTION;
+        projection.mul(modelView);
         projection.invert();
 
         Vector4f pos = new Vector4f(fx, fy, (float) z, 1.0f);
-        pos.transform(projection);
-        pos.multiply(1.0f / pos.getW());
+        pos = pos.mul(projection);
+        pos = pos.mul(1.0f / pos.w());
 
-        return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+        return new Vec3d(pos.x, pos.y, pos.z);
     }
 
     @Override
@@ -370,7 +376,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super.removed();
         if (client.player != null)
-            handler.close(client.player);
+            handler.onClosed(client.player);
 
         PLCHudRenderer.leave();
     }
@@ -383,7 +389,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         PLCHudRenderer.leave();
     }
 
-    public void renderTooltipText(MatrixStack matrices, List<Text> texts, boolean offset, int x, int y, int col)
+    public void renderTooltipText(DrawContext matrices, List<Text> texts, boolean offset, int x, int y, int col)
     {
         renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
     }
@@ -393,8 +399,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
     }
 
-    private void renderTooltipComponents(MatrixStack matrices, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
+    private void renderTooltipComponents(DrawContext context, List<TooltipComponent> components, boolean offset, int x, int y, int maxWidth, int col)
     {
+        MatrixStack matrices = context.getMatrices();
         if (offset)
         {
             x += 12;
@@ -427,20 +434,18 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         }
 
         matrices.push();
-        float itemRendererPrevZ = this.itemRenderer.zOffset;
-        float prevZ = this.getZOffset();
-        this.itemRenderer.zOffset = 400.0f;
-        this.setZOffset(400);
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+//        this.itemRenderer.zOffset = 400.0f;
+//        this.setZOffset(400);
+        matrices.translate(0, 0, 400);
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
-        Screen.fill(matrices, x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
-        drawHorizontalLine(matrices, x, x + maxWidth + 2, y, col);
-        drawHorizontalLine(matrices, x, x + maxWidth + 2, y + maxHeight + 2, col);
-        drawVerticalLine(matrices, x + maxWidth + 2, y, y + maxHeight + 2, col);
-        drawVerticalLine(matrices, x, y, y + maxHeight + 2, col);
+        context.fill(x, y, x + maxWidth + 2, y + maxHeight + 2, 0x90000000);
+        drawHorizontalLine1(context, x, x + maxWidth + 2, y, col);
+        drawHorizontalLine1(context, x, x + maxWidth + 2, y + maxHeight + 2, col);
+        drawVerticalLine1(context, x + maxWidth + 2, y, y + maxHeight + 2, col);
+        drawVerticalLine1(context, x, y, y + maxHeight + 2, col);
 
         RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
         VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
         matrices.translate(0.0, 0.0, 400.0);
 
@@ -459,11 +464,9 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         for (int index = 0; index < components.size(); ++index)
         {
             TooltipComponent tooltipComponent2 = components.get(index);
-            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, matrices, this.itemRenderer, 400);
+            tooltipComponent2.drawItems(this.textRenderer, x, yAdvance, context);
             yAdvance += tooltipComponent2.getHeight() + (index == 0 ? 2 : 0);
         }
-        this.itemRenderer.zOffset = itemRendererPrevZ;
-        this.setZOffset((int) prevZ);
     }
 
     @Override
@@ -482,17 +485,18 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return shell;
     }
 
-    class SaveButton extends ClickableWidget
+    abstract class SaveButton extends ClickableWidget
     {
         public SaveButton(int x, int y, int width, int height, Text message)
         {
             super(x, y, width, height, message);
         }
 
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        @Override
+        public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
             RenderSystem.setShaderTexture(0, WIDGETS);
             RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
             int i = this.getYImage(this.isHovered());
@@ -500,13 +504,18 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             int thingHeight = 16;
-            drawTexture(matrices, this.x, this.y, 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
-            this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
+            MonoTextRenderer.drawTexture(matrices.getMatrices().peek().getPositionMatrix(), getX(), getY(), 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
+//            this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
 
             if (isMouseOver(mouseX, mouseY))
             {
                 renderTooltip(matrices, mouseX, mouseY);
             }
+        }
+
+        protected int getYImage(boolean hovered)
+        {
+            return hovered ? 16 : 0;
         }
 
         @Override
@@ -526,14 +535,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             return 0;
         }
 
-        @Override
-        public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+        public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
         {
             renderTooltipText(matrices, List.of(getMessage()), true, mouseX, mouseY, PLCCols.BORDER.col);
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
+        protected void appendClickableNarrations(NarrationMessageBuilder builder)
         {
 
         }
@@ -545,6 +553,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         {
             super(x, y, width, height, message);
         }
+
 
         @Override
         protected int getU()

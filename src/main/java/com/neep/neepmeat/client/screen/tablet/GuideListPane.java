@@ -20,7 +20,6 @@ import net.minecraft.client.render.item.ItemModels;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
-import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
@@ -61,7 +60,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         if (parent.getAnimationTicks() < 12) return;
         super.render(matrices, mouseX, mouseY, delta);
@@ -265,22 +264,22 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
-        {
-
-        }
-
-        @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             if (!searchMode)
             {
-                textRenderer.draw(matrices, searchMessage, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
+                GUIUtil.drawText(matrices, textRenderer, searchMessage, getX() + 2, getY() + (this.height - 7) / 2f, 0x008800, false);
             }
             else
             {
-                textRenderer.draw(matrices, "/" + searchString, this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
+                GUIUtil.drawText(matrices, textRenderer, "/" + searchString, getX() + 2, getY() + (this.height - 7) / 2f, 0x008800, false);
             }
+        }
+
+        @Override
+        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        {
+
         }
     }
 
@@ -332,7 +331,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
 //            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
             int borderCol = 0xFF008800;
             int x = getX();
-            int y = getY()
+            int y = getY();
             GUIUtil.drawHorizontalLine1(matrices, x, x + width, y + height, borderCol);
             GUIUtil.drawHorizontalLine1(matrices, x, x + width, y, borderCol);
             GUIUtil.drawVerticalLine1(matrices, x, y, y + height, borderCol);
