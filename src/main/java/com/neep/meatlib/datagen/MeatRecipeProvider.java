@@ -5,6 +5,7 @@ import com.neep.meatlib.block.BasePaintedBlock;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.block.MetalScaffoldingBlock;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;
 import net.minecraft.data.server.RecipeProvider;
 import net.minecraft.data.server.recipe.CraftingRecipeJsonBuilder;
@@ -21,13 +22,13 @@ import java.util.function.Consumer;
 
 public class MeatRecipeProvider extends FabricRecipeProvider
 {
-    public MeatRecipeProvider(FabricDataGenerator output)
+    public MeatRecipeProvider(FabricDataOutput output)
     {
         super(output);
     }
 
     @Override
-    protected void generateRecipes(Consumer<RecipeJsonProvider> exporter)
+    public void generate(Consumer<RecipeJsonProvider> exporter)
     {
         BlockRegistry.REGISTERED_BLOCKS.values().stream()
                 .filter(block -> block instanceof BaseBuildingBlock)
