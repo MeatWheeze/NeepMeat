@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorItem;
@@ -11,17 +11,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class GogglesItem extends ArmorItem implements MeatlibItem, IAnimatable
+public class GogglesItem extends ArmorItem implements MeatlibItem, GeoItem
 {
     private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
 
@@ -64,5 +64,29 @@ public class GogglesItem extends ArmorItem implements MeatlibItem, IAnimatable
     {
         this.tooltip.apply(this, tooltip);
         super.appendTooltip(stack, world, tooltip, context);
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer)
+    {
+
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider()
+    {
+        return null;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return null;
     }
 }

@@ -23,6 +23,9 @@ import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.object.PlayState;
 
@@ -31,7 +34,7 @@ import java.util.List;
 
 import static com.neep.neepmeat.network.NMTrackedData.DOUBLE;
 
-public class WormEntity extends AbstractWormPart implements MultiPartEntity<WormEntity.WormSegment>, IAnimatable
+public class WormEntity extends AbstractWormPart implements MultiPartEntity<WormEntity.WormSegment>, GeoEntity
 {
     protected static final TrackedData<String> CURRENT_ACTION = DataTracker.registerData(WormEntity.class, TrackedDataHandlerRegistry.STRING);
     protected static final TrackedData<Double> HEAD_X = DataTracker.registerData(WormEntity.class, DOUBLE);
@@ -326,6 +329,18 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         lerpHeadPos(tick, totalTicks, getNeutralHeadPos());
         Vec2f pitchYaw = getNeutralHeadPitch();
         lerpHeadAngles(tick, totalTicks, pitchYaw.x, pitchYaw.y);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return null;
     }
 
 

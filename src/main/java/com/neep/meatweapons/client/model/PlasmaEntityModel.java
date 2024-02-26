@@ -18,7 +18,7 @@ public class PlasmaEntityModel extends EntityModel<FusionBlastEntity>
 
 //		bb_main = new ModelPart(this);
 		bb_main = modelPart.getChild(EntityModelPartNames.CUBE);
-//		bb_main.rotate(new MatrixStack().multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(24f)));
+//		bb_main.rotate(new MatrixStack().multiply(RotationAxis.POSITIVE_Y.rotationDegrees(24f)));
 //		bb_main.setTextureOffset(0, 0).addCuboid(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 3.0F, 0.0F, false);
 //		bb_main.cub(-1.5F, -3.0F, 0.0F, 3.0F, 3.0F, 3.0F, 0.0F, false);
 	}

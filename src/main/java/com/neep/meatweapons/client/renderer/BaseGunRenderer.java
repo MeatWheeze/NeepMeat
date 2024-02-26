@@ -14,7 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
@@ -22,7 +22,7 @@ import software.bernie.geckolib3.util.GeckoLibUtil;
 
 public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoItemRenderer<T>
 {
-    public Vec3f currentTransform = new Vec3f(0, 0, 0);
+    public Vector3f currentTransform = new Vector3f(0, 0, 0);
 
     public BaseGunRenderer(AnimatedGeoModel<T> model)
     {
@@ -45,9 +45,9 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
         if (mode.isFirstPerson())
         {
             Item item = itemStack.getItem();
-            Vec3f transform = item instanceof Aimable aimable ? aimable.getAimOffset() : new Vec3f(0, 0, 0);
+            Vector3f transform = item instanceof Aimable aimable ? aimable.getAimOffset() : new Vector3f(0, 0, 0);
             float delta = 0.2f;
-            currentTransform.lerp(isAiming ? transform : new Vec3f(0, 0, 0), delta);
+            currentTransform.lerp(isAiming ? transform : new Vector3f(0, 0, 0), delta);
 
             boolean stackInMain = GeckoLibUtil.getIDFromStack(player.getStackInHand(Hand.MAIN_HAND)) == GeckoLibUtil.getIDFromStack(itemStack);
 

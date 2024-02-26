@@ -28,10 +28,10 @@ public class BeamRenderer
         double pitch = Math.atan2(beam.getX(), beam.getZ());
         double yaw = Math.asin(-beam.getY() / beam.length());
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
-        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) yaw));
+        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
+        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) yaw));
         Matrix3f normal = matrices.peek().getNormalMatrix().copy();
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(rollDegrees));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(rollDegrees));
 
         MatrixStack.Entry entry = matrices.peek();
         Matrix4f model = entry.getPositionMatrix();
@@ -61,8 +61,8 @@ public class BeamRenderer
         double pitch = Math.atan2(beam.getX(), beam.getZ());
         double yaw = Math.asin(-beam.getY() / beam.length());
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
-        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) yaw));
+        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((float) pitch));
+        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) yaw));
 
         float h = 0.0F - (age + tickDelta) * 0.04F;
         float i = g / 32.0F - (age + tickDelta) * 0.04F;

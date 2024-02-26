@@ -10,12 +10,13 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedIntegratorStructureBlockEntity> implements DataCable
@@ -28,7 +29,8 @@ public class AdvancedIntegratorStructure extends BigBlockStructure<AdvancedInteg
     @Override
     protected BlockEntityType<AdvancedIntegratorStructureBlockEntity> registerBlockEntity()
     {
-        return Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "advanced_integrator_structure"),
+        return Registry.register(
+                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, "advanced_integrator_structure"),
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new AdvancedIntegratorStructureBlockEntity(getBlockEntityType(), p, s),
                         this).build());

@@ -4,9 +4,9 @@ import com.google.gson.JsonObject;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import java.util.List;
 import java.util.function.Function;

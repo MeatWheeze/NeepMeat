@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.assembler;
 
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.api.pipe.ItemPipe;
@@ -91,7 +91,7 @@ public class AssemblerBlock extends TallBlock implements BlockEntityProvider
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override

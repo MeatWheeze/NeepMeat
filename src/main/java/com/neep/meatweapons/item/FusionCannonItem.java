@@ -22,7 +22,7 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import software.bernie.geckolib3.core.IAnimatable;
@@ -204,9 +204,9 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
 
     @Override
-    public Vec3f getAimOffset()
+    public Vector3f getAimOffset()
     {
-        return new Vec3f(0.56f, 0, 0);
+        return new Vector3f(0.56f, 0, 0);
     }
 
     @Override

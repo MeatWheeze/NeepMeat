@@ -11,7 +11,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 public class LargeMotorInstance extends BlockEntityInstance<LargeMotorBlockEntity> implements DynamicInstance
 {
@@ -45,7 +45,7 @@ public class LargeMotorInstance extends BlockEntityInstance<LargeMotorBlockEntit
 
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0.5, 1.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(blockEntity.angle));
         matrices.translate(-0.5, -1.5, -0.5);
 
         rotorModel.setTransform(matrices);

@@ -37,7 +37,7 @@ public class SinkBlock extends BaseHorFacingBlock
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return getDefaultState().with(FACING, context.getPlayerFacing().getOpposite());
+        return getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
     }
 
     // Auto-generated

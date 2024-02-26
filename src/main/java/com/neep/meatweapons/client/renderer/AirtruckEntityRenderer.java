@@ -16,7 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import software.bernie.geckolib3.compat.PatchouliCompat;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.IAnimatableModel;
@@ -155,9 +155,9 @@ public class AirtruckEntityRenderer<T extends AirtruckEntity & IAnimatable> exte
     protected void applyRotations(T entity, MatrixStack matrices, float ageInTicks, float rotationYaw, float tickDelta)
     {
         EntityPose pose = entity.getPose();
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180.0F - rotationYaw));
-        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(entity.getRoll(tickDelta)));
-        matrices.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(entity.getPitch(tickDelta)));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180.0F - rotationYaw));
+        matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(entity.getRoll(tickDelta)));
+        matrices.multiply(RotationAxis.NEGATIVE_X.rotationDegrees(entity.getPitch(tickDelta)));
     }
 
     public static int getPackedOverlay(Entity livingEntityIn, float uIn)

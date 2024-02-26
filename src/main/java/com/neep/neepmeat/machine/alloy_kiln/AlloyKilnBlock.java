@@ -58,7 +58,7 @@ public class AlloyKilnBlock extends BaseHorFacingBlock implements BlockEntityPro
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        Direction facing = context.getPlayerFacing();
+        Direction facing = context.getHorizontalPlayerFacing();
         return facing.getAxis().isVertical() ? getDefaultState() :
                 this.getDefaultState().with(FACING, facing.getOpposite());
     }

@@ -1,8 +1,8 @@
 package com.neep.neepmeat.fluid;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.neepmeat.NMItemGroups;
 import com.neep.neepmeat.item.BaseBucketItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -13,10 +13,11 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.WorldView;
 
 public class FluidFactory

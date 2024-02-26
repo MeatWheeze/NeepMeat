@@ -23,7 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import org.jetbrains.annotations.Nullable;
@@ -156,15 +156,15 @@ public class SlopeTest implements UnbakedModel, BakedModel, FabricBakedModel
     public void emitBlockQuads(BlockRenderView blockView, BlockState state, BlockPos pos, Supplier<Random> randomSupplier, RenderContext context)
     {
         Direction direction = state.get(BaseStairsBlock.FACING);
-//        context.pushTransform(Vec3f.POSITIVE_Y.getDegreesQuaternion(direction.asRotation()));
+//        context.pushTransform(RotationAxis.POSITIVE_Y.rotationDegrees(direction.asRotation()));
         context.pushTransform((quad -> {
             for (int i = 0; i < 4; ++i)
             {
-                Vec3f vert1 = quad.copyPos(i, null);
-                Vec3f vert = quad.copyPos(i, null);
+                Vector3f vert1 = quad.copyPos(i, null);
+                Vector3f vert = quad.copyPos(i, null);
                 vert.add(-0.5f, 0, -0.5f);
-                vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(-direction.asRotation() - 180f));
-//                vert1.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(0f));
+                vert.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(-direction.asRotation() - 180f));
+//                vert1.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(0f));
                 vert.add(0.5f, 0, 0.5f);
                 quad.pos(i, vert);
             }

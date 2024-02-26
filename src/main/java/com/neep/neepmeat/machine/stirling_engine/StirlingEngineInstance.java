@@ -13,7 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class StirlingEngineInstance extends BlockEntityInstance<StirlingEngineBlockEntity> implements DynamicInstance
@@ -46,7 +46,7 @@ public class StirlingEngineInstance extends BlockEntityInstance<StirlingEngineBl
 
         float delta = MinecraftClient.getInstance().isPaused() ? 0 : MinecraftClient.getInstance().getLastFrameDuration();
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.getSpeed() * delta);
-        matrices.multiply(Vec3f.NEGATIVE_Z.getDegreesQuaternion(blockEntity.angle));
+        matrices.multiply(RotationAxis.NEGATIVE_Z.rotationDegrees(blockEntity.angle));
         matrices.translate(-0.5, -0.5, -0.5);
 
         rotor.setTransform(matrices);

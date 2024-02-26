@@ -3,7 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.block.entity.MetalBarrelBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import net.minecraft.block.BarrelBlock;

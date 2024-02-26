@@ -10,7 +10,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class DeathBladesRenderer implements BlockEntityRenderer<DeathBladesBlockEntity>
@@ -38,7 +38,7 @@ public class DeathBladesRenderer implements BlockEntityRenderer<DeathBladesBlock
         matrices.push();
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(angle));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(angle));
         matrices.translate( 0, 0, - offset / 16f);
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.LARGE_BLADE, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);

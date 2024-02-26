@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import net.minecraft.client.item.TooltipContext;

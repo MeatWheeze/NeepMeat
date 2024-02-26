@@ -11,7 +11,7 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 import java.util.function.Function;
 
@@ -39,7 +39,7 @@ public class ItemBlockEntityRenderer<T extends BlockEntity> implements BlockEnti
 
         matrices.translate(0.5, offsetFunction.apply(entity), 0.5);
         // Wrap degrees to ensure precision for long-lived worlds
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion((MathHelper.wrapDegrees(entity.getWorld().getTime()) + tickDelta) * 1));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees((MathHelper.wrapDegrees(entity.getWorld().getTime()) + tickDelta) * 1));
 
         MinecraftClient.getInstance().getItemRenderer().renderItem(stack, ModelTransformation.Mode.GROUND, light, overlay, matrices, vertexConsumers, 0);
 

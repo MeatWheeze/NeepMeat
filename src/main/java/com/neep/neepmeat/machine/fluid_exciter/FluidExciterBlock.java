@@ -2,7 +2,7 @@ package com.neep.neepmeat.machine.fluid_exciter;
 
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;

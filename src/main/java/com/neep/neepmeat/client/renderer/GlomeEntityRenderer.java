@@ -14,7 +14,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import org.jetbrains.annotations.Nullable;
 
 @Environment(value = EnvType.CLIENT)
@@ -40,8 +40,8 @@ public class GlomeEntityRenderer extends LivingEntityRenderer<GlomeEntity, Glome
 
         matrices.push();
         matrices.translate(0, entity.getHeight() / 2, 0);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(angle));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(angle));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(angle));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(angle));
         matrices.scale(scale1, scale1, scale1);
         matrices.translate(0, -entity.getHeight() / 2, 0);
         super.render(entity, f, b, matrices, vertexConsumerProvider, i);

@@ -14,7 +14,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements DynamicInstance
@@ -84,8 +84,8 @@ public class PLCInstance extends BlockEntityInstance<PLCBlockEntity> implements 
                     0.1 * sinTime : 0), 0);
 
             matrixStack.translate(0.5, 0.5, 0.5);
-            matrixStack.multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(robot.clientYaw + 180));
-            matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion((float) (100 * speed)));
+            matrixStack.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(robot.clientYaw + 180));
+            matrixStack.multiply(RotationAxis.NEGATIVE_X.rotationDegrees((float) (100 * speed)));
             matrixStack.translate(-0.5, -0.5, -0.5);
 
             robotModel.setTransform(matrixStack);

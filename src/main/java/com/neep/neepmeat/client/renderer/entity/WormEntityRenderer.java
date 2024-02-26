@@ -10,7 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 import software.bernie.geckolib3.util.EModelRenderCycle;
 
@@ -142,8 +142,8 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
     protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)
     {
         matrices.translate(0, 0.5, 0);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - yaw));
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(90f - pitch));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - yaw));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f - pitch));
         matrices.translate(0, -0.5, 0);
     }
 

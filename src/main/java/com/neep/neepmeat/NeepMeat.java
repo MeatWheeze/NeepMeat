@@ -41,15 +41,15 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.passive.CowEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registry;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import software.bernie.geckolib3.GeckoLib;
+import software.bernie.geckolib.GeckoLib;
 
 public class NeepMeat implements ModInitializer
 {
@@ -88,15 +88,15 @@ public class NeepMeat implements ModInitializer
 			MobSynthesisRegistry.initDefaults();
 			NMGraphicsEffects.init();
 
+			NMItemGroups.init();
+
 			// --- Transport module ---
 			ItemTransport.init();
 			FluidTransport.init();
 			BloodNetworkManager.init();
 
-
 //		EnlightenmentUtil.init();
 //		EnlightenmentEventManager.init();
-
 
 			// --- Other misc things ---
 			ToolTransformPacket.registerReceiver();
@@ -171,7 +171,7 @@ public class NeepMeat implements ModInitializer
 			{
 				cow.dropStack(new ItemStack(NMItems.ROUGH_BRAIN), 0.5f);
 			}
-			player.world.playSound(cow.getX(), cow.getY(), cow.getZ(),
+			player.getWorld().playSound(cow.getX(), cow.getY(), cow.getZ(),
 					SoundEvents.ITEM_HONEYCOMB_WAX_ON, SoundCategory.NEUTRAL, 1, 1, false);
 			cow.setDropsLoot(false);
 			cow.kill();

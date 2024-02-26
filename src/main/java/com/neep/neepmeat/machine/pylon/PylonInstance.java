@@ -11,7 +11,7 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.LightType;
 
 @Environment(value = EnvType.CLIENT)
@@ -43,7 +43,7 @@ public class PylonInstance extends BlockEntityInstance<PylonBlockEntity> impleme
         matrices.translate(0.5, 0.5, 0.5);
         float delta = !MinecraftClient.getInstance().isPaused() ? MinecraftClient.getInstance().getLastFrameDuration() : 0;
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + delta * blockEntity.getSpeed());
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(blockEntity.angle));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(blockEntity.angle));
         matrices.translate(-0.5, -0.5, -0.5);
 
         if (blockEntity.isRunning())

@@ -145,9 +145,9 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
 //                {
 //                    for (int i = 0; i < 4; ++i)
 //                    {
-//                        Vec3f vert = quad.copyPos(i, null);
+//                        Vector3f vert = quad.copyPos(i, null);
 //                        vert.add(-0.5f, -0.5f, -0.5f);
-//                        vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(direction.asRotation()));
+//                        vert.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(direction.asRotation()));
 //                        vert.add(0.5f, 0.5f, 0.5f);
 //                    }
 //                    return true;
@@ -165,9 +165,9 @@ public class ScaffoldTopModel implements UnbakedModel, BakedModel, FabricBakedMo
 //            }
 //            for (int i = 0; i < 4; ++i)
 //            {
-//                Vec3f vert = quad.copyPos(i, null);
+//                Vector3f vert = quad.copyPos(i, null);
 //                vert.add(-0.5f, -0.5f, -0.5f);
-//                vert.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(face.asRotation()));
+//                vert.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(face.asRotation()));
 //                vert.add(0.5f, 0.5f, 0.5f);
 //            }
 //            return true;

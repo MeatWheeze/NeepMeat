@@ -13,7 +13,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHandler>
@@ -80,7 +80,7 @@ public class StirlingEngineScreen extends HandledScreen<StirlingEngineScreenHand
         this.currentFrame = MinecraftClient.getInstance().world.getTime() + MinecraftClient.getInstance().getTickDelta();
         float delta = (currentFrame - lastFrame);
         this.angle += delta * StirlingEngineBlockEntity.energyToSpeed(energy);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(this.angle));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(this.angle));
         this.drawTexture(matrices, -16, -16, 190, 0, 32, 32);
         this.lastFrame = currentFrame;
         matrices.pop();

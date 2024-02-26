@@ -14,7 +14,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(EnvType.CLIENT)
 public class AdvancedMotorInstance extends BlockEntityInstance<AdvancedMotorBlockEntity> implements DynamicInstance
@@ -55,7 +55,7 @@ public class AdvancedMotorInstance extends BlockEntityInstance<AdvancedMotorBloc
 
         BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(blockEntity.angle));
         matrices.translate(-0.5, -0.5, -0.5);
 
         rotor.setTransform(matrices);

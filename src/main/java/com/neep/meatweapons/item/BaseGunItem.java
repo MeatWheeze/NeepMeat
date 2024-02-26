@@ -1,7 +1,7 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.BulletDamageSource;

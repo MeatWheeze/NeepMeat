@@ -11,7 +11,7 @@ import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.entity.LimbEntity;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 import java.util.List;
 
@@ -76,7 +76,7 @@ public class LimbEntityInstance extends EntityInstance<LimbEntity> implements Dy
         var pos = getInstancePosition(tickDelta);
         matrices.translate(pos.getX(), pos.getY(), pos.getZ());
 
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(entity.getYaw(tickDelta)));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.getYaw(tickDelta)));
         matrices.translate(-0.5, 0, -0.5);
 
         model.setTransform(matrices);

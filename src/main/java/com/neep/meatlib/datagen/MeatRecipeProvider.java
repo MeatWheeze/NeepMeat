@@ -2,7 +2,7 @@ package com.neep.meatlib.datagen;
 
 import com.neep.meatlib.block.BaseBuildingBlock;
 import com.neep.meatlib.block.BasePaintedBlock;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.block.MetalScaffoldingBlock;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricRecipeProvider;

@@ -2,7 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.entity.AbstractVehicleEntity;
 import com.neep.meatweapons.entity.AirtruckEntity;
 import net.minecraft.entity.Entity;

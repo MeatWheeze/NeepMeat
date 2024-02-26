@@ -15,7 +15,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -54,7 +54,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         int j = stack.isEmpty() ? 187 : Item.getRawId(stack.getItem()) + stack.getDamage();
         this.random.setSeed(j);
 
-        matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-45));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-45));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.rotateFacing(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
@@ -72,7 +72,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         float sZ = bakedModel.getTransformation().ground.scale.getZ();
 
         // Rotate by 1 degree to prevent axis fighting with nearby block models
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(1));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(1));
 
 
         float t;

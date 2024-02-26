@@ -11,7 +11,7 @@ import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 public class CannonBulletEntityRenderer extends EntityRenderer<CannonBulletEntity>
 {
@@ -28,8 +28,8 @@ public class CannonBulletEntityRenderer extends EntityRenderer<CannonBulletEntit
     public void render(CannonBulletEntity cannonBulletEntity, float f, float g, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i)
     {
         matrixStack.push();
-        matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(MathHelper.lerp(g, cannonBulletEntity.prevYaw, cannonBulletEntity.getYaw()) - 90.0F));
-        matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(MathHelper.lerp(g, cannonBulletEntity.prevPitch, cannonBulletEntity.getPitch())));
+        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(MathHelper.lerp(g, cannonBulletEntity.prevYaw, cannonBulletEntity.getYaw()) - 90.0F));
+        matrixStack.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(MathHelper.lerp(g, cannonBulletEntity.prevPitch, cannonBulletEntity.getPitch())));
         model.render(matrixStack, vertexConsumerProvider.getBuffer(model.getLayer(getTexture(cannonBulletEntity))), i, 1, 1.0F, 1.0F, 1.0F, 1F);
         matrixStack.pop();
     }

@@ -24,7 +24,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
@@ -49,7 +49,7 @@ public class CastingBasinRenderer implements BlockEntityRenderer<CastingBasinBlo
         BakedModel bakedModel = this.itemRenderer.getModel(stack, be.getWorld(), null, 0);
         boolean depth = bakedModel.hasDepth();
         matrices.translate(0.5, 0.66, 0.5);
-        if (!depth) matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(-90));
+        if (!depth) matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-90));
         itemRenderer.renderItem(stack, ModelTransformation.Mode.GROUND, false, matrices, vertexConsumers, light, OverlayTexture.DEFAULT_UV, bakedModel);
     }
 

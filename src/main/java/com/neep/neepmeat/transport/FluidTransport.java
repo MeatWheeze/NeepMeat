@@ -2,7 +2,7 @@ package com.neep.neepmeat.transport;
 
 import com.google.common.collect.Maps;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.item.FluidComponentItem;

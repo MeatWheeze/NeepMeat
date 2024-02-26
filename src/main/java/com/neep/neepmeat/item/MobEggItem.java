@@ -1,7 +1,7 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
 import net.minecraft.entity.EntityType;

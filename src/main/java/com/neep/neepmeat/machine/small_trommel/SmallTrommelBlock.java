@@ -47,7 +47,7 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getPlayerFacing());
+        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing());
     }
 
     @Override

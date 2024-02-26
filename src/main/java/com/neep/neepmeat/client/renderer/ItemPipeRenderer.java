@@ -12,7 +12,7 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class ItemPipeRenderer<T extends ItemPipeBlockEntity> implements BlockEntityRenderer<T>
@@ -41,8 +41,8 @@ public class ItemPipeRenderer<T extends ItemPipeBlockEntity> implements BlockEnt
 
             matrices.translate(item.x, item.y, item.z);
             matrices.scale(0.4f, 0.4f, 0.4f);
-//            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(0.1f));
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
+//            matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(0.1f));
+            matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
             renderer.renderItem(stack, ModelTransformation.Mode.FIXED, light, overlay, matrices, vertexConsumers, 0);
 
             matrices.pop();

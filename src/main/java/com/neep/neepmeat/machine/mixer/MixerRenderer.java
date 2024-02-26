@@ -16,7 +16,7 @@ import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
@@ -75,7 +75,7 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
         );
 
         be.bladeAngle = MathHelper.wrapDegrees(be.bladeAngle + be.bladeSpeed * delta);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.bladeAngle));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(be.bladeAngle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MIXER_AGITATOR_BLADES, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 

@@ -2,7 +2,7 @@ package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.implant.player.EntityImplantInstaller;
 import com.neep.neepmeat.init.NMComponents;

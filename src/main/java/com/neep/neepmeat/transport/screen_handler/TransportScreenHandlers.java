@@ -15,7 +15,7 @@ public class TransportScreenHandlers
 
     public static void registerScreenHandlers()
     {
-        LIMITER_VALVE = register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "limiter_valve"), LIMITER_VALVE);
-        VSC = register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "vsc"), VSC);
+        LIMITER_VALVE = register(Registries.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "limiter_valve"), LIMITER_VALVE);
+        VSC = register(Registries.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "vsc"), VSC);
     }
 }

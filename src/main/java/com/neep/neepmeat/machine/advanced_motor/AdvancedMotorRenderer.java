@@ -12,7 +12,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class AdvancedMotorRenderer implements BlockEntityRenderer<AdvancedMotorBlockEntity>
@@ -33,7 +33,7 @@ public class AdvancedMotorRenderer implements BlockEntityRenderer<AdvancedMotorB
 
         BERenderUtils.rotateFacingSouth(facing, matrices);
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(be.angle));
+        matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(be.angle));
         matrices.translate(-0.5, -0.5, -0.5);
         BERenderUtils.renderModel(NMExtraModels.MOTOR_ROTOR, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);
 

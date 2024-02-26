@@ -12,7 +12,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
@@ -40,9 +40,9 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
 //            Vec3d vel = animatable.getVelocity();
 //            double hlen = vel.horizontalLength();
 //
-//            Vec3f hor = new Vec3f((float) vel.x, 0, (float) vel.z);
+//            Vector3f hor = new Vector3f((float) vel.x, 0, (float) vel.z);
 //            hor.normalize();
-//            hor.rotate(Vec3f.POSITIVE_Y.getDegreesQuaternion(90));
+//            hor.rotate(RotationAxis.POSITIVE_Y.rotationDegrees(90));
 //            poseStack.multiply(hor.getDegreesQuaternion((float) (hlen * 40)));
 //        }
 
@@ -74,6 +74,6 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     @Override
     protected void applyRotations(BovineHorrorEntity animatable, MatrixStack poseStack, float ageInTicks, float rotationYaw, float partialTick)
     {
-        poseStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(180f - rotationYaw));
+        poseStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - rotationYaw));
     }
 }

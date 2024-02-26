@@ -3,8 +3,8 @@ package com.neep.neepmeat.implant.player;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.entity.Entity;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.SimpleRegistry;
 
 /**
  * An implant installer that operates on an Entity.

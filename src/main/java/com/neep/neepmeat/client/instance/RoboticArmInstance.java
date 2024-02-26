@@ -9,7 +9,7 @@ import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.plc.arm.RoboticArmBlockEntity;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntity> implements DynamicInstance
 {
@@ -82,7 +82,7 @@ public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntit
 
         matrices.push();
         matrices.translate(0.5, 0.5, 0.5);
-        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(yaw));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(yaw));
         matrices.translate(-0.5, -0.5, -0.5);
 
         spinnyBit.setTransform(matrices);
@@ -92,7 +92,7 @@ public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntit
         matrices.translate(0, 2 - 1 / 16f, 0);
         matrices.translate(0.5, -12 / 16f, 0.5);
         double angle1 = Math.atan2(x3, y3);
-        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) angle1));
+        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) angle1));
         matrices.translate(-0.5, 12 / 16f, -0.5);
         segment1.setTransform(matrices);
 //        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_1, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
@@ -101,7 +101,7 @@ public class RoboticArmInstance extends BlockEntityInstance<RoboticArmBlockEntit
         matrices.translate(0, y3 + 2 - 1 / 16f, x3);
         matrices.translate(0.5, -12 / 16f, 0.5);
         double angle2 = Math.atan2((lx - x3), (ly - y3));
-        matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion((float) angle2));
+        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) angle2));
         matrices.translate(-0.5, 12 / 16f, -0.5);
         segment2.setTransform(matrices);
 //        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_2, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);

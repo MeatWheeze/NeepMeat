@@ -30,8 +30,8 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -70,7 +70,7 @@ public class PhageRayEntity extends Entity
 
     private void syncBeamEffect(ServerPlayerEntity player, World world, Vec3d start, Vec3d end, Vec3d velocity, float scale, int maxTime)
     {
-        if (world.isClient)
+        if (getWorld().isClient)
             throw new IllegalStateException("packet create called on the client!");
 
         PacketByteBuf byteBuf = GraphicsEffects.createPacket(NMGraphicsEffects.PHAGE_RAY, world);
@@ -106,16 +106,16 @@ public class PhageRayEntity extends Entity
 
     @Nullable
     @Override
-    public Entity getPrimaryPassenger()
+    public LivingEntity getControllingPassenger()
     {
-        return getFirstPassenger();
+        return (LivingEntity) getFirstPassenger();
     }
 
     @Override
     public void tick()
     {
         super.tick();
-        if (!world.isClient() && (age > 5 && (parent == null || parent.isRemoved())))
+        if (!getWorld().isClient() && (age > 5 && (parent == null || parent.isRemoved())))
         {
             remove(RemovalReason.DISCARDED);
         }
@@ -129,7 +129,7 @@ public class PhageRayEntity extends Entity
             this.setRotation(this.getYaw(), this.getPitch());
         }
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             clientTick();
         }
@@ -148,7 +148,7 @@ public class PhageRayEntity extends Entity
         {
             if (triggerTicks >= 20)
             {
-                if (!world.isClient())
+                if (!getWorld().isClient())
                 {
                     spawnBeams();
                     breakBlocks();
@@ -173,7 +173,7 @@ public class PhageRayEntity extends Entity
         {
             for (ServerPlayerEntity player : PlayerLookup.tracking(this))
             {
-                syncBeamEffect(player, world,
+                syncBeamEffect(player, getWorld(),
                         getBeamOrigin(), getBeamEnd(), Vec3d.ZERO, 1.2f, beamInterval);
             }
         }
@@ -215,7 +215,7 @@ public class PhageRayEntity extends Entity
                     RaycastContext.FluidHandling.NONE,
                     this);
 
-            BlockHitResult result = world.raycast(context);
+            BlockHitResult result = getWorld().raycast(context);
 
             if (result.getType() == HitResult.Type.BLOCK)
             {
@@ -231,7 +231,7 @@ public class PhageRayEntity extends Entity
     {
         if (hasPassengers() && getFirstPassenger() != null)
         {
-            if (world.getTime() % 2 == 0)
+            if (getWorld().getTime() % 2 == 0)
             {
                 Set<BlockPos> newTargets = getTargets(getBeamOrigin(), getBeamEnd());
 
@@ -244,13 +244,13 @@ public class PhageRayEntity extends Entity
                 var target = it.next();
                 if (target.getValue() >= 1)
                 {
-                    world.breakBlock(target.getKey(), false);
+                    getWorld().breakBlock(target.getKey(), false);
                     it.remove();
                 }
                 else
                 {
-                    BlockState state = world.getBlockState(target.getKey());
-                    target.setValue(target.getValue() + calcBlockBreakingDelta(state, world, target.getKey()));
+                    BlockState state = getWorld().getBlockState(target.getKey());
+                    target.setValue(target.getValue() + calcBlockBreakingDelta(state, getWorld(), target.getKey()));
                 }
             }
         }
@@ -311,15 +311,15 @@ public class PhageRayEntity extends Entity
 //        double posX = this.getX() + vec3d.x;
 //        double posZ = this.getZ() + vec3d.z;
 //        BlockPos blockPos = new BlockPos(posX, this.getBoundingBox().maxY, posZ).down();
-//        if (!this.world.isWater(blockPos))
+//        if (!this.getWorld().isWater(blockPos))
 //        {
 //            ArrayList<Vec3d> list = Lists.newArrayList();
-//            double f = this.world.getDismountHeight(blockPos);
+//            double f = this.getWorld().getDismountHeight(blockPos);
 //            if (Dismounting.canDismountInBlock(f))
 //            {
 //                list.add(new Vec3d(posX, blockPos.getY() + f, posZ));
 //            }
-//            double g = this.world.getDismountHeight(blockPos);
+//            double g = this.getWorld().getDismountHeight(blockPos);
 //            if (Dismounting.canDismountInBlock(g))
 //            {
 //                list.add(new Vec3d(posX, blockPos.getY() + g, posZ));
@@ -370,7 +370,7 @@ public class PhageRayEntity extends Entity
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
-        if (!world.isClient())
+        if (!getWorld().isClient())
         {
             if (hasPassengers())
                 return ActionResult.PASS;
@@ -381,12 +381,7 @@ public class PhageRayEntity extends Entity
     }
 
     @Override
-    public void updatePassengerPosition(Entity passenger)
-    {
-        this.updatePassengerPosition(passenger, Entity::setPosition);
-    }
-
-    private void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater)
+    protected void updatePassengerPosition(Entity passenger, PositionUpdater positionUpdater)
     {
         if (this.hasPassenger(passenger))
         {

@@ -30,7 +30,7 @@ public class StopValveRenderer<T extends FilterPipeBlockEntity> implements Block
 //        matrices.translate(0, be.openDelta * - 1 / 16f, 0);
 //
 //        matrices.translate(0.5, 0.5, 0.5);
-//        matrices.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(be.openDelta * 135));
+//        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(be.openDelta * 135));
 //        matrices.translate(-0.5, -0.5, -0.5);
 //
 //        BERenderUtils.renderModel(NMExtraModels.VALVE_WHEEL, matrices, be.getWorld(), be.getPos(), be.getCachedState(), vertexConsumers);

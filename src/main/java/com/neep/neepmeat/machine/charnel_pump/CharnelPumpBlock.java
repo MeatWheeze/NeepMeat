@@ -4,8 +4,8 @@ import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.Registries.BLOCKRegistry;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
@@ -78,7 +78,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
-        return this.getDefaultState().with(FACING, ctx.getPlayerFacing());
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
     }
 
     @Override

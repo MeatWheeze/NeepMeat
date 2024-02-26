@@ -32,11 +32,11 @@ public class ExtraKneeImplant implements EntityImplant
     @Override
     public void tick()
     {
-        if (player.world.getTime() % 40 == 0)
+        if (player.getWorld().getTime() % 40 == 0)
         {
-            if (player.stepHeight < 1.1f)
+            if (player.getStepHeight() < 1.1f)
             {
-                player.stepHeight = 1.1f;
+                player.setStepHeight(1.1f);
             }
         }
     }
@@ -44,11 +44,11 @@ public class ExtraKneeImplant implements EntityImplant
     @Override
     public void clientTick()
     {
-        if (player.world.getTime() % 40 == 0)
+        if (player.getWorld().getTime() % 40 == 0)
         {
-            if (player.stepHeight < 1.1f)
+            if (player.getStepHeight() < 1.1f)
             {
-                player.stepHeight = 1.1f;
+                player.setStepHeight(1.1f);
             }
         }
     }
@@ -56,12 +56,12 @@ public class ExtraKneeImplant implements EntityImplant
     @Override
     public void onInstall()
     {
-        player.stepHeight = 1f;
+        player.setStepHeight(1f);
     }
 
     @Override
     public void onUninstall()
     {
-        player.stepHeight = 0.6f;
+        player.setStepHeight(0.6f);
     }
 }

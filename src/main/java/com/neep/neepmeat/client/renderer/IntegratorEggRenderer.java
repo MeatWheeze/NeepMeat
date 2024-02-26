@@ -17,7 +17,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 import net.minecraft.util.math.random.Random;
 import software.bernie.geckolib3.core.util.Color;
 import software.bernie.geckolib3.geo.render.built.GeoModel;
@@ -53,7 +53,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
             renderBase(matrices, be, vertexConsumers);
             matrices.push();
             matrices.translate(0.5d, 0d, 0.5d);
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
+            matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
             matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + partialTicks) / 20) / 15, 0);
 

@@ -33,7 +33,7 @@ public class StatueBlock extends BaseHorFacingBlock implements Waterloggable
     public BlockState getPlacementState(ItemPlacementContext context)
     {
         return getDefaultState()
-                .with(FACING, context.getPlayerFacing())
+                .with(FACING, context.getHorizontalPlayerFacing())
                 .with(WATERLOGGED, context.getWorld().getFluidState(context.getBlockPos()).getFluid() == Fluids.WATER);
     }
 

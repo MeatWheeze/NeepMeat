@@ -25,7 +25,7 @@ import net.minecraft.client.texture.Sprite;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(value = EnvType.CLIENT)
 public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockEntityRenderer<T>
@@ -44,7 +44,7 @@ public class ConverterRenderer<T extends ConverterBlockEntity> implements BlockE
 
         matrices.translate(0.5, 0.5, 0.5);
         if (be.getCachedState().get(HorizontalFacingBlock.FACING).getAxis() == Direction.Axis.X)
-            matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
+            matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((float) (Math.PI / 2)));
         matrices.translate(-0.5, -0.5, -0.5);
 //        matrices.translate(0, 1, 0);
 

@@ -6,7 +6,7 @@ import com.neep.meatlib.api.event.InputEvents;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.sound.DrillSoundInstance;

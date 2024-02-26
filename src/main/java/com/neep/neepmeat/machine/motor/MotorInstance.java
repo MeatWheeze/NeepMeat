@@ -13,7 +13,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.Vector3f;
 
 @Environment(EnvType.CLIENT)
 public class MotorInstance extends BlockEntityInstance<MotorBlockEntity> implements DynamicInstance
@@ -48,9 +48,9 @@ public class MotorInstance extends BlockEntityInstance<MotorBlockEntity> impleme
         blockEntity.angle = MathHelper.wrapDegrees(blockEntity.angle + blockEntity.currentSpeed * delta);
 
         rotor.loadIdentity().translate(getInstancePosition()).centre()
-            .multiply(Vec3f.NEGATIVE_Y.getDegreesQuaternion(facing.asRotation()))
-            .multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(facing == Direction.UP ? 90 : facing == Direction.DOWN ? -90 : 0))
-            .multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(blockEntity.angle))
+            .multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation()))
+            .multiply(RotationAxis.NEGATIVE_X.rotationDegrees(facing == Direction.UP ? 90 : facing == Direction.DOWN ? -90 : 0))
+            .multiply(RotationAxis.POSITIVE_Z.rotationDegrees(blockEntity.angle))
             .unCentre();
     }
 

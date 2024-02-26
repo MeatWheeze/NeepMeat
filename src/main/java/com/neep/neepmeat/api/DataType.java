@@ -2,8 +2,8 @@ package com.neep.neepmeat.api;
 
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class DataType
 {
