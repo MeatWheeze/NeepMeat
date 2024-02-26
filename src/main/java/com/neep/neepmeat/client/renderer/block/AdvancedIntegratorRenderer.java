@@ -7,7 +7,7 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 public class AdvancedIntegratorRenderer implements BlockEntityRenderer<AdvancedIntegratorBlockEntity>
 {

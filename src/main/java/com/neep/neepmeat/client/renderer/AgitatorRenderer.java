@@ -10,7 +10,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 public class AgitatorRenderer implements BlockEntityRenderer<AgitatorBlockEntity>
@@ -33,7 +33,7 @@ public class AgitatorRenderer implements BlockEntityRenderer<AgitatorBlockEntity
         if (facing == Direction.DOWN)
             matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180));
 
-        matrices.multiply(Vector3f.POSITIVE_Y.getRadialQuaternion((be.getWorld().getTime() + tickDelta) / 10f));
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotation((be.getWorld().getTime() + tickDelta) / 10f));
         matrices.translate(-0.5, -0.5, -0.5);
 
         matrices.translate(0, 1, 0);

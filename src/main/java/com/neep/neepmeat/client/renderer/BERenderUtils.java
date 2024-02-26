@@ -23,10 +23,11 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 
 import java.util.BitSet;
 import java.util.List;
@@ -112,8 +113,8 @@ public class BERenderUtils
         for (Direction direction : Direction.values())
         {
             Vector3f vec1 = closest.getUnitVector();
-            vec1.subtract(vec);
-            float len = length(vec1);
+            vec1.sub(vec);
+            float len = vec1.length();
             if (len < closestDist)
             {
                 closest = direction;
@@ -121,14 +122,6 @@ public class BERenderUtils
             }
         }
         return Direction.UP;
-    }
-
-    private static float length(Vector3f vec)
-    {
-        float u = vec.getX();
-        float v = vec.getY();
-        float w = vec.getZ();
-        return (float) Math.sqrt(u * u + v * v + w * w);
     }
 
     /**

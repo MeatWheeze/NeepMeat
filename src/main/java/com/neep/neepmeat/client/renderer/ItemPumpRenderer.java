@@ -18,9 +18,10 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import org.joml.Vector3f;
 
 
 @Environment(value = EnvType.CLIENT)
@@ -50,8 +51,8 @@ public class ItemPumpRenderer implements BlockEntityRenderer<ItemPumpBlockEntity
 
         be.offset = (float) MathHelper.lerp(0.3, be.offset, be.shuttle > 0 ? (float) 0.2 : 0);
 
-        vec.multiplyComponentwise((float) be.offset, (float) be.offset, (float) be.offset);
-        matrices.translate(vec.getX(), vec.getY(), vec.getZ());
+        vec.mul((float) be.offset, (float) be.offset, (float) be.offset);
+        matrices.translate(vec.x, vec.y, vec.z);
 
         matrices.multiply(RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation()));
         if (facing == Direction.DOWN)

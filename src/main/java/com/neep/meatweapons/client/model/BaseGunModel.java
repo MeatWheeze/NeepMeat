@@ -2,9 +2,9 @@ package com.neep.meatweapons.client.model;
 
 import com.neep.meatweapons.item.BaseGunItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class BaseGunModel<T extends BaseGunItem> extends AnimatedGeoModel<T>
+public class BaseGunModel<T extends BaseGunItem> extends GeoModel<T>
 {
     private final Identifier modelPath;
     private final Identifier texturePath;

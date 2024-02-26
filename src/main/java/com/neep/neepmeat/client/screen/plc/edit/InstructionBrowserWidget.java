@@ -10,15 +10,10 @@ import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.Element;
-import net.minecraft.client.gui.ParentElement;
-import net.minecraft.client.gui.Selectable;
-import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -89,22 +84,22 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
 
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext context, int mouseX, int mouseY, float delta)
     {
-        Screen.fill(matrices, x, y, x + width, y + height, 0x90000000);
-        GUIUtil.renderBorder(matrices, x, y, width - 1, height - 1, PLCCols.BORDER.col, 0);
+        context.fill(x, y, x + width, y + height, 0x90000000);
+        GUIUtil.renderBorder(context, x, y, width - 1, height - 1, PLCCols.BORDER.col, 0);
 
-        matrices.push();
+        context.getMatrices().push();
         int yOffset = (int) (y + 2 + scrollAmount);
         int xOffset = x + 2;
 
-        enableScissor();
+        enableScissor(context);
         for (var entry : entries)
         {
-            yOffset += entry.render(matrices, xOffset, yOffset, mouseX, mouseY, delta) + pad;
+            yOffset += entry.render(context, xOffset, yOffset, mouseX, mouseY, delta) + pad;
         }
-        disableScissor();
-        matrices.pop();
+        disableScissor(context);
+        context.getMatrices().pop();
     }
 
     @Override
@@ -190,14 +185,14 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         return SelectionType.NONE;
     }
 
-    private void enableScissor()
+    private void enableScissor(DrawContext context)
     {
-        DrawableHelper.enableScissor(x + 1, y + 1, x + width - 1, y + height - 1);
+        context.enableScissor(x + 1, y + 1, x + width - 1, y + height - 1);
     }
 
-    private void disableScissor()
+    private void disableScissor(DrawContext context)
     {
-        DrawableHelper.disableScissor();
+        context.disableScissor();
     }
 
     public int getX()
@@ -210,7 +205,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         return y;
     }
 
-    private class DropWidget extends DrawableHelper
+    private class DropWidget
     {
         private final InstructionAttributes.Category category;
         private final List<OperationWidget> operationWidgets;
@@ -228,21 +223,23 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
             this.operationWidgets = operationWidgets;
         }
 
-        public float render(MatrixStack matrices, int x, int y, double mouseX, double mouseY, float delta)
+        public float render(DrawContext context, int x, int y, double mouseX, double mouseY, float delta)
         {
             prevX = x;
             prevY = y;
 
             String arrow = unfolded ? "↓" : "→";
-            textRenderer.draw(matrices, arrow, x + 2, y + 2, PLCCols.TEXT.col);
-            textRenderer.draw(matrices, category.name, x + 2 + 9, y + 2, PLCCols.TEXT.col);
+            context.drawText(textRenderer, arrow, x + 2, y + 2, PLCCols.TEXT.col, false);
+            context.drawText(textRenderer, category.name, x + 2 + 9, y + 2, PLCCols.TEXT.col, false);
+//            textRenderer.draw(arrow, x + 2, y + 2, PLCCols.TEXT.col, false, matrices.peek(), );
+//            textRenderer.draw(category.name, x + 2 + 9, y + 2, PLCCols.TEXT.col);
 
             int yOffset = headerHeight;
             if (unfolded)
             {
                 for (var widget : operationWidgets)
                 {
-                    widget.render(matrices, x, y + yOffset, mouseX, mouseY, delta);
+                    widget.render(context, x, y + yOffset, mouseX, mouseY, delta);
                     yOffset += widget.height + 1;
                 }
             }
@@ -273,7 +270,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         }
     }
 
-    private class OperationWidget extends DrawableHelper
+    private class OperationWidget
     {
         private final InstructionProvider provider;
         private final Consumer<InstructionProvider> action;
@@ -291,19 +288,20 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
             this.action = action;
         }
 
-        public void render(MatrixStack matrices, int x, int y, double mouseX, double mouseY, float delta)
+        public void render(DrawContext context, int x, int y, double mouseX, double mouseY, float delta)
         {
             this.prevX = x;
             this.prevY = y;
 
             int col = selected.get() == provider ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
-            GUIUtil.drawHorizontalLine1(matrices, x, x + width, y, col);
+            GUIUtil.drawHorizontalLine1(context, x, x + width, y, col);
 
             TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
-            textRenderer.draw(matrices, message, x + 2, y + 2, col);
+            context.drawText(textRenderer, message, x + 2, y + 2, col, false);
+//            textRenderer.draw(context, message, x + 2, y + 2, col);
             if (isMouseOver(mouseX, mouseY))
             {
-                renderTooltip(matrices, x, y, (int) mouseX, (int) mouseY);
+                renderTooltip(context, x, y, (int) mouseX, (int) mouseY);
             }
         }
 
@@ -313,9 +311,9 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
                     (prevX<= mouseX && prevY <= mouseY && prevX + this.width >= mouseX && prevY + this.height >= mouseY);
         }
 
-        public void renderTooltip(MatrixStack matrices, int x, int y, int mouseX, int mouseY)
+        public void renderTooltip(DrawContext matrices, int x, int y, int mouseX, int mouseY)
         {
-            InstructionBrowserWidget.this.disableScissor();
+            InstructionBrowserWidget.this.disableScissor(matrices);
             InstructionAttributes.InstructionTooltip tooltip = InstructionAttributes.get(provider);
             int width = 200;
             int tx = x - width - 5;
@@ -324,7 +322,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
                 List<OrderedText> wrapped = textRenderer.wrapLines(tooltip.description(), width);
                 parent.renderTooltipOrderedText(matrices, wrapped, false, tx, y, width, PLCCols.TEXT.col);
             }
-            InstructionBrowserWidget.this.enableScissor();
+            InstructionBrowserWidget.this.enableScissor(matrices);
         }
 
         public void onClick(double mouseX, double mouseY)

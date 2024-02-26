@@ -6,7 +6,7 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
@@ -69,7 +69,7 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         matrices.translate(0, 2 - 1 / 16f, 0);
         matrices.translate(0.5, -12 / 16f, 0.5);
         double angle1 = Math.atan2(x3, y3);
-        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) angle1));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) angle1));
         matrices.translate(-0.5, 12 / 16f, -0.5);
 //        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_1, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
         matrices.pop();
@@ -77,7 +77,7 @@ public class RoboticArmRenderer implements BlockEntityRenderer<RoboticArmBlockEn
         matrices.translate(0, y3 + 2 - 1 / 16f, x3);
         matrices.translate(0.5, -12 / 16f, 0.5);
         double angle2 = Math.atan2((lx - x3), (ly - y3));
-        matrices.multiply(Vector3f.POSITIVE_X.getRadialQuaternion((float) angle2));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotation((float) angle2));
         matrices.translate(-0.5, 12 / 16f, -0.5);
 //        BERenderUtils.renderModelSmooth(NMExtraModels.ROBOTIC_ARM_SEGMENT_2, matrices, be.getWorld(), be.getPos().up(), be.getCachedState(), vertexConsumers);
         matrices.pop();

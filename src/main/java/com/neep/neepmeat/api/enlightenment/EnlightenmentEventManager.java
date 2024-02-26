@@ -5,10 +5,10 @@ import com.neep.neepmeat.api.network.EnlightenmentEventPacket;
 import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
+import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.DefaultedRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,7 +72,7 @@ public class EnlightenmentEventManager
 
             if (p < thing)
             {
-                if (EVENTS.isEmpty())
+                if (EVENTS.size() == 0)
                     return;
 
                 // Choose a random factory. If it can't spawn, find one that does.

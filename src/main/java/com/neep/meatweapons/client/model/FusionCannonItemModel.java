@@ -3,9 +3,9 @@ package com.neep.meatweapons.client.model;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.FusionCannonItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class FusionCannonItemModel extends AnimatedGeoModel<FusionCannonItem>
+public class FusionCannonItemModel extends GeoModel<FusionCannonItem>
 {
     @Override
     public Identifier getModelResource(FusionCannonItem object)

@@ -10,9 +10,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vector3f;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
-import software.bernie.geckolib3.util.EModelRenderCycle;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
 {
@@ -26,7 +24,7 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
     @Override
     public void render(WormEntity entity, float entityYaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vcp, int packedLight)
     {
-        setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
+//        setCurrentModelRenderCycle(EModelRenderCycle.INITIAL);
 //        matrices.push();
 //
 //        this.dispatchedMat = matrices.peek().getPositionMatrix().copy();
@@ -139,13 +137,13 @@ public class WormEntityRenderer extends GeoEntityRenderer<WormEntity>
         return super.shouldRender(entity, frustum, x, y, z);
     }
 
-    protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)
-    {
-        matrices.translate(0, 0.5, 0);
-        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - yaw));
-        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f - pitch));
-        matrices.translate(0, -0.5, 0);
-    }
+//    protected void applyRotations(Entity entity, MatrixStack matrices, float pitch, float yaw, float tickDelta)
+//    {
+//        matrices.translate(0, 0.5, 0);
+//        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(180f - yaw));
+//        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(90f - pitch));
+//        matrices.translate(0, -0.5, 0);
+//    }
 
     @Override
     public Identifier getTexture(WormEntity entity)

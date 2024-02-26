@@ -3,9 +3,9 @@ package com.neep.meatweapons.client.model;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class DrillItemModel extends AnimatedGeoModel<AssaultDrillItem>
+public class DrillItemModel extends GeoModel<AssaultDrillItem>
 {
     @Override
     public Identifier getModelResource(AssaultDrillItem object)

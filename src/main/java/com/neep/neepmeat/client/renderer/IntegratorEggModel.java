@@ -6,10 +6,10 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
 @Environment(value = EnvType.CLIENT)
-public class IntegratorEggModel<I extends BlockEntity> extends AnimatedGeoModel<IntegratorBlockEntity>
+public class IntegratorEggModel<I extends BlockEntity> extends GeoModel<IntegratorBlockEntity>
 {
     @Override
     public Identifier getModelResource(IntegratorBlockEntity object)

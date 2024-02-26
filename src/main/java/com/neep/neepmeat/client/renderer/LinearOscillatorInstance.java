@@ -12,8 +12,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
+import org.joml.Quaternionf;
 
 @Environment(value = EnvType.CLIENT)
 public class LinearOscillatorInstance extends BlockEntityInstance<LinearOscillatorBlockEntity> implements DynamicInstance
@@ -40,7 +40,7 @@ public class LinearOscillatorInstance extends BlockEntityInstance<LinearOscillat
         Direction facing = blockEntity.getCachedState().get(BaseFacingBlock.FACING);
         extension = (float) MathHelper.lerp(0.3, extension, blockEntity.extension);
         float maxExtension = 1 / 16f * 9;
-        Quaternion yaw = RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation());
+        Quaternionf yaw = RotationAxis.NEGATIVE_Y.rotationDegrees(facing.asRotation());
 
         armature.loadIdentity()
                 .translate(getInstancePosition())

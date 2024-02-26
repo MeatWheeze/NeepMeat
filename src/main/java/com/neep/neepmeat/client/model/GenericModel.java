@@ -2,9 +2,9 @@ package com.neep.neepmeat.client.model;
 
 import net.minecraft.util.Identifier;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class GenericModel<T extends IAnimatable> extends AnimatedGeoModel<T>
+public class GenericModel<T extends IAnimatable> extends GeoModel<T>
 {
     public final String namespace;
     public final String modelPath;

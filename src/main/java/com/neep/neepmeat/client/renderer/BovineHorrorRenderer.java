@@ -12,9 +12,9 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vector3f;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
+import net.minecraft.util.math.RotationAxis;
+import software.bernie.geckolib.core.object.Color;
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
 
 public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
 {

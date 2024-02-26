@@ -10,7 +10,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
 public class PhageRayInstance extends EntityInstance<PhageRayEntity> implements DynamicInstance
@@ -37,7 +37,7 @@ public class PhageRayInstance extends EntityInstance<PhageRayEntity> implements 
     public void beginFrame()
     {
         matrices.push();
-        matrices.translate(getInstancePosition().getX(), getInstancePosition().getY() - 0.5, getInstancePosition().getZ());
+        matrices.translate(getInstancePosition().x, getInstancePosition().y - 0.5, getInstancePosition().z);
 
         float tickDelta = MinecraftClient.getInstance().getTickDelta();;
         float pitch = entity.getPitch(tickDelta);

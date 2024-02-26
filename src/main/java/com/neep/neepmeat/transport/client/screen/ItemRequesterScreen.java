@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.transport.network.SyncRequesterScreenS2CPacket;
 import com.neep.neepmeat.transport.screen_handler.ItemRequesterScreenHandler;
 import net.fabricmc.api.EnvType;
@@ -12,16 +13,16 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.ResourceAmount;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.slot.Slot;
@@ -49,14 +50,14 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     protected void init()
     {
         super.init();
-        itemPane = new ItemPane(9, 7, x + 8, y + 8, itemRenderer, textRenderer, handler.getItems(), client);
+        itemPane = new ItemPane(9, 7, x + 8, y + 8, client.getItemRenderer(), textRenderer, handler.getItems(), client);
         this.addDrawableChild(itemPane);
 
         this.titleX = 29;
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
@@ -64,14 +65,14 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
@@ -89,12 +90,12 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
 //        this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
     }
 
-    public class ItemPane extends DrawableHelper implements Drawable, Element, Selectable
+    public class ItemPane implements Drawable, Element, Selectable, GUIUtil
     {
         protected final int wGrid, hGrid;
         protected int wSlot = 18;
@@ -127,12 +128,12 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             int x, y, i, j;
             for (int m = 0; m < items.size(); ++m)
             {
-                matrices.push();
+                matrices.getMatrices().push();
                 i = m % wGrid;
                 j = m / wGrid;
 
@@ -143,13 +144,13 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
 
                 drawSlot(x, y, matrices, getGridItem(i, j));
 
-                matrices.pop();
+                matrices.getMatrices().pop();
             }
 
             ResourceAmount<ItemVariant> ra = getHoveredItem(mouseX, mouseY);
             if (ra != null)
             {
-                renderTooltip(matrices, ra.resource().toStack(), mouseX, mouseY);
+                matrices.drawItemTooltip(textRenderer, ra.resource().toStack(), mouseX, mouseY);
             }
         }
 
@@ -206,6 +207,18 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
             return mouseInGrid(mouseX, mouseY);
         }
 
+        @Override
+        public void setFocused(boolean focused)
+        {
+
+        }
+
+        @Override
+        public boolean isFocused()
+        {
+            return true;
+        }
+
         protected ResourceAmount<ItemVariant> getGridItem(int i, int j)
         {
             if (!isInGrid(i, j)) return null;
@@ -227,23 +240,23 @@ public class ItemRequesterScreen extends HandledScreen<ItemRequesterScreenHandle
             return i < wGrid && j < hGrid;
         }
 
-        public void drawSlot(int x, int y, MatrixStack matrices, ResourceAmount<ItemVariant> ra)
+        public void drawSlot(int x, int y, DrawContext matrices, ResourceAmount<ItemVariant> ra)
         {
             if (ra == null) return;
 
             ItemStack itemStack = ra.resource().toStack((int) ra.amount());
             String string = null;
+            matrices.getMatrices().push();
+            matrices.getMatrices().translate(x, y, 100);
 
-            this.setZOffset(100);
-            itemRenderer.zOffset = 100.0f;
+//            this.setZOffset(100);
+//            itemRenderer.zOffset = 100.0f;
 
             RenderSystem.enableDepthTest();
 //            this.itemRenderer.renderInGuiWithOverrides(this.client.player, itemStack, x, y, slot.x + slot.y * this.backgroundWidth);
-            itemRenderer.renderInGuiWithOverrides(itemStack, x, y);
-            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y, string);
-
-            itemRenderer.zOffset = 0.0f;
-            this.setZOffset(0);
+            itemRenderer.renderItem(itemStack, ModelTransformationMode.GUI, 0xF000F0, OverlayTexture.DEFAULT_UV, matrices.getMatrices(), matrices.getVertexConsumers(), null, 0);
+//            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x, y, string);
+            matrices.getMatrices().pop();
         }
     }
 }

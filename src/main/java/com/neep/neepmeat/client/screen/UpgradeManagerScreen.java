@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.screen.narration.NarrationPart;
@@ -66,33 +67,33 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY)
     {
-        super.renderBackground(matrices);
-        GUIUtil.renderBorder(matrices, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
-        GUIUtil.drawVerticalLine1(matrices, x + entryWidth + 4, y, y + backgroundHeight, PLCCols.BORDER.col);
+        super.renderBackground(context);
+        GUIUtil.renderBorder(context, x, y, backgroundWidth, backgroundHeight, PLCCols.BORDER.col, 0);
+        GUIUtil.drawVerticalLine1(context, x + entryWidth + 4, y, y + backgroundHeight, PLCCols.BORDER.col);
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext context, int mouseX, int mouseY)
     {
         if (mip == null)
         {
             Text message1 = Text.of("No valid PLC workbench found.");
             Text message2 = Text.of("Place a PLC workbench in front of the machine.");
             int textWidth = textRenderer.getWidth(message1);
-            textRenderer.drawWithShadow(matrices, message1, (backgroundWidth - textWidth) / 2f, 20, PLCCols.TEXT.col);
+            GUIUtil.drawText(context, textRenderer, message1, ((backgroundWidth - textWidth) / 2f), 20, PLCCols.TEXT.col, true);
             textWidth = textRenderer.getWidth(message2);
-            textRenderer.drawWithShadow(matrices, message2, (backgroundWidth - textWidth) / 2f, 20 + textRenderer.fontHeight * 1.5f, PLCCols.TEXT.col);
+            GUIUtil.drawText(context, textRenderer, message2, ((backgroundWidth - textWidth) / 2f), (20 + textRenderer.fontHeight * 1.5f), PLCCols.TEXT.col, true);
         }
         else if (implantManager == null)
         {
             Text message1 = Text.of("No upgradable object found.");
             Text message2 = Text.of("Insert an item or entity into the connected workbench.");
             int textWidth = textRenderer.getWidth(message1);
-            textRenderer.drawWithShadow(matrices, message1, (backgroundWidth - textWidth) / 2f, 20, PLCCols.TEXT.col);
+            GUIUtil.drawText(context, textRenderer, message1, (backgroundWidth - textWidth) / 2f, 20, PLCCols.TEXT.col, true);
             textWidth = textRenderer.getWidth(message2);
-            textRenderer.drawWithShadow(matrices, message2, (backgroundWidth - textWidth) / 2f, 20 + textRenderer.fontHeight * 1.5f, PLCCols.TEXT.col);
+            GUIUtil.drawText(context, textRenderer, message2, (backgroundWidth - textWidth) / 2f, 20 + textRenderer.fontHeight * 1.5f, PLCCols.TEXT.col, true);
         }
     }
 
@@ -144,12 +145,6 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         this.selected = id;
     }
 
-    @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
-    {
-        super.render(matrices, mouseX, mouseY, delta);
-    }
-
     class RemoveButton extends ClickableWidget
     {
         public RemoveButton(int x, int y, int width, int height, Text message)
@@ -158,13 +153,13 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
+        protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
         {
-            builder.put(NarrationPart.TITLE, Text.literal("remove"));
+
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             int col = PLCCols.INVALID.col;
             if (selected != null)
@@ -173,7 +168,7 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
             }
 
             GUIUtil.renderBorder(matrices, x, y, width, height,  col, 0);
-            ClickableWidget.drawCenteredText(matrices, textRenderer, this.getMessage(),
+            matrices.drawCenteredTextWithShadow(textRenderer, this.getMessage(),
                     x + width / 2, y + (height - 8) / 2, PLCCols.TEXT.col);
         }
 
@@ -187,6 +182,12 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         public void playDownSound(SoundManager soundManager)
         {
             soundManager.play(PositionedSoundInstance.master(NMSounds.UI_BEEP, 1.0f));
+        }
+
+        @Override
+        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        {
+
         }
     }
 
@@ -202,25 +203,19 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void render(DrawContext context, int mouseX, int mouseY, float delta)
         {
             int textCol = id.equals(selected) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
-            GUIUtil.renderBorder(matrices, x, y, width, height, textCol, 0);
+            GUIUtil.renderBorder(context, x, y, width, height, textCol, 0);
 
             Text name = ImplantAttributes.getName(id);
-            textRenderer.draw(matrices, name, x + 2, y + 2, textCol);
+            GUIUtil.drawText(context, textRenderer, name, x + 2, y + 2, textCol, false);
         }
 
         @Override
         public SelectionType getType()
         {
             return SelectionType.NONE;
-        }
-
-        @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
-        {
-
         }
 
         @Override

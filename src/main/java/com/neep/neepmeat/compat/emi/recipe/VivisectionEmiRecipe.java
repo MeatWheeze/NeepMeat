@@ -11,9 +11,9 @@ import dev.emi.emi.api.widget.WidgetHolder;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.Ingredient;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class VivisectionEmiRecipe implements EmiRecipe {
     public VivisectionEmiRecipe(Item input, Item output) {
         this.entities = List.of();
 
-        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+Registries.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
+        this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+ Registries.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
         this.input = List.of(EmiIngredient.of(Ingredient.ofItems(input)));
         this.output = List.of(EmiStack.of(output));
     }

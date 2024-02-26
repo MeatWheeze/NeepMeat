@@ -3,9 +3,9 @@ package com.neep.meatweapons.client.model;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.item.LMGItem;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class LMGItemModel extends AnimatedGeoModel<LMGItem>
+public class LMGItemModel extends GeoModel<LMGItem>
 {
     @Override
     public Identifier getModelResource(LMGItem object)

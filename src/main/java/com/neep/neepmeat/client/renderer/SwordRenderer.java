@@ -10,18 +10,16 @@ import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.model.json.ModelTransformation;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.util.Color;
-import software.bernie.geckolib3.geo.render.built.GeoModel;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
+import software.bernie.geckolib.core.object.Color;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
 import java.util.Collections;
 
 @Environment(value = EnvType.CLIENT)
 public class SwordRenderer<T extends AnimatedSword> extends GeoItemRenderer<T>
 {
-    public SwordRenderer(AnimatedGeoModel<T> modelProvider)
+    public SwordRenderer(GeoModel<T> modelProvider)
     {
         super(modelProvider);
     }

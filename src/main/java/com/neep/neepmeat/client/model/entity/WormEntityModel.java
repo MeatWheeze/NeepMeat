@@ -3,9 +3,9 @@ package com.neep.neepmeat.client.model.entity;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib.model.GeoModel;
 
-public class WormEntityModel extends AnimatedGeoModel<WormEntity>
+public class WormEntityModel extends GeoModel<WormEntity>
 {
     @Override
     public Identifier getModelResource(WormEntity object)

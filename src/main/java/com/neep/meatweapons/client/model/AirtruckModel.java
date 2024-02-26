@@ -3,9 +3,9 @@ package com.neep.meatweapons.client.model;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.entity.AirtruckEntity;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 
-public class AirtruckModel extends AnimatedGeoModel<AirtruckEntity>
+public class AirtruckModel extends GeoModel<AirtruckEntity>
 {
     @Override
     public Identifier getModelResource(AirtruckEntity object)

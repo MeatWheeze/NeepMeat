@@ -16,7 +16,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vector3f;
 import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 import software.bernie.geckolib3.util.GeckoLibUtil;
 
@@ -24,7 +24,7 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
 {
     public Vector3f currentTransform = new Vector3f(0, 0, 0);
 
-    public BaseGunRenderer(AnimatedGeoModel<T> model)
+    public BaseGunRenderer(GeoModel<T> model)
     {
         super(model);
     }

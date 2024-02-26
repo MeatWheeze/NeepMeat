@@ -18,6 +18,7 @@ import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -387,7 +388,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         renderTooltipComponents(matrices, texts.stream().map(t -> TooltipComponent.of(t.asOrderedText())).collect(Collectors.toList()), offset, x, y, 0, col);
     }
 
-    public void renderTooltipOrderedText(MatrixStack matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
+    public void renderTooltipOrderedText(DrawContext matrices, List<OrderedText> texts, boolean offset, int x, int y, int width, int col)
     {
         renderTooltipComponents(matrices, texts.stream().map(TooltipComponent::of).collect(Collectors.toList()), offset, x, y, width, col);
     }

@@ -7,6 +7,7 @@ import com.neep.neepmeat.guide.GuideReloadListener;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
 import net.minecraft.client.item.TooltipData;
@@ -16,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Matrix4f;
+import org.joml.Matrix4f;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.Deque;
@@ -109,15 +110,15 @@ public class GuideMainScreen extends Screen implements GuideScreen
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
 
         // Initial animation
-        matrices.push();
+        matrices.getMatrices().push();
         float scale = MathHelper.clampedLerp(0.01f, 1f, (animationTicks + delta) / 10f);
-        matrices.translate(0, height / 2f * (1 - scale), 0);
-        matrices.scale(1, scale, 1);
+        matrices.getMatrices().translate(0, height / 2f * (1 - scale), 0);
+        matrices.getMatrices().scale(1, scale, 1);
         if (animationTicks > 10)
         {
             super.render(matrices, mouseX, mouseY, delta);
@@ -130,7 +131,7 @@ public class GuideMainScreen extends Screen implements GuideScreen
 
         if (animationTicks != 0 && animationTicks != 2)
             GUIUtil.renderBorder(matrices, x, y, contentWidth, contentHeight, borderCol, offset);
-        matrices.pop();
+        matrices.getMatrices().pop();
     }
 
     @Override
@@ -189,29 +190,29 @@ public class GuideMainScreen extends Screen implements GuideScreen
         }
     }
 
-    protected void drawLogo(MatrixStack matrices, float delta)
+    protected void drawLogo(DrawContext matrices, float delta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, LOGO_TEXTURE);
         int logoHeight = 24;
         int logoWidth = 60;
-        drawTexture(matrices, x, y + contentHeight - logoHeight + 1, 0, 0, logoWidth, logoHeight, logoWidth, 26);
+        matrices.drawTexture(LOGO_TEXTURE, x, y + contentHeight - logoHeight + 1, 0, 0, logoWidth, logoHeight, logoWidth, 26);
     }
 
-    @Override
-    protected void renderTooltip(MatrixStack matrices, ItemStack stack, int x, int y)
-    {
-        this.renderTooltip(matrices, this.getTooltipFromItem(stack), stack.getTooltipData(), x, y);
-    }
+//    @Override
+//    protected void renderTooltip(DrawContext context, ItemStack stack, int x, int y)
+//    {
+//        this.renderTooltip(matrices, this.getTooltipFromItem(stack), stack.getTooltipData(), x, y);
+//    }
 
-    @Override
-    public void renderTooltip(MatrixStack matrices, List<Text> lines, Optional<TooltipData> data2, int x, int y)
-    {
-        List<TooltipComponent> list = lines.stream().map(Text::asOrderedText).map(TooltipComponent::of).collect(Collectors.toList());
-        data2.ifPresent(data -> list.add(1, TooltipComponent.of(data)));
-        this.renderTooltipFromComponents(matrices, list, x, y);
-    }
+//    @Override
+//    public void renderTooltip(MatrixStack matrices, List<Text> lines, Optional<TooltipData> data2, int x, int y)
+//    {
+//        List<TooltipComponent> list = lines.stream().map(Text::asOrderedText).map(TooltipComponent::of).collect(Collectors.toList());
+//        data2.ifPresent(data -> list.add(1, TooltipComponent.of(data)));
+//        this.renderTooltipFromComponents(matrices, list, x, y);
+//    }
 
     @Override
     public void tick()
@@ -221,91 +222,91 @@ public class GuideMainScreen extends Screen implements GuideScreen
         rightPane.tick();
     }
 
-    private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y)
-    {
-        TooltipComponent tooltipComponent2;
-        int s;
-        int k;
-        if (components.isEmpty()) {
-            return;
-        }
-        int i = 0;
-        int j = components.size() == 1 ? -2 : 0;
-        for (TooltipComponent tooltipComponent : components) {
-            k = tooltipComponent.getWidth(this.textRenderer);
-            if (k > i) {
-                i = k;
-            }
-            j += tooltipComponent.getHeight();
-        }
-        int l = x + 12;
-        int startY = y - 12;
-        k = i;
-        int m = j;
-        if (l + i > this.width) {
-            l -= 28 + i;
-        }
-        if (startY + m + 6 > this.height) {
-            startY = this.height - m - 6;
-        }
-        matrices.push();
-        int n = -267386864;
-        int o = 0x505000FF;
-        int p = 1344798847;
-        int q = 400;
-        float f = this.itemRenderer.zOffset;
-        this.itemRenderer.zOffset = 400.0f;
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
-        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
-
-        int borderCol = -0x50FF50FF;
-        // Border top
-//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 4, l + k + 3, startY - 3, 400, -267386864, -267386864);
-        // Border bottom
-//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY + m + 3, l + k + 3, startY + m + 4, 400, -267386864, -267386864);
-        // Background
-        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3, l + k + 3, startY + m + 3, 400, -267486464, -267386864);
-        // Border left
-//        Screen.fillGradient(matrix4f, bufferBuilder, l - 4, startY - 3, l - 3, startY + m + 3, 400, -267386864, -267386864);
-        // Border right
-//        Screen.fillGradient(matrix4f, bufferBuilder, l + k + 3, startY - 3, l + k + 4, startY + m + 3, 400, -267386864, -267386864);
-        // Gradient left
-        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3 + 1, l - 3 + 1, startY + m + 3 - 1, 400, borderCol, borderCol);
-        // Gradient right
-        Screen.fillGradient(matrix4f, bufferBuilder, l + k + 2, startY - 3 + 1, l + k + 3, startY + m + 3 - 1, 400, borderCol, borderCol);
-        // Gradient top
-        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3, l + k + 3, startY - 3 + 1, 400, borderCol, borderCol);
-        // Gradient bottom
-        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY + m + 2, l + k + 3, startY + m + 3, 400, borderCol, borderCol);
-
-        RenderSystem.enableDepthTest();
-        RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        BufferRenderer.drawWithShader(bufferBuilder.end());
-        RenderSystem.disableBlend();
-        RenderSystem.enableTexture();
-        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
-        matrices.translate(0.0, 0.0, 400.0);
-        int r = startY;
-        for (s = 0; s < components.size(); ++s) {
-            tooltipComponent2 = components.get(s);
-            tooltipComponent2.drawText(this.textRenderer, l, r, matrix4f, immediate);
-            r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
-        }
-        immediate.draw();
-        matrices.pop();
-        r = startY;
-        for (s = 0; s < components.size(); ++s) {
-            tooltipComponent2 = components.get(s);
-            tooltipComponent2.drawItems(this.textRenderer, l, r, matrices, this.itemRenderer, 400);
-            r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
-        }
-        this.itemRenderer.zOffset = f;
-    }
+//    private void renderTooltipFromComponents(MatrixStack matrices, List<TooltipComponent> components, int x, int y)
+//    {
+//        TooltipComponent tooltipComponent2;
+//        int s;
+//        int k;
+//        if (components.isEmpty()) {
+//            return;
+//        }
+//        int i = 0;
+//        int j = components.size() == 1 ? -2 : 0;
+//        for (TooltipComponent tooltipComponent : components) {
+//            k = tooltipComponent.getWidth(this.textRenderer);
+//            if (k > i) {
+//                i = k;
+//            }
+//            j += tooltipComponent.getHeight();
+//        }
+//        int l = x + 12;
+//        int startY = y - 12;
+//        k = i;
+//        int m = j;
+//        if (l + i > this.width) {
+//            l -= 28 + i;
+//        }
+//        if (startY + m + 6 > this.height) {
+//            startY = this.height - m - 6;
+//        }
+//        matrices.push();
+//        int n = -267386864;
+//        int o = 0x505000FF;
+//        int p = 1344798847;
+//        int q = 400;
+//        float f = this.itemRenderer.zOffset;
+//        this.itemRenderer.zOffset = 400.0f;
+//        Tessellator tessellator = Tessellator.getInstance();
+//        BufferBuilder bufferBuilder = tessellator.getBuffer();
+//        RenderSystem.setShader(GameRenderer::getPositionColorShader);
+//        bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);
+//        Matrix4f matrix4f = matrices.peek().getPositionMatrix();
+//
+//        int borderCol = -0x50FF50FF;
+//        // Border top
+////        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 4, l + k + 3, startY - 3, 400, -267386864, -267386864);
+//        // Border bottom
+////        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY + m + 3, l + k + 3, startY + m + 4, 400, -267386864, -267386864);
+//        // Background
+//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3, l + k + 3, startY + m + 3, 400, -267486464, -267386864);
+//        // Border left
+////        Screen.fillGradient(matrix4f, bufferBuilder, l - 4, startY - 3, l - 3, startY + m + 3, 400, -267386864, -267386864);
+//        // Border right
+////        Screen.fillGradient(matrix4f, bufferBuilder, l + k + 3, startY - 3, l + k + 4, startY + m + 3, 400, -267386864, -267386864);
+//        // Gradient left
+//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3 + 1, l - 3 + 1, startY + m + 3 - 1, 400, borderCol, borderCol);
+//        // Gradient right
+//        Screen.fillGradient(matrix4f, bufferBuilder, l + k + 2, startY - 3 + 1, l + k + 3, startY + m + 3 - 1, 400, borderCol, borderCol);
+//        // Gradient top
+//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY - 3, l + k + 3, startY - 3 + 1, 400, borderCol, borderCol);
+//        // Gradient bottom
+//        Screen.fillGradient(matrix4f, bufferBuilder, l - 3, startY + m + 2, l + k + 3, startY + m + 3, 400, borderCol, borderCol);
+//
+//        RenderSystem.enableDepthTest();
+//        RenderSystem.disableTexture();
+//        RenderSystem.enableBlend();
+//        RenderSystem.defaultBlendFunc();
+//        BufferRenderer.drawWithShader(bufferBuilder.end());
+//        RenderSystem.disableBlend();
+//        RenderSystem.enableTexture();
+//        VertexConsumerProvider.Immediate immediate = VertexConsumerProvider.immediate(Tessellator.getInstance().getBuffer());
+//        matrices.translate(0.0, 0.0, 400.0);
+//        int r = startY;
+//        for (s = 0; s < components.size(); ++s) {
+//            tooltipComponent2 = components.get(s);
+//            tooltipComponent2.drawText(this.textRenderer, l, r, matrix4f, immediate);
+//            r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
+//        }
+//        immediate.draw();
+//        matrices.pop();
+//        r = startY;
+//        for (s = 0; s < components.size(); ++s) {
+//            tooltipComponent2 = components.get(s);
+//            tooltipComponent2.drawItems(this.textRenderer, l, r, matrices, this.itemRenderer, 400);
+//            r += tooltipComponent2.getHeight() + (s == 0 ? 2 : 0);
+//        }
+//        this.itemRenderer.zOffset = f;
+//    }
 
 //    @Override
 //    public GuideScreenHandler getScreenHandler()

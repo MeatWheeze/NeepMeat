@@ -9,6 +9,7 @@ import com.neep.neepmeat.util.NMMaths;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
@@ -20,16 +21,17 @@ import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
 import net.minecraft.client.render.model.BakedQuad;
 import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.client.texture.TextureManager;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.registry.Registry;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.ArrayList;
@@ -303,6 +305,12 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         }
 
         @Override
+        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        {
+
+        }
+
+        @Override
         public void onClick(double mouseX, double mouseY)
         {
             this.onPress();
@@ -315,40 +323,35 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
         }
 
         @Override
-        public void appendNarrations(NarrationMessageBuilder builder)
-        {
-
-        }
-
-        @Override
-        public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             // Delay animation by 16 ticks if the screen has been opened for fewer than 32 ticks.
             if (parent.getAnimationTicks() < (animationTicks <= 32 ? 16 : 0) + entryAnimationStart + index) return;
 
             VertexConsumerProvider vertexConsumers = MinecraftClient.getInstance().getBufferBuilders().getEntityVertexConsumers();
-            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
-//            int borderCol = getSelected() == index ? 0xFF00CC00 : 0xFF008800;
+//            this.renderBackground(matrices, MinecraftClient.getInstance(), mouseX, mouseY);
             int borderCol = 0xFF008800;
-            this.drawHorizontalLine(matrices, this.x, this.x + width, this.y + height, borderCol);
-            this.drawHorizontalLine(matrices, this.x, this.x + width, this.y, borderCol);
-            this.drawVerticalLine(matrices, this.x, this.y, this.y + height, borderCol);
-            this.drawVerticalLine(matrices, this.x + width, this.y, this.y + height, borderCol);
-//            int j = this.active ? 0xFFFFFF : 0xA0A0A0;
-            textRenderer.draw(matrices, this.getMessage(), this.x + 2, this.y + (this.height - 7) / 2f, 0x008800);
+            int x = getX();
+            int y = getY()
+            GUIUtil.drawHorizontalLine1(matrices, x, x + width, y + height, borderCol);
+            GUIUtil.drawHorizontalLine1(matrices, x, x + width, y, borderCol);
+            GUIUtil.drawVerticalLine1(matrices, x, y, y + height, borderCol);
+            GUIUtil.drawVerticalLine1(matrices, getX() + width, getY(), getY() + height, borderCol);
+            GUIUtil.drawText(matrices, textRenderer, getMessage(), getX() + 2, getY() + (height - 7) / 2f, 0x008800, true);
             if (node.getChildren().size() > 0)
             {
-                textRenderer.draw(matrices, "\u2192", this.x + this.width - 9, this.y + (this.height - 7) / 2f, 0x008800);
+                GUIUtil.drawText(matrices, textRenderer, "\u2192", getX() + width - 9, getY() + (height - 7) / 2f, 0x008800, true);
             }
             else
             {
-                renderItemIcon(this.x + width - 16, this.y - 1, itemRenderer, getZOffset(), icon, matrices, vertexConsumers, 15, 0);
+                renderItemIcon(this.getX() + width - 16, this.getY() - 1, client.getItemRenderer(), 0, icon, matrices, vertexConsumers, 15, 0);
             }
         }
     }
 
-    public static void renderItemIcon(int x, int y, ItemRenderer renderer, int zOffset, ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
+    public static void renderItemIcon(int x, int y, ItemRenderer renderer, int zOffset, ItemStack stack, DrawContext context, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
+        MatrixStack matrices = context.getMatrices();
         if (stack.isEmpty())
         {
             return;
@@ -386,7 +389,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
 
     public static void renderItem(ItemStack stack, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay, BakedModel model)
     {
-        ModelTransformation.Mode renderMode = ModelTransformation.Mode.GUI;
+        ModelTransformationMode renderMode = ModelTransformationMode.GUI;
         matrices.push();
         model.getTransformation().getTransformation(renderMode).apply(false, matrices);
         matrices.translate(-0.5, -0.5, -0.5);

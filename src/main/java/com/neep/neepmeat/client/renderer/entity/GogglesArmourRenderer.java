@@ -3,13 +3,13 @@ package com.neep.neepmeat.client.renderer.entity;
 import com.neep.neepmeat.item.GogglesItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import software.bernie.geckolib3.model.AnimatedGeoModel;
+import software.bernie.geckolib3.model.GeoModel;
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 @Environment(value = EnvType.CLIENT)
 public class GogglesArmourRenderer extends GeoArmorRenderer<GogglesItem>
 {
-    public GogglesArmourRenderer(AnimatedGeoModel<GogglesItem> modelProvider)
+    public GogglesArmourRenderer(GeoModel<GogglesItem> modelProvider)
     {
         super(modelProvider);
 
