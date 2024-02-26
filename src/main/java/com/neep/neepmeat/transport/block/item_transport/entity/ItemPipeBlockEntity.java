@@ -91,7 +91,8 @@ public class ItemPipeBlockEntity extends SyncableBlockEntity
                     if (transferred == item.amount() || item.getItemStack().isEmpty())
                     {
                         it.remove();
-                    } else
+                    }
+                    else
                     {
                         ItemPipeUtil.bounce(item, world, blockState);
                     }

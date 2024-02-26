@@ -22,7 +22,6 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -59,7 +58,7 @@ public class RouterBlock extends BaseBlock implements BlockEntityProvider, ItemP
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
     {
         if (world instanceof ServerWorld serverWorld)
-            onBroken(pos, serverWorld);
+            onChanged(pos, serverWorld);
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 

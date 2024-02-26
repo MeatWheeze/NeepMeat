@@ -275,8 +275,8 @@ public class ItemPipeUtil
                 }
                 else if ((storage = ItemStorage.SIDED.find(world, offset, offsetState, null, direction.getOpposite())) != null)
                 {
-                    return MeatlibStorageUtil.simulateInsert(storage, item.resource(), Long.MAX_VALUE, transaction)
-                            - alreadyInTransit;
+                    return Math.max(0, MeatlibStorageUtil.simulateInsert(storage, item.resource(), Long.MAX_VALUE, transaction)
+                            - alreadyInTransit);
                 }
             }
         }

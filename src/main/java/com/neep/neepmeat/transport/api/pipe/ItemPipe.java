@@ -13,9 +13,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -105,8 +103,13 @@ public interface ItemPipe
         ((IServerWorld) world).getItemNetwork().onPipeAdded(this, pos, state);
     }
 
-    default void onBroken(BlockPos pos, ServerWorld world)
+    default void onChanged(BlockPos pos, ServerWorld world)
     {
         ((IServerWorld) world).getItemNetwork().onPipeRemove(pos);
+    }
+
+    default boolean supportsRouting()
+    {
+        return false;
     }
 }

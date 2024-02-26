@@ -60,7 +60,7 @@ public class ItemInPipe
 
     public long amount()
     {
-        return amount;
+        return Math.max(amount, 0);
     }
 
     public void setRoute(List<Direction> route)

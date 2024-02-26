@@ -53,7 +53,7 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
             world.removeBlockEntity(pos);
         }
         if (world instanceof ServerWorld serverWorld)
-            onBroken(pos, serverWorld);
+            onChanged(pos, serverWorld);
     }
 
     @Override
@@ -192,5 +192,11 @@ public class ItemPipeBlock extends AbstractPipeBlock implements BlockEntityProvi
             return transferred;
         }
         return 0;
+    }
+
+    @Override
+    public boolean supportsRouting()
+    {
+        return true;
     }
 }

@@ -16,7 +16,7 @@ public class PipeCacheImpl implements PipeCache
 {
     protected final ServerWorld world;
 
-    protected final Map<BlockPos, ItemPipeInstance> pipes = new WeakHashMap<>();
+//    protected final Map<BlockPos, ItemPipeInstance> pipes = new WeakHashMap<>();
 
     public PipeCacheImpl(ServerWorld world)
     {
@@ -46,35 +46,37 @@ public class PipeCacheImpl implements PipeCache
 
     public ItemPipeInstance getPipe(BlockPos pos)
     {
-        return pipes.computeIfAbsent(pos, v -> createPipe(pos, world.getBlockState(pos)));
+//        return pipes.computeIfAbsent(pos, v -> createPipe(pos, world.getBlockState(pos)));
+        return createPipe(pos, world.getBlockState(pos));
     }
 
     protected ItemPipeInstance createPipe(BlockPos pos, BlockState state)
     {
         if (state.getBlock() instanceof ItemPipe pipe)
         {
-            ItemPipeInstance pipeState = new ItemPipeInstance(pipe);
-            return pipeState;
+            return new ItemPipeInstance(pipe);
         }
         return null;
     }
 
     public ItemPipeInstance putPipe(BlockPos pos, ItemPipeInstance pipe)
     {
-        return pipes.put(pos, pipe);
+//        return pipes.put(pos, pipe);
+        return null;
     }
 
     public void removePipe(BlockPos pos)
     {
-        pipes.remove(pos.asLong());
+//        pipes.remove(pos.asLong());
     }
 
     /** To be optionally called when an {@link ItemPipe} is added or changed.
      */
+    @Deprecated
     public void onPipeAdded(ItemPipe pipe, BlockPos pos, BlockState state)
     {
-        ItemPipeInstance pipeState = new ItemPipeInstance(pipe);
-        putPipe(pos, pipeState);
+//        ItemPipeInstance pipeState = new ItemPipeInstance(pipe);
+//        putPipe(pos, pipeState);
 //
 //        List<Direction> connections = pipe.getConnections(state, d -> true);
 //        for (Direction direction : connections)
@@ -91,9 +93,10 @@ public class PipeCacheImpl implements PipeCache
 
     /** Removes the cached pipe at the given position. Must be called whenever an {@link ItemPipe} is removed.
      */
+    @Deprecated
     public void onPipeRemove(BlockPos pos)
     {
-        removePipe(pos);
+//        removePipe(pos);
     }
 
     // TODO: Account for item filters
@@ -154,18 +157,24 @@ public class PipeCacheImpl implements PipeCache
 
         for (int i = 0; i < 100; ++i)
         {
-            if (visited.contains(current.asLong())) return null;
+            if (visited.contains(current.asLong()))
+                return null;
 
             ItemPipeInstance pipe = getPipe(current);
 
-            if (pipe == null) return null;
+            if (pipe == null)
+                return null;
+
+            if (!pipe.pipe().supportsRouting())
+                return null;
 
             visited.add(current.asLong());
             Direction excluded = face.getOpposite();
             Set<Direction> connections = pipe.pipe().getConnections(world.getBlockState(current), d -> d != excluded);
 
             if (connections.size() == 0) return null;
-            if (connections.size() > 1 || current.equals(endPos)) return current;
+            if (connections.size() > 1 || current.equals(endPos))
+                return current.toImmutable();
 
             face = connections.iterator().next();
             current = current.offset(face);
