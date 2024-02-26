@@ -1,5 +1,6 @@
 package com.neep.neepmeat.neepasm.compiler;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.neep.neepmeat.neepasm.NeepASM;
 import com.neep.neepmeat.neepasm.compiler.alias.ParsedAlias;
@@ -7,6 +8,7 @@ import com.neep.neepmeat.neepasm.compiler.alias.ParsedArgumentAlias;
 import com.neep.neepmeat.neepasm.compiler.parser.InstructionParser;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedFunctionCallInstruction;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedMacro;
 import com.neep.neepmeat.neepasm.program.KeyValue;
 import com.neep.neepmeat.neepasm.program.Label;
 import com.neep.neepmeat.plc.Instructions;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,7 +60,6 @@ public class Parser
 
             parsedSource.instruction(((world, s, program) -> program.addBack(Instruction.EMPTY)), -1);
 
-            // Expand the macros (which seem to have turned into functions) at the end with their labels.
             for (var func : parsedSource.functions())
             {
                 func.expand(parsedSource);
@@ -70,21 +72,29 @@ public class Parser
         return parsedSource;
     }
 
-    private void parseLine(TokenView view) throws NeepASM.ParseException
+    public void parseLine(TokenView view) throws NeepASM.ParseException
     {
         if (view.peekThing() == '%')
         {
             view.next();
             String id = view.nextIdentifier();
-            if (id.equals("func"))
+            switch (id)
             {
-                parseFunction(view);
-                return;
-            }
-            else if (id.equals("alias"))
-            {
-                parseAlias(view);
-                return;
+                case "func" ->
+                {
+                    parseFunction(view);
+                    return;
+                }
+                case "macro" ->
+                {
+                    parseMacro(view);
+                    return;
+                }
+                case "alias" ->
+                {
+                    parseAlias(view);
+                    return;
+                }
             }
             throw new NeepASM.ParseException("unexpected directive '" + id + "'");
         }
@@ -108,9 +118,69 @@ public class Parser
             }
         }
 
-        ParsedInstruction instruction = parseInstruction(view);
-        if (instruction != null)
-            parsedSource.instruction(instruction, view.line());
+        // Handle macro expansions and normal instructions differently
+        ParsedMacro macro = parsedSource.findMacro(token);
+        if (macro != null)
+        {
+            macro.expand(view, parsedSource, this);
+        }
+        else
+        {
+            ParsedInstruction instruction = parseInstruction(view);
+            if (instruction != null)
+                parsedSource.instruction(instruction, view.line());
+        }
+    }
+
+    private void parseMacro(TokenView view) throws NeepASM.ParseException
+    {
+        StringBuilder macroText = new StringBuilder();
+        String name = view.nextIdentifier();
+        if (name.isEmpty())
+            throw new NeepASM.ParseException("expected macro name");
+
+        int startLine = view.line();
+
+        List<String> parameters = Lists.newArrayList();
+        view.fastForward();
+        while (TokenView.isIdentifier(0, view.peek()))
+        {
+            parameters.add(parseMacroParameter(view));
+            view.fastForward();
+        }
+
+        if (!view.lineEnded() && !isComment(view))
+            throw new NeepASM.ParseException("unexpected token");
+
+        while (!view.eof())
+        {
+            if (view.peek() == '%')
+            {
+                try (var entry = view.save())
+                {
+                    view.next();
+                    String id = view.nextIdentifier();
+                    if (id.equals("end"))
+                    {
+                        entry.commit();
+                        parsedSource.macro(new ParsedMacro(name, parameters, macroText.toString(), startLine));
+                        return;
+                    }
+                }
+            }
+
+            macroText.append(view.peek());
+            view.next();
+        }
+
+        throw new NeepASM.ParseException("reached end of file while parsing macro '" + name + "'");
+    }
+
+    private String parseMacroParameter(TokenView view)
+    {
+        view.fastForward();
+        String name = view.nextIdentifier();
+        return name;
     }
 
     private void parseAlias(TokenView view) throws NeepASM.ParseException

@@ -33,6 +33,7 @@ public class TokenView
         if (offset >= string.length())
             return 0;
 
+        // Return the previous value
         char c = string.charAt(offset++);
 
 //        if (c == '\n')
@@ -68,6 +69,20 @@ public class TokenView
 
         return string.charAt(offset);
     }
+
+//    public String peekChars(int n)
+//    {
+//        int offsetCopy = offset;
+//        StringBuilder builder = new StringBuilder();
+//
+//        while (offsetCopy <= offset + n && offsetCopy <= string.length() &&
+//                !(string.charAt(offsetCopy) == '\n' || string.charAt(offsetCopy) == ';' || string.charAt(offsetCopy) == 0))
+//        {
+//            builder.append(string.charAt(offsetCopy++));
+//        }
+//        return builder.toString();
+//
+//    }
 
     public char peek(int n)
     {

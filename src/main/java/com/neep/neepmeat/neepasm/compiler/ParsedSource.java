@@ -3,6 +3,7 @@ package com.neep.neepmeat.neepasm.compiler;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.neepasm.compiler.alias.ParsedAlias;
 import com.neep.neepmeat.neepasm.compiler.parser.ParsedInstruction;
+import com.neep.neepmeat.neepasm.compiler.parser.ParsedMacro;
 import com.neep.neepmeat.neepasm.program.Label;
 import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +18,7 @@ public class ParsedSource
     private final List<Label> labels = Lists.newArrayList();
     private final List<ParsedFunction> functions = Lists.newArrayList();
     private final List<ParsedAlias> aliases = Lists.newArrayList();
+    private final List<ParsedMacro> macros = Lists.newArrayList();
 
     public void instruction(ParsedInstruction preInstruction, int line)
     {
@@ -36,6 +38,11 @@ public class ParsedSource
     public void alias(ParsedAlias alias)
     {
         aliases.add(alias);
+    }
+
+    public void macro(ParsedMacro macro)
+    {
+        macros.add(macro);
     }
 
     public int size()
@@ -74,6 +81,12 @@ public class ParsedSource
     public ParsedFunction findFunction(String name)
     {
         return functions.stream().filter(m -> m.name().equals(name)).findFirst().orElse(null);
+    }
+
+    @Nullable
+    public ParsedMacro findMacro(String name)
+    {
+        return macros.stream().filter(m -> m.name().equals(name)).findFirst().orElse(null);
     }
 
     @Nullable
