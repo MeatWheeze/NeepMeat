@@ -29,7 +29,7 @@ public class LMGItem extends BaseGunItem implements IAnimatable
 
     public LMGItem()
     {
-        super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new FabricItemSettings());
+        super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.LMG_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

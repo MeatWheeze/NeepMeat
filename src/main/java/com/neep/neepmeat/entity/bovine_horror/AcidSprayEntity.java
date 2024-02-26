@@ -4,7 +4,6 @@ import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMParticles;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
 import net.minecraft.util.hit.BlockHitResult;
@@ -91,7 +90,7 @@ public class AcidSprayEntity extends ProjectileEntity
         }
         this.setPosition(d, e, f);
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
            int count = 10;
 
@@ -101,7 +100,7 @@ public class AcidSprayEntity extends ProjectileEntity
                 double py = getEyeY() + (Math.random() - 0.5) * 2;
                 double pz = getPos().z + (Math.random() - 0.5) * 2;
                 Vec3d vel = getVelocity();
-                world.addParticle(NMParticles.BODY_COMPOUND_SHOWER, px, py, pz, vel.x, vel.y, vel.z);
+                getWorld().addParticle(NMParticles.BODY_COMPOUND_SHOWER, px, py, pz, vel.x, vel.y, vel.z);
             }
         }
     }
@@ -118,14 +117,14 @@ public class AcidSprayEntity extends ProjectileEntity
 //        if (type == HitResult.Type.ENTITY)
 //        {
 //            this.onEntityHit((EntityHitResult)hitResult);
-//            this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Emitter.of(this, null));
+//            this.getWorld().emitGameEvent(GameEvent.PROJECTILE_LAND, hitResult.getPos(), GameEvent.Emitter.of(this, null));
 //        }
         if (type == HitResult.Type.BLOCK)
         {
             BlockHitResult blockHitResult = (BlockHitResult)hitResult;
             this.onBlockHit(blockHitResult);
             BlockPos blockPos = blockHitResult.getBlockPos();
-            this.world.emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Emitter.of(this, this.world.getBlockState(blockPos)));
+            this.getWorld().emitGameEvent(GameEvent.PROJECTILE_LAND, blockPos, GameEvent.Emitter.of(this, this.getWorld().getBlockState(blockPos)));
         }
     }
 
@@ -150,7 +149,7 @@ public class AcidSprayEntity extends ProjectileEntity
 
     protected void onHit()
     {
-        world.getOtherEntities(this, getBoundingBox().expand(2), e -> e instanceof LivingEntity
+        getWorld().getOtherEntities(this, getBoundingBox().expand(2), e -> e instanceof LivingEntity
                 && !e.getType().equals(NMEntities.BOVINE_HORROR)).forEach(e ->
         {
             float dist = e.distanceTo(this);
@@ -160,10 +159,10 @@ public class AcidSprayEntity extends ProjectileEntity
             else if (dist > 2.5)
                 damage = 2;
 
-            e.damage(DamageSource.mob((LivingEntity) getOwner()), damage);
+            e.damage(getWorld().getDamageSources().mobAttack((LivingEntity) getOwner()), damage);
         });
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             var effect = NMParticles.BODY_COMPOUND_SHOWER;
             for (int i = 0; i < 100; ++i)
@@ -178,7 +177,7 @@ public class AcidSprayEntity extends ProjectileEntity
                 double vy = r * r * 0.1;
                 double vz = (pz - getZ()) * 0.2;
 
-               world.addParticle(effect, px, py, pz, vx, vy, vz);
+               getWorld().addParticle(effect, px, py, pz, vx, vy, vz);
             }
         }
 

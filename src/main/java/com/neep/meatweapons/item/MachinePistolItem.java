@@ -1,9 +1,9 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -25,7 +25,7 @@ public class MachinePistolItem extends BaseGunItem implements IAnimatable, Aimab
 
     public MachinePistolItem()
     {
-        super("machine_pistol", MWItems.BALLISTIC_CARTRIDGE, 24, 10, false, new FabricItemSettings());
+        super("machine_pistol", MWItems.BALLISTIC_CARTRIDGE, 24, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

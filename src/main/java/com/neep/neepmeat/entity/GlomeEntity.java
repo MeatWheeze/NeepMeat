@@ -11,8 +11,8 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.FlyingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Arm;
@@ -115,7 +115,7 @@ public class GlomeEntity extends FlyingEntity
     {
         for (int i = 0; i < amount; ++i)
         {
-            world.addParticle(NMParticles.MEAT_BIT, getX(), getY(), getZ(),
+            getWorld().addParticle(NMParticles.MEAT_BIT, getX(), getY(), getZ(),
                     d * (random.nextFloat() - 0.5),
                     d * (random.nextFloat() - 0.5),
                     d * (random.nextFloat() - 0.5));
@@ -126,7 +126,7 @@ public class GlomeEntity extends FlyingEntity
     {
         for (int i = 0; i < amount; ++i)
         {
-            world.addParticle(NMParticles.MEAT_BIT, getX(), getY() + getWidth() / 2, getZ(),
+            getWorld().addParticle(NMParticles.MEAT_BIT, getX(), getY() + getWidth() / 2, getZ(),
                     d * (random.nextFloat() - 0.5),
                     d * (random.nextFloat() - 0.5),
                     d * (random.nextFloat() - 0.5));

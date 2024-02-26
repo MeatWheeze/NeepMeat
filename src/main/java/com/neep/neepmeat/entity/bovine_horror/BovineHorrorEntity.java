@@ -31,18 +31,13 @@ import net.minecraft.world.LocalDifficulty;
 import net.minecraft.world.ServerWorldAccess;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.AnimationState;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.builder.ILoopType;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
 
-public class BovineHorrorEntity extends HostileEntity implements IAnimatable, AnimationSyncable
+public class BovineHorrorEntity extends HostileEntity implements AnimationSyncable, GeoEntity
 {
     protected static final TrackedData<Integer> SYNC_ID = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Float> VISIBILITY = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -98,8 +93,8 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
 
     protected void updateGoals()
     {
-        goalSelector = new GoalSelector(world.getProfilerSupplier());
-        targetSelector = new GoalSelector(world.getProfilerSupplier());
+        goalSelector = new GoalSelector(getWorld().getProfilerSupplier());
+        targetSelector = new GoalSelector(getWorld().getProfilerSupplier());
 
         if (isPhase2())
         {
@@ -202,7 +197,7 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         Vec3d origin = getPos().add(0, 1.5, 0);
         for (int i = 0; i < 150; ++i)
         {
-            spawnParticle(world, NMParticles.BODY_COMPOUND_SHOWER, random, origin);
+            spawnParticle(getWorld(), NMParticles.BODY_COMPOUND_SHOWER, random, origin);
         }
     }
 
@@ -219,13 +214,13 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         double vy = py - origin.y * 1;
         double vz = pz - origin.z * 1;
 
-        world.addParticle(effect, px, py, pz, vx, vy, vz);
+        getWorld().addParticle(effect, px, py, pz, vx, vy, vz);
     }
 
     @Override
     public boolean isInvisibleTo(PlayerEntity player)
     {
-        float visibility = world.isClient() ? prevVisibility : getVisibility();
+        float visibility = getWorld().isClient() ? prevVisibility : getVisibility();
         return super.isInvisibleTo(player) || (!SightUtil.canPlayerSee(player, this) && visibility == 0);
     }
 
@@ -256,10 +251,10 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             bossBar.setDarkenSky(true);
         }
 
-        if (!world.isClient())
+        if (!getWorld().isClient())
         {
             prevVisibility = getVisibility();
-            if (world.getTime() % 60 == 0)
+            if (getWorld().getTime() % 60 == 0)
             {
                 float p = random.nextFloat();
                 if (p > 0.5 && getVisibility() == 0)
@@ -282,11 +277,11 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
         setVisibility(1);
 
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             for (int i = 0; i < 100; ++i)
             {
-                world.addParticle(NMParticles.BODY_COMPOUND_SHOWER,
+                getWorld().addParticle(NMParticles.BODY_COMPOUND_SHOWER,
                         getX() + (random.nextFloat() - 0.5) * 3,
                         getY() + (random.nextFloat()) * 2 + 0.5,
                         getZ() + (random.nextFloat() - 0.5) * 3,
@@ -386,5 +381,17 @@ public class BovineHorrorEntity extends HostileEntity implements IAnimatable, An
             return false;
 
         return super.damage(source, amount);
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return null;
     }
 }

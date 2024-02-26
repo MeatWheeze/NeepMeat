@@ -10,6 +10,6 @@ public class FakePlayerEntity extends ServerPlayerEntity
 {
     public FakePlayerEntity(MinecraftServer server, ServerWorld world, BlockPos pos)
     {
-        super(server, world, new GameProfile(null, pos.toShortString() + "fakePlayer"), null);
+        super(server, world, new GameProfile(null, pos.toShortString() + "fakePlayer"));
     }
 }

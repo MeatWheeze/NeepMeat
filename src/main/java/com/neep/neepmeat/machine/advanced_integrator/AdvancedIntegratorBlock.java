@@ -4,8 +4,8 @@ import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.MeatlibItem;
-import com.neep.meatlib.Registries.BLOCKRegistry;
-import com.neep.meatlib.Registries.ITEMRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
@@ -15,7 +15,6 @@ import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Material;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -47,7 +46,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     @Override
     protected AdvancedIntegratorStructure registerStructureBlock()
     {
-        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, FabricBlockSettings.of(Material.METAL)), "advanced_integrator_structure");
+        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, FabricBlockSettings.create()), "advanced_integrator_structure");
     }
 
     @Override

@@ -27,7 +27,7 @@ public class UpgradeManagerScreenHandler extends BasicScreenHandler
     {
         super(ScreenHandlerInit.UPGRADE_MANAGER, playerInventory, new SimpleInventory(1), syncId, null);
         BlockPos pos = PacketBufUtil.readBlockPos(buf);
-        this.manager = (UpgradeManagerBlockEntity) playerInventory.player.world.getBlockEntity(pos);
+        this.manager = (UpgradeManagerBlockEntity) playerInventory.player.getWorld().getBlockEntity(pos);
     }
 
     // Server
@@ -68,7 +68,7 @@ public class UpgradeManagerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index)
+    public ItemStack quickMove(PlayerEntity player, int index)
     {
         return ItemStack.EMPTY;
     }
@@ -80,9 +80,10 @@ public class UpgradeManagerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public void close(PlayerEntity player)
+    public void onClosed(PlayerEntity player)
     {
-        if (!player.world.isClient())
+        super.onClosed(player);
+        if (!player.getWorld().isClient())
         {
             ServerPlayNetworking.unregisterReceiver(((ServerPlayerEntity) player).networkHandler, HANDLER_ID);
         }

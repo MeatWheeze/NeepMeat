@@ -15,6 +15,7 @@ import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class OreFatFluidFactory
@@ -80,7 +81,7 @@ public class OreFatFluidFactory
         }
 
         @Override
-        protected boolean isInfinite()
+        protected boolean isInfinite(World world)
         {
             return isInfinite;
         }

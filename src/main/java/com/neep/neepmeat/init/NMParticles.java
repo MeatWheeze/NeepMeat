@@ -18,7 +18,7 @@ import net.minecraft.client.particle.*;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleType;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.registry.Registries;
 
 public class NMParticles
 {

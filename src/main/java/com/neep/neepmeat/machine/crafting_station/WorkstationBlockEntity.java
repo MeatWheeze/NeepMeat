@@ -220,7 +220,7 @@ public class WorkstationBlockEntity extends SyncableBlockEntity implements Sided
                 input.setStack(i, remainderStack);
                 continue;
             }
-            if (ItemStack.areItemsEqualIgnoreDamage(currentStack, remainderStack) && ItemStack.areNbtEqual(currentStack, remainderStack))
+            if (ItemStack.areItemsEqual(currentStack, remainderStack) && currentStack.equals(remainderStack))
             {
                 remainderStack.increment(currentStack.getCount());
                 input.setStack(i, remainderStack);

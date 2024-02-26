@@ -3,7 +3,7 @@ package com.neep.meatlib.block;
 import com.neep.meatlib.datagen.MeatRecipeProvider;
 import com.neep.meatlib.item.BaseBlockItem;
 import com.neep.meatlib.item.ItemSettings;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.data.server.recipe.RecipeProvider;

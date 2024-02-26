@@ -39,7 +39,7 @@ public class FluidRationerScreenHandler extends BasicScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index)
+    public ItemStack quickMove(PlayerEntity player, int index)
     {
         ItemStack oldStack = getStacks().get(index);
 //        super.transferSlot(player, invSlot);

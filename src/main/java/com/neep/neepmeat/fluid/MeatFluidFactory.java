@@ -8,10 +8,12 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 
 public class MeatFluidFactory extends FluidFactory
@@ -86,6 +88,12 @@ public class MeatFluidFactory extends FluidFactory
         protected BlockState toBlockState(FluidState fluidState)
         {
             return block.getDefaultState().with(Properties.LEVEL_15, getBlockStateLevel(fluidState));
+        }
+
+        @Override
+        protected boolean isInfinite(World world)
+        {
+            return false;
         }
     }
 

@@ -28,7 +28,7 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
     public HeavyCannonItem()
     {
-        super("heavy_cannon", MWItems.BALLISTIC_CARTRIDGE, 1, 15,false, new FabricItemSettings());
+        super("heavy_cannon", MWItems.BALLISTIC_CARTRIDGE, 1, 15,false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);
     }

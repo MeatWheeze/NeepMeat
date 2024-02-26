@@ -30,7 +30,7 @@ public class MA75Item extends BaseGunItem implements IAnimatable, IWeakTwoHanded
 
     public MA75Item()
     {
-        super("ma75", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new FabricItemSettings());
+        super("ma75", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.AR_FIRE);
         this.sounds.put(GunSounds.FIRE_SECONDARY, NMSounds.HAND_CANNON_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.HAND_CANNON_RELOAD);

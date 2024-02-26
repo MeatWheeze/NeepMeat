@@ -3,16 +3,15 @@ package com.neep.neepmeat.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.MovementType;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.predicate.entity.EntityPredicates;
-import net.minecraft.tag.FluidTags;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -111,15 +110,15 @@ public abstract class SimpleEntity extends Entity
 
         this.setVelocity(h, i, j);
 
-        this.world.getProfiler().push("travel");
+        this.getWorld().getProfiler().push("travel");
         this.sidewaysSpeed *= 0.98f;
         this.forwardSpeed *= 0.98f;
         this.travel(new Vec3d(this.sidewaysSpeed, this.upwardSpeed, this.forwardSpeed));
-        this.world.getProfiler().pop();
+        this.getWorld().getProfiler().pop();
 
-        this.world.getProfiler().push("push");
+        this.getWorld().getProfiler().push("push");
         tickCramming();
-        this.world.getProfiler().pop();
+        this.getWorld().getProfiler().pop();
     }
 
     public Vec3d applyVerticalSpeed(double d, boolean bl, Vec3d vec3d)
@@ -179,11 +178,11 @@ public abstract class SimpleEntity extends Entity
     protected void moveOnLand(Vec3d movementInput, double d)
     {
         BlockPos blockPos = this.getVelocityAffectingPos();
-        float slipperiness = this.world.getBlockState(blockPos).getBlock().getSlipperiness();
-        float f = this.onGround ? slipperiness * 0.91f : 0.91f;
+        float slipperiness = this.getWorld().getBlockState(blockPos).getBlock().getSlipperiness();
+        float f = this.isOnGround() ? slipperiness * 0.91f : 0.91f;
         Vec3d vec3d6 = this.applyMovementInput(movementInput, slipperiness);
         double q = vec3d6.y;
-        if (!this.world.isClient || this.world.isChunkLoaded(blockPos))
+        if (!this.getWorld().isClient || this.getWorld().isChunkLoaded(blockPos))
         {
             if (!this.hasNoGravity())
             {
@@ -192,7 +191,7 @@ public abstract class SimpleEntity extends Entity
         }
         else
         {
-            q = this.getY() > (double)this.world.getBottomY() ? -0.1 : 0.0;
+            q = this.getY() > (double)this.getWorld().getBottomY() ? -0.1 : 0.0;
         }
         this.setVelocity(vec3d6.x * (double)f, q * (double)0.98f, vec3d6.z * (double)f);
     }
@@ -240,11 +239,11 @@ public abstract class SimpleEntity extends Entity
 
     protected void tickCramming()
     {
-        List<Entity> list = this.world.getOtherEntities(this, this.getBoundingBox(), EntityPredicates.canBePushedBy(this));
+        List<Entity> list = this.getWorld().getOtherEntities(this, this.getBoundingBox(), EntityPredicates.canBePushedBy(this));
         if (!list.isEmpty())
         {
             int j;
-            int i = this.world.getGameRules().getInt(GameRules.MAX_ENTITY_CRAMMING);
+            int i = this.getWorld().getGameRules().getInt(GameRules.MAX_ENTITY_CRAMMING);
             if (i > 0 && list.size() > i - 1 && this.random.nextInt(4) == 0)
             {
                 j = 0;
@@ -255,7 +254,7 @@ public abstract class SimpleEntity extends Entity
                 }
                 if (j > i - 1)
                 {
-                    this.damage(DamageSource.CRAMMING, 6.0f);
+                    this.damage(getWorld().getDamageSources().cramming(), 6.0f);
                 }
             }
             for (j = 0; j < list.size(); ++j)

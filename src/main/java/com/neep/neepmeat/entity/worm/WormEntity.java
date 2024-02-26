@@ -15,21 +15,16 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.object.PlayState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,10 +64,10 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         segments.addAll(tail);
         segments.add(head);
 
-        this.goalSelector = new GoalSelector(world.getProfilerSupplier());
-//        this.targetGoalSelector = new GoalSelector(world.getProfilerSupplier());
+        this.goalSelector = new GoalSelector(getWorld().getProfilerSupplier());
+//        this.targetGoalSelector = new GoalSelector(getWorld().getProfilerSupplier());
 
-        if (!world.isClient())
+        if (!getWorld().isClient())
         {
             initGoals();
         }
@@ -148,7 +143,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         double x = getX();
         double z = getZ();
 
-        if (world.isClient())
+        if (getWorld().isClient())
         {
             updateHead();
         }
@@ -189,24 +184,24 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     @Override
     protected void tickNewAi()
     {
-        int i = this.world.getServer().getTicks() + this.getId();
+        int i = this.getWorld().getServer().getTicks() + this.getId();
         if (i % 2 == 0 || this.age <= 1)
         {
-//            this.world.getProfiler().push("targetSelector");
+//            this.getWorld().getProfiler().push("targetSelector");
 //            this.targetSelector.tick();
-//            this.world.getProfiler().pop();
-            this.world.getProfiler().push("goalSelector");
+//            this.getWorld().getProfiler().pop();
+            this.getWorld().getProfiler().push("goalSelector");
             this.goalSelector.tick();
-            this.world.getProfiler().pop();
+            this.getWorld().getProfiler().pop();
         }
         else
         {
-//            this.world.getProfiler().push("targetSelector");
+//            this.getWorld().getProfiler().push("targetSelector");
 //            this.targetSelector.tickGoals(false);
-//            this.world.getProfiler().pop();
-            this.world.getProfiler().push("goalSelector");
+//            this.getWorld().getProfiler().pop();
+            this.getWorld().getProfiler().push("goalSelector");
             this.goalSelector.tickGoals(false);
-            this.world.getProfiler().pop();
+            this.getWorld().getProfiler().pop();
         }
     }
 

@@ -13,12 +13,12 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.registry.Registries;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 
@@ -84,16 +84,16 @@ public class EggEntity extends SimpleEntity
 
     private void hatch()
     {
-        if (!world.isClient() && getHatchType() != null)
+        if (!getWorld().isClient() && getHatchType() != null)
         {
-            Entity entity = getHatchType().create(world);
+            Entity entity = getHatchType().create(getWorld());
             if (entity != null)
             {
                 entity.setPosition(getPos());
-                world.spawnEntity(entity);
+                getWorld().spawnEntity(entity);
             }
             this.remove(RemovalReason.DISCARDED);
-            ((ServerWorld) world).spawnParticles(NMParticles.MEAT_SPLASH, entity.getX(), entity.getY(), entity.getZ(), 30, 1, 2, 1, 0.01);
+            ((ServerWorld) getWorld()).spawnParticles(NMParticles.MEAT_SPLASH, entity.getX(), entity.getY(), entity.getZ(), 30, 1, 2, 1, 0.01);
         }
     }
 
@@ -104,7 +104,7 @@ public class EggEntity extends SimpleEntity
         setWobbleStrength(getWobbleStrength() + amount * 10.0f);
         invertWobbleDirection();
         this.emitGameEvent(GameEvent.ENTITY_DAMAGE, source.getAttacker());
-        if (!world.isClient() && getWobbleStrength() > 30.0f)
+        if (!getWorld().isClient() && getWobbleStrength() > 30.0f)
         {
             this.onDeath();
         }
@@ -121,12 +121,12 @@ public class EggEntity extends SimpleEntity
         EssentialSaltesItem.putEntityType(stack, hatchType);
         dropStack(stack);
         this.kill();
-        this.world.sendEntityStatus(this, (byte)3);
+        this.getWorld().sendEntityStatus(this, (byte)3);
     }
 
     public boolean canGrow()
     {
-        return world.getFluidState(getBlockPos()).isOf(NMFluids.STILL_BLOOD);
+        return getWorld().getFluidState(getBlockPos()).isOf(NMFluids.STILL_BLOOD);
     }
 
     @Override

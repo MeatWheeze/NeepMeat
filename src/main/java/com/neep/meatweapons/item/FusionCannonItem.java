@@ -1,5 +1,6 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.entity.FusionBlastEntity;
@@ -7,7 +8,6 @@ import com.neep.meatweapons.entity.WeaponCooldownAttachment;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -40,7 +40,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     public String controllerName = "controller1";
     public FusionCannonItem()
     {
-        super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new FabricItemSettings());
+        super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.FUSION_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.RELOAD);
     }

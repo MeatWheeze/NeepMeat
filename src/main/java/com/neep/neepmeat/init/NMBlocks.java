@@ -4,7 +4,7 @@ import com.neep.meatlib.block.*;
 import com.neep.meatlib.block.multi.TallBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.item.TooltipSupplier;
-import com.neep.meatlib.Registries.BLOCKRegistry;
+import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.block.*;
@@ -85,14 +85,14 @@ import net.minecraft.world.BlockView;
 public class NMBlocks
 {
     // --- Building Blocks ---
-    public static final AbstractBlock.Settings METAL = FabricBlockSettings.of(Material.METAL).hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
-    public static final AbstractBlock.Settings BRASS_BLOCKS = FabricBlockSettings.of(Material.METAL).strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
-    public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
-    public static final AbstractBlock.Settings VASCULAR_CONDUIT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(NMSoundGroups.METAL);
-    public static final AbstractBlock.Settings MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).nonOpaque().solidBlock(InventoryDetectorBlock::never);
+    public static final AbstractBlock.Settings METAL = FabricBlockSettings.create().hardness(3.0f).sounds(BlockSoundGroup.NETHERITE);
+    public static final AbstractBlock.Settings BRASS_BLOCKS = FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.NETHERITE);
+    public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = FabricBlockSettings.create().strength(1.1f).sounds(NMSoundGroups.METAL);
+    public static final AbstractBlock.Settings VASCULAR_CONDUIT_SETTINGS = FabricBlockSettings.create().strength(1.1f).sounds(NMSoundGroups.METAL);
+    public static final AbstractBlock.Settings MACHINE_SETTINGS = FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).nonOpaque().solidBlock(InventoryDetectorBlock::never);
 //    public static final AbstractBlock.Settings VAT_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
-    public static final AbstractBlock.Settings FLUID_MACHINE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
-    public static final AbstractBlock.Settings ITEM_PIPE_SETTINGS = FabricBlockSettings.of(Material.METAL).strength(1.1f).sounds(BlockSoundGroup.METAL);
+    public static final AbstractBlock.Settings FLUID_MACHINE_SETTINGS = FabricBlockSettings.create().strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
+    public static final AbstractBlock.Settings ITEM_PIPE_SETTINGS = FabricBlockSettings.create().strength(1.1f).sounds(BlockSoundGroup.METAL);
 
 //    public static Block DUAT_STONE = new BaseBuildingBlock("duat_stone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
 //    public static Block DUAT_COBBLESTONE = new BaseBuildingBlock("duat_cobblestone", true, FabricBlockSettings.of(Material.STONE).strength(2.5f).sounds(BlockSoundGroup.STONE));
@@ -100,29 +100,29 @@ public class NMBlocks
 
 //    public static Block OBJ_TEST = BlockRegistry.queue(new BigBlock("obj_test", FabricBlockSettings.copyOf(Blocks.STONE)));
 
-    public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.of(Material.STONE).hardness(5.0f));
+    public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.create().hardness(5.0f));
 
-    public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock("polished_metal", true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock("blue_polished_metal", true, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal", false, FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
-    public static Block WHITE_ROUGH_CONCRETE = new BaseBuildingBlock("white_rough_concrete", false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block GREY_ROUGH_CONCRETE = new BaseBuildingBlock("grey_rough_concrete", false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block YELLOW_ROUGH_CONCRETE = new BaseBuildingBlock("yellow_rough_concrete", false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block RED_ROUGH_CONCRETE = new BaseBuildingBlock("red_rough_concrete", false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block BLUE_ROUGH_CONCRETE = new BaseBuildingBlock("blue_rough_concrete", false, FabricBlockSettings.of(Material.STONE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block YELLOW_TILES = new BaseBuildingBlock("yellow_tiles", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block CAUTION_BLOCK = new BaseBuildingBlock("caution_block", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block DIRTY_RED_TILES = new BaseBuildingBlock("dirty_red_tiles", false, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
-    public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock("dirty_white_tiles", true, FabricBlockSettings.of(Material.AGGREGATE).strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock("polished_metal", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static Block BLUE_IRON_BLOCK = new BaseBuildingBlock("blue_polished_metal", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static Block RUSTY_METAL_BLOCK = new BaseBuildingBlock("rusty_metal", false, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
+    public static Block WHITE_ROUGH_CONCRETE = new BaseBuildingBlock("white_rough_concrete", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block GREY_ROUGH_CONCRETE = new BaseBuildingBlock("grey_rough_concrete", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block YELLOW_ROUGH_CONCRETE = new BaseBuildingBlock("yellow_rough_concrete", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block RED_ROUGH_CONCRETE = new BaseBuildingBlock("red_rough_concrete", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block BLUE_ROUGH_CONCRETE = new BaseBuildingBlock("blue_rough_concrete", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block YELLOW_TILES = new BaseBuildingBlock("yellow_tiles", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block CAUTION_BLOCK = new BaseBuildingBlock("caution_block", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block DIRTY_RED_TILES = new BaseBuildingBlock("dirty_red_tiles", false, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
+    public static Block DIRTY_WHITE_TILES = new BaseBuildingBlock("dirty_white_tiles", true, FabricBlockSettings.create().strength(1.8f).sounds(BlockSoundGroup.STONE));
     public static Block SAND_BRICKS = new BaseBuildingBlock("sandy_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
     public static Block MEAT_STEEL_BLOCK = new BaseBuildingBlock("meat_steel_block", true, FabricBlockSettings.copyOf(Blocks.NETHERITE_BLOCK));
 
     public static Block BLOODY_BRICKS = new BaseBuildingBlock("bloody_bricks", true, FabricBlockSettings.copyOf(Blocks.BRICKS));
     public static Block BLOODY_TILES = new BaseBuildingBlock("bloody_tiles", false, FabricBlockSettings.copyOf(BLOODY_BRICKS));
 
-    public static Block REINFORCED_GLASS = new BaseBuildingBlock("reinforced_glass", false, AbstractBlock.Settings.of(Material.GLASS).strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
+    public static Block REINFORCED_GLASS = new BaseBuildingBlock("reinforced_glass", false, FabricBlockSettings.create().strength(0.3f).sounds(BlockSoundGroup.GLASS).nonOpaque().allowsSpawning(VatWindowBlock::never).solidBlock(VatWindowBlock::never).suffocates(VatWindowBlock::never).blockVision(VatWindowBlock::never))
     {
         @Override
         public boolean isSideInvisible(BlockState state, BlockState stateFrom, Direction direction)
@@ -147,7 +147,7 @@ public class NMBlocks
         }
 
         @Override
-        public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+        public boolean isTransparent(BlockState state, BlockView world, BlockPos pos)
         {
             return true;
         }
@@ -156,13 +156,13 @@ public class NMBlocks
 
 //    public static Block FILLED_SCAFFOLD = new BaseBuildingBlock("filled_scaffold", 64, false, FabricBlockSettings.of(Material.METAL).strength(5.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE));
 
-    public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
-    public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
-    public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", block(), FabricBlockSettings.of(Material.METAL).strength(1.5f).sounds(NMSoundGroups.METAL));
+    public static MetalScaffoldingBlock SCAFFOLD_PLATFORM = new MetalScaffoldingBlock("rusted_metal_scaffold", block(), FabricBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
+    public static MetalScaffoldingBlock BLUE_SCAFFOLD = new MetalScaffoldingBlock("blue_metal_scaffold", block(), FabricBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
+    public static MetalScaffoldingBlock YELLOW_SCAFFOLD = new MetalScaffoldingBlock("yellow_metal_scaffold", block(), FabricBlockSettings.create().strength(1.5f).sounds(NMSoundGroups.METAL));
 
     public static Block RUSTY_VENT = BlockRegistry.queue(new BaseColumnBlock("rusty_column", block(), FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK).nonOpaque()));
-    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", block(), FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
-    public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", block(), FabricBlockSettings.of(Material.METAL).strength(3.5f).sounds(NMSoundGroups.METAL)));
+    public static Block MESH_PANE = BlockRegistry.queue(new BasePaneBlock("mesh_pane", block(), FabricBlockSettings.create().strength(3.5f).sounds(BlockSoundGroup.LANTERN)));
+    public static Block RUSTED_BARS = BlockRegistry.queue(new BasePaneBlock("rusted_bars", block(), FabricBlockSettings.create().strength(3.5f).sounds(NMSoundGroups.METAL)));
     public static Block RUSTY_PANEL = BlockRegistry.queue(new BaseBlock("rusty_panel", FabricBlockSettings.copyOf(RUSTY_METAL_BLOCK)));
     public static Block RUSTY_GRATE = BlockRegistry.queue(new BaseBlock("rusty_vent", FabricBlockSettings.copy(RUSTY_METAL_BLOCK)));
 
@@ -174,7 +174,7 @@ public class NMBlocks
 
 //    public static Block SLOPE_TEST = BlockRegistry.queue(new BaseStairsBlock(CAUTION_BLOCK.getDefaultState(), "slope_test", 64, FabricBlockSettings.of(Material.METAL).nonOpaque()));
 
-    public static Block SCAFFOLD_TRAPDOOR = BlockRegistry.queue(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", block(), FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque()));
+    public static Block SCAFFOLD_TRAPDOOR = BlockRegistry.queue(new ScaffoldTrapdoorBlock("rusted_metal_scaffold_trapdoor", block(), FabricBlockSettings.create().strength(2.0f).sounds(NMSoundGroups.METAL).nonOpaque()));
 
 //    public static Block CAUTION_TAPE = BlockRegistry.queue(new CautionTapeBlock("caution_tape", 64, false, FabricBlockSettings.of(Material.CARPET).strength(1.0f).sounds(BlockSoundGroup.STONE).nonOpaque()));
 
@@ -202,10 +202,10 @@ public class NMBlocks
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));
     public static AssemblerBlock ASSEMBLER = BlockRegistry.queue(new AssemblerBlock("assembler", block().requiresVascular(), MACHINE_SETTINGS));
 
-    public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
+    public static TallBlock FLUID_EXCITER = BlockRegistry.queue(new FluidExciterBlock("fluid_exciter", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.create().sounds(NMSoundGroups.MECHANICAL_MACHINE).hardness(4.0f)));
 
     public static Block TRANSDUCER = BlockRegistry.queue(new TransducerBlock("transducer", block(), MACHINE_SETTINGS));
-    public static final FabricBlockSettings POWER_FLOWER_SETTINGS = FabricBlockSettings.of(Material.NETHER_WOOD).sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
+    public static final FabricBlockSettings POWER_FLOWER_SETTINGS = FabricBlockSettings.create().sounds(BlockSoundGroup.MUDDY_MANGROVE_ROOTS).strength(2.0f);
     public static Block POWER_FLOWER_SEEDS = BlockRegistry.queue(new PowerFlowerSeedsBlock("power_flower_seeds", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS).hardness(0.01f)));
     public static PowerFlowerGrowthBlock POWER_FLOWER_GROWTH = BlockRegistry.queue(new PowerFlowerGrowthBlock("power_flower_growth", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
     public static Block POWER_FLOWER_CONTROLLER = BlockRegistry.queue(new PowerFlowerControllerBlock("power_flower_controller", block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.copyOf(POWER_FLOWER_SETTINGS)));
@@ -288,28 +288,28 @@ public class NMBlocks
 //    public static Block ROCKWART = BlockRegistry.queue(new BaseCropBlock("rockwart", 64, true, AbstractBlock.Settings.copy(Blocks.WHEAT)));
     public static Block BLOOD_BUBBLE_SAPLING = BlockRegistry.queue(new BaseSaplingBlock("blood_bubble_sapling", new BloodBubbleTreeGenerator(), block(), FabricBlockSettings.copyOf(Blocks.WARPED_FUNGUS)));
 
-    public static final AbstractBlock.Settings BB_SETTINGS = FabricBlockSettings.of(Material.WOOD).strength(1.1f).sounds(BlockSoundGroup.METAL);
+    public static final AbstractBlock.Settings BB_SETTINGS = FabricBlockSettings.create().strength(1.1f).sounds(BlockSoundGroup.METAL);
     public static Block BLOOD_BUBBLE_LOG = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_log", TooltipSupplier.blank()));
     public static Block BLOOD_BUBBLE_WOOD = BlockRegistry.queue(BlockRegistry.createLogBlock("blood_bubble_wood", TooltipSupplier.blank()));
     public static Block BLOOD_BUBBLE_LEAVES = BlockRegistry.queue(new BloodBubbleLeavesBlock("blood_bubble_leaves", FabricBlockSettings.copyOf(Blocks.AZALEA_LEAVES).sounds(BlockSoundGroup.AZALEA_LEAVES)));
     public static Block BLOOD_BUBBLE_LEAVES_FLOWERING = BlockRegistry.queue(new BloodBubbleLeavesBlock.FruitingBloodBubbleLeavesBlock("blood_bubble_leaves_flowering", FabricBlockSettings.copyOf(Blocks.AZALEA_LEAVES).sounds(BlockSoundGroup.SLIME)));
-    public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock("blood_bubble_planks", true, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD));
-    public static Block BLOOD_BUBBLE_TRAPDOOR = BlockRegistry.queueWithItem(new TrapdoorBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_trapdoor");
-    public static Block BLOOD_BUBBLE_DOOR = BlockRegistry.queueWithItem(new DoorBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_door");
-    public static Block BLOOD_BUBBLE_BUTTON = BlockRegistry.queueWithItem(new WoodenButtonBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_button");
-    public static Block BLOOD_BUBBLE_FENCE_GATE = BlockRegistry.queueWithItem(new FenceGateBlock(FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_fence_gate");
-    public static Block BLOOD_BUBBLE_PRESSURE_PLATE = BlockRegistry.queueWithItem(new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, FabricBlockSettings.of(Material.WOOD).strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_pressure_plate", block().tooltip(TooltipSupplier.simple(1)));
+    public static Block BLOOD_BUBBLE_PLANKS = new BaseBuildingBlock("blood_bubble_planks", true, FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD));
+    public static Block BLOOD_BUBBLE_TRAPDOOR = BlockRegistry.queueWithItem(new TrapdoorBlock(FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED), "blood_bubble_planks_trapdoor");
+    public static Block BLOOD_BUBBLE_DOOR = BlockRegistry.queueWithItem(new DoorBlock(FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED), "blood_bubble_planks_door");
+    public static Block BLOOD_BUBBLE_BUTTON = BlockRegistry.queueWithItem(new ButtonBlock(FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD), BlockSetType.WARPED, 20, true), "blood_bubble_planks_button");
+    public static Block BLOOD_BUBBLE_FENCE_GATE = BlockRegistry.queueWithItem(new FenceGateBlock(FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD), WoodType.WARPED), "blood_bubble_planks_fence_gate");
+    public static Block BLOOD_BUBBLE_PRESSURE_PLATE = BlockRegistry.queueWithItem(new BloodBubblePressurePlate(PressurePlateBlock.ActivationRule.EVERYTHING, FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.WOOD)), "blood_bubble_planks_pressure_plate", block().tooltip(TooltipSupplier.simple(1)));
 
     // --- Assembly ---
 //    public static Block LINEAR_RAIL = BlockRegistry.queue(new LinearRailBlock("linear_rail", 64, false, FabricBlockSettings.of(Material.METAL).strength(4.0f)));
 
-    public static Block BIG_LEVER = BlockRegistry.queue(new BigLeverBlock("big_lever", FabricBlockSettings.of(Material.METAL).strength(4.0f)));
+    public static Block BIG_LEVER = BlockRegistry.queue(new BigLeverBlock("big_lever", FabricBlockSettings.create().strength(4.0f)));
 
     // --- Integrator ---
-    public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).strength(2.0f).sounds(BlockSoundGroup.SLIME)));
+    public static Block INTEGRATOR_EGG = BlockRegistry.queue(new IntegratorBlock("integrator_egg", block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.create().strength(2.0f).sounds(BlockSoundGroup.SLIME)));
 
 //    public static Block ADVANCED_INTEGRATOR_EGG = BlockRegistry.queue(new AdvancedIntegratorEggBlock("advanced_integrator_egg", block(), FabricBlockSettings.copyOf(INTEGRATOR_EGG)));
-    public static BigBlock<AdvancedIntegratorStructure> ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
+    public static BigBlock<AdvancedIntegratorStructure> ADVANCED_INTEGRATOR = BlockRegistry.queue(new AdvancedIntegratorBlock("advanced_integrator", FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL)));
 //    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = ADVANCED_INTEGRATOR.getStructure();
 //    public static BigBlockStructure ADVANCED_INTEGRATOR_STRUCTURE = BlockRegistry.queue(new BigBlockStructure(ADVANCED_INTEGRATOR, "advanced_integrator_structure", FabricBlockSettings.of(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL)));
 
