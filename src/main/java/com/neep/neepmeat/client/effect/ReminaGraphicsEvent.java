@@ -57,7 +57,7 @@ public class ReminaGraphicsEvent implements GraphicsEffect
         bufferBuilder.vertex(matrix4f2, k, 100.0f, k).texture(1.0f, 1.0f).next();
         bufferBuilder.vertex(matrix4f2, -k, 100.0f, k).texture(0.0f, 1.0f).next();
         var built = bufferBuilder.end();
-        BufferRenderer.draw(built);
+        BufferRenderer.drawWithGlobalProgram(built);
         matrices.pop();
     }
 

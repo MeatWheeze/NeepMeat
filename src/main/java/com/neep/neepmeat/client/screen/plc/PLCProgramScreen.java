@@ -196,7 +196,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         bufferBuilder.vertex(matrix, x1, y1, z).color(light, light, light, 1).texture(u1, v1).next();
         bufferBuilder.vertex(matrix, x1, y0, z).color(light, light, light, 1).texture(u1, v0).next();
         bufferBuilder.vertex(matrix, x0, y0, z).color(light, light, light, 1).texture(u0, v0).next();
-        BufferRenderer.draw(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     private void renderInWallOverlay(Sprite sprite, MatrixStack matrices)
@@ -215,7 +215,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         bufferBuilder.vertex(matrix4f, x1, y1, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, o).next();
         bufferBuilder.vertex(matrix4f, x1, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(l, n).next();
         bufferBuilder.vertex(matrix4f, x0, y0, z).color(0.1f, 0.1f, 0.1f, 1.0f).texture(m, n).next();
-        BufferRenderer.draw(bufferBuilder.end());
+        BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
     }
 
     private void tickTooltip(double mouseX, double mouseY)
@@ -515,7 +515,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         protected int getYImage(boolean hovered)
         {
-            return hovered ? 16 : 0;
+            return hovered ? 2 : 1;
         }
 
         @Override

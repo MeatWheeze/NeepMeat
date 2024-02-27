@@ -187,7 +187,13 @@ public class PLCSyncThings
         {
             ClientPlayNetworking.registerGlobalReceiver(ID, (client, handler, buf, responseSender) ->
             {
-                Action action = Action.values()[buf.readInt()];
+                int id = buf.readInt();
+                Action action = Action.values()[id];
+//                if (action == null)
+//                {
+//                    System.out.println(id);
+//                }
+//                System.out.println(action);
 
                 PacketByteBuf copy = PacketByteBufs.copy(buf.copy());
 

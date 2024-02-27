@@ -31,6 +31,6 @@ public interface RenderItemGuiEvent
         buffer.vertex(x + width, y + height, 0.0).color(red, green, blue, alpha).next();
         buffer.vertex(x + width, y + 0, 0.0).color(red, green, blue, alpha).next();
         var built = buffer.end();
-        BufferRenderer.draw(built);
+        BufferRenderer.drawWithGlobalProgram(built);
     }
 }

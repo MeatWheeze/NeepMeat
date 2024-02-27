@@ -1,8 +1,5 @@
 package com.neep.meatlib.storage;
 
-import com.neep.meatlib.mixin.InventoryStorageAccessor;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-
 public class StorageEvents
 {
     public static void init()
@@ -11,9 +8,9 @@ public class StorageEvents
         // BlockEntities prevent GC of their worlds, which causes the accumulation of CCA components and WorldChunks
         // that they reference.
         // It's very naughty, but should fix the leak with no side effects.
-        ServerLifecycleEvents.SERVER_STOPPED.register(server ->
-        {
-            InventoryStorageAccessor.getWRAPPERS().clear();
-        });
+//        ServerLifecycleEvents.SERVER_STOPPED.register(server ->
+//        {
+//            InventoryStorageAccessor.getWRAPPERS().clear();
+//        });
     }
 }

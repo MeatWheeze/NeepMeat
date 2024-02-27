@@ -74,7 +74,6 @@ public class MonoTextRenderer
 
     private float drawLayer(OrderedText text, float x, float y, int color, Matrix4f matrix)
     {
-//        RenderSystem.enableTexture();
         RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         RenderSystem.setShaderTexture(0, TEXTURE);
         Drawer drawer = new Drawer(x, y, color, matrix);
@@ -200,7 +199,7 @@ public class MonoTextRenderer
 
         public float draw()
         {
-            BufferRenderer.draw(bufferBuilder.end());
+            BufferRenderer.drawWithGlobalProgram(bufferBuilder.end());
             return x + 1;
         }
     }
