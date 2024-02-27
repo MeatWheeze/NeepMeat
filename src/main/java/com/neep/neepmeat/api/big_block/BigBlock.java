@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -26,7 +27,7 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 
     public BigBlock(Settings settings)
     {
-        super(settings);
+        super(settings.pistonBehavior(PistonBehavior.IGNORE));
         this.structureBlock = registerStructureBlock();
     }
 

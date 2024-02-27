@@ -7,7 +7,6 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.BipedEntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
-import net.minecraft.client.render.entity.feature.ArmorFeatureRenderer;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.EntityModelLayers;
 import net.minecraft.util.Identifier;
@@ -30,7 +29,7 @@ public class KeeperEntityRenderer extends BipedEntityRenderer<KeeperEntity, Keep
     {
         super(ctx, new KeeperEntityModel(ctx.getPart(layer)), 0.5f);
 //        super(ctx, new KeeperEntityModel(ctx.getPart(layer)), new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer)));
-        this.addFeature(new ArmorFeatureRenderer<>(this, new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer))));
+//        this.addFeature(new ArmorFeatureRenderer<>(this, new KeeperEntityModel(ctx.getPart(legsArmorLayer)), new KeeperEntityModel(ctx.getPart(bodyArmorLayer))));
     }
 
     @Override

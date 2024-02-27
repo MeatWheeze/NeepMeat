@@ -227,7 +227,7 @@ public class SurgicalRobot implements PLCRobot, NbtSerialisable
 
     public BlockPos getBlockPos()
     {
-        return new BlockPos(x, y, z);
+        return BlockPos.ofFloored(x, y, z);
     }
 
     public double getX()

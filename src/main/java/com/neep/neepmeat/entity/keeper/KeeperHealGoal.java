@@ -60,7 +60,7 @@ public class KeeperHealGoal extends Goal
         super.stop();
         if (ticks >= getTickCount(healTime))
         {
-            if (entity.world instanceof ServerWorld serverWorld)
+            if (entity.getWorld() instanceof ServerWorld serverWorld)
             {
                 serverWorld.spawnParticles(ParticleTypes.ENTITY_EFFECT, entity.getX(), entity.getY() + 1, entity.getZ(), 30, 0.4, 1.7, 0.4, 0.1);
                 serverWorld.playSound(entity.getX(), entity.getY(), entity.getZ(), NMSounds.COMPOUND_INJECTOR, SoundCategory.HOSTILE, 1f, 1f, true);

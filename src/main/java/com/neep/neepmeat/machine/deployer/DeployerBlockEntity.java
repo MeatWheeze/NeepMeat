@@ -71,7 +71,7 @@ public class DeployerBlockEntity extends SyncableBlockEntity implements SingleSl
     public void deploy(ServerWorld world)
     {
         ServerPlayerEntity fakePlayer1 = this.playerSupplier.get();
-        fakePlayer1.setWorld(world);
+        fakePlayer1.setServerWorld(world);
         fakePlayer1.setPos(pos.getX(), pos.getY(), pos.getZ());
         Direction facing = getCachedState().get(BaseFacingBlock.FACING);
         fakePlayer1.setPitch(0);

@@ -3,9 +3,10 @@ package com.neep.meatweapons.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
-import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.client.model.*;
+import com.neep.meatweapons.client.model.BulletEntityModel;
+import com.neep.meatweapons.client.model.CannonBulletEntityModel;
+import com.neep.meatweapons.client.model.PlasmaEntityModel;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.item.AssaultDrillItem;
@@ -21,7 +22,6 @@ import net.minecraft.client.render.BufferBuilder;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 
 @Environment(value= EnvType.CLIENT)
 public class MWClient implements ClientModInitializer
@@ -59,15 +59,15 @@ public class MWClient implements ClientModInitializer
 
     public static void registerAnimations()
     {
-        GeoItemRenderer.registerItemRenderer(MWItems.HAND_CANNON, new BaseGunRenderer<>(new HandCannonItemModel()));
-        GeoItemRenderer.registerItemRenderer(MWItems.FUSION_CANNON, new BaseGunRenderer<>(new FusionCannonItemModel()));
-        GeoItemRenderer.registerItemRenderer(MWItems.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
-        GeoItemRenderer.registerItemRenderer(MWItems.LMG, new BaseGunRenderer<>(new LMGItemModel()));
-        GeoItemRenderer.registerItemRenderer(MWItems.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
-        GeoItemRenderer.registerItemRenderer(MWItems.MA75, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/ma75.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/ma75.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/ma75.animation.json"))));
+//        GeoItemRenderer.registerItemRenderer(MWItems.HAND_CANNON, new BaseGunRenderer<>(new HandCannonItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.FUSION_CANNON, new BaseGunRenderer<>(new FusionCannonItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.MACHINE_PISTOL, new BaseGunRenderer<>(new PistolItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.LMG, new BaseGunRenderer<>(new LMGItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.HEAVY_CANNON, new BaseGunRenderer<>(new HeavyCannonItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.MA75, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/ma75.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/ma75.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/ma75.animation.json"))));
 //        GeoItemRenderer.registerItemRenderer(MWItems.BLASTER, new BaseGunRenderer<>(new BaseGunModel<>(new Identifier(MeatWeapons.NAMESPACE, "geo/blaster.geo.json"), new Identifier(MeatWeapons.NAMESPACE, "textures/general/thingy.png"), new Identifier(MeatWeapons.NAMESPACE, "animations/blaster.animation.json"))));
 
-        GeoItemRenderer.registerItemRenderer(MWItems.ASSAULT_DRILL, new DrillItemRenderer(new DrillItemModel()));
+//        GeoItemRenderer.registerItemRenderer(MWItems.ASSAULT_DRILL, new DrillItemRenderer(new DrillItemModel()));
 
         net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry.register(MeatWeapons.AIRTRUCK, AirtruckEntityRenderer::new);
 

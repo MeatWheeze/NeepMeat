@@ -1,10 +1,10 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -15,16 +15,12 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.model.GeoModel;
 
-public class LMGItem extends BaseGunItem implements IAnimatable
+public class LMGItem extends BaseGunItem
 {
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public LMGItem()
@@ -41,26 +37,21 @@ public class LMGItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-    }
-
-    @Override
     public UseAction getUseAction(ItemStack stack)
     {
         return UseAction.NONE;
     }
 
     @Override
+    protected GeoModel<? extends BaseGunItem> createModel()
+    {
+        return null;
+    }
+
+    @Override
     public int getMaxUseTime(ItemStack stack)
     {
         return 99999;
-    }
-
-    public AnimationFactory getFactory()
-    {
-        return this.factory;
     }
 
     @Override
@@ -125,20 +116,26 @@ public class LMGItem extends BaseGunItem implements IAnimatable
         }
     }
 
+//    @Override
+//    public void onAnimationSync(int id, int state)
+//    {
+//        if (state == ANIM_FIRE)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//                controller.markNeedsReload();
+//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.light_machine_gun.fire"));
+//        }
+//        else if (state == ANIM_RELOAD)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//            controller.markNeedsReload();
+//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
+//        }
+//    }
+
     @Override
-    public void onAnimationSync(int id, int state)
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        if (state == ANIM_FIRE)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-                controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.light_machine_gun.fire"));
-        }
-        else if (state == ANIM_RELOAD)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
-        }
+        controllers.add(new AnimationController(this, controllerName, 1, this::fireController));
     }
 }

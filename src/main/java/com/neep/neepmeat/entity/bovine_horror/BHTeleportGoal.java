@@ -35,7 +35,7 @@ public class BHTeleportGoal extends Goal
     @Override
     public boolean canStart()
     {
-        if (!mob.isOnGround() && mob.world.getTime() - lastTeleport < cooldown)
+        if (!mob.isOnGround() && mob.getWorld().getTime() - lastTeleport < cooldown)
         {
             return false;
         }
@@ -80,7 +80,7 @@ public class BHTeleportGoal extends Goal
             Box originBox = mob.getBoundingBox().offset(mob.getPos());
             BlockPos.Mutable mutable = new BlockPos.Mutable(targetPos.x + r * Math.sin(t), targetPos.y, targetPos.z + r * Math.cos(t));
             int count = 0;
-            while (!mob.world.isSpaceEmpty(originBox.offset(mutable)))
+            while (!mob.getWorld().isSpaceEmpty(originBox.offset(mutable)))
             {
                 mutable.set(mutable, Direction.UP);
                 count++;
@@ -98,7 +98,7 @@ public class BHTeleportGoal extends Goal
             if (newDistance < currentDistance)
             {
                 mob.requestTeleport(newPos.x, newPos.y, newPos.z);
-                lastTeleport = mob.world.getTime();
+                lastTeleport = mob.getWorld().getTime();
                 teleported = true;
             }
         }
@@ -112,8 +112,8 @@ public class BHTeleportGoal extends Goal
 
     protected static Vec3d findTeleportPos(World world, Vec3d v, Entity mob)
     {
-        BlockPos.Mutable mutable = new BlockPos(v).mutableCopy();
-        while (world.getBlockState(mutable).getMaterial().blocksMovement())
+        BlockPos.Mutable mutable = BlockPos.ofFloored(v).mutableCopy();
+        while (world.getBlockState(mutable).isSolid())
         {
             mutable.set(mutable, Direction.UP);
         }

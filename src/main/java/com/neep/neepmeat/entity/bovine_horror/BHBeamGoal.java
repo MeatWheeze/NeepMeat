@@ -40,7 +40,7 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
         {
             mob.syncNearby("animation.horror.beam");
             mob.playSound(NMSounds.BH_CHARGE, 1, 0.9f);
-            mob.world.playSound(null, mob.getX(), mob.getY(), mob.getZ(), NMSounds.BH_PHASE2, SoundCategory.HOSTILE, 5, 1);
+            mob.getWorld().playSound(null, mob.getX(), mob.getY(), mob.getZ(), NMSounds.BH_PHASE2, SoundCategory.HOSTILE, 5, 1);
         }
 
         mob.setVisibility(1);
@@ -90,7 +90,7 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
     protected void shootBeam(Vec3d origin, Vec3d end)
     {
         var foundTarget = hitScan(mob, origin, end, 30);
-        DamageSource damageSource = DamageSource.mob(mob);
+        DamageSource damageSource = mob.getWorld().getDamageSources().mobAttack(mob);
 
         if (foundTarget.first() != null)
         {
@@ -107,7 +107,7 @@ public class BHBeamGoal extends AnimatedGoal<BovineHorrorEntity, BHBeamGoal>
 
     protected Pair<Entity, Vec3d> hitScan(LivingEntity caster, Vec3d start, Vec3d end, double distance)
     {
-        World world = caster.world;
+        World world = caster.getWorld();
 
         // Find where the ray hits a block
         RaycastContext ctx = new RaycastContext(start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, caster);

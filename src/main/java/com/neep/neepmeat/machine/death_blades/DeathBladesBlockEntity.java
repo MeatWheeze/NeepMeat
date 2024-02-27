@@ -12,7 +12,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.TypeFilter;
@@ -65,7 +64,7 @@ public class DeathBladesBlockEntity extends MotorisedMachineBlockEntity
                     {
                         if (e.getHealth() > damageAmount)
 //                            e.damage(world.getDamageSources().generic(), damageAmount);
-                            e.damage(DamageSource.GENERIC, damageAmount);
+                            e.damage(world.getDamageSources().generic(), damageAmount);
                         else killEntity((ServerWorld) world, e);
                     });
         }

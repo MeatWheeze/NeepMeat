@@ -9,18 +9,18 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
-public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
+public class AirtruckEntity extends AbstractVehicleEntity implements GeoEntity
 {
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
 
     public final float maxSpeed = 0.05f;
     protected final float forwardsAccel = 0.004f;
@@ -95,21 +95,9 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
 //        MinecraftClient.getInstance().getSoundManager().play(new AirtruckSoundInstance(this));
     }
 
-    @Override
-    public void registerControllers(AnimationData data)
+    private PlayState predicate(AnimationState<AirtruckEntity> event)
     {
-        data.addAnimationController(new AnimationController<AirtruckEntity>(this, "controller", 0, this::predicate));
-    }
-
-    @Override
-    public AnimationFactory getFactory()
-    {
-        return factory;
-    }
-
-    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
-    {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.airtruck.fly"));
+        event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.airtruck.fly"));
         return PlayState.CONTINUE;
     }
 
@@ -123,5 +111,17 @@ public class AirtruckEntity extends AbstractVehicleEntity implements IAnimatable
     public SoundEvent getDamageSound()
     {
         return SoundEvents.ENTITY_IRON_GOLEM_DAMAGE;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+        controllers.add(new AnimationController<AirtruckEntity>(this, "controller", 0, this::predicate));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return instanceCache;
     }
 }

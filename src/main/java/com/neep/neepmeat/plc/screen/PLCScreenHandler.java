@@ -25,7 +25,7 @@ public class PLCScreenHandler extends ScreenHandler
     public PLCScreenHandler(int syncId, PlayerInventory playerInventory, PacketByteBuf buf)
     {
         this(syncId,
-                playerInventory.player, (PLCBlockEntity) playerInventory.player.world.getBlockEntity(buf.readBlockPos()),
+                playerInventory.player, (PLCBlockEntity) playerInventory.player.getWorld().getBlockEntity(buf.readBlockPos()),
                 new ArrayPropertyDelegate(PLCBlockEntity.PLCPropertyDelegate.SIZE),
                 buf.readString()
         );
@@ -63,7 +63,7 @@ public class PLCScreenHandler extends ScreenHandler
     }
 
     @Override
-    public ItemStack transferSlot(PlayerEntity player, int index)
+    public ItemStack quickMove(PlayerEntity player, int index)
     {
         return ItemStack.EMPTY;
     }

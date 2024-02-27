@@ -95,7 +95,7 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
     public void dropItems(DamageSource damageSource)
     {
         this.remove(Entity.RemovalReason.KILLED);
-        if (this.world.getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
+        if (this.getWorld().getGameRules().getBoolean(GameRules.DO_ENTITY_DROPS)) {
             ItemStack itemStack = new ItemStack(Items.MINECART);
             if (this.hasCustomName()) {
                 itemStack.setCustomName(this.getCustomName());
@@ -116,13 +116,13 @@ public abstract class TankMinecartEntity extends AbstractMinecartEntity implemen
     @Override
     public ActionResult interactAt(PlayerEntity player, Vec3d hitPos, Hand hand)
     {
-        if (WritableSingleFluidStorage.handleInteract(buffer, world, player, hand))
+        if (WritableSingleFluidStorage.handleInteract(buffer, getWorld(), player, hand))
         {
             return ActionResult.SUCCESS;
         }
         else if (!getEntityWorld().isClient)
         {
-            TankBlockEntity.showContents((ServerPlayerEntity) player, world, getBlockPos(), buffer);
+            TankBlockEntity.showContents((ServerPlayerEntity) player, getWorld(), getBlockPos(), buffer);
         }
         return ActionResult.SUCCESS;
     }

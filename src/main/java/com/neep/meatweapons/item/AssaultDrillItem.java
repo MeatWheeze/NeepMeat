@@ -9,6 +9,7 @@ import com.neep.meatlib.item.PoweredItem;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
+import com.neep.meatweapons.client.renderer.DrillItemRenderer;
 import com.neep.meatweapons.client.sound.DrillSoundInstance;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
@@ -31,6 +32,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.client.sound.SoundManager;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -46,10 +48,10 @@ import net.minecraft.item.ToolMaterials;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.BlockTags;
-import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
@@ -62,26 +64,26 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.core.manager.SingletonAnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
-public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, ISyncable, PoweredItem, CustomEnchantable, OverrideSwingItem
+public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, PoweredItem, CustomEnchantable, OverrideSwingItem
 {
-    public AnimationFactory factory = new SingletonAnimationFactory(this);
+    protected final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
+    protected final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
     protected String registryName;
 
     protected float attackDamage;
@@ -99,7 +101,6 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         this.effectiveBlocks = BlockTags.PICKAXE_MINEABLE;
         this.miningSpeed = ToolMaterials.DIAMOND.getMiningSpeedMultiplier();
 
-        GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queue(this);
     }
 
@@ -129,26 +130,16 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-    }
-
-    public AnimationFactory getFactory()
-    {
-        return this.factory;
-    }
-
-    @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
     {
         ItemStack itemStack = user.getStackInHand(hand);
         user.setCurrentHand(hand);
 
-        if (!world.isClient())
+        if (world instanceof ServerWorld serverWorld)
         {
-            final int id = GeckoLibUtil.guaranteeIDForStack(user.getStackInHand(hand), (ServerWorld) world);
-            world.getPlayers().forEach(p -> GeckoLibNetwork.syncAnimation(user, this, id, 0));
+            long id = GeoItem.getOrAssignId(user.getStackInHand(hand), serverWorld);
+            // TODO
+//            world.getPlayers().forEach(p -> GeckoLibNetwork.syncAnimation(user, this, id, 0));
         }
 
         itemStack.getOrCreateNbt().putBoolean("using", true);
@@ -315,19 +306,19 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         return 1;
     }
 
-    @Override
-    public void onAnimationSync(int id, int state)
-    {
-        if (state == 0)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            if (controller.getCurrentAnimation() == null || !Objects.equals(controller.getCurrentAnimation().animationName, "animation.assault_drill.spin"))
-            {
-                controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.assault_drill.spin"));
-            }
-        }
-    }
+//    @Override
+//    public void onAnimationSync(int id, int state)
+//    {
+//        if (state == 0)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//            if (controller.getCurrentAnimation() == null || !Objects.equals(controller.getCurrentAnimation().animationName, "animation.assault_drill.spin"))
+//            {
+//                controller.markNeedsReload();
+//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.assault_drill.spin"));
+//            }
+//        }
+//    }
 
     public void onAttackBlock(ItemStack stack, PlayerEntity player)
     {
@@ -339,7 +330,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
         stack.getOrCreateNbt().putBoolean("attacking", false);
     }
 
-    protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
+    protected PlayState controller(AnimationState<AssaultDrillItem> event)
     {
         return PlayState.CONTINUE;
     }
@@ -354,6 +345,42 @@ public class AssaultDrillItem extends Item implements MeatlibItem, IAnimatable, 
     public static Storage<FluidVariant> getStorage(ItemStack stack, ContainerItemContext containerItemContext)
     {
         return new InternalStorage(stack, containerItemContext);
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer)
+    {
+        consumer.accept(new RenderProvider()
+        {
+            private DrillItemRenderer renderer;
+
+            @Override
+            public BuiltinModelItemRenderer getCustomRenderer()
+            {
+                if (renderer == null)
+                    renderer = new DrillItemRenderer();
+
+                return renderer;
+            }
+        });
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider()
+    {
+        return renderProvider;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+        controllers.add(new AnimationController<>(this, controllerName, 1, this::controller));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return instanceCache;
     }
 
     @SuppressWarnings("UnstableApiUsage")

@@ -3,6 +3,8 @@ package com.neep.meatweapons.item;
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.Util;
+import com.neep.meatweapons.client.model.FusionCannonItemModel;
+import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.meatweapons.entity.FusionBlastEntity;
 import com.neep.meatweapons.entity.WeaponCooldownAttachment;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
@@ -22,33 +24,22 @@ import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.Arm;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import org.joml.Vector3f;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.model.GeoModel;
 
 import java.util.Optional;
 
-public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakTwoHanded, Aimable
+public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aimable
 {
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller1";
     public FusionCannonItem()
     {
         super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new MeatlibItemSettings());
         this.sounds.put(GunSounds.FIRE_PRIMARY, NMSounds.FUSION_FIRE);
         this.sounds.put(GunSounds.RELOAD, NMSounds.RELOAD);
-    }
-
-    @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController<>(this, controllerName, 1, this::predicate));
     }
 
     @Override
@@ -60,11 +51,6 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     @Override
     public int getMaxUseTime(ItemStack stack) {
         return 70000;
-    }
-    @Override
-    public AnimationFactory getFactory()
-    {
-        return this.factory;
     }
 
     protected static final String KEY_CHARGE = "charge";
@@ -134,7 +120,7 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
                 // Damage the player if they hold for too long.
                 if (charge > EXPLOSION_TIME)
                 {
-                    world.createExplosion(player, player.getX(), player.getY(), player.getZ(), 1, Explosion.DestructionType.NONE);
+                    world.createExplosion(player, null, ExplodingShellEntity.KEEP_BEHAVIOUR, player.getX(), player.getY(), player.getZ(), 1, false, World.ExplosionSourceType.MOB);
                     world.playSoundFromEntity(null, player, NMSounds.FUSION_BLAST_FIRE, SoundCategory.PLAYERS, 1f, 1f);
                     nbt.putInt("charge", 0);
                     nbt.putBoolean("charging", false);
@@ -188,6 +174,12 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
     }
 
     @Override
+    protected GeoModel<? extends BaseGunItem> createModel()
+    {
+        return new FusionCannonItemModel();
+    }
+
+    @Override
     public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected)
     {
         super.inventoryTick(stack, world, entity, slot, selected);
@@ -228,8 +220,8 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
 
         Vec3d end = pos.add(Util.getRotationVector((float) pitch, (float) yaw).multiply(20));
         Optional<Entity> target = hitScan(entity, pos, end, 20, this);
-//        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
-        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        DamageSource damage = entity instanceof PlayerEntity player ?
+                world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
         target.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
 
         // Play fire sound
@@ -245,7 +237,8 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         Vec3d end = target.getPos().add(0, target.getHeight() / 2, 0);
 
         Optional<Entity> foundTarget = hitScan(entity, pos, end, 20, this);
-        DamageSource damage = entity instanceof PlayerEntity player ? DamageSource.player(player) : DamageSource.mob(entity);
+        DamageSource damage = entity instanceof PlayerEntity player ?
+                world.getDamageSources().playerAttack(player) : world.getDamageSources().mobAttack(entity);
         foundTarget.ifPresent(livingEntity -> livingEntity.damage(damage, 4));
 
         // Play fire sound
@@ -265,19 +258,26 @@ public class FusionCannonItem extends BaseGunItem implements IAnimatable, IWeakT
         }
     }
 
+//    @Override
+//    public void onAnimationSync(int id, int state)
+//    {
+//        final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//        if (state == ANIM_FIRE)
+//        {
+//            controller.markNeedsReload();
+//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire"));
+//        }
+//        else if (state == ANIM_RELOAD)
+//        {
+//            controller.markNeedsReload();
+//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
+//        }
+//    }
+
+
     @Override
-    public void onAnimationSync(int id, int state)
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-        if (state == ANIM_FIRE)
-        {
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.fire"));
-        }
-        else if (state == ANIM_RELOAD)
-        {
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.fusion.reload_r"));
-        }
+        controllers.add(new AnimationController<>(this, controllerName, 1, this::fireController));
     }
 }

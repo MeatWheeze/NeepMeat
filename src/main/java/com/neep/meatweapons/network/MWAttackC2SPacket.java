@@ -62,24 +62,24 @@ public class MWAttackC2SPacket
             {
                 if ((hand & 0b01) > 0 && mainStack.getItem() instanceof GunItem gunItem)
                 {
-                    gunItem.trigger(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                    gunItem.trigger(player.getWorld(), player, mainStack, triggerId, pitch, yaw, handType);
                 }
 
                 if ((hand & 0b10) > 0 && offStack.getItem() instanceof GunItem gunItem)
                 {
-                    gunItem.trigger(player.world, player, offStack, triggerId, pitch, yaw, handType);
+                    gunItem.trigger(player.getWorld(), player, offStack, triggerId, pitch, yaw, handType);
                 }
             }
             case RELEASE ->
             {
                 if ((hand & 0b01) > 0 && mainStack.getItem() instanceof GunItem gunItem)
                 {
-                    gunItem.release(player.world, player, mainStack, triggerId, pitch, yaw, handType);
+                    gunItem.release(player.getWorld(), player, mainStack, triggerId, pitch, yaw, handType);
                 }
 
                 if ((hand & 0b10) > 0 && offStack.getItem() instanceof GunItem gunItem)
                 {
-                    gunItem.release(player.world, player, offStack, triggerId, pitch, yaw, handType);
+                    gunItem.release(player.getWorld(), player, offStack, triggerId, pitch, yaw, handType);
                 }
             }
         }

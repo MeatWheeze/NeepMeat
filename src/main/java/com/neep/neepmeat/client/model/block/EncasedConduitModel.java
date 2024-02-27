@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.model.block;
 
-import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.block.EncasedBlockEntity;
 import net.fabricmc.api.EnvType;
@@ -27,7 +26,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -48,19 +46,25 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
     }
 
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+    public void setParents(Function<Identifier, UnbakedModel> modelLoader)
     {
-        return List.of(particleSpriteId, frameTextureId);
+
     }
+
+    //    @Override
+//    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+//    {
+//        return List.of(particleSpriteId, frameTextureId);
+//    }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings settings, Identifier modelId)
+    public BakedModel bake(Baker baker, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
         particleSprite = textureGetter.apply(particleSpriteId);
 
-        UnbakedModel m = loader.getOrLoadModel(frameId);
-        this.frame = m.bake(loader, textureGetter, new ModelVariant(frameId, settings.getRotation(), settings.isUvLocked(), 1), frameId);
+        UnbakedModel m = baker.getOrLoadModel(frameId);
+        this.frame = m.bake(baker, textureGetter, new ModelVariant(frameId, rotationContainer.getRotation(), rotationContainer.isUvLocked(), 1), frameId);
         return this;
     }
 
@@ -80,14 +84,7 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
             if (!camoState.isAir() && !camoState.isOf(state.getBlock()))
             {
                 BakedModel camoModel = MinecraftClient.getInstance().getBakedModelManager().getBlockModels().getModel(camoState);
-                if (camoModel instanceof FabricBakedModel fabricBakedModel)
-                {
-                    fabricBakedModel.emitBlockQuads(blockView, camoState, pos, randomSupplier, context);
-                }
-            }
-            else
-            {
-                context.bakedModelConsumer().accept(frame);
+                camoModel.emitBlockQuads(blockView, camoState, pos, randomSupplier, context);
             }
         }
     }

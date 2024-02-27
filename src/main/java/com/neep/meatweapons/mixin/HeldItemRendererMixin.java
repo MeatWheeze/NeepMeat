@@ -1,6 +1,6 @@
 package com.neep.meatweapons.mixin;
 
-import com.neep.meatweapons.item.IWeakTwoHanded;
+import com.neep.meatweapons.item.WeakTwoHanded;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -69,7 +69,7 @@ public class HeldItemRendererMixin
     public void renderItemHead(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci)
     {
         isAiming = player.isSneaking();
-        if (item.getItem() instanceof IWeakTwoHanded)
+        if (item.getItem() instanceof WeakTwoHanded)
         {
             // Offhand will only be rendered if empty and not swinging.
             if (hand == Hand.MAIN_HAND && player.getOffHandStack().isEmpty() && !player.handSwinging && !isAiming)

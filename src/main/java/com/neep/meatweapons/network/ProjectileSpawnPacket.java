@@ -9,12 +9,12 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
-import net.minecraft.network.Packet;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 
 import java.util.UUID;
 
@@ -22,7 +22,7 @@ public class ProjectileSpawnPacket
 {
     public static Packet<ClientPlayPacketListener> create(Entity e, Identifier packetID)
     {
-        if (e.world.isClient)
+        if (e.getWorld().isClient)
             throw new IllegalStateException("SpawnPacketUtil.create called on the logical client!");
 
         PacketByteBuf byteBuf = new PacketByteBuf(Unpooled.buffer());

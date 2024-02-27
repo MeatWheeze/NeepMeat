@@ -4,6 +4,7 @@ import com.neep.meatlib.block.MeatlibBlock;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
@@ -22,7 +23,7 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
 
     public BigBlockStructure(BigBlock<?> parent, Settings settings)
     {
-        super(settings.nonOpaque());
+        super(settings.nonOpaque().pistonBehavior(PistonBehavior.IGNORE));
         this.parent = parent;
         this.blockEntityType = registerBlockEntity();
     }

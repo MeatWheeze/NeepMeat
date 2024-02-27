@@ -2,6 +2,7 @@ package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MWItems;
 import com.neep.meatweapons.MeatWeapons;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
@@ -14,12 +15,24 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.hit.HitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
+import net.minecraft.world.explosion.ExplosionBehavior;
 
 public class ExplodingShellEntity extends PersistentProjectileEntity
 {
+    public static final ExplosionBehavior DESTROY_BEHAVIOUR = new ExplosionBehavior();
+    public static final ExplosionBehavior KEEP_BEHAVIOUR = new ExplosionBehavior()
+    {
+        @Override
+        public boolean canDestroyBlock(Explosion explosion, BlockView world, BlockPos pos, BlockState state, float power)
+        {
+            return false;
+        }
+    };
 
     protected int explosionPower = 1;
     protected boolean destructive;
@@ -61,14 +74,14 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     public void tick()
     {
         super.tick();
-        if (this.world.isClient)
+        if (this.getWorld().isClient)
         {
                this.spawnParticles(5);
         }
         else if (this.inGround || this.distanceTraveled > 200)
         {
 //            explode();
-            this.world.sendEntityStatus(this, (byte) 0);
+            this.getWorld().sendEntityStatus(this, (byte) 0);
             this.remove(RemovalReason.DISCARDED);
         }
     }
@@ -77,7 +90,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     protected void onCollision(HitResult hitResult)
     {
         super.onCollision(hitResult);
-        if (!world.isClient)
+        if (!getWorld().isClient)
         {
             if (hitResult.getType() == HitResult.Type.BLOCK)
             {
@@ -90,7 +103,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     protected void onEntityHit(EntityHitResult entityHitResult)
     {
         super.onEntityHit(entityHitResult);
-        if (!world.isClient)
+        if (!getWorld().isClient)
         {
             explode();
         }
@@ -121,9 +134,10 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
 
     protected void explode()
     {
-        boolean mobGriefing = world.getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) && destructive;
-//        this.world.createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, World.ExplosionSourceType.NONE);
-        this.world.createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, Explosion.DestructionType.NONE);
+        boolean mobGriefing = getWorld().getGameRules().getBoolean(GameRules.DO_MOB_GRIEFING) && destructive;
+//        this.getWorld().createExplosion(null, this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, World.ExplosionSourceType.NONE);
+        this.getWorld().createExplosion(null, null, mobGriefing ? DESTROY_BEHAVIOUR : KEEP_BEHAVIOUR,
+                this.getX(), this.getY(), this.getZ(), this.explosionPower, mobGriefing, World.ExplosionSourceType.BLOCK);
     }
 
     private void spawnParticles(int amount)
@@ -132,7 +146,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
 //        System.out.println(distanceTraveled);
         double x = 0.05;
         for (int i = 0; i < amount; ++i)
-            this.world.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), x * random.nextGaussian(), x * random.nextGaussian(), x * random.nextGaussian());
+            this.getWorld().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), x * random.nextGaussian(), x * random.nextGaussian(), x * random.nextGaussian());
     }
 
     protected void onHit(LivingEntity target)

@@ -32,7 +32,7 @@ public class BHMoveToTargetGoal extends Goal
     @Override
     public boolean canStart()
     {
-        long worldTime = this.mob.world.getTime();
+        long worldTime = this.mob.getWorld().getTime();
         if (worldTime - this.lastUpdateTime < 20L)
         {
             return false;

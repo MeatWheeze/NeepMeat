@@ -105,7 +105,7 @@ public class MincerBlockEnity extends SyncableBlockEntity implements MotorisedBl
         else
         {
 //            entity.damage(world.getDamageSources().generic(), damageAmount);
-            entity.damage(DamageSource.GENERIC, damageAmount);
+            entity.damage(world.getDamageSources().generic(), damageAmount);
         }
     }
 

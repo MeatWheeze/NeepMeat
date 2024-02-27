@@ -41,8 +41,8 @@ public class WormTargetGoal extends Goal
     {
         Vec3d pos = parent.getPos();
         Box box = Box.of(pos, range * 2, range * 2, range * 2);
-        List<LivingEntity> el = parent.world.getEntitiesByClass(LivingEntity.class, box, e -> true);
-        return parent.world.getClosestEntity(LivingEntity.class, targetPredicate, parent, pos.x, pos.y, pos.z, box);
+        List<LivingEntity> el = parent.getWorld().getEntitiesByClass(LivingEntity.class, box, e -> true);
+        return parent.getWorld().getClosestEntity(LivingEntity.class, targetPredicate, parent, pos.x, pos.y, pos.z, box);
     }
 
     @Override

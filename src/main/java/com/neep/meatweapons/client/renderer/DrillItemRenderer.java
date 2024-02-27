@@ -4,30 +4,33 @@ import com.neep.meatweapons.client.model.DrillItemModel;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
-import software.bernie.geckolib3.core.molang.MolangParser;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
-import software.bernie.geckolib3.resource.GeckoLibCache;
+import software.bernie.example.GeckoLibMod;
+import software.bernie.geckolib.GeckoLib;
+import software.bernie.geckolib.cache.GeckoLibCache;
+import software.bernie.geckolib.core.molang.MolangParser;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 {
-    public DrillItemRenderer(DrillItemModel model)
+    public DrillItemRenderer()
     {
-        super(model);
+        super(new DrillItemModel());
     }
 
     boolean b;
 
     @Override
-    public void render(ItemStack stack, ModelTransformation.Mode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
+    public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack poseStack, VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
     {
         NbtCompound nbt = stack.getOrCreateNbt();
 //        NbtCompound renderNbt = stack.getVolatileNbt();
-        MolangParser parser = GeckoLibCache.getInstance().parser;
+        MolangParser parser = MolangParser.INSTANCE;
 
         MinecraftClient client = MinecraftClient.getInstance();
         float timeDegrees = client.world.getTime() % 360 + client.getTickDelta();
@@ -37,7 +40,7 @@ public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
         b = using;
 
 //        float thrust = renderNbt.getFloat("thrust");
-        double thrust = parser.getVariable("thrust", null).get();
+        double thrust = parser.getVariable("thrust").get();
         float targetThrust = using ? 0.07f : 0;
 
         float delta = using ? 0.1f : 0.05f;

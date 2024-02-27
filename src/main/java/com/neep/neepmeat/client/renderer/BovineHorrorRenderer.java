@@ -6,7 +6,6 @@ import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.util.SightUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
@@ -51,7 +50,7 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     }
 
     @Override
-    public Color getRenderColor(BovineHorrorEntity animatable, float tickDelta, MatrixStack matrixStack, VertexConsumerProvider vcp, VertexConsumer vertexConsumer, int packedLight)
+    public Color getRenderColor(BovineHorrorEntity animatable, float partialTick, int packedLight)
     {
         float alpha = animatable.prevVisibility;
         if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player, animatable))
@@ -62,7 +61,7 @@ public class BovineHorrorRenderer extends GeoEntityRenderer<BovineHorrorEntity>
     }
 
     @Override
-    public RenderLayer getRenderType(BovineHorrorEntity animatable, float partialTick, MatrixStack poseStack, VertexConsumerProvider bufferSource, VertexConsumer buffer, int packedLight, Identifier texture)
+    public RenderLayer getRenderType(BovineHorrorEntity animatable, Identifier texture, VertexConsumerProvider bufferSource, float partialTick)
     {
         if (SightUtil.canPlayerSee(MinecraftClient.getInstance().player, animatable))
         {

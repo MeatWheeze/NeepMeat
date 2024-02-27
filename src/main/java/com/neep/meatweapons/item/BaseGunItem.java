@@ -1,14 +1,16 @@
 package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItem;
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
+import com.neep.meatweapons.client.renderer.BaseGunRenderer;
 import com.neep.meatweapons.entity.BulletDamageSource;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
+import net.minecraft.client.render.item.BuiltinModelItemRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -32,22 +34,27 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.PlayState;
-import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.core.manager.SingletonAnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.network.ISyncable;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.RenderProvider;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 
-public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, IAnimatable, ISyncable, OverrideSwingItem
+public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, GeoItem, OverrideSwingItem
 {
-    public AnimationFactory factory = new SingletonAnimationFactory(this);
-    Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
+    protected final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
+    protected final Supplier<Object> renderProvider = GeoItem.makeRenderer(this);
+
+    protected Map<GunSounds, SoundEvent> sounds = new EnumMap<GunSounds, SoundEvent>(GunSounds.class);
     public Item ammunition;
     public boolean hasLore;
     public final int maxShots;
@@ -55,7 +62,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     protected final Random random = new Random(0);
     protected String registryName;
 
-    public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, FabricItemSettings settings)
+    public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, MeatlibItemSettings settings)
     {
         super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots).group(MeatWeapons.WEAPONS));
 //        group(MeatWeapons.WEAPONS);
@@ -64,7 +71,6 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         this.maxShots = maxShots;
         this.hasLore = hasLore;
         this.cooldown = cooldown;
-        GeckoLibNetwork.registerSyncable(this);
         ItemRegistry.queue(this);
     }
 
@@ -101,10 +107,6 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         return UseAction.NONE;
     }
 
-    public AnimationFactory getFactory()
-    {
-        return this.factory;
-    }
 
     @Override
     public TypedActionResult<ItemStack> use(World world, PlayerEntity user, Hand hand)
@@ -142,13 +144,13 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
             stack.setDamage(0);
             ammoStack.decrement(1);
 
-            if (!user.world.isClient)
+            if (user.getWorld() instanceof ServerWorld serverWorld)
             {
                 // Do not sync reload animation with other players; it looks silly.
-                final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) user.world);
-                GeckoLibNetwork.syncAnimation(user, this, id, ANIM_RELOAD);
+                final long id = GeoItem.getOrAssignId(stack, serverWorld);
+                triggerAnim(user, id, "Activation", "activate");
 
-                playSound(user.world, user, GunSounds.RELOAD);
+                playSound(serverWorld, user, GunSounds.RELOAD);
             }
         }
     }
@@ -210,7 +212,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
 
     public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, GunItem gunItem)
     {
-        World world = caster.world;
+        World world = caster.getWorld();
         if (!world.isClient)
         {
             // Find where the ray hits a block
@@ -243,15 +245,19 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     @Override
     public void syncAnimation(World world, LivingEntity player, ItemStack stack, int animation, boolean broadcast)
     {
-        final int id = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+        long id = GeoItem.getOrAssignId(stack, (ServerWorld) world);
 
-        if (player instanceof PlayerEntity playerEntity) GeckoLibNetwork.syncAnimation(playerEntity, this, id, animation);
+        if (player instanceof PlayerEntity playerEntity)
+        {
+            // TODO:
+//            GeckoLibNetwork.syncAnimation(playerEntity, this, id, animation);
+        }
 
         if (broadcast)
         {
             for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
             {
-                GeckoLibNetwork.syncAnimation(otherPlayer, this, id, animation);
+//                GeckoLibNetwork.syncAnimation(otherPlayer, this, id, animation);
             }
         }
     }
@@ -272,7 +278,46 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         }
     }
 
-    protected <P extends Item & IAnimatable> PlayState predicate(AnimationEvent<P> event)
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+        controllers.add(new AnimationController<>(this, "controller", this::fireController));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache()
+    {
+        return instanceCache;
+    }
+
+    @Override
+    public Supplier<Object> getRenderProvider()
+    {
+        return renderProvider;
+    }
+
+    @Override
+    public void createRenderer(Consumer<Object> consumer)
+    {
+        consumer.accept(new RenderProvider()
+        {
+            private BaseGunRenderer<? extends BaseGunItem> renderer;
+
+            @Override
+            public BuiltinModelItemRenderer getCustomRenderer()
+            {
+                if (renderer == null)
+                {
+                    this.renderer = new BaseGunRenderer<>(createModel());
+                }
+                return RenderProvider.super.getCustomRenderer();
+            }
+        });
+    }
+
+    protected abstract GeoModel<? extends BaseGunItem> createModel();
+
+    protected <P extends BaseGunItem> PlayState fireController(AnimationState<P> event)
     {
         return PlayState.CONTINUE;
     }
@@ -281,10 +326,4 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     {
         PersistentProjectileEntity create(World world, double x, double y, double z, double vx, double vy, double vz);
     }
-
-//    @Override
-//    public BipedEntityModel.ArmPose getPose(ItemStack stack, LivingEntity entity)
-//    {
-//        return BipedEntityModel.ArmPose.BOW_AND_ARROW;
-//    }
 }

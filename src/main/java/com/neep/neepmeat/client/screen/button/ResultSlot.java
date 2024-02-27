@@ -63,11 +63,11 @@ public class ResultSlot extends Slot
     {
         if (this.amount > 0)
         {
-            stack.onCraft(this.player.world, this.player, this.amount);
+            stack.onCraft(this.player.getWorld(), this.player, this.amount);
         }
         if (this.inventory instanceof RecipeUnlocker)
         {
-            ((RecipeUnlocker) this.inventory).unlockLastRecipe(this.player);
+//            ((RecipeUnlocker) this.inventory).unlockLastRecipe(this.player, );
         }
         this.amount = 0;
     }

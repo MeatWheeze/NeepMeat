@@ -10,10 +10,9 @@ import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
-import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.entity.Entity;
@@ -22,15 +21,15 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 public class MeatWeapons implements ModInitializer
 {
     public static final String NAMESPACE = "meatweapons";
 
-    public static final ItemGroup WEAPONS = FabricItemGroupBuilder.build(
-            new Identifier(NeepMeat.NAMESPACE, "weapons"), () -> new ItemStack(NMItems.SLASHER));
+    public static final ItemGroup WEAPONS = FabricItemGroup.builder().icon(() -> new ItemStack(NMItems.SLASHER)).build();
 
     public static EntityType<BulletEntity> BULLET;
     public static EntityType<CannonBulletEntity> CANNON_BULLET;
@@ -41,7 +40,8 @@ public class MeatWeapons implements ModInitializer
 
     public static <T extends Entity> EntityType<T> registerEntity(String id, FabricEntityTypeBuilder<T> builder)
     {
-        return Registry.register(Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id),
+        return Registry.register(
+                Registries.ENTITY_TYPE, new Identifier(NAMESPACE, id),
                                    builder
                         .dimensions(EntityDimensions.fixed(0.25F, 0.25F))
                         .trackRangeBlocks(4).trackedUpdateRate(10)
@@ -75,6 +75,8 @@ public class MeatWeapons implements ModInitializer
             MWParticles.init();
             MWGraphicsEffects.init();
             MWAttackC2SPacket.init();
+
+            Registry.register(Registries.ITEM_GROUP, new Identifier(NAMESPACE, "weapons"), WEAPONS);
 
 //        MWEnchantmentTargets.init();
             MWEnchantments.init();

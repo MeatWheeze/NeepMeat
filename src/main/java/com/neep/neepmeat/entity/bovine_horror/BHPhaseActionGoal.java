@@ -6,12 +6,12 @@ import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.init.NMSounds;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 import net.minecraft.world.explosion.Explosion;
 import net.minecraft.world.explosion.ExplosionBehavior;
 
@@ -32,7 +32,7 @@ public class BHPhaseActionGoal extends AnimatedGoal<BovineHorrorEntity, BHPhaseA
                 MWGraphicsEffects.syncBeamEffect(p, MWGraphicsEffects.BEAM, getMob().getWorld(),
                         getMob().getPos().add(0, 40, 0), getMob().getPos(), Vec3d.ZERO, 1.8f, 60);
             });
-            mob.world.playSound(null, mob.getX(), mob.getY(), mob.getZ(), NMSounds.BH_PHASE2, SoundCategory.PLAYERS, 5, 0.7f);
+            mob.getWorld().playSound(null, mob.getX(), mob.getY(), mob.getZ(), NMSounds.BH_PHASE2, SoundCategory.PLAYERS, 5, 0.7f);
             setSequence(action.particles);
         }
     };
@@ -47,8 +47,8 @@ public class BHPhaseActionGoal extends AnimatedGoal<BovineHorrorEntity, BHPhaseA
                 Vec3d mobPos = getMob().getPos();
                 serverWorld.spawnParticles(NMParticles.MEAT_BIT, mobPos.x, mobPos.y + 2, mobPos.z, 50, 3, 3, 3, 0.1);
 
-                serverWorld.createExplosion(action.mob, DamageSource.mob(action.mob), new Behaviour(),
-                        mobPos.x, mobPos.y, mobPos.z, 3, false, Explosion.DestructionType.NONE);
+                serverWorld.createExplosion(action.mob, serverWorld.getDamageSources().mobAttack(action.mob), new Behaviour(),
+                        mobPos.x, mobPos.y, mobPos.z, 3, false, World.ExplosionSourceType.MOB);
             }
             markFinished();
             getMob().setInvulnerable(false);

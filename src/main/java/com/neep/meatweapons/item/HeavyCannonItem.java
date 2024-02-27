@@ -1,29 +1,21 @@
 package com.neep.meatweapons.item;
 
+import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.client.model.HeavyCannonItemModel;
 import com.neep.meatweapons.entity.ExplodingShellEntity;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.network.GeckoLibNetwork;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.model.GeoModel;
 
-public class HeavyCannonItem extends BaseGunItem implements IAnimatable
+public class HeavyCannonItem extends BaseGunItem
 {
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public HeavyCannonItem()
@@ -34,20 +26,15 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-    }
-
-    @Override
     public UseAction getUseAction(ItemStack stack)
     {
         return UseAction.NONE;
     }
 
-    public AnimationFactory getFactory()
+    @Override
+    protected GeoModel<? extends BaseGunItem> createModel()
     {
-        return this.factory;
+        return new HeavyCannonItemModel();
     }
 
     @Override
@@ -92,12 +79,13 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
 
                     if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
 
-                    final int anim = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
-                    GeckoLibNetwork.syncAnimation(player, this, anim, ANIM_FIRE);
-                    for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
-                    {
-                        GeckoLibNetwork.syncAnimation(otherPlayer, this, anim, ANIM_FIRE);
-                    }
+                    // TODO
+//                    final int anim = GeckoLibUtil.guaranteeIDForStack(stack, (ServerWorld) world);
+//                    GeckoLibNetwork.syncAnimation(player, this, anim, ANIM_FIRE);
+//                    for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
+//                    {
+//                        GeckoLibNetwork.syncAnimation(otherPlayer, this, anim, ANIM_FIRE);
+//                    }
                 }
             }
             else // Weapon is out of ammunition.
@@ -110,20 +98,20 @@ public class HeavyCannonItem extends BaseGunItem implements IAnimatable
         }
     }
 
-    @Override
-    public void onAnimationSync(int id, int state)
-    {
-        if (state == ANIM_FIRE)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-                controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.fire"));
-        }
-        else if (state == ANIM_RELOAD)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.reload"));
-        }
-    }
+//    @Override
+//    public void onAnimationSync(int id, int state)
+//    {
+//        if (state == ANIM_FIRE)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//                controller.markNeedsReload();
+//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.fire"));
+//        }
+//        else if (state == ANIM_RELOAD)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//            controller.markNeedsReload();
+//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.heavy_cannon.reload"));
+//        }
+//    }
 }

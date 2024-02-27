@@ -1,7 +1,7 @@
 package com.neep.meatweapons.item;
 
 
-import net.minecraft.util.math.Vector3f;
+import org.joml.Vector3f;
 
 public interface Aimable
 {

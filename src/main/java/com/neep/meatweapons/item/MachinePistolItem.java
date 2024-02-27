@@ -2,6 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.client.model.PistolItemModel;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.LivingEntity;
@@ -9,24 +10,18 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.Vector3f;
 import net.minecraft.world.World;
-import software.bernie.geckolib.animatable.GeoItem;
+import org.joml.Vector3f;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.core.builder.AnimationBuilder;
-import software.bernie.geckolib3.core.controller.AnimationController;
-import software.bernie.geckolib3.core.manager.AnimationData;
-import software.bernie.geckolib3.core.manager.AnimationFactory;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.model.GeoModel;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-public class MachinePistolItem extends BaseGunItem implements GeoItem, Aimable
+public class MachinePistolItem extends BaseGunItem implements Aimable
 {
-    public AnimationFactory factory = GeckoLibUtil.createFactory(this);
     public String controllerName = "controller";
 
     public MachinePistolItem()
@@ -37,20 +32,9 @@ public class MachinePistolItem extends BaseGunItem implements GeoItem, Aimable
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController(this, controllerName, 1, this::predicate));
-    }
-
-    @Override
     public UseAction getUseAction(ItemStack stack)
     {
         return UseAction.NONE;
-    }
-
-    public AnimationFactory getFactory()
-    {
-        return this.factory;
     }
 
     @Override
@@ -98,27 +82,33 @@ public class MachinePistolItem extends BaseGunItem implements GeoItem, Aimable
         }
     }
 
-    @Override
-    public void onAnimationSync(int id, int state)
-    {
-        if (state == ANIM_FIRE)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-                controller.markNeedsReload();
-                controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.fire"));
-        }
-        else if (state == ANIM_RELOAD)
-        {
-            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-            controller.markNeedsReload();
-            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
-        }
-    }
+//    @Override
+//    public void onAnimationSync(int id, int state)
+//    {
+//        if (state == ANIM_FIRE)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//                controller.markNeedsReload();
+//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.fire"));
+//        }
+//        else if (state == ANIM_RELOAD)
+//        {
+//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
+//            controller.markNeedsReload();
+//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
+//        }
+//    }
 
     @Override
     public void createRenderer(Consumer<Object> consumer)
     {
 
+    }
+
+    @Override
+    protected GeoModel<? extends BaseGunItem> createModel()
+    {
+        return new PistolItemModel();
     }
 
     @Override
@@ -130,7 +120,7 @@ public class MachinePistolItem extends BaseGunItem implements GeoItem, Aimable
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-
+        controllers.add(new AnimationController(this, controllerName, 1, this::fireController));
     }
 
     @Override

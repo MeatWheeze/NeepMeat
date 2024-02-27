@@ -53,7 +53,7 @@ public class AssemblerStorage implements NbtSerialisable
         for (int i = BUFFER_START; i < BUFFER_END; ++i)
         {
             ItemStack foundStack = inventory.getStack(i);
-            if (foundStack.isItemEqualIgnoreDamage(pattern) && foundStack.getCount() >= count)
+            if (foundStack.equals(pattern) && foundStack.getCount() >= count)
             {
                 foundStack.decrement(count);
                 return pattern.copy();

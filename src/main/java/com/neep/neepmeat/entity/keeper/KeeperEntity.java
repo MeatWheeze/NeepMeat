@@ -99,7 +99,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
 
     public void updateAttackType()
     {
-        if (this.world == null || this.world.isClient) return;
+        if (this.getWorld() == null || this.getWorld().isClient) return;
 
         this.goalSelector.remove(this.meleeAttackGoal);
         this.goalSelector.remove(this.rangedAttackGoal);
@@ -193,7 +193,7 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     {
         if (slot == EquipmentSlot.MAINHAND)
             equipped = stack;
-        if (!world.isClient()) updateAttackType();
+        if (!getWorld().isClient()) updateAttackType();
     }
 
     @Override
@@ -206,9 +206,9 @@ public class KeeperEntity extends HostileEntity implements RangedAttackMob
     public void attack(LivingEntity target, float pullProgress)
     {
         ItemStack itemStack = getStackInHand(Hand.MAIN_HAND);
-        if (!world.isClient() && itemStack.isOf(MWItems.FUSION_CANNON))
+        if (!getWorld().isClient() && itemStack.isOf(MWItems.FUSION_CANNON))
         {
-            ((FusionCannonItem) itemStack.getItem()).fireBeam(world, this, target, itemStack);
+            ((FusionCannonItem) itemStack.getItem()).fireBeam(getWorld(), this, target, itemStack);
         }
     }
 

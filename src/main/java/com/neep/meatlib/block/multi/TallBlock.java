@@ -36,7 +36,7 @@ public abstract class TallBlock extends BaseBlock
 
     public TallBlock(String registryName, ItemSettings itemSettings, Settings settings)
     {
-        super(registryName, itemSettings, settings);
+        super(registryName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
         this.structureBlock = createStructure();
     }
 
@@ -94,7 +94,7 @@ public abstract class TallBlock extends BaseBlock
     {
         public Structure(String registryName, Settings settings)
         {
-            super(registryName, settings);
+            super(registryName, settings.pistonBehavior(PistonBehavior.IGNORE));
         }
 
         @Override
@@ -139,12 +139,6 @@ public abstract class TallBlock extends BaseBlock
         protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
         {
             world.syncWorldEvent(player, WorldEvents.BLOCK_BROKEN, pos, Block.getRawIdFromState(TallBlock.this.getDefaultState()));
-        }
-
-        @Override
-        public PistonBehavior getPistonBehavior(BlockState state)
-        {
-            return PistonBehavior.IGNORE;
         }
     }
 }

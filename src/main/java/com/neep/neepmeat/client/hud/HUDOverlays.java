@@ -32,7 +32,7 @@ public class HUDOverlays
 
     public static void renderVignettes(float tickDelta)
     {
-        RenderSystem.setShader(GameRenderer::getPositionShader);
+        RenderSystem.setShader(GameRenderer::getPositionProgram);
         MinecraftClient client = MinecraftClient.getInstance();
         scaledWidth = client.getWindow().getScaledWidth();
         scaledHeight = client.getWindow().getScaledHeight();
@@ -120,7 +120,7 @@ public class HUDOverlays
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
         RenderSystem.defaultBlendFunc();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+        RenderSystem.setShader(GameRenderer::getPositionTexProgram);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, opacity);
         RenderSystem.setShaderTexture(0, texture);
 

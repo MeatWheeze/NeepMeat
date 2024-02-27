@@ -1,10 +1,7 @@
 package com.neep.neepmeat.client.fluid;
 
 import com.neep.neepmeat.NeepMeat;
-import com.neep.neepmeat.client.model.GenericModel;
-import com.neep.neepmeat.client.renderer.SwordRenderer;
 import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
@@ -44,19 +41,19 @@ public class NMFluidsClient
 
     public static void registerFluidRenderers()
     {
-        GeoItemRenderer.registerItemRenderer(NMItems.SLASHER, new SwordRenderer<>(new GenericModel<>(
-                NeepMeat.NAMESPACE,
-                "geo/slasher.geo.json",
-                "textures/item/slasher.png",
-                "animations/slasher.animation.json"
-        )));
+//        GeoItemRenderer.registerItemRenderer(NMItems.SLASHER, new SwordRenderer<>(new GenericModel<>(
+//                NeepMeat.NAMESPACE,
+//                "geo/slasher.geo.json",
+//                "textures/item/slasher.png",
+//                "animations/slasher.animation.json"
+//        )));
 
-        GeoItemRenderer.registerItemRenderer(NMItems.CHEESE_CLEAVER, new SwordRenderer<>(new GenericModel<>(
-                NeepMeat.NAMESPACE,
-                "geo/cheese_cleaver.geo.json",
-                "textures/item/cheese_cleaver.png",
-                "animations/cheese_cleaver.animation.json"
-        )));
+//        GeoItemRenderer.registerItemRenderer(NMItems.CHEESE_CLEAVER, new SwordRenderer<>(new GenericModel<>(
+//                NeepMeat.NAMESPACE,
+//                "geo/cheese_cleaver.geo.json",
+//                "textures/item/cheese_cleaver.png",
+//                "animations/cheese_cleaver.animation.json"
+//        )));
 
 //        GeoArmorRenderer.registerArmorRenderer(new MeatSteelArmourRenderer(new GenericModel<>(
 //                        NeepMeat.NAMESPACE,

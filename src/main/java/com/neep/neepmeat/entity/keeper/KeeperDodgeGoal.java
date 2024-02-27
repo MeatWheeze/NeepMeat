@@ -65,9 +65,9 @@ public class KeeperDodgeGoal extends Goal
 
             float angle = (float) (b1 ? -Math.PI / 2 : Math.PI / 2);
             Vec3d v = target.getPos().subtract(entity.getPos()).rotateY(angle);
-            Vec3d newPos = findTeleportPos(entity.world, target.getPos().add(v));
+            Vec3d newPos = findTeleportPos(entity.getWorld(), target.getPos().add(v));
 
-            if (entity.world instanceof ServerWorld serverWorld)
+            if (entity.getWorld() instanceof ServerWorld serverWorld)
             {
                 serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()),
                         entity.getX(), entity.getBodyY(0.5), entity.getZ(), 20, 0.1, 1, 0.1,2);
@@ -79,8 +79,8 @@ public class KeeperDodgeGoal extends Goal
 
     protected static Vec3d findTeleportPos(World world, Vec3d v)
     {
-        BlockPos.Mutable mutable = new BlockPos(v).mutableCopy();
-        while (world.getBlockState(mutable).getMaterial().blocksMovement())
+        BlockPos.Mutable mutable = BlockPos.ofFloored(v).mutableCopy();
+        while (world.getBlockState(mutable).blocksMovement())
         {
             mutable.set(mutable, Direction.UP);
         }

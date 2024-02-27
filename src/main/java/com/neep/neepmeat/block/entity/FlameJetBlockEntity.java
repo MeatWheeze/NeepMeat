@@ -110,7 +110,7 @@ public class FlameJetBlockEntity extends SyncableBlockEntity
                 entityList.forEach(entity ->
                 {
 //                    if (entity.damage(world.getDamageSources().lava(), 1.5f))
-                    if (entity.damage(DamageSource.LAVA, 1.5f))
+                    if (entity.damage(world.getDamageSources().lava(), 1.5f))
                     {
                         entity.setFireTicks(10);
                     }

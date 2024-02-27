@@ -5,22 +5,21 @@ import com.neep.meatweapons.item.BaseGunItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vector3f;
-import software.bernie.geckolib3.core.IAnimatable;
-import software.bernie.geckolib3.model.GeoModel;
-import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import org.joml.Vector3f;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.model.GeoModel;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
 
-public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoItemRenderer<T>
+public class BaseGunRenderer<T extends BaseGunItem & GeoAnimatable> extends GeoItemRenderer<T>
 {
     public Vector3f currentTransform = new Vector3f(0, 0, 0);
 
@@ -30,14 +29,12 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
     }
 
     @Override
-    public RenderLayer getRenderType(T animatable, float partialTicks, MatrixStack stack,
-                                     VertexConsumerProvider renderTypeBuffer, VertexConsumer vertexBuilder, int packedLightIn,
-                                     Identifier textureLocation)
+    public RenderLayer getRenderType(T animatable, Identifier texture, VertexConsumerProvider bufferSource, float partialTick)
     {
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
-    public void render(ItemStack itemStack, ModelTransformation.Mode mode, MatrixStack matrices,
+    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrices,
                        VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
@@ -49,20 +46,21 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
             float delta = 0.2f;
             currentTransform.lerp(isAiming ? transform : new Vector3f(0, 0, 0), delta);
 
-            boolean stackInMain = GeckoLibUtil.getIDFromStack(player.getStackInHand(Hand.MAIN_HAND)) == GeckoLibUtil.getIDFromStack(itemStack);
+            boolean stackInMain = GeoItem.getId(player.getStackInHand(Hand.MAIN_HAND)) == GeoItem.getId(itemStack);
 
             matrices.translate(
-                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.getX() : currentTransform.getX(),
-                    currentTransform.getY(),
-                    currentTransform.getZ());
+                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.x : currentTransform.x,
+                    currentTransform.y,
+                    currentTransform.z);
         }
-        this.render((T) itemStack.getItem(), matrices, bufferIn, combinedLightIn, itemStack);
+//        this.render((T) itemStack.getItem(), matrices, bufferIn, combinedLightIn, itemStack);
+        super.render(itemStack, mode, matrices, bufferIn, combinedLightIn, combinedOverlayIn);
     }
 
-    public void render(T animatable, MatrixStack matrices, VertexConsumerProvider bufferIn, int packedLightIn,
-                       ItemStack itemStack) {
-
-        super.render(animatable, matrices, bufferIn, packedLightIn, itemStack);
+//    public void render(T animatable, MatrixStack matrices, VertexConsumerProvider bufferIn, int packedLightIn,
+//                       ItemStack itemStack) {
+//
+//        super.render(animatable, matrices, bufferIn, packedLightIn, itemStack);
 
 //        MinecraftClient client = MinecraftClient.getInstance();
 //        this.currentItemStack = itemStack;
@@ -98,5 +96,5 @@ public class BaseGunRenderer<T extends BaseGunItem & IAnimatable> extends GeoIte
 //            matrices.pop();
 //            matrices.pop();
 //        }
-    }
+//    }
 }

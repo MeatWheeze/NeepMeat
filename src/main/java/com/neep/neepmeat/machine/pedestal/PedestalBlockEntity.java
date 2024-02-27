@@ -138,7 +138,7 @@ public class PedestalBlockEntity extends SyncableBlockEntity
             hasRecipe = true;
 
             getIntegrator().setLookPos(pos);
-            world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 50);
+            world.scheduleBlockTick(pos, getCachedState().getBlock(), 50);
 //            world.playSound(null, pos, NMSounds.COSMIC_BEAM, SoundCategory.BLOCKS, 10, 0.8f);
             getIntegrator().spawnBeam(world, pos);
 //            spawnBeam((ServerWorld) world, integrator.up(), pos);
