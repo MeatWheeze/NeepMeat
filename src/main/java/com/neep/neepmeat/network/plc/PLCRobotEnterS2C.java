@@ -28,7 +28,7 @@ public class PLCRobotEnterS2C
 
             server.execute(() ->
             {
-                if (player.world.getBlockEntity(pos) instanceof PLCBlockEntity be)
+                if (player.getWorld().getBlockEntity(pos) instanceof PLCBlockEntity be)
                 {
                     be.exit();
                 }

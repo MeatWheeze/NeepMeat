@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -118,6 +118,6 @@ public class Article
     // Content takes a fixed width and returns a height
     public interface Content
     {
-        int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent);
+        int render(DrawContext matrices, float x, float y, float width, double scroll, ArticleTextWidget parent);
     }
 }

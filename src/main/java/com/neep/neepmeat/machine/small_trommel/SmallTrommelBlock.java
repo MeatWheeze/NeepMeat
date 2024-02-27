@@ -29,7 +29,7 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
 {
     public SmallTrommelBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(itemName, itemSettings, settings.pistonBehavior(PistonBehavior.IGNORE));
     }
 
     @Nullable
@@ -85,7 +85,7 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
     {
         public Structure(String registryName, Settings settings)
         {
-            super(registryName, settings.nonOpaque());
+            super(registryName, settings.nonOpaque().pistonBehavior(PistonBehavior.IGNORE));
             this.setDefaultState(this.getStateManager().getDefaultState().with(FACING, Direction.NORTH));
         }
 
@@ -93,12 +93,6 @@ public class SmallTrommelBlock extends BaseHorFacingBlock implements BlockEntity
         public ItemConvertible dropsLike()
         {
             return NMBlocks.SMALL_TROMMEL;
-        }
-
-        @Override
-        public PistonBehavior getPistonBehavior(BlockState state)
-        {
-            return PistonBehavior.IGNORE;
         }
 
         @Override

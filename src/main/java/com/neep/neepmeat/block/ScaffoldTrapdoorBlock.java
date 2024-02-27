@@ -3,6 +3,7 @@ package com.neep.neepmeat.block;
 import com.neep.meatlib.block.BaseTrapdoorBlock;
 import com.neep.meatlib.item.ItemSettings;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSetType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.enums.BlockHalf;
@@ -27,7 +28,7 @@ public class ScaffoldTrapdoorBlock extends BaseTrapdoorBlock
 
     public ScaffoldTrapdoorBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings.nonOpaque());
+        super(itemName, itemSettings, settings.nonOpaque(), BlockSetType.IRON);
     }
 
     @Override
@@ -57,11 +58,13 @@ public class ScaffoldTrapdoorBlock extends BaseTrapdoorBlock
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        state = (BlockState)state.cycle(OPEN);
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        state = state.cycle(OPEN);
         world.setBlockState(pos, state, Block.NOTIFY_LISTENERS);
-        if (state.get(WATERLOGGED).booleanValue()) {
-            world.createAndScheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        if (state.get(WATERLOGGED).booleanValue())
+        {
+            world.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         this.playToggleSound(player, world, pos, state.get(OPEN));
         return ActionResult.success(world.isClient);

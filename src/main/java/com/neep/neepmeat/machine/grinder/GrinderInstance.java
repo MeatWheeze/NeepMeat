@@ -52,7 +52,7 @@ public class GrinderInstance extends BlockEntityInstance<GrinderBlockEntity> imp
         {
             var unit = facing.getUnitVector();
             double magnitude = Math.abs(0.05 * sinTime);
-            matrixStack.translate(unit.getX() * magnitude, 0, unit.getZ() * magnitude);
+            matrixStack.translate(unit.x * magnitude, 0, unit.z * magnitude);
         }
         BERenderUtils.rotateFacing(facing, matrixStack);
         jawModel.setTransform(matrixStack);

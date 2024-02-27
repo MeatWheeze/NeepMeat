@@ -91,7 +91,7 @@ public class CharnelCompactorBlock extends BaseBlock implements DataCable
     {
         if (state.get(LEVEL) == 7)
         {
-            world.createAndScheduleBlockTick(pos, state.getBlock(), 20);
+            world.scheduleBlockTick(pos, state.getBlock(), 20);
         }
     }
 

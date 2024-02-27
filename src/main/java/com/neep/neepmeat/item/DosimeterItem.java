@@ -4,12 +4,14 @@ import com.neep.meatlib.item.BaseItem;
 import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentManager;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.init.NMComponents;
 import com.neep.neepmeat.init.NMItems;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -41,7 +43,7 @@ public class DosimeterItem extends BaseItem
 
         }
 
-        private static void renderOverlay(MatrixStack matrices, float tickDelta)
+        private static void renderOverlay(DrawContext matrices, float tickDelta)
         {
             MinecraftClient client = MinecraftClient.getInstance();
 
@@ -55,8 +57,8 @@ public class DosimeterItem extends BaseItem
                 Text text = Text.of("Dose per tick: " + DF.format(manager.lastDose())).copy().formatted(Formatting.YELLOW);
                 int textWidth = client.textRenderer.getWidth(text);
 
-                client.textRenderer.drawWithShadow(matrices, text,
-                        (float) (width - textWidth) / 2, height - 50, 0xFFFFFFFF);
+                GUIUtil.drawText(matrices, client.textRenderer, text,
+                        (float) (width - textWidth) / 2, height - 50, 0xFFFFFFFF, true);
             }
         }
     }

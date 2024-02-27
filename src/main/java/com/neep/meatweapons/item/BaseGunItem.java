@@ -6,7 +6,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.Util;
 import com.neep.meatweapons.client.renderer.BaseGunRenderer;
-import com.neep.meatweapons.entity.BulletDamageSource;
+import com.neep.meatweapons.damage.MWDamageSources;
 import com.neep.neepmeat.api.item.OverrideSwingItem;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.client.item.TooltipContext;
@@ -176,7 +176,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         if (target.isPresent())
         {
             Entity entity = target.get();
-            target.get().damage(BulletDamageSource.create(player, 0.1f), 2);
+            target.get().damage(MWDamageSources.of(MWDamageSources.BULLET, world, player), 2);
             entity.timeUntilRegen = 0;
         }
 

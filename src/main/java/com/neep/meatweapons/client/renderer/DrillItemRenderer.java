@@ -9,12 +9,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
-import software.bernie.example.GeckoLibMod;
-import software.bernie.geckolib.GeckoLib;
-import software.bernie.geckolib.cache.GeckoLibCache;
 import software.bernie.geckolib.core.molang.MolangParser;
 import software.bernie.geckolib.renderer.GeoItemRenderer;
-import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class DrillItemRenderer extends GeoItemRenderer<AssaultDrillItem>
 {

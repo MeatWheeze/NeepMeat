@@ -12,8 +12,6 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -21,8 +19,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, DataCable
 {
@@ -79,25 +75,4 @@ public class IntegratorBlock extends BaseBlock implements BlockEntityProvider, D
     {
         super.onBreak(world, pos, state, player);
     }
-
-    @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
-    {
-        return super.getDroppedStacks(state, builder);
-    }
-
-    //    @Override
-//    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random)
-//    {
-//        super.randomDisplayTick(state, world, pos, random);
-//        if (world.getBlockEntity(pos) instanceof IntegratorBlockEntity be)
-//        {
-//            Box box = new Box(pos.getX() - 2, pos.getY() - 2, pos.getZ() - 2, pos.getX() + 3, pos.getY() + 3, pos.getZ() + 3);
-//            List<Entity> players = be.getWorld().getEntitiesByType(TypeFilter.instanceOf(Entity.class), box, (e) -> true);
-//            if (players.size() > 0)
-//            {
-//                be.setLookPos(players.get(0).getBlockPos());
-//            }
-//        }
-//    }
 }

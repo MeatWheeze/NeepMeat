@@ -30,7 +30,7 @@ public class ExtraMouthImplant implements EntityImplant
     @Override
     public void tick()
     {
-        if (player.world.getTime() % 20 != 0) return;
+        if (player.getWorld().getTime() % 20 != 0) return;
 
         HungerManager hungerManager = player.getHungerManager();
         if (hungerManager.isNotFull())
@@ -97,11 +97,11 @@ public class ExtraMouthImplant implements EntityImplant
         // Hopefully nobody notices this.
         if (item instanceof MeatCartonItem meatCarton)
         {
-            meatCarton.eatFood(player, player.world, stack);
+            meatCarton.eatFood(player, player.getWorld(), stack);
         }
         else
         {
-            player.eatFood(player.world, stack);
+            player.eatFood(player.getWorld(), stack);
 //            player.getHungerManager().eat(item, stack);
         }
     }

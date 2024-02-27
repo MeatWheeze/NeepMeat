@@ -1,18 +1,17 @@
 package com.neep.neepmeat.transport.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.screen_handler.LimiterValveScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.screen.slot.SlotActionType;
@@ -63,12 +62,12 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
 
         textField = new TextField(this.textRenderer, textFieldX, buttonY, textFieldWidth, buttonHeight, Text.of(""))
         {
-            @Override
-            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
-            {
-                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
-                super.renderTooltip(matrices, mouseX, mouseY);
-            }
+//            @Override
+//            public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
+//            {
+//                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
+//                super.renderTooltip(matrices, mouseX, mouseY);
+//            }
         };
         textField.setText(Integer.toString(handler.getProperty(LimiterValveScreenHandler.PROP_MAX_AMOUNT)));
 
@@ -79,7 +78,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         });
         this.addDrawableChild(textField);
 
-        this.addDrawableChild(new ButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {})
+        this.addDrawableChild(new ButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {}, textSupplier -> getButtonText().copy())
         {
             @Override
             public void onPress()
@@ -95,12 +94,12 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
                 ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(PROP_MB_MODE, newMode));
             }
 
-            @Override
-            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
-            {
-                LimiterValveScreen.this.renderTooltip(matrices, getButtonTooltip(), mouseX, mouseY);
-                super.renderTooltip(matrices, mouseX, mouseY);
-            }
+//            @Override
+//            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
+//            {
+//                LimiterValveScreen.this.renderTooltip(matrices, getButtonTooltip(), mouseX, mouseY);
+//                super.renderTooltip(matrices, mouseX, mouseY);
+//            }
         });
     }
 
@@ -131,7 +130,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
@@ -139,14 +138,14 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
@@ -162,9 +161,9 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
+        GUIUtil.drawText(matrices, textRenderer, this.title, this.playerInventoryTitleX, this.titleY, 0x404040,false);
     }
 
     protected static class TextField extends TextFieldWidget

@@ -42,7 +42,7 @@ public class HeldItemRendererMixin
         ClientPlayerEntity clientPlayer = MinecraftClient.getInstance().player;
         ItemStack itemStack = clientPlayer.getMainHandStack();
 
-        if (itemStack.getItem() instanceof AssaultDrillItem && ItemStack.areItemsEqualIgnoreDamage(mainHand, itemStack))
+        if (itemStack.getItem() instanceof AssaultDrillItem && ItemStack.areItemsEqual(mainHand, itemStack))
         {
             this.equipProgressMainHand = 1;
             this.mainHand = itemStack;

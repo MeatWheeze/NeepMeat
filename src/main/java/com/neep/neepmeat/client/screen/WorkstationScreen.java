@@ -2,9 +2,11 @@ package com.neep.neepmeat.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.screen_handler.WorkstationScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -42,7 +44,7 @@ public class WorkstationScreen extends HandledScreen<WorkstationScreenHandler>
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
 //        if (this.recipeBook.isOpen() && this.narrow)
@@ -61,19 +63,19 @@ public class WorkstationScreen extends HandledScreen<WorkstationScreenHandler>
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(matrices, this.title, (float)this.playerInventoryTitleX, (float)this.titleY, 0x404040);
+        GUIUtil.drawText(matrices, textRenderer, this.title, (float)this.playerInventoryTitleX, (float)this.titleY, 0x404040, false);
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 }

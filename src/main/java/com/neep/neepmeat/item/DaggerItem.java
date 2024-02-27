@@ -13,7 +13,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -125,7 +124,7 @@ public class DaggerItem extends BaseSwordItem
             if (optional.isPresent())
             {
                 LivingEntity entity = optional.get();
-                entity.damage(DamageSource.player(player), 5);
+                entity.damage(world.getDamageSources().playerAttack(player), 5);
 
                 if (entity.getHealth() <= MAX_HEALTH)
                 {
@@ -181,7 +180,7 @@ public class DaggerItem extends BaseSwordItem
 
     public Optional<LivingEntity> getTarget(PlayerEntity caster, Vec3d start, Vec3d end, double distance)
     {
-        World world = caster.world;
+        World world = caster.getWorld();
         if (!world.isClient)
         {
             // Find where the ray hits a block

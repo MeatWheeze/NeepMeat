@@ -193,7 +193,7 @@ public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, Powe
                     if (entity instanceof LivingEntity && entity.isAlive() && user instanceof PlayerEntity player)
                     {
                         // Set entity damage cooldown to 4 ticks (20 - 14)
-                        entity.damage(BulletDamageSource.create(player, 0.04f, 14), getDamage(stack, entity));
+                        entity.damage(BulletDamageSource.create(world, player, 0.04f, 14), getDamage(stack, entity));
 
                         // Spawn blood particles
                         serverWorld.spawnParticles(new BlockStateParticleEffect(ParticleTypes.BLOCK, Blocks.NETHER_WART_BLOCK.getDefaultState()), tip.x, tip.y, tip.z, 3, 0.05, 0.05, 0.05, 0.2);

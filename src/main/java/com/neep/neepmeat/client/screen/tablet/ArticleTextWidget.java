@@ -2,11 +2,11 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import com.neep.neepmeat.guide.article.Article;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 public class ArticleTextWidget implements Element, Drawable, Selectable
@@ -48,7 +48,7 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         scrollAmount = MathHelper.lerp(0.4, scrollAmount, scrollLag);
         int head = 0;
@@ -75,5 +75,17 @@ public class ArticleTextWidget implements Element, Drawable, Selectable
     {
         scrollLag = MathHelper.clamp(scrollLag - 7 * amount, 0, Double.MAX_VALUE);
         return true;
+    }
+
+    @Override
+    public void setFocused(boolean focused)
+    {
+
+    }
+
+    @Override
+    public boolean isFocused()
+    {
+        return false;
     }
 }

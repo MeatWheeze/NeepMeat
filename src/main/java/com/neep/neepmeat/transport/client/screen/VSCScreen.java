@@ -1,16 +1,14 @@
 package com.neep.neepmeat.transport.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.TextFieldWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -38,11 +36,13 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
         textField = new TextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""))
         {
             @Override
-            public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+            public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
             {
-                super.renderButton(matrices, mouseX, mouseY, delta);
+                super.renderButton(context, mouseX, mouseY, delta);
                 if (isMouseOver(mouseX, mouseY))
-                    VSCScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+                {
+//                    VSCScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+                }
             }
         };
         textField.setText(Integer.toString(handler.getProperty(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal())));
@@ -57,19 +57,19 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
         super.renderBackground(matrices);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
     }
 

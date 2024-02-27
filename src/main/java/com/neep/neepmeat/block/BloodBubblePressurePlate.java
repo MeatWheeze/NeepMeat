@@ -1,5 +1,6 @@
 package com.neep.neepmeat.block;
 
+import net.minecraft.block.BlockSetType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.PressurePlateBlock;
 import net.minecraft.util.math.BlockPos;
@@ -10,7 +11,7 @@ public class BloodBubblePressurePlate extends PressurePlateBlock
 {
     public BloodBubblePressurePlate(ActivationRule type, Settings settings)
     {
-        super(type, settings);
+        super(type, settings, BlockSetType.WARPED);
     }
 
     @Override

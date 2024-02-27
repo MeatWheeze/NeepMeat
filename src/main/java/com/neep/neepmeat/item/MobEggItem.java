@@ -44,7 +44,7 @@ public class MobEggItem extends Item implements MeatlibItem
             {
                 world.spawnEntity(egg);
 //                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
-                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, new BlockPos(hit));
+                world.emitGameEvent(user, GameEvent.ENTITY_PLACE, BlockPos.ofFloored(hit));
                 if (!user.isCreative())
                 {
                     stack.decrement(1);

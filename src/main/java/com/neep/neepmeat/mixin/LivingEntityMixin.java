@@ -10,6 +10,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.util.math.random.Random;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -45,8 +46,8 @@ public abstract class LivingEntityMixin implements ILivingEntity
     @Inject(method = "onDeath", at = @At(value = "HEAD"))
     public void onDeath(DamageSource source, CallbackInfo ci)
     {
-//        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
-        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isFire())
+        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
+//        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn())
         {
             EssentialSaltesItem.onEntityDeath((LivingEntity) (Object) this);
         }

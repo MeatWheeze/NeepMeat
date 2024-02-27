@@ -1,12 +1,14 @@
 package com.neep.neepmeat.client.screen;
 
 import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.text.Text;
@@ -67,7 +69,7 @@ public class MachineHudOverlay
         }
     }
 
-    public void onRender(MinecraftClient client, MatrixStack matrixStack, float tickDelta)
+    public void onRender(MinecraftClient client, DrawContext context, float tickDelta)
     {
         if (diagnostics != null)
         {
@@ -86,12 +88,12 @@ public class MachineHudOverlay
                     int textWidth = textRenderer.getWidth(t);
                     int textHeight = textRenderer.fontHeight;
 
-                    textRenderer.drawWithShadow(matrixStack, t,
-                            (width - textWidth) / 2, (height + 1.5f * textHeight) / 2, Color.RED.getRGB());
+                    GUIUtil.drawText(context, textRenderer, t,
+                            (width - textWidth) / 2, (height + 1.5f * textHeight) / 2, Color.RED.getRGB(), true);
 
                     textWidth = textRenderer.getWidth(m);
-                    textRenderer.drawWithShadow(matrixStack, m,
-                            (width - textWidth) / 2, (height + 3.5f * textHeight) / 2, Color.RED.getRGB());
+                    GUIUtil.drawText(context, textRenderer, m,
+                            (width - textWidth) / 2, (height + 3.5f * textHeight) / 2, Color.RED.getRGB(), true);
                 }
             }
         }

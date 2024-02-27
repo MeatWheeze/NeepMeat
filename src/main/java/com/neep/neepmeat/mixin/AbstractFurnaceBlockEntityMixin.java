@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.AbstractCookingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeManager;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -99,19 +100,19 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
 //            Recipe<?> recipe = getLastRecipe();
             Recipe<?> recipe = matchGetter.getFirstMatch(furnace, world).orElse(null);
             int i = furnace.getMaxCountPerStack();
-            return isBurning() && canAcceptRecipeOutput(recipe, inventory, i);
+            return isBurning() && canAcceptRecipeOutput(recipe, inventory, i, world.getRegistryManager());
         }
         return false;
     }
 
     @Unique
-    private static boolean canAcceptRecipeOutput(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count)
+    private static boolean canAcceptRecipeOutput(@Nullable Recipe<?> recipe, DefaultedList<ItemStack> slots, int count, DynamicRegistryManager dynamicRegistryManager)
     {
         if (slots.get(0).isEmpty() || recipe == null)
         {
             return false;
         }
-        ItemStack itemStack = recipe.getOutput();
+        ItemStack itemStack = recipe.getOutput(dynamicRegistryManager);
         if (itemStack.isEmpty())
         {
             return false;
@@ -121,7 +122,7 @@ public abstract class AbstractFurnaceBlockEntityMixin implements HeatableFurnace
         {
             return true;
         }
-        if (!itemStack2.isItemEqualIgnoreDamage(itemStack))
+        if (!ItemStack.areItemsEqual(itemStack2, itemStack))
         {
             return false;
         }

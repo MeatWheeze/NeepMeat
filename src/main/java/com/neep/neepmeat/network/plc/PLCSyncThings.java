@@ -76,14 +76,14 @@ public class PLCSyncThings
         {
             switch (action)
             {
-                case ARGUMENT -> applyArgument(copy, player.world);
-                case OPERATION -> applyInstruction(copy, player.world);
-                case PAUSE -> applyPause(copy, player.world);
-                case RUN -> applyRun(copy, player.world);
-                case STOP -> applyStop(copy, player.world);
-                case MODE -> applyMode(copy, player.world);
-                case TEXT -> applyText(copy, player.world);
-                case COMPILE -> applyCompile(copy, player.world);
+                case ARGUMENT -> applyArgument(copy, player.getWorld());
+                case OPERATION -> applyInstruction(copy, player.getWorld());
+                case PAUSE -> applyPause(copy, player.getWorld());
+                case RUN -> applyRun(copy, player.getWorld());
+                case STOP -> applyStop(copy, player.getWorld());
+                case MODE -> applyMode(copy, player.getWorld());
+                case TEXT -> applyText(copy, player.getWorld());
+                case COMPILE -> applyCompile(copy, player.getWorld());
             }
         });
     }

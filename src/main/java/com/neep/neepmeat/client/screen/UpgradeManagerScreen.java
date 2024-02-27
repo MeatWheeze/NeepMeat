@@ -15,11 +15,9 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
-import net.minecraft.client.gui.screen.narration.NarrationPart;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.sound.PositionedSoundInstance;
 import net.minecraft.client.sound.SoundManager;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
@@ -213,9 +211,21 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         }
 
         @Override
+        protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+        {
+
+        }
+
+        @Override
         public SelectionType getType()
         {
             return SelectionType.NONE;
+        }
+
+        @Override
+        protected void appendClickableNarrations(NarrationMessageBuilder builder)
+        {
+
         }
 
         @Override

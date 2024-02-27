@@ -17,7 +17,7 @@ public class Util
 {
     public static List<EntityHitResult> getRayTargets(LivingEntity caster, Vec3d startPos, Vec3d endPos, Predicate<Entity> predicate, double margin)
     {
-        World world = caster.world;
+        World world = caster.getWorld();
 
         Box box = caster.getBoundingBox().stretch(endPos.subtract(startPos)).expand(1.0, 1.0, 1.0);
 

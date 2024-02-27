@@ -59,7 +59,7 @@ public class SimpleHandledScreen<T extends ScreenHandler> extends Screen impleme
         {
             return;
         }
-        this.handler.close(client.player);
+        this.handler.onClosed(client.player);
     }
 
     @Override

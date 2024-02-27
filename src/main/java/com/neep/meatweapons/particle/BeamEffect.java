@@ -84,7 +84,7 @@ public class BeamEffect extends BeamGraphicsEffect
         public static final Function<Identifier, RenderLayer> BEAM_FUNC = Util.memoize((texture) ->
         {
             RenderLayer.MultiPhaseParameters multiPhaseParameters = RenderLayer.MultiPhaseParameters.builder()
-                    .shader(new RenderPhase.Shader(GameRenderer::getRenderTypeBeaconBeamShader))
+                    .program(new RenderPhase.ShaderProgram(GameRenderer::getRenderTypeBeaconBeamProgram))
                     .texture(new RenderPhase.Texture(texture, false, false))
                     .transparency(TRANSLUCENT_TRANSPARENCY)
                     .cull(DISABLE_CULLING)

@@ -18,22 +18,6 @@ public class VatWindowBlock extends VatCasingBlock implements VatComponent
         super(registryName, itemSettings, settings.nonOpaque().solidBlock(VatWindowBlock::never));
     }
 
-    @Override
-    public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
-    {
-        return VoxelShapes.empty();
-    }
-
-    @Override
-    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos) {
-        return 1.0f;
-    }
-
-    @Override
-    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos) {
-        return true;
-    }
-
     public static boolean never(BlockState state, BlockView world, BlockPos pos)
     {
         return false;
@@ -43,6 +27,24 @@ public class VatWindowBlock extends VatCasingBlock implements VatComponent
     {
         return false;
     }
+
+    @Override
+    public VoxelShape getCameraCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return VoxelShapes.empty();
+    }
+
+    @Override
+    public float getAmbientOcclusionLightLevel(BlockState state, BlockView world, BlockPos pos)
+    {
+        return 1.0f;
+    }
+
+//    @Override
+//    public boolean isTranslucent(BlockState state, BlockView world, BlockPos pos)
+//    {
+//        return true;
+//    }
 
     @Nullable
     @Override

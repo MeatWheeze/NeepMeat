@@ -13,7 +13,7 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -56,18 +56,14 @@ public class TankBlock extends BaseColumnBlock implements BlockEntityProvider
     }
 
     @Override
-    public List<ItemStack> getDroppedStacks(BlockState state, LootContext.Builder builder)
+    public List<ItemStack> getDroppedStacks(BlockState state, LootContextParameterSet.Builder builder)
     {
         List<ItemStack> stacks = super.getDroppedStacks(state, builder);
-        BlockEntity blockEntity = builder.getNullable(LootContextParameters.BLOCK_ENTITY);
+        BlockEntity blockEntity = builder.get(LootContextParameters.BLOCK_ENTITY);
         if (blockEntity instanceof TankBlockEntity be)
         {
-//            LootContext lootContext = builder.parameter(LootContextParameters.BLOCK_STATE, state).build(LootContextTypes.BLOCK);
-//            ServerWorld serverWorld = lootContext.getWorld();
-//            LootTable lootTable = serverWorld.getServer().getLootManager().getTable(this.getLootTableId());
-//            List<ItemStack> stacks = lootTable.generateLoot(lootContext);
-
-            if (!be.getStorage(null).isResourceBlank()) stacks.forEach(be::setStackNbt);
+            if (!be.getStorage(null).isResourceBlank())
+                stacks.forEach(be::setStackNbt);
 
             return stacks;
         }

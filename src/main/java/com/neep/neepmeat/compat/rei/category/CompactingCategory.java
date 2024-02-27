@@ -25,6 +25,7 @@ package com.neep.neepmeat.compat.rei.category;
 
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
 import com.neep.neepmeat.compat.rei.display.CompactingDisplay;
 import com.neep.neepmeat.init.NMBlocks;
@@ -41,7 +42,8 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.Text;
 
 import java.util.ArrayList;
@@ -55,38 +57,41 @@ public class CompactingCategory implements DisplayCategory<CompactingDisplay>
     {
         return NMREIPlugin.COMPACTING;
     }
-    
+
     @Override
     public Renderer getIcon()
     {
         return EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR);
     }
-    
+
     @Override
     public Text getTitle()
     {
         return Text.translatable("category." + NeepMeat.NAMESPACE + ".compacting");
     }
-    
+
     @Override
     public DisplayRenderer getDisplayRenderer(CompactingDisplay display)
     {
         return new DisplayRenderer()
         {
             private final Text text = Text.translatable("text." + NeepMeat.NAMESPACE + ".compacting.page", display.getPage() + 1);
-            
+
             @Override
-            public int getHeight() {
+            public int getHeight()
+            {
                 return 10 + MinecraftClient.getInstance().textRenderer.fontHeight;
             }
-            
+
             @Override
-            public void render(MatrixStack matrices, Rectangle rectangle, int mouseX, int mouseY, float delta) {
-                MinecraftClient.getInstance().textRenderer.draw(matrices, text.asOrderedText(), rectangle.x + 5, rectangle.y + 6, -1);
+            public void render(DrawContext matrices, Rectangle rectangle, int mouseX, int mouseY, float delta)
+            {
+                TextRenderer textRenderer = MinecraftClient.getInstance().textRenderer;
+                GUIUtil.drawText(matrices, textRenderer, text, rectangle.x + 5, rectangle.y + 6, -1, false);
             }
         };
     }
-    
+
     @Override
     public List<Widget> setupDisplay(CompactingDisplay display, Rectangle bounds)
     {
@@ -114,14 +119,16 @@ public class CompactingCategory implements DisplayCategory<CompactingDisplay>
         widgets.add(Widgets.createSlot(new Point(startingPoint.x + 33 - 5, startingPoint.y + 8 - 5)).entries(display.getOutputEntries().get(0)).disableBackground().markOutput());
         return widgets;
     }
-    
+
     @Override
-    public int getDisplayHeight() {
+    public int getDisplayHeight()
+    {
         return 140;
     }
-    
+
     @Override
-    public int getFixedDisplaysPerPage() {
+    public int getFixedDisplaysPerPage()
+    {
         return 1;
     }
 }

@@ -58,6 +58,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// Geckolib
+	modImplementation "com.eliotlash.mclib:mclib:20"
 	modImplementation "software.bernie.geckolib:geckolib-fabric-${project.geckolib_version}"
 
 	// Cardinal Components

@@ -160,7 +160,7 @@ public class ImplantInstruction implements Instruction
         {
             Entity entity = mip.get();
             return new BlockPos(entity.getBlockX(),
-                    Math.ceil(entity.getY() + entity.getHeight()),
+                    (int) Math.ceil(entity.getY() + entity.getHeight()),
                     entity.getBlockZ());
         }
         else

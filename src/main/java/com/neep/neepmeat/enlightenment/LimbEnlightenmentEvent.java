@@ -36,7 +36,7 @@ public class LimbEnlightenmentEvent implements EnlightenmentEvent
             double f = playerPos.getZ() + (this.random.nextDouble() - 0.5) * 64.0;
 
             BlockPos.Mutable mutable = new BlockPos.Mutable(d, e, f);
-            while (mutable.getY() > this.world.getBottomY() && this.world.getBlockState(mutable).getMaterial().blocksMovement())
+            while (mutable.getY() > this.world.getBottomY() && this.world.getBlockState(mutable).isSolid())
             {
                 mutable.move(Direction.DOWN);
             }

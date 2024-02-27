@@ -2,6 +2,7 @@ package com.neep.neepmeat.client.screen.tablet;
 
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 
 public interface GUIUtil
@@ -22,6 +23,14 @@ public interface GUIUtil
 
 
     static int drawText(DrawContext context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
+    {
+        int i = textRenderer.draw( text, x, y, color, shadow, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(),
+                TextRenderer.TextLayerType.NORMAL, 0, 15728880 );
+        context.draw();
+        return i;
+    }
+
+    static int drawText(DrawContext context, TextRenderer textRenderer, OrderedText text, float x, float y, int color, boolean shadow)
     {
         int i = textRenderer.draw( text, x, y, color, shadow, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(),
                 TextRenderer.TextLayerType.NORMAL, 0, 15728880 );

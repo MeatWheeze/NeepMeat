@@ -3,6 +3,7 @@ package com.neep.neepmeat.guide.article;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -23,8 +24,9 @@ public class ImageContent implements Article.Content
     }
 
     @Override
-    public int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent)
+    public int render(DrawContext context, float x, float y, float width, double scroll, ArticleTextWidget parent)
     {
+        MatrixStack matrices = context.getMatrices();
         matrices.push();
         RenderSystem.setShaderTexture(0, image);
 

@@ -58,7 +58,7 @@ public class PLCRedstoneInterfaceBlockEntity extends BlockEntity implements Reds
     {
         if (world != null)
         {
-            world.createAndScheduleBlockTick(pos, getCachedState().getBlock(), 1);
+            world.scheduleBlockTick(pos, getCachedState().getBlock(), 1);
 //            world.updateNeighbors(pos, getCachedState().getBlock());
         }
     }

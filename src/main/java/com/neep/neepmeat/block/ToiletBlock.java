@@ -56,7 +56,7 @@ public class ToiletBlock extends BaseHorFacingBlock
                 Vec3d downCorner = Vec3d.of(pos.down(3));
                 LivingEntity entity = entityList.get(0);
                 double y = pos.getY() - 1 - entity.getHeight();
-                if (world.isAir(new BlockPos(pos.getX(), Math.floor(y), pos.getZ())) && world.isSpaceEmpty(entity.getBoundingBox().offset(downCorner)))
+                if (world.isAir(new BlockPos(pos.getX(), (int) Math.floor(y), pos.getZ())) && world.isSpaceEmpty(entity.getBoundingBox().offset(downCorner)))
                 {
                     entity.requestTeleport(pos.getX() + 0.5, y, pos.getZ() + 0.5);
                     world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 1f, 1f);

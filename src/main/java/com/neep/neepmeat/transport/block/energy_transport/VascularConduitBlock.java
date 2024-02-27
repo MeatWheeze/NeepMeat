@@ -88,7 +88,8 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
     {
         super.neighborUpdate(state, world, pos, sourceBlock, sourcePos, notify);
 
-        Direction dir = Direction.fromVector(sourcePos.subtract(pos));
+        BlockPos diff = sourcePos.subtract(pos);
+        Direction dir = Direction.fromVector(diff.getX(), diff.getY(), diff.getZ());
 
         if (isConnectedIn(world, pos, state, dir)
                 && VascularConduit.find(world, sourcePos, world.getBlockState(sourcePos)) == null

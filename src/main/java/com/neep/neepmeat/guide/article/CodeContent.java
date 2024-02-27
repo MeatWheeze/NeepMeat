@@ -2,7 +2,7 @@ package com.neep.neepmeat.guide.article;
 
 import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
-import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
@@ -20,7 +20,7 @@ public class CodeContent implements Article.Content
     }
 
     @Override
-    public int render(MatrixStack matrices, float x, float y, float width, double scroll, ArticleTextWidget parent)
+    public int render(DrawContext matrices, float x, float y, float width, double scroll, ArticleTextWidget parent)
     {
         List<OrderedText> lines = RENDERER.wrapLines(text, (int) width);
         int fontHeight = RENDERER.fontHeight();
@@ -30,7 +30,7 @@ public class CodeContent implements Article.Content
             float head = y + i * fontHeight;
             if (head > parent.getTop() && (head + fontHeight) < parent.getBottom())
             {
-                RENDERER.draw(matrices, lines.get(i), x + 5, (float) (y - scroll + i * fontHeight), 0xFF00BE50);
+                RENDERER.draw(matrices.getMatrices(), lines.get(i), x + 5, (float) (y - scroll + i * fontHeight), 0xFF00BE50);
             }
             ++i;
         }

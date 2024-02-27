@@ -19,9 +19,9 @@ import me.shedaniel.rei.api.common.util.EntryStacks;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
@@ -129,12 +129,12 @@ public class TransformingToolCategory implements DisplayCategory<TransformingToo
         }
 
         @Override
-        public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+        public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
         {
             int x = origin.x + 2;
             int y = origin.y + 2;
 
-            textRenderer.drawWithShadow(matrices, name, x, y, PLCCols.BORDER.col);
+            GUIUtil.drawText(matrices, textRenderer, name, x, y, PLCCols.BORDER.col, true);
 
             GUIUtil.renderBorder(matrices, origin.x, origin.y, width() + 3, height(), PLCCols.BORDER.col, 0);
             widget.render(matrices, mouseX, mouseY, delta);

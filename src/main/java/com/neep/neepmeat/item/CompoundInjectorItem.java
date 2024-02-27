@@ -153,7 +153,7 @@ public class CompoundInjectorItem extends BaseItem
             }
             // Damage player by one heart.
 //            player.damage(player.getDamageSources().magic(), initialDamage);
-            player.damage(DamageSource.GENERIC, initialDamage);
+            player.damage(player.getWorld().getDamageSources().generic(), initialDamage);
             setHealsRemaining(stack, healsFor + initialDamage);
         }
     }

@@ -1,12 +1,10 @@
 package com.neep.neepmeat.machine.separator;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.screen.NumberFieldWidget;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -31,12 +29,13 @@ public class SeparatorScreen extends HandledScreen<SeparatorScreenHandler>
         NumberFieldWidget textField = new NumberFieldWidget(this.textRenderer, x + 6, y + 7, 50, 17, Text.of(""))
         {
             @Override
-            public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
+            public void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
             {
                 super.renderButton(matrices, mouseX, mouseY, delta);
                 if (isMouseOver(mouseX, mouseY))
                 {
-                    SeparatorScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+                    // TODO
+//                    SeparatorScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
                 }
             }
         };
@@ -51,9 +50,7 @@ public class SeparatorScreen extends HandledScreen<SeparatorScreenHandler>
 
         this.addDrawableChild(new ButtonWidget(x + 5, y + 30, 73, 20, Text.empty(), button ->
                 handler.setTakeBabies(!handler.takeBabies()),
-                (button, matrices, mouseX, mouseY) ->
-                {
-                })
+                t -> Text.empty())
         {
             @Override
             public Text getMessage()
@@ -67,19 +64,19 @@ public class SeparatorScreen extends HandledScreen<SeparatorScreenHandler>
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
         super.renderBackground(matrices);
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
 //        super.drawForeground(matrices, mouseX, mouseY);
     }

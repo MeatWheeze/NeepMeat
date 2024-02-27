@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.screen_handler.FluidRationerScreenHandler;
@@ -8,10 +7,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -62,26 +60,23 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
         int startY = 20;
         int w = 40;
         int h = 20;
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY, w, h, BOTTLE, button ->
-        {
-            textField.setText(String.valueOf(FluidConstants.BOTTLE));
-        }));
+        this.addDrawableChild(ButtonWidget.builder(BOTTLE,
+                button -> textField.setText(String.valueOf(FluidConstants.BOTTLE)))
+                .dimensions(x + 5, y + startY, w, h).build());
 
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + (h + 1) , w, h, BUCKET, button ->
-        {
-            textField.setText(String.valueOf(FluidConstants.BUCKET));
-        }));
+        this.addDrawableChild(ButtonWidget.builder(BUCKET,
+                button -> textField.setText(String.valueOf(FluidConstants.BUCKET)))
+                .dimensions(x + 5, y + startY + (h + 1) , w, h).build());
 
-        this.addDrawableChild(new ButtonWidget(x + 5, y + startY + 2 * (h + 1), w, h, INGOT, button ->
-        {
-            textField.setText(String.valueOf(FluidConstants.INGOT));
-        }));
+        this.addDrawableChild(ButtonWidget.builder(INGOT,
+                button -> textField.setText(String.valueOf(FluidConstants.INGOT)))
+                .dimensions(x + 5, y + startY + 2 * (h + 1), w, h).build());
 
         this.titleX = 29;
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    public void render(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         this.renderBackground(matrices);
         super.render(matrices, mouseX, mouseY, delta);
@@ -89,20 +84,20 @@ public class FluidRationerScreen extends HandledScreen<FluidRationerScreenHandle
     }
 
     @Override
-    protected void drawBackground(MatrixStack matrices, float delta, int mouseX, int mouseY)
+    protected void drawBackground(DrawContext matrices, float delta, int mouseX, int mouseY)
     {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, TEXTURE);
+//        RenderSystem.setShader(GameRenderer::getPositionTexShader);
+//        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+//        RenderSystem.setShaderTexture(0, TEXTURE);
         int i = this.x;
         int j = (this.height - this.backgroundHeight) / 2;
-        this.drawTexture(matrices, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
+        matrices.drawTexture(TEXTURE, i, j, 0, 0, this.backgroundWidth, this.backgroundHeight);
     }
 
     @Override
-    protected void drawForeground(MatrixStack matrices, int mouseX, int mouseY)
+    protected void drawForeground(DrawContext matrices, int mouseX, int mouseY)
     {
-        this.textRenderer.draw(matrices, this.title, this.playerInventoryTitleX, this.titleY, 0x404040);
-        this.textRenderer.draw(matrices, this.amountText, this.amountX, this.amountY - 10, 0x404040);
+        matrices.drawText(textRenderer, this.title, this.playerInventoryTitleX, this.titleY, 0x404040, false);
+        matrices.drawText(textRenderer, this.amountText, this.amountX, this.amountY - 10, 0x404040, false);
     }
 }

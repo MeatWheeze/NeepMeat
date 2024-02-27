@@ -1,6 +1,5 @@
 package com.neep.neepmeat.transport.client.model;
 
-import com.mojang.datafixers.util.Pair;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.transport.api.pipe.VascularConduit;
 import net.fabricmc.api.EnvType;
@@ -29,7 +28,6 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -52,18 +50,24 @@ public class VascularConduitModel implements UnbakedModel, BakedModel, FabricBak
         return List.of(SIDE_ID, STRAIGHT_ID);
     }
 
+//    @Override
+//    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+//    {
+//        return List.of(PARTICLE_SPRITE_ID,
+//                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side")),
+//                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_centre"))
+//        );
+//    }
+
     @Override
-    public Collection<SpriteIdentifier> getTextureDependencies(Function<Identifier, UnbakedModel> unbakedModelGetter, Set<Pair<String, String>> unresolvedTextureReferences)
+    public void setParents(Function<Identifier, UnbakedModel> modelLoader)
     {
-        return List.of(PARTICLE_SPRITE_ID,
-                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_side")),
-                new SpriteIdentifier(PlayerScreenHandler.BLOCK_ATLAS_TEXTURE, new Identifier(NeepMeat.NAMESPACE, "block/vascular_conduit/pipe_centre"))
-        );
+
     }
 
     @Nullable
     @Override
-    public BakedModel bake(ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
+    public BakedModel bake(Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, ModelBakeSettings rotationContainer, Identifier modelId)
     {
         PARTICLE_SPRITE = textureGetter.apply(PARTICLE_SPRITE_ID);
 
@@ -90,7 +94,7 @@ public class VascularConduitModel implements UnbakedModel, BakedModel, FabricBak
         return this;
     }
 
-    protected void addPart(Triple<BakedModel, Float, Float>[] parts, Direction face, Identifier id, float x, float y, ModelLoader loader, Function<SpriteIdentifier, Sprite> textureGetter, Identifier modelId)
+    protected void addPart(Triple<BakedModel, Float, Float>[] parts, Direction face, Identifier id, float x, float y, Baker loader, Function<SpriteIdentifier, Sprite> textureGetter, Identifier modelId)
     {
         UnbakedModel unbaked = loader.getOrLoadModel(id);
         ModelVariant settings = new ModelVariant(id, new AffineTransformation(null, null, null, face.getRotationQuaternion()), false, 1);
