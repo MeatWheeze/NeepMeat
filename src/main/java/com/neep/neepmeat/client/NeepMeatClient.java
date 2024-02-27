@@ -8,7 +8,6 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
 import com.neep.neepmeat.client.hud.HUDOverlays;
-import com.neep.neepmeat.client.model.GenericModel;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
 import com.neep.neepmeat.client.model.entity.HoundEntityModel;
@@ -16,7 +15,10 @@ import com.neep.neepmeat.client.plc.PLCClient;
 import com.neep.neepmeat.client.plc.PLCHudRenderer;
 import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.block.AdvancedIntegratorRenderer;
-import com.neep.neepmeat.client.renderer.entity.*;
+import com.neep.neepmeat.client.renderer.entity.DummyEntityRenderer;
+import com.neep.neepmeat.client.renderer.entity.HoundEntityRenderer;
+import com.neep.neepmeat.client.renderer.entity.KeeperEntityRenderer;
+import com.neep.neepmeat.client.renderer.entity.WormEntityRenderer;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
@@ -64,7 +66,6 @@ import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.render.entity.model.MinecartEntityModel;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
-import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer;
 
 @Environment(value= EnvType.CLIENT)
 public class NeepMeatClient implements ClientModInitializer
@@ -140,12 +141,12 @@ public class NeepMeatClient implements ClientModInitializer
 
         EntityModelLayerRegistry.registerModelLayer(TANK_MINECART, MinecartEntityModel::getTexturedModelData);
 
-        GeoArmorRenderer.registerArmorRenderer(new GogglesArmourRenderer(new GenericModel<>(
-                NeepMeat.NAMESPACE,
-                "geo/goggles.geo.json",
-                "textures/entity/armour/goggles.png",
-                "animations/goggles.animation.json"
-                )), NMItems.GOGGLES);
+//        GeoArmorRenderer.regi(new GogglesArmourRenderer(new GenericModel<>(
+//                NeepMeat.NAMESPACE,
+//                "geo/goggles.geo.json",
+//                "textures/entity/armour/goggles.png",
+//                "animations/goggles.animation.json"
+//                )), NMItems.GOGGLES);
 
         // Custom baked models
         ModelLoadingRegistry.INSTANCE.registerResourceProvider(rm -> new NeepMeatModelProvider());

@@ -1,8 +1,6 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatweapons.MeatWeapons;
-import com.neep.meatweapons.network.MWNetwork;
-import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.EntityType;
@@ -10,7 +8,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
@@ -33,22 +32,23 @@ public class ZapProjectileEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
-        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
+        return super.createSpawnPacket();
+//        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
     }
 
     @Override
     public void tick()
     {
         super.tick();
-        if (this.world.isClient)
+        if (getWorld().isClient)
         {
                this.spawnParticles(2);
         }
         else if (this.inGround || this.distanceTraveled > 30 || this.getVelocity().length() < 1)
         {
-            this.world.sendEntityStatus(this, (byte)0);
+            getWorld().sendEntityStatus(this, (byte)0);
             this.remove(RemovalReason.DISCARDED);
         }
     }
@@ -83,13 +83,13 @@ public class ZapProjectileEntity extends PersistentProjectileEntity
     {
         for (int i = 0; i < 10; ++i)
         {
-            this.world.addParticle(MWParticles.PLASMA_PARTICLE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            getWorld().addParticle(MWParticles.PLASMA_PARTICLE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
         }
     }
 
     private void spawnParticles(int amount)
     {
-        this.world.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+        getWorld().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
     }
 
     protected void onHit(LivingEntity target)

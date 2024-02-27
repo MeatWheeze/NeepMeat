@@ -7,7 +7,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
@@ -38,7 +39,7 @@ public class ExplodingShellEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
 //        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
         return super.createSpawnPacket();

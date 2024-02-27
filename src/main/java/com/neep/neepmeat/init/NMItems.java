@@ -13,7 +13,6 @@ import com.neep.neepmeat.implant.player.ExtraMouthImplant;
 import com.neep.neepmeat.implant.player.LungExtensionsImplant;
 import com.neep.neepmeat.implant.player.PinealEyeImplant;
 import com.neep.neepmeat.item.*;
-import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 
@@ -89,7 +88,7 @@ public class NMItems
 //    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 //    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 //    public static Item MEAT_STEEL_CHESTPLATE = new MeatSteelArmourItem("meat_steel_chestplate", ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
-    public static GogglesItem GOGGLES = new GogglesItem("goggles", ArmorMaterials.IRON, EquipmentSlot.HEAD, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
+    public static GogglesItem GOGGLES = new GogglesItem("goggles", ArmorMaterials.IRON, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
     public static PlayerImplantItem PINEAL_EYE = new PlayerImplantItem("pineal_eye", 1, PinealEyeImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));
     public static PlayerImplantItem EXTRA_KNEES = new PlayerImplantItem("extra_knees", 1, ExtraKneeImplant.ID, new MeatlibItemSettings().group(NMItemGroups.GENERAL));

@@ -6,17 +6,15 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.loot.LootTable;
 import net.minecraft.loot.LootTables;
-import net.minecraft.loot.context.LootContext;
+import net.minecraft.loot.context.LootContextParameterSet;
 import net.minecraft.loot.context.LootContextParameters;
-import net.minecraft.loot.context.LootContextTypes;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.tag.TagKey;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.registry.Registry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -55,15 +53,13 @@ public class RandomOres
         else
         {
             BlockState state = block.getDefaultState();
-            LootContext.Builder builder = new LootContext.Builder(world);
-            builder.parameter(LootContextParameters.TOOL, Items.NETHERITE_PICKAXE.getDefaultStack());
-            builder.parameter(LootContextParameters.ORIGIN, Vec3d.ofCenter(origin));
-
-            LootContext lootContext = builder.parameter(LootContextParameters.BLOCK_STATE, state).build(LootContextTypes.BLOCK);
-            ServerWorld serverWorld = lootContext.getWorld();
-            LootTable lootTable = serverWorld.getServer().getLootManager().getTable(identifier);
-
-            return lootTable.generateLoot(lootContext);
+//
+            LootContextParameterSet.Builder builder = new LootContextParameterSet.Builder(world)
+                    .add(LootContextParameters.ORIGIN, Vec3d.ofCenter(origin))
+                    .add(LootContextParameters.TOOL, Items.NETHERITE_PICKAXE.getDefaultStack())
+                    .addOptional(LootContextParameters.THIS_ENTITY, null)
+                    .addOptional(LootContextParameters.BLOCK_ENTITY, null);
+            return state.getDroppedStacks(builder);
         }
     }
 

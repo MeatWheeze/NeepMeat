@@ -6,7 +6,6 @@ import com.neep.meatweapons.entity.WeaponCooldownAttachment;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;

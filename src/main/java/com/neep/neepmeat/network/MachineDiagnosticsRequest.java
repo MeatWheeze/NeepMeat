@@ -19,8 +19,6 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.registry.Registry;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -36,7 +34,13 @@ public class MachineDiagnosticsRequest
     private static void applyServer(MinecraftServer server, ServerPlayerEntity player, ServerPlayNetworkHandler handler, PacketByteBuf buf, PacketSender sender)
     {
         Identifier worldId = Identifier.tryParse(buf.readString());
-        ServerWorld world = server.getWorld(RegistryKey.of(Registry.WORLD_KEY, worldId));
+        ServerWorld world = (ServerWorld) handler.player.getWorld();
+
+        // Not sure how this might happen
+        if (!world.getRegistryKey().getValue().equals(worldId))
+            return;
+
+//        ServerWorld world = server.getWorld(RegistryKey.of(RegistryKeys.DIME, worldId));
         BlockPos pos = PacketBufUtil.readBlockPos(buf);
 
         server.execute(() ->

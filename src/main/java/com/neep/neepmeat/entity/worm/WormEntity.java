@@ -27,7 +27,9 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     protected static final TrackedData<Float> HEAD_PITCH = DataTracker.registerData(WormEntity.class, TrackedDataHandlerRegistry.FLOAT);
     protected static final TrackedData<Float> HEAD_YAW = DataTracker.registerData(WormEntity.class, TrackedDataHandlerRegistry.FLOAT);
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private WormAction currentAction;
     protected List<WormSegment> segments = new ArrayList<>(17);
     protected List<WormSegment> tail = new ArrayList<>(16);
@@ -269,24 +271,12 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
         }
     }
 
-    @Override
-    public void registerControllers(final AnimationData data)
-    {
-        data.addAnimationController(new AnimationController<>(this, "Controller", 5, this::controller));
-    }
-
-    protected PlayState controller(final AnimationEvent<WormEntity> event)
+    protected PlayState controller(final AnimationState<WormEntity> event)
     {
 //        String anim = WormActions.getAnimation(dataTracker.get(CURRENT_ACTION));
 //        event.getController().setAnimation(WormActions.getAnimation(dataTracker.get(CURRENT_ACTION)));
 
         return PlayState.CONTINUE;
-    }
-
-    @Override
-    public AnimationFactory getFactory()
-    {
-        return factory;
     }
 
     @Override
@@ -334,13 +324,13 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-
+        controllers.add(new AnimationController<>(this, "controller", 5, this::controller));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()
     {
-        return null;
+        return instanceCache;
     }
 
 
@@ -351,7 +341,7 @@ public class WormEntity extends AbstractWormPart implements MultiPartEntity<Worm
 
         public WormSegment(WormEntity parent, float width, float height)
         {
-            super(parent.getType(), parent.world);
+            super(parent.getType(), parent.getWorld());
             this.parent = parent;
             this.partDimensions = EntityDimensions.changing(width, height);
             calculateDimensions();

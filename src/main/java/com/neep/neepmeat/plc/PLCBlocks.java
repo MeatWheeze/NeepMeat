@@ -17,7 +17,6 @@ import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.instruction.gui.InstructionAttributes;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 
 public class PLCBlocks
@@ -26,9 +25,9 @@ public class PLCBlocks
     public static BlockEntityType<RoboticArmBlockEntity> ROBOTIC_ARM_ENTITY;
     public static BlockEntityType<ExecutorBlockEntity> EXECUTOR_ENTITY;
 
-    public static final Block ROBOTIC_ARM = BlockRegistry.queue(new RoboticArmBlock("robotic_arm", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)).requiresMotor().plcActuator(), FabricBlockSettings.of(Material.METAL)));;
-    public static final Block REDSTONE_INTERFACE = BlockRegistry.queue(new PLCRedstoneInterface("redstone_interface", FabricBlockSettings.of(Material.METAL)));
-    public static final Block EXECUTOR = BlockRegistry.queue(new ExecutorBlock("executor", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.of(Material.METAL).nonOpaque()));
+    public static final Block ROBOTIC_ARM = BlockRegistry.queue(new RoboticArmBlock("robotic_arm", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)).requiresMotor().plcActuator(), FabricBlockSettings.create()));;
+    public static final Block REDSTONE_INTERFACE = BlockRegistry.queue(new PLCRedstoneInterface("redstone_interface", FabricBlockSettings.create()));
+    public static final Block EXECUTOR = BlockRegistry.queue(new ExecutorBlock("executor", ItemSettings.block().tooltip(TooltipSupplier.hidden(1)), FabricBlockSettings.create().nonOpaque()));
     public static final Block PLC = BlockRegistry.queue(new PLCBlock("plc", NMBlocks.block(), FabricBlockSettings.copyOf(NMBlocks.MACHINE_SETTINGS)));
     public static BlockEntityType<PLCBlockEntity> PLC_ENTITY;
 

@@ -1,8 +1,8 @@
 package com.neep.neepmeat.guide.article;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.client.screen.plc.MonoTextRenderer;
 import com.neep.neepmeat.client.screen.tablet.ArticleTextWidget;
-import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -34,7 +34,7 @@ public class ImageContent implements Article.Content
         float cx = x + (width / 2 - scaledWidth / 2f);
         float i = Math.max(0, parent.getTop() - y);
         float j = Math.max(0, y + scaledHeight - parent.getBottom());
-        DrawableHelper.drawTexture(matrices,
+        MonoTextRenderer.drawTexture(matrices.peek().getPositionMatrix(),
                 (int) cx,
                 (int) ((int) y - scroll + i),
                 0,

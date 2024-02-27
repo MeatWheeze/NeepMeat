@@ -15,7 +15,6 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -41,7 +40,10 @@ import software.bernie.geckolib.animatable.GeoBlockEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -82,7 +84,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
         }
     };
 
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
+    private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
     private boolean hatching;
 
     public IntegratorBlockEntity(BlockPos pos, BlockState state)
@@ -156,19 +158,6 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
         }
     }
 
-    @Override
-    public void registerControllers(AnimationData data)
-    {
-        data.addAnimationController(
-            new AnimationController<>(this, "controller", 0, this::predicate));
-    }
-
-    @Override
-    public AnimationFactory getFactory()
-    {
-        return factory;
-    }
-
     public boolean canGrow()
     {
         return !isMature && storage.immatureStorage.getAmount() > 0;
@@ -225,17 +214,17 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
 
     }
 
-    private <E extends BlockEntity & IAnimatable> PlayState predicate(AnimationEvent<E> event)
+    private <E extends GeoBlockEntity> PlayState predicate(AnimationState<E> event)
     {
-        event.getController().transitionLengthTicks = 20;
+        event.getController().transitionLength(20);
         if (this.hatching)
         {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.hatch"));
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.integrator.hatch"));
             hatching = false;
         }
         else
         {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.integrator.idle"));
+            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.integrator.idle"));
         }
 
         return PlayState.CONTINUE;
@@ -314,12 +303,12 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-
+        controllers.add(new AnimationController<>(this, "controller", 0, this::predicate));
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()
     {
-        return null;
+        return instanceCache;
     }
 }

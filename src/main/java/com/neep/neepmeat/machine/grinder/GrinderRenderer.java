@@ -10,12 +10,12 @@ import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.BakedModel;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -67,9 +67,9 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
         int k = getRenderedAmount(stack);
         BakedModel bakedModel = itemRenderer.getModel(stack, world, null, 0);
         boolean depth = bakedModel.hasDepth();
-        float sX = bakedModel.getTransformation().ground.scale.getX();
-        float sY = bakedModel.getTransformation().ground.scale.getY();
-        float sZ = bakedModel.getTransformation().ground.scale.getZ();
+        float sX = bakedModel.getTransformation().ground.scale.x;
+        float sY = bakedModel.getTransformation().ground.scale.y;
+        float sZ = bakedModel.getTransformation().ground.scale.z;
 
         // Rotate by 1 degree to prevent axis fighting with nearby block models
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(1));
@@ -95,7 +95,7 @@ public class GrinderRenderer implements BlockEntityRenderer<GrinderBlockEntity>
                     matrices.translate(s, t, 0.0);
                 }
             }
-            itemRenderer.renderItem(stack, ModelTransformation.Mode.GROUND, false, matrices, vertices, light, OverlayTexture.DEFAULT_UV, bakedModel);
+            itemRenderer.renderItem(stack, ModelTransformationMode.GROUND, false, matrices, vertices, light, OverlayTexture.DEFAULT_UV, bakedModel);
             matrices.pop();
             if (depth) continue;
             matrices.translate(0.0f * sX, 0.0f * sY, 0.09375f * sZ);

@@ -12,11 +12,10 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
-import net.minecraft.client.render.model.json.ModelTransformation;
+import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Quaternion;
-import net.minecraft.util.math.Vector3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(value = EnvType.CLIENT)
 @SuppressWarnings("UnstableApiUsage")
@@ -98,10 +97,11 @@ public class MixerRenderer implements BlockEntityRenderer<MixerBlockEntity>
             float yOffset = (float) MathHelper.clamp(fluidHeight + 0.03f * Math.sin((be.getWorld().getTime() + tickDelta) / 6 + bobOffset), -0.27f, 1 - 0.4f);
 
             matrices.push();
-            matrices.multiply(Quaternion.fromEulerXyz(0, (float) (angle + angleOffset), 0));
+            matrices.multiply(RotationAxis.POSITIVE_Y.rotation(angle + angleOffset));
+//            matrices.multiply(Quaternion.fromEulerXyz(0, (float) (angle + angleOffset), 0));
             matrices.translate(0, yOffset, offset);
             MinecraftClient.getInstance().getItemRenderer()
-                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformation.Mode.GROUND, 255, overlay, matrices, vertexConsumers, 0);
+                    .renderItem(view.getResource().toStack((int) view.getAmount()), ModelTransformationMode.GROUND, 255, overlay, matrices, vertexConsumers, null, 0);
             angleOffset += 2 * Math.PI / n;
             matrices.pop();
         }

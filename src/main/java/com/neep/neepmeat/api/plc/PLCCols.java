@@ -1,6 +1,7 @@
 package com.neep.neepmeat.api.plc;
 
-import software.bernie.geckolib3.core.util.Color;
+
+import software.bernie.geckolib.core.object.Color;
 
 // I use the word 'col' because I don't want to give in and start using 'color'
 public enum PLCCols

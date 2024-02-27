@@ -3,8 +3,8 @@ package com.neep.neepmeat.implant.item;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.SimpleRegistry;
 
 /**
  * An implant installer that operates on an ItemStack.

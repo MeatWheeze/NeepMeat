@@ -6,7 +6,8 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 
@@ -26,7 +27,7 @@ public class BulletEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
 //        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
         return super.createSpawnPacket();
@@ -36,20 +37,20 @@ public class BulletEntity extends PersistentProjectileEntity
     public void tick()
     {
         super.tick();
-        if (this.world.isClient)
+        if (this.getWorld().isClient)
         {
                this.spawnParticles(2);
         }
         else if (this.inGround || this.distanceTraveled > 30 || this.getVelocity().length() < 1)
         {
-            this.world.sendEntityStatus(this, (byte)0);
+            this.getWorld().sendEntityStatus(this, (byte)0);
             this.remove(RemovalReason.DISCARDED);
         }
     }
 
     private void spawnParticles(int amount)
     {
-        this.world.addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+        this.getWorld().addParticle(ParticleTypes.SMOKE, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
     }
 
     protected void onHit(LivingEntity target)

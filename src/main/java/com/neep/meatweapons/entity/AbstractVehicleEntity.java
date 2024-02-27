@@ -18,14 +18,13 @@ import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.predicate.entity.EntityPredicates;
+import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.tag.FluidTags;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
@@ -137,7 +136,7 @@ extends Entity {
     @Override
     public boolean damage(DamageSource source, float amount)
     {
-        if (this.world.isClient || this.isRemoved())
+        if (this.getWorld().isClient || this.isRemoved())
         {
             return true;
         }
@@ -146,7 +145,7 @@ extends Entity {
 
         this.scheduleVelocityUpdate();
         this.emitGameEvent(GameEvent.ENTITY_DAMAGE, source.getAttacker());
-        world.playSoundFromEntity(null, this, getDamageSound(), SoundCategory.NEUTRAL, 1, 1);
+        getWorld().playSoundFromEntity(null, this, getDamageSound(), SoundCategory.NEUTRAL, 1, 1);
 
         if (health <= 0)
         {
@@ -171,11 +170,11 @@ extends Entity {
         }
     }
 
-    @Override
-    public void animateDamage()
-    {
-        getEntityWorld().addParticle(ParticleTypes.SMOKE, this.x, this.y, this.z, 0, 0, 0);
-    }
+//    @Override
+//    public void animateDamage()
+//    {
+//        getEntityWorld().addParticle(ParticleTypes.SMOKE, this.x, this.y, this.z, 0, 0, 0);
+//    }
 
     @Override
     public boolean canHit()
@@ -206,7 +205,7 @@ extends Entity {
         if (this.isLogicalSideForUpdatingMovement())
         {
             this.updateVelocity();
-            if (this.world.isClient)
+            if (this.getWorld().isClient)
             {
                 updateKeys();
                 this.updateMotion();
@@ -220,9 +219,9 @@ extends Entity {
 
         this.checkBlockCollision();
 
-        List<Entity> otherEntities = this.world.getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
+        List<Entity> otherEntities = this.getWorld().getOtherEntities(this, this.getBoundingBox().expand(0.2f, -0.01f, 0.2f), EntityPredicates.canBePushedBy(this));
         if (!otherEntities.isEmpty()) {
-            boolean soundEvent = !this.world.isClient && !(this.getPrimaryPassenger() instanceof PlayerEntity);
+            boolean soundEvent = !this.getWorld().isClient && !(getControllingPassenger() instanceof PlayerEntity);
             for (Entity entity : otherEntities)
             {
                 if (entity.hasPassenger(this))
@@ -334,7 +333,7 @@ extends Entity {
     }
 
     @Override
-    public void updatePassengerPosition(Entity passenger)
+    public void updatePassengerPosition(Entity passenger, Entity.PositionUpdater updater)
     {
         if (!this.hasPassenger(passenger))
         {
@@ -389,22 +388,22 @@ extends Entity {
         Vec3d vec3d = AbstractVehicleEntity.getPassengerDismountOffset(this.getWidth() * MathHelper.SQUARE_ROOT_OF_TWO, passenger.getWidth(), passenger.getYaw());
         double d = this.getX() + vec3d.x;
         BlockPos blockPos = new BlockPos((int) d, (int) this.getBoundingBox().maxY, (int) (e = this.getZ() + vec3d.z)).down();
-        if (!this.world.isWater(blockPos))
+        if (!this.getWorld().isWater(blockPos))
         {
             double g;
             ArrayList<Vec3d> list = Lists.newArrayList();
-            double f = this.world.getDismountHeight(blockPos);
+            double f = this.getWorld().getDismountHeight(blockPos);
             if (Dismounting.canDismountInBlock(f)) {
                 list.add(new Vec3d(d, (double)blockPos.getY() + f, e));
             }
-            if (Dismounting.canDismountInBlock(g = this.world.getDismountHeight(blockPos)))
+            if (Dismounting.canDismountInBlock(g = this.getWorld().getDismountHeight(blockPos)))
             {
                 list.add(new Vec3d(d, (double)blockPos.getY() + g, e));
             }
             for (EntityPose entityPose : passenger.getPoses())
             {
                 for (Vec3d vec3d2 : list) {
-                    if (!Dismounting.canPlaceEntityAt(this.world, vec3d2, passenger, entityPose)) continue;
+                    if (!Dismounting.canPlaceEntityAt(getWorld(), vec3d2, passenger, entityPose)) continue;
                     passenger.setPose(entityPose);
                     return vec3d2;
                 }
@@ -431,7 +430,7 @@ extends Entity {
     @Override
     public ActionResult interact(PlayerEntity player, Hand hand)
     {
-        if (!this.world.isClient)
+        if (!this.getWorld().isClient)
         {
             if (player.isSneaking())
             {
@@ -457,9 +456,9 @@ extends Entity {
         {
             if (this.fallDistance > 3.0f && !powered)
             {
-//                this.handleFallDamage(this.fallDistance, 1.0f, world.getDamageSources().fall());
-                this.handleFallDamage(this.fallDistance, 1.0f, DamageSource.FALL);
-                if (!this.world.isClient && !this.isRemoved())
+//                this.handleFallDamage(this.fallDistance, 1.0f, getWorld().getDamageSources().fall());
+                this.handleFallDamage(this.fallDistance, 1.0f, getEntityWorld().getDamageSources().fall());
+                if (!this.getWorld().isClient && !this.isRemoved())
                 {
                     this.kill();
                     this.dropDead();
@@ -467,7 +466,7 @@ extends Entity {
             }
             this.fallDistance = 0.0f;
         }
-        else if (!this.world.getFluidState(this.getBlockPos().down()).isIn(FluidTags.WATER) && heightDifference < 0.0)
+        else if (!this.getWorld().getFluidState(this.getBlockPos().down()).isIn(FluidTags.WATER) && heightDifference < 0.0)
         {
             this.fallDistance = (float)((double)this.fallDistance - heightDifference);
         }
@@ -490,7 +489,7 @@ extends Entity {
     }
 
     @Override
-    public LivingEntity getPrimaryPassenger()
+    public LivingEntity getControllingPassenger()
     {
         return this.getFirstPassenger() instanceof LivingEntity living ? living : null;
     }

@@ -1,19 +1,22 @@
 package com.neep.meatweapons.entity;
 
 import com.neep.meatlib.attachment.player.PlayerAttachment;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import software.bernie.geckolib3.util.GeckoLibUtil;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
+import software.bernie.geckolib.animatable.GeoItem;
 
 // A minimal implementation of ItemCooldownManager that works for individual stacks
 public class WeaponCooldownAttachment implements PlayerAttachment
 {
     public static String ID = "meatweapons:weapon_cooldown";
+    private final PlayerEntity player;
 
-    protected Int2ObjectOpenHashMap<Entry> map = new Int2ObjectOpenHashMap<>();
+    protected Long2ObjectOpenHashMap<Entry> map = new Long2ObjectOpenHashMap<>();
     protected int time;
 
     public static WeaponCooldownAttachment get(PlayerEntity player)
@@ -24,13 +27,14 @@ public class WeaponCooldownAttachment implements PlayerAttachment
     public WeaponCooldownAttachment(PlayerEntity player)
     {
 
+        this.player = player;
     }
 
     @Override
     public void tickAttachment()
     {
         ++time;
-        ObjectIterator<Int2ObjectMap.Entry<Entry>> it = map.int2ObjectEntrySet().fastIterator();
+        ObjectIterator<Long2ObjectMap.Entry<Entry>> it = map.long2ObjectEntrySet().fastIterator();
         while (it.hasNext())
         {
             if (it.next().getValue().endTime <= time) it.remove();
@@ -39,21 +43,25 @@ public class WeaponCooldownAttachment implements PlayerAttachment
 
     public boolean isCoolingDown(ItemStack stack, int trigger)
     {
-        int id = getStackId(stack, trigger);
-        Entry entry = map.get(getStackId(stack, trigger));
+        long id = getStackId(stack, trigger, player.getWorld());
+        Entry entry = map.get(getStackId(stack, trigger, player.getWorld()));
         return entry != null && entry.endTime > time;
     }
 
     // Returns a unique ID for each stack (hopefully).
-    public static int getStackId(ItemStack stack, int trigger)
+    public static long getStackId(ItemStack stack, int trigger, World world)
     {
-        return GeckoLibUtil.getIDFromStack(stack) + trigger;
+        if (world instanceof ServerWorld serverWorld)
+        {
+            return GeoItem.getOrAssignId(stack, serverWorld);
+        }
+        return GeoItem.getId(stack) + trigger;
 //        return Objects.hash(stack.getItem().getTranslationKey(), stack.getNbt(), stack.getCount(), trigger);
     }
 
     public void set(ItemStack stack, int trigger, int cooldown)
     {
-        map.put(getStackId(stack, trigger), new Entry(time, time + cooldown));
+        map.put(getStackId(stack, trigger, player.getWorld()), new Entry(time, time + cooldown));
     }
 
     protected static class Entry

@@ -7,13 +7,13 @@ import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.Packet;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.hit.BlockHitResult;
@@ -53,9 +53,8 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     }
 
     @Override
-    public Packet<?> createSpawnPacket()
+    public Packet<ClientPlayPacketListener> createSpawnPacket()
     {
-//        return ProjectileSpawnPacket.create(this, MWNetwork.SPAWN_ID);
         return super.createSpawnPacket();
     }
 
@@ -64,14 +63,14 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     {
         super.tick();
         dataTracker.set(POWER, power);
-        if (this.world.isClient)
+        if (getWorld().isClient)
         {
                this.spawnParticles();
         }
         else if (this.inGround || this.distanceTraveled > 30 || getVelocity().length() < 0.1)
         {
-            this.world.sendEntityStatus(this, (byte)0);
-            this.remove(RemovalReason.DISCARDED);
+            getWorld().sendEntityStatus(this, (byte)0);
+            remove(RemovalReason.DISCARDED);
         }
     }
 
@@ -165,7 +164,7 @@ public class FusionBlastEntity extends PersistentProjectileEntity
 //        }
         explode();
         spawnHitParticles();
-        if (!world.isClient)
+        if (!getWorld().isClient)
         {
             this.discard();
         }
@@ -183,19 +182,19 @@ public class FusionBlastEntity extends PersistentProjectileEntity
     {
         float r = 2.5f;
         Box box = getBoundingBox().expand(r);
-        List<Entity> entities = world.getOtherEntities(null, box);
+        List<Entity> entities = getWorld().getOtherEntities(null, box);
         entities.forEach(e ->
         {
             // Damage reduces linearly with distance
 //            double d = getDamage() * (centre.distanceTo(e.getPos()) / r);
 //            e.damage(world.getDamageSources().mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) d);
-            e.damage(DamageSource.mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) getDamage());
+            e.damage(getWorld().getDamageSources().mobProjectile(this, getOwner() instanceof LivingEntity le ? le : null), (float) getDamage());
         });
     }
 
     protected void spawnHitParticles()
     {
-        if (world instanceof ServerWorld serverWorld)
+        if (getWorld() instanceof ServerWorld serverWorld)
         {
             for (int i = 0; i < 10; ++i)
             {
@@ -207,7 +206,7 @@ public class FusionBlastEntity extends PersistentProjectileEntity
 
     protected void spawnParticles()
     {
-        this.world.addParticle(MWParticles.PLASMA_PARTICLE,
+        getWorld().addParticle(MWParticles.PLASMA_PARTICLE,
                 this.getX() + (random.nextFloat() - 0.5) / 2,
                 this.getY() + (random.nextFloat() - 0.5) / 2,
                 this.getZ() + (random.nextFloat() - 0.5) / 2,
