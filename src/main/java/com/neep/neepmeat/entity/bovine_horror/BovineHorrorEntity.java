@@ -23,6 +23,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
 import net.minecraft.particle.ParticleEffect;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -35,19 +36,20 @@ import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 public class BovineHorrorEntity extends HostileEntity implements AnimationSyncable, GeoEntity
 {
+    private final AnimatableInstanceCache instanceCache = GeckoLibUtil.createInstanceCache(this);
+
     protected static final TrackedData<Integer> SYNC_ID = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.INTEGER);
     protected static final TrackedData<Float> VISIBILITY = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.FLOAT);
     protected static final TrackedData<Boolean> PHASE2 = DataTracker.registerData(BovineHorrorEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    protected static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.horror.wave", ILoopType.EDefaultLoopTypes.LOOP);
-
-    private final AnimationFactory factory = GeckoLibUtil.createFactory(this);
-    private final String moveIdleController = "move_idle";
-    private final String attackController = "attack";
+//    protected static final AnimationBuilder IDLE_ANIM = new AnimationBuilder().addAnimation("animation.horror.wave", ILoopType.EDefaultLoopTypes.LOOP);
 
     public float prevVisibility = 0;
 
@@ -128,48 +130,12 @@ public class BovineHorrorEntity extends HostileEntity implements AnimationSyncab
     }
 
     @Override
-    public void registerControllers(AnimationData animationData)
-    {
-        animationData.addAnimationController(new AnimationController<>(this, moveIdleController, 5, this::moveController));
-        animationData.addAnimationController(new AnimationController<>(this, attackController, 5, this::attackControl));
-    }
-
-    @Override
     public boolean tryAttack(Entity target)
     {
         syncNearby("animation.horror.melee");
         return super.tryAttack(target);
     }
 
-    private <T extends IAnimatable> PlayState attackControl(final AnimationEvent<T> event)
-    {
-        if (!animationQueue.isEmpty() && event.getController().getAnimationState().equals(AnimationState.Stopped))
-        {
-            event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation(animationQueue.poll()));
-        }
-//        if (handSwinging && event.getController().getAnimationState().equals(AnimationState.Stopped))
-//        {
-//            event.getController().markNeedsReload();
-//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.horror.melee", ILoopType.EDefaultLoopTypes.PLAY_ONCE));
-//            handSwinging = false;
-//        }
-
-        return PlayState.CONTINUE;
-    }
-
-    protected <E extends BovineHorrorEntity> PlayState moveController(final AnimationEvent<E> event)
-    {
-//        event.getController().setAnimation(IDLE_ANIM);
-
-        return PlayState.CONTINUE;
-    }
-
-    @Override
-    public AnimationFactory getFactory()
-    {
-        return factory;
-    }
 
     @Override
     public void takeKnockback(double strength, double x, double z)
@@ -245,7 +211,7 @@ public class BovineHorrorEntity extends HostileEntity implements AnimationSyncab
             dataTracker.set(PHASE2, true);
             phase2 = true;
 
-            goalSelector.clear();
+            goalSelector.clear(g -> true);
             goalSelector.add(1, new BHPhaseActionGoal(this));
             navigation.stop();
             bossBar.setDarkenSky(true);
@@ -352,11 +318,6 @@ public class BovineHorrorEntity extends HostileEntity implements AnimationSyncab
         return distanceTo(entity) <= getAttackRange(entity) * 0.5;
     }
 
-    public boolean isInMoveRange(Entity entity)
-    {
-        return distanceTo(entity) <= 20;
-    }
-
     public boolean isPhase2()
     {
         return dataTracker.get(PHASE2);
@@ -377,7 +338,7 @@ public class BovineHorrorEntity extends HostileEntity implements AnimationSyncab
     @Override
     public boolean damage(DamageSource source, float amount)
     {
-        if (source.isFromFalling())
+        if (source.isIn(DamageTypeTags.IS_FALL))
             return false;
 
         return super.damage(source, amount);
@@ -386,12 +347,33 @@ public class BovineHorrorEntity extends HostileEntity implements AnimationSyncab
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
+        controllers.add(
+                new AnimationController<>(this, "move", 5, this::moveController),
+                new AnimationController<>(this, "attack", 5, this::attackControl));
+    }
 
+    private <T extends GeoEntity> PlayState attackControl(final AnimationState<T> event)
+    {
+        if (!animationQueue.isEmpty() && event.getController().getAnimationState() == AnimationController.State.STOPPED)
+        {
+            event.setAndContinue(RawAnimation.begin().thenPlay(animationQueue.poll()));
+        }
+
+        return PlayState.CONTINUE;
+    }
+
+    private <E extends BovineHorrorEntity> PlayState moveController(final AnimationState<E> event)
+    {
+        if (event.isMoving())
+        {
+            event.setAndContinue(RawAnimation.begin().thenLoop("animation.horror.wave"));
+        }
+        return PlayState.CONTINUE;
     }
 
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()
     {
-        return null;
+        return instanceCache;
     }
 }

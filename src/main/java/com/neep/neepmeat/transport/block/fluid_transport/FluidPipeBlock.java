@@ -38,7 +38,7 @@ import net.minecraft.world.BlockRenderView;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
-import software.bernie.geckolib3.core.util.Color;
+import software.bernie.geckolib.core.object.Color;
 
 @SuppressWarnings("UnstableApiUsage")
 public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProvider, FluidPipe
@@ -76,7 +76,8 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos fromPos, boolean notify)
     {
-        Direction direction = Direction.fromVector(fromPos.subtract(pos));
+        BlockPos subtracted = fromPos.subtract(pos);
+        Direction direction = Direction.fromVector(subtracted.getX(), subtracted.getY(), subtracted.getZ());
         BlockState nextState = getStateForNeighborUpdate(state, direction, world.getBlockState(fromPos), world, pos, fromPos);
 
         // Block state change must be applied to the world in order for PipeNetwork::discoverNodes to pick it up

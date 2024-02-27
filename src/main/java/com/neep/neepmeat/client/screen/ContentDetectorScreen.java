@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.screen;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.content_detector.InventoryDetectorBehaviour;
 import com.neep.neepmeat.screen_handler.ContentDetectorScreenHandler;
@@ -8,13 +7,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
-import net.minecraft.client.render.GameRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 @Environment(value = EnvType.CLIENT)
 public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHandler>
@@ -65,30 +60,30 @@ public class ContentDetectorScreen extends HandledScreen<ContentDetectorScreenHa
                 16, 0, 8, 32, 3, COUNT_WIDGET, 32, 128, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(InventoryDetectorBehaviour.DEL_COUNT);
-        },
-        (buttonWidget, matrices, mouseX, mouseY) ->
-        {
-            drawMouseoverTooltip(null, Text.of("Stack Condition"), mouseX, mouseY);
         });
+//        (buttonWidget, matrices, mouseX, mouseY) ->
+//        {
+//            drawMouseoverTooltip(null, Text.of("Stack Condition"), mouseX, mouseY);
+//        });
 
         this.countButton = new CyclingButtonWidget(this.x + 20, this.y + 54, 32, 16, 0, 8,
                 32, 1, BEHAVIOUR_WIDGET, 32, 64, Text.of("uwu"), (button, mouseButton) ->
         {
             this.buttonPress(InventoryDetectorBehaviour.DEL_BEHAVIOUR);
-        },
-        (buttonWidget, matrices, mouseX, mouseY) ->
-        {
-//            renderTooltip(matrices, Text.of("owo"), mouseX, mouseY);
-            switch (((CyclingButtonWidget) buttonWidget).index)
-            {
-                case 0:
-                    renderTooltip(matrices, List.of(Text.of("Regulate"), Text.of("Stays powered until all filter items have left")), mouseX, mouseY);
-                    break;
-                case 1:
-                    renderTooltip(matrices, List.of(Text.of("Absolute"), Text.of("Stays powered only while conditions are met")), mouseX, mouseY);
-
-            }
         });
+//        (buttonWidget, matrices, mouseX, mouseY) ->
+//        {
+//            renderTooltip(matrices, Text.of("owo"), mouseX, mouseY);
+//            switch (((CyclingButtonWidget) buttonWidget).index)
+//            {
+//                case 0:
+//                    renderTooltip(matrices, List.of(Text.of("Regulate"), Text.of("Stays powered until all filter items have left")), mouseX, mouseY);
+//                    break;
+//                case 1:
+//                    renderTooltip(matrices, List.of(Text.of("Absolute"), Text.of("Stays powered only while conditions are met")), mouseX, mouseY);
+
+//            }
+//        });
 
 
         this.addDrawableChild(countButton);

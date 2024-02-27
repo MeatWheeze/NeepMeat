@@ -19,7 +19,6 @@ import com.neep.neepmeat.transport.screen_handler.TransportScreenHandlers;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.BlockSoundGroup;
@@ -37,9 +36,9 @@ public class ItemTransport
     public static BlockEntityType<StorageBusBlockEntity> STORAGE_BUS_BE;
     public static BlockEntityType<ItemRequesterBlockEntity> ITEM_REQUESTER_BE;
 
-    public static final Block PIPE_DRIVER = BlockRegistry.queue(new PipeDriverBlock("pipe_driver", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
-    public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
-    public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.of(Material.METAL).hardness(0.3f).sounds(BlockSoundGroup.METAL)));
+    public static final Block PIPE_DRIVER = BlockRegistry.queue(new PipeDriverBlock("pipe_driver", ItemSettings.block().tooltip(TooltipSupplier.hidden(2)).plcActuator(), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL)));
+    public static final Block STORAGE_BUS = BlockRegistry.queue(new StorageBusBlock("storage_bus", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL)));
+    public static final Block ITEM_REQUESTER = BlockRegistry.queue(new ItemRequesterBlock("item_requester", ItemSettings.block().tooltip(TooltipSupplier.simple(1)), FabricBlockSettings.create().hardness(0.3f).sounds(BlockSoundGroup.METAL)));
 
     public static void init()
     {

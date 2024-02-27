@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.screen;
 
-import com.neep.meatlib.item.TooltipSupplier;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +23,7 @@ public class CyclingButtonWidget extends ButtonWidget
     protected final MousePressAction onPress;
 
     @Environment(value= EnvType.CLIENT)
-    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, MousePressAction onPress, TooltipSupplier tooltipSupplier)
+    public CyclingButtonWidget(int x, int y, int width, int height, int u, int v, int vOffset, int maxIndex, Identifier texture, int tw, int th, Text message, MousePressAction onPress)
     {
         super(x, y, width, height, message, button -> {}, textSupplier -> Text.empty());
 
