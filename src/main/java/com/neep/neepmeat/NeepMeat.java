@@ -2,6 +2,7 @@ package com.neep.neepmeat;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.neepmeat.api.Burner;
+import com.neep.neepmeat.api.DataType;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEvent;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentEventManager;
 import com.neep.neepmeat.api.enlightenment.EnlightenmentUtil;
@@ -89,6 +90,7 @@ public class NeepMeat implements ModInitializer
 			NMGraphicsEffects.init();
 
 			NMItemGroups.init();
+			DataType.init();
 
 			// --- Transport module ---
 			ItemTransport.init();

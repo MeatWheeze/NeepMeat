@@ -19,6 +19,7 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.system.windows.WINDOWPLACEMENT;
 
 import java.util.List;
 
@@ -143,7 +144,7 @@ public class PLCScreenShellState extends ScreenSubElement implements Drawable, E
 
             int u = 112;
             int v = isMouseOver(mouseX, mouseY) ? 32 : 16;
-            MonoTextRenderer.drawTexture(matrices.getMatrices().peek().getPositionMatrix(), this.x, this.y, 0, u, v, width, height, 256, 256);
+            matrices.drawTexture(PLCProgramScreen.WIDGETS, this.x, this.y, 0, u, v, width, height, 256, 256);
 
             int maxWidth = 150;
 

@@ -4,6 +4,7 @@ import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
 import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.meatlib.recipe.MeatlibRecipes;
+import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.SoundRegistry;
@@ -53,6 +54,7 @@ public class MeatLib implements ModInitializer
         InitialTicks.init();
         MeatItemGroups.init();
         StorageEvents.init();
+        RecipeInputs.init();
     }
 
     public static class Context implements AutoCloseable

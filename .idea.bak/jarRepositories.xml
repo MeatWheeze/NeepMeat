@@ -12,9 +12,19 @@
       <option name="url" value="https://repository.jboss.org/nexus/content/repositories/public/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="MavenRepo" />
-      <option name="name" value="MavenRepo" />
+      <option name="id" value="LoomLocalMinecraft" />
+      <option name="name" value="LoomLocalMinecraft" />
+      <option name="url" value="file:$PROJECT_DIR$/.gradle/loom-cache/minecraftMaven/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="MavenCentralLWJGL" />
+      <option name="name" value="MavenCentralLWJGL" />
       <option name="url" value="https://repo.maven.apache.org/maven2/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven3" />
+      <option name="name" value="maven3" />
+      <option name="url" value="https://www.jitpack.io" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="Fabric" />
@@ -27,14 +37,19 @@
       <option name="url" value="https://libraries.minecraft.net/" />
     </remote-repository>
     <remote-repository>
+      <option name="id" value="LoomLocalRemappedMods" />
+      <option name="name" value="LoomLocalRemappedMods" />
+      <option name="url" value="file:$PROJECT_DIR$/.gradle/loom-cache/remapped_mods/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="LoomGlobalMinecraft" />
+      <option name="name" value="LoomGlobalMinecraft" />
+      <option name="url" value="file:$USER_HOME$/.gradle/caches/fabric-loom/minecraftMaven/" />
+    </remote-repository>
+    <remote-repository>
       <option name="id" value="maven2" />
       <option name="name" value="maven2" />
       <option name="url" value="https://maven.shedaniel.me/" />
-    </remote-repository>
-    <remote-repository>
-      <option name="id" value="UserLocalRemappedMods" />
-      <option name="name" value="UserLocalRemappedMods" />
-      <option name="url" value="file:$PROJECT_DIR$/.gradle/loom-cache/remapped_mods/" />
     </remote-repository>
     <remote-repository>
       <option name="id" value="maven" />
@@ -42,19 +57,29 @@
       <option name="url" value="https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="maven3" />
-      <option name="name" value="maven3" />
-      <option name="url" value="https://www.jitpack.io" />
+      <option name="id" value="maven2" />
+      <option name="name" value="maven2" />
+      <option name="url" value="https://maven.architectury.dev/" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="LoomLocalMinecraft" />
-      <option name="name" value="LoomLocalMinecraft" />
-      <option name="url" value="file:$PROJECT_DIR$/.gradle/loom-cache/minecraftMaven/" />
+      <option name="id" value="maven5" />
+      <option name="name" value="maven5" />
+      <option name="url" value="https://maven.ladysnake.org/releases" />
     </remote-repository>
     <remote-repository>
-      <option name="id" value="LoomGlobalMinecraft" />
-      <option name="name" value="LoomGlobalMinecraft" />
-      <option name="url" value="file:$USER_HOME$/.gradle/caches/fabric-loom/minecraftMaven/" />
+      <option name="id" value="maven6" />
+      <option name="name" value="maven6" />
+      <option name="url" value="https://maven.terraformersmc.com/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven7" />
+      <option name="name" value="maven7" />
+      <option name="url" value="https://maven.tterrag.com/" />
+    </remote-repository>
+    <remote-repository>
+      <option name="id" value="maven8" />
+      <option name="name" value="maven8" />
+      <option name="url" value="https://maven.saps.dev/minecraft" />
     </remote-repository>
   </component>
 </project>

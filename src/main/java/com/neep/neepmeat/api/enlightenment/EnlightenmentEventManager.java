@@ -6,6 +6,7 @@ import com.neep.neepmeat.transport.interfaces.IServerWorld;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.DefaultedRegistry;
+import net.minecraft.registry.Registry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
@@ -18,15 +19,28 @@ import java.util.stream.Collectors;
 
 public class EnlightenmentEventManager
 {
-    private int counter = 0;
-    private final Random random;
-    protected final List<EnlightenmentEvent> tickingEvents = new ArrayList<>(16);
+    public static final Identifier EMPTY_ID = new Identifier(NeepMeat.NAMESPACE, "empty");
 
-    public static DefaultedRegistry<EnlightenmentEvent.Factory> EVENTS = FabricRegistryBuilder.createDefaulted(EnlightenmentEvent.Factory.class,
+    public static DefaultedRegistry<EnlightenmentEvent.Factory> EVENTS = FabricRegistryBuilder.createDefaulted(
+            EnlightenmentEvent.Factory.class,
             new Identifier(NeepMeat.NAMESPACE, "enlightenment_event"),
-            new Identifier(NeepMeat.NAMESPACE, "null")).buildAndRegister();
+            EMPTY_ID).buildAndRegister();
+
+    static
+    {
+
+    }
+
+    protected final List<EnlightenmentEvent> tickingEvents = new ArrayList<>(16);
+    private final Random random;
 
 //    public static final EnlightenmentEvent.Factory TEST_EVENT = register(new TickingEnlightenmentEvent.Factory());
+    private int counter = 0;
+
+    public EnlightenmentEventManager()
+    {
+        this.random = new Random();
+    }
 
     public static void init()
     {
@@ -36,11 +50,6 @@ public class EnlightenmentEventManager
         });
     }
 
-    public EnlightenmentEventManager()
-    {
-        this.random = new Random();
-    }
-
     protected void tick(ServerWorld world)
     {
         ++counter;
@@ -48,7 +57,7 @@ public class EnlightenmentEventManager
         if (counter >= 40)
         {
             chooseEvent(world);
-            counter  = 0;
+            counter = 0;
         }
         tickEvents();
     }
@@ -97,5 +106,36 @@ public class EnlightenmentEventManager
         EnlightenmentEventPacket.send(factory, world, player);
         tickingEvents.add(event);
         event.spawn();
+    }
+
+    static
+    {
+        Registry.register(EVENTS, EMPTY_ID, new EnlightenmentEvent.Factory()
+        {
+            @Override
+            public EnlightenmentEvent create(ServerWorld world, ServerPlayerEntity player)
+            {
+                return new EnlightenmentEvent()
+                {
+                    @Override
+                    public void tick()
+                    {
+
+                    }
+
+                    @Override
+                    public boolean isRemoved()
+                    {
+                        return true;
+                    }
+                };
+            }
+
+            @Override
+            public boolean willSpawn(ServerWorld world, ServerPlayerEntity player)
+            {
+                return false;
+            }
+        });
     }
 }

@@ -504,7 +504,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             RenderSystem.defaultBlendFunc();
             RenderSystem.enableDepthTest();
             int thingHeight = 16;
-            MonoTextRenderer.drawTexture(matrices.getMatrices().peek().getPositionMatrix(), getX(), getY(), 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
+            matrices.drawTexture(WIDGETS, getX(), getY(), 0, getU(), getV() + i * thingHeight, this.width, this.height, 256, 256);
 //            this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
 
             if (isMouseOver(mouseX, mouseY))

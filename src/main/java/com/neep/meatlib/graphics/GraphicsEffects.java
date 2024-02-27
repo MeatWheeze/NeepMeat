@@ -5,8 +5,9 @@ import com.neep.meatweapons.MeatWeapons;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.network.PacketByteBuf;
-import net.minecraft.registry.DefaultedRegistry;
 import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.SimpleRegistry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
@@ -22,11 +23,8 @@ public class GraphicsEffects
     public static final Identifier CHANNEL_ID = new Identifier(MeatLib.NAMESPACE, "graphics_effect");
     public static final Identifier BLANK_EFFECT = new Identifier(MeatLib.NAMESPACE, "empty");
 
-    public static DefaultedRegistry<GraphicsEffectType> GRAPHICS_EFFECTS = FabricRegistryBuilder.createDefaulted(GraphicsEffectType.class,
-            new Identifier(MeatWeapons.NAMESPACE, "graphics_effects"),
-            BLANK_EFFECT).buildAndRegister();
-
-//    public static final GraphicsEffectFactory BLANK_FACTORY = l
+    public static RegistryKey<Registry<GraphicsEffectType>> GRAPHICS_EFFECTS_KEY = RegistryKey.ofRegistry(new Identifier(MeatWeapons.NAMESPACE, "graphics_effects"));
+    public static SimpleRegistry<GraphicsEffectType> GRAPHICS_EFFECTS = FabricRegistryBuilder.createSimple(GRAPHICS_EFFECTS_KEY).buildAndRegister();
 
     public static GraphicsEffectType register(String namespace, String id, GraphicsEffectType factory)
     {
@@ -45,5 +43,10 @@ public class GraphicsEffects
         buf.writeVarInt(GRAPHICS_EFFECTS.getRawId(factory));
 
         return buf;
+    }
+
+    static
+    {
+        Registry.register(GRAPHICS_EFFECTS, BLANK_EFFECT, GraphicsEffect.EMPTY);
     }
 }

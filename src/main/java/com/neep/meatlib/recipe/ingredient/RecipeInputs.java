@@ -62,4 +62,14 @@ public class RecipeInputs
     public static final RecipeInput.Serialiser<EntityType<?>> ENTITY = Registry.register(SERIALISERS, ENTITY_MUTATE_ID, new RecipeInput.RegistrySerialiser<>(Registries.ENTITY_TYPE));
 
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, EMPTY_SERIALISER, EMPTY_ID);
+
+    public static void init()
+    {
+
+    }
+
+    static
+    {
+//        Registry.register(SERIALISERS, EMPTY_ID, EMPTY_SERIALISER);
+    }
 }

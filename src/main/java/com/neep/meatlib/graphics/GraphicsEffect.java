@@ -10,6 +10,8 @@ import net.minecraft.world.World;
 @Environment(value= EnvType.CLIENT)
 public interface GraphicsEffect
 {
+    GraphicsEffectType EMPTY = new GraphicsEffectType();
+
     void render(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta);
 
     default void renderAfter(Camera camera, MatrixStack matrices, VertexConsumerProvider consumers, float tickDelta) {}

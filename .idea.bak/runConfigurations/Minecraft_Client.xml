@@ -1,10 +1,12 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" factoryName="Application" name="Minecraft Client" singleton="true" type="Application">
-    <option name="ALTERNATIVE_JRE_PATH" value="/usr/lib/jvm/jdk17-jetbrains-bin"/>
+  <configuration default="false" factoryName="Application" name="Minecraft Client" type="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="jbr-17"/>
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true"/>
     <option name="MAIN_CLASS_NAME" value="net.fabricmc.devlaunchinjector.Main"/>
     <module name="NeepMeat.main"/>
-    <option name="VM_PARAMETERS" value="-XX:+AllowEnhancedClassRedefinition -Dfabric.dli.config=$PROJECT_DIR$/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -Xmx4096M"/>
+    <option name="PROGRAM_PARAMETERS" value="--username=NaughtyNeep --uuid=5dfe2738-7312-41b8-a024-f8054319b21b"/>
+    <shortenClasspath name="ARGS_FILE"/>
+    <option name="VM_PARAMETERS" value="-Dfabric.dli.config=$PROJECT_DIR$/.gradle/loom-cache/launch.cfg -Dfabric.dli.env=client -Dfabric.dli.main=net.fabricmc.loader.impl.launch.knot.KnotClient -XX:+AllowEnhancedClassRedefinition"/>
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/run/"/>
     <method v="2">
       <option enabled="true" name="Make"/>

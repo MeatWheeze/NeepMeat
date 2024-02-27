@@ -100,32 +100,8 @@ public class MachinePistolItem extends BaseGunItem implements Aimable
 //    }
 
     @Override
-    public void createRenderer(Consumer<Object> consumer)
-    {
-
-    }
-
-    @Override
     protected GeoModel<? extends BaseGunItem> createModel()
     {
         return new PistolItemModel();
-    }
-
-    @Override
-    public Supplier<Object> getRenderProvider()
-    {
-        return null;
-    }
-
-    @Override
-    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
-    {
-        controllers.add(new AnimationController(this, controllerName, 1, this::fireController));
-    }
-
-    @Override
-    public AnimatableInstanceCache getAnimatableInstanceCache()
-    {
-        return null;
     }
 }

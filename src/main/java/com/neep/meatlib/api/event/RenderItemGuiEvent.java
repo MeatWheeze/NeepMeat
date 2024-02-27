@@ -8,6 +8,7 @@ import net.minecraft.client.render.*;
 import net.minecraft.item.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
+// CURRENTLY BROKEN
 public interface RenderItemGuiEvent
 {
     Event<RenderItemGuiEvent> EVENT = EventFactory.createArrayBacked(RenderItemGuiEvent.class,

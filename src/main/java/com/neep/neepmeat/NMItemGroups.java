@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class NMItemGroups
@@ -18,7 +19,7 @@ public class NMItemGroups
 //    public static final ItemGroup FOOD = FabricItemGroup.builder( new Identifier(NeepMeat.NAMESPACE, "food"))
 //            .icon(() -> new ItemStack(NMItems.COOKED_MEAT_BRICK)).build();
 
-    public static final ItemGroup GENERAL = FabricItemGroup.builder().icon(() -> FluidTransport.PUMP.asItem().getDefaultStack()).build();
+    public static final ItemGroup GENERAL = FabricItemGroup.builder().displayName(Text.translatable("itemGroup." + NeepMeat.NAMESPACE + ".general")).icon(() -> FluidTransport.PUMP.asItem().getDefaultStack()).build();
 
     public static final ItemGroup INGREDIENTS = GENERAL;
 

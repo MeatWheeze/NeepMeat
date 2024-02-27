@@ -36,7 +36,7 @@ public class ImageContent implements Article.Content
         float cx = x + (width / 2 - scaledWidth / 2f);
         float i = Math.max(0, parent.getTop() - y);
         float j = Math.max(0, y + scaledHeight - parent.getBottom());
-        MonoTextRenderer.drawTexture(matrices.peek().getPositionMatrix(),
+        context.drawTexture(image,
                 (int) cx,
                 (int) ((int) y - scroll + i),
                 0,

@@ -106,6 +106,6 @@ public class GogglesItem extends ArmorItem implements MeatlibItem, GeoItem
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache()
     {
-        return null;
+        return instanceCache;
     }
 }
