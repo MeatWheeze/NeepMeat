@@ -180,7 +180,8 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
                 }
 
                 ItemStack filterStack = storage.getInventory().getStack(i);
-                if (!(filterStack.isEmpty() || filterStack.equals(stack))) return false;
+                if (!(filterStack.isEmpty() || ItemStack.areItemsEqual(filterStack, stack)))
+                    return false;
 
                 try (Transaction transaction = Transaction.openOuter())
                 {

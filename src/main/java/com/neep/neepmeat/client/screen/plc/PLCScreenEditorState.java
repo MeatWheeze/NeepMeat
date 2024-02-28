@@ -111,6 +111,8 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
+        if (!textField.isHovered())
+            parent.focusOn(parent);
         try
         {
             return super.mouseClicked(mouseX, mouseY, button);

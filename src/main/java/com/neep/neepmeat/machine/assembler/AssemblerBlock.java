@@ -91,7 +91,10 @@ public class AssemblerBlock extends TallBlock implements BlockEntityProvider
     @Override
     public BlockState getPlacementState(ItemPlacementContext context)
     {
-        return this.getDefaultState().with(FACING, context.getHorizontalPlayerFacing().getOpposite());
+        if (context.getPlayer() == null)
+            return getDefaultState();
+
+        return getDefaultState().with(FACING, context.getPlayer().isSneaking() ? context.getHorizontalPlayerFacing().getOpposite() : context.getHorizontalPlayerFacing());
     }
 
     @Override
