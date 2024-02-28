@@ -74,7 +74,8 @@
       "net/minecraft/block/entity/ServerWorld": ["com/neep/neepmeat/transport/interfaces/IServerWorld"],
       "net/minecraft/entity/LivingEntity": ["com/neep/neepmeat/interfaces/ILivingEntity"],
       "net/minecraft/entity/player/PlayerEntity": ["com/neep/meatlib/attachment/player/MeatPlayerEntity", "com/neep/meatweapons/interfaces/MWPlayerEntity"],
-      "net/minecraft/item/ItemStack": ["com/neep/meatlib/attachment/itemstack/MeatItemStack"]
+      "net/minecraft/item/ItemStack": ["com/neep/meatlib/attachment/itemstack/MeatItemStack"],
+      "net/minecraft/item/item": ["com/neep/meatlib/item/MeatlibItemExtension"]
     },
     "cardinal-components": [
       "neepmeat:blood_network_chunk",

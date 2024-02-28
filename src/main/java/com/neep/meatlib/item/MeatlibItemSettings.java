@@ -13,6 +13,8 @@ import net.minecraft.util.Rarity;
 // HAHAHHAHAHAHA I'M BRINGING BACK Settings::group! YOU CAN'T STOP ME!
 public class MeatlibItemSettings extends FabricItemSettings
 {
+    public ItemGroup group;
+
     public MeatlibItemSettings equipmentSlot(EquipmentSlotProvider equipmentSlotProvider) {
         FabricItemInternals.computeExtraData(this).equipmentSlot(equipmentSlotProvider);
         return this;
@@ -75,6 +77,7 @@ public class MeatlibItemSettings extends FabricItemSettings
 
     public MeatlibItemSettings group(ItemGroup group)
     {
+        this.group = group;
         return this;
     }
 }

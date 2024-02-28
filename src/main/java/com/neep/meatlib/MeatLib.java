@@ -9,6 +9,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.meatlib.registry.SoundRegistry;
 import com.neep.meatlib.storage.StorageEvents;
+import com.neep.meatlib.util.MeatlibItemGroups;
 import com.neep.neepmeat.NeepMeat;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
@@ -55,6 +56,7 @@ public class MeatLib implements ModInitializer
         MeatItemGroups.init();
         StorageEvents.init();
         RecipeInputs.init();
+        MeatlibItemGroups.init();
     }
 
     public static class Context implements AutoCloseable

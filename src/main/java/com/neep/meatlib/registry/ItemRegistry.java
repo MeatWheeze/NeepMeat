@@ -2,7 +2,10 @@ package com.neep.meatlib.registry;
 
 import com.neep.meatlib.MeatLib;
 import com.neep.meatlib.item.MeatlibItem;
+import com.neep.meatlib.item.MeatlibItemExtension;
+import com.neep.meatlib.util.MeatlibItemGroups;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -45,8 +48,16 @@ public class ItemRegistry
         for (Iterator<Map.Entry<Identifier, Item>> it = ITEMS.entrySet().iterator(); it.hasNext();)
         {
             Map.Entry<Identifier, Item> entry = it.next();
+
             // TODO: Remove the jank
             Registry.register(Registries.ITEM, entry.getKey(), entry.getValue());
+
+            ItemGroup group = ((MeatlibItemExtension) entry.getValue()).meatlib$getItemGroup();
+            if (group != null)
+            {
+                MeatlibItemGroups.add(group, entry.getValue());
+            }
+
             it.remove();
         }
         ITEMS.clear();
