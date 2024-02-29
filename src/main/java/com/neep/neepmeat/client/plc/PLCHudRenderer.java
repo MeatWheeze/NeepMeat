@@ -1,5 +1,6 @@
 package com.neep.neepmeat.client.plc;
 
+import com.neep.meatlib.api.event.InputEvents;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.mixin.CameraAccessor;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
@@ -13,9 +14,11 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -28,24 +31,17 @@ import org.joml.Matrix4f;
 @Environment(value = EnvType.CLIENT)
 public class PLCHudRenderer
 {
-    @Nullable private static PLCHudRenderer INSTANCE;
-    @Nullable public static BlockHitResult HIT_RESULT;
-
     @Nullable
-    public static PLCHudRenderer getInstance()
-    {
-        return INSTANCE;
-    }
-
+    public static BlockHitResult HIT_RESULT;
     public static Matrix4f PROJECTION;
     public static Matrix4f MODEL_VIEW;
-
+    @Nullable
+    private static PLCHudRenderer INSTANCE;
     private final PLCBlockEntity be;
     private final SurgicalRobot.Client robotClient;
     private final MinecraftClient client;
     private final PLCMotionController controller;
     private final Camera camera;
-
 
     private PLCHudRenderer(PLCBlockEntity be)
     {
@@ -57,15 +53,10 @@ public class PLCHudRenderer
         this.camera = client.gameRenderer.getCamera();
     }
 
-    public void exit()
+    @Nullable
+    public static PLCHudRenderer getInstance()
     {
-        PLCRobotEnterS2C.Client.send(be);
-        this.be.exit();
-    }
-
-    public boolean onRender()
-    {
-        return true;
+        return INSTANCE;
     }
 
     public static void enter(PLCBlockEntity be)
@@ -85,6 +76,85 @@ public class PLCHudRenderer
             INSTANCE.exit();
         }
         INSTANCE = null;
+    }
+
+    public static void drawCuboidShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape shape, double offsetX, double offsetY, double offsetZ,
+                                              float r, float g, float b, float a)
+    {
+        MatrixStack.Entry entry = matrices.peek();
+        shape.forEachEdge((minX, minY, minZ, maxX, maxY, maxZ) ->
+        {
+            float k = (float) (maxX - minX);
+            float l = (float) (maxY - minY);
+            float m = (float) (maxZ - minZ);
+            float n = MathHelper.sqrt(k * k + l * l + m * m);
+            vertexConsumer.vertex(entry.getPositionMatrix(), (float) (minX + offsetX), (float) (minY + offsetY), (float) (minZ + offsetZ)).color(r, g, b, a).normal(entry.getNormalMatrix(), k /= n, l /= n, m /= n).next();
+            vertexConsumer.vertex(entry.getPositionMatrix(), (float) (maxX + offsetX), (float) (maxY + offsetY), (float) (maxZ + offsetZ)).color(r, g, b, a).normal(entry.getNormalMatrix(), k, l, m).next();
+        });
+    }
+
+    public static void init()
+    {
+        WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
+        {
+            PROJECTION = new Matrix4f(context.projectionMatrix());
+            MODEL_VIEW = new Matrix4f(context.matrixStack().peek().getPositionMatrix());
+        });
+
+        ClientTickEvents.START_CLIENT_TICK.register(client ->
+        {
+            PLCHudRenderer instance = getInstance();
+            if (instance != null)
+            {
+                instance.clientTick();
+            }
+        });
+
+        WorldRenderEvents.BLOCK_OUTLINE.register((worldRenderContext, blockOutlineContext) ->
+        {
+            PLCHudRenderer instance = getInstance();
+            if (instance != null)
+            {
+                instance.onOutlineRender(worldRenderContext, blockOutlineContext);
+                return false;
+            }
+            return true;
+
+        });
+
+        ClientPlayConnectionEvents.DISCONNECT.register((handler, client1) ->
+        {
+            leave();
+        });
+
+        InputEvents.PRE_INPUT.register((window, key, scancode, action, modifiers) ->
+        {
+            PLCHudRenderer instance = getInstance();
+            if (instance != null)
+            {
+                InputUtil.Key key2 = InputUtil.fromKeyCode(key, scancode);
+                if (action == 0)
+                {
+                    KeyBinding.setKeyPressed(key2, false);
+                }
+                else
+                {
+                    KeyBinding.setKeyPressed(key2, true);
+                    KeyBinding.onKeyPressed(key2);
+                }
+            }
+        });
+    }
+
+    public void exit()
+    {
+        PLCRobotEnterS2C.Client.send(be);
+        this.be.exit();
+    }
+
+    public boolean onRender()
+    {
+        return true;
     }
 
     public void onCameraUpdate(float tickDelta)
@@ -126,67 +196,19 @@ public class PLCHudRenderer
 
     }
 
-    public static void drawCuboidShapeOutline(MatrixStack matrices, VertexConsumer vertexConsumer, VoxelShape shape, double offsetX, double offsetY, double offsetZ,
-                                               float r, float g, float b, float a)
-    {
-        MatrixStack.Entry entry = matrices.peek();
-        shape.forEachEdge((minX, minY, minZ, maxX, maxY, maxZ) ->
-        {
-            float k = (float)(maxX - minX);
-            float l = (float)(maxY - minY);
-            float m = (float)(maxZ - minZ);
-            float n = MathHelper.sqrt(k * k + l * l + m * m);
-            vertexConsumer.vertex(entry.getPositionMatrix(), (float)(minX + offsetX), (float)(minY + offsetY), (float)(minZ + offsetZ)).color(r, g, b, a).normal(entry.getNormalMatrix(), k /= n, l /= n, m /= n).next();
-            vertexConsumer.vertex(entry.getPositionMatrix(), (float)(maxX + offsetX), (float)(maxY + offsetY), (float)(maxZ + offsetZ)).color(r, g, b, a).normal(entry.getNormalMatrix(), k, l, m).next();
-        });
-    }
-
     private void clientTick()
     {
         if (!client.isPaused())
         {
             robotClient.tick();
+
+//            ((MinecraftClientAccessor) client).callHandleInputEvents();
         }
     }
 
     public PLCBlockEntity getBlockEntity()
     {
         return be;
-    }
-
-    public static void init()
-    {
-        WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
-        {
-            PROJECTION = context.projectionMatrix();
-            MODEL_VIEW = context.matrixStack().peek().getPositionMatrix();
-        });
-
-        ClientTickEvents.START_CLIENT_TICK.register(client ->
-        {
-            PLCHudRenderer instance = getInstance();
-            if (instance != null)
-            {
-                instance.clientTick();
-            }
-        });
-
-        WorldRenderEvents.BLOCK_OUTLINE.register((worldRenderContext, blockOutlineContext) ->
-        {
-            PLCHudRenderer instance = getInstance();
-            if (instance != null)
-            {
-                instance.onOutlineRender(worldRenderContext, blockOutlineContext);
-                return false;
-            }
-            return true;
-
-        });
-
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client1) ->
-        {
-            leave();
-        });
     }
 
     public PLCMotionController getController()

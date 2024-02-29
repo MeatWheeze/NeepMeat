@@ -1,0 +1,17 @@
+{
+  "sources": [
+    {
+      "type": "directory",
+      "prefix": "entity/limbs/",
+      "source": "entity/limbs"
+    },
+    { "type": "single", "resource": "neepmeat:entity/limbs/cow_head" },
+    { "type": "single", "resource": "neepmeat:entity/limbs/cow" },
+    { "type": "single", "resource": "neepmeat:entity/limbs/flesh_1" },
+    { "type": "single", "resource": "neepmeat:entity/limbs/flesh_2" },
+    { "type": "single", "resource": "neepmeat:entity/limbs/limbs" },
+    { "type": "single", "resource": "neepmeat:entity/limbs/pig_head" },
+
+    {"type": "single", "resource": "neepmeat:entity/armour/goggles"}
+  ]
+}

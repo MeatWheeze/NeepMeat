@@ -18,7 +18,7 @@ import net.minecraft.text.Text;
 public class PLCScreenEditorState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
     private final PLCProgramScreen parent;
-    private EditBoxWidget textField;
+    private EditBoxWidget editorField;
     private final InstructionBrowserWidget browser;
     private final PLCStackViewer viewer;
     private boolean changed;
@@ -34,16 +34,15 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     private void selectProvider(InstructionProvider provider)
     {
-        textField.insert(provider.getShortName().getString().toLowerCase());
+        editorField.insert(provider.getShortName().getString().toLowerCase());
     }
 
     @Override
     protected void init()
     {
-        super.init();
-        if (textField == null)
+        if (editorField == null)
         {
-            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
+            editorField = new EditBoxWidget(client.textRenderer, x, y, 300, screenHeight, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
             {
                 @Override
                 public void setFocused(boolean focused)
@@ -52,8 +51,8 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
                     updateEditorWidth();
                 }
             };
-            textField.setText(parent.getScreenHandler().getInitialText());
-            textField.setChangeListener(s -> this.changed = true);
+            editorField.setText(parent.getScreenHandler().getInitialText());
+            editorField.setChangeListener(s -> this.changed = true);
 
         }
 
@@ -63,19 +62,26 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
         viewer.init(screenWidth - 100 - 40, browser.getY(), 40, screenHeight - browser.getY());
 
-        addDrawableChild(textField);
+        addDrawableChild(editorField);
         addDrawableChild(browser);
         addDrawable(viewer);
     }
 
+    @Override
+    public void setFocused(boolean focused)
+    {
+        super.setFocused(focused);
+        updateEditorWidth();
+    }
+
     private void updateEditorWidth()
     {
-        if (textField.isFocused())
-            textField.setWidth(300);
+        if (editorField.isFocused())
+            editorField.setWidth(300);
         else
-            textField.setWidth(100);
+            editorField.setWidth(100);
 
-        textField.setHeight(height);
+        editorField.setHeight(screenHeight);
     }
 
     @Override
@@ -87,7 +93,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
         {
             try
             {
-                ParsedSource parsedSource = parser.parse(textField.getText());
+                ParsedSource parsedSource = parser.parse(editorField.getText());
                 setCompileMessage("Parsed Successfully", true, -1);
             }
             catch (NeepASM.ProgramBuildException e)
@@ -95,47 +101,38 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
                 setCompileMessage(e.getMessage(), false, e.line());
             }
 
-            PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
+            PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), editorField.getText());
             changed = false;
         }
 
-        textField.setDebugLine(parent.getScreenHandler().debugLine());
+        editorField.setDebugLine(parent.getScreenHandler().debugLine());
     }
 
     public void setCompileMessage(String message, boolean success, int line)
     {
-        textField.setError(message, success ? 0xFF44AA00 : 0xFFFF0000);
-        textField.setErrorLine(line);
+        editorField.setError(message, success ? 0xFF44AA00 : 0xFFFF0000);
+        editorField.setErrorLine(line);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if (!textField.isHovered())
-            parent.focusOn(parent);
-        try
+        if (!editorField.isHovered() && getFocused() == editorField)
         {
-            return super.mouseClicked(mouseX, mouseY, button);
+            setFocused(null);
+//            updateEditorWidth();
+//            setFocused(null);
+//            parent.focusOn(null);
+//            return false;
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return true;
+
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean charTyped(char chr, int modifiers)
     {
-        try
-        {
-            return super.charTyped(chr, modifiers);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return true;
+        return super.charTyped(chr, modifiers);
     }
 
     @Override
@@ -152,23 +149,27 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
 
     public boolean isSelected()
     {
-        return textField.isFocused();
+        return editorField.isFocused();
     }
 
     public void argument(Argument argument)
     {
-        textField.insert("@(" + argument.pos().getX() + " " + argument.pos().getY() + " " + argument.pos().getZ() + " " + argument.face().name().toUpperCase().charAt(0) + ")");
+        editorField.insert("@(" + argument.pos().getX() + " " + argument.pos().getY() + " " + argument.pos().getZ() + " " + argument.face().name().toUpperCase().charAt(0) + ")");
     }
 
     @Override
-    public void onKeyPressed(int keyCode, int scanCode, int modifiers) { keyPressed(keyCode, scanCode, modifiers); }
+    public void onKeyPressed(int keyCode, int scanCode, int modifiers)
+    {
+        keyPressed(keyCode, scanCode, modifiers);
+    }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
     {
         if (keyCode == 258 && !isSelected())
         {
-            parent.setFocused(this);
+//            parent.setFocused(this);
+
 //            boolean bl = !hasShiftDown();
 //            if (!this.changeFocus(bl))
 //            {

@@ -70,6 +70,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.AnimationState;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
@@ -332,6 +333,10 @@ public class AssaultDrillItem extends Item implements MeatlibItem, GeoItem, Powe
 
     protected PlayState controller(AnimationState<AssaultDrillItem> event)
     {
+        if (event.getController().getAnimationState() == AnimationController.State.STOPPED)
+        {
+            event.setAnimation(RawAnimation.begin().thenLoop("animation.assault_drill.spin"));
+        }
         return PlayState.CONTINUE;
     }
 
