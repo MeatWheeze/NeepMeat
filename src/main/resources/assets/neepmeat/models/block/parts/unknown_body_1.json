@@ -1,0 +1,21 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "neepmeat:entity/limbs/flesh_2",
+		"particle": "neepmeat:entity/limbs/flesh_2"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 1],
+			"to": [14, 9, 15],
+			"faces": {
+				"north": {"uv": [0, 9, 12, 0], "texture": "#0"},
+				"east": {"uv": [0, 9, 14, 0], "texture": "#0"},
+				"south": {"uv": [0, 9, 12, 0], "texture": "#0"},
+				"west": {"uv": [0, 11, 14, 2], "texture": "#0"},
+				"up": {"uv": [1, 2, 15, 14], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [2, 1, 14, 15], "texture": "#0"}
+			}
+		}
+	]
+}

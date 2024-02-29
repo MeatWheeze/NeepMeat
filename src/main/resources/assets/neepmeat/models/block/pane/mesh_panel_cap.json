@@ -3,7 +3,7 @@
     "textures": {
         "particle": "neepmeat:block/mesh_panel",
         "bars": "neepmeat:block/mesh_panel",
-        "edge": "neepmeat:/block/mesh_panel_top"
+        "edge": "neepmeat:block/mesh_panel_top"
     },
     "elements": [
         {   "from": [ 8, 0, 8 ],

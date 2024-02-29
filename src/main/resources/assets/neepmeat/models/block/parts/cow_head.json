@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "neepmeat:entity/limbs/cow_head",
-		"particle": "minecraft:entity/conduit/base"
+		"particle": "neepmeat:entity/limbs/cow_head"
 	},
 	"elements": [
 		{

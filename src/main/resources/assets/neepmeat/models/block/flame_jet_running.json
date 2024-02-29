@@ -2,11 +2,11 @@
     "parent": "block/cube_directional",
     "textures": {
         "particle": "neepmeat:block/flame_jet/side",
-        "down": "neepmeat:/block/flame_jet/side_running",
-        "up": "neepmeat:/block/flame_jet/side_running",
+        "down": "neepmeat:block/flame_jet/side_running",
+        "up": "neepmeat:block/flame_jet/side_running",
         "north": "neepmeat:block/flame_jet/front",
-        "east": "neepmeat:/block/flame_jet/side_running",
+        "east": "neepmeat:block/flame_jet/side_running",
         "south": "neepmeat:block/flame_jet/back",
-        "west": "neepmeat:/block/flame_jet/side_running"
+        "west": "neepmeat:block/flame_jet/side_running"
     }
 }
