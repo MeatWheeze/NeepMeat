@@ -629,7 +629,7 @@
   "instruction.neepmeat.sub.desc": "Pops the last two stack entries.\nSubtracts the first from the last. \nThe result is pushed to the stack.",
   "instruction.neepmeat.mul.desc": "Pops the last two stack entries.\nMultiplies them. \nThe result is pushed to the stack.",
   "instruction.neepmeat.div.desc": "Pops the last two stack entries.\nDivides the first by the last. \nThe result is pushed to the stack.",
-  "instruction.neepmeat.not.desc": "Computes the bitwise §6compliment§f of the last stack entry.",
+  "instruction.neepmeat.not.desc": "Computes the bitwise §6complement§f of the last stack entry.",
   "instruction.neepmeat.and.desc": "Pops the last two stack entries.\nComputes their bitwise §6AND§f.\nThe result is pushed to the stack.",
   "instruction.neepmeat.or.desc": "Pops the last two stack entries.\nComputes their bitwise §6OR§f.\nThe result is pushed to the stack.",
   "instruction.neepmeat.nand.desc": "Pops the last two stack entries.\nComputes their bitwise §6NAND§f.\nThe result is pushed to the stack.",

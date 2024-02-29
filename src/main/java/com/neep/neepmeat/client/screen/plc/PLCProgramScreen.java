@@ -13,7 +13,6 @@ import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.plc.block.entity.PLCBlockEntity;
 import com.neep.neepmeat.plc.component.MutateInPlace;
 import com.neep.neepmeat.plc.instruction.Argument;
-import com.neep.neepmeat.plc.instruction.InstructionProvider;
 import com.neep.neepmeat.plc.screen.PLCScreenHandler;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -43,8 +42,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Matrix4d;
 import org.joml.Matrix4f;
-import org.joml.Vector4f;
+import org.joml.Vector3d;
 import org.lwjgl.glfw.GLFW;
 
 import java.util.List;
@@ -55,18 +55,15 @@ import static com.neep.neepmeat.client.screen.tablet.GUIUtil.drawVerticalLine1;
 
 public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PLCScreenHandler>
 {
-    protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     public static final Identifier WIDGETS = new Identifier(NeepMeat.NAMESPACE, "textures/gui/widget/plc_widgets.png");
-
+    protected static final Identifier VIGNETTE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/plc_robot_vignette.png");
     protected final PLCScreenEditorState editor;
     protected final PLCScreenShellState shell;
-    protected PLCScreenState state;
-
     private final PLCScreenHandler handler;
     private final PLCBlockEntity plc;
-
     // Text relating to the block that the mouse is currently over
     private final List<Text> tooltipText = Lists.newArrayList();
+    protected PLCScreenState state;
     private double mouseX;
     private double mouseY;
     private RecordMode mode;
@@ -81,6 +78,43 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         this.shell = new PLCScreenShellState(this);
         this.state = shell;
         this.mode = handler.getMode();
+    }
+
+    @Nullable
+    private static BlockState getWallState(World world, Camera camera)
+    {
+        BlockPos.Mutable mutable = new BlockPos.Mutable();
+        float width = 0.8f;
+        for (int i = 0; i < 8; ++i)
+        {
+            Vec3d camPos = camera.getPos();
+            double d = camPos.x + (((i >> 0) % 2) - 0.5f) * width * 0.8f;
+            double e = camPos.y + (((i >> 1) % 2) - 0.5f) * 0.1f;
+            double f = camPos.z + (((i >> 2) % 2) - 0.5f) * width * 0.8f;
+            mutable.set(d, e, f);
+
+            BlockState blockState = world.getBlockState(mutable);
+            if (blockState.getRenderType() == BlockRenderType.INVISIBLE || !blockState.shouldBlockVision(world, mutable))
+                continue;
+            return blockState;
+        }
+        return null;
+    }
+
+    private static void makeEntityTooltip(@Nullable Entity entity, List<Text> tooltip)
+    {
+        if (entity == null)
+            return;
+
+        tooltip.add(entity.getDisplayName());
+        Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
+        if (workpiece != null)
+        {
+            for (var step : workpiece.getSteps())
+            {
+                step.appendText(tooltip);
+            }
+        }
     }
 
     @Override
@@ -169,29 +203,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         super.render(matrices, mouseX, mouseY, delta);
     }
 
-    @Nullable
-    private static BlockState getWallState(World world, Camera camera)
-    {
-        BlockPos.Mutable mutable = new BlockPos.Mutable();
-        float width = 0.8f;
-        for (int i = 0; i < 8; ++i)
-        {
-            Vec3d camPos = camera.getPos();
-            double d = camPos.x + (((i >> 0) % 2) - 0.5f) * width * 0.8f;
-            double e = camPos.y + (((i >> 1) % 2) - 0.5f) * 0.1f;
-            double f = camPos.z + (((i >> 2) % 2) - 0.5f) * width * 0.8f;
-            mutable.set(d, e, f);
-
-            BlockState blockState = world.getBlockState(mutable);
-            if (blockState.getRenderType() == BlockRenderType.INVISIBLE || !blockState.shouldBlockVision(world, mutable)) continue;
-            return blockState;
-        }
-        return null;
-    }
-
     private void drawScreenTexture(MatrixStack matrices, Identifier texture, float u0, float v0, float u1, float v1, float light)
     {
-        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        float x0 = 0;
+        float y0 = 0;
+        float x1 = width;
+        float y1 = height;
+        float z = 0;
         var matrix = matrices.peek().getPositionMatrix();
         RenderSystem.setShaderTexture(0, texture);
         RenderSystem.setShader(GameRenderer::getPositionTexProgram);
@@ -207,7 +225,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
     private void renderInWallOverlay(Sprite sprite, MatrixStack matrices)
     {
-        float x0 = 0; float y0 = 0; float x1 = width; float y1 = height; float z = 0;
+        float x0 = 0;
+        float y0 = 0;
+        float x1 = width;
+        float y1 = height;
+        float z = 0;
         RenderSystem.setShaderTexture(0, sprite.getAtlasId());
         RenderSystem.setShader(GameRenderer::getPositionColorTexProgram);
         BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
@@ -250,22 +272,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         else
         {
             PLCHudRenderer.HIT_RESULT = null;
-        }
-    }
-
-    private static void makeEntityTooltip(@Nullable Entity entity, List<Text> tooltip)
-    {
-        if (entity == null)
-            return;
-
-        tooltip.add(entity.getDisplayName());
-        Workpiece workpiece = NMComponents.WORKPIECE.getNullable(entity);
-        if (workpiece != null)
-        {
-            for (var step : workpiece.getSteps())
-            {
-                step.appendText(tooltip);
-            }
         }
     }
 
@@ -321,11 +327,6 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return true;
     }
 
-    public void updateInstruction(InstructionProvider provider)
-    {
-        PLCSyncThings.Client.switchOperation(provider, plc);
-    }
-
     protected void addArgument(BlockHitResult result)
     {
         state.argument(new Argument(result.getBlockPos(), result.getSide()));
@@ -347,23 +348,16 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return client.world.raycast(raycastContext);
     }
 
-
-
     public Vec3d screenToWorld(double mouseX, double mouseY, double z)
     {
-        float fx = (float) (mouseX / client.getWindow().getScaledWidth()) * 2 - 1;
-        float fy = (float) -((mouseY / client.getWindow().getScaledHeight()) * 2 - 1); // Screen coords are vertically inverted
+        var window = client.getWindow();
 
-        var modelView = PLCHudRenderer.MODEL_VIEW;
-        var projection = PLCHudRenderer.PROJECTION;
-        projection.mul(modelView);
-        projection.invert();
+        Vector3d worldPos = new Matrix4d(PLCHudRenderer.PROJECTION)
+                .mul(PLCHudRenderer.MODEL_VIEW)
+                .unproject(mouseX, (window.getScaledHeight() - mouseY), z,
+                        new int[]{0, 0, window.getScaledWidth(), window.getScaledHeight()}, new Vector3d());
 
-        Vector4f pos = new Vector4f(fx, fy, (float) z, 1.0f);
-        pos = pos.mul(projection);
-        pos = pos.mul(1.0f / pos.w());
-
-        return new Vec3d(pos.x, pos.y, pos.z);
+        return new Vec3d(worldPos.x, worldPos.y, worldPos.z);
     }
 
     @Override
@@ -664,7 +658,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         @Override
         protected int getU()
         {
-            return switch(handler.getMode())
+            return switch (handler.getMode())
             {
                 case EDIT -> 64;
                 case IMMEDIATE -> 48;

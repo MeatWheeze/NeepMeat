@@ -97,8 +97,8 @@ public class PLCHudRenderer
     {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(context ->
         {
-            PROJECTION = context.projectionMatrix();
-            MODEL_VIEW = context.matrixStack().peek().getPositionMatrix();
+            PROJECTION = new Matrix4f(context.projectionMatrix());
+            MODEL_VIEW = new Matrix4f(context.matrixStack().peek().getPositionMatrix());
         });
 
         ClientTickEvents.START_CLIENT_TICK.register(client ->
