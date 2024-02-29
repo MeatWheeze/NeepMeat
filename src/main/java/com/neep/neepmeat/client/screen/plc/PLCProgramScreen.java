@@ -94,8 +94,8 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     {
         super.init();
 
-        editor.init(client, width, height);
-        shell.init(client, width, height);
+        editor.init(width, height);
+        shell.init(width, height);
         if (mode == RecordMode.EDIT)
         {
             addDrawableChild(editor);
@@ -134,6 +134,12 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
 
         state.onKeyPressed(keyCode, scanCode, modifiers);
         return true;
+    }
+
+    @Override
+    public boolean charTyped(char chr, int modifiers)
+    {
+        return super.charTyped(chr, modifiers);
     }
 
     @Override
@@ -289,6 +295,7 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
             return true;
         }
 
+        setFocused(null);
         return handleWorldClick(mouseX, mouseY, button);
     }
 
