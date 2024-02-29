@@ -18,12 +18,6 @@ public class BaseSwordItem extends SwordItem implements MeatlibItem
     }
 
     @Override
-    public @Nullable ItemGroup getGroupOverride()
-    {
-        return null;
-    }
-
-    @Override
     public String getRegistryName()
     {
         return registryName;

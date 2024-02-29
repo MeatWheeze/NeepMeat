@@ -2,7 +2,6 @@ package com.neep.meatlib;
 
 import com.neep.meatlib.api.event.InitialTicks;
 import com.neep.meatlib.graphics.GraphicsEffects;
-import com.neep.meatlib.item.MeatItemGroups;
 import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.registry.BlockRegistry;
@@ -53,7 +52,6 @@ public class MeatLib implements ModInitializer
 //        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MeatRecipeManager.getInstance());
         MeatlibRecipes.init();
         InitialTicks.init();
-        MeatItemGroups.init();
         StorageEvents.init();
         RecipeInputs.init();
         MeatlibItemGroups.init();
