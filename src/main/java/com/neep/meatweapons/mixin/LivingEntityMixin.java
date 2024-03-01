@@ -61,6 +61,10 @@ public abstract class LivingEntityMixin
 
     @Shadow protected abstract void fall(double heightDifference, boolean onGround, BlockState landedState, BlockPos landedPosition);
 
+    @Shadow public int hurtTime;
+
+    @Shadow public int maxHurtTime;
+
     @Inject(method = "damage(Lnet/minecraft/entity/damage/DamageSource;F)Z", at = @At("HEAD"), cancellable = true)
     private void injectMethod(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir)
     {
@@ -94,6 +98,8 @@ public abstract class LivingEntityMixin
 
             applyDamage(source, amount);
             lastDamageTaken = amount;
+            maxHurtTime = 10;
+            hurtTime = maxHurtTime;
             ((Entity) (Object) this).timeUntilRegen = bulletSource.getRegenTime();
 
             Entity sourceEntity = bulletSource.getAttacker();
@@ -109,6 +115,9 @@ public abstract class LivingEntityMixin
 
             // Not entirely sure what this does
             sendStatus(thisEntity, shielded);
+
+//            ((Entity) (Object) this).getWorld().sendEntityDamage(thisEntity, 29);
+            ((Entity) (Object) this).getWorld().sendEntityDamage(thisEntity, source);
 
             // Apply knockback
             if (sourceEntity != null)
