@@ -13,8 +13,6 @@ import java.util.Random;
 
 public interface GunItem
 {
-    int ANIM_FIRE = 0;
-    int ANIM_RELOAD = 1;
 
     static GunItem getGun(ItemStack stack)
     {
@@ -24,15 +22,18 @@ public interface GunItem
     Vec3d getMuzzleOffset(LivingEntity entity, ItemStack stack);
 
     default void trigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
-
     default void release(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
+
+    default void triggerClient(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
+    default void releaseClient(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
+
     default void tickTrigger(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType) {}
 
     void playSound(World world, LivingEntity entity, GunSounds sound);
 
    default void syncBeamEffect(ServerWorld world, Vec3d pos, Vec3d end, Vec3d velocity, float width, int maxTime, double showRadius) {}
 
-   void syncAnimation(World world, LivingEntity player, ItemStack stack, int animation, boolean broadcast);
+   void syncAnimation(World world, LivingEntity player, ItemStack stack, String animation, boolean broadcast);
 
     Random getRandom();
 

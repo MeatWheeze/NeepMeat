@@ -35,6 +35,7 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.SingletonGeoAnimatable;
 import software.bernie.geckolib.animatable.client.RenderProvider;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -62,6 +63,8 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     protected final Random random = new Random(0);
     protected String registryName;
 
+    protected final String controllerName = "controller";
+
     public BaseGunItem(String registryName, Item ammunition, int maxShots, int cooldown, boolean hasLore, MeatlibItemSettings settings)
     {
         super(settings.maxCount(1).maxDamage(maxShots).maxDamageIfAbsent(maxShots).group(MeatWeapons.WEAPONS));
@@ -72,6 +75,8 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
         this.hasLore = hasLore;
         this.cooldown = cooldown;
         ItemRegistry.queue(this);
+
+        SingletonGeoAnimatable.registerSyncedAnimatable(this);
     }
 
     @Override
@@ -182,7 +187,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
 
         playSound(world, player, GunSounds.FIRE_PRIMARY);
 
-        syncAnimation(world, player, stack, ANIM_FIRE, true);
+        syncAnimation(world, player, stack, "fire", true);
     }
 
     protected void fireShell(World world, PlayerEntity player, ItemStack stack, double speed, ProjectileFactory factory)
@@ -207,7 +212,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
 
         playSound(world, player, GunSounds.FIRE_SECONDARY);
 
-        syncAnimation(world, player, stack, ANIM_FIRE, true);
+        syncAnimation(world, player, stack, "fire", true);
     }
 
     public static Optional<Entity> hitScan(@NotNull LivingEntity caster, Vec3d start, Vec3d end, double distance, GunItem gunItem)
@@ -243,22 +248,27 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     }
 
     @Override
-    public void syncAnimation(World world, LivingEntity player, ItemStack stack, int animation, boolean broadcast)
+    public void syncAnimation(World world, LivingEntity player, ItemStack stack, String animation, boolean broadcast)
     {
-        long id = GeoItem.getOrAssignId(stack, (ServerWorld) world);
-
-        if (player instanceof PlayerEntity playerEntity)
+        if (world instanceof ServerWorld serverWorld)
         {
-            // TODO:
-//            GeckoLibNetwork.syncAnimation(playerEntity, this, id, animation);
-        }
-
-        if (broadcast)
-        {
-            for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
+            if (player instanceof PlayerEntity playerEntity)
             {
-//                GeckoLibNetwork.syncAnimation(otherPlayer, this, id, animation);
+                long id = GeoItem.getOrAssignId(stack, (ServerWorld) world);
+                triggerAnim(player, id, controllerName, animation);
+
+                if (broadcast)
+                {
+                    for (PlayerEntity otherPlayer : PlayerLookup.tracking(player))
+                    {
+                        triggerAnim(otherPlayer, id, controllerName, animation);
+                    }
+                }
             }
+        }
+        else
+        {
+            triggerAnim(player, GeoItem.getId(stack), controllerName, animation);
         }
     }
 
@@ -281,7 +291,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController<>(this, "controller", this::fireController));
+        controllers.add(new AnimationController<>(this, controllerName, this::fireController));
     }
 
     @Override
@@ -310,7 +320,7 @@ public abstract class BaseGunItem extends Item implements MeatlibItem, GunItem, 
                 {
                     this.renderer = new BaseGunRenderer<>(createModel());
                 }
-                return RenderProvider.super.getCustomRenderer();
+                return renderer;
             }
         });
     }

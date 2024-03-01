@@ -2,14 +2,14 @@
 	"format_version": "1.8.0",
 	"animations": {
 		"animation.ma75.fire": {
-			"animation_length": 0.125,
+			"animation_length": 0.04167,
 			"bones": {
 				"bone": {
 					"position": {
 						"0.0": {
 							"vector": [0, 0, 2]
 						},
-						"0.125": {
+						"0.0417": {
 							"vector": [0, 0, 0]
 						}
 					}

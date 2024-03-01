@@ -19,6 +19,9 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class MA75Item extends BaseGunItem implements WeakTwoHanded
@@ -131,20 +134,10 @@ public class MA75Item extends BaseGunItem implements WeakTwoHanded
         }
     }
 
-//    @Override
-//    public void onAnimationSync(int id, int state)
-//    {
-//        if (state == ANIM_FIRE)
-//        {
-//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-//                controller.markNeedsReload();
-//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.ma75.fire"));
-//        }
-//        else if (state == ANIM_RELOAD)
-//        {
-//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-//            controller.markNeedsReload();
-//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
-//        }
-//    }
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
+    {
+        controllers.add(new AnimationController<>(this, controllerName, this::fireController)
+                .triggerableAnim("fire", RawAnimation.begin().thenPlay("animation.ma75.fire")));
+    }
 }

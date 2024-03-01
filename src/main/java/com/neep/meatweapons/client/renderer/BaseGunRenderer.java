@@ -5,10 +5,11 @@ import com.neep.meatweapons.item.BaseGunItem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
+import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
@@ -34,28 +35,50 @@ public class BaseGunRenderer<T extends BaseGunItem & GeoAnimatable> extends GeoI
         return RenderLayer.getEntityTranslucent(getTextureLocation(animatable));
     }
 
-    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrices,
-                       VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
+    @Override
+    public void render(ItemStack stack, ModelTransformationMode transformType, MatrixStack matrices,
+                       VertexConsumerProvider bufferSource, int packedLight, int packedOverlay)
     {
+        this.animatable = (T) stack.getItem();
+        this.currentItemStack = stack;
+        this.renderPerspective = transformType;
+
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        boolean isAiming = player.isSneaking();
-        if (mode.isFirstPerson())
+
+        if (transformType == ModelTransformationMode.GUI)
         {
-            Item item = itemStack.getItem();
-            Vector3f transform = item instanceof Aimable aimable ? aimable.getAimOffset() : new Vector3f(0, 0, 0);
-            float delta = 0.2f;
-            currentTransform.lerp(isAiming ? transform : new Vector3f(0, 0, 0), delta);
-
-            boolean stackInMain = GeoItem.getId(player.getStackInHand(Hand.MAIN_HAND)) == GeoItem.getId(itemStack);
-
-            matrices.translate(
-                    (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.x : currentTransform.x,
-                    currentTransform.y,
-                    currentTransform.z);
+            renderInGui(transformType, matrices, bufferSource, packedLight, packedOverlay);
         }
-//        this.render((T) itemStack.getItem(), matrices, bufferIn, combinedLightIn, itemStack);
-        super.render(itemStack, mode, matrices, bufferIn, combinedLightIn, combinedOverlayIn);
+        else
+        {
+            if (renderPerspective.isFirstPerson() && player != null)
+            {
+                boolean isAiming = player.isSneaking();
+                Vector3f transform = stack.getItem() instanceof Aimable aimable ? aimable.getAimOffset() : new Vector3f(0, 0, 0);
+                float delta = 0.2f;
+                currentTransform.lerp(isAiming ? transform : new Vector3f(0, 0, 0), delta);
+
+                boolean stackInMain = GeoItem.getId(player.getStackInHand(Hand.MAIN_HAND)) == GeoItem.getId(stack);
+
+                matrices.translate(
+                        (stackInMain && player.getMainArm() == Arm.RIGHT) ? -currentTransform.x : currentTransform.x,
+                        currentTransform.y,
+                        currentTransform.z);
+            }
+
+            RenderLayer renderType = getRenderType(this.animatable, getTextureLocation(this.animatable), bufferSource, MinecraftClient.getInstance().getTickDelta());
+            VertexConsumer buffer = ItemRenderer.getDirectItemGlintConsumer(bufferSource, renderType, false, this.currentItemStack != null && this.currentItemStack.hasGlint());
+
+            defaultRender(matrices, this.animatable, bufferSource, renderType, buffer,
+                    0, MinecraftClient.getInstance().getTickDelta(), packedLight);
+        }
     }
+
+
+    //    public void render(ItemStack itemStack, ModelTransformationMode mode, MatrixStack matrices,
+//                       VertexConsumerProvider bufferIn, int combinedLightIn, int combinedOverlayIn)
+//    {
+//    }
 
 //    public void render(T animatable, MatrixStack matrices, VertexConsumerProvider bufferIn, int packedLightIn,
 //                       ItemStack itemStack) {

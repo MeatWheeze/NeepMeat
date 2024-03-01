@@ -28,13 +28,13 @@ import net.minecraft.world.World;
 import org.joml.Vector3f;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.model.GeoModel;
 
 import java.util.Optional;
 
 public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aimable
 {
-    public String controllerName = "controller1";
     public FusionCannonItem()
     {
         super("fusion", MWItems.BALLISTIC_CARTRIDGE, 16, 10, false, new MeatlibItemSettings());
@@ -92,6 +92,23 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
         if (!manager.isCoolingDown(stack, 0) && stack.getDamage() >= this.maxShots)
         {
             this.reload(player, stack, null);
+        }
+    }
+
+    @Override
+    public void triggerClient(World world, PlayerEntity player, ItemStack stack, int id, double pitch, double yaw, MWAttackC2SPacket.HandType handType)
+    {
+        WeaponCooldownAttachment manager = WeaponCooldownAttachment.get(player);
+        if (id == MWAttackC2SPacket.TRIGGER_PRIMARY)
+        {
+            if (!manager.isCoolingDown(stack, 0))
+            {
+                if (stack.getDamage() != this.maxShots)
+                {
+//                    syncAnimation(world, player, stack, "fire", true);
+                }
+            }
+
         }
     }
 
@@ -170,7 +187,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
 
         playSound(world, player, GunSounds.FIRE_SECONDARY);
 
-        syncAnimation(world, player, stack, ANIM_FIRE, true);
+        syncAnimation(world, player, stack, "fire", true);
     }
 
     @Override
@@ -227,7 +244,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
 
-        syncAnimation(world, entity, stack, ANIM_FIRE, true);
+        syncAnimation(world, entity, stack, "fire", true);
     }
 
     public void fireBeam(World world, LivingEntity entity, Entity target, ItemStack stack)
@@ -244,7 +261,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
         // Play fire sound
         playSound(world, entity, GunSounds.FIRE_PRIMARY);
 
-        syncAnimation(world, entity, stack, ANIM_FIRE, true);
+        syncAnimation(world, entity, stack, "fire", true);
 
     }
 
@@ -278,6 +295,7 @@ public class FusionCannonItem extends BaseGunItem implements WeakTwoHanded, Aima
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController<>(this, controllerName, 1, this::fireController));
+        controllers.add(new AnimationController<>(this, controllerName, 0, this::fireController)
+                .triggerableAnim("fire", RawAnimation.begin().thenPlay("animation.fusion.fire")));
     }
 }

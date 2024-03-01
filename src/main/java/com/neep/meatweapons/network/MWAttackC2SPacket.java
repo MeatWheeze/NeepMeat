@@ -99,6 +99,11 @@ public class MWAttackC2SPacket
 
         }
 
+        public static HandType of(int binary)
+        {
+            return values()[binary];
+        }
+
         public Hand oneOrTheOther()
         {
             return this == OFF ? Hand.OFF_HAND : Hand.MAIN_HAND;

@@ -36,8 +36,8 @@ public class PlayerWeaponManager
         if (offItem != null)
         {
             stack = player.getOffHandStack();
-            if (offStatus[0]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN);
-            if (offStatus[1]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.MAIN);
+            if (offStatus[0]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_PRIMARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF);
+            if (offStatus[1]) offItem.tickTrigger(player.getWorld(), player, stack, MWAttackC2SPacket.TRIGGER_SECONDARY, pitch, yaw, MWAttackC2SPacket.HandType.OFF);
         }
     }
 

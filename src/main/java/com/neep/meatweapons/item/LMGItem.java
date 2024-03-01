@@ -2,6 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.neep.meatlib.item.MeatlibItemSettings;
 import com.neep.meatweapons.MWItems;
+import com.neep.meatweapons.client.model.LMGItemModel;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.neepmeat.init.NMSounds;
@@ -17,12 +18,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.model.GeoModel;
 
 public class LMGItem extends BaseGunItem
 {
-    public String controllerName = "controller";
-
     public LMGItem()
     {
         super("light_machine_gun", MWItems.BALLISTIC_CARTRIDGE, 50, 1, false, new MeatlibItemSettings());
@@ -31,21 +31,9 @@ public class LMGItem extends BaseGunItem
     }
 
     @Override
-    public boolean allowNbtUpdateAnimation(PlayerEntity player, Hand hand, ItemStack oldStack, ItemStack newStack)
-    {
-        return false;
-    }
-
-    @Override
-    public UseAction getUseAction(ItemStack stack)
-    {
-        return UseAction.NONE;
-    }
-
-    @Override
     protected GeoModel<? extends BaseGunItem> createModel()
     {
-        return null;
+        return new LMGItemModel();
     }
 
     @Override
@@ -83,7 +71,8 @@ public class LMGItem extends BaseGunItem
                 if (!world.isClient)
                 {
                     fireBeam(world, player, stack);
-                    if (!player.isCreative()) stack.setDamage(stack.getDamage() + 1);
+                    if (!player.isCreative())
+                        stack.setDamage(stack.getDamage() + 1);
                 }
             }
             else // Weapon is out of ammunition.
@@ -116,26 +105,10 @@ public class LMGItem extends BaseGunItem
         }
     }
 
-//    @Override
-//    public void onAnimationSync(int id, int state)
-//    {
-//        if (state == ANIM_FIRE)
-//        {
-//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-//                controller.markNeedsReload();
-//                controller.setAnimation(new AnimationBuilder().addAnimation("animation.light_machine_gun.fire"));
-//        }
-//        else if (state == ANIM_RELOAD)
-//        {
-//            final AnimationController<?> controller = GeckoLibUtil.getControllerForID(this.factory, id, controllerName);
-//            controller.markNeedsReload();
-//            controller.setAnimation(new AnimationBuilder().addAnimation("animation.machine_pistol.reload_r"));
-//        }
-//    }
-
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers)
     {
-        controllers.add(new AnimationController(this, controllerName, 1, this::fireController));
+        controllers.add(new AnimationController<>(this, controllerName, 0, this::fireController)
+                .triggerableAnim("fire", RawAnimation.begin().thenPlay("animation.light_machine_gun.fire")));
     }
 }

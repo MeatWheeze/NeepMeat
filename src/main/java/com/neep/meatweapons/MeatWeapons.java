@@ -25,6 +25,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 public class MeatWeapons implements ModInitializer
 {
@@ -92,8 +93,13 @@ public class MeatWeapons implements ModInitializer
         }
     }
 
-    public static boolean redirectClicks(ItemStack stack)
+    @Nullable
+    public static GunItem redirectClicks(ItemStack stack)
     {
-        return stack.getItem() instanceof GunItem gun && gun.redirectClicks();
+        if (stack.getItem() instanceof GunItem gunItem && gunItem.redirectClicks())
+        {
+            return gunItem;
+        }
+        return null;
     }
 }
