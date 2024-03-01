@@ -86,6 +86,10 @@ public class EncasedConduitModel implements UnbakedModel, BakedModel, FabricBake
                 BakedModel camoModel = MinecraftClient.getInstance().getBakedModelManager().getBlockModels().getModel(camoState);
                 camoModel.emitBlockQuads(blockView, camoState, pos, randomSupplier, context);
             }
+            else
+            {
+                frame.emitBlockQuads(blockView, state, pos, randomSupplier, context);
+            }
         }
     }
 
