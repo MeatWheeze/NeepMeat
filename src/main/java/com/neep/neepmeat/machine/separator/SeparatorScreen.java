@@ -35,7 +35,7 @@ public class SeparatorScreen extends HandledScreen<SeparatorScreenHandler>
                 if (isMouseOver(mouseX, mouseY))
                 {
                     // TODO
-//                    SeparatorScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+                    matrices.drawTooltip(textRenderer, TOOLTIP, mouseX, mouseY);
                 }
             }
         };

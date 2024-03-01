@@ -62,7 +62,16 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
 
         textField = new TextField(this.textRenderer, textFieldX, buttonY, textFieldWidth, buttonHeight, Text.of(""))
         {
-//            @Override
+            @Override
+            public void render(DrawContext context, int mouseX, int mouseY, float delta)
+            {
+                super.render(context, mouseX, mouseY, delta);
+                if (isMouseOver(mouseX, mouseY)) // Porting jank
+                {
+                    context.drawTooltip(textRenderer, RATE, mouseX, mouseY);
+                }
+            }
+            //            @Override
 //            public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
 //            {
 //                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
@@ -94,7 +103,17 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
                 ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(PROP_MB_MODE, newMode));
             }
 
-//            @Override
+            @Override
+            public void render(DrawContext context, int mouseX, int mouseY, float delta)
+            {
+                super.render(context, mouseX, mouseY, delta);
+                if (isMouseOver(mouseX, mouseY)) // Porting jank
+                {
+                    context.drawTooltip(textRenderer, getButtonTooltip(), mouseX, mouseY);
+                }
+            }
+
+            //            @Override
 //            public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
 //            {
 //                LimiterValveScreen.this.renderTooltip(matrices, getButtonTooltip(), mouseX, mouseY);

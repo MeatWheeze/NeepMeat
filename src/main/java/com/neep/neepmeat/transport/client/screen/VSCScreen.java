@@ -41,7 +41,7 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
                 super.renderButton(context, mouseX, mouseY, delta);
                 if (isMouseOver(mouseX, mouseY))
                 {
-//                    VSCScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
+                    context.drawTooltip(textRenderer, TOOLTIP, mouseX, mouseY);
                 }
             }
         };
