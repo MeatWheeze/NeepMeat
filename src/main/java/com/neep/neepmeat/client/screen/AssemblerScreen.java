@@ -8,6 +8,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
+import net.minecraft.client.gui.widget.ButtonWidget;
+import net.minecraft.client.gui.widget.ToggleButtonWidget;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -102,9 +104,17 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
         this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, Text.translatable("button." + NeepMeat.NAMESPACE + ".assembler.select"),
                 handler.getProperty(2) > 0, (b, t) ->
         {
-
             buttonPress(AssemblerScreenHandler.ID_TOGGLE_SELECT);
         }));
+
+//        this.addDrawableChild(ButtonWidget.builder(Text.translatable("container.neepmeat.assembler.display"), button ->
+//        {
+//
+//        })
+//            .dimensions(x + 7, y + 93, 110, 20)
+//            .build());
+
+//        addDrawableChild(new ToggleButtonWidget(this.x + 7, this.y + 93, 110, 20, handler.getProperty(2) > 0));
     }
 
     public void buttonPress(int id)
