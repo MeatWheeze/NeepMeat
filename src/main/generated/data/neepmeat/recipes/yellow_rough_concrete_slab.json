@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "neepmeat:yellow_rough_concrete"
@@ -11,5 +12,6 @@
   "result": {
     "count": 6,
     "item": "neepmeat:yellow_rough_concrete_slab"
-  }
+  },
+  "show_notification": true
 }

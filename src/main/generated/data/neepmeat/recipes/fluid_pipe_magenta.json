@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "d": {
       "item": "minecraft:magenta_dye"
@@ -14,7 +15,7 @@
     "iii"
   ],
   "result": {
-    "count": 8,
     "item": "neepmeat:fluid_pipe_magenta"
-  }
+  },
+  "show_notification": true
 }

@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "d": {
       "item": "neepmeat:blood_bubble"
@@ -14,7 +15,7 @@
     "iii"
   ],
   "result": {
-    "count": 8,
     "item": "neepmeat:dirty_red_tiles"
-  }
+  },
+  "show_notification": true
 }

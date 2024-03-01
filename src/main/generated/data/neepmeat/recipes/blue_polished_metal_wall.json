@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "neepmeat:blue_polished_metal"
@@ -12,5 +13,6 @@
   "result": {
     "count": 6,
     "item": "neepmeat:blue_polished_metal_wall"
-  }
+  },
+  "show_notification": true
 }

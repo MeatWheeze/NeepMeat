@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "#": {
       "item": "neepmeat:bloody_bricks"
@@ -12,5 +13,6 @@
   "result": {
     "count": 6,
     "item": "neepmeat:bloody_bricks_wall"
-  }
+  },
+  "show_notification": true
 }

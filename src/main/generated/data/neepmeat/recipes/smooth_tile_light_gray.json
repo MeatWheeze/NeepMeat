@@ -1,5 +1,6 @@
 {
   "type": "minecraft:crafting_shaped",
+  "category": "building",
   "key": {
     "d": {
       "item": "minecraft:light_gray_dye"
@@ -14,7 +15,7 @@
     "iii"
   ],
   "result": {
-    "count": 8,
     "item": "neepmeat:smooth_tile_light_gray"
-  }
+  },
+  "show_notification": true
 }

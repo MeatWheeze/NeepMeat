@@ -47,6 +47,6 @@ public class GraphicsEffects
 
     static
     {
-        Registry.register(GRAPHICS_EFFECTS, BLANK_EFFECT, GraphicsEffect.EMPTY);
+//        Registry.register(GRAPHICS_EFFECTS, BLANK_EFFECT, GraphicsEffect.EMPTY);
     }
 }
