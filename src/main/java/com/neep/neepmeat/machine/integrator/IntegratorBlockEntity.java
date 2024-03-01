@@ -224,7 +224,7 @@ public class IntegratorBlockEntity extends SyncableBlockEntity implements Integr
         }
         else
         {
-            event.getController().setAnimation(RawAnimation.begin().thenPlay("animation.integrator.idle"));
+            event.getController().setAnimation(RawAnimation.begin().thenLoop("animation.integrator.flex"));
         }
 
         return PlayState.CONTINUE;
