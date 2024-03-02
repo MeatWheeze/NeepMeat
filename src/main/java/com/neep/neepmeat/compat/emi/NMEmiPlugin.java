@@ -31,6 +31,8 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack ALLOY_SMELTING_WORKSTATION = EmiStack.of(NMBlocks.ALLOY_KILN);
     public static final EmiStack COMPACTING_WORKSTATION = EmiStack.of(NMBlocks.CHARNEL_COMPACTOR);
     public static final EmiStack ENLIGHTENING_WORKSTATION = EmiStack.of(NMBlocks.PEDESTAL);
+    public static final EmiStack INTEGRATOR_WORKSTATION = EmiStack.of(NMBlocks.INTEGRATOR_EGG);
+    public static final EmiStack ADV_INTEGRATOR_WORKSTATION = EmiStack.of(NMBlocks.ADVANCED_INTEGRATOR);
     public static final EmiStack GRINDING_WORKSTATION = EmiStack.of(NMBlocks.GRINDER);
     public static final EmiStack VIVISECTION_WORKSTATION = EmiStack.of(NMItems.SACRIFICIAL_SCALPEL);
     public static final EmiStack HEATING_WORKSTATION = EmiStack.of(FluidTransport.MULTI_TANK);
@@ -72,6 +74,8 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(ALLOY_SMELTING, ALLOY_SMELTING_WORKSTATION);
         registry.addWorkstation(COMPACTING, COMPACTING_WORKSTATION);
         registry.addWorkstation(ENLIGHTENING, ENLIGHTENING_WORKSTATION);
+        registry.addWorkstation(ENLIGHTENING, INTEGRATOR_WORKSTATION);
+        registry.addWorkstation(ENLIGHTENING, ADV_INTEGRATOR_WORKSTATION);
         registry.addWorkstation(GRINDING, GRINDING_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
