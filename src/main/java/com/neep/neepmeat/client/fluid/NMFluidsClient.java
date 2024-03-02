@@ -67,7 +67,8 @@ public class NMFluidsClient
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_BLOOD, NMFluids.FLOWING_BLOOD, new SimpleFluidRenderHandler(
                 BLOOD,
                 BLOOD_FLOWING,
-                0x952424
+                0xFFFFFF
+//                0x52424
         ));
 
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PATINA_TREATMENT, NMFluids.FLOWING_PATINA_TREATMENT, new SimpleFluidRenderHandler(
