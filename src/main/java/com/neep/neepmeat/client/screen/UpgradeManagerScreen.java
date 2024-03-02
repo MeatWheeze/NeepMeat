@@ -165,9 +165,9 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
                 col = isMouseOver(mouseX, mouseY) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
             }
 
-            GUIUtil.renderBorder(matrices, x, y, width, height,  col, 0);
+            GUIUtil.renderBorder(matrices, getX(), getY(), width, height,  col, 0);
             matrices.drawCenteredTextWithShadow(textRenderer, this.getMessage(),
-                    x + width / 2, y + (height - 8) / 2, PLCCols.TEXT.col);
+                    getX() + width / 2, getY() + (height - 8) / 2, PLCCols.TEXT.col);
         }
 
         @Override
@@ -204,10 +204,10 @@ public class UpgradeManagerScreen extends HandledScreen<UpgradeManagerScreenHand
         public void render(DrawContext context, int mouseX, int mouseY, float delta)
         {
             int textCol = id.equals(selected) ? PLCCols.SELECTED.col : PLCCols.TEXT.col;
-            GUIUtil.renderBorder(context, x, y, width, height, textCol, 0);
+            GUIUtil.renderBorder(context, getX(), getY(), width, height, textCol, 0);
 
             Text name = ImplantAttributes.getName(id);
-            GUIUtil.drawText(context, textRenderer, name, x + 2, y + 2, textCol, false);
+            GUIUtil.drawText(context, textRenderer, name, getX() + 2, getY() + 2, textCol, false);
         }
 
         @Override
