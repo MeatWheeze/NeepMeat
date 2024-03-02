@@ -4,7 +4,7 @@ import net.minecraft.block.sapling.SaplingGenerator;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
-import org.apache.commons.lang3.NotImplementedException;
+import net.minecraft.world.gen.feature.ConfiguredFeatures;
 
 
 public class BloodBubbleTreeGenerator extends SaplingGenerator
@@ -12,6 +12,6 @@ public class BloodBubbleTreeGenerator extends SaplingGenerator
     @Override
     protected RegistryKey<ConfiguredFeature<?, ?>> getTreeFeature(Random random, boolean bees)
     {
-        throw new NotImplementedException("Please implement me!");
+        return ConfiguredFeatures.of("neepmeat:blood_bubble_tree");
     }
 }
