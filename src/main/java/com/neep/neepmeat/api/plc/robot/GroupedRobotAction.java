@@ -88,4 +88,9 @@ public class GroupedRobotAction implements RobotAction, NbtSerialisable
     {
         this.index = nbt.getInt("index");
     }
+
+    public void setFinished(PLC plc)
+    {
+        index = actions.size();
+    }
 }

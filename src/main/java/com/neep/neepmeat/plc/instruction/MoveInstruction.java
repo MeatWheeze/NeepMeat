@@ -97,7 +97,8 @@ public class MoveInstruction implements Instruction
         if (stored == null)
         {
 //            plc.raiseError(new PLC.Error("No extractable resource found at " + from.pos() + ", " + from.face()));
-            cancel(plc);
+//            cancel(plc);
+            group.setFinished(plc);
             finish(plc);
         }
         else
