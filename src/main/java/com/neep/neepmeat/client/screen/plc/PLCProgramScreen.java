@@ -373,6 +373,13 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
     }
 
     @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
+    {
+        var hovered = hoveredElement(mouseX, mouseY);
+        return super.mouseScrolled(mouseX, mouseY, amount);
+    }
+
+    @Override
     public void removed()
     {
         super.removed();

@@ -77,6 +77,12 @@ public abstract class ScreenSubElement extends AbstractParentElement implements 
         this.selectables.add(t);
     }
 
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY)
+    {
+        return hoveredElement(mouseX, mouseY).isPresent();
+    }
+
     public void addDrawable(Drawable t)
     {
         this.drawables.add(t);
