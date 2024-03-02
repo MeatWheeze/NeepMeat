@@ -11,7 +11,6 @@ import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.BaseGunItem;
-import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
@@ -53,8 +52,6 @@ public class MWClient implements ClientModInitializer
 
         EntityRendererRegistry.register(MeatWeapons.EXPLODING_SHELL, ShellEntityRenderer::new);
         EntityModelLayerRegistry.registerModelLayer(MODEL_SHELL_LAYER, PlasmaEntityModel::getTexturedModelData);
-
-        ProjectileSpawnPacket.Client.registerReceiver();
     }
 
     public static void registerAnimations()

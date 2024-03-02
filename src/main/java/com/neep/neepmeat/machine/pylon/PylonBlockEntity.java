@@ -11,6 +11,7 @@ import com.neep.neepmeat.client.sound.PylonSoundInstance;
 import com.neep.neepmeat.entity.GlomeEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.init.NMEntities;
 import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.machine.advanced_integrator.AdvancedIntegratorBlockEntity;
 import com.neep.neepmeat.machine.advanced_integrator.SimpleDataPort;
@@ -151,7 +152,9 @@ public class PylonBlockEntity extends SyncableBlockEntity implements MotorisedBl
             Vec3d entityPos = Vec3d.ofCenter(entityBlockPos);
             if (world.isAir(entityBlockPos))
             {
-                GlomeEntity entity = new GlomeEntity(world, entityPos.x, entityPos.y - 0.2, entityPos.z, 0, 0, 0);
+                GlomeEntity entity = NMEntities.GLOME.create(world);
+                entity.setPosition(entityPos.x, entityPos.y - 0.2, entityPos.z);
+//                GlomeEntity entity = new GlomeEntity(world, entityPos.x, entityPos.y - 0.2, entityPos.z, 0, 0, 0);
                 world.spawnEntity(entity);
             }
         }

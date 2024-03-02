@@ -27,7 +27,7 @@ public class ChrysalisItem extends BaseItem implements EntityImplantInstaller
             if (!world.isClient())
             {
                 BovineHorrorEntity bovineHorror = NMEntities.BOVINE_HORROR.create(world);
-                bovineHorror.setPos(cow.getX(), cow.getY() + 1, cow.getZ());
+                bovineHorror.setPosition(cow.getX(), cow.getY() + 1, cow.getZ());
                 world.spawnEntity(bovineHorror);
             }
         }

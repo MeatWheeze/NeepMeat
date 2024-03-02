@@ -47,6 +47,7 @@ import com.neep.neepmeat.transport.block.fluid_transport.FilterPipeBlock;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidPipeBlock;
 import com.neep.neepmeat.transport.client.TransportClient;
 import com.neep.neepmeat.transport.client.renderer.WindowPipeRenderer;
+import dev.monarkhes.myron_neepmeat.api.Myron;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -78,7 +79,7 @@ public class NeepMeatClient implements ClientModInitializer
     @Override
     public void onInitializeClient()
     {
-//        Myron.registerNamespace(NeepMeat.NAMESPACE);
+        Myron.registerNamespace(NeepMeat.NAMESPACE);
 
         registerRenderers();
         registerLayers();

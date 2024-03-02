@@ -64,7 +64,7 @@ public class PhageRayBlockEntity extends SyncableBlockEntity
             if (entities.isEmpty())
             {
                 tetheredEntity = NMEntities.PHAGE_RAY.create(world);
-                tetheredEntity.setPos(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+                tetheredEntity.setPosition(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
                 world.spawnEntity(tetheredEntity);
             }
             else

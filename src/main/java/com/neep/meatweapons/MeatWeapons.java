@@ -7,7 +7,6 @@ import com.neep.meatweapons.entity.*;
 import com.neep.meatweapons.item.AssaultDrillItem;
 import com.neep.meatweapons.item.GunItem;
 import com.neep.meatweapons.network.MWAttackC2SPacket;
-import com.neep.meatweapons.network.ProjectileSpawnPacket;
 import com.neep.meatweapons.particle.MWGraphicsEffects;
 import com.neep.meatweapons.particle.MWParticles;
 import com.neep.neepmeat.init.NMItems;
@@ -84,8 +83,6 @@ public class MeatWeapons implements ModInitializer
 
 //        MWEnchantmentTargets.init();
             MWEnchantments.init();
-
-            ProjectileSpawnPacket sp = new ProjectileSpawnPacket();
 
             PlayerAttachmentManager.registerAttachment(WeaponCooldownAttachment.ID, WeaponCooldownAttachment::new);
 

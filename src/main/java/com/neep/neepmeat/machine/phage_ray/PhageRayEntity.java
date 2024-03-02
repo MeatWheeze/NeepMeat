@@ -94,6 +94,12 @@ public class PhageRayEntity extends Entity
     }
 
     @Override
+    public boolean handleAttack(Entity attacker)
+    {
+        return super.handleAttack(attacker);
+    }
+
+    @Override
     protected void readCustomDataFromNbt(NbtCompound nbt)
     {
 

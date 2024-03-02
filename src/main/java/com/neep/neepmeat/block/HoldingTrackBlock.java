@@ -260,7 +260,7 @@ public class HoldingTrackBlock extends AbstractRailBlock implements BlockEntityP
             {
                 if (!powered)
                 {
-                    e.setPos(x, y, z);
+                    e.setPosition(x, y, z);
                     e.setVelocity(0, 0, 0);
                 }
                 else
