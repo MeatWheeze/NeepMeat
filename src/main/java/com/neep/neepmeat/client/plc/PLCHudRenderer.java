@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.plc;
 
 import com.neep.meatlib.api.event.InputEvents;
+import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.mixin.CameraAccessor;
 import com.neep.neepmeat.network.plc.PLCRobotEnterS2C;
@@ -110,6 +111,7 @@ public class PLCHudRenderer
             }
         });
 
+        // Rendere the PLC's orange block outline
         WorldRenderEvents.BLOCK_OUTLINE.register((worldRenderContext, blockOutlineContext) ->
         {
             PLCHudRenderer instance = getInstance();
@@ -127,10 +129,12 @@ public class PLCHudRenderer
             leave();
         });
 
+        // Screen.passEvents was removed before 1.20, so input events must be processed here while in the scree.
         InputEvents.PRE_INPUT.register((window, key, scancode, action, modifiers) ->
         {
+            MinecraftClient client = MinecraftClient.getInstance();
             PLCHudRenderer instance = getInstance();
-            if (instance != null)
+            if (instance != null && client.currentScreen instanceof PLCProgramScreen ps && ps.passEvents())
             {
                 InputUtil.Key key2 = InputUtil.fromKeyCode(key, scancode);
                 if (action == 0)

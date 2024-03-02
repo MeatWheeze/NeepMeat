@@ -486,6 +486,11 @@ public class PLCProgramScreen extends Screen implements ScreenHandlerProvider<PL
         return shell;
     }
 
+    public boolean passEvents()
+    {
+        return !editor.isEditFieldFocused();
+    }
+
     abstract class SaveButton extends ClickableWidget
     {
         public SaveButton(int x, int y, int width, int height, Text message)

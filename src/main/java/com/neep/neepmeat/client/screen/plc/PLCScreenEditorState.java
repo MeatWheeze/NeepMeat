@@ -183,4 +183,9 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
             return this.getFocused() != null && this.getFocused().keyPressed(keyCode, scanCode, modifiers);
         }
     }
+
+    public boolean isEditFieldFocused()
+    {
+        return editorField.isFocused();
+    }
 }
