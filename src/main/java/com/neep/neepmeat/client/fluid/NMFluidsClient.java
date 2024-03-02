@@ -115,7 +115,7 @@ public class NMFluidsClient
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MILK, NMFluids.FLOWING_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_P_MILK, NMFluids.FLOWING_P_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_FEED, NMFluids.FLOWING_FEED, new SimpleFluidRenderHandler(FEED, FEED_FLOWING));
-        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(PINKDRINK, PINKDRINK_FLOWING, 0xd28dab));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(PINKDRINK, PINKDRINK_FLOWING, 0xFFf089a8));
 
         FluidVariantRendering.register(NMFluids.STILL_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
         FluidVariantRendering.register(NMFluids.FLOWING_DIRTY_ORE_FAT, new OreFatFluidVariantRenderHandler());
