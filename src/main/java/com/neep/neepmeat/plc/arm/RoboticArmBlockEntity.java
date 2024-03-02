@@ -158,6 +158,9 @@ public class RoboticArmBlockEntity extends SyncableBlockEntity implements PLCAct
     @Override
     public void setTarget(PLC plc, @Nullable BlockPos target)
     {
+        if (power < minPower)
+            plc.raiseError(new PLC.Error("Insufficient power"));
+
         this.target = target;
         if (target != null)
             this.targetVec = Vec3d.ofCenter(target, 0.0);
