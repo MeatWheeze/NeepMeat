@@ -1,0 +1,38 @@
+{
+  "parent": "neepmeat:place_grinder",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:hydraulic_press"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.neepmeat.main.place_hydraulic_press.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "neepmeat:hydraulic_press"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.neepmeat.main.place_hydraulic_press.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

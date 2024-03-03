@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_blue_metal_scaffold": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:blue_metal_scaffold"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "neepmeat:blue_metal_scaffold_slab"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_blue_metal_scaffold",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "neepmeat:blue_metal_scaffold_slab"
+    ]
+  },
+  "sends_telemetry_event": false
+}
