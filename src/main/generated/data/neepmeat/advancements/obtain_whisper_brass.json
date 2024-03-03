@@ -1,0 +1,38 @@
+{
+  "parent": "neepmeat:obtain_whisper_flour",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:whisper_brass_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.neepmeat.main.obtain_whisper_brass.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "neepmeat:whisper_brass_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.neepmeat.main.obtain_whisper_brass.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

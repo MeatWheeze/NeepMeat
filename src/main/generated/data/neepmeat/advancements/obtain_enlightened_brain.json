@@ -1,0 +1,38 @@
+{
+  "parent": "neepmeat:enlightenment",
+  "criteria": {
+    "get_item": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "neepmeat:enlightened_brain"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "advancements.neepmeat.main.obtain_enlightened_brain.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "advancements.neepmeat.main.obtain_enlightened_brain.title"
+    }
+  },
+  "requirements": [
+    [
+      "get_item"
+    ]
+  ],
+  "sends_telemetry_event": true
+}
