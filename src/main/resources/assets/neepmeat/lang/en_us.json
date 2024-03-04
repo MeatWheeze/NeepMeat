@@ -563,6 +563,7 @@
   "item.neepmeat.essential_saltes.lore_0": "Use in a Synthesiser to replicate an organism.",
   "item.neepmeat.essential_saltes.meat": "Biomass required: %s",
   "item.neepmeat.mob_egg": "Mob Egg: %s",
+  "item.neepmeat.mob_egg.lore_0": "Must be immersed in blood in order to hatch.",
 
   "item.neepmeat.compound_injector": "Compound Injector",
   "item.neepmeat.compound_injector_lore_0": "Heals 4 hearts when used.",

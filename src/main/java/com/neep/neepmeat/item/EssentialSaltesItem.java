@@ -54,13 +54,13 @@ public class EssentialSaltesItem extends BaseItem
     {
         super.appendTooltip(itemStack, world, tooltip, tooltipContext);
         EntityType<?> type = getEntityType(itemStack);
-        tooltip.add(Text.translatable(getTranslationKey() + ".meat", Text.of(
-                String.format("%.2f", MobSynthesisRegistry.get(type).meat() / 81f) + "mb"
-        )));
-//        String id = itemStack.getOrCreateNbt().getString("id");
-//        {
-//            tooltip.add(Registries.ENTITY_TYPE.get(new Identifier(id)).getName());
-//        }
+        var entry = MobSynthesisRegistry.get(type);
+        if (entry != null)
+        {
+            tooltip.add(Text.translatable(getTranslationKey() + ".meat", Text.of(
+                    String.format("%.2f", entry.meat() / 81f) + "mb"
+            )));
+        }
     }
 
     @Override

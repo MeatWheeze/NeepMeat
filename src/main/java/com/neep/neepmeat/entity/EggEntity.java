@@ -5,12 +5,14 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.init.NMItems;
 import com.neep.neepmeat.init.NMParticles;
 import com.neep.neepmeat.item.EssentialSaltesItem;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.listener.ClientPlayPacketListener;
@@ -126,7 +128,8 @@ public class EggEntity extends SimpleEntity
 
     public boolean canGrow()
     {
-        return getWorld().getFluidState(getBlockPos()).isOf(NMFluids.STILL_BLOOD);
+        FluidState state = getWorld().getFluidState(getBlockPos());
+        return state.getFluid() == NMFluids.STILL_BLOOD || state.getFluid() == NMFluids.FLOWING_BLOOD;
     }
 
     @Override

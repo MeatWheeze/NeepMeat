@@ -93,7 +93,7 @@ public class DeathBladesBlockEntity extends MotorisedMachineBlockEntity
         {
             return entry.meat() / 2;
         }
-        return MobSynthesisRegistry.meatForEntity(entity) / 2;
+        return MobSynthesisRegistry.meatFromSize(entity) / 2;
     }
 
     @Override
