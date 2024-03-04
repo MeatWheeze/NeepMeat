@@ -3,6 +3,9 @@ package com.neep.neepmeat.compat.rei.display;
 import com.google.common.collect.Lists;
 import com.neep.neepmeat.api.plc.recipe.ManufactureStep;
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
+import com.neep.neepmeat.plc.recipe.CombineStep;
+import com.neep.neepmeat.plc.recipe.ImplantStep;
+import com.neep.neepmeat.plc.recipe.InjectStep;
 import com.neep.neepmeat.plc.recipe.ItemManufactureRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.Display;
@@ -24,6 +27,7 @@ public class ManufactureDisplay implements Display
 {
     private final List<ManufactureStep<?>> steps;
     private final List<EntryIngredient> outputs;
+    private final List<EntryIngredient> inputs;
     private final Item base;
 
     public ManufactureDisplay(ItemManufactureRecipe recipe)
@@ -31,6 +35,10 @@ public class ManufactureDisplay implements Display
         this.steps = recipe.getSteps();
         this.outputs = Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getRecipeOutput().resource()), (int) recipe.getRecipeOutput().minAmount()));
         this.base = (Item) recipe.getBase();
+
+        this.inputs = Lists.newArrayList();
+        inputs.add(EntryIngredients.of(base));
+        appendStepIngredients(steps, inputs);
     }
 
     public ManufactureDisplay(Item base, List<ManufactureStep<?>> steps, List<EntryIngredient> output)
@@ -38,12 +46,35 @@ public class ManufactureDisplay implements Display
         this.base = base;
         this.steps = steps;
         this.outputs = output;
+
+        this.inputs = Lists.newArrayList();
+        inputs.add(EntryIngredients.of(base));
+        appendStepIngredients(steps, inputs);
+    }
+
+    private static void appendStepIngredients(List<ManufactureStep<?>> steps, List<EntryIngredient> ingredients)
+    {
+        for (var step : steps)
+        {
+            if (step instanceof CombineStep combineStep)
+            {
+                ingredients.add(EntryIngredients.of(combineStep.getItem()));
+            }
+            else if (step instanceof InjectStep injectStep)
+            {
+                ingredients.add(EntryIngredients.of(injectStep.getFluid()));
+            }
+            else if (step instanceof ImplantStep implantStep)
+            {
+                ingredients.add(EntryIngredients.of(implantStep.getItem()));
+            }
+        }
     }
 
     @Override
     public List<EntryIngredient> getInputEntries()
     {
-        return List.of(EntryIngredients.of(base));
+        return inputs;
     }
 
     @Override
