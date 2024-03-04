@@ -51,7 +51,6 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
             {
                 try(InputStream stream = opt.get().getInputStream())
                 {
-
                     Reader reader = new InputStreamReader(stream);
                     JsonElement rootElement = JsonParser.parseReader(reader);
 

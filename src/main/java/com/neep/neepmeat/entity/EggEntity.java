@@ -11,6 +11,7 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.Packet;
@@ -126,7 +127,8 @@ public class EggEntity extends SimpleEntity
 
     public boolean canGrow()
     {
-        return world.getFluidState(getBlockPos()).isOf(NMFluids.STILL_BLOOD);
+        FluidState state = getWorld().getFluidState(getBlockPos());
+        return state.getFluid() == NMFluids.STILL_BLOOD || state.getFluid() == NMFluids.FLOWING_BLOOD;
     }
 
     @Override

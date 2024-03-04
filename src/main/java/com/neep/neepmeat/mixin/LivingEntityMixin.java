@@ -28,6 +28,7 @@ public abstract class LivingEntityMixin implements ILivingEntity
 
     @Shadow public abstract Random getRandom();
 
+    @Shadow public int hurtTime;
     @Unique public boolean neepmeat$dropsLoot = true;
 
     @Override
@@ -45,8 +46,7 @@ public abstract class LivingEntityMixin implements ILivingEntity
     @Inject(method = "onDeath", at = @At(value = "HEAD"))
     public void onDeath(DamageSource source, CallbackInfo ci)
     {
-//        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isIn(DamageTypeTags.IS_FIRE))
-        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && source.isFire())
+        if (hasStatusEffect(NMStatusEffects.ASH_PEPARATION) && ((LivingEntity) (Object) (this)).isOnFire())
         {
             EssentialSaltesItem.onEntityDeath((LivingEntity) (Object) this);
         }

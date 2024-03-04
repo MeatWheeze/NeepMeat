@@ -84,7 +84,7 @@ public class NMItems
 
     // Mob cloning
     public static Item ESSENTIAL_SALTES = new EssentialSaltesItem("essential_saltes", TooltipSupplier.simple(1), new FabricItemSettings().group(NMItemGroups.INGREDIENTS).fireproof());
-    public static Item MOB_EGG = new MobEggItem("mob_egg", new FabricItemSettings());
+    public static Item MOB_EGG = new MobEggItem("mob_egg", TooltipSupplier.simple(1), new FabricItemSettings());
 
 //    public static Item MEAT_STEEL_BOOTS = new MeatSteelArmourItem("meat_steel_boots", ArmorMaterials.DIAMOND, EquipmentSlot.FEET, new FabricItemSettings().group(NMItemGroups.GENERAL));
 //    public static Item MEAT_STEEL_LEGS = new MeatSteelArmourItem("meat_steel_legs", ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, new FabricItemSettings().group(NMItemGroups.GENERAL));

@@ -1,9 +1,11 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.MeatlibItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.entity.EggEntity;
+import net.minecraft.client.item.TooltipContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -16,15 +18,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class MobEggItem extends Item implements MeatlibItem
 {
     private final String registryName;
+    private final TooltipSupplier tooltip;
 
-    public MobEggItem(String registryName, Settings settings)
+    public MobEggItem(String registryName, TooltipSupplier tooltip, Settings settings)
     {
         super(settings);
         this.registryName = registryName;
+        this.tooltip = tooltip;
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) this);
     }
 
@@ -70,5 +77,12 @@ public class MobEggItem extends Item implements MeatlibItem
     public String getRegistryName()
     {
         return registryName;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack stack, @Nullable World world, List<Text> tooltip, TooltipContext context)
+    {
+        super.appendTooltip(stack, world, tooltip, context);
+        this.tooltip.apply(this, tooltip);
     }
 }

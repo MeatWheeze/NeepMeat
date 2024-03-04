@@ -85,7 +85,6 @@ public class NeepMeat implements ModInitializer
 			OreFatRegistry.init();
 			NMStatusEffects.init();
 			NMPotions.init();
-			MobSynthesisRegistry.initDefaults();
 			NMGraphicsEffects.init();
 
 			// --- Transport module ---
@@ -107,6 +106,7 @@ public class NeepMeat implements ModInitializer
 
 			NMFeatures.init();
 
+
 			ItemStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> CharnelCompactorStorage.getStorage(world, pos, direction), NMBlocks.CHARNEL_COMPACTOR);
 			FluidStorage.SIDED.registerForBlocks((world, pos, state, blockEntity, direction) -> blockEntity instanceof IntegratorBlockEntity be ? be.getStorage(world, pos, state, direction) : null, NMBlocks.INTEGRATOR_EGG);
 
@@ -123,8 +123,9 @@ public class NeepMeat implements ModInitializer
 			// Meat additives
 			MeatAdditives.init();
 
-			// Guide resources
+			// Resource reload listeners
 			ResourceManagerHelper.get(ResourceType.CLIENT_RESOURCES).registerReloadListener(GuideReloadListener.getInstance());
+			ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(MobSynthesisRegistry.getInstance());
 
 			WormActions.init();
 
