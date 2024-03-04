@@ -15,8 +15,6 @@ public class NMTags
     public static final TagKey<Item> RAW_MEAT = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "raw_meat"));
     public static final TagKey<Item> METAL_SCAFFOLDING = TagKey.of(Registry.ITEM_KEY, new Identifier("c", "metal_scaffolding"));
 
-    public static final TagKey<EntityType<?>> CLONEABLE = TagKey.of(Registries.ENTITY_TYPE.getKey(), new Identifier(NeepMeat.NAMESPACE, "cloneable"));
-
     private static TagKey<Item> registerItem(String namespace, String id)
     {
 //        return RequiredTagListRegistry.register(new Identifier(namespace, id), "charnel_substrate");
