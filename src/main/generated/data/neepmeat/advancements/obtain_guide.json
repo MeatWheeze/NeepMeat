@@ -6,7 +6,7 @@
         "items": [
           {
             "items": [
-              "neepmeat:enlightened_brain"
+              "neepmeat:projector"
             ]
           }
         ]
@@ -22,7 +22,7 @@
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "neepmeat:enlightened_brain"
+      "item": "neepmeat:projector"
     },
     "show_toast": true,
     "title": {
