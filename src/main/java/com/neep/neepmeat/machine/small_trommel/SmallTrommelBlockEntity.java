@@ -93,7 +93,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
         this.progress = nbt.getFloat("progress");
         this.progressIncrement = nbt.getFloat("progressIncrement");
         this.totalProgress = nbt.getInt("totalProgress");
-        this.currentFluid = FluidVariant.fromNbt((NbtCompound) nbt.get("currentFluid"));
+        this.currentFluid = FluidVariant.fromNbt(nbt.getCompound("currentFluid"));
     }
 
     public void convert()
