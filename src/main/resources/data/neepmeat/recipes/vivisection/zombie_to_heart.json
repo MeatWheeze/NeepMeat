@@ -1,0 +1,9 @@
+{
+  "type": "neepmeat:vivisection",
+  "entity": "minecraft:zombie",
+  "max_health": 4,
+  "output": {
+    "resource": "neepmeat:reanimated_heart",
+    "amount": 1
+  }
+}

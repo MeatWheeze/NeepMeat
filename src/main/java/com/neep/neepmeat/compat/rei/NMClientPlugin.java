@@ -58,6 +58,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.registerRecipeFiller(MixingRecipe.class, NMrecipeTypes.MIXING, MixingDisplay::new);
         registry.registerRecipeFiller(EnlighteningRecipe.class, NMrecipeTypes.ENLIGHTENING, EnlighteningDisplay::new);
         registry.registerRecipeFiller(PressingRecipe.class, NMrecipeTypes.PRESSING, PressingDisplay::new);
+        registerRecipeFiller(registry, VivisectionRecipe.class, NMrecipeTypes.VIVISECTION, VivisectionDisplay::new);
 
         // Charnel Compactor recipes
         int page = 0;
@@ -69,7 +70,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         }
 
         // Vivisection
-        registry.add(VivisectionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.REANIMATED_HEART)))));
+//        registry.add(VivisectionDisplay.of(List.of(EntityType.ZOMBIE), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.REANIMATED_HEART)))));
         registry.add(VivisectionDisplay.of(NMBlocks.INTEGRATOR_EGG.asItem(), Collections.singletonList(EntryIngredients.of(new ItemStack(NMItems.CHRYSALIS)))));
     }
 

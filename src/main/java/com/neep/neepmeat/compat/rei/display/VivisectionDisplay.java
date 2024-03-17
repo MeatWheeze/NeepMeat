@@ -1,6 +1,7 @@
 package com.neep.neepmeat.compat.rei.display;
 
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
+import com.neep.neepmeat.recipe.VivisectionRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -16,13 +17,11 @@ public class VivisectionDisplay extends BasicDisplay
 {
     protected final List<Text> entities;
 
-    public static VivisectionDisplay of(List<EntityType<?>> inputs, List<EntryIngredient> output)
+    public VivisectionDisplay(VivisectionRecipe recipe)
     {
-        return new VivisectionDisplay(inputs, output, null);
-    }
-    public static VivisectionDisplay of(Item item, List<EntryIngredient> output)
-    {
-        return new VivisectionDisplay(Collections.singletonList(EntryIngredients.of(item)), output);
+        this(List.of(recipe.getEntityType()),
+                Collections.singletonList(EntryIngredients.ofItems(List.of(recipe.getReicpeOutput().resource()), (int) recipe.getReicpeOutput().minAmount())),
+                null);
     }
 
     // AAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -36,6 +35,16 @@ public class VivisectionDisplay extends BasicDisplay
     {
         super(inputs, outputs);
         this.entities = Collections.emptyList();
+    }
+
+    public static VivisectionDisplay of(List<EntityType<?>> inputs, List<EntryIngredient> output)
+    {
+        return new VivisectionDisplay(inputs, output, null);
+    }
+
+    public static VivisectionDisplay of(Item item, List<EntryIngredient> output)
+    {
+        return new VivisectionDisplay(Collections.singletonList(EntryIngredients.of(item)), output);
     }
 
     public static Serializer<VivisectionDisplay> serializer()

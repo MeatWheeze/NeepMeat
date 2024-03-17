@@ -68,6 +68,8 @@ public class NMSounds
     public static SoundEvent PYLON_ACTIVE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "pylon_active");
     public static SoundEvent MARATHON_BEEP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "beep");
 
+    public static SoundEvent VIVISECTION_COMPLETE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "vivisection_complete");
+
     public static SoundEvent LMG_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "light_machine_gun_fire");
     public static SoundEvent AR_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "ar_fire");
     public static SoundEvent GRENADE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "grenade_fire");
