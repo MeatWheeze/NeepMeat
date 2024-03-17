@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:cobblestone",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:gravel",
+    "amount": 1
+  },
+  "experience": 0,
+  "processtime": 40
+}

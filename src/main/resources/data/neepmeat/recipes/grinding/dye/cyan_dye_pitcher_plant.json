@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:pitcher_plant",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:cyan_dye",
+    "min": 2,
+    "max": 3
+  },
+  "processtime": 20
+}

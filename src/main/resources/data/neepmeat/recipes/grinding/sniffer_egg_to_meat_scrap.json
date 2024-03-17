@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:sniffer_egg",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:meat_scrap",
+    "min": 64,
+    "max": 64
+  },
+  "experience": 0,
+  "processtime": 40
+}

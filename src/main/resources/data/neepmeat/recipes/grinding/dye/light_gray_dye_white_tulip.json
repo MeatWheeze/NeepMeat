@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:white_tulip",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:light_gray_dye",
+    "min": 2,
+    "max": 3
+  },
+  "processtime": 20
+}
