@@ -169,7 +169,7 @@ import com.modrinth.minotaur.dependencies.ModDependency
 modrinth {
 	token = token = System.getenv("MODRINTH_TOKEN")
 	projectId = 'Hagcl1FT'
-	versionType = "alpha"
+	versionType = "beta"
 	uploadFile = remapJar // Tells Minotaur to use the remapped jar
 	gameVersions = ['1.20.1'] // An array of game versions the version supports
 	loaders = ['fabric']
