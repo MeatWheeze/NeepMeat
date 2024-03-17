@@ -1,13 +1,13 @@
 {
   "type": "neepmeat:grinding",
   "input": {
-    "resource": "neepmeat:biomass",
+    "resource": "minecraft:rose_bush",
     "amount": 1
   },
   "output": {
-    "resource": "minecraft:bone_meal",
-    "min": 1,
-    "max": 6
+    "resource": "minecraft:red_dye",
+    "min": 3,
+    "max": 4
   },
   "processtime": 20
 }

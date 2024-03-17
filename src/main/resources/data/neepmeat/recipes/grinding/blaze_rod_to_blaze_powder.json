@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:blaze_rod",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:blaze_powder",
+    "min": 3,
+    "max": 5
+  },
+  "experience": 0,
+  "processtime": 40
+}

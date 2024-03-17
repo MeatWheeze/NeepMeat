@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:torchflower",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:orange_dye",
+    "min": 2,
+    "max": 3
+  },
+  "processtime": 20
+}
