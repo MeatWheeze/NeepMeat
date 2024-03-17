@@ -187,5 +187,10 @@
   "phage_ray_running": { "subtitle": "subtitles.neepmeat.phage_ray.running",
     "sounds": [
       "neepmeat:phage_ray_running"
+    ]},
+
+  "vivisection_complete": { "subtitle": "subtitles.neepmeat.vivisection.complete",
+    "sounds": [
+      "neepmeat:vivisection_complete"
     ]}
 }

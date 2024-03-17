@@ -60,4 +60,7 @@ public class NMrecipeTypes
 
     public static final MeatRecipeSerialiser<FluidHeatingRecipe> HEATING_SERIALISER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "heating", new FluidHeatingRecipe.Serializer(FluidHeatingRecipe::new, 60));
     public static final MeatRecipeType<FluidHeatingRecipe> HEATING = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "heating");
+
+    public static final MeatRecipeSerialiser<VivisectionRecipe> VIVISECTION_SERIALISER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "vivisection", new VivisectionRecipe.Serializer());
+    public static final MeatRecipeType<VivisectionRecipe> VIVISECTION = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "vivisection");
 }

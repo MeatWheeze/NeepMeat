@@ -1,10 +1,10 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseSwordItem;
+import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatweapons.Util;
-import com.neep.neepmeat.init.NMBlocks;
-import com.neep.neepmeat.init.NMFluids;
-import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.init.*;
+import com.neep.neepmeat.recipe.VivisectionRecipe;
 import com.neep.neepmeat.transport.block.fluid_transport.entity.FluidDrainBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -13,13 +13,13 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.particle.BlockStateParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
@@ -126,11 +126,11 @@ public class DaggerItem extends BaseSwordItem
                 LivingEntity entity = optional.get();
                 entity.damage(world.getDamageSources().playerAttack(player), 5);
 
-                if (entity.getHealth() <= MAX_HEALTH)
-                {
-                    spawnSpecialDrop(world, entity.getPos(), entity);
-                    entity.kill();
-                }
+                tryRecipe(world, entity.getPos(), entity);
+//                if (entity.getHealth() <= MAX_HEALTH)
+//                {
+//                    entity.kill();
+//                }
             }
             else if (pos != null && world.getBlockState(pos).isOf(NMBlocks.INTEGRATOR_EGG))
             {
@@ -138,6 +138,7 @@ public class DaggerItem extends BaseSwordItem
                 ItemStack stack1 = NMItems.CHRYSALIS.getDefaultStack();
                 ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack1);
                 world.spawnEntity(itemEntity);
+                world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), NMSounds.VIVISECTION_COMPLETE, SoundCategory.PLAYERS, 1, 1);
             }
             return stack;
         }
@@ -162,12 +163,14 @@ public class DaggerItem extends BaseSwordItem
         super.onStoppedUsing(stack, world, user, remainingUseTicks);
     }
 
-    public static void spawnSpecialDrop(World world, Vec3d pos, LivingEntity entity)
+    public static void tryRecipe(World world, Vec3d pos, LivingEntity entity)
     {
-        if (entity instanceof ZombieEntity)
+        var ctx = new VivisectionRecipe.VivisectionContext(world, entity);
+        VivisectionRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.VIVISECTION, ctx).orElse(null);
+        if (recipe != null)
         {
-            ItemEntity item = new ItemEntity(world, pos.x, pos.y, pos.z, NMItems.REANIMATED_HEART.getDefaultStack());
-            world.spawnEntity(item);
+            recipe.ejectOutputs(ctx, null);
+            world.playSound(null, pos.x, pos.y, pos.z, NMSounds.VIVISECTION_COMPLETE, SoundCategory.PLAYERS, 1, 1);
         }
     }
 
