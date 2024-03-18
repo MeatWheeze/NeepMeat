@@ -2,6 +2,7 @@ package com.neep.neepmeat.util;
 
 import com.neep.neepmeat.transport.fluid_network.node.FluidNode;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 
@@ -124,5 +125,10 @@ public class NMMaths
     public static Vec2f rectToPol(Vec3d vec)
     {
         return rectToPol(vec.x, vec.y, vec.z);
+    }
+
+    public static float sin(long time, float tickDelta, float timeFactor)
+    {
+        return (float) (Math.sin(time * timeFactor) * MathHelper.cos(tickDelta * timeFactor) + Math.cos(time * timeFactor) * MathHelper.sin(tickDelta * timeFactor));
     }
 }

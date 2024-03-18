@@ -55,7 +55,8 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
             matrices.translate(0.5d, 0d, 0.5d);
             matrices.multiply(Vec3f.POSITIVE_Y.getRadialQuaternion(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
-            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + partialTicks) / 20) / 15, 0);
+            float s = NMMaths.sin(be.getWorld().getTime(), tickDelta, 1 / 20f);
+            matrices.translate(0, 1.8 + s / 15, 0);
 
             AnimatedGeoModel<IntegratorBlockEntity> modelProvider = getGeoModelProvider();
             GeoModel model = modelProvider.getModel(modelProvider.getModelResource(be));
