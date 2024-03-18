@@ -111,6 +111,9 @@ public class NMEmiPlugin implements EmiPlugin {
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.TROMMEL)
                 .map(TrommelEmiRecipe::new)
                 .forEach(registry::addRecipe);
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.VIVISECTION)
+                .map(VivisectionEmiRecipe::new)
+                .forEach(registry::addRecipe);
 
         registry.addRecipe(new ToolManufactureEmiRecipe(TransformingToolRecipe.getInstance()));
 
@@ -122,8 +125,7 @@ public class NMEmiPlugin implements EmiPlugin {
             registry.addRecipe(new CompactingEmiRecipe(entries, NMItems.CRUDE_INTEGRATION_CHARGE, page++));
         }
 
-        // Heart extraction
-        registry.addRecipe(new VivisectionEmiRecipe(List.of(EntityType.ZOMBIE), NMItems.ANIMAL_HEART));
+//        registry.addRecipe(new VivisectionEmiRecipe(List.of(EntityType.ZOMBIE), NMItems.ANIMAL_HEART));
         registry.addRecipe(new VivisectionEmiRecipe(NMBlocks.INTEGRATOR_EGG.asItem(), NMItems.CHRYSALIS));
     }
 }
