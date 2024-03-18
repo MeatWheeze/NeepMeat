@@ -2,6 +2,7 @@ package com.neep.neepmeat.compat.emi.recipe;
 
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
+import com.neep.neepmeat.recipe.VivisectionRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -26,12 +27,12 @@ public class VivisectionEmiRecipe implements EmiRecipe {
 
     private final List<Text> entities;
 
-    public VivisectionEmiRecipe(List<EntityType<?>> input, Item output) {
+    public VivisectionEmiRecipe(List<EntityType<?>> input, EmiStack output) {
         this.entities = input.stream().map(e -> (Text) Text.translatable(e.getTranslationKey())).toList();
 
         this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+String.join("_", input.stream().map(e -> e.getUntranslatedName().toLowerCase(Locale.ROOT)).toList()));
         this.input = List.of();
-        this.output = List.of(EmiStack.of(output));
+        this.output = List.of(output);
     }
 
     public VivisectionEmiRecipe(Item input, Item output) {
@@ -40,6 +41,11 @@ public class VivisectionEmiRecipe implements EmiRecipe {
         this.id = new Identifier(NeepMeat.NAMESPACE, "vivisection/"+ Registries.ITEM.getId(input).getPath().toLowerCase(Locale.ROOT));
         this.input = List.of(EmiIngredient.of(Ingredient.ofItems(input)));
         this.output = List.of(EmiStack.of(output));
+    }
+
+    public VivisectionEmiRecipe(VivisectionRecipe recipe)
+    {
+        this(List.of(recipe.getEntityType()), EmiStack.of(recipe.getReicpeOutput().resource(), recipe.getReicpeOutput().minAmount()));
     }
 
     @Override
