@@ -4,11 +4,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.neep.meatlib.recipe.MeatRecipeSerialiser;
 import com.neep.meatlib.recipe.MeatlibRecipe;
-import com.neep.meatlib.recipe.ingredient.GenericIngredient;
 import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
-import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
@@ -17,10 +15,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class VivisectionRecipe implements MeatlibRecipe<VivisectionRecipe.VivisectionContext>
@@ -96,13 +94,13 @@ public class VivisectionRecipe implements MeatlibRecipe<VivisectionRecipe.Vivise
         public VivisectionRecipe read(Identifier id, JsonObject json)
         {
             Identifier entityId = Identifier.tryParse(JsonHelper.getString(json, "entity"));
-            var type = Registries.ENTITY_TYPE.getOrEmpty(entityId).orElse(null);
+            var type = Registry.ENTITY_TYPE.getOrEmpty(entityId).orElse(null);
             if (type == null)
                 throw new JsonSyntaxException("Entity '" + entityId + "' not found");
 
             int maxHealth = JsonHelper.getInt(json, "max_health");
 
-            RecipeOutput<Item> output = RecipeOutputImpl.fromJsonRegistry(Registries.ITEM, JsonHelper.getObject(json, "output"));
+            RecipeOutput<Item> output = RecipeOutputImpl.fromJsonRegistry(Registry.ITEM, JsonHelper.getObject(json, "output"));
 
             return new VivisectionRecipe(id, type, maxHealth, output);
         }
@@ -110,18 +108,18 @@ public class VivisectionRecipe implements MeatlibRecipe<VivisectionRecipe.Vivise
         @Override
         public VivisectionRecipe read(Identifier id, PacketByteBuf buf)
         {
-            EntityType<?> type = buf.readRegistryValue(Registries.ENTITY_TYPE);
+            EntityType<?> type = buf.readRegistryValue(Registry.ENTITY_TYPE);
             int maxHealth = buf.readVarInt();
-            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
+            RecipeOutput<Item> output = RecipeOutputImpl.fromBuffer(Registry.ITEM, buf);
             return new VivisectionRecipe(id, type, maxHealth, output);
         }
 
         @Override
         public void write(PacketByteBuf buf, VivisectionRecipe recipe)
         {
-            buf.writeRegistryValue(Registries.ENTITY_TYPE, recipe.entityType);
+            buf.writeRegistryValue(Registry.ENTITY_TYPE, recipe.entityType);
             buf.writeVarInt(recipe.maxHealth);
-            recipe.output.write(Registries.ITEM, buf);
+            recipe.output.write(Registry.ITEM, buf);
         }
     }
 

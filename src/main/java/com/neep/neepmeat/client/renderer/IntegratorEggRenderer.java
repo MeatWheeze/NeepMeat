@@ -36,7 +36,7 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
     }
 
     @Override
-    public void render(IntegratorBlockEntity be, float partialTicks, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
+    public void render(IntegratorBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int packedLightIn)
     {
         if (!be.isMature)
         {
@@ -67,16 +67,16 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
 
             // Render main model
             MinecraftClient.getInstance().getTextureManager().bindTexture(getTextureLocation(be));
-            Color renderColor = getRenderColor(be, partialTicks, matrices, vertexConsumers, null, packedLightIn);
-            RenderLayer renderType = getRenderType(be, partialTicks, matrices, vertexConsumers, null, packedLightIn, getTextureLocation(be));
-            render(model, be, partialTicks, renderType, matrices, vertexConsumers, null, packedLightIn, OverlayTexture.DEFAULT_UV,
+            Color renderColor = getRenderColor(be, tickDelta, matrices, vertexConsumers, null, packedLightIn);
+            RenderLayer renderType = getRenderType(be, tickDelta, matrices, vertexConsumers, null, packedLightIn, getTextureLocation(be));
+            render(model, be, tickDelta, renderType, matrices, vertexConsumers, null, packedLightIn, OverlayTexture.DEFAULT_UV,
                     (float) renderColor.getRed() / 255f, (float) renderColor.getGreen() / 255f,
                     (float) renderColor.getBlue() / 255f, (float) renderColor.getAlpha() / 255);
 
             // Render enlightenment overlay
             float dataPropt = (float) be.getData(DataVariant.NORMAL) / IntegratorBlockEntity.MAX_DATA;
             RenderLayer cameo =  RenderLayer.getEntityTranslucent(LAYER);
-            render(model, be, partialTicks, cameo, matrices, vertexConsumers,
+            render(model, be, tickDelta, cameo, matrices, vertexConsumers,
                     vertexConsumers.getBuffer(cameo), packedLightIn, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, dataPropt);
 
             matrices.pop();
