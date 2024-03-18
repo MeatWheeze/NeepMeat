@@ -16,6 +16,7 @@ import net.minecraft.client.render.block.BlockRenderManager;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -91,7 +92,9 @@ public class IntegratorEggRenderer extends GeoBlockRenderer<IntegratorBlockEntit
             matrices.translate(0.5d, 0d, 0.5d);
             matrices.multiply(RotationAxis.POSITIVE_Y.rotation(be.facing));
             matrices.translate(-0.5d, 0d, -0.5d);
-            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + tickDelta) / 20) / 15, 0);
+//            matrices.translate(0, 1.8 + Math.sin((be.getWorld().getTime() + tickDelta) / 20) / 15, 0);
+            float s = NMMaths.sin(be.getWorld().getTime(), tickDelta, 1 / 20f);
+            matrices.translate(0, 1.8 + s / 15, 0);
 
             GeoModel<IntegratorBlockEntity> modelProvider = getGeoModel();
 //            GeoModel model = modelProvider.getModel(modelProvider.getModelResource(be));

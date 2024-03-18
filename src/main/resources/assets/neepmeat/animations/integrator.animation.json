@@ -55,7 +55,7 @@
 						}
 					},
 					"position": {
-						"vector": [0, "sin(t)", 0]
+						"vector": [0, "math.sin(t)", 0]
 					}
 				},
 				"seg1": {
