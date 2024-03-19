@@ -40,6 +40,8 @@ public class NMFluidsClient
     public static final Identifier TISSUE_SLURRY_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/tissue_slurry_flowing");
     public static final Identifier MILK = new Identifier(NeepMeat.NAMESPACE, "block/milk_still");
     public static final Identifier MILK_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/milk_flowing");
+    public static final Identifier PASTEURISED_MILK = new Identifier(NeepMeat.NAMESPACE, "block/pasteurised_milk_still");
+    public static final Identifier PASTEURISED_MILK_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/pasteurised_milk_flowing");
     public static final Identifier FEED = new Identifier(NeepMeat.NAMESPACE, "block/animal_feed_still");
     public static final Identifier FEED_FLOWING = new Identifier(NeepMeat.NAMESPACE, "block/animal_feed_flowing");
     public static final Identifier PINKDRINK = new Identifier(NeepMeat.NAMESPACE, "block/pinkdrink_still");
@@ -113,8 +115,9 @@ public class NMFluidsClient
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MEAT, NMFluids.FLOWING_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_C_MEAT, NMFluids.FLOWING_C_MEAT, new SimpleFluidRenderHandler(MEAT, MEAT_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_TISSUE_SLURRY, NMFluids.FLOWING_TISSUE_SLURRY, new SimpleFluidRenderHandler(TISSUE_SLURRY_STILL, TISSUE_SLURRY_FLOWING));
-        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MILK, NMFluids.FLOWING_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
-        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_P_MILK, NMFluids.FLOWING_P_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_MILK, NMFluids.FLOWING_MILK, new SimpleFluidRenderHandler(MILK, MILK_FLOWING, 0xecebe1));
+        FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PASTEURISED_MILK, NMFluids.FLOWING_P_MILK, new SimpleFluidRenderHandler(PASTEURISED_MILK, PASTEURISED_MILK_FLOWING, 0xFFFFFF));
+
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_FEED, NMFluids.FLOWING_FEED, new SimpleFluidRenderHandler(FEED, FEED_FLOWING));
         FluidRenderHandlerRegistry.INSTANCE.register(NMFluids.STILL_PINKDRINK, NMFluids.FLOWING_PINKDRINK, new SimpleFluidRenderHandler(PINKDRINK, PINKDRINK_FLOWING, 0xFFf089a8));
 
