@@ -88,11 +88,15 @@ public class EditBoxWidget extends ScrollableWidget
 
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if (super.mouseClicked(mouseX, mouseY, button))
-        {
-            return true;
-        }
-        else if (this.isWithinBounds(mouseX, mouseY) && button == 0)
+        // Scroll bar
+        boolean bl2 = this.overflows() && mouseX >= (this.getX() + this.width) && mouseX <= (this.getX() + this.width + 8) && mouseY >= this.getY() && mouseY < (this.getY() + this.height);
+
+        // The super implementation of this method returns true both when scrolling and clicking the main widget,
+        // so there is no way of telling whether to move the cursor or not.
+        if (isWithinBounds(mouseX, mouseY) && bl2)
+            return super.mouseClicked(mouseX, mouseY, button);
+
+        if (this.isWithinBounds(mouseX, mouseY) && button == 0)
         {
             this.editBox.setSelecting(Screen.hasShiftDown());
             this.moveCursor(mouseX, mouseY);
