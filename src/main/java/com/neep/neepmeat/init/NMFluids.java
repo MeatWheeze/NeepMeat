@@ -96,7 +96,7 @@ public class NMFluids
     public static FluidFactory MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "milk", false, 5, 1).withBucketItem(Items.MILK_BUCKET);
 
     public static FlowableFluid FLOWING_P_MILK;
-    public static FlowableFluid STILL_P_MILK;
+    public static FlowableFluid STILL_PASTEURISED_MILK;
     public static Item P_MILK_BUCKET;
     public static Block P_MILK;
     public static FluidFactory P_MILK_FACTORY = new FluidFactory(NeepMeat.NAMESPACE, "pasteurised_milk", false, 5, 1);
@@ -180,7 +180,7 @@ public class NMFluids
         FLOWING_MILK = MILK_FACTORY.registerFlowing();
         MILK = MILK_FACTORY.registerBlock();
 
-        STILL_P_MILK = P_MILK_FACTORY.registerStill();
+        STILL_PASTEURISED_MILK = P_MILK_FACTORY.registerStill();
         FLOWING_P_MILK = P_MILK_FACTORY.registerFlowing();
         P_MILK_BUCKET = P_MILK_FACTORY.registerItem();
         P_MILK = P_MILK_FACTORY.registerBlock();
@@ -208,9 +208,9 @@ public class NMFluids
                 new EmptyItemFluidStorage(context, NMItems.PINKDRINK, NMFluids.STILL_PINKDRINK, FluidConstants.BOTTLE));
 
         FluidStorage.combinedItemApiProvider(NMItems.MILK_CARTON).register(context ->
-                new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_P_MILK), FluidConstants.BOTTLE));
+                new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_PASTEURISED_MILK), FluidConstants.BOTTLE));
         FluidStorage.combinedItemApiProvider(NMItems.CARTON).register(context ->
-                new EmptyItemFluidStorage(context, NMItems.MILK_CARTON, NMFluids.STILL_P_MILK, FluidConstants.BOTTLE));
+                new EmptyItemFluidStorage(context, NMItems.MILK_CARTON, NMFluids.STILL_PASTEURISED_MILK, FluidConstants.BOTTLE));
 
 //        FluidStorage.combinedItemApiProvider(NMItems.MILK_CARTON).register(context ->
 //                new FullItemFluidStorage(context, NMItems.CARTON, FluidVariant.of(NMFluids.STILL_P_MILK), FluidConstants.BOTTLE));
