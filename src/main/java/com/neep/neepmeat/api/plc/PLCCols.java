@@ -11,7 +11,8 @@ public enum PLCCols
     TEXT(Color.ofRGBA(255, 94, 33, 255).getColor()),
     SELECTED(Color.ofRGBA(255, 150, 33, 255).getColor()),
     DEBUG_LINE(Color.ofRGBA(120, 10, 100, 100).getColor()),
-    TRANSPARENT(Color.ofRGBA(255, 94, 33, 100).getColor());
+    TRANSPARENT(Color.ofRGBA(255, 94, 33, 100).getColor()),
+    LINE_NUMBER(Color.ofRGBA(200, 94, 33, 255).getColor());
 
     PLCCols(int col)
     {

@@ -7,22 +7,23 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.input.CursorMovement;
 import net.minecraft.text.Style;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
+import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @Environment(EnvType.CLIENT)
 public class EditBox
 {
-    private final List<Substring> lines = Lists.newArrayList();
+    private final List<LineEntry> lines = Lists.newArrayList();
     private final int width;
     private final MonoTextRenderer textRenderer;
     private String text = "";
@@ -134,11 +135,21 @@ public class EditBox
         return this.lines.size();
     }
 
+    public int absLineToWrapped(int line)
+    {
+        for (int i = 0; i < lines.size(); ++i)
+        {
+            if (lines.get(i).lineNum() == line)
+                return i;
+        }
+        return 0;
+    }
+
     public int getCurrentLineIndex()
     {
         for (int i = 0; i < this.lines.size(); ++i)
         {
-            Substring substring = this.lines.get(i);
+            Substring substring = this.lines.get(i).substring();
             if (this.cursor >= substring.beginIndex && this.cursor <= substring.endIndex)
             {
                 return i;
@@ -148,7 +159,7 @@ public class EditBox
         return -1;
     }
 
-    public Substring getLine(int index)
+    public LineEntry getLine(int index)
     {
         return this.lines.get(MathHelper.clamp(index, 0, this.lines.size() - 1));
     }
@@ -191,9 +202,9 @@ public class EditBox
     {
         int i = MathHelper.floor(x);
         int j = MathHelper.floor(y / 9.0);
-        Substring substring = this.lines.get(MathHelper.clamp(j, 0, this.lines.size() - 1));
-        int k = this.textRenderer.trimToWidth(this.text.substring(substring.beginIndex, substring.endIndex), i).length();
-        this.moveCursor(CursorMovement.ABSOLUTE, substring.beginIndex + k);
+        LineEntry substring = this.lines.get(MathHelper.clamp(j, 0, this.lines.size() - 1));
+        int k = this.textRenderer.trimToWidth(this.text.substring(substring.beginIndex(), substring.endIndex()), i).length();
+        this.moveCursor(CursorMovement.ABSOLUTE, substring.beginIndex() + k);
     }
 
     public boolean handleSpecialKey(int keyCode)
@@ -346,7 +357,7 @@ public class EditBox
         }
     }
 
-    public Iterable<Substring> getLines()
+    public Iterable<LineEntry> getLines()
     {
         return this.lines;
     }
@@ -378,7 +389,7 @@ public class EditBox
         }
         else
         {
-            return this.lines.get(MathHelper.clamp(i + offsetFromCurrent, 0, this.lines.size() - 1));
+            return this.lines.get(MathHelper.clamp(i + offsetFromCurrent, 0, this.lines.size() - 1)).substring();
         }
     }
 
@@ -431,7 +442,7 @@ public class EditBox
     private int getWordEndIndex(int startIndex)
     {
         int i;
-        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i) ;
+        for (i = startIndex; i < this.text.length() && !Character.isWhitespace(this.text.charAt(i)); ++i);
 
         return i;
     }
@@ -445,20 +456,42 @@ public class EditBox
 
     private void rewrap()
     {
-        this.lines.clear();
-        if (this.text.isEmpty())
+        lines.clear();
+        if (text.isEmpty())
         {
-            this.lines.add(EditBox.Substring.EMPTY);
+            lines.add(LineEntry.EMPTY);
         }
         else
         {
-            this.textRenderer.getTextHandler().wrapLines(this.text, Math.round(this.width / this.scale), Style.EMPTY, false, (style, start, end) ->
+//            AtomicInteger numLines = new AtomicInteger();
+//            String[] splitLines = text.split("\n");
+//            AtomicInteger lineEnd = new AtomicInteger(0);
+//            for (String line : splitLines)
+//            {
+//                line += '\n';
+//                AtomicBoolean lineStart = new AtomicBoolean(true);
+//                textRenderer.getTextHandler().wrapLines(line, Math.round(width / scale), Style.EMPTY, false, (style, start, end) ->
+//                {
+//                    lines.add(new LineEntry(lineEnd.get() + start, lineEnd.get() + end, !lineStart.get()));
+//                    lineEnd.addAndGet(end);
+//                    lineStart.set(false);
+//                });
+//            }
+
+            AtomicInteger numLines = new AtomicInteger(0);
+            textRenderer.getTextHandler().wrapLines(text, Math.round(width / scale), Style.EMPTY, false, (style, start, end) ->
             {
-                this.lines.add(new Substring(start, end));
+                boolean wrap = start - 1 >= 0 && text.charAt(start - 1) != '\n';
+
+                if (!wrap && start - 1 >= 0)
+                    numLines.incrementAndGet();
+
+                lines.add(new LineEntry(start, end, numLines.get(), wrap));
+
             });
-            if (this.text.charAt(this.text.length() - 1) == '\n')
+            if (text.charAt(this.text.length() - 1) == '\n')
             {
-                this.lines.add(new Substring(this.text.length(), this.text.length()));
+                lines.add(new LineEntry(text.length(), text.length(), numLines.get(), false));
             }
 
         }
@@ -495,6 +528,27 @@ public class EditBox
         public int endIndex()
         {
             return this.endIndex;
+        }
+    }
+
+    @Environment(EnvType.CLIENT)
+    public record LineEntry(Substring substring, int lineNum, boolean wrapped)
+    {
+        static final LineEntry EMPTY = new LineEntry(Substring.EMPTY, 0, false);
+
+        public LineEntry(int i, int j, int lineNum, boolean wrapped)
+        {
+            this(new Substring(i, j), lineNum, wrapped);
+        }
+
+        public int endIndex()
+        {
+            return substring.endIndex;
+        }
+
+        public int beginIndex()
+        {
+            return substring.beginIndex;
         }
     }
 }

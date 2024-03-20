@@ -37,7 +37,7 @@ public class ParsedMacro
 
             String arg = parseArgumentString(view, parser);
             if (arg.isEmpty())
-                throw new NeepASM.ParseException("not enough macro arguments");
+                throw new NeepASM.ParseException("not enough comma-separated macro arguments.");
 
             if (!view.lineEnded())
                 view.next();

@@ -25,7 +25,7 @@ import java.util.Map;
 /**
  * It's the worst lexer/parser ever!
  * We don't need all those silly things like operator precedence, nested scopes blah blah blah. It's all bloat.
- * Abstract syntax tree? What's that?
+ * Abstract syntax tree? Never heard of her.
  */
 public class Parser
 {
