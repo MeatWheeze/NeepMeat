@@ -46,7 +46,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
     @Override
     protected AdvancedIntegratorStructure registerStructureBlock()
     {
-        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, FabricBlockSettings.create()), "advanced_integrator_structure");
+        return BlockRegistry.queue(new AdvancedIntegratorStructure(this, settings), "advanced_integrator_structure");
     }
 
     @Override

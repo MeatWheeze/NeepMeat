@@ -1,0 +1,9 @@
+# Made in Blockbench 4.9.4
+newmtl m_489c7fdd-1c7c-615d-45c9-511cfa8ae34a
+map_Kd neepmeat:block/large_crusher/main1
+newmtl m_c13baea4-3c29-ac65-828f-d44b91c940a6
+map_Kd neepmeat:block/large_crusher/main
+newmtl m_9ab97e7e-4af0-9a69-2e2d-622299f7fcaa
+map_Kd neepmeat:block/large_crusher/jaw
+newmtl m_6e2710b1-22bb-2fcb-c6af-0d6d9518df7b
+map_Kd neepmeat:block/large_crusher/main2

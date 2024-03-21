@@ -35,7 +35,7 @@ public class GrindingCategory implements DisplayCategory<GrindingDisplay>
     @Override
     public Renderer getIcon()
     {
-        return EntryStacks.of(NMBlocks.GRINDER);
+        return EntryStacks.of(NMBlocks.CRUSHER);
     }
 
     @Override

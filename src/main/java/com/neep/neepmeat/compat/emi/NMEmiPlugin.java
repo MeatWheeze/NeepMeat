@@ -18,7 +18,6 @@ import dev.emi.emi.api.EmiPlugin;
 import dev.emi.emi.api.EmiRegistry;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
-import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.recipe.RecipeManager;
 import net.minecraft.registry.Registries;
@@ -33,7 +32,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiStack ENLIGHTENING_WORKSTATION = EmiStack.of(NMBlocks.PEDESTAL);
     public static final EmiStack INTEGRATOR_WORKSTATION = EmiStack.of(NMBlocks.INTEGRATOR_EGG);
     public static final EmiStack ADV_INTEGRATOR_WORKSTATION = EmiStack.of(NMBlocks.ADVANCED_INTEGRATOR);
-    public static final EmiStack GRINDING_WORKSTATION = EmiStack.of(NMBlocks.GRINDER);
+    public static final EmiStack GRINDING_WORKSTATION = EmiStack.of(NMBlocks.CRUSHER);
     public static final EmiStack VIVISECTION_WORKSTATION = EmiStack.of(NMItems.SACRIFICIAL_SCALPEL);
     public static final EmiStack HEATING_WORKSTATION = EmiStack.of(FluidTransport.MULTI_TANK);
     public static final EmiStack MANUFACTURE_WORKSTATION = EmiStack.of(PLCBlocks.PLC);

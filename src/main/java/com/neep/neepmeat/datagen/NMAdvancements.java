@@ -68,7 +68,7 @@ public class NMAdvancements extends FabricAdvancementProvider
 
         Advancement place_grinder = placeBlock(
                 consumer, "main", "place_grinder", obtain_integrator,
-                NMBlocks.GRINDER
+                NMBlocks.CRUSHER
         );
 
         Advancement place_hydraulic_press = getItem(

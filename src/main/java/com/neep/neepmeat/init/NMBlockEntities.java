@@ -348,7 +348,7 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(DEPLOYER);
 //        AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
-        GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.GRINDER);
+        GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.CRUSHER);
         ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         Heatable.LOOKUP.registerSelf(ALLOY_KILN);
         CRUCIBLE = register("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);

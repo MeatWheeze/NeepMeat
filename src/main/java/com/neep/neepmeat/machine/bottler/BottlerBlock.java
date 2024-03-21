@@ -19,7 +19,7 @@ public class BottlerBlock extends BaseHorFacingBlock implements BlockEntityProvi
 {
     public BottlerBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(itemName, itemSettings, settings.nonOpaque());
     }
 
     @Override
