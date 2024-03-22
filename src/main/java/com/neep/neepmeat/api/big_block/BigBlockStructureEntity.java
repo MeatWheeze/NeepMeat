@@ -7,6 +7,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.*;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
@@ -42,6 +43,14 @@ public class BigBlockStructureEntity extends SyncableBlockEntity
 
         BlockPos relative = pos.subtract(controllerPos);
         return outlineShape.offset(-relative.getX(), -relative.getY(), -relative.getZ());
+    }
+
+    public VoxelShape translateChopShape(VoxelShape outlineShape)
+    {
+        if (controllerPos == null)
+            return VoxelShapes.fullCube();
+
+        return VoxelShapes.combine(translateShape(outlineShape), VoxelShapes.fullCube(), BooleanBiFunction.AND);
     }
 
     @Override

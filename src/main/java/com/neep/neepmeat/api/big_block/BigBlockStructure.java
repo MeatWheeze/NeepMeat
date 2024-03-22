@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class BigBlockStructure<T extends BigBlockStructureEntity> extends Block implements MeatlibBlock, BlockEntityProvider
 {
-    private final BigBlock<?> parent;
+    protected final BigBlock<?> parent;
     private final BlockEntityType<T> blockEntityType;
 
     public BigBlockStructure(BigBlock<?> parent, Settings settings)
@@ -53,9 +53,6 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
             BlockState parentState = world.getBlockState(controllerPos);
             if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
                return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
-//            else
-//                return VoxelShapes.empty();
-//            return VoxelShapes.cuboid(0.25, 0.25, 0.25, 0.75, 0.75, 0.75);
         }
 
         return VoxelShapes.empty();

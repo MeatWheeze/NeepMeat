@@ -95,23 +95,26 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     {
         super.tick();
 
-        if (client.world.getTime() % 10 == 0 && changed)
+        if (editorField != null)
         {
-            try
+            if (client.world.getTime() % 10 == 0 && changed)
             {
-                ParsedSource parsedSource = parser.parse(editorField.getText());
-                setCompileMessage("Parsed Successfully", true, -1);
-            }
-            catch (NeepASM.ProgramBuildException e)
-            {
-                setCompileMessage(e.getMessage(), false, e.line());
+                try
+                {
+                    ParsedSource parsedSource = parser.parse(editorField.getText());
+                    setCompileMessage("Parsed Successfully", true, -1);
+                }
+                catch (NeepASM.ProgramBuildException e)
+                {
+                    setCompileMessage(e.getMessage(), false, e.line());
+                }
+
+                PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), editorField.getText());
+                changed = false;
             }
 
-            PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), editorField.getText());
-            changed = false;
+            editorField.setDebugLine(parent.getScreenHandler().debugLine());
         }
-
-        editorField.setDebugLine(parent.getScreenHandler().debugLine());
     }
 
     public void setCompileMessage(String message, boolean success, int line)

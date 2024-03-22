@@ -1,12 +1,120 @@
 package com.neep.neepmeat.machine.large_crusher;
 
-import com.neep.meatlib.block.BaseHorFacingBlock;
+import com.google.common.collect.ImmutableMap;
+import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.api.big_block.BigBlock;
+import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.util.MiscUtil;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
+import net.minecraft.state.property.Properties;
+import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
+import org.jetbrains.annotations.Nullable;
 
-public class LargeCrusherBlock extends BaseHorFacingBlock
+import java.util.Map;
+
+public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
-    public LargeCrusherBlock(String itemName, ItemSettings itemSettings, Settings settings)
+    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+
+    private final String name;
+    private final BlockItem blockItem;
+    private final BigBlockPattern northPattern;
+
+    private final Map<Direction, BigBlockPattern> patternMap;
+    private final Map<Direction, VoxelShape> shapeMap;
+
+    private final VoxelShape northShape =
+            VoxelShapes.combine(VoxelShapes.union(
+                    VoxelShapes.cuboid(-1, 0, -1, 2, 2, 2),
+                    VoxelShapes.cuboid(-1, 2, -1, 2, 3, 1)),
+            VoxelShapes.cuboid(-10 / 16f, 2, -0.75, 1 + 10 / 16f, 3, 0.75), BooleanBiFunction.ONLY_FIRST);
+
+    public LargeCrusherBlock(String name, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(settings);
+        this.name = name;
+        this.blockItem = itemSettings.getFactory().create(this, name, itemSettings);
+        this.northPattern = BigBlockPattern.oddCylinder(1, 0, 1, getStructure().getDefaultState())
+                .set(-1, 2, 0, getStructure().getDefaultState())
+                .set(-0, 2, 0, getStructure().getDefaultState())
+                .set(1, 2, 0, getStructure().getDefaultState())
+                .set(-1, 2, -1, getStructure().getDefaultState())
+                .set(0, 2, -1, getStructure().getDefaultState())
+                .set(1, 2, -1, getStructure().getDefaultState())
+        ;
+
+        this.patternMap = ImmutableMap.of(
+                Direction.NORTH, northPattern,
+                Direction.EAST, northPattern.rotateY(90),
+                Direction.SOUTH, northPattern.rotateY(180),
+                Direction.WEST, northPattern.rotateY(270)
+        );
+
+        this.shapeMap = ImmutableMap.of(
+                Direction.NORTH, MiscUtil.rotateShapeY(northShape, 0),
+                Direction.EAST, MiscUtil.rotateShapeY(northShape, 90),
+                Direction.SOUTH, MiscUtil.rotateShapeY(northShape, 180),
+                Direction.WEST, MiscUtil.rotateShapeY(northShape, 270)
+        );
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return shapeMap.get(state.get(FACING));
+    }
+
+    @Override
+    protected LargeCrusherStructureBlock registerStructureBlock()
+    {
+        return BlockRegistry.queue(new LargeCrusherStructureBlock(name + "_structure", this, settings));
+    }
+
+    @Override
+    protected BigBlockPattern getVolume(BlockState blockState)
+    {
+        return patternMap.get(blockState.get(FACING));
+    }
+
+    @Nullable
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx)
+    {
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+    }
+
+    @Override
+    public String getRegistryName()
+    {
+        return name;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return null;
     }
 }
