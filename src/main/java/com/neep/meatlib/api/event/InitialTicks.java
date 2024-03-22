@@ -22,7 +22,7 @@ public final class InitialTicks
 
     public static InitialTicks getInstance(ServerWorld world)
     {
-        return MAP.get(world);
+        return MAP.computeIfAbsent(world, InitialTicks::new);
     }
 
     public void queue(InitialTickListener listener)
@@ -32,10 +32,10 @@ public final class InitialTicks
 
     public static void init()
     {
-        ServerWorldEvents.LOAD.register((server, world) ->
-        {
-            MAP.put(world, new InitialTicks(world));
-        });
+//        ServerWorldEvents.LOAD.register((server, world) ->
+//        {
+//            MAP.put(world, new InitialTicks(world));
+//        });
 
         ServerLifecycleEvents.SERVER_STOPPED.register(server ->
         {

@@ -38,7 +38,7 @@ public class FluidNodeManager
 
     public static FluidNodeManager getInstance(ServerWorld world)
     {
-        return WORLD_MANAGERS.get(world);
+        return WORLD_MANAGERS.computeIfAbsent(world, FluidNodeManager::create);
     }
 
     public static FluidNodeManager getInstance(World world)
@@ -59,14 +59,15 @@ public class FluidNodeManager
         }
     }
 
-    protected static void create(ServerWorld world)
+    protected static FluidNodeManager create(ServerWorld world)
     {
-        FluidNodeManager manager = WORLD_MANAGERS.get(world);
-        if (manager == null)
-        {
-            manager = new FluidNodeManager(world);
-            WORLD_MANAGERS.put(world, manager);
-        }
+//        FluidNodeManager manager = WORLD_MANAGERS.get(world);
+//        if (manager == null)
+//        {
+//            manager = new FluidNodeManager(world);
+//            WORLD_MANAGERS.put(world, manager);
+//        }
+        return new FluidNodeManager(world);
     }
 
     private static void startWorld(MinecraftServer server, ServerWorld world)
