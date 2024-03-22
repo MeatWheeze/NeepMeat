@@ -78,7 +78,7 @@ public class GeneralSurgeryRecipe extends SurgeryRecipe
 
             try (Transaction transaction = Transaction.openOuter())
             {
-                if (!input.test(structure.getStorage(), transaction))
+                if (!input.testStorage(structure.getStorage()))
                 {
                     transaction.abort();
                     return false;

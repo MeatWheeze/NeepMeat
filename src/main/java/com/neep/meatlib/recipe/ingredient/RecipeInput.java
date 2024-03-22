@@ -123,7 +123,7 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
         return Arrays.stream(matchingObjects).anyMatch(o -> storageView.getResource().getObject().equals(o));
     }
 
-    public boolean test(Storage<? extends TransferVariant<?>> storage, TransactionContext transaction)
+    public boolean testStorage(Storage<? extends TransferVariant<?>> storage)
     {
         cacheMatching();
         Stream<?> entries = Arrays.stream(matchingObjects);

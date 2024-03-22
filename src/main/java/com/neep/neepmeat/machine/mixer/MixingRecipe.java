@@ -10,6 +10,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
@@ -94,7 +95,7 @@ public class MixingRecipe extends ImplementedRecipe<MixerStorage>
             }
         }
         transaction.abort();
-        return queue.size() == 0 && itemInput.test(inventory.getItemInput());
+        return queue.size() == 0 && itemInput.test((StorageView<? extends TransferVariant<Item>>) inventory.getItemInput());
     }
 
     public boolean takeInputs(MixerStorage inventory, TransactionContext transactionContext)

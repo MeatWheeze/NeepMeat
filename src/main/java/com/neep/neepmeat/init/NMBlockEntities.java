@@ -38,6 +38,7 @@ import com.neep.neepmeat.machine.homogeniser.HomogeniserBlockEntity;
 import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
+import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlockEntity;
 import com.neep.neepmeat.machine.large_motor.LargeMotorBlockEntity;
 import com.neep.neepmeat.machine.large_motor.LargeMotorStructureEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
@@ -163,7 +164,8 @@ public class NMBlockEntities
 
 
     public static BlockEntityType<MixerBlockEntity> MIXER;
-    public static BlockEntityType<GrinderBlockEntity> GRINDER;
+    public static BlockEntityType<GrinderBlockEntity> CRUSHER;
+    public static BlockEntityType<LargeCrusherBlockEntity> LARGE_CRUSHER;
     public static BlockEntityType<StirlingEngineBlockEntity> STIRLING_ENGINE;
     public static BlockEntityType<AlloyKilnBlockEntity> ALLOY_KILN;
 
@@ -348,7 +350,8 @@ public class NMBlockEntities
         ItemStorage.SIDED.registerSelf(DEPLOYER);
 //        AGITATOR = register("agitator", AgitatorBlockEntity::new, NMBlocks.AGITATOR);
 
-        GRINDER = register("grinder", GrinderBlockEntity::new, NMBlocks.CRUSHER);
+        CRUSHER = register("grinder", GrinderBlockEntity::new, NMBlocks.CRUSHER);
+        LARGE_CRUSHER = register("large_crusher", (p, s) -> new LargeCrusherBlockEntity(LARGE_CRUSHER, p, s), NMBlocks.LARGE_CRUSHER);
         ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         Heatable.LOOKUP.registerSelf(ALLOY_KILN);
         CRUCIBLE = register("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);
@@ -470,7 +473,7 @@ public class NMBlockEntities
         FluidStorage.SIDED.registerForBlockEntity(PumpBlockEntity::getBuffer, PUMP);
 
 
-        ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), GRINDER);
+        ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getItemStorage(direction), CRUSHER);
 
         ItemStorage.SIDED.registerForBlockEntity((be, direction) -> be.getStorage().getStorage(direction), ALLOY_KILN);
         ItemStorage.SIDED.registerForBlockEntity(DisplayPlatformBlockEntity::getStorage, ITEM_BUFFER_BLOCK_ENTITY);

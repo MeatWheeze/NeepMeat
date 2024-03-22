@@ -11,6 +11,8 @@ import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.integrator.Integrator;
 import com.neep.neepmeat.machine.pedestal.PedestalBlockEntity;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
+import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
@@ -41,7 +43,7 @@ public class EnlighteningRecipe extends ImplementedRecipe<PedestalBlockEntity.Re
     @Override
     public boolean matches(PedestalBlockEntity.RecipeBehaviour inventory, World world)
     {
-        return itemInput.test(inventory.getStorage())
+        return itemInput.test((StorageView<? extends TransferVariant<Item>>) inventory.getStorage())
                 && inventory.getIntegrator() != null
                 && inventory.getIntegrator().getData(DataVariant.NORMAL) >= data;
     }

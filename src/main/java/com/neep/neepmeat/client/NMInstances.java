@@ -26,8 +26,8 @@ public class NMInstances
     public static void init()
     {
         // Flywheel
-        InstancedRenderRegistry.configure(NMBlockEntities.GRINDER).factory(GrinderInstance::new).apply();
-        BlockEntityRendererFactories.register(NMBlockEntities.GRINDER, GrinderRenderer::new);
+        InstancedRenderRegistry.configure(NMBlockEntities.CRUSHER).factory(GrinderInstance::new).apply();
+        BlockEntityRendererFactories.register(NMBlockEntities.CRUSHER, GrinderRenderer::new);
 
         InstancedRenderRegistry.configure(NMBlockEntities.MOTOR).alwaysSkipRender().factory(MotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();

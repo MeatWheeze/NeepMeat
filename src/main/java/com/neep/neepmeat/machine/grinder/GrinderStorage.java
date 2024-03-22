@@ -3,8 +3,6 @@ package com.neep.neepmeat.machine.grinder;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
-import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.ItemScatterer;
@@ -13,7 +11,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
-public class GrinderStorage extends SimpleInventory
+public class GrinderStorage extends SimpleInventory implements IGrinderStorage
 {
     protected GrinderBlockEntity parent;
     protected WritableStackStorage inputStorage;
@@ -29,11 +27,7 @@ public class GrinderStorage extends SimpleInventory
             @Override
             public boolean canInsert(ItemVariant resource)
             {
-//                if (world == null)
-                    return true;
-
-//                List<?> list = world.getRecipeManager().listAllOfType(NMrecipeTypes.GRINDING);
-//                return list.stream().anyMatch(r -> r instanceof GrindingRecipe recipe && recipe.getItemInput().resource().equals(resource));
+                return true;
             }
         };
 
@@ -115,12 +109,12 @@ public class GrinderStorage extends SimpleInventory
         xpStorage.readNbt(xpNbt);
     }
 
-    public WritableStackStorage getOutputStorage()
+    public Storage<ItemVariant> getOutputStorage()
     {
         return outputStorage;
     }
 
-    public WritableStackStorage getExtraStorage()
+    public Storage<ItemVariant> getExtraStorage()
     {
         return extraStorage;
     }
@@ -131,58 +125,4 @@ public class GrinderStorage extends SimpleInventory
         ItemScatterer.spawn(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, outputStorage.getAsStack());
     }
 
-    public static class XpStorage extends SnapshotParticipant<Float>
-    {
-        private float xp;
-
-        public float insert(float maxAmount, TransactionContext transaction)
-        {
-            if (maxAmount > 0)
-            {
-                updateSnapshots(transaction);
-                xp += maxAmount;
-                return maxAmount;
-            }
-            return 0;
-        }
-
-        public float extract(float maxAmount, TransactionContext transaction)
-        {
-            if (maxAmount > 0)
-            {
-                updateSnapshots(transaction);
-                float extracted = Math.min(xp, maxAmount);
-                xp -= extracted;
-                return extracted;
-            }
-            return 0;
-        }
-
-        public float getAmount()
-        {
-            return xp;
-        }
-
-        public void writeNbt(NbtCompound nbt)
-        {
-            nbt.putFloat("amount", xp);
-        }
-
-        public void readNbt(NbtCompound nbt)
-        {
-            this.xp = nbt.getFloat("amount");
-        }
-
-        @Override
-        protected Float createSnapshot()
-        {
-            return xp;
-        }
-
-        @Override
-        protected void readSnapshot(Float snapshot)
-        {
-            this.xp = snapshot;
-        }
-    }
 }

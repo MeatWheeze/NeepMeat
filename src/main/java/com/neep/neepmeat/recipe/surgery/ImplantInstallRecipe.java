@@ -55,7 +55,7 @@ public class ImplantInstallRecipe extends SurgeryRecipe
             {
                 MutableBoolean b = new MutableBoolean(true);
 
-                b.setValue(b.getValue() && resourceInput.test(itemSlot.getStorage(), transaction));
+                b.setValue(b.getValue() && resourceInput.testStorage(itemSlot.getStorage()));
 
                 mobSlot.getStorage().forEach(storageView ->
                     b.setValue(b.getValue() && storageView.getAmount() == 1));

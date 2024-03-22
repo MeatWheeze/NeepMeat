@@ -53,7 +53,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
 
     public GrinderBlockEntity(BlockPos pos, BlockState state)
     {
-        this(NMBlockEntities.GRINDER, pos, state);
+        this(NMBlockEntities.CRUSHER, pos, state);
     }
 
     public GrindingRecipe getCurrentRecipe()
@@ -129,7 +129,7 @@ public class GrinderBlockEntity extends MotorisedMachineBlockEntity
 //        }
 
         // Eject outputs
-        if (!storage.getOutputStorage().isEmpty() || !storage.extraStorage.isEmpty())
+        if (!storage.outputStorage.isEmpty() || !storage.extraStorage.isEmpty())
         {
             try (Transaction transaction = Transaction.openOuter())
             {

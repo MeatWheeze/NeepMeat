@@ -65,7 +65,7 @@ public class GrinderBlock extends BaseHorFacingBlock implements BlockEntityProvi
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, NMBlockEntities.GRINDER, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
+        return MiscUtil.checkType(type, NMBlockEntities.CRUSHER, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     @Override
