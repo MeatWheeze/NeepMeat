@@ -3,7 +3,9 @@ package com.neep.neepmeat.client.screen;
 import net.minecraft.client.gui.Drawable;
 import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 public class ScreenSubElement extends Screen implements Drawable, Element
 {
@@ -37,6 +39,22 @@ public class ScreenSubElement extends Screen implements Drawable, Element
         super.init();
         this.screenWidth = width;
         this.screenHeight = height;
+    }
+
+    @Override
+    public void setFocused(@Nullable Element focused)
+    {
+//        if (getFocused() instanceof ClickableWidget widget)
+//        {
+//            widget.setFocused(false);
+//        }
+//
+//        if (focused != null)
+//        {
+//            focused.setf(true);
+//        }
+
+        super.setFocused(focused);
     }
 
     //    protected final List<Element> children = Lists.newArrayList();

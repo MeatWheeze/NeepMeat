@@ -8,7 +8,7 @@ import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.SharedConstants;
-import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.client.gui.widget.ScrollableWidget;
@@ -19,7 +19,7 @@ import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.render.VertexFormats;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
-import org.joml.Matrix4f;
+import net.minecraft.util.math.Matrix4f;
 
 import java.util.Iterator;
 import java.util.function.Consumer;
@@ -105,6 +105,7 @@ public class EditBoxWidget extends ScrollableWidget
 
         if (this.isWithinBounds(mouseX, mouseY) && button == 0)
         {
+            super.mouseClicked(mouseX, mouseY, button);
             this.editBox.setSelecting(Screen.hasShiftDown());
             this.moveCursor(mouseX, mouseY);
             return true;
@@ -136,12 +137,6 @@ public class EditBoxWidget extends ScrollableWidget
         {
             return false;
         }
-    }
-
-    @Override
-    protected void appendClickableNarrations(NarrationMessageBuilder builder)
-    {
-
     }
 
     public boolean keyPressed(int keyCode, int scanCode, int modifiers)
@@ -183,18 +178,17 @@ public class EditBoxWidget extends ScrollableWidget
     }
 
     @Override
-    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
+    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
     {
-        MatrixStack matrices = context.getMatrices();
         int x = getX();
         int y = getY();
         if (this.visible)
         {
             int col = !this.isFocused() ? PLCCols.INVALID.col : PLCCols.SELECTED.col;
-            context.fill(x + 1, y + 1, x + this.width - 1, y + this.height - 1, 0x90000000);
-            GUIUtil.renderBorder(context, x, y, width - 1, height - 1, col, 0);
+            fill(matrices, x + 1, y + 1, x + this.width - 1, y + this.height - 1, 0x90000000);
+            GUIUtil.renderBorder(matrices, x, y, width - 1, height - 1, col, 0);
 
-            context.enableScissor(x + 1, y + 1, x + width - 1, y + height - 1);
+            enableScissor(x + 1, y + 1, x + width - 1, y + height - 1);
             matrices.push();
             float bottom = (float) (y + height - lineHeight() - getPadding());
             matrices.translate(0, bottom, 0);
@@ -205,28 +199,37 @@ public class EditBoxWidget extends ScrollableWidget
             matrices.push();
 
             matrices.translate(0.0, -this.getScrollY(), 0.0);
-            renderHighlightLine(context, errorLine, PLCCols.ERROR_LINE.col);
-            renderHighlightLine(context, debugLine, PLCCols.DEBUG_LINE.col);
-            renderContents(context, mouseX, mouseY, delta);
+            renderHighlightLine(matrices, errorLine, PLCCols.ERROR_LINE.col);
+            renderHighlightLine(matrices, debugLine, PLCCols.DEBUG_LINE.col);
+            renderContents(matrices, mouseX, mouseY, delta);
 
             matrices.pop();
-            context.disableScissor();
+            disableScissor();
             renderOverlay(matrices);
         }
     }
 
-    protected void renderHighlightLine(DrawContext matrices, int line, int col)
+    protected void renderHighlightLine(MatrixStack matrices, int line, int col)
     {
         if (line >= 0)
         {
             double lineStart = getY() + getPadding() + editBox.absLineToWrapped(line) * lineHeight();
-            matrices.fill(getX() + getPadding(), (int) lineStart, getX() + width - getPadding(), (int) (lineStart + lineHeight()), col);
+            DrawableHelper.fill(matrices, getX() + getPadding(), (int) lineStart, getX() + width - getPadding(), (int) (lineStart + lineHeight()), col);
         }
     }
 
-    protected void renderContents(DrawContext context, int mouseX, int mouseY, float delta)
+    private int getX()
     {
-        MatrixStack matrices = context.getMatrices();
+        return y;
+    }
+
+    private int getY()
+    {
+        return y;
+    }
+
+    protected void renderContents(MatrixStack matrices, int mouseX, int mouseY, float delta)
+    {
         matrices.push();
 
         String string = this.editBox.getText();
@@ -285,7 +288,7 @@ public class EditBoxWidget extends ScrollableWidget
                     matrices.translate((lineNumberWidth), 0, 0);
                     j = this.textRenderer.drawWithShadow(matrices, string.substring(substring.beginIndex(), i), 0, 0, textCol());
 
-                    context.fill((int) (j - 1), 0, (int) j, textRenderer.fontHeight(), cursorCol());
+                    fill(matrices, (int) (j - 1), 0, (int) j, textRenderer.fontHeight(), cursorCol());
                     this.textRenderer.drawWithShadow(matrices, string.substring(i, substring.endIndex()), j - 1, 0, textCol());
                     matrices.pop();
                 }
@@ -316,7 +319,7 @@ public class EditBoxWidget extends ScrollableWidget
                 matrices.translate(0, k, 0);
                 matrices.scale(scale, scale, 1);
                 matrices.translate((lineNumberWidth), 0, 0);
-                context.fill((int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight(), cursorCol());
+                fill(matrices, (int) (j + 5), 0, (int) j + 10, textRenderer.fontHeight(), cursorCol());
                 matrices.pop();
             }
         }
@@ -397,7 +400,7 @@ public class EditBoxWidget extends ScrollableWidget
         Matrix4f matrix4f = matrices.peek().getPositionMatrix();
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
-        RenderSystem.setShader(GameRenderer::getPositionProgram);
+        RenderSystem.setShader(GameRenderer::getPositionShader);
         RenderSystem.setShaderColor(0.0F, 0.0F, 1.0F, 1.0F);
 //        RenderSystem.disableTexture();
         RenderSystem.enableColorLogicOp();
@@ -480,5 +483,11 @@ public class EditBoxWidget extends ScrollableWidget
     public void setDebugLine(int line)
     {
         this.debugLine = line;
+    }
+
+    @Override
+    public void appendNarrations(NarrationMessageBuilder builder)
+    {
+
     }
 }

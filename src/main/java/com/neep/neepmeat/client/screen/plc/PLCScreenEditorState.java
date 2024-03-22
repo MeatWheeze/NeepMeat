@@ -14,6 +14,7 @@ import net.minecraft.client.gui.Element;
 import net.minecraft.client.gui.Selectable;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
 import net.minecraft.text.Text;
+import org.jetbrains.annotations.Nullable;
 
 public class PLCScreenEditorState extends ScreenSubElement implements Drawable, Element, Selectable, PLCScreenState
 {
@@ -43,7 +44,7 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
         super.init();
         if (textField == null)
         {
-            textField = new EditBoxWidget(client.textRenderer, x, y, 300, height, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
+            textField = new EditBoxWidget(x, y, 300, height, 0.8f, Text.of("Write your program here.\n\nClick a block in the world to insert its coordinates as a target.\n\nTo run the program, press the 'compile' button and then the 'run' button."), Text.of("gle"))
             {
                 @Override
                 protected void setFocused(boolean focused)
@@ -83,23 +84,26 @@ public class PLCScreenEditorState extends ScreenSubElement implements Drawable, 
     {
         super.tick();
 
-        if (client.world.getTime() % 10 == 0 && changed)
+        if (textField != null)
         {
-            try
+            if (client.world.getTime() % 10 == 0 && changed)
             {
-                ParsedSource parsedSource = parser.parse(textField.getText());
-                setCompileMessage("Parsed Successfully", true, -1);
-            }
-            catch (NeepASM.ProgramBuildException e)
-            {
-                setCompileMessage(e.getMessage(), false, e.line());
+                try
+                {
+                    ParsedSource parsedSource = parser.parse(textField.getText());
+                    setCompileMessage("Parsed Successfully", true, -1);
+                }
+                catch (NeepASM.ProgramBuildException e)
+                {
+                    setCompileMessage(e.getMessage(), false, e.line());
+                }
+
+                PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
+                changed = false;
             }
 
-            PLCSyncThings.Client.sendText(parent.getScreenHandler().getPlc(), textField.getText());
-            changed = false;
+            textField.setDebugLine(parent.getScreenHandler().debugLine());
         }
-
-        textField.setDebugLine(parent.getScreenHandler().debugLine());
     }
 
     public void setCompileMessage(String message, boolean success, int line)

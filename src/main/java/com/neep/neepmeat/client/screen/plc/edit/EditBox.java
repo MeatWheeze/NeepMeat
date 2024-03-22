@@ -13,10 +13,8 @@ import net.minecraft.text.Style;
 import net.minecraft.util.StringHelper;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.glfw.GLFW;
-import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
