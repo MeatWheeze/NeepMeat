@@ -47,7 +47,7 @@ public class LargeCrusherInstance extends BlockEntityInstance<LargeCrusherBlockE
 //            recipe = recipe || slot.getRecipe() != null;
 //        }
 
-        if (blockEntity.getProgressIncrement() > 0)
+        if (blockEntity.progressIncrement() > blockEntity.minIncrement())
         {
             var unit = facing.getUnitVector();
             double magnitude = Math.abs(0.05 * sinTime1);
@@ -59,7 +59,7 @@ public class LargeCrusherInstance extends BlockEntityInstance<LargeCrusherBlockE
         matrixStack.pop();
 
         matrixStack.push();
-        if (blockEntity.getProgressIncrement() > 0)
+        if (blockEntity.progressIncrement() > blockEntity.minIncrement())
         {
             matrixStack.translate(0, sinTime2 * 0.03, 0);
         }

@@ -152,6 +152,6 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
     {
-        return MiscUtil.checkType(type, NMBlockEntities.LARGE_CRUSHER, (world1, pos, state1, blockEntity) -> blockEntity.serverTick((ServerWorld) world1), null, world);
+        return MiscUtil.checkType(type, NMBlockEntities.LARGE_CRUSHER, (world1, pos, state1, blockEntity) -> blockEntity.serverTick((ServerWorld) world1), ((world1, pos, state1, blockEntity) -> blockEntity.clientTick()), world);
     }
 }
