@@ -93,7 +93,9 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
             Optional<Item> item = itemInput.getFirstMatching(storage.getInputStorage(), transaction);
             if (item.isEmpty())
             {
-                throw new IllegalStateException("Storage contents must conform to recipe");
+                inner.abort();
+                return false;
+//                throw new IllegalStateException("Storage contents must conform to recipe");
             }
 
             long extracted = storage.getInputStorage().extract(ItemVariant.of(item.get()), itemInput.amount(), transaction);

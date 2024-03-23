@@ -113,6 +113,8 @@
     "neepmeat:stirling_engine",
     "neepmeat:deployer",
     "neepmeat:grinder",
+    "neepmeat:null_structure",
+    "neepmeat:large_crusher",
     "neepmeat:alloy_kiln",
     "neepmeat:crucible",
     "neepmeat:collector",
