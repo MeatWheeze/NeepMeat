@@ -93,12 +93,16 @@ public class LargeCrusherStorage implements NbtSerialisable
                     }
                     recipe = null;
                     progress = 0;
+                    syncIfPossible();
                 }
             }
             else if (!isEmpty())
             {
-                MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this)
-                        .ifPresent(foundRecipe -> recipe = foundRecipe);
+                MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).ifPresent(foundRecipe ->
+                {
+                    recipe = foundRecipe;
+                    syncIfPossible();
+                });
             }
         }
 
@@ -116,6 +120,8 @@ public class LargeCrusherStorage implements NbtSerialisable
             super.readNbt(nbt);
             if (nbt.contains("recipe"))
                 this.recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
+            else
+                this.recipe = null;
         }
 
         @Override

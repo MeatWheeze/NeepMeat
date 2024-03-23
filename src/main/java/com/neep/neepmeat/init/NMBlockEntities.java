@@ -354,6 +354,8 @@ public class NMBlockEntities
         CRUSHER = register("grinder", GrinderBlockEntity::new, NMBlocks.CRUSHER);
         LARGE_CRUSHER = register("large_crusher", (p, s) -> new LargeCrusherBlockEntity(LARGE_CRUSHER, p, s), NMBlocks.LARGE_CRUSHER);
         MotorisedBlock.LOOKUP.registerForBlockEntity(LargeCrusherStructureBlockEntity::getMotorised, NMBlocks.LARGE_CRUSHER.getStructure().getBlockEntityType());
+        ItemStorage.SIDED.registerForBlockEntity(LargeCrusherStructureBlockEntity::getInputStorage, NMBlocks.LARGE_CRUSHER.getStructure().getBlockEntityType());
+
         ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         Heatable.LOOKUP.registerSelf(ALLOY_KILN);
         CRUCIBLE = register("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);

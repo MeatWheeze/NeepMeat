@@ -8,7 +8,11 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -18,6 +22,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -57,11 +62,17 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
         this.blockItem = itemSettings.getFactory().create(this, name, itemSettings);
         this.northPattern = BigBlockPattern.oddCylinder(1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, 0, getStructure().getDefaultState())
+                .enableApi(-1, 2, 0, ItemStorage.SIDED)
                 .set(-0, 2, 0, getStructure().getDefaultState())
+                .enableApi(-0, 2, 0, ItemStorage.SIDED)
                 .set(1, 2, 0, getStructure().getDefaultState())
+                .enableApi(1, 2, 0, ItemStorage.SIDED)
                 .set(-1, 2, -1, getStructure().getDefaultState())
+                .enableApi(-1, 2, -1, ItemStorage.SIDED)
                 .set(0, 2, -1, getStructure().getDefaultState())
+                .enableApi(0, 2, -1, ItemStorage.SIDED)
                 .set(1, 2, -1, getStructure().getDefaultState())
+                .enableApi(1, 2, -1, ItemStorage.SIDED)
                 .enableApi(-1, 1, 0, MotorisedBlock.LOOKUP)
                 .enableApi(1, 1, 0, MotorisedBlock.LOOKUP)
         ;
@@ -90,7 +101,7 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
     @Override
     protected LargeCrusherStructureBlock registerStructureBlock()
     {
-        return BlockRegistry.queue(new LargeCrusherStructureBlock(name + "_structure", this, settings));
+        return BlockRegistry.queue(new LargeCrusherStructureBlock("large_crusher_structure", this, settings));
     }
 
     @Override
@@ -104,6 +115,17 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
     public BlockState getPlacementState(ItemPlacementContext ctx)
     {
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing());
+    }
+
+    @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (!newState.isOf(this))
+        {
+            world.getBlockEntity(pos, NMBlockEntities.LARGE_CRUSHER).ifPresent(be ->
+                    ItemUtil.scatterItems(world, pos, be.getInputStorage(null)));
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
     }
 
     @Override

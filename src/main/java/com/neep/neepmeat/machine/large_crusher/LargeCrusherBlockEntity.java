@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -32,6 +33,7 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity implements Moto
     {
         super.writeNbt(nbt);
         storage.writeNbt(nbt);
+        nbt.putFloat("input_power", inputPower);
     }
 
     @Override
@@ -39,6 +41,7 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity implements Moto
     {
         super.readNbt(nbt);
         storage.readNbt(nbt);
+        this.inputPower = nbt.getFloat("input_power");
     }
 
     public void serverTick(ServerWorld world)
@@ -48,7 +51,11 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity implements Moto
             Direction facing = getCachedState().get(LargeCrusherBlock.FACING);
             Direction clockwise = facing.rotateYClockwise();
             Direction aclockwise = facing.rotateYCounterclockwise();
-            Box box = new Box(pos.up(2).offset(clockwise), pos.up(2).offset(facing).offset(aclockwise));
+            Box box = new Box(pos.up(2))
+                .stretch(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ())
+                .stretch(clockwise.getOffsetX(), clockwise.getOffsetY(), clockwise.getOffsetZ())
+                .stretch(aclockwise.getOffsetX(), aclockwise.getOffsetY(), aclockwise.getOffsetZ())
+                    ;
 
             List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, box, e -> true);
             if (!items.isEmpty())
@@ -97,6 +104,12 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity implements Moto
     }
 
     @Override
+    public void sync()
+    {
+        super.sync();
+    }
+
+    @Override
     public boolean motorTick(MotorEntity motor)
     {
         return false;
@@ -106,5 +119,20 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity implements Moto
     public void setInputPower(float power)
     {
         inputPower = power;
+    }
+
+    public Storage<ItemVariant> getInputStorage(Direction unused)
+    {
+        return storage.inputStorage;
+    }
+
+    public List<LargeCrusherStorage.InputSlot> getSlots()
+    {
+        return storage.slots;
+    }
+
+    public float getProgressIncrement()
+    {
+        return inputPower;
     }
 }
