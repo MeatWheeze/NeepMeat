@@ -1,6 +1,8 @@
 package com.neep.neepmeat.machine.large_crusher;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.transport.util.ItemPipeUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -15,9 +17,10 @@ import net.minecraft.util.math.Direction;
 
 import java.util.List;
 
-public class LargeCrusherBlockEntity extends SyncableBlockEntity
+public class LargeCrusherBlockEntity extends SyncableBlockEntity implements MotorisedBlock
 {
     private final LargeCrusherStorage storage = new LargeCrusherStorage(this);
+    private float inputPower = 0;
 
     public LargeCrusherBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -40,10 +43,13 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity
 
     public void serverTick(ServerWorld world)
     {
-        if (world.getTime() % 2 == 0)
+        if (world.getTime() % 4 == 0)
         {
             Direction facing = getCachedState().get(LargeCrusherBlock.FACING);
-            Box box = new Box(pos.up(2));
+            Direction clockwise = facing.rotateYClockwise();
+            Direction aclockwise = facing.rotateYCounterclockwise();
+            Box box = new Box(pos.up(2).offset(clockwise), pos.up(2).offset(facing).offset(aclockwise));
+
             List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, box, e -> true);
             if (!items.isEmpty())
             {
@@ -80,13 +86,25 @@ public class LargeCrusherBlockEntity extends SyncableBlockEntity
                     occupied++;
             }
 
-            float progressIncrement = (float) 4 / occupied;
+            // Divide the progress increment evenly across occupied slots.
+            float progressIncrement = inputPower * 4 / occupied;
             for (var slot : storage.slots)
             {
                 slot.tick(progressIncrement, transaction);
             }
             transaction.commit();
         }
+    }
 
+    @Override
+    public boolean motorTick(MotorEntity motor)
+    {
+        return false;
+    }
+
+    @Override
+    public void setInputPower(float power)
+    {
+        inputPower = power;
     }
 }

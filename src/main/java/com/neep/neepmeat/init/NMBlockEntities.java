@@ -39,6 +39,7 @@ import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressBlockEntity;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerBlockEntity;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlockEntity;
+import com.neep.neepmeat.machine.large_crusher.LargeCrusherStructureBlockEntity;
 import com.neep.neepmeat.machine.large_motor.LargeMotorBlockEntity;
 import com.neep.neepmeat.machine.large_motor.LargeMotorStructureEntity;
 import com.neep.neepmeat.machine.mincer.MincerBlockEnity;
@@ -352,6 +353,7 @@ public class NMBlockEntities
 
         CRUSHER = register("grinder", GrinderBlockEntity::new, NMBlocks.CRUSHER);
         LARGE_CRUSHER = register("large_crusher", (p, s) -> new LargeCrusherBlockEntity(LARGE_CRUSHER, p, s), NMBlocks.LARGE_CRUSHER);
+        MotorisedBlock.LOOKUP.registerForBlockEntity(LargeCrusherStructureBlockEntity::getMotorised, NMBlocks.LARGE_CRUSHER.getStructure().getBlockEntityType());
         ALLOY_KILN = register("alloy_kiln", AlloyKilnBlockEntity::new, NMBlocks.ALLOY_KILN);
         Heatable.LOOKUP.registerSelf(ALLOY_KILN);
         CRUCIBLE = register("crucible", CrucibleBlockEntity::new, NMBlocks.CRUCIBLE);

@@ -42,30 +42,6 @@ public class LargeCrusherStorage implements NbtSerialisable
         inputStorage = new CombinedStorage<>(slots);
     }
 
-//    @Override
-//    public Storage<ItemVariant> getInputStorage()
-//    {
-//        return inputStorage;
-//    }
-//
-//    @Override
-//    public Storage<ItemVariant> getOutputStorage()
-//    {
-//        return outputStorage;
-//    }
-//
-//    @Override
-//    public Storage<ItemVariant> getExtraStorage()
-//    {
-//        return outputStorage;
-//    }
-//
-//    @Override
-//    public XpStorage getXpStorage()
-//    {
-//        return xpStorage;
-//    }
-
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
@@ -121,11 +97,8 @@ public class LargeCrusherStorage implements NbtSerialisable
             }
             else if (!isEmpty())
             {
-                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).orElse(null);
-                if (foundRecipe != null)
-                {
-                    recipe = foundRecipe;
-                }
+                MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this)
+                        .ifPresent(foundRecipe -> recipe = foundRecipe);
             }
         }
 

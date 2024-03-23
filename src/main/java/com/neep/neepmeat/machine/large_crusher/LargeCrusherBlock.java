@@ -6,6 +6,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
 import net.minecraft.block.Block;
@@ -61,6 +62,8 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
                 .set(-1, 2, -1, getStructure().getDefaultState())
                 .set(0, 2, -1, getStructure().getDefaultState())
                 .set(1, 2, -1, getStructure().getDefaultState())
+                .enableApi(-1, 1, 0, MotorisedBlock.LOOKUP)
+                .enableApi(1, 1, 0, MotorisedBlock.LOOKUP)
         ;
 
         this.patternMap = ImmutableMap.of(
