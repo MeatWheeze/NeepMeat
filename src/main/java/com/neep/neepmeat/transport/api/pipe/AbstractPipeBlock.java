@@ -13,6 +13,7 @@ import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.fluid.Fluid;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
@@ -61,7 +62,7 @@ public abstract class AbstractPipeBlock extends BaseBlock
 
     public AbstractPipeBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
-        super(itemName, itemSettings, settings);
+        super(itemName, itemSettings, settings.solid());
         this.setDefaultState(this.stateManager.getDefaultState()
                 .with(NORTH_CONNECTION, PipeConnectionType.NONE)
                 .with(EAST_CONNECTION, PipeConnectionType.NONE)
@@ -249,4 +250,15 @@ public abstract class AbstractPipeBlock extends BaseBlock
 
     }
 
+    @Override
+    public boolean canReplace(BlockState state, ItemPlacementContext context)
+    {
+        return super.canReplace(state, context);
+    }
+
+    @Override
+    public boolean canBucketPlace(BlockState state, Fluid fluid)
+    {
+        return false;
+    }
 }
