@@ -44,7 +44,7 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
 
         float[] offsets = {-0.25f, 0.25f, -0.75f, 0.75f};
 
-        float yOffset = 2 + 3 / 16f;
+        float yOffset = 2 + 0 / 16f;
         if (be.progressIncrement() > 0)
         {
             yOffset += Math.abs(sinTime * 0.02);
@@ -69,7 +69,7 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
                     ((random.nextFloat() * 2) - 1) * 0.15,
                     ((random.nextFloat() * 2) - 1) * 0.15,
                     ((random.nextFloat() * 2) - 1) * 0.15);
-            matrices.scale(2, 2, 2);
+            matrices.scale(2.4f, 2.4f, 2.4f);
             renderItems(stack, matrices, vertexConsumers, itemRenderer, be.getWorld(), random, light);
 
             matrices.pop();
@@ -113,7 +113,9 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
                     matrices.translate(s, t, 0.0);
                 }
             }
-            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(-20));
+            matrices.translate(0, 0, 0.25);
+            matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(depth ? 0 : -20));
+            matrices.translate(0, 0, -0.25);
             itemRenderer.renderItem(stack, ModelTransformationMode.GROUND, false, matrices, vertices, light, OverlayTexture.DEFAULT_UV, bakedModel);
             matrices.pop();
             if (depth)

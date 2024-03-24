@@ -31,9 +31,12 @@ public class GrindingEmiRecipe implements EmiRecipe {
 
         List<EmiStack> output = new ArrayList<>();
 
-        output.add(EmiStack.of(recipe.getItemOutput().resource(), recipe.getItemOutput().minAmount()));
-        if (recipe.getAuxOutput() != null) {
-            output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()));
+        if (!recipe.destroy())
+        {
+            output.add(EmiStack.of(recipe.getItemOutput().resource(), recipe.getItemOutput().minAmount()));
+            if (recipe.getAuxOutput() != null) {
+                output.add(EmiStack.of(recipe.getAuxOutput().resource(), recipe.getAuxOutput().amount()));
+            }
         }
 
         this.output = output;
@@ -71,6 +74,11 @@ public class GrindingEmiRecipe implements EmiRecipe {
 
     @Override
     public void addWidgets(WidgetHolder widgets) {
+        if (recipe.destroy())
+        {
+            return;
+        }
+
         int startX = getDisplayWidth() / 2 - 41;
         int startY = 10;
 

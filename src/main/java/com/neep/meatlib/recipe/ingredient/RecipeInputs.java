@@ -63,6 +63,11 @@ public class RecipeInputs
 
     public static final RecipeInput<Object> EMPTY = new RecipeInput<>(RecipeInput.Entry.EMPTY, 0, EMPTY_SERIALISER, EMPTY_ID);
 
+    public static <T> RecipeInput<T> empty()
+    {
+        return (RecipeInput<T>) EMPTY;
+    }
+
     public static void init()
     {
 

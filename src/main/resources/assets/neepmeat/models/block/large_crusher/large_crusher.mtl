@@ -7,3 +7,5 @@ newmtl m_9ab97e7e-4af0-9a69-2e2d-622299f7fcaa
 map_Kd neepmeat:block/large_crusher/jaw
 newmtl m_6e2710b1-22bb-2fcb-c6af-0d6d9518df7b
 map_Kd neepmeat:block/large_crusher/main2
+newmtl m_49a4c67f-18c3-71c3-b153-c2847975445d
+map_Kd neepmeat:block/large_crusher/sheath

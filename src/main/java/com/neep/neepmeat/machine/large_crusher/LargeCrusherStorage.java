@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.large_crusher;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.meatlib.util.NbtSerialisable;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
@@ -98,11 +99,16 @@ public class LargeCrusherStorage implements NbtSerialisable
             }
             else if (!isEmpty())
             {
-                MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).ifPresent(foundRecipe ->
+                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).orElse(null);
+                if (foundRecipe != null)
                 {
                     recipe = foundRecipe;
-                    syncIfPossible();
-                });
+                }
+                else if (!isEmpty())
+                {
+                    recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, new Identifier(NeepMeat.NAMESPACE, "grinding/destroy")).orElse(null);
+                }
+                syncIfPossible();
             }
         }
 

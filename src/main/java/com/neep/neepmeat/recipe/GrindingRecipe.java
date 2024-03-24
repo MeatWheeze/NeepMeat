@@ -6,10 +6,12 @@ import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.MeatlibRecipe;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
+import com.neep.meatlib.recipe.ingredient.RecipeOutput;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.item.Item;
@@ -26,12 +28,12 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
 {
     protected Identifier id;
     protected RecipeInput<Item> itemInput;
-    protected RecipeOutputImpl<Item> itemOutput;
-    protected RecipeOutputImpl<Item> extraOutput;
+    protected RecipeOutput<Item> itemOutput;
+    protected RecipeOutput<Item> extraOutput;
     protected float experience;
     protected int processTime;
 
-    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutputImpl<Item> itemOutput, RecipeOutputImpl<Item> extraOutput, float experience, int processTime)
+    public GrindingRecipe(Identifier id, RecipeInput<Item> itemInput, RecipeOutput<Item> itemOutput, RecipeOutput<Item> extraOutput, float experience, int processTime)
     {
         this.itemInput = itemInput;
         this.itemOutput = itemOutput;
@@ -39,6 +41,11 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         this.experience = experience;
         this.processTime = processTime;
         this.id = id;
+    }
+
+    public boolean destroy()
+    {
+        return false;
     }
 
     @Override
@@ -52,12 +59,12 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         return itemInput;
     }
 
-    public RecipeOutputImpl<Item> getItemOutput()
+    public RecipeOutput<Item> getItemOutput()
     {
         return itemOutput;
     }
 
-    public RecipeOutputImpl<Item> getAuxOutput()
+    public RecipeOutput<Item> getAuxOutput()
     {
         return extraOutput;
     }
@@ -145,6 +152,11 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         @Override
         public GrindingRecipe read(Identifier id, JsonObject json)
         {
+            if (json.has("destroy") && JsonHelper.getBoolean(json, "destroy"))
+            {
+                return new DestroyRecipe(id);
+            }
+
             JsonObject inputElement = JsonHelper.getObject(json, "input");
             RecipeInput<Item> itemInput = RecipeInput.fromJsonRegistry(RecipeInputs.ITEM, inputElement);
 
@@ -168,6 +180,10 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         @Override
         public GrindingRecipe read(Identifier id, PacketByteBuf buf)
         {
+            // Ignore everything else
+            if (buf.readBoolean())
+                return new DestroyRecipe(id);
+
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
 
@@ -186,6 +202,7 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         @Override
         public void write(PacketByteBuf buf, GrindingRecipe recipe)
         {
+            buf.writeBoolean(recipe.destroy());
             recipe.itemInput.write(buf);
             recipe.itemOutput.write(Registries.ITEM, buf);
 
@@ -205,6 +222,46 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         public interface RecipeFactory<T extends GrindingRecipe>
         {
             T create(Identifier var1, RecipeInput<Item> in, RecipeOutputImpl<Item> out, @Nullable RecipeOutputImpl<Item> eOut, float xp, int time);
+        }
+    }
+
+    // A recipe that destroys any input item, for use in the Large Crusher.
+    public static class DestroyRecipe extends GrindingRecipe
+    {
+        public DestroyRecipe(Identifier id)
+        {
+            super(id, RecipeInputs.empty(), RecipeOutput.empty(), RecipeOutput.empty(), 0, 40);
+        }
+
+        @Override
+        public boolean destroy()
+        {
+            return true;
+        }
+
+        @Override
+        public boolean matches(IGrinderStorage inventory)
+        {
+            return false;
+        }
+
+        @Override
+        public boolean takeInputs(IGrinderStorage storage, TransactionContext transaction)
+        {
+            var it = storage.getInputStorage().nonEmptyIterator();
+            if (it.hasNext())
+            {
+                StorageView<ItemVariant> view = it.next();
+                view.extract(view.getResource(), 1, transaction);
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean ejectOutputs(IGrinderStorage context, TransactionContext transaction)
+        {
+            return true;
         }
     }
 }

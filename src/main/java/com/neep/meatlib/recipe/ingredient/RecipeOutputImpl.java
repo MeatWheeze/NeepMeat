@@ -5,6 +5,7 @@ import com.google.gson.JsonSyntaxException;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.TransferVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.registry.Registry;
@@ -42,6 +43,7 @@ public class RecipeOutputImpl<T> implements RecipeOutput<T>
     {
         this(resource, min, max, 1);
     }
+
 
     public T resource()
     {
