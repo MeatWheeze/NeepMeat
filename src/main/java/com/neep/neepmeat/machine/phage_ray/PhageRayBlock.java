@@ -50,7 +50,7 @@ public class PhageRayBlock extends BigBlock<PhageRayBlock.PhageRayStructureBlock
         super(settings);
         this.name = name;
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, name, ItemSettings.block().requiresVascular().tooltip(TooltipSupplier.hidden(1))));
-        volume = BigBlockPattern.oddCylinder(1, 0, 0, getStructure().getDefaultState());
+        volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override

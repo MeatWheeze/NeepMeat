@@ -62,7 +62,7 @@ public class LargeMotorBlock extends BigBlock<LargeMotorStructureBlock> implemen
         ItemRegistry.queue(new BaseBlockItem(this, registryName, itemSettings));
         this.setDefaultState(getStateManager().getDefaultState().with(FACING, Direction.NORTH));
 
-        volume = BigBlockPattern.range( -1, 0, 0, 1, 2, -1, getStructure().getDefaultState());
+        volume = BigBlockPattern.makeRange( -1, 0, 0, 1, 2, -1, getStructure().getDefaultState());
         normalShape = volume.toVoxelShape();
     }
 

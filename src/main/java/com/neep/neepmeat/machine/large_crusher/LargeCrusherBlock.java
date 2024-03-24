@@ -60,7 +60,7 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
         super(settings);
         this.name = name;
         this.blockItem = itemSettings.getFactory().create(this, name, itemSettings);
-        this.northPattern = BigBlockPattern.oddCylinder(1, 0, 1, getStructure().getDefaultState())
+        this.northPattern = BigBlockPattern.makeOddCylinder(1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, 0, getStructure().getDefaultState())
                 .enableApi(-1, 2, 0, ItemStorage.SIDED)
                 .set(-0, 2, 0, getStructure().getDefaultState())

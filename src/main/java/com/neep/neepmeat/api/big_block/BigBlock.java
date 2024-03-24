@@ -50,13 +50,6 @@ public abstract class BigBlock<T extends BigBlockStructure<?>> extends Block
 //        return VOLUME;
 //    }
 
-
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
-    {
-        return super.onUse(state, world, pos, player, hand, hit);
-    }
-
     @Override
     protected void spawnBreakParticles(World world, PlayerEntity player, BlockPos pos, BlockState state)
     {

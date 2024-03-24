@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
+    "neepmeat:test_multiblock_structure",
+    "neepmeat:test_multiblock",
     "neepmeat:smooth_tile_white",
     "neepmeat:smooth_tile_orange",
     "neepmeat:smooth_tile_magenta",
@@ -113,7 +115,7 @@
     "neepmeat:stirling_engine",
     "neepmeat:deployer",
     "neepmeat:grinder",
-    "neepmeat:null_structure",
+    "neepmeat:large_crusher_structure",
     "neepmeat:large_crusher",
     "neepmeat:alloy_kiln",
     "neepmeat:crucible",

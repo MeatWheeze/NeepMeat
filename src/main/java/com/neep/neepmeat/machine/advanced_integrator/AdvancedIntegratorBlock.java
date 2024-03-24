@@ -40,7 +40,7 @@ public class AdvancedIntegratorBlock extends BigBlock<AdvancedIntegratorStructur
         super(settings);
         this.registryName = registryName;
         ItemRegistry.queue(NeepMeat.NAMESPACE, (MeatlibItem) new BaseBlockItem(this, registryName, ItemSettings.block()));
-        volume = BigBlockPattern.oddCylinder(1, 0, 0, getStructure().getDefaultState());
+        volume = BigBlockPattern.makeOddCylinder(1, 0, 0, getStructure().getDefaultState());
     }
 
     @Override

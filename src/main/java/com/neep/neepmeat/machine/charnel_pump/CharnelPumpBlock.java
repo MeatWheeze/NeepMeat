@@ -47,7 +47,7 @@ public class CharnelPumpBlock extends BigBlock<CharnelPumpStructure> implements 
         super(settings);
         ItemRegistry.queue(new BaseBlockItem(this, name, itemSettings));
         this.name = name;
-        volume = BigBlockPattern.oddCylinder(1, 0, 7, getStructure().getDefaultState())
+        volume = BigBlockPattern.makeOddCylinder(1, 0, 7, getStructure().getDefaultState())
                 .set(-2, 0, 0, getStructure().getDefaultState())
                 .set(-2, 1, 0, getStructure().getDefaultState())
                 .enableApi(-2, 1, 0, MotorisedBlock.LOOKUP)

@@ -16,7 +16,7 @@ import net.minecraft.world.BlockView;
 
 public class CentrifugeBlock extends BigBlock
 {
-    public static final BigBlockPattern VOLUME = BigBlockPattern.oddCylinder(1, 0, 0, null);
+    public static final BigBlockPattern VOLUME = BigBlockPattern.makeOddCylinder(1, 0, 0, null);
     public static final VoxelShape SHAPE = VOLUME.toVoxelShape();
 
     public CentrifugeBlock(String registryName, Settings settings)
