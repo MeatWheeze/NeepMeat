@@ -9,16 +9,26 @@ import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.item.ItemStack;
+import net.minecraft.loot.LootTable;
+import net.minecraft.loot.context.LootContextParameterSet;
+import net.minecraft.loot.context.LootContextParameters;
+import net.minecraft.loot.context.LootContextTypes;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -54,21 +64,50 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
             Direction clockwise = facing.rotateYClockwise();
             Direction aclockwise = facing.rotateYCounterclockwise();
             Box box = new Box(pos.up(2))
-                .stretch(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ())
-                .stretch(clockwise.getOffsetX(), clockwise.getOffsetY(), clockwise.getOffsetZ())
-                .stretch(aclockwise.getOffsetX(), aclockwise.getOffsetY(), aclockwise.getOffsetZ())
-                    ;
+                    .stretch(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ())
+                    .stretch(clockwise.getOffsetX(), clockwise.getOffsetY(), clockwise.getOffsetZ())
+                    .stretch(aclockwise.getOffsetX(), aclockwise.getOffsetY(), aclockwise.getOffsetZ());
 
-            List<ItemEntity> items = world.getEntitiesByClass(ItemEntity.class, box, e -> true);
-            if (!items.isEmpty())
+            List<Entity> entities = world.getEntitiesByClass(Entity.class, box, e -> true);
+            entities.stream().filter(e -> e instanceof ItemEntity).map(ItemEntity.class::cast).findFirst().ifPresent(item ->
             {
-                ItemEntity item = items.get(0);
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     ItemVariant variant = ItemVariant.of(item.getStack());
                     long inserted = storage.inputStorage.insert(variant, item.getStack().getCount(), transaction);
                     item.getStack().decrement((int) inserted);
                     transaction.commit();
+                }
+            });
+
+            if (world.getTime() % 8 == 0)
+            {
+                float damageAmount = power * 20;
+                DamageSource damageSource = world.getDamageSources().generic();
+                List<ItemStack> resultStacks = new ArrayList<>();
+
+                entities.stream().filter(e -> e instanceof LivingEntity).map(LivingEntity.class::cast).forEach(entity ->
+                {
+                    if (entity.isAlive() && entity.canTakeDamage() && entity.hurtTime == 0)
+                    {
+                        if (entity.getHealth() <= damageAmount)
+                        {
+                            dropLoot(world, entity, damageSource, resultStacks);
+                            entity.setDropsLoot(false);
+                            entity.kill();
+                        }
+                        entity.damage(damageSource, 4);
+                    }
+                });
+
+                if (!resultStacks.isEmpty())
+                {
+                    try (Transaction transaction = Transaction.openOuter())
+                    {
+                        // Destroy items that don't fit in the output. We don't care.
+                        resultStacks.forEach(stack -> storage.outputStorage.insert(ItemVariant.of(stack), stack.getCount(), transaction));
+                        transaction.commit();
+                    }
                 }
             }
         }
@@ -105,10 +144,24 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
         }
     }
 
-    @Override
-    public void sync()
+    private void dropLoot(ServerWorld world, LivingEntity entity, DamageSource damageSource, List<ItemStack> resultStacks)
     {
-        super.sync();
+        Identifier identifier = entity.getLootTable();
+        LootTable lootTable = world.getServer().getLootManager().getLootTable(identifier);
+        LootContextParameterSet.Builder builder = (new LootContextParameterSet.Builder(world))
+                .add(LootContextParameters.THIS_ENTITY, entity)
+                .add(LootContextParameters.ORIGIN, entity.getPos())
+                .add(LootContextParameters.DAMAGE_SOURCE, damageSource)
+                .addOptional(LootContextParameters.KILLER_ENTITY, damageSource.getAttacker())
+                .addOptional(LootContextParameters.DIRECT_KILLER_ENTITY, damageSource.getSource());
+
+//        if (causedByPlayer && this.attackingPlayer != null)
+//        {
+//            builder = builder.add(LootContextParameters.LAST_DAMAGE_PLAYER, this.attackingPlayer).luck(this.attackingPlayer.getLuck());
+//        }
+
+        LootContextParameterSet lootContextParameterSet = builder.build(LootContextTypes.ENTITY);
+        lootTable.generateLoot(lootContextParameterSet, entity.getLootTableSeed(), resultStacks::add);
     }
 
     @Override
