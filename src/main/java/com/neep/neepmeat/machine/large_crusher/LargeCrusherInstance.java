@@ -41,12 +41,6 @@ public class LargeCrusherInstance extends BlockEntityInstance<LargeCrusherBlockE
         matrixStack.push();
         Direction facing = blockEntity.getCachedState().get(LargeCrusherBlock.FACING);
 
-//        boolean recipe = false;
-//        for (var slot : blockEntity.getSlots())
-//        {
-//            recipe = recipe || slot.getRecipe() != null;
-//        }
-
         if (blockEntity.progressIncrement() > blockEntity.minIncrement())
         {
             var unit = facing.getUnitVector();
