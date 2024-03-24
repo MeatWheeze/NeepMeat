@@ -5,6 +5,7 @@ import com.neep.meatlib.util.LazySupplier;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.network.TankMessagePacket;
+import com.neep.neepmeat.transport.block.fluid_transport.TankBlock;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.lookup.v1.block.BlockApiLookup;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -150,7 +151,7 @@ public class TankBlockEntity extends SyncableBlockEntity
 
     public static <T extends BlockEntity> TankBlockEntity find(T be, BlockEntityType<?> type)
     {
-        if (be.getType().equals(type))
+        if (be.getType().equals(type) && be.getCachedState().get(TankBlock.AXIS).isVertical())
             return (TankBlockEntity) be;
 
         return null;
