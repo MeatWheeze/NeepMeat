@@ -33,6 +33,9 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
     @Override
     public void render(LargeCrusherBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
+        if (!be.getCachedState().get(LargeCrusherBlock.ASSEMBLED))
+            return;
+
         List<LargeCrusherStorage.InputSlot> slots = be.getSlots();
 
         double sinTime = NMMaths.sin(be.getWorld().getTime(), tickDelta, 1);
@@ -59,8 +62,7 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
 
             matrices.push();
 
-//            Vector3f sideways = facing.rotateYClockwise().getUnitVector().mul(offsets[i]);
-            matrices.translate(offsets[i], 0, -0.3);
+            matrices.translate(offsets[i], 0, -1.3);
 
             int j = stack.isEmpty() ? 187 : Item.getRawId(stack.getItem()) + stack.getDamage();
             this.random.setSeed(j);

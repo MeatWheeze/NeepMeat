@@ -7,6 +7,8 @@ import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
+import com.neep.neepmeat.api.multiblock.MultiBlock;
+import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
 import com.neep.neepmeat.api.multiblock2.TestMultiblock;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.entity.CandleCronenCakeBlock;
@@ -202,7 +204,7 @@ public class NMBlocks
     public static Block DEPLOYER = BlockRegistry.queue(new DeployerBlock("deployer", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 //    public static Block AGITATOR = BlockRegistry.queue(new AgitatorBlock("agitator", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block CRUSHER = BlockRegistry.queue(new GrinderBlock("grinder", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static BigBlock<LargeCrusherStructureBlock> LARGE_CRUSHER = BlockRegistry.queue(new LargeCrusherBlock("large_crusher", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Multiblock2ControllerBlock<LargeCrusherStructureBlock> LARGE_CRUSHER = BlockRegistry.queue(new LargeCrusherBlock("large_crusher", block().requiresMotor(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static Block ALLOY_KILN = BlockRegistry.queue(new AlloyKilnBlock("alloy_kiln", block(), FabricBlockSettings.copyOf(NMBlocks.SAND_BRICKS)));
     public static Block CRUCIBLE = BlockRegistry.queue(new CrucibleBlock("crucible", block(), FLUID_PIPE_SETTINGS));
     public static Block COLLECTOR = BlockRegistry.queue(new FatCollectorBlock("collector", block(), FLUID_PIPE_SETTINGS));

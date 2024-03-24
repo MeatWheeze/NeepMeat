@@ -4,15 +4,15 @@ import com.google.common.collect.ImmutableMap;
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
-import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.machine.MotorisedBlock;
+import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
+import com.neep.neepmeat.api.multiblock2.MultiblockUnassembledPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.transport.util.ItemPipeUtil;
+import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -30,6 +30,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.function.BooleanBiFunction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
@@ -38,51 +39,67 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> implements MeatlibBlock, BlockEntityProvider
+public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherStructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
     private final String name;
-    private final BlockItem blockItem;
-    private final BigBlockPattern northPattern;
+    public final BlockItem blockItem;
 
-    private final Map<Direction, BigBlockPattern> patternMap;
+    private final Map<Direction, BigBlockPattern> assembledMap;
+    private final Map<Direction, MultiblockUnassembledPattern> unassembledMap;
+
     private final Map<Direction, VoxelShape> shapeMap;
-
-    private final VoxelShape northShape =
-            VoxelShapes.combine(VoxelShapes.union(
-                    VoxelShapes.cuboid(-1, 0, -1, 2, 2, 2),
-                    VoxelShapes.cuboid(-1, 2, -1, 2, 3, 1)),
-            VoxelShapes.cuboid(-10 / 16f, 2, -0.75, 1 + 10 / 16f, 3, 0.75), BooleanBiFunction.ONLY_FIRST);
 
     public LargeCrusherBlock(String name, ItemSettings itemSettings, Settings settings)
     {
         super(settings);
         this.name = name;
         this.blockItem = itemSettings.getFactory().create(this, name, itemSettings);
-        this.northPattern = BigBlockPattern.makeOddCylinder(1, 0, 1, getStructure().getDefaultState())
-                .set(-1, 2, 0, getStructure().getDefaultState())
-                .enableApi(-1, 2, 0, ItemStorage.SIDED)
-                .set(-0, 2, 0, getStructure().getDefaultState())
-                .enableApi(-0, 2, 0, ItemStorage.SIDED)
-                .set(1, 2, 0, getStructure().getDefaultState())
-                .enableApi(1, 2, 0, ItemStorage.SIDED)
+        BigBlockPattern northAssembledPattern = BigBlockPattern.makeOddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, getStructure().getDefaultState())
                 .set(-1, 2, -1, getStructure().getDefaultState())
                 .enableApi(-1, 2, -1, ItemStorage.SIDED)
-                .set(0, 2, -1, getStructure().getDefaultState())
-                .enableApi(0, 2, -1, ItemStorage.SIDED)
+                .set(-0, 2, -1, getStructure().getDefaultState())
+                .enableApi(-0, 2, -1, ItemStorage.SIDED)
                 .set(1, 2, -1, getStructure().getDefaultState())
                 .enableApi(1, 2, -1, ItemStorage.SIDED)
-                .enableApi(-1, 1, 0, MotorisedBlock.LOOKUP)
-                .enableApi(1, 1, 0, MotorisedBlock.LOOKUP)
-        ;
 
-        this.patternMap = ImmutableMap.of(
-                Direction.NORTH, northPattern,
-                Direction.EAST, northPattern.rotateY(90),
-                Direction.SOUTH, northPattern.rotateY(180),
-                Direction.WEST, northPattern.rotateY(270)
+                .set(-1, 2, -2, getStructure().getDefaultState())
+                .enableApi(-1, 2, -2, ItemStorage.SIDED)
+                .set(0, 2, -2, getStructure().getDefaultState())
+                .enableApi(0, 2, -2, ItemStorage.SIDED)
+                .set(1, 2, -2, getStructure().getDefaultState())
+                .enableApi(1, 2, -2, ItemStorage.SIDED)
+
+                .enableApi(-1, 1, -1, MotorisedBlock.LOOKUP)
+                .enableApi(1, 1, -1, MotorisedBlock.LOOKUP);
+
+        MultiblockUnassembledPattern northUnassembledPattern = new MultiblockUnassembledPattern().oddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(-1, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(-0, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(1, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(-1, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(0, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
+                .set(1, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState());
+
+        this.unassembledMap = ImmutableMap.of(
+                Direction.NORTH, northUnassembledPattern,
+                Direction.EAST, northUnassembledPattern.rotateY(90),
+                Direction.SOUTH, northUnassembledPattern.rotateY(180),
+                Direction.WEST, northUnassembledPattern.rotateY(270)
         );
+
+        this.assembledMap = ImmutableMap.of(
+                Direction.NORTH, northAssembledPattern,
+                Direction.EAST, northAssembledPattern.rotateY(90),
+                Direction.SOUTH, northAssembledPattern.rotateY(180),
+                Direction.WEST, northAssembledPattern.rotateY(270)
+        );
+
+        VoxelShape northShape = VoxelShapes.combine(VoxelShapes.union(
+                        VoxelShapes.cuboid(-1, 0, -2, 2, 2, 1),
+                        VoxelShapes.cuboid(-1, 2, -2, 2, 3, 0)),
+                VoxelShapes.cuboid(-10 / 16f, 2, -0.75 - 1, 1 + 10 / 16f, 3, 0.75 - 1), BooleanBiFunction.ONLY_FIRST);
 
         this.shapeMap = ImmutableMap.of(
                 Direction.NORTH, MiscUtil.rotateShapeY(northShape, 0),
@@ -93,9 +110,27 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
     }
 
     @Override
-    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    public VoxelShape getAssembledShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
     {
         return shapeMap.get(state.get(FACING));
+    }
+
+    @Override
+    public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context)
+    {
+        return VoxelShapes.fullCube();
+    }
+
+    @Override
+    protected BigBlockPattern getAssembledPattern(BlockState blockState)
+    {
+        return assembledMap.get(blockState.get(FACING));
+    }
+
+    @Override
+    protected MultiblockUnassembledPattern getUnassembledPattern(BlockState blockState)
+    {
+        return unassembledMap.get(blockState.get(FACING));
     }
 
     @Override
@@ -104,11 +139,6 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
         return BlockRegistry.queue(new LargeCrusherStructureBlock("large_crusher_structure", this, settings));
     }
 
-    @Override
-    protected BigBlockPattern getVolume(BlockState blockState)
-    {
-        return patternMap.get(blockState.get(FACING));
-    }
 
     @Nullable
     @Override
@@ -123,8 +153,18 @@ public class LargeCrusherBlock extends BigBlock<LargeCrusherStructureBlock> impl
         if (!newState.isOf(this))
         {
             world.getBlockEntity(pos, NMBlockEntities.LARGE_CRUSHER).ifPresent(be ->
-                    ItemUtil.scatterItems(world, pos, be.getInputStorage(null)));
+            {
+                ItemUtil.scatterItems(world, pos, be.getInputStorage(null));
+            });
         }
+//        else if (state.get(ASSEMBLED) && !newState.get(ASSEMBLED))
+//        {
+//            world.getBlockEntity(pos, NMBlockEntities.LARGE_CRUSHER).ifPresent(be ->
+//            {
+//                ItemUtil.scatterItems(world, pos, be.getInputStorage(null));
+//                be.storage.slots.forEach(s -> s.setStack(ItemStack.EMPTY));
+//            });
+//        }
         super.onStateReplaced(state, world, pos, newState, moved);
     }
 

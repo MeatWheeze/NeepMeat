@@ -34,6 +34,13 @@ public class LargeCrusherInstance extends BlockEntityInstance<LargeCrusherBlockE
     @Override
     public void beginFrame()
     {
+        if (!blockEntity.getCachedState().get(LargeCrusherBlock.ASSEMBLED))
+        {
+            jawModel.scale(0, 0, 0);
+            sheathModel.scale(0, 0, 0);
+            return;
+        }
+
         float tickDelta = AnimationTickHolder.getPartialTicks();
         float sinTime1 = NMMaths.sin(blockEntity.getWorld().getTime(), tickDelta, 1);
         float sinTime2 = NMMaths.sin(blockEntity.getWorld().getTime(), tickDelta, 2);

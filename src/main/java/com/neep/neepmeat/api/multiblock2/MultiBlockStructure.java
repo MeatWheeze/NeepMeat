@@ -53,7 +53,7 @@ public abstract class MultiBlockStructure<T extends BigBlockStructureEntity> ext
 
             BlockState parentState = world.getBlockState(controllerPos);
             if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
-               return be.translateShape(parent.getOutlineShape(parentState, world, pos, context));
+               return be.translateShape(parent.getAssembledShape(parentState, world, pos, context));
         }
 
         return VoxelShapes.fullCube();
@@ -65,11 +65,13 @@ public abstract class MultiBlockStructure<T extends BigBlockStructureEntity> ext
         if (!newState.isOf(state.getBlock()))
         {
             // Remove the controller block and let it handle the destruction of the rest of the structure.
-            if (world.getBlockEntity(pos) instanceof BigBlockStructureEntity be)
+            if (world.getBlockEntity(pos) instanceof BigBlockStructureEntity be && be.getControllerPos() != null)
             {
                 BlockPos controllerPos = be.getControllerPos();
-                if (controllerPos != null)
+                BlockState controllerState = world.getBlockState(controllerPos);
+                if (controllerPos != null && controllerState.isOf(parent) && controllerState.get(Multiblock2ControllerBlock.ASSEMBLED))
                 {
+                    world.setBlockState(controllerPos, controllerState.with(Multiblock2ControllerBlock.ASSEMBLED, false));
                     parent.disassemble(world, controllerPos, world.getBlockState(controllerPos), pos);
                 }
             }

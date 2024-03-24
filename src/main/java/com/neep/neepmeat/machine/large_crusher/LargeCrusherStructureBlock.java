@@ -4,6 +4,8 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
+import com.neep.neepmeat.api.multiblock2.MultiBlockStructure;
+import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
@@ -16,11 +18,11 @@ import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 
-public class LargeCrusherStructureBlock extends BigBlockStructure<LargeCrusherStructureBlockEntity>
+public class LargeCrusherStructureBlock extends MultiBlockStructure<LargeCrusherStructureBlockEntity>
 {
     private final String name;
 
-    public LargeCrusherStructureBlock(String name, BigBlock<?> parent, Settings settings)
+    public LargeCrusherStructureBlock(String name, Multiblock2ControllerBlock<?> parent, Settings settings)
     {
         super(parent, settings);
         this.name = name;
@@ -47,7 +49,7 @@ public class LargeCrusherStructureBlock extends BigBlockStructure<LargeCrusherSt
 
             BlockState parentState = world.getBlockState(controllerPos);
             if (parentState.isOf(parent)) // Sometimes air replaces the parent (not sure why)
-                return be.translateChopShape(parent.getOutlineShape(parentState, world, pos, context));
+                return be.translateChopShape(parent.getAssembledShape(parentState, world, pos, context));
         }
         return VoxelShapes.empty();
     }

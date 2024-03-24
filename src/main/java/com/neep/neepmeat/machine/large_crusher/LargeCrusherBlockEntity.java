@@ -23,6 +23,7 @@ import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Pair;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Direction;
@@ -34,7 +35,7 @@ import java.util.Random;
 
 public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity implements MotorisedBlock
 {
-    private final LargeCrusherStorage storage = new LargeCrusherStorage(this);
+    protected final LargeCrusherStorage storage = new LargeCrusherStorage(this);
     private final Random jrandom = new Random();
 
     public LargeCrusherBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -58,12 +59,23 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
 
     public void serverTick(ServerWorld world)
     {
+        super.serverTick();
+
+        if (!getCachedState().get(LargeCrusherBlock.ASSEMBLED))
+        {
+            power = 0;
+            progressIncrement = 0;
+            return;
+        }
+
+        Direction facing = getCachedState().get(LargeCrusherBlock.FACING);
+
         if (world.getTime() % 4 == 0)
         {
-            Direction facing = getCachedState().get(LargeCrusherBlock.FACING);
             Direction clockwise = facing.rotateYClockwise();
             Direction aclockwise = facing.rotateYCounterclockwise();
             Box box = new Box(pos.up(2))
+                    .offset(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ())
                     .stretch(facing.getOffsetX(), facing.getOffsetY(), facing.getOffsetZ())
                     .stretch(clockwise.getOffsetX(), clockwise.getOffsetY(), clockwise.getOffsetZ())
                     .stretch(aclockwise.getOffsetX(), aclockwise.getOffsetY(), aclockwise.getOffsetZ());
@@ -118,7 +130,7 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
             {
                 if (!view.isResourceBlank())
                 {
-                    int extracted = ItemPipeUtil.stackToAny(world, pos, Direction.DOWN, view.getResource(), view.getAmount(), transaction);
+                    int extracted = ItemPipeUtil.stackToAny(world, pos.offset(facing), Direction.DOWN, view.getResource(), view.getAmount(), transaction);
                     view.extract(view.getResource(), extracted, transaction);
                 }
             }
@@ -182,6 +194,9 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
 
     public void clientTick()
     {
+        if (!getCachedState().get(LargeCrusherBlock.ASSEMBLED))
+            return;
+
         float intensity = progressIncrement / maxIncrement;
         Direction facing = getCachedState().get(LargeCrusherBlock.FACING);
 
@@ -200,7 +215,7 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
 
                 double px = getPos().getX() + facing.getOffsetX() * 0.5 + 0.5 + (jrandom.nextFloat() - 0.5) * 1;
                 double py = getPos().getY() + 2.5 + (jrandom.nextFloat() - 0.5) * 0.5;
-                double pz = getPos().getZ() + facing.getOffsetZ() * 0.5 + 0.5 + (jrandom.nextFloat() - 0.5) * 1;
+                double pz = getPos().getZ() - 1 + facing.getOffsetZ() * 0.5 + 0.5 + (jrandom.nextFloat() - 0.5) * 1;
 
                 double vx = (jrandom.nextFloat() - 0.5) * 0.2;
                 double vy = jrandom.nextFloat() * Math.max(0.3, intensity);

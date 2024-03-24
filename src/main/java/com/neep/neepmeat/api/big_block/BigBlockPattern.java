@@ -14,26 +14,13 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
+// Okay, I know that casting the results of every function to T is cursed and unsafe, but I... erm...
 public class BigBlockPattern
 {
     protected Map<Vec3i, BlockStateProvider> stateProviderMap = Maps.newHashMap();
-//    @Nullable private Map<Vec3i, BlockState> stateMap = Maps.newHashMap();
-
-//    public Map<Vec3i, BlockState> stateMap()
-//    {
-//        if (stateMap == null)
-//        {
-//            stateMap = new HashMap<>();
-//            stateProviderMap.forEach((p, sp) -> stateMap.put(p, sp.get()));
-//        }
-//        return stateMap;
-//    }
-
     protected Multimap<Vec3i, BlockApiLookup<?, ?>> apiMap = Multimaps.newSetMultimap(Maps.newHashMap(), Sets::newHashSet);
     
     public <T extends BigBlockPattern> T oddCylinder(int radius, int startHeight, int endHeight, BlockStateProvider state)
@@ -80,36 +67,36 @@ public class BigBlockPattern
         return new BigBlockPattern().range(startX, startY, startZ, endX, endY, endZ, () -> state);
     }
 
-    public BigBlockPattern set(int x, int y, int z, BlockState state)
+    public <P extends BigBlockPattern> P  set(int x, int y, int z, BlockState state)
     {
         return set(new Vec3i(x, y, z), () -> state);
     }
 
-    public BigBlockPattern set(int x, int y, int z, BlockStateProvider state)
+    public <P extends BigBlockPattern> P set(int x, int y, int z, BlockStateProvider state)
     {
         return set(new Vec3i(x, y, z), state);
     }
 
-    public BigBlockPattern set(Vec3i pos, BlockStateProvider state)
+    public <P extends BigBlockPattern> P  set(Vec3i pos, BlockStateProvider state)
     {
         stateProviderMap.put(pos, state);
-        return this;
+        return (P) this;
     }
 
     /**
      * The block entity at the specified location will be flagged with the given API lookup's ID.
      * The structure block entity's API provider still needs to be registered elsewhere.
      */
-    public <T, C> BigBlockPattern enableApi(int x, int y, int z, BlockApiLookup<T, C> lookup)
+    public <P extends BigBlockPattern, T, C> P enableApi(int x, int y, int z, BlockApiLookup<T, C> lookup)
     {
         apiMap.put(new Vec3i(x, y, z), lookup);
-        return this;
+        return (P) this;
     }
 
-    public BigBlockPattern remove(Vec3i pos)
+    public <P extends BigBlockPattern> P remove(Vec3i pos)
     {
         stateProviderMap.remove(pos);
-        return this;
+        return (P) this;
     }
 
     public Iterable<Vec3i> iterable()
@@ -149,7 +136,7 @@ public class BigBlockPattern
         }
     }
 
-    public BigBlockPattern rotateY(float degrees)
+    public <P extends BigBlockPattern> P rotateY(float degrees)
     {
         BigBlockPattern newVolume = new BigBlockPattern();
 
@@ -170,7 +157,7 @@ public class BigBlockPattern
             newVolume.enableApi(newX, offset.getY(), newZ, api);
         });
 
-        return newVolume;
+        return (P) newVolume;
     }
 
     public VoxelShape toVoxelShape()
