@@ -39,5 +39,6 @@ public class ItemMincerRenderer implements BlockEntityRenderer<ItemMincerBlockEn
         this.random.setSeed(j);
 
         renderItems(stack, matrices, vertexConsumers, itemRenderer, be.getWorld(), random, light);
+        matrices.pop();
     }
 }
