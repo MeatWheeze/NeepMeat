@@ -22,7 +22,6 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
@@ -74,13 +73,15 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
                 .enableApi(-1, 1, -1, MotorisedBlock.LOOKUP)
                 .enableApi(1, 1, -1, MotorisedBlock.LOOKUP);
 
-        MultiblockUnassembledPattern northUnassembledPattern = new MultiblockUnassembledPattern().oddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(-1, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(-0, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(1, 2, -1, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(-1, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(0, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState())
-                .set(1, 2, -2, () -> NMBlocks.MEAT_STEEL_BLOCK.getDefaultState());
+        BigBlockPattern.BlockStateProvider provider = () -> NMBlocks.MACHINE_BLOCK.getDefaultState();
+
+        MultiblockUnassembledPattern northUnassembledPattern = new MultiblockUnassembledPattern().oddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, provider)
+                .set(-1, 2, -1, provider)
+                .set(-0, 2, -1, provider)
+                .set(1, 2, -1, provider)
+                .set(-1, 2, -2, provider)
+                .set(0, 2, -2, provider)
+                .set(1, 2, -2, provider);
 
         this.unassembledMap = ImmutableMap.of(
                 Direction.NORTH, northUnassembledPattern,

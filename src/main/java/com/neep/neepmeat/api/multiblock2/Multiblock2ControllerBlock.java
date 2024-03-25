@@ -1,10 +1,12 @@
 package com.neep.neepmeat.api.multiblock2;
 
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
+import com.neep.neepmeat.init.NMSounds;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
@@ -45,11 +47,11 @@ public abstract class Multiblock2ControllerBlock<T extends MultiBlockStructure<?
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (player.isSneaking())
-        {
-            getUnassembledPattern(state).placeBlocks(world, pos, pos);
-            return ActionResult.SUCCESS;
-        }
+//        if (player.isSneaking())
+//        {
+//            getUnassembledPattern(state).placeBlocks(world, pos, pos);
+//            return ActionResult.SUCCESS;
+//        }
 
         if (assemble(world, pos, state))
             return ActionResult.SUCCESS;
@@ -64,6 +66,7 @@ public abstract class Multiblock2ControllerBlock<T extends MultiBlockStructure<?
         {
             getAssembledPattern(state).placeBlocks(world, controllerPos, controllerPos);
             world.setBlockState(controllerPos, state.with(ASSEMBLED, true));
+            world.playSound(null, controllerPos, NMSounds.MULTIBLOCK_ASSEMBLE, SoundCategory.BLOCKS);
             return true;
         }
         return false;
@@ -73,6 +76,7 @@ public abstract class Multiblock2ControllerBlock<T extends MultiBlockStructure<?
     {
         MultiblockUnassembledPattern pattern = getUnassembledPattern(state);
         pattern.placeBlocks(world, controllerPos, controllerPos);
+        world.playSound(null, origin, NMSounds.MULTIBLOCK_DISASSEMBLE, SoundCategory.BLOCKS);
     }
 
     protected boolean checkSpaceForAssembly(World world, BlockPos origin, BlockState state)

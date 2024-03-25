@@ -19,6 +19,27 @@
       "model": "neepmeat:block/large_crusher/large_crusher",
       "y": -90,
       "x": 0
+    },
+
+    "assembled=false,facing=east": {
+      "model": "neepmeat:block/large_crusher/unassembled",
+      "y": 90,
+      "x": 0
+    },
+    "assembled=false,facing=north": {
+      "model": "neepmeat:block/large_crusher/unassembled",
+      "y": 0,
+      "x": 0
+    },
+    "assembled=false,facing=south": {
+      "model": "neepmeat:block/large_crusher/unassembled",
+      "y": 180,
+      "x": 0
+    },
+    "assembled=false,facing=west": {
+      "model": "neepmeat:block/large_crusher/unassembled",
+      "y": -90,
+      "x": 0
     }
   }
 }

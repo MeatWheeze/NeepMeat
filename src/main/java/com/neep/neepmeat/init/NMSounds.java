@@ -34,6 +34,9 @@ public class NMSounds
     public static SoundEvent MECHANICAL_MACHINE_BREAK = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "mechanical_machine_break");
     public static SoundEvent FLESH_MACHINE_PLACE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "flesh_machine_place");
 
+    public static SoundEvent MULTIBLOCK_ASSEMBLE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "multiblock_assemble");
+    public static SoundEvent MULTIBLOCK_DISASSEMBLE = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "multiblock_disassemble");
+
     public static SoundEvent PLC_SELECT = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select");
     public static SoundEvent UI_BEEP = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "plc_select_block");
     public static SoundEvent COMBINE_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "combine_instruction_apply");

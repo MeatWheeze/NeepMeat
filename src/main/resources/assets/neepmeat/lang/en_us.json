@@ -291,7 +291,7 @@
   "block.neepmeat.router": "Item Router",
   "block.neepmeat.router.lore_0": "Distributes items based on filters.",
   "block.neepmeat.grinder": "Crusher",
-  "block.neepmeat.large_crusher": "Large Crusher (WIP)",
+  "block.neepmeat.large_crusher": "Large Crusher",
   "block.neepmeat.alloy_kiln": "Alloy Kiln",
   "block.neepmeat.collector": "Fat Collector",
   "block.neepmeat.crucible": "Rendering Basin",

@@ -82,6 +82,18 @@
       "neepmeat:mechanical_machine_break"
     ]
   },
+  "multiblock_assemble": {
+    "subtitle": "subtitles.neepmeat.multiblock_assemble",
+    "sounds": [
+      "neepmeat:multiblock_assemble"
+    ]
+  },
+  "multiblock_disassemble": {
+    "subtitle": "subtitles.neepmeat.multiblock_disassemble",
+    "sounds": [
+      "neepmeat:multiblock_disassemble"
+    ]
+  },
   "flesh_machine_place": {
     "subtitle": "subtitles.neepmeat.flesh_machine_place",
     "sounds": [
