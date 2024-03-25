@@ -109,6 +109,8 @@ public class NMBlocks
 
     public static BasePaintedBlock SMOOTH_TILE = new BasePaintedBlock("smooth_tile", FabricBlockSettings.create().hardness(5.0f));
 
+    public static Block MACHINE_BLOCK = BlockRegistry.queue(new BaseBlock("machine_block", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
     public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
     public static BaseBuildingBlock POLISHED_METAL = new BaseBuildingBlock("polished_metal", true, FabricBlockSettings.create().strength(3.0f).sounds(NMSoundGroups.METAL));
