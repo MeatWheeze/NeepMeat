@@ -55,6 +55,10 @@ public class MotorBlockEntity extends LiquidFuelMachine implements MotorEntity
 
             motorised.motorTick(this);
         }
+        else
+        {
+            lastMotorised = null;
+        }
 
         try (Transaction transaction = Transaction.openOuter())
         {

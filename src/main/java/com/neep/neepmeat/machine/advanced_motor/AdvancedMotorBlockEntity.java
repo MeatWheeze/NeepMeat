@@ -77,6 +77,10 @@ public class AdvancedMotorBlockEntity extends SyncableBlockEntity implements Mot
 
             motorised.motorTick(this);
         }
+        else
+        {
+            lastMotorised = null;
+        }
     }
 
     protected void onPowerChange()

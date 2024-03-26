@@ -76,6 +76,10 @@ public class LargeMotorBlockEntity extends SyncableBlockEntity implements MotorE
 
             motorised.motorTick(this);
         }
+        else
+        {
+            lastMotorised = null;
+        }
     }
 
     protected void onPowerChange()
