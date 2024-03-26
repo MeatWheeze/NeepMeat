@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bbb",
+    "mmm",
+    "ici"
+  ],
+  "key": {
+    "b": {
+      "item": "neepmeat:meat_steel_block"
+    },
+    "m": {
+      "item": "neepmeat:meat_steel_ingot"
+    },
+    "i": {
+      "item": "minecraft:iron_block"
+    },
+    "c": {
+      "item": "neepmeat:grinder"
+    }
+  },
+  "result": {
+    "item": "neepmeat:large_crusher",
+    "count": 1
+  }
+}

@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "neepmeat:large_crusher"
+          "name": "neepmeat:machine_block"
         }
       ],
       "rolls": 1.0
