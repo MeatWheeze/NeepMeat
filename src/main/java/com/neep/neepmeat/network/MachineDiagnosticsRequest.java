@@ -56,11 +56,13 @@ public class MachineDiagnosticsRequest
     protected static void send(ServerPlayerEntity player, @NotNull MotorisedBlock.DiagnosticsProvider diagnosticsProvider)
     {
         MotorisedBlock.Diagnostics diagnostics = diagnosticsProvider.getDiagnostics();
+        if (diagnostics != null)
+        {
+            PacketByteBuf buf = PacketByteBufs.create();
+            buf.writeNbt(diagnostics.nbt());
 
-        PacketByteBuf buf = PacketByteBufs.create();
-        buf.writeNbt(diagnostics.nbt());
-
-        ServerPlayNetworking.send(player, ID, buf);
+            ServerPlayNetworking.send(player, ID, buf);
+        }
     }
 
     @Environment(value = EnvType.CLIENT)
