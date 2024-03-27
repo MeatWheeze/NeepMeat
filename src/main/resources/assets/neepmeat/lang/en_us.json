@@ -402,7 +402,7 @@
   "item.neepmeat.enlightened_brain.lore_1": "some profound structural changes.",
   "item.neepmeat.divine_organ": "Divine Organ",
 
-  "item.neepmeat.integration_charge_crude": "Body Compound Cartridge",
+  "item.neepmeat.integration_charge_crude": "Integration Fluid Cartridge",
   "item.neepmeat.integration_charge_crude.lore_0": "The flesh is still alive.",
   "item.neepmeat.integration_charge_adv": "Advanced Integration Charge",
   "item.neepmeat.integration_charge_adv.lore_0": "The fluid writhes inside its shell, as if alive.",
@@ -502,7 +502,7 @@
   "item.neepmeat.meat_steel_boots": "Meat Steel Boots",
 
   "block.neepmeat.charnel_compactor": "Charnel Compactor",
-  "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Body Compound when connected to an Integrator.",
+  "block.neepmeat.charnel_compactor.lore_0": "Converts flesh into Integration Fluid when connected to an Integrator.",
 
   "message.neepmeat.compactor.not_found": "No Integrator organism is connected.",
   "message.neepmeat.compactor.immature": "The connected Integrator organism is not fully grown.",
