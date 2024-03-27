@@ -4,8 +4,8 @@ import net.minecraft.nbt.NbtCompound;
 
 public interface MeatItemStack
 {
-    default NbtCompound getVolatileNbt()
-    {
-        return null;
-    }
+//    default NbtCompound getVolatileNbt()
+//    {
+//        return null;
+//    }
 }

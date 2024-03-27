@@ -1,6 +1,6 @@
 package com.neep.meatlib.mixin;
 
-import com.neep.meatlib.api.event.InputEvents;
+import com.neep.meatlib.client.api.event.InputEvents;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Mouse;

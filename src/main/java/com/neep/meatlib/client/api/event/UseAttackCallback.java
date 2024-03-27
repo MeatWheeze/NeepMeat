@@ -1,4 +1,4 @@
-package com.neep.meatlib.api.event;
+package com.neep.meatlib.client.api.event;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;

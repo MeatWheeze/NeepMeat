@@ -14,6 +14,7 @@ import net.minecraft.util.Rarity;
 public class MeatlibItemSettings extends FabricItemSettings
 {
     public ItemGroup group;
+    public boolean supportsGuideLookup = true; // For minimal extra boilerplate in item declarations, this is the default behaviour.
 
     public MeatlibItemSettings equipmentSlot(EquipmentSlotProvider equipmentSlotProvider) {
         FabricItemInternals.computeExtraData(this).equipmentSlot(equipmentSlotProvider);
@@ -78,6 +79,12 @@ public class MeatlibItemSettings extends FabricItemSettings
     public MeatlibItemSettings group(ItemGroup group)
     {
         this.group = group;
+        return this;
+    }
+
+    public MeatlibItemSettings noLookup()
+    {
+        this.supportsGuideLookup = false;
         return this;
     }
 }

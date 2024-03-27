@@ -174,7 +174,7 @@ public class GuideListPane extends ContentPane implements Drawable, Element, Sel
 
         // Create a de-duplicated set of matching entries.
         // GuideNode.GuideNodeImpl::equals() only checks the ID string since there is no reason for multiple entries to share an ID but have different contents.
-        Iterator<GuideNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().distinct().filter(
+        Iterator<GuideNode.ArticleNode> filtered = GuideReloadListener.getInstance().getArticleNodes().stream().distinct().filter(
                 a -> a.getText().toString().toLowerCase().contains(searchString)).iterator();
 
         for (int i = 0; filtered.hasNext() && (i + 1) * entryHeight < contentHeight; ++i)

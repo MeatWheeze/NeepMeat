@@ -9,6 +9,7 @@ import net.minecraft.util.Identifier;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public interface GuideNode
 {
@@ -135,9 +136,12 @@ public interface GuideNode
 
     class ArticleNode extends GuideNodeImpl
     {
-        public ArticleNode(String id, Identifier icon, Text text)
+        private final Set<String> lookups;
+
+        public ArticleNode(String id, Set<String> lookup, Identifier icon, Text text)
         {
             super(id, icon, text);
+            this.lookups = lookup;
         }
 
         @Override
@@ -157,6 +161,11 @@ public interface GuideNode
         {
             Article article = GuideReloadListener.getInstance().getArticle(getId());
             screen.setRightPane(new GuideArticlePane(screen, article));
+        }
+
+        public boolean matchesLookupTerm(String term)
+        {
+            return this.lookups.contains(term);
         }
     }
 }

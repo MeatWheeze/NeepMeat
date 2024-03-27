@@ -7,6 +7,7 @@ import com.neep.meatweapons.particle.PhageRayGraphicsEffect;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.client.effect.ReminaGraphicsEvent;
 import com.neep.neepmeat.client.fluid.NMFluidsClient;
+import com.neep.neepmeat.client.hud.GuideLookupThings;
 import com.neep.neepmeat.client.hud.HUDOverlays;
 import com.neep.neepmeat.client.model.GlassTankModel;
 import com.neep.neepmeat.client.model.GlomeEntityModel;
@@ -112,6 +113,8 @@ public class NeepMeatClient implements ClientModInitializer
         DosimeterItem.Client.init();
 
         PhageRayEntity.Client.init();
+
+        GuideLookupThings.init();
 
 //        ImplantAttributes.register(Impla);
     }

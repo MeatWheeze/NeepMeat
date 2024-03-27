@@ -1,6 +1,6 @@
 package com.neep.neepmeat.client.plc;
 
-import com.neep.meatlib.api.event.InputEvents;
+import com.neep.meatlib.client.api.event.InputEvents;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.machine.surgical_controller.SurgicalRobot;
 import com.neep.neepmeat.mixin.CameraAccessor;

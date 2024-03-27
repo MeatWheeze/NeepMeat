@@ -7,10 +7,13 @@ import com.google.gson.JsonParser;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.guide.article.Article;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.JsonHelper;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -23,7 +26,7 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
 
     private GuideNode root;
     private final Map<String, Article> articles = new HashMap<>();
-    private final Collection<GuideNode> articleNodes = new ArrayList<>();
+    private final Collection<GuideNode.ArticleNode> articleNodes = new ArrayList<>();
 
     public static GuideReloadListener getInstance()
     {
@@ -81,15 +84,31 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         String id = JsonHelper.getString(object, "id");
         String icon = JsonHelper.getString(object, "icon");
         String text = JsonHelper.getString(object, "text");
+
         if (JsonHelper.hasArray(object, "entries"))
         {
             List<GuideNode> nodes = new ArrayList<>();
-            JsonHelper.getArray(object, "entries").forEach(o -> nodes.add(processNode((JsonObject) o)));
 
             // Using recursion because I can't be bothered to traverse it properly
+            JsonHelper.getArray(object, "entries").forEach(o -> nodes.add(processNode((JsonObject) o)));
+
             return new GuideNode.MenuNode(id, new Identifier(icon), Text.of(text), nodes);
         }
-        GuideNode node = new GuideNode.ArticleNode(id, new Identifier(icon), Text.of(text));
+
+        Set<String> lookup = new HashSet<>();
+        if (JsonHelper.hasArray(object, "lookup"))
+        {
+            for (var term : JsonHelper.getArray(object, "lookup"))
+            {
+                lookup.add(term.getAsString());
+            }
+        }
+        else if (JsonHelper.hasString(object, "lookup"))
+        {
+            lookup.add(JsonHelper.getString(object, "lookup"));
+        }
+
+        GuideNode.ArticleNode node = new GuideNode.ArticleNode(id, lookup, new Identifier(icon), Text.of(text));
         articleNodes.add(node);
         return node;
     }
@@ -104,12 +123,53 @@ public class GuideReloadListener implements SimpleSynchronousResourceReloadListe
         return articles.get(id);
     }
 
+    @Nullable
+    public GuideNode.ArticleNode getArticleByItem(ItemStack stack)
+    {
+        Identifier itemId = Registries.ITEM.getId(stack.getItem());
+        return articleNodes.stream().filter(n -> n.getId().equals(itemId.getPath())).findFirst().orElse(null);
+    }
+
+    @Nullable
+    public List<GuideNode> getPath(ItemStack stack)
+    {
+        Identifier itemId = Registries.ITEM.getId(stack.getItem());
+        GuideNode target = articleNodes.stream().filter(n -> n.matchesLookupTerm(itemId.toString())).findFirst().orElse(null);
+        if (target != null)
+        {
+            List<GuideNode> route = new ArrayList<>();
+            recursiveDfs(root, target, route);
+
+            // If no route is found, we will go directly to the target.
+            route.add(target);
+
+            return route;
+        }
+        return null;
+    }
+
+    private boolean recursiveDfs(GuideNode node, GuideNode target, List<GuideNode> route)
+    {
+        route.add(route.size(), node);
+        for (var child : node.getChildren())
+        {
+            if (child == target)
+                return true;
+
+            boolean foundSub = recursiveDfs(child, target, route);
+            if (foundSub)
+                return true;
+        }
+        route.remove(route.size() - 1);
+        return false;
+    }
+
     public Collection<Article> getArticles()
     {
         return articles.values();
     }
 
-    public Collection<GuideNode> getArticleNodes()
+    public Collection<GuideNode.ArticleNode> getArticleNodes()
     {
         return articleNodes;
     }

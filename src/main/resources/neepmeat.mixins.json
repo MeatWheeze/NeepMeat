@@ -9,8 +9,8 @@
     "CowEntityMixin",
     "FurnaceAccessor",
     "LivingEntityMixin",
-    "ServerWorldMixin",
     "ServerPlayNetworkHandlerMixin",
+    "ServerWorldMixin",
     "WorldChunkMixin"
   ],
   "client": [

@@ -1,19 +1,24 @@
 package com.neep.neepmeat.item;
 
 import com.neep.meatlib.item.BaseItem;
+import com.neep.meatlib.item.TooltipSupplier;
 import com.neep.neepmeat.client.screen.tablet.GuideMainScreen;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.StackReference;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
+import net.minecraft.util.ClickType;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Hand;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.world.World;
 
+import javax.tools.Tool;
 import java.util.List;
 
 public class ProjectorItem extends BaseItem
@@ -41,7 +46,8 @@ public class ProjectorItem extends BaseItem
 
     public static void applyTooltip(Item item, List<Text> tooltip)
     {
-        tooltip.add(Text.translatable(item.getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
+        TooltipSupplier.wrapLines(tooltip, Text.translatable(item.getTranslationKey() + ".lore_0").formatted(Formatting.YELLOW));
+        TooltipSupplier.wrapLines(tooltip, Text.translatable(item.getTranslationKey() + ".lore_1").formatted(Formatting.GRAY));
     }
 
 //    @Nullable
@@ -51,12 +57,34 @@ public class ProjectorItem extends BaseItem
 //        return new GuideScreenHandler(syncId, inv);
 //    }
 
-    @Environment(EnvType.CLIENT)
-    private static class Client
+
+    @Override
+    public boolean onStackClicked(ItemStack stack, Slot slot, ClickType clickType, PlayerEntity player)
     {
-        public static void openScreen()
+        return super.onStackClicked(stack, slot, clickType, player);
+//        return true;
+    }
+
+    @Override
+    public boolean onClicked(ItemStack stack, ItemStack otherStack, Slot slot, ClickType clickType, PlayerEntity player, StackReference cursorStackReference)
+    {
+        return super.onClicked(stack, otherStack, slot, clickType, player, cursorStackReference);
+//        return true;
+    }
+
+    @Environment(EnvType.CLIENT)
+    public static class Client
+    {
+        public static GuideMainScreen openScreen()
         {
-            MinecraftClient.getInstance().setScreen(new GuideMainScreen());
+            MinecraftClient client = MinecraftClient.getInstance();
+            GuideMainScreen screen = new GuideMainScreen();
+
+            if (client.player != null)
+                client.player.closeHandledScreen();
+
+            client.setScreen(screen);
+            return screen;
         }
     }
 }

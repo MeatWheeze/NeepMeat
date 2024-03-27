@@ -1,7 +1,5 @@
 package com.neep.meatweapons.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-import com.neep.meatlib.api.event.RenderItemGuiEvent;
 import com.neep.meatlib.graphics.client.GraphicsEffectClient;
 import com.neep.meatweapons.MeatWeapons;
 import com.neep.meatweapons.client.model.BulletEntityModel;
@@ -10,15 +8,12 @@ import com.neep.meatweapons.client.model.PlasmaEntityModel;
 import com.neep.meatweapons.client.renderer.*;
 import com.neep.meatweapons.client.sound.AirtruckSoundInstance;
 import com.neep.meatweapons.item.AssaultDrillItem;
-import com.neep.meatweapons.item.BaseGunItem;
 import com.neep.meatweapons.particle.*;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.minecraft.client.render.BufferBuilder;
-import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 
@@ -88,24 +83,24 @@ public class MWClient implements ClientModInitializer
         GraphicsEffectClient.registerEffect(MWGraphicsEffects.ZAP, ZapBeamEffect::new);
 
 
-        RenderItemGuiEvent.EVENT.register((textRenderer, stack, x, y, countLabel) ->
-        {
-            if (stack.getItem() instanceof BaseGunItem baseGunItem && baseGunItem.getShots(stack, 1) >= 0)
-            {
-                RenderSystem.disableDepthTest();
-//                RenderSystem.disableTexture();
-                RenderSystem.disableBlend();
-                Tessellator tessellator = Tessellator.getInstance();
-                BufferBuilder bufferBuilder = tessellator.getBuffer();
-                int i = stack.getItemBarStep();
-                int j = stack.getItemBarColor();
-                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
-                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
-                RenderSystem.enableBlend();
-//                RenderSystem.enableTexture();
-                RenderSystem.enableDepthTest();
-            }
-        });
+//        RenderItemGuiEvent.EVENT.register((textRenderer, stack, x, y) ->
+//        {
+//            if (stack.getItem() instanceof BaseGunItem baseGunItem && baseGunItem.getShots(stack, 1) >= 0)
+//            {
+//                RenderSystem.disableDepthTest();
+////                RenderSystem.disableTexture();
+//                RenderSystem.disableBlend();
+//                Tessellator tessellator = Tessellator.getInstance();
+//                BufferBuilder bufferBuilder = tessellator.getBuffer();
+//                int i = stack.getItemBarStep();
+//                int j = stack.getItemBarColor();
+//                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, 13, 1, 0, 0, 0, 255);
+//                RenderItemGuiEvent.renderGuiQuad(bufferBuilder, x + 2, y + 15, i, 1, j >> 16 & 0xFF, j >> 8 & 0xFF, j & 0xFF, 255);
+//                RenderSystem.enableBlend();
+////                RenderSystem.enableTexture();
+//                RenderSystem.enableDepthTest();
+//            }
+//        });
 
 //        PlayerAttachmentManager.registerAttachment(DrillSoundInstance.ATTACHMENT_ID, DrillSoundInstance::new);
     }

@@ -445,6 +445,7 @@
 
   "item.neepmeat.projector": "Guide Projector",
   "item.neepmeat.projector.lore_0": "A guide to all NEEPMeat content.",
+  "item.neepmeat.projector.lore_1": "Press CTRL + L to look up an item while this guide is in your inventory.",
 
   "item.neepmeat.pipette": "Pipette",
   "item.neepmeat.pipette.full": "Pipette: %s (%s mb)",
@@ -719,6 +720,7 @@
   "tag.neepmeat.blood_bubble_logs": "Blood Bubble Logs",
   "tag.neepmeat.charnel_substrate": "Charnel Substrate",
   "tag.neepmeat.fluid_pipes": "Fluid Pipes",
+  "tag.neepmeat.guide_lookup": "Guide Lookup",
 
   "stat.neepmeat.enlightenment": "Enlightenment",
 

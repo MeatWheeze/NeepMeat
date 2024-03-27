@@ -12,4 +12,9 @@ public interface MeatlibItemExtension
     {
         return null;
     }
+
+    default boolean meatlib$supportsGuideLookup()
+    {
+        return false;
+    }
 }

@@ -2,7 +2,7 @@ package com.neep.meatweapons.item;
 
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Multimap;
-import com.neep.meatlib.api.event.InputEvents;
+import com.neep.meatlib.client.api.event.InputEvents;
 import com.neep.meatlib.item.CustomEnchantable;
 import com.neep.meatlib.item.MeatlibItem;
 import com.neep.meatlib.item.PoweredItem;

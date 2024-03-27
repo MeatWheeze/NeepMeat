@@ -1,26 +1,26 @@
-package com.neep.meatlib.api.event;
+package com.neep.meatlib.client.api.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.*;
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.Nullable;
 
 // CURRENTLY BROKEN
 public interface RenderItemGuiEvent
 {
     Event<RenderItemGuiEvent> EVENT = EventFactory.createArrayBacked(RenderItemGuiEvent.class,
-            (listeners) -> (textRenderer, stack, x, y, countLabel) ->
+            (listeners) -> (context, textRenderer, stack, x, y) ->
             {
                 for (RenderItemGuiEvent listener : listeners)
                 {
-                    listener.interact(textRenderer, stack, x, y, countLabel);
+                    listener.render(context, textRenderer, stack, x, y);
                 }
             });
 
-    void interact(TextRenderer textRenderer, ItemStack stack, int x, int y, @Nullable String countLabel);
+    void render(DrawContext context, TextRenderer textRenderer, ItemStack stack, int x, int y);
 
     static void renderGuiQuad(BufferBuilder buffer, int x, int y, int width, int height, int red, int green, int blue, int alpha)
     {

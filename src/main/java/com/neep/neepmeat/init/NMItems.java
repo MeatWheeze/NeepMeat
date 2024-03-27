@@ -70,7 +70,7 @@ public class NMItems
     public static Item WHISPER_FLOUR = new BaseCraftingItem("whisper_flour", 1, new MeatlibItemSettings().group(NMItemGroups.INGREDIENTS));
     public static Item WHISPER_BREAD = new EnlightenmentFoodItem("whisper_bread", 0, new MeatlibItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.WHISPER_BREAD));
 
-    public static Item TABLET = ItemRegistry.queue(new ProjectorItem("projector", new MeatlibItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
+    public static Item PROJECTOR = ItemRegistry.queue(new ProjectorItem("projector", new MeatlibItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
     public static Item PIPETTE = ItemRegistry.queue(new PipetteItem("pipette", TooltipSupplier.hidden(3), new MeatlibItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 

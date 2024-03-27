@@ -48,7 +48,7 @@ public class NMAdvancements extends FabricAdvancementProvider
 
         Advancement obtain_guide = getItem(
                 consumer, "main", "obtain_guide", root,
-                NMItems.TABLET
+                NMItems.PROJECTOR
         );
 
         Advancement obtain_integrator = getItem(
