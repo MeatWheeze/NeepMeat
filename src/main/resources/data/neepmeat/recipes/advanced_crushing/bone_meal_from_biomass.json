@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "resource": "neepmeat:biomass",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:bone_meal",
+    "min": 3,
+    "max": 6
+  },
+  "processtime": 20
+}

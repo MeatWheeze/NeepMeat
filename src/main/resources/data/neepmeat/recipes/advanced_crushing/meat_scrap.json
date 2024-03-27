@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "tag": "c:raw_meat",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:meat_scrap",
+    "min": 2,
+    "max": 3
+  },
+  "experience": 0,
+  "processtime": 40
+}

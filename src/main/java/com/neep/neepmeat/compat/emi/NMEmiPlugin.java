@@ -47,6 +47,7 @@ public class NMEmiPlugin implements EmiPlugin {
     public static final EmiRecipeCategory COMPACTING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/compacting"), COMPACTING_WORKSTATION);
     public static final EmiRecipeCategory ENLIGHTENING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/enlightening"), ENLIGHTENING_WORKSTATION);
     public static final EmiRecipeCategory GRINDING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/grinding"), GRINDING_WORKSTATION);
+    public static final EmiRecipeCategory ADVANCED_CRUSHING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/advanced_crushing"), LARGE_CRUSHER_WORKSTATION);
     public static final EmiRecipeCategory VIVISECTION = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/vivisection"), VIVISECTION_WORKSTATION);
     public static final EmiRecipeCategory HEATING = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/heating"), HEATING_WORKSTATION);
     public static final EmiRecipeCategory MANUFACTURE = new LazyEmiRecipeCategory(new Identifier(NeepMeat.NAMESPACE, "plugins/manufacture"), MANUFACTURE_WORKSTATION);
@@ -62,6 +63,7 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addCategory(COMPACTING);
         registry.addCategory(ENLIGHTENING);
         registry.addCategory(GRINDING);
+        registry.addCategory(ADVANCED_CRUSHING);
         registry.addCategory(VIVISECTION);
         registry.addCategory(HEATING);
         registry.addCategory(MANUFACTURE);
@@ -78,6 +80,7 @@ public class NMEmiPlugin implements EmiPlugin {
         registry.addWorkstation(ENLIGHTENING, ADV_INTEGRATOR_WORKSTATION);
         registry.addWorkstation(GRINDING, GRINDING_WORKSTATION);
         registry.addWorkstation(GRINDING, LARGE_CRUSHER_WORKSTATION);
+        registry.addWorkstation(ADVANCED_CRUSHING, LARGE_CRUSHER_WORKSTATION);
         registry.addWorkstation(VIVISECTION, VIVISECTION_WORKSTATION);
         registry.addWorkstation(HEATING, HEATING_WORKSTATION);
         registry.addWorkstation(MANUFACTURE, MANUFACTURE_WORKSTATION);
@@ -106,7 +109,11 @@ public class NMEmiPlugin implements EmiPlugin {
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.GRINDING)
                 .filter(r -> !r.destroy())
-                .map(GrindingEmiRecipe::new)
+                .map(r -> new GrindingEmiRecipe(GRINDING, r))
+                .forEach(registry::addRecipe);
+        MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.ADVANCED_CRUSHING)
+                .filter(r -> !r.destroy())
+                .map(r -> new GrindingEmiRecipe(ADVANCED_CRUSHING, r))
                 .forEach(registry::addRecipe);
         MeatlibRecipes.getInstance().getAllValuesOfType(NMrecipeTypes.HEATING)
                 .map(HeatingEmiRecipe::new)

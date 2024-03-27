@@ -21,9 +21,11 @@ public class GrindingEmiRecipe implements EmiRecipe {
     private final List<EmiIngredient> input;
     private final List<EmiStack> output;
 
+    private final EmiRecipeCategory category;
     private final GrindingRecipe recipe;
 
-    public GrindingEmiRecipe(GrindingRecipe recipe) {
+    public GrindingEmiRecipe(EmiRecipeCategory category, GrindingRecipe recipe) {
+        this.category = category;
         this.recipe = recipe;
 
         this.id = recipe.getId();
@@ -44,7 +46,7 @@ public class GrindingEmiRecipe implements EmiRecipe {
 
     @Override
     public EmiRecipeCategory getCategory() {
-        return NMEmiPlugin.GRINDING;
+        return category;
     }
 
     @Override

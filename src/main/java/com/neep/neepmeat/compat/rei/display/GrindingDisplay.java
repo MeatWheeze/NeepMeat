@@ -14,14 +14,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 public class GrindingDisplay extends BasicDisplay
 {
+    private final CategoryIdentifier<?> categoryIdentifier;
     private GrindingRecipe recipe;
 
-    public GrindingDisplay(GrindingRecipe recipe)
+    public GrindingDisplay(CategoryIdentifier<?> categoryIdentifier, GrindingRecipe recipe)
     {
-        this(
+        this(categoryIdentifier,
                 List.of(EntryIngredients.ofItems((Collection<ItemConvertible>) (Object) recipe.getItemInput().getAll(), (int) recipe.getItemInput().amount())),
                 new ArrayList<>(List.of(
                         EntryIngredients.ofItems(List.of(recipe.getItemOutput().resource()), (int) recipe.getItemOutput().minAmount())
@@ -43,14 +45,20 @@ public class GrindingDisplay extends BasicDisplay
         }
     }
 
-    public GrindingDisplay(List<EntryIngredient> input, List<EntryIngredient> output, Optional<Identifier> location)
+    public GrindingDisplay(CategoryIdentifier<?> categoryIdentifier, List<EntryIngredient> input, List<EntryIngredient> output, Optional<Identifier> location)
     {
         super(input, output);
+        this.categoryIdentifier = categoryIdentifier;
     }
 
-    public static BasicDisplay.Serializer<GrindingDisplay> serializer()
+    public static BasicDisplay.Serializer<GrindingDisplay> serializer(CategoryIdentifier<?> categoryIdentifier)
     {
-        return BasicDisplay.Serializer.ofSimple(GrindingDisplay::new);
+        return BasicDisplay.Serializer.ofSimple((input, output, location1) -> new GrindingDisplay(categoryIdentifier, input, output, location1));
+    }
+
+    public static <T extends GrindingRecipe> Function<T, GrindingDisplay> filler(CategoryIdentifier<? extends GrindingDisplay> categoryIdentifier)
+    {
+        return r -> new GrindingDisplay(categoryIdentifier, r);
     }
 
     @Override

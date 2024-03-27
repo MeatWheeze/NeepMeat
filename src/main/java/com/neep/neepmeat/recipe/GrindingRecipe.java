@@ -138,23 +138,25 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         return false;
     }
 
-    public static class Serializer implements MeatRecipeSerialiser<GrindingRecipe>
+    public static class Serializer<T extends GrindingRecipe> implements MeatRecipeSerialiser<T>
     {
-        RecipeFactory<GrindingRecipe> factory;
-        int processTIme;
+        private RecipeFactory<T> factory;
+        private DestroyRecipeFactory<T> destroyFactory;
+        private int processTIme;
 
-        public Serializer(RecipeFactory<GrindingRecipe> recipeFactory, int processTime)
+        public Serializer(RecipeFactory<T> recipeFactory, DestroyRecipeFactory<T> destroyFactory, int processTime)
         {
             this.factory = recipeFactory;
+            this.destroyFactory = destroyFactory;
             this.processTIme = processTime;
         }
 
         @Override
-        public GrindingRecipe read(Identifier id, JsonObject json)
+        public T read(Identifier id, JsonObject json)
         {
             if (json.has("destroy") && JsonHelper.getBoolean(json, "destroy"))
             {
-                return new DestroyRecipe(id);
+                return destroyFactory.create(id);
             }
 
             JsonObject inputElement = JsonHelper.getObject(json, "input");
@@ -178,11 +180,11 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         }
 
         @Override
-        public GrindingRecipe read(Identifier id, PacketByteBuf buf)
+        public T read(Identifier id, PacketByteBuf buf)
         {
             // Ignore everything else
             if (buf.readBoolean())
-                return new DestroyRecipe(id);
+                return destroyFactory.create(id);
 
             RecipeInput<Item> itemInput = RecipeInput.fromBuffer(buf);
             RecipeOutputImpl<Item> itemOutput = RecipeOutputImpl.fromBuffer(Registries.ITEM, buf);
@@ -222,6 +224,11 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         public interface RecipeFactory<T extends GrindingRecipe>
         {
             T create(Identifier var1, RecipeInput<Item> in, RecipeOutputImpl<Item> out, @Nullable RecipeOutputImpl<Item> eOut, float xp, int time);
+        }
+
+        public interface DestroyRecipeFactory<T extends GrindingRecipe>
+        {
+            T create(Identifier id);
         }
     }
 

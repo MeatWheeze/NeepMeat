@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "tag": "minecraft:iron_ores",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:raw_iron",
+    "min": 1,
+    "max": 4
+  },
+  "experience": 2,
+  "processtime": 40
+}

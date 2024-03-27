@@ -1,12 +1,12 @@
 {
-  "type": "neepmeat:grinding",
+  "type": "neepmeat:advanced_crushing",
   "input": {
     "resource": "minecraft:glowstone",
     "amount": 1
   },
   "output": {
     "resource": "minecraft:glowstone_dust",
-    "min": 3,
+    "min": 4,
     "max": 4
   },
   "experience": 0,

@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "resource": "minecraft:blaze_rod",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:blaze_powder",
+    "min": 4,
+    "max": 5
+  },
+  "experience": 0,
+  "processtime": 40
+}

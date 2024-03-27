@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "tag": "minecraft:copper_ores",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:raw_copper",
+    "min": 4,
+    "max": 7
+  },
+  "experience": 2,
+  "processtime": 40
+}

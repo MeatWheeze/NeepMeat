@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "resource": "neepmeat:whisper_wheat",
+    "amount": 1
+  },
+  "output": {
+    "resource": "neepmeat:whisper_flour",
+    "min": 1,
+    "max": 2
+  },
+  "experience": 0.7,
+  "processtime": 10
+}

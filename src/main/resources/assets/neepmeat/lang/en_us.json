@@ -697,6 +697,7 @@
 
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
+  "category.neepmeat.advanced_crushing": "Advanced Crushing",
   "category.neepmeat.compacting": "Charnel Compacting",
   "category.neepmeat.mixing": "Mixing",
   "category.neepmeat.mixing.time": "Time: %ds",

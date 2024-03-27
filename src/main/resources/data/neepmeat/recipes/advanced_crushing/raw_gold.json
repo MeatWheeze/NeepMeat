@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "tag": "minecraft:gold_ores",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:raw_gold",
+    "min": 1,
+    "max": 4
+  },
+  "experience": 2,
+  "processtime": 40
+}

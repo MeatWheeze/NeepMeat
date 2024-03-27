@@ -99,14 +99,18 @@ public class LargeCrusherStorage implements NbtSerialisable
             }
             else if (!isEmpty())
             {
-                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).orElse(null);
+                GrindingRecipe foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.ADVANCED_CRUSHING, this).orElse(null);
+
+                if (foundRecipe == null)
+                    foundRecipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, this).orElse(null);
+
                 if (foundRecipe != null)
                 {
                     recipe = foundRecipe;
                 }
                 else if (!isEmpty())
                 {
-                    recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, new Identifier(NeepMeat.NAMESPACE, "grinding/destroy")).orElse(null);
+                    recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.ADVANCED_CRUSHING, new Identifier(NeepMeat.NAMESPACE, "advanced_crushing/destroy")).orElse(null);
                 }
                 syncIfPossible();
             }

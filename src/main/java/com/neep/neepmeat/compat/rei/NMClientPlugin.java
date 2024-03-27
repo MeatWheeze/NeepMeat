@@ -20,7 +20,6 @@ import com.neep.neepmeat.transport.FluidTransport;
 import me.shedaniel.rei.api.client.plugins.REIClientPlugin;
 import me.shedaniel.rei.api.client.registry.category.CategoryRegistry;
 import me.shedaniel.rei.api.client.registry.display.DisplayRegistry;
-import me.shedaniel.rei.api.client.registry.display.reason.DisplayAdditionReason;
 import me.shedaniel.rei.api.common.display.Display;
 import me.shedaniel.rei.api.common.plugins.PluginManager;
 import me.shedaniel.rei.api.common.registry.ReloadStage;
@@ -33,7 +32,6 @@ import net.minecraft.registry.entry.RegistryEntry;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -41,16 +39,17 @@ import java.util.function.Predicate;
 
 public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 {
-    private static final Comparator<MeatlibRecipe<?>> RECIPE_COMPARATOR = Comparator.comparing((MeatlibRecipe<?> o) -> o.getId().getNamespace()).thenComparing(o -> o.getId().getPath());
-    private List<MeatlibRecipe<?>> sortedRecipes = null;
-    DisplayAdditionReason SPECIAL_RECIPE_MANAGER = DisplayAdditionReason.simple();
+//    private static final Comparator<MeatlibRecipe<?>> RECIPE_COMPARATOR = Comparator.comparing((MeatlibRecipe<?> o) -> o.getId().getNamespace()).thenComparing(o -> o.getId().getPath());
+//    private List<MeatlibRecipe<?>> sortedRecipes = null;
+//    DisplayAdditionReason SPECIAL_RECIPE_MANAGER = DisplayAdditionReason.simple();
 
     @Override
     public void registerDisplays(DisplayRegistry registry)
     {
         registerRecipeFiller(registry, ItemManufactureRecipe.class, PLCRecipes.MANUFACTURE, ManufactureDisplay::new);
         registry.add(new TransformingToolDisplay(TransformingToolRecipe.getInstance()));
-        registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay::new);
+        registerRecipeFiller(registry, GrindingRecipe.class, NMrecipeTypes.GRINDING, GrindingDisplay.filler(GRINDING));
+        registerRecipeFiller(registry, AdvancedCrushingRecipe.class, NMrecipeTypes.ADVANCED_CRUSHING, GrindingDisplay.filler(ADVANCED_CRUSHING));
         registerRecipeFiller(registry, TrommelRecipe.class, NMrecipeTypes.TROMMEL, TrommelDisplay::new);
         registerRecipeFiller(registry, FluidHeatingRecipe.class, NMrecipeTypes.HEATING, HeatingDisplay::new);
         registerRecipeFiller(registry, AlloyKilnRecipe.class, NMrecipeTypes.ALLOY_SMELTING, AlloySmeltingDisplay::new);
@@ -81,6 +80,7 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
 //                new SurgeryCategory(),
                 new TransformingToolCategory(),
                 new GrindingCategory(),
+                new AdvancedCrushingCategory(),
                 new TrommelCategory(),
                 new HeatingCategory(),
                 new CompactingCategory(),
@@ -94,6 +94,8 @@ public class NMClientPlugin implements REIClientPlugin, NMREIPlugin
         registry.addWorkstations(MANUFACTURE, EntryStacks.of(PLCBlocks.PLC.asItem()));
         registry.addWorkstations(TRANSFORMING_TOOL, EntryStacks.of(PLCBlocks.PLC.asItem()));
         registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.CRUSHER.asItem()));
+        registry.addWorkstations(GRINDING, EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()));
+        registry.addWorkstations(ADVANCED_CRUSHING, EntryStacks.of(NMBlocks.LARGE_CRUSHER.asItem()));
         registry.addWorkstations(TROMMEL, EntryStacks.of(NMBlocks.SMALL_TROMMEL.asItem()));
         registry.addWorkstations(HEATING, EntryStacks.of(FluidTransport.MULTI_TANK.asItem()));
         registry.addWorkstations(COMPACTING, EntryStacks.of(NMBlocks.CHARNEL_COMPACTOR.asItem()));
