@@ -42,8 +42,8 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
 {
     public static final int PATTERN_SLOTS = 12;
     public static final int MAX_PROGRESS = 10;
-    public static final float MAX_INCREMENT = 1f;
-    public static final float MIN_INCREMENT = 0.3f;
+    public static final float MAX_INCREMENT = 5f;
+    public static final float MIN_INCREMENT = 1f;
     protected float progress;
     protected float increment = 1;
     protected boolean slotSelectMode;
@@ -119,22 +119,6 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
     public AssemblerBlockEntity(BlockPos pos, BlockState state)
     {
         this(NMBlockEntities.ASSEMBLER, pos, state);
-    }
-
-    public void test()
-    {
-        if (!(world instanceof ServerWorld serverWorld))
-            return;
-
-        NamedScreenHandlerFactory factory = world.getBlockState(pos.down()).createScreenHandlerFactory(world, pos);
-        FakePlayerEntity fakePlayer = new FakePlayerEntity(world.getServer(), serverWorld, pos);
-        if (factory != null)
-        {
-            fakePlayer.openHandledScreen(factory);
-            ScreenHandler handler = fakePlayer.currentScreenHandler;
-            handler.getSlot(1).setStack(Items.STONE.getDefaultStack());
-        }
-        fakePlayer.remove(Entity.RemovalReason.DISCARDED);
     }
 
     @Override
@@ -269,7 +253,7 @@ public class AssemblerBlockEntity extends SyncableBlockEntity implements NamedSc
 
     public void syncAnimation()
     {
-        this.spinTicks = 10;
+        this.spinTicks = 5;
         sync();
     }
 
