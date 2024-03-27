@@ -204,7 +204,16 @@ public class GrindingRecipe implements MeatlibRecipe<IGrinderStorage>
         @Override
         public void write(PacketByteBuf buf, GrindingRecipe recipe)
         {
-            buf.writeBoolean(recipe.destroy());
+            if (recipe.destroy())
+            {
+                buf.writeBoolean(true);
+                return;
+            }
+            else
+            {
+                buf.writeBoolean(false);
+            }
+
             recipe.itemInput.write(buf);
             recipe.itemOutput.write(Registries.ITEM, buf);
 
