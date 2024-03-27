@@ -1,6 +1,5 @@
 package com.neep.neepmeat.compat.emi.recipe;
 
-import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
@@ -91,7 +90,8 @@ public class GrindingEmiRecipe implements EmiRecipe {
         widgets.addSlot(output.get(0), startX + 61, startY + 9).appendTooltip(Text.of("Min: " + recipe.getItemOutput().minAmount() + ", Max: " + recipe.getItemOutput().maxAmount())).recipeContext(this);
 
         if (output.size() > 1) {
-            widgets.addSlot(output.get(1), startX + 81, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getItemOutput().chance())).recipeContext(this);
+            float chance = recipe.getItemOutput().chance();
+            widgets.addSlot(output.get(1), startX + 81, startY + 9).appendTooltip(Text.of("Chance: " + recipe.getAuxOutput().chance())).recipeContext(this);
         }
     }
 }
