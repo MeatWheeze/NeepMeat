@@ -36,6 +36,7 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
 {
     protected final LargeCrusherStorage storage = new LargeCrusherStorage(this);
     private final Random jrandom = new Random();
+    public int previewTicks = 0;
 
     public LargeCrusherBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -200,8 +201,15 @@ public class LargeCrusherBlockEntity extends MotorisedMachineBlockEntity impleme
         return storage.slots;
     }
 
+    public void preview()
+    {
+        previewTicks = 30;
+    }
+
     public void clientTick()
     {
+        previewTicks = Math.max(0, previewTicks - 1);
+
         if (!getCachedState().get(LargeCrusherBlock.ASSEMBLED))
             return;
 

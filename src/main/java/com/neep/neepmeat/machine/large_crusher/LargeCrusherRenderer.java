@@ -3,7 +3,9 @@ package com.neep.neepmeat.machine.large_crusher;
 import com.neep.neepmeat.client.renderer.BERenderUtils;
 import com.neep.neepmeat.machine.grinder.GrinderBlock;
 import com.neep.neepmeat.util.NMMaths;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.OverlayTexture;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.block.entity.BlockEntityRenderer;
 import net.minecraft.client.render.block.entity.BlockEntityRendererFactory;
@@ -13,8 +15,10 @@ import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.RotationAxis;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.List;
@@ -34,7 +38,31 @@ public class LargeCrusherRenderer implements BlockEntityRenderer<LargeCrusherBlo
     public void render(LargeCrusherBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, int overlay)
     {
         if (!be.getCachedState().get(LargeCrusherBlock.ASSEMBLED))
+        {
+            if (be.previewTicks > 0 && (be.getCachedState().getBlock() instanceof LargeCrusherBlock block))
+            {
+                var pattern = block.getUnassembledPattern(be.getCachedState());
+                BlockPos pos = be.getPos();
+                BlockPos.Mutable mutable = pos.mutableCopy();
+//                BakedModelManager manager = MinecraftClient.getInstance().getBlockRenderManager().getModels().getModelManager();
+//                BakedModel handle = BakedModelManagerHelper.getModel(manager, model);
+//                BlockModelRenderer renderer = MinecraftClient.getInstance().getBlockRenderManager().getModelRenderer();
+                for (var entry : pattern.entries())
+                {
+                    matrices.push();
+                    Vec3i offset = entry.key();
+                    mutable.set(pos, offset);
+                    matrices.translate(offset.getX(), offset.getY(), offset.getZ());
+                    matrices.translate(0.5, 0.5, 0.5);
+                    matrices.scale(0.8f, 0.8f, 0.8f);
+                    matrices.translate(-0.5, -0.5, -0.5);
+                    MinecraftClient.getInstance().getBlockRenderManager().renderBlock(entry.value(), pos, be.getWorld(), matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), false, net.minecraft.util.math.random.Random.create());
+//                    renderer.render(be.getWorld(), handle, be.getCachedState(), mutable, matrices, vertexConsumers.getBuffer(RenderLayer.getCutout()), true, random, 0, OverlayTexture.DEFAULT_UV);
+                    matrices.pop();
+                }
+            }
             return;
+        }
 
         List<LargeCrusherStorage.InputSlot> slots = be.getSlots();
 

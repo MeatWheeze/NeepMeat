@@ -20,13 +20,17 @@ import net.minecraft.block.ShapeContext;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.minecraft.util.function.BooleanBiFunction;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3i;
@@ -167,6 +171,19 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
 //            });
 //        }
         super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
+    {
+        if (!assemble(world, pos, state))
+        {
+            if (world.getBlockEntity(pos) instanceof LargeCrusherBlockEntity be)
+            {
+                be.preview();
+            }
+        }
+        return ActionResult.SUCCESS;
     }
 
     @Override
