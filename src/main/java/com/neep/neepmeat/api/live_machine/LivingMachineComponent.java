@@ -14,5 +14,5 @@ public interface LivingMachineComponent
 
     boolean componentRemoved();
 
-    ComponentType<?> getComponentType();
+    ComponentType<? extends LivingMachineComponent> getComponentType();
 }

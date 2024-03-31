@@ -17,9 +17,32 @@ public interface ImplementedInventory extends Inventory, NbtSerialisable
         return () -> items;
     }
 
+    static ImplementedInventory of(DefaultedList<ItemStack> items, Runnable callback)
+    {
+        return new ImplementedInventory()
+        {
+            @Override
+            public DefaultedList<ItemStack> getItems()
+            {
+                return items;
+            }
+
+            @Override
+            public void markDirty()
+            {
+                callback.run();
+            }
+        };
+    }
+
     static ImplementedInventory ofSize(int size)
     {
         return of(DefaultedList.ofSize(size, ItemStack.EMPTY));
+    }
+
+    static ImplementedInventory ofSize(int size, Runnable callback)
+    {
+        return of(DefaultedList.ofSize(size, ItemStack.EMPTY), callback);
     }
 
     @Override

@@ -73,12 +73,13 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
 
     public boolean hasComponents(ComponentType<?>... types)
     {
-        for (var type : types)
-        {
-            if (!getComponents().containsKey(type))
-                return false;
-        }
-        return true;
+        return getComponents().keys().containsAll(Arrays.asList(types));
+//        for (var type : types)
+//        {
+//            if (!getComponents().containsKey(type))
+//                return false;
+//        }
+//        return true;
     }
 
     protected void updateStructure()

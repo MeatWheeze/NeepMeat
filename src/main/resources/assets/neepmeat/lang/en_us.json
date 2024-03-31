@@ -131,6 +131,8 @@
   "block.neepmeat.caution_block_door": "Caution Stripes Door",
 
   "block.neepmeat.machine_block": "Machine Block",
+  "block.neepmeat.motor_port": "Motor Port",
+  "block.neepmeat.item_output_port": "Item Output Port",
 
   "block.neepmeat.meat_steel_block": "Meat Steel Block",
   "block.neepmeat.meat_steel_block_slab": "Meat Steel Slab",

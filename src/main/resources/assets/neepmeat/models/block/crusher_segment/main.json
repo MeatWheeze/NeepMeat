@@ -4,7 +4,7 @@
 	"textures": {
 		"1": "neepmeat:block/large_crusher/main2",
 		"2": "neepmeat:block/large_crusher/main",
-		"particle": "neepmeat:block/large_crusher/unassembled"
+		"particle": "neepmeat:block/large_crusher/main2"
 	},
 	"elements": [
 		{
@@ -55,11 +55,11 @@
 		},
 		"firstperson_righthand": {
 			"rotation": [0, 45, 0],
-			"scale": [0.4, 0.4, 0.4]
+			"scale": [0.19297, 0.19297, 0.19297]
 		},
 		"firstperson_lefthand": {
-			"rotation": [0, 225, 0],
-			"scale": [0.4, 0.4, 0.4]
+			"rotation": [0, 45, 0],
+			"scale": [0.19297, 0.19297, 0.19297]
 		},
 		"ground": {
 			"translation": [0, 3, 0],

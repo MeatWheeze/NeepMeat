@@ -125,10 +125,12 @@ public class RecipeInput<T> implements Predicate<StorageView<? extends TransferV
     public boolean testStorage(Storage<? extends TransferVariant<?>> storage)
     {
         cacheMatching();
-        Stream<?> entries = Arrays.stream(matchingObjects);
+//        Supplier<Stream<?> entries = Arrays.stream(matchingObjects);
         for (StorageView<? extends TransferVariant<?>> view : storage)
         {
-            if (entries.anyMatch(o -> view.getResource().getObject().equals(o))) return true;
+            // Not very efficient, but hopefully this won't be used on storages with many slots too often.
+            if (Arrays.stream(matchingObjects).anyMatch(o -> view.getResource().getObject().equals(o)))
+                return true;
         }
         return false;
     }
