@@ -21,6 +21,7 @@ import com.neep.neepmeat.init.*;
 import com.neep.neepmeat.machine.charnel_compactor.CharnelCompactorStorage;
 import com.neep.neepmeat.machine.homogeniser.MeatAdditives;
 import com.neep.neepmeat.machine.integrator.IntegratorBlockEntity;
+import com.neep.neepmeat.machine.live_machine.LiveMachines;
 import com.neep.neepmeat.machine.synthesiser.MobSynthesisRegistry;
 import com.neep.neepmeat.network.MachineDiagnosticsRequest;
 import com.neep.neepmeat.network.NMTrackedData;
@@ -91,6 +92,7 @@ public class NeepMeat implements ModInitializer
 
 
 			PLCBlocks.init();
+			LiveMachines.init();
 
 			NMFluids.initialise();
 			NMBlockEntities.initialise();

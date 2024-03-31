@@ -2,21 +2,27 @@ package com.neep.neepmeat.api.live_machine;
 
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.google.common.util.concurrent.AtomicDouble;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
+    private final Map<ComponentType<?>, LivingMachineComponent> componentMap = new HashMap<>();
+    private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
+
+//    protected FailureManager failureManager = new Fa
+    protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
+
     protected long age = 0;
     protected int updateInterval = 80;
     protected int maxSize = 64;
@@ -44,10 +50,34 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
     {
         age++;
 
+        componentMap.entrySet().removeIf(e -> e.getValue().componentRemoved());
+
+        degradationManager.tick();
+
         if (age % updateInterval == 0)
         {
             updateStructure();
         }
+    }
+
+    public Map<ComponentType<?>, LivingMachineComponent> getComponents()
+    {
+        return componentMap;
+    }
+
+    public <T extends LivingMachineComponent> T getComponent(ComponentType<T> type)
+    {
+        return (T) getComponents().get(type);
+    }
+
+    public boolean hasComponents(ComponentType<?>... types)
+    {
+        for (var type : types)
+        {
+            if (!getComponents().containsKey(type))
+                return false;
+        }
+        return true;
     }
 
     protected void updateStructure()
@@ -56,7 +86,23 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
         processStructure();
     }
 
-    protected abstract void processStructure();
+    protected void processStructure()
+    {
+        properties.clear();
+        for (var structure : structures)
+        {
+            structure.getProperties().forEach((property, value) ->
+            {
+                properties.computeIfAbsent(property, p -> new AtomicDouble(0)).addAndGet(value);
+            });
+        }
+
+        // Average all properties
+        for (var value : properties.values())
+        {
+            value.set(value.get() / properties.size());
+        }
+    }
 
     protected void search(BlockPos start)
     {
@@ -80,6 +126,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
                 {
                     BlockState nextState = world.getBlockState(mutable);
 
+                    LivingMachineComponent component;
                     if (structures.size() >= maxSize)
                     {
                         return;
@@ -88,18 +135,34 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
                     if (nextState.getBlock() instanceof LivingMachineStructure structure)
                     {
                         structures.add(structure);
+                        queue.add(mutable.toImmutable());
                     }
                     else if (nextState.getBlock() instanceof LivingMachineBlock)
                     {
                         structures.clear();
                         return;
                     }
-                    else if (world.getBlockEntity(mutable) instanceof LivingMachineComponent component)
+                    else if ((component = LivingMachineComponent.LOOKUP.find(world, mutable, null)) != null)
                     {
                         component.setController(pos);
+                        componentMap.put(component.getComponentType(), component);
+                        queue.add(mutable.toImmutable());
                     }
                 }
             }
         }
+    }
+
+    public float getEfficiency()
+    {
+        // Take into account performance degradation and block types
+        return (float)
+                properties.get(LivingMachineStructure.Property.EFFICIENCY).get()
+                * degradationManager.getDegradation();
+    }
+
+    public float degradationRate()
+    {
+        return 0.1f * (1 - degradationManager.getDegradation());
     }
 }

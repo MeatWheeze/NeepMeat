@@ -63,6 +63,14 @@ public class BlockRegistry
         return block;
     }
 
+    public static <T extends Block & MeatlibBlock> T queueWithItem(T block, ItemSettings itemSettings)
+    {
+        MeatLib.assertActive(block);
+        BLOCKS.put(new Identifier(MeatLib.CURRENT_NAMESPACE, block.getRegistryName()), block);
+        itemSettings.getFactory().create(block, block.getRegistryName(), itemSettings);
+        return block;
+    }
+
     public static <T extends Block> T queueWithItem(T block, String registryName)
     {
         MeatLib.assertActive(block);
