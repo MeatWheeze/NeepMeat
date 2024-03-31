@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.live_machine;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
+import com.neep.neepmeat.machine.live_machine.block.entity.LargestHopperBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
 import com.neep.neepmeat.machine.live_machine.component.HopperComponent;
 import com.neep.neepmeat.machine.live_machine.component.IItemOutputComponent;
@@ -12,6 +13,7 @@ import net.minecraft.block.entity.HopperBlockEntity;
 public class LivingMachineComponents
 {
     public static final ComponentType<CrusherSegmentBlockEntity> CRUSHER_SEGMENT = new ComponentType.Simple<>();
+    public static final ComponentType<LargestHopperBlockEntity> LARGEST_HOPPER = new ComponentType.Simple<>();
     public static final ComponentType<MotorPortBlockEntity> MOTOR_PORT = new ComponentType.Simple<>();
 
     public static final ComponentType<HopperComponent> HOPPER = new ComponentType.Simple<>();
