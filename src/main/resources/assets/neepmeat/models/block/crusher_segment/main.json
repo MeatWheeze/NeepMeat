@@ -1,0 +1,76 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "neepmeat:block/large_crusher/main2",
+		"2": "neepmeat:block/large_crusher/main",
+		"particle": "neepmeat:block/large_crusher/unassembled"
+	},
+	"elements": [
+		{
+			"from": [-16, 0, -16],
+			"to": [32, 2, 32],
+			"faces": {
+				"north": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"east": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"south": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"west": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"up": {"uv": [0, 0, 12, 12], "texture": "#1"},
+				"down": {"uv": [0, 0, 12, 12], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-16, 14, -16],
+			"to": [32, 16, 32],
+			"faces": {
+				"north": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"east": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"south": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"west": {"uv": [0, 12, 12, 12.5], "texture": "#1"},
+				"up": {"uv": [0, 12, 12, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 12, 12], "texture": "#1"}
+			}
+		},
+		{
+			"from": [-14, 2, -14],
+			"to": [30, 14, 30],
+			"faces": {
+				"north": {"uv": [0.5, 12, 11.5, 15], "texture": "#2"},
+				"east": {"uv": [0.5, 12, 11.5, 15], "texture": "#2"},
+				"south": {"uv": [0.5, 12, 11.5, 15], "texture": "#2"},
+				"west": {"uv": [0.5, 12, 11.5, 15], "texture": "#2"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 225, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"scale": [0.22656, 0.22656, 0.22656]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

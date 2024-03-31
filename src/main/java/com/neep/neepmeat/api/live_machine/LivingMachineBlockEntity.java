@@ -1,5 +1,7 @@
 package com.neep.neepmeat.api.live_machine;
 
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Multimaps;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -10,14 +12,13 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
-    private final Map<ComponentType<?>, LivingMachineComponent> componentMap = new HashMap<>();
+    private final Multimap<ComponentType<?>, LivingMachineComponent> componentMap = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
     private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
 
 //    protected FailureManager failureManager = new Fa
@@ -50,7 +51,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
     {
         age++;
 
-        componentMap.entrySet().removeIf(e -> e.getValue().componentRemoved());
+        componentMap.entries().removeIf(e -> e.getValue().componentRemoved());
 
         degradationManager.tick();
 
@@ -60,14 +61,14 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
         }
     }
 
-    public Map<ComponentType<?>, LivingMachineComponent> getComponents()
+    public Multimap<ComponentType<?>, LivingMachineComponent> getComponents()
     {
         return componentMap;
     }
 
-    public <T extends LivingMachineComponent> T getComponent(ComponentType<T> type)
+    public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
     {
-        return (T) getComponents().get(type);
+        return (Collection<T>) getComponents().get(type);
     }
 
     public boolean hasComponents(ComponentType<?>... types)
@@ -107,6 +108,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
     protected void search(BlockPos start)
     {
         structures.clear();
+        componentMap.clear();
 
         Set<BlockPos> visited = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -124,11 +126,20 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
 
                 if (!visited.contains(mutable))
                 {
+                    visited.add(mutable.toImmutable());
+
                     BlockState nextState = world.getBlockState(mutable);
+                    if (nextState.isAir())
+                        continue;
 
                     LivingMachineComponent component;
-                    if (structures.size() >= maxSize)
+                    if (structures.size() + componentMap.size() >= maxSize)
+                        return;
+
+                    if (nextState.getBlock() instanceof LivingMachineBlock)
                     {
+                        structures.clear();
+                        componentMap.clear();
                         return;
                     }
 
@@ -136,11 +147,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
                     {
                         structures.add(structure);
                         queue.add(mutable.toImmutable());
-                    }
-                    else if (nextState.getBlock() instanceof LivingMachineBlock)
-                    {
-                        structures.clear();
-                        return;
                     }
                     else if ((component = LivingMachineComponent.LOOKUP.find(world, mutable, null)) != null)
                     {

@@ -2,8 +2,7 @@ package com.neep.neepmeat.machine.live_machine.block;
 
 import com.neep.meatlib.block.MeatlibBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlock;
-import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
-import com.neep.neepmeat.machine.live_machine.LiveMachines;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +28,6 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return LiveMachines.TEST_LIVING_MACHINE_BE.instantiate(pos, state);
+        return LivingMachines.TEST_LIVING_MACHINE_BE.instantiate(pos, state);
     }
 }
