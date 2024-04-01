@@ -1,12 +1,12 @@
 package com.neep.neepmeat.api.live_machine;
 
-import com.neep.meatlib.recipe.MeatlibRecipes;
-import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
-import com.neep.neepmeat.recipe.GrindingRecipe;
+import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -23,50 +23,56 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
     {
         super.serverTick();
 
-        if (hasComponents(LivingMachineComponents.HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT))
+        withComponents(LivingMachineComponents.LARGEST_HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
         {
-            var hoppers = getComponent(LivingMachineComponents.HOPPER);
-            var crushers = getComponent(LivingMachineComponents.CRUSHER_SEGMENT);
-            var itemOutputs = getComponent(LivingMachineComponents.ITEM_OUTPUT);
+            var hoppers = result.t1();
+            var crushers = result.t2();
+            var itemOutputs = result.t3();
+            var motors = result.t4();
 
-            Storage<ItemVariant> input = hoppers.iterator().next().getStorage();
-            Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
-
-            CrushingStorage context = new CrushingStorage(input, output);
-            GrindingRecipe recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.GRINDING, context).orElse(null);
-            if (recipe != null)
+            float power = 0;
+            for (var motor : motors)
             {
-                try (Transaction transaction = Transaction.openOuter())
-                {
-                    recipe.takeInputs(context, transaction);
-                    recipe.ejectOutputs(context, transaction);
-                    transaction.commit();
-                }
+                power = Math.max(power, motor.getPower());
             }
 
-//            if (world.getTime() % 10 == 0)
-//            {
-//                itemOutputs.iterator().next().get().setStack(0, Items.STONE.getDefaultStack());
-//            }
+            if (power < 0.1)
+            {
+                power = 0;
+                return;
+            }
 
-//            HopperBlockEntity hopperBlockEntity = hopper.get();
-//            ChestBlockEntity chestBlockEntity = itemOutput.get();
-//            ItemStack stack = hopperBlockEntity.getStack(0);
-//            if (!stack.isEmpty() && chestBlockEntity.getStack(0).isEmpty())
-//            {
-//                chestBlockEntity.setStack(0, stack);
-//                hopperBlockEntity.setStack(0, ItemStack.EMPTY);
-//            }
-        }
+            float progressIncrement = power / crushers.size() * 4;
+
+            InventoryStorage input = hoppers.iterator().next().getStorage(null);
+            Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
+
+            try (Transaction transaction = Transaction.openOuter())
+            {
+                for (var crusher : crushers)
+                {
+                    CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
+
+                    if (slot.isEmpty())
+                        StorageUtil.move(input, slot, v -> true, 1, transaction);
+
+                    if (!slot.isEmpty())
+                    {
+                        slot.tick(progressIncrement, output, transaction);
+                    }
+                }
+                transaction.commit();
+            }
+        });
     }
 
-    private static class CrushingStorage implements IGrinderStorage
+    public static class SimpleCrushingStorage implements IGrinderStorage
     {
         private final Storage<ItemVariant> input;
         private final Storage<ItemVariant> output;
         private XpStorage xpStorage = new XpStorage();
 
-        public CrushingStorage(Storage<ItemVariant> input, Storage<ItemVariant> output)
+        public SimpleCrushingStorage(Storage<ItemVariant> input, Storage<ItemVariant> output)
         {
             this.input = input;
             this.output = output;

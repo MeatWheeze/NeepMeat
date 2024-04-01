@@ -15,7 +15,7 @@ import net.minecraft.util.math.random.Random;
 
 import java.util.*;
 
-public abstract class LivingMachineBlockEntity extends BlockEntity
+public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
     private final Multimap<ComponentType<?>, LivingMachineComponent> componentMap = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
@@ -74,13 +74,16 @@ public abstract class LivingMachineBlockEntity extends BlockEntity
     public boolean hasComponents(ComponentType<?>... types)
     {
         return getComponents().keys().containsAll(Arrays.asList(types));
-//        for (var type : types)
-//        {
-//            if (!getComponents().containsKey(type))
-//                return false;
-//        }
-//        return true;
     }
+
+//    void ooer()
+//    {
+//        withComponents(LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.CRUSHER_SEGMENT).consume(with ->
+//        {
+//            with.t1().iterator().next();
+//            with.t2.stream();
+//        });
+//    }
 
     protected void updateStructure()
     {
