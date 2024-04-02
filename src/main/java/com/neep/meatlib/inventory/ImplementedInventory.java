@@ -6,12 +6,12 @@ import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtElement;
+import net.minecraft.nbt.NbtList;
 import net.minecraft.util.collection.DefaultedList;
 
 public interface ImplementedInventory extends Inventory, NbtSerialisable
 {
-    DefaultedList<ItemStack> getItems();
-
     static ImplementedInventory of(DefaultedList<ItemStack> items)
     {
         return () -> items;
@@ -45,6 +45,30 @@ public interface ImplementedInventory extends Inventory, NbtSerialisable
         return of(DefaultedList.ofSize(size, ItemStack.EMPTY), callback);
     }
 
+    static void readNbt(NbtCompound nbt, DefaultedList<ItemStack> stacks)
+    {
+        NbtList nbtList = nbt.getList("Items", NbtElement.COMPOUND_TYPE);
+
+        // Inventories::readNbt does nothing if the received list is empty.
+        if (nbtList.isEmpty())
+        {
+            stacks.clear();
+            return;
+        }
+
+        for (int i = 0; i < nbtList.size(); ++i)
+        {
+            NbtCompound nbtCompound = nbtList.getCompound(i);
+            int j = nbtCompound.getByte("Slot") & 255;
+            if (j >= 0 && j < stacks.size())
+            {
+                stacks.set(j, ItemStack.fromNbt(nbtCompound));
+            }
+        }
+    }
+
+    DefaultedList<ItemStack> getItems();
+
     @Override
     default int size()
     {
@@ -75,7 +99,8 @@ public interface ImplementedInventory extends Inventory, NbtSerialisable
     default ItemStack removeStack(int slot, int count)
     {
         ItemStack result = Inventories.splitStack(getItems(), slot, count);
-        if (!result.isEmpty()) {
+        if (!result.isEmpty())
+        {
             markDirty();
         }
         return result;
@@ -118,6 +143,6 @@ public interface ImplementedInventory extends Inventory, NbtSerialisable
 
     default void readNbt(NbtCompound tag)
     {
-        Inventories.readNbt(tag, getItems());
+        readNbt(tag, getItems());
     }
 }

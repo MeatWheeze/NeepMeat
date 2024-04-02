@@ -47,18 +47,23 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
             InventoryStorage input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
 
+            boolean hasInput = input.nonEmptyIterator().hasNext();
             try (Transaction transaction = Transaction.openOuter())
             {
                 for (var crusher : crushers)
                 {
-                    CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
-
-                    if (slot.isEmpty())
-                        StorageUtil.move(input, slot, v -> true, 1, transaction);
-
-                    if (!slot.isEmpty())
+                    try (Transaction inner = transaction.openNested())
                     {
-                        slot.tick(progressIncrement, output, transaction);
+                        CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
+
+                        if (hasInput && slot.isEmpty())
+                            StorageUtil.move(input, slot, v -> true, 1, inner);
+
+                        if (!slot.isEmpty())
+                        {
+                            slot.tick(progressIncrement, output, inner);
+                        }
+                        inner.commit();
                     }
                 }
                 transaction.commit();

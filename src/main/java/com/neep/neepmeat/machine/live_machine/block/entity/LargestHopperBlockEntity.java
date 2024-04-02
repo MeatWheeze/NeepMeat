@@ -43,6 +43,12 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Liv
     }
 
     @Override
+    public void sync()
+    {
+        super.sync();
+    }
+
+    @Override
     public void setController(BlockPos pos)
     {
 

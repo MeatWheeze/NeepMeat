@@ -1,9 +1,6 @@
 package com.neep.neepmeat.api.live_machine;
 
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Multimaps;
-import com.google.common.collect.Queues;
-import com.google.common.collect.Sets;
+import com.google.common.collect.*;
 import com.google.common.util.concurrent.AtomicDouble;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,7 +15,8 @@ import java.util.*;
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
-    private final Multimap<ComponentType<?>, LivingMachineComponent> componentMap = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
+//    private final Multimap<ComponentType<?>, LivingMachineComponent> componentMap = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
+    private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
     private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
 
 //    protected FailureManager failureManager = new Fa
@@ -51,8 +49,8 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         age++;
 
-        // TODO: remove keys for empty values
-        componentMap.entries().removeIf(e -> e.getValue().componentRemoved());
+        // TODO: remove keys for empty values (sometimes doesn't work)
+        componentMap.values().removeIf(LivingMachineComponent::componentRemoved);
 
         degradationManager.tick();
 

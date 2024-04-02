@@ -120,6 +120,12 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
         }
 
         @Override
+        protected long getCapacity(ItemVariant variant)
+        {
+            return 1;
+        }
+
+        @Override
         public void writeNbt(NbtCompound nbt)
         {
             if (recipe != null)

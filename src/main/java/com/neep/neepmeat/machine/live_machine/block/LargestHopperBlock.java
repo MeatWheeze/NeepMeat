@@ -78,7 +78,7 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         super.onEntityCollision(state, world, pos, entity);
-        if (world.getTime() % 2 == 0 && entity instanceof ItemEntity itemEntity && world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be)
+        if (!world.isClient() && world.getTime() % 2 == 0 && entity instanceof ItemEntity itemEntity && world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be)
         {
             be.insertEntity(itemEntity);
         }

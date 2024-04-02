@@ -9,7 +9,7 @@ public interface ComponentHolder
     {
         Collection<T1> t1 = getComponent(c1);
 
-        if (t1 == null)
+        if (t1.isEmpty())
             return Optional.empty();
 
         return Optional.of(new With1<>(t1));
@@ -20,7 +20,7 @@ public interface ComponentHolder
         Collection<T1> t1 = getComponent(c1);
         Collection<T2> t2 = getComponent(c2);
 
-        if (t1 == null || t2 == null)
+        if (t1.isEmpty() || t2.isEmpty())
             return Optional.empty();
 
         return Optional.of(new With2<>(t1, t2));
@@ -34,7 +34,7 @@ public interface ComponentHolder
         Collection<T2> t2 = getComponent(c2);
         Collection<T3> t3 = getComponent(c3);
 
-        if (t1 == null || t2 == null || t3 == null)
+        if (t1.isEmpty() || t2.isEmpty() || t3.isEmpty())
             return Optional.empty();
 
         return Optional.of(new With3<>(t1, t2, t3));
@@ -47,7 +47,7 @@ public interface ComponentHolder
         Collection<T3> t3 = getComponent(c3);
         Collection<T4> t4 = getComponent(c4);
 
-        if (t1 == null || t2 == null || t3 == null || t4 == null)
+        if (t1.isEmpty() || t2.isEmpty() || t3.isEmpty() || t4.isEmpty())
             return Optional.empty();
 
         return Optional.of(new With4<>(t1, t2, t3, t4));
