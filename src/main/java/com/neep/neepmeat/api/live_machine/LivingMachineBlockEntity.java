@@ -2,6 +2,9 @@ package com.neep.neepmeat.api.live_machine;
 
 import com.google.common.collect.*;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
+import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -49,8 +52,30 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         age++;
 
-        // TODO: remove keys for empty values (sometimes doesn't work)
-        componentMap.values().removeIf(LivingMachineComponent::componentRemoved);
+//        componentMap.values().removeIf(LivingMachineComponent::componentRemoved);
+
+        float power = 0;
+        Collection<MotorPortBlockEntity> motors = getComponent(LivingMachineComponents.MOTOR_PORT);
+        if (!motors.isEmpty())
+        {
+            power = motors.iterator().next().getPower();
+        }
+
+        for (var it = componentMap.values().iterator(); it.hasNext();)
+        {
+            var component = it.next();
+            if (component.componentRemoved())
+            {
+                it.remove();
+            }
+            else
+            {
+                if (component instanceof CrusherSegmentBlockEntity be)
+                {
+                    be.setProgressIncrement(power);
+                }
+            }
+        }
 
         degradationManager.tick();
 

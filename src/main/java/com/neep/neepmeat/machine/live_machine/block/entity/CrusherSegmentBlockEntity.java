@@ -16,13 +16,21 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Random;
 
 public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
     private final InputSlot slot = new InputSlot(this::sync);
+    private float progressIncrement;
+    private float maxIncrement;
+    private final Random jrandom = new Random();
 
     public CrusherSegmentBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -33,6 +41,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        nbt.putFloat("progress_increment", progressIncrement);
         slot.writeNbt(nbt);
     }
 
@@ -40,6 +49,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.progressIncrement = nbt.getFloat("progress_increment");
         slot.readNbt(nbt);
     }
 
@@ -64,6 +74,25 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
     public InputSlot getStorage()
     {
         return slot;
+    }
+
+    public float progressIncrement()
+    {
+        return progressIncrement;
+    }
+
+    public void setProgressIncrement(float progressIncrement)
+    {
+        if (progressIncrement != this.progressIncrement)
+        {
+            this.progressIncrement = progressIncrement;
+            sync();
+        }
+    }
+
+    public float minIncrement()
+    {
+        return 0;
     }
 
     public static class InputSlot extends WritableStackStorage
@@ -138,7 +167,8 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
         {
             super.readNbt(nbt);
             if (nbt.contains("recipe"))
-                this.recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
+                this.recipe = (GrindingRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
+//                this.recipe = MeatlibRecipes.getInstance().get(NMrecipeTypes.GRINDING, Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
             else
                 this.recipe = null;
         }
@@ -147,6 +177,43 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
         public GrindingRecipe getRecipe()
         {
             return recipe;
+        }
+    }
+
+    public void clientTick()
+    {
+        float intensity = progressIncrement / 2;
+
+        // Particles will be more frequent at higher power. Clamp above 1 to prevent / 0.
+        int tickInterval = (int) MathHelper.clamp(1, 1 / (intensity * 2), 100);
+
+        if ((world.getTime() % tickInterval) == 0 && progressIncrement() >= minIncrement())
+        {
+            if (slot.isEmpty() || slot.getRecipe() == null)
+                return;
+
+            double px;
+            double pz;
+            if (jrandom.nextBoolean())
+            {
+                px = pos.getX() + 0.5 + (jrandom.nextBoolean() ? -1.5 : 1.5);
+                pz = getPos().getZ() + 0.5 + ((jrandom.nextFloat() - 0.5)) * 3;
+            }
+            else
+            {
+                pz = pos.getZ() + 0.5 + (jrandom.nextBoolean() ? -1.5 : 1.5);
+                px = getPos().getX() + 0.5 + ((jrandom.nextFloat() - 0.5)) * 3;
+            }
+            double py = getPos().getY() + 0.5 + (jrandom.nextFloat() - 0.5) * 0.5;
+//            double px = getPos().getX() + 0.5 + ((jrandom.nextFloat() - 0.5)) * 3;
+//            double pz = getPos().getZ() + 0.5 + ((jrandom.nextFloat() - 0.5)) * 3;
+
+            double vx = (jrandom.nextFloat() - 0.5) * 0.4;
+            double vy = jrandom.nextFloat() * 0.3;
+            double vz = (jrandom.nextFloat() - 0.5) * 0.4;
+
+            world.addParticle(new ItemStackParticleEffect(ParticleTypes.ITEM, slot.getAsStack()),
+                    px, py, pz, vx, vy, vz);
         }
     }
 }

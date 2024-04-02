@@ -9,12 +9,15 @@ import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
+import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSegmentStructureBlock> implements MeatlibBlock, BlockEntityProvider
@@ -52,6 +55,13 @@ public class CrusherSegmentBlock extends BigBlock<CrusherSegmentBlock.CrusherSeg
     public String getRegistryName()
     {
         return registryName;
+    }
+
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
+    {
+        return MiscUtil.checkType(type, LivingMachines.CRUSHER_SEGMENT_BE, null, (world1, pos, state1, blockEntity) -> blockEntity.clientTick(), world);
     }
 
     public static class CrusherSegmentStructureBlock extends BigBlockStructure<CrusherSegmentStructureBlockEntity>
