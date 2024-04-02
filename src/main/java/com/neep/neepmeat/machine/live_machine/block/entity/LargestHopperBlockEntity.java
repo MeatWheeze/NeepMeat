@@ -4,6 +4,7 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
+import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -19,7 +20,7 @@ import net.minecraft.util.math.Direction;
 
 public class LargestHopperBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
-    private final ImplementedInventory inventory = ImplementedInventory.ofSize(4, this::markDirty);
+    private final ImplementedInventory inventory = ImplementedInventory.ofSize(4, this::sync);
     private final InventoryStorage inventoryStorage = InventoryStorage.of(inventory, null);
 
     public LargestHopperBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
@@ -66,12 +67,17 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Liv
         {
             inventory.setStack(0, itemEntity.getStack());
             itemEntity.remove(Entity.RemovalReason.DISCARDED);
+            inventory.markDirty();
         }
         else
         {
             try (Transaction transaction = Transaction.openOuter())
             {
                 long inserted = inventoryStorage.insert(ItemVariant.of(stack), stack.getCount(), transaction);
+                if (inserted == 0)
+                {
+                    return;
+                }
                 if (inserted == stack.getCount())
                 {
                     itemEntity.remove(Entity.RemovalReason.DISCARDED);
@@ -80,6 +86,7 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Liv
                 {
                     stack.decrement((int) inserted);
                 }
+                transaction.commit();
             }
         }
     }
@@ -87,5 +94,10 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Liv
     public InventoryStorage getStorage(Direction unused)
     {
         return inventoryStorage;
+    }
+
+    public ImplementedInventory getInventory()
+    {
+        return inventory;
     }
 }

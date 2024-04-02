@@ -22,7 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
-    private final InputSlot slot = new InputSlot(this::markDirty);
+    private final InputSlot slot = new InputSlot(this::sync);
 
     public CrusherSegmentBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {

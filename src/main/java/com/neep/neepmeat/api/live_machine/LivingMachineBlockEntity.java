@@ -51,6 +51,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         age++;
 
+        // TODO: remove keys for empty values
         componentMap.entries().removeIf(e -> e.getValue().componentRemoved());
 
         degradationManager.tick();

@@ -5,6 +5,7 @@ import com.neep.neepmeat.client.instance.LargeFanInstance;
 import com.neep.neepmeat.client.instance.RoboticArmInstance;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
+import com.neep.neepmeat.client.renderer.block.LargestHopperRenderer;
 import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMEntities;
@@ -17,6 +18,7 @@ import com.neep.neepmeat.machine.hydraulic_press.HydraulicPressInstance;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherInstance;
 import com.neep.neepmeat.machine.large_crusher.LargeCrusherRenderer;
 import com.neep.neepmeat.machine.large_motor.LargeMotorInstance;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.motor.MotorInstance;
 import com.neep.neepmeat.machine.phage_ray.PhageRayInstance;
 import com.neep.neepmeat.machine.pylon.PylonInstance;
@@ -35,6 +37,8 @@ public class NMInstances
 
         InstancedRenderRegistry.configure(NMBlockEntities.LARGE_CRUSHER).factory(LargeCrusherInstance::new).apply();
         BlockEntityRendererFactories.register(NMBlockEntities.LARGE_CRUSHER, LargeCrusherRenderer::new);
+
+        BlockEntityRendererFactories.register(LivingMachines.LARGEST_HOPPER_BE, LargestHopperRenderer::new);
 
         InstancedRenderRegistry.configure(NMBlockEntities.MOTOR).alwaysSkipRender().factory(MotorInstance::new).apply();
         InstancedRenderRegistry.configure(NMBlockEntities.ADVANCED_MOTOR).alwaysSkipRender().factory(AdvancedMotorInstance::new).apply();
