@@ -14,6 +14,7 @@ public class NMExtraModels implements ExtraModelProvider
     public static final PartialModel LARGE_CRUSHER_JAW = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/large_crusher/large_crusher_jaw"));
     public static final PartialModel LARGE_CRUSHER_SHEATH = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/large_crusher/large_crusher_sheath"));
     public static final PartialModel CRUSHER_SEGMENT_SHEATH = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/crusher_segment/sheath"));
+    public static final PartialModel LARGE_TROMMEL_MESH = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/large_trommel_mesh"));
     public static final PartialModel P_PYLON_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor"));
     public static final PartialModel P_PYLON_ACTIVE_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/pylon/rotor_active"));
     public static final PartialModel P_MOTOR_ROTOR = new PartialModel(new Identifier(NeepMeat.NAMESPACE, "block/motor_rotor"));

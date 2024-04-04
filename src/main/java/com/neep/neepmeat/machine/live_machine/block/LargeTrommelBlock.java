@@ -12,13 +12,16 @@ import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.motor.MotorEntity;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.Registries;
@@ -36,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 
-public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTrommelBlock.LargeTrommelStructureBlockEntity>> implements MeatlibBlock
+public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTrommelBlock.LargeTrommelStructureBlockEntity>> implements MeatlibBlock, BlockEntityProvider
 {
     private final String registryName;
 
@@ -123,6 +126,13 @@ public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTr
     public String getRegistryName()
     {
         return registryName;
+    }
+
+    @Nullable
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
+    {
+        return LivingMachines.LARGE_TROMMEL_BE.instantiate(pos, state);
     }
 
 //    @Nullable
