@@ -1,7 +1,5 @@
 package com.neep.neepmeat.api.live_machine;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
@@ -18,13 +16,15 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import sun.misc.Unsafe;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
-    private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
-//    private final LivingMachineComponent[] componentMap = new LivingMachineComponent[ComponentType.Simple.size()];
+//    private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
+    private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
+    private final BitSet currentComponents = new BitSet();
     private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
 
 //    protected FailureManager failureManager = new Fa
@@ -82,33 +82,66 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         age++;
 
         Collection<MotorPortBlockEntity> motors = getComponent(LivingMachineComponents.MOTOR_PORT);
+        float nextPower = 0;
         if (!motors.isEmpty())
         {
             for (var motor : motors)
             {
-                power = Math.max(power, motor.getPower());
+                nextPower = Math.max(nextPower, motor.getPower());
             }
         }
         else
         {
-            power = 0;
+            nextPower = 0;
         }
+        power = nextPower;
 
-        for (var it = componentMap.values().iterator(); it.hasNext();)
+//        for (var thing : componentMap)
+//        {
+//            if (thing != null)
+//            {
+//
+//            }
+//        }
+
+        int i = currentComponents.nextSetBit(0);
+        while (i != -1 && i < currentComponents.length())
         {
-            var component = it.next();
-            if (component.componentRemoved())
+            i = currentComponents.nextSetBit(i);
+
+            for (var component : componentMap[i])
             {
-                it.remove();
-            }
-            else
-            {
-                if (component instanceof CrusherSegmentBlockEntity be)
+                if (component.componentRemoved())
                 {
-                    be.setProgressIncrement(getProgressIncrement());
+                    removeComponent(component);
+                }
+                else
+                {
+                    if (component instanceof CrusherSegmentBlockEntity be)
+                    {
+                        be.setProgressIncrement(getProgressIncrement());
+                    }
                 }
             }
+
+            ++i;
         }
+
+//        for (var it = componentMap.values().iterator(); it.hasNext();)
+//        {
+//            var component = it.next();
+//            if (component.componentRemoved())
+//            {
+//                it.remove();
+//            }
+//            else
+//            {
+//                if (component instanceof CrusherSegmentBlockEntity be)
+//                {
+//                    be.setProgressIncrement(getProgressIncrement());
+//                }
+//            }
+//        }
 
         degradationManager.tick();
 
@@ -118,20 +151,24 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         }
     }
 
-    public Multimap<ComponentType<?>, LivingMachineComponent> getComponents()
-    {
-        return componentMap;
-    }
+//    public Multimap<ComponentType<?>, LivingMachineComponent> getComponents()
+//    {
+//        return componentMap;
+//    }
 
     public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
     {
-        return (Collection<T>) getComponents().get(type);
+        int idx = type.getId();
+        if (!currentComponents.get(idx))
+            return Collections.emptySet();
+
+        return (Collection<T>) componentMap[idx];
     }
 
-    public boolean hasComponents(ComponentType<?>... types)
-    {
-        return getComponents().keys().containsAll(Arrays.asList(types));
-    }
+//    public boolean hasComponents(ComponentType<?>... types)
+//    {
+//        return getComponents().keys().containsAll(Arrays.asList(types));
+//    }
 
     protected void updateStructure()
     {
@@ -161,10 +198,49 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         return properties.computeIfAbsent(property, p -> new AtomicDouble(1)).get();
     }
 
+    protected void addComponent(LivingMachineComponent component)
+    {
+        int idx = component.getComponentType().getId();
+
+        if (componentMap[idx] == null)
+            componentMap[idx] = new HashSet<>();
+
+        currentComponents.set(idx);
+        componentMap[idx].add(component);
+    }
+
+    protected void removeComponent(LivingMachineComponent component)
+    {
+        int idx = component.getComponentType().getId();
+        if (!currentComponents.get(idx))
+            return;
+
+        currentComponents.clear(idx);
+        componentMap[idx].remove(component);
+    }
+
+    protected void clearComponents()
+    {
+        int i = currentComponents.nextSetBit(0);
+        while (i != -1 && i <currentComponents.length())
+        {
+            i = currentComponents.nextSetBit(i);
+
+            currentComponents.clear(i);
+            var component = componentMap[i];
+            if (component == null)
+                NeepMeat.LOGGER.error("Something has gone horribly wrong");
+            else
+                componentMap[i].clear();
+
+            ++i;
+        }
+    }
+
     protected void search(BlockPos start)
     {
         structures.clear();
-        componentMap.clear();
+        clearComponents();
 
         Set<BlockPos> visited = Sets.newHashSet();
         Queue<BlockPos> queue = Queues.newArrayDeque();
@@ -189,13 +265,13 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
                         continue;
 
                     LivingMachineComponent component;
-                    if (structures.size() + componentMap.size() >= maxSize)
+                    if (structures.size() + currentComponents.stream().sum() >= maxSize)
                         return;
 
                     if (nextState.getBlock() instanceof LivingMachineBlock)
                     {
                         structures.clear();
-                        componentMap.clear();
+                        clearComponents();
                         return;
                     }
 
@@ -207,7 +283,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
                     else if ((component = LivingMachineComponent.LOOKUP.find(world, mutable, null)) != null)
                     {
                         component.setController(pos);
-                        componentMap.put(component.getComponentType(), component);
+                        addComponent(component);
                         queue.add(mutable.toImmutable());
                     }
                 }

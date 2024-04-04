@@ -7,17 +7,27 @@ public interface ComponentType<T extends LivingMachineComponent>
     class Simple<T extends LivingMachineComponent> implements ComponentType<T>
     {
         static int NEXT_ID = 0;
+        static int[] INDICES;
 
         private final int id;
-
-        public Simple()
-        {
-            id = NEXT_ID++;
-        }
 
         public static int size()
         {
             return NEXT_ID;
+        }
+
+        public static int[] indices()
+        {
+            if (INDICES == null)
+            {
+
+            }
+            return INDICES;
+        }
+
+        public Simple()
+        {
+            id = NEXT_ID++;
         }
 
         public int getId()

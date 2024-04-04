@@ -44,7 +44,7 @@ public class LivingMachines
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.MOTOR_PORT_BE);
         INTEGRATION_PORT_BE = register("integration_port", (p, s) -> new IntegrationPortBlockEntity(INTEGRATION_PORT_BE, p, s), INTEGRATION_PORT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.INTEGRATION_PORT_BE);
-        FluidStorage.SIDED.registerSelf(LivingMachines.INTEGRATION_PORT_BE);
+        FluidStorage.SIDED.registerForBlockEntity(IntegrationPortBlockEntity::getFluidStorage, LivingMachines.INTEGRATION_PORT_BE);
         CRUSHER_SEGMENT_BE = register("crusher_segment", (p, s) -> new CrusherSegmentBlockEntity(CRUSHER_SEGMENT_BE, p, s), CRUSHER_SEGMENT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.CRUSHER_SEGMENT_BE);
         LARGE_TROMMEL_BE = register("large_trommel", (p, s) -> new LargeTrommelBlockEntity(LARGE_TROMMEL_BE, p, s), LARGE_TROMMEL);
