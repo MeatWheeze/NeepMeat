@@ -28,21 +28,13 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
             var hoppers = result.t1();
             var crushers = result.t2();
             var itemOutputs = result.t3();
-            var motors = result.t4();
-
-            float power = 0;
-            for (var motor : motors)
-            {
-                power = Math.max(power, motor.getPower());
-            }
 
             if (power < 0.1)
             {
-                power = 0;
                 return;
             }
 
-            float progressIncrement = power / crushers.size() * 4;
+            float progressIncrement = getProgressIncrement() / crushers.size() * 4;
 
             InventoryStorage input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
@@ -70,6 +62,7 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
             }
         });
     }
+
 
     public static class SimpleCrushingStorage implements IGrinderStorage
     {

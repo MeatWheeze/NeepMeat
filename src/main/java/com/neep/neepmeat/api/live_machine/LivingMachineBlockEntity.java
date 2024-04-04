@@ -1,7 +1,11 @@
 package com.neep.neepmeat.api.live_machine;
 
-import com.google.common.collect.*;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Queues;
+import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
@@ -12,14 +16,15 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import sun.misc.Unsafe;
 
 import java.util.*;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
-//    private final Multimap<ComponentType<?>, LivingMachineComponent> componentMap = Multimaps.newSetMultimap(new HashMap<>(), HashSet::new);
     private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
+//    private final LivingMachineComponent[] componentMap = new LivingMachineComponent[ComponentType.Simple.size()];
     private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
 
 //    protected FailureManager failureManager = new Fa
@@ -28,6 +33,8 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     protected long age = 0;
     protected int updateInterval = 80;
     protected int maxSize = 64;
+
+    protected float power;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -48,17 +55,43 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         nbt.putLong("age", age);
     }
 
+    protected void tickDegradation()
+    {
+        Unsafe unsafe = Unsafe.getUnsafe();
+//        unsafe.getInt()
+        long consumePerTick = 2; // 2d per tick will consume approximately one bucket per half hour
+        withComponents(LivingMachineComponents.INTEGRATION_PORT).ifPresent(w ->
+        {
+            for (var port : w.t1())
+            {
+                port.getFluidStorage(null);
+            }
+        });
+
+        degradationManager.tick();
+
+        var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
+        if (world.getTime() % 20 == 0 && !motors1.isEmpty())
+        {
+            NeepMeat.LOGGER.info("Efficiency: {}", 100 * getEfficiency());
+        }
+    }
+
     public void serverTick()
     {
         age++;
 
-//        componentMap.values().removeIf(LivingMachineComponent::componentRemoved);
-
-        float power = 0;
         Collection<MotorPortBlockEntity> motors = getComponent(LivingMachineComponents.MOTOR_PORT);
         if (!motors.isEmpty())
         {
-            power = motors.iterator().next().getPower();
+            for (var motor : motors)
+            {
+                power = Math.max(power, motor.getPower());
+            }
+        }
+        else
+        {
+            power = 0;
         }
 
         for (var it = componentMap.values().iterator(); it.hasNext();)
@@ -72,7 +105,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             {
                 if (component instanceof CrusherSegmentBlockEntity be)
                 {
-                    be.setProgressIncrement(power);
+                    be.setProgressIncrement(getProgressIncrement());
                 }
             }
         }
@@ -100,15 +133,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         return getComponents().keys().containsAll(Arrays.asList(types));
     }
 
-//    void ooer()
-//    {
-//        withComponents(LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.CRUSHER_SEGMENT).consume(with ->
-//        {
-//            with.t1().iterator().next();
-//            with.t2.stream();
-//        });
-//    }
-
     protected void updateStructure()
     {
         search(getPos());
@@ -117,7 +141,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected void processStructure()
     {
-        properties.clear();
         for (var structure : structures)
         {
             structure.getProperties().forEach((property, value) ->
@@ -127,10 +150,15 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         }
 
         // Average all properties
-        for (var value : properties.values())
-        {
-            value.set(value.get() / properties.size());
-        }
+//        for (var value : properties.values())
+//        {
+//            value.set(value.get() / properties.size());
+//        }
+    }
+
+    protected double getProperty(LivingMachineStructure.Property property)
+    {
+        return properties.computeIfAbsent(property, p -> new AtomicDouble(1)).get();
     }
 
     protected void search(BlockPos start)
@@ -187,16 +215,21 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         }
     }
 
+    public float getProgressIncrement()
+    {
+        return power * getEfficiency();
+    }
+
     public float getEfficiency()
     {
         // Take into account performance degradation and block types
         return (float)
-                properties.get(LivingMachineStructure.Property.EFFICIENCY).get()
-                * degradationManager.getDegradation();
+                getProperty(LivingMachineStructure.Property.SPEED)
+                * (1 - degradationManager.getDegradation());
     }
 
     public float degradationRate()
     {
-        return 0.1f * (1 - degradationManager.getDegradation());
+        return (float) (0.1f * Math.pow(1 - degradationManager.getDegradation(), 4));
     }
 }

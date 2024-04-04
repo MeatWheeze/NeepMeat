@@ -9,7 +9,7 @@ public interface LivingMachineStructure
     enum Property
     {
         FAULT_TOLERANCE,
-        EFFICIENCY,
+        SPEED,
         SELF_REPAIR,
         MAX_POWER
     }

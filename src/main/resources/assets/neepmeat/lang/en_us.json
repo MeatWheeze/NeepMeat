@@ -131,7 +131,9 @@
   "block.neepmeat.caution_block_door": "Caution Stripes Door",
 
   "block.neepmeat.machine_block": "Machine Block",
+  "block.neepmeat.base_machine_block": "Base Machine Block",
   "block.neepmeat.motor_port": "Motor Port",
+  "block.neepmeat.integration_port": "Integration Port",
   "block.neepmeat.item_output_port": "Item Output Port",
   "block.neepmeat.crusher_segment": "Crusher Segment",
   "block.neepmeat.largest_hopper": "Largest Hopper",

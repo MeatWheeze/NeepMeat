@@ -26,8 +26,9 @@ public class DegradationManager implements NbtSerialisable
 
     public void tick()
     {
+        float nextDegradation = degradationRate.get();
         degradation = MathHelper.clamp(
-                degradation + (random.nextFloat() * degradationRate.get()),
+                degradation + nextDegradation,
                 0, 1);
     }
 

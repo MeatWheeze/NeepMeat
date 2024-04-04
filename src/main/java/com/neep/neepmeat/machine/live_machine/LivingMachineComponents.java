@@ -2,10 +2,7 @@ package com.neep.neepmeat.machine.live_machine;
 
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
-import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
-import com.neep.neepmeat.machine.live_machine.block.entity.LargeTrommelBlockEntity;
-import com.neep.neepmeat.machine.live_machine.block.entity.LargestHopperBlockEntity;
-import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
+import com.neep.neepmeat.machine.live_machine.block.entity.*;
 import com.neep.neepmeat.machine.live_machine.component.HopperComponent;
 import com.neep.neepmeat.machine.live_machine.component.IItemOutputComponent;
 import net.minecraft.block.Blocks;
@@ -17,6 +14,7 @@ public class LivingMachineComponents
     public static final ComponentType<LargeTrommelBlockEntity> LARGE_TROMMEL = new ComponentType.Simple<>();
     public static final ComponentType<LargestHopperBlockEntity> LARGEST_HOPPER = new ComponentType.Simple<>();
     public static final ComponentType<MotorPortBlockEntity> MOTOR_PORT = new ComponentType.Simple<>();
+    public static final ComponentType<IntegrationPortBlockEntity> INTEGRATION_PORT = new ComponentType.Simple<>();
 
     public static final ComponentType<HopperComponent> HOPPER = new ComponentType.Simple<>();
     public static final ComponentType<IItemOutputComponent> ITEM_OUTPUT = new ComponentType.Simple<>();
