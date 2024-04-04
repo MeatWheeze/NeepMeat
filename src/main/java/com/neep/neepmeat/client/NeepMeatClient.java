@@ -31,6 +31,7 @@ import com.neep.neepmeat.machine.crucible.AlembicRenderer;
 import com.neep.neepmeat.machine.crucible.CrucibleRenderer;
 import com.neep.neepmeat.machine.death_blades.DeathBladesRenderer;
 import com.neep.neepmeat.machine.item_mincer.ItemMincerRenderer;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.mixer.MixerRenderer;
 import com.neep.neepmeat.machine.multitank.MultiTankRenderer;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
@@ -273,6 +274,7 @@ public class NeepMeatClient implements ClientModInitializer
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.COLLECTOR);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.TRANSDUCER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.SMALL_TROMMEL);
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), LivingMachines.LARGE_TROMMEL);
 //        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.CAUTION_TAPE);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getTranslucent(), NMBlocks.ASSEMBLER);
         BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutout(), NMBlocks.BOTTLER);

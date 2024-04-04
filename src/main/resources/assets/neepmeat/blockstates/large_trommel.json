@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "neepmeat:block/living_machine/large_trommel.obj",
+      "y": 90,
+      "x": 0
+    },
+    "facing=north": {
+      "model": "neepmeat:block/living_machine/large_trommel.obj",
+      "y": 0,
+      "x": 0
+    },
+    "facing=south": {
+      "model": "neepmeat:block/living_machine/large_trommel.obj",
+      "y": 180,
+      "x": 0
+    },
+    "facing=west": {
+      "model": "neepmeat:block/living_machine/large_trommel.obj",
+      "y": -90,
+      "x": 0
+    }
+  }
+}

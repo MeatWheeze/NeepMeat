@@ -21,14 +21,22 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     protected final BigBlock<?> parent;
     private final BlockEntityType<T> blockEntityType;
 
-    public BigBlockStructure(BigBlock<?> parent, Settings settings)
+    public BigBlockStructure(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<T> registerBlockEntity)
     {
         super(settings.nonOpaque());
         this.parent = parent;
-        this.blockEntityType = registerBlockEntity();
+        this.blockEntityType = registerBlockEntity.get(this);
     }
 
-    protected abstract BlockEntityType<T> registerBlockEntity();
+    public BigBlockStructure(BigBlock<?> parent, Settings settings)
+    {
+        this(parent, settings, BigBlockStructure::registerBlockEntity);
+    }
+
+    protected BlockEntityType<T> registerBlockEntity()
+    {
+        throw new NotImplementedException("You fool! Implement this or supply a BlockEntityRegistererererer in the super constructor.");
+    }
 
     public BlockEntityType<T> getBlockEntityType()
     {
@@ -113,5 +121,29 @@ public abstract class BigBlockStructure<T extends BigBlockStructureEntity> exten
     public PistonBehavior getPistonBehavior(BlockState state)
     {
         return PistonBehavior.IGNORE;
+    }
+
+    public static class Simple<T extends BigBlockStructureEntity> extends BigBlockStructure<T>
+    {
+//        private final BlockEntityRegisterererer<T> registerBlockEntity;
+
+        public Simple(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<T> registerBlockEntity)
+        {
+            super(parent, settings, registerBlockEntity);
+//            this.registerBlockEntity = registerBlockEntity;
+        }
+
+        @Override
+        protected BlockEntityType<T> registerBlockEntity()
+        {
+//            return registerBlockEntity.get(this);
+            return null;
+        }
+    }
+
+    @FunctionalInterface
+    public interface BlockEntityRegisterererer<T extends BigBlockStructureEntity>
+    {
+        BlockEntityType<T> get(BigBlockStructure<T> structure);
     }
 }
