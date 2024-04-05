@@ -44,4 +44,9 @@ public class DegradationManager implements NbtSerialisable
     {
         this.degradation = nbt.getFloat("degradation");
     }
+
+    public void subtract(float amount)
+    {
+        degradation = MathHelper.clamp(degradation - amount, 0, 1);
+    }
 }

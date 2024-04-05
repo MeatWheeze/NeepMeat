@@ -4,9 +4,12 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
+import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
+import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -14,10 +17,10 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
@@ -46,6 +49,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         super.readNbt(nbt);
         this.age = nbt.getLong("age");
+        degradationManager.readNbt(nbt);
     }
 
     @Override
@@ -53,20 +57,37 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         super.writeNbt(nbt);
         nbt.putLong("age", age);
+        degradationManager.writeNbt(nbt);
     }
 
     protected void tickDegradation()
     {
-        Unsafe unsafe = Unsafe.getUnsafe();
-//        unsafe.getInt()
-        long consumePerTick = 2; // 2d per tick will consume approximately one bucket per half hour
+        float repairPerDroplet = 4 / 81000f; // Decrease in degradation from one droplet
+        long maxConsume = 8;
+        long consumePerTick = Math.min((long) (degradationManager.getDegradation() / repairPerDroplet), maxConsume);
+
+//        long consumePerTick = 2; // 2d per tick will consume approximately one bucket per half hour
+        AtomicLong satisfied = new AtomicLong();
         withComponents(LivingMachineComponents.INTEGRATION_PORT).ifPresent(w ->
         {
-            for (var port : w.t1())
+            try (Transaction transaction = Transaction.openOuter())
             {
-                port.getFluidStorage(null);
+                for (var port : w.t1())
+                {
+                    if (satisfied.get() < consumePerTick)
+                        satisfied.addAndGet(port.getFluidStorage(null).extract(FluidVariant.of(NMFluids.STILL_WORK_FLUID),
+                                consumePerTick - satisfied.get(), transaction));
+                    else
+                        break;
+                }
+                transaction.commit();
             }
         });
+
+        if (satisfied.get() >= consumePerTick)
+        {
+            degradationManager.subtract(repairPerDroplet * satisfied.get());
+        }
 
         degradationManager.tick();
 
@@ -80,6 +101,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public void serverTick()
     {
         age++;
+        tickDegradation();
 
         Collection<MotorPortBlockEntity> motors = getComponent(LivingMachineComponents.MOTOR_PORT);
         float nextPower = 0;
@@ -306,6 +328,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     public float degradationRate()
     {
-        return (float) (0.1f * Math.pow(1 - degradationManager.getDegradation(), 4));
+        return (float) (0.0001f * Math.pow(1 - degradationManager.getDegradation(), 4));
     }
 }
