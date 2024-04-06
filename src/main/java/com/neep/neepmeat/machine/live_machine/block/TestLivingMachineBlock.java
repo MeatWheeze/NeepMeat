@@ -16,6 +16,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.DecimalFormat;
+
 public class TestLivingMachineBlock extends LivingMachineBlock implements MeatlibBlock
 {
     private final String name;
@@ -36,6 +38,7 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
                 player.sendMessage(Text.of("Rated power: ").copy().append(PowerUtils.perUnitToText(be.getRatedPower())));
                 player.sendMessage((PowerUtils.perUnitToLabelText(be.getPower())));
                 player.sendMessage(Text.of("Efficiency: " + Math.round(be.getEfficiency() * 100) + "%"));
+                player.sendMessage(Text.of("RUL: " + new DecimalFormat("###.##").format(be.getRulHours()) + "hr"));
             }
             return ActionResult.SUCCESS;
         }

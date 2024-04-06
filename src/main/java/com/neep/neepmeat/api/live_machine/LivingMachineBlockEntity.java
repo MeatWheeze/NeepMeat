@@ -9,6 +9,7 @@ import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
+import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -35,13 +36,14 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
 //    protected FailureManager failureManager = new Fa
     protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
-    private float rateMultiplier = 100;
+    private final float rateMultiplier = 1;
 
     protected long age = 0;
     protected int updateInterval = 80;
     protected int maxSize = 100;
 
     protected float power;
+    protected float repairAmount;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -63,6 +65,11 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         nbt.putLong("age", age);
         degradationManager.writeNbt(nbt);
     }
+
+//    private boolean counting = false;
+//    private int countTicks = 0;
+//    private FloatArrayList estimatedDegradation;
+//    private long estimatedTicks;
 
     protected void tickDegradation()
     {
@@ -88,24 +95,51 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             }
         });
 
+        repairAmount = 0;
+
         if (satisfied.get() >= consumePerTick)
         {
-            degradationManager.subtract(rateMultiplier * repairPerDroplet * satisfied.get());
+            repairAmount += rateMultiplier * repairPerDroplet * satisfied.get();
         }
 
-        float selfRepair = getProperty(StructureProperty.SELF_REPAIR);
+        float selfRepair = getSelfRepair();
         if (selfRepair > 0)
         {
-            degradationManager.subtract(rateMultiplier * selfRepair);
+            repairAmount += rateMultiplier * selfRepair;
         }
 
         var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
+
+        // Debug counter
+//        if (power > 0 && !motors1.isEmpty() && !counting && degradationManager.getDegradation() < 0.75)
+//        {
+//            counting = true;
+//            estimatedDegradation = degradationManager.storeRul();
+//            estimatedTicks = estimatedDegradation.size();
+//            NeepMeat.LOGGER.info("Started counting");
+//        }
+
         if (world.getTime() % 20 == 0 && !motors1.isEmpty())
         {
             NeepMeat.LOGGER.info("Efficiency: {}", 100 * getEfficiency());
         }
 
+//        if (counting)
+//        {
+//            NeepMeat.LOGGER.info("True: {}, expected: {}", estimatedDegradation.getFloat(countTicks), degradationManager.getDegradation());
+//        }
+
         degradationManager.tick();
+
+//        if (counting)
+//        {
+//            if (degradationManager.getDegradation() >= 0.75 && counting)
+//            {
+//                NeepMeat.LOGGER.info("Took {} ticks to reach 25%. Expected: {} ticks", countTicks, estimatedTicks);
+//                counting = false;
+//            }
+//            countTicks++;
+//        }
     }
 
     public void serverTick()
@@ -150,24 +184,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
             ++i;
         }
-
-//        for (var it = componentMap.values().iterator(); it.hasNext();)
-//        {
-//            var component = it.next();
-//            if (component.componentRemoved())
-//            {
-//                it.remove();
-//            }
-//            else
-//            {
-//                if (component instanceof CrusherSegmentBlockEntity be)
-//                {
-//                    be.setProgressIncrement(getProgressIncrement());
-//                }
-//            }
-//        }
-
-        degradationManager.tick();
 
         if (age % updateInterval == 0)
         {
@@ -331,8 +347,9 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public float getEfficiency()
     {
         // Take into account performance degradation and block types
-        return getProperty(StructureProperty.SPEED)
-                * (1 - degradationManager.getDegradation());
+//        return getProperty(StructureProperty.SPEED)
+//                * (1 - degradationManager.getDegradation());
+        return  (1 - degradationManager.getDegradation());
     }
 
     public float getSelfRepair()
@@ -345,23 +362,29 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         return getProperty(StructureProperty.MAX_POWER) / PowerUtils.referencePower();
     }
 
-    public float degradationRate()
+    public float degradationRate(float degradation)
     {
+        float rate = -repairAmount;
         if (power <= getRatedPower() / 2)
         {
-            return 0;
+            return rate;
         }
 
         if (power > getRatedPower())
-        {
-            return (float) (rateMultiplier * ((0.0002f * power / getRatedPower()) * Math.pow(1 - degradationManager.getDegradation(), 4)));
-        }
+            rate += (float) (rateMultiplier * (0.0002f * power / getRatedPower()) * Math.pow(1 - degradation, 4));
+        else
+            rate += (float) (rateMultiplier * (0.0001f * Math.pow(1 - degradation, 4)));
 
-        return (float) (rateMultiplier * (0.0001f * Math.pow(1 - degradationManager.getDegradation(), 4)));
+        return rate;
     }
 
     public double getPower()
     {
         return power;
+    }
+
+    public double getRulHours()
+    {
+        return degradationManager.estimateRul() / (20 * 3600.0);
     }
 }
