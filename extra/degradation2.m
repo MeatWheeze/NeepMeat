@@ -10,7 +10,8 @@ y = zeros(1, length(x));
 i = 0;
 while i < max_its
     if (i > 1)
-         rate = k * 1500 / 300 * (1 - y(i-1))^4;
+        % rate = k * 1500 / 300 * (1 - y(i-1))^0.5;
+        rate = k * 1;
         y(i) = y(i-1) + h * rate;
         % if y(i) >= 0.75
         %     printf("Found RUL at %0.1fhr in %i its\n", x(i) / (20*3600), i);
