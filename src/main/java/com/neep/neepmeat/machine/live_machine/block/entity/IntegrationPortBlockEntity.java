@@ -16,7 +16,7 @@ import net.minecraft.util.math.Direction;
 
 public class IntegrationPortBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
 {
-    private final WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET, this::markDirty)
+    private final WritableSingleFluidStorage fluidStorage = new WritableSingleFluidStorage(FluidConstants.BUCKET / 4, this::markDirty)
     {
         @Override
         protected boolean canInsert(FluidVariant variant)

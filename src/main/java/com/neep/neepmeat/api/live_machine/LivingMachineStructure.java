@@ -4,13 +4,5 @@ import java.util.EnumMap;
 
 public interface LivingMachineStructure
 {
-    EnumMap<Property, Float> getProperties();
-
-    enum Property
-    {
-        FAULT_TOLERANCE,
-        SPEED,
-        SELF_REPAIR,
-        MAX_POWER
-    }
+    EnumMap<StructureProperty, StructureProperty.Entry> getProperties();
 }

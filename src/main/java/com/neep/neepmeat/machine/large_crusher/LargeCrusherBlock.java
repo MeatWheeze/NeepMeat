@@ -9,7 +9,7 @@ import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
 import com.neep.neepmeat.api.multiblock2.MultiblockUnassembledPattern;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.init.NMBlocks;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.util.ItemUtil;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -77,7 +77,7 @@ public class LargeCrusherBlock extends Multiblock2ControllerBlock<LargeCrusherSt
                 .enableApi(-1, 1, -1, MotorisedBlock.LOOKUP)
                 .enableApi(1, 1, -1, MotorisedBlock.LOOKUP);
 
-        BigBlockPattern.BlockStateProvider provider = () -> NMBlocks.MACHINE_BLOCK.getDefaultState();
+        BigBlockPattern.BlockStateProvider provider = () -> LivingMachines.MACHINE_BLOCK.getDefaultState();
 
         MultiblockUnassembledPattern northUnassembledPattern = new MultiblockUnassembledPattern().oddCylinder(new Vec3i(0, 0, -1), 1, 0, 1, provider)
                 .set(-1, 2, -1, provider)

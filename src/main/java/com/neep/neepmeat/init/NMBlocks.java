@@ -8,7 +8,6 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.api.NMSoundGroups;
 import com.neep.neepmeat.api.big_block.BigBlock;
-import com.neep.neepmeat.api.live_machine.TestLivingMachineBE;
 import com.neep.neepmeat.api.multiblock2.Multiblock2ControllerBlock;
 import com.neep.neepmeat.block.*;
 import com.neep.neepmeat.block.entity.BaseDoorBlock;
@@ -118,7 +117,6 @@ public class NMBlocks
     public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>("smooth_tile", SmoothTileBlock::new ,MeatlibBlockSettings.create(Material.STONE).hardness(3.0f));
 
     public static Block TEST_LIVING_MACHINE = BlockRegistry.queueWithItem(new TestLivingMachineBlock("test_living_machine", FabricBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
-    public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
     public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));

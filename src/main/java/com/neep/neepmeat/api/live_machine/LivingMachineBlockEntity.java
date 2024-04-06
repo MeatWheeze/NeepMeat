@@ -4,6 +4,7 @@ import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
@@ -16,10 +17,12 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
@@ -27,15 +30,16 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     protected List<LivingMachineStructure> structures = new ArrayList<>();
 //    private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
     private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
-    private final BitSet currentComponents = new BitSet();
-    private final EnumMap<LivingMachineStructure.Property, AtomicDouble> properties = new EnumMap<>(LivingMachineStructure.Property.class);
+    private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
+    private final EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
 
 //    protected FailureManager failureManager = new Fa
     protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
+    private float rateMultiplier = 100;
 
     protected long age = 0;
     protected int updateInterval = 80;
-    protected int maxSize = 64;
+    protected int maxSize = 100;
 
     protected float power;
 
@@ -64,7 +68,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         float repairPerDroplet = 4 / 81000f; // Decrease in degradation from one droplet
         long maxConsume = 8;
-        long consumePerTick = Math.min((long) (degradationManager.getDegradation() / repairPerDroplet), maxConsume);
+        long consumePerTick = Math.min(MathHelper.ceil(degradationManager.getDegradation() / repairPerDroplet), maxConsume);
 
 //        long consumePerTick = 2; // 2d per tick will consume approximately one bucket per half hour
         AtomicLong satisfied = new AtomicLong();
@@ -86,16 +90,22 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
         if (satisfied.get() >= consumePerTick)
         {
-            degradationManager.subtract(repairPerDroplet * satisfied.get());
+            degradationManager.subtract(rateMultiplier * repairPerDroplet * satisfied.get());
         }
 
-        degradationManager.tick();
+        float selfRepair = getProperty(StructureProperty.SELF_REPAIR);
+        if (selfRepair > 0)
+        {
+            degradationManager.subtract(rateMultiplier * selfRepair);
+        }
 
         var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
         if (world.getTime() % 20 == 0 && !motors1.isEmpty())
         {
             NeepMeat.LOGGER.info("Efficiency: {}", 100 * getEfficiency());
         }
+
+        degradationManager.tick();
     }
 
     public void serverTick()
@@ -117,14 +127,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             nextPower = 0;
         }
         power = nextPower;
-
-//        for (var thing : componentMap)
-//        {
-//            if (thing != null)
-//            {
-//
-//            }
-//        }
 
         int i = currentComponents.nextSetBit(0);
         while (i != -1 && i < currentComponents.length())
@@ -178,20 +180,11 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 //        return componentMap;
 //    }
 
-    public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
-    {
-        int idx = type.getId();
-        if (!currentComponents.get(idx))
-            return Collections.emptySet();
-
-        return (Collection<T>) componentMap[idx];
-    }
 
 //    public boolean hasComponents(ComponentType<?>... types)
 //    {
 //        return getComponents().keys().containsAll(Arrays.asList(types));
 //    }
-
     protected void updateStructure()
     {
         search(getPos());
@@ -200,24 +193,41 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected void processStructure()
     {
+        // Is this bad? Should I be using AtomicDouble and AtomicInteger in single-threaded code? Leave your answer in the comments.
+
+        EnumMap<StructureProperty, AtomicInteger> present = new EnumMap<>(StructureProperty.class);
         for (var structure : structures)
         {
-            structure.getProperties().forEach((property, value) ->
+            structure.getProperties().forEach((property, entry) ->
             {
-                properties.computeIfAbsent(property, p -> new AtomicDouble(0)).addAndGet(value);
+                if (entry.function().average())
+                    present.computeIfAbsent(property, p -> new AtomicInteger(0)).incrementAndGet();
             });
         }
 
-        // Average all properties
-//        for (var value : properties.values())
-//        {
-//            value.set(value.get() / properties.size());
-//        }
+        properties.clear();
+        for (var structure : structures)
+        {
+            structure.getProperties().forEach((property, entry) ->
+            {
+                var numberPresent = present.get(property);
+                entry.apply(properties.computeIfAbsent(property, p -> new AtomicDouble(p.defaultValue())), numberPresent != null ? numberPresent.get() : 1);
+            });
+        }
     }
 
-    protected double getProperty(LivingMachineStructure.Property property)
+    protected float getProperty(StructureProperty property)
     {
-        return properties.computeIfAbsent(property, p -> new AtomicDouble(1)).get();
+        return properties.computeIfAbsent(property, p -> new AtomicDouble(p.defaultValue())).floatValue();
+    }
+
+    public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
+    {
+        int idx = type.getId();
+        if (!currentComponents.get(idx))
+            return Collections.emptySet();
+
+        return (Collection<T>) componentMap[idx];
     }
 
     protected void addComponent(LivingMachineComponent component)
@@ -321,13 +331,37 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public float getEfficiency()
     {
         // Take into account performance degradation and block types
-        return (float)
-                getProperty(LivingMachineStructure.Property.SPEED)
+        return getProperty(StructureProperty.SPEED)
                 * (1 - degradationManager.getDegradation());
+    }
+
+    public float getSelfRepair()
+    {
+        return getProperty(StructureProperty.SELF_REPAIR);
+    }
+
+    public float getRatedPower()
+    {
+        return getProperty(StructureProperty.MAX_POWER) / PowerUtils.referencePower();
     }
 
     public float degradationRate()
     {
-        return (float) (0.0001f * Math.pow(1 - degradationManager.getDegradation(), 4));
+        if (power <= getRatedPower() / 2)
+        {
+            return 0;
+        }
+
+        if (power > getRatedPower())
+        {
+            return (float) (rateMultiplier * ((0.0002f * power / getRatedPower()) * Math.pow(1 - degradationManager.getDegradation(), 4)));
+        }
+
+        return (float) (rateMultiplier * (0.0001f * Math.pow(1 - degradationManager.getDegradation(), 4)));
+    }
+
+    public double getPower()
+    {
+        return power;
     }
 }

@@ -4,6 +4,7 @@ import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
+import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.api.live_machine.TestLivingMachineBE;
 import com.neep.neepmeat.block.MachineBlock;
 import com.neep.neepmeat.init.NMBlocks;
@@ -15,12 +16,23 @@ import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntityType;
 
+import java.util.Map;
+
 import static com.neep.neepmeat.init.NMBlockEntities.register;
 import static com.neep.neepmeat.init.NMBlocks.MACHINE_SETTINGS;
 
 public class LivingMachines
 {
-    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("machine_block", Map.of(
+            StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
+                    StructureProperty.MASS, new StructureProperty.Entry(1000f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block BASE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("base_machine_block", Map.of(
+            StructureProperty.MAX_POWER, new StructureProperty.Entry(300f),
+            StructureProperty.MASS, new StructureProperty.Entry(2000f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", Map.of(
+            StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
+            StructureProperty.MASS, new StructureProperty.Entry(500f),
+            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.00001f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static final Block MOTOR_PORT = BlockRegistry.queue(new MotorPortBlock("motor_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block INTEGRATION_PORT = BlockRegistry.queue(new IntegrationPortBlock("integration_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));

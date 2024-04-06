@@ -72,7 +72,7 @@ public class HeaterBlock extends BaseFacingBlock implements BlockEntityProvider
         {
             if (world.getBlockEntity(pos) instanceof HeaterBlockEntity be)
             {
-                player.sendMessage(PowerUtils.perUnitToText(be.getPUPower()).append(", Furnace speed: " + Heatable.getFurnaceTickIncrement((float) be.getPUPower()) + "x"), true);
+                player.sendMessage(PowerUtils.perUnitToLabelText(be.getPUPower()).append(", Furnace speed: " + Heatable.getFurnaceTickIncrement((float) be.getPUPower()) + "x"), true);
             }
         }
         return ActionResult.SUCCESS;

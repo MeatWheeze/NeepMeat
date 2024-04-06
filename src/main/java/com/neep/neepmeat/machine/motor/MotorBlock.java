@@ -37,7 +37,7 @@ public class MotorBlock extends BaseFacingBlock implements BlockEntityProvider
 
         if (world.getBlockEntity(pos) instanceof MotorBlockEntity be && !world.isClient())
         {
-            player.sendMessage(PowerUtils.perUnitToText(be.getMechPUPower()), true);
+            player.sendMessage(PowerUtils.perUnitToLabelText(be.getMechPUPower()), true);
         }
 
         return ActionResult.SUCCESS;

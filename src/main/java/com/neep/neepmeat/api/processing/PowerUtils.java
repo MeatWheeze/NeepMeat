@@ -45,9 +45,14 @@ public class PowerUtils
         return perUnitToAbsolute(perUnit) * 20;
     }
 
-    public static MutableText perUnitToText(double perUnit)
+    public static MutableText perUnitToLabelText(double perUnit)
     {
         return POWER.copyContentOnly().append(Text.literal(POWER_FORMAT.format(perUnitToAbsolute(perUnit))).append(POWER_UNIT));
+    }
+
+    public static MutableText perUnitToText(double perUnit)
+    {
+        return Text.literal(POWER_FORMAT.format(perUnitToAbsolute(perUnit))).append(POWER_UNIT);
     }
 
     public static long absToAmount(Fluid fluid, long energy)

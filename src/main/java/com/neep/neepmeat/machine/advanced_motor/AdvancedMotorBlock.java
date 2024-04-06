@@ -43,7 +43,7 @@ public class AdvancedMotorBlock extends BaseFacingBlock implements BlockEntityPr
 
         if (world.getBlockEntity(pos) instanceof AdvancedMotorBlockEntity be && !world.isClient())
         {
-            player.sendMessage(PowerUtils.perUnitToText(be.getMechPUPower()), true);
+            player.sendMessage(PowerUtils.perUnitToLabelText(be.getMechPUPower()), true);
         }
 
         return ActionResult.SUCCESS;
