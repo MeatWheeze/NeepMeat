@@ -27,18 +27,17 @@ public class DegradationManager implements NbtSerialisable
     {
         float y = degradation;
         long t = 0;
-        int h = 1;
+        int h = 100 * 20;
         int maxSteps = 40000;
 
         int i = 0;
-        DegradationManager manager = new DegradationManager(degradationRate, random);
+//        DegradationManager manager = new DegradationManager(degradationRate, random);
         while (i < maxSteps)
         {
-//            float rate = degradationRate.get(y);
-            manager.tick();
-//            y += MathHelper.clamp(h * rate, 0, 1);
+            float rate = degradationRate.get(y);
+            y += MathHelper.clamp(h * rate, 0, 1);
 
-            if (1 - manager.getDegradation() <= 0.25)
+            if (1 - y <= 0.25)
             {
                 return t;
             }

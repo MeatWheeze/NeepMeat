@@ -1,18 +1,23 @@
 clear
-len = 2 * 3600 * 20;
-k = 0.0002;
-h = 1;
+len = 5 * 3600 * 20;
+k1 = 0.0002;
+k0 = 0.0001;
+h = 10;
 max_its = len / h;
 
 x = 1:h:len;
 y = zeros(1, length(x));
 
+%rate_func = @(y) k1 * 1500 / 300 * (y + 0.01)^1.5;
+rate_func = @(y) k0 * 1 * (y + 0.01)^1.5;
+
 i = 0;
 while i < max_its
     if (i > 1)
         % rate = k * 1500 / 300 * (1 - y(i-1))^0.5;
-        rate = k * 1;
-        y(i) = y(i-1) + h * rate;
+        %rate = k * 1500 / 300 * (y(i-1) + 0.01)^4;
+        rate = rate_func(y(i-1));
+        y(i) = min(y(i-1) + h * rate, 1);
         % if y(i) >= 0.75
         %     printf("Found RUL at %0.1fhr in %i its\n", x(i) / (20*3600), i);
         %     break
@@ -22,14 +27,14 @@ while i < max_its
     i = i + 1;
 end
 
-[tau_est, its] = estimate_degradation(0, k, 20, 5000);
+[tau_est, its] = estimate_degradation(0, 20 * 50, 1000, rate_func);
 
 
 figure
 hold on
 plot(x / (20*3600), y * 100)
 xlabel("Time (hr)")
-ylabel("Degradation (%)")
+ylabel("Performance Degradation (%)")
 
 greater = (x)(y>=0.75);
 if length(greater) > 0
