@@ -121,7 +121,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
         if (world.getTime() % 20 == 0 && !motors1.isEmpty())
         {
-            NeepMeat.LOGGER.info("Efficiency: {}", 100 * getEfficiency());
+            NeepMeat.LOGGER.info("Age: {}, Efficiency: {}, Rate: {}", 100 * degradationManager.getDegradation(), 100 * getEfficiency(), 100 * 20 * degradationRate(degradationManager.getDegradation()));
         }
 
 //        if (counting)
@@ -362,18 +362,18 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         return getProperty(StructureProperty.MAX_POWER) / PowerUtils.referencePower();
     }
 
-    public float degradationRate(float degradation)
+    public double degradationRate(double degradation)
     {
-        float rate = -repairAmount;
+        double rate = -repairAmount;
         if (power <= getRatedPower() / 2)
         {
             return rate;
         }
 
         if (power > getRatedPower())
-            rate += (float) (rateMultiplier * (0.0002f * power / getRatedPower()) * Math.pow(degradation + 0.01, 1.5));
+            rate += (rateMultiplier * (0.00002f * power / getRatedPower()));
         else
-            rate += (float) (rateMultiplier * (0.0001f * Math.pow(degradation + 0.01, 1.5)));
+            rate += (rateMultiplier * (0.000005f));
 
         return rate;
     }

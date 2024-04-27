@@ -10,7 +10,7 @@ public class DegradationManager implements NbtSerialisable
 {
     private final RateFunction degradationRate;
     private final Random random;
-    private float degradation = 0f;
+    private double degradation = 0f;
 
     public DegradationManager(RateFunction degradationRate, Random random)
     {
@@ -20,74 +20,51 @@ public class DegradationManager implements NbtSerialisable
 
     public float getDegradation()
     {
-        return degradation;
+        return (float) degradation;
     }
 
     public long estimateRul()
     {
-        float y = degradation;
-        long t = 0;
-        int h = 100 * 20;
-        int maxSteps = 40000;
+        double rate = degradationRate.get(degradation);
+        if (rate <= 0 )
+            return -1;
 
-        int i = 0;
-//        DegradationManager manager = new DegradationManager(degradationRate, random);
-        while (i < maxSteps)
-        {
-            float rate = degradationRate.get(y);
-            y += MathHelper.clamp(h * rate, 0, 1);
-
-            if (1 - y <= 0.25)
-            {
-                return t;
-            }
-
-            t += h;
-            i++;
-        }
-        return -1;
-    }
-
-    public FloatArrayList storeRul()
-    {
-        float y = degradation;
-        long t = 0;
-        int h = 1;
-        int maxSteps = 40000;
-        FloatArrayList floatArrayList = new FloatArrayList();
-
-        int i = 0;
-        DegradationManager manager = new DegradationManager(degradationRate, random);
-        while (i < maxSteps)
-        {
+        return (long) ((1 - degradation) / rate);
+//        float y = degradation;
+//        long t = 0;
+//        int h = 10 * 20;
+//        int maxSteps = 40000;
+//
+//        int i = 0;
+////        DegradationManager manager = new DegradationManager(degradationRate, random);
+//        while (i < maxSteps)
+//        {
 //            float rate = degradationRate.get(y);
-            manager.tick();
 //            y += MathHelper.clamp(h * rate, 0, 1);
-
-            floatArrayList.add(manager.getDegradation());
-            if (1 - manager.getDegradation() <= 0.25)
-            {
-                return floatArrayList;
-            }
-
-            t += h;
-            i++;
-        }
-        return floatArrayList;
+//
+//            if (1 - y <= 0.25)
+//            {
+//                return t;
+//            }
+//
+//            t += h;
+//            i++;
+//        }
+//        return -1;
     }
 
     public void tick()
     {
-        float nextDegradation = degradationRate.get(degradation);
+        double rate = degradationRate.get(degradation);
         degradation = MathHelper.clamp(
-                degradation + nextDegradation,
+                degradation + rate,
                 0, 1);
     }
 
     @Override
     public NbtCompound writeNbt(NbtCompound nbt)
     {
-        nbt.putFloat("degradation", degradation);
+        nbt.putDouble("degradation", degradation);
         return nbt;
     }
 
@@ -105,6 +82,6 @@ public class DegradationManager implements NbtSerialisable
     @FunctionalInterface
     public interface RateFunction
     {
-        float get(float degradation);
+        double get(double degradation);
     }
 }

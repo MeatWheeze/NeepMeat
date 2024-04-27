@@ -32,7 +32,7 @@ public class LivingMachines
     public static Block BLOOD_BUBBLE_MACHINE_BLOCK = BlockRegistry.queue(new MachineBlock("blood_bubble_machine_block", Map.of(
             StructureProperty.MAX_POWER, new StructureProperty.Entry(StructureProperty.Function.ADD, -5),
             StructureProperty.MASS, new StructureProperty.Entry(500f),
-            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.00001f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+            StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.000001f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
     public static final Block MOTOR_PORT = BlockRegistry.queue(new MotorPortBlock("motor_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final Block INTEGRATION_PORT = BlockRegistry.queue(new IntegrationPortBlock("integration_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
