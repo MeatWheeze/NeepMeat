@@ -82,20 +82,26 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
 
         BlockState fromState = world.getBlockState(fromPos);
 
+        // Update comnnections: junction change, update is from another pipe
+
         // Neighbour state changes have already been applied, so there is no way of knowing if the update came from a
         // destroyed pipe.
-        boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState) != null || fromState.isAir();
+        boolean foundPipe = FluidPipe.findFluidPipe(world, fromPos, fromState) != null;
+        boolean nodeChange = false;
         if (!foundPipe)
         {
             // If the nodes have changed, we need to update the pipe.
-            if (createStorageNodes(world, pos, nextState))
-            {
-                FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateHiddenConnections(nextState));
-            }
+            nodeChange = createStorageNodes(world, pos, nextState);
+//            {
+//                FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateConnectionChange(state, nextState));
+//            }
         }
-        else if (!state.equals(nextState))
+//        else if (!state.equals(nextState))
+//        {
+//            // The addition of a pipe can change this one's junction status
+//        }
+        if (foundPipe || nodeChange || !state.equals(nextState))
         {
-            // The addition of a pipe can change this one's junction status
             FluidPipeBlockEntity.find(world, pos).ifPresent(be -> be.updateConnectionChange(state, nextState));
         }
     }

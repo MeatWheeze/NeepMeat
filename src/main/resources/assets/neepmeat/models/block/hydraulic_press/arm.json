@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "neepmeat:block/hydraulic_press/head"
+		"1": "neepmeat:block/hydraulic_press/head",
+		"particle": "neepmeat:block/hydraulic_press/main"
 	},
 	"elements": [
 		{

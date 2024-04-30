@@ -5,7 +5,7 @@
 		"3": "neepmeat:block/hydraulic_press/ring",
 		"4": "neepmeat:block/hydraulic_press/main",
 		"5": "neepmeat:block/hydraulic_press/top",
-		"particle": "neepmeat:block/hydraulic_press/sheath"
+		"particle": "neepmeat:block/hydraulic_press/main"
 	},
 	"elements": [
 		{
