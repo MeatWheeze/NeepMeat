@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "minecraft:block/air"
+      "model": "neepmeat:block/hydraulic_press/air"
     }
   }
 }
