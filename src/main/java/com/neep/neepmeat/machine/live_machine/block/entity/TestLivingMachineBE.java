@@ -1,5 +1,6 @@
-package com.neep.neepmeat.api.live_machine;
+package com.neep.neepmeat.machine.live_machine.block.entity;
 
+import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;

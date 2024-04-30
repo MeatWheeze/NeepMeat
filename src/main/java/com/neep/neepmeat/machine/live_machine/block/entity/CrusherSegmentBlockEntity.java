@@ -5,7 +5,6 @@ import com.neep.meatlib.recipe.MeatlibRecipes;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
-import com.neep.neepmeat.api.live_machine.TestLivingMachineBE;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;

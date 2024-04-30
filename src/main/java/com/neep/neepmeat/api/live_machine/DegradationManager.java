@@ -1,7 +1,6 @@
 package com.neep.neepmeat.api.live_machine;
 
 import com.neep.meatlib.util.NbtSerialisable;
-import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
@@ -9,13 +8,11 @@ import net.minecraft.util.math.random.Random;
 public class DegradationManager implements NbtSerialisable
 {
     private final RateFunction degradationRate;
-    private final Random random;
     private double degradation = 0f;
 
     public DegradationManager(RateFunction degradationRate, Random random)
     {
         this.degradationRate = degradationRate;
-        this.random = random;
     }
 
     public float getDegradation()
@@ -30,27 +27,6 @@ public class DegradationManager implements NbtSerialisable
             return -1;
 
         return (long) ((1 - degradation) / rate);
-//        float y = degradation;
-//        long t = 0;
-//        int h = 10 * 20;
-//        int maxSteps = 40000;
-//
-//        int i = 0;
-////        DegradationManager manager = new DegradationManager(degradationRate, random);
-//        while (i < maxSteps)
-//        {
-//            float rate = degradationRate.get(y);
-//            y += MathHelper.clamp(h * rate, 0, 1);
-//
-//            if (1 - y <= 0.25)
-//            {
-//                return t;
-//            }
-//
-//            t += h;
-//            i++;
-//        }
-//        return -1;
     }
 
     public void tick()

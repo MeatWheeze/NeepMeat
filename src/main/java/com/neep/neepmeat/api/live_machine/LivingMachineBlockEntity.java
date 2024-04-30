@@ -29,12 +29,10 @@ import java.util.concurrent.atomic.AtomicLong;
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
     protected List<LivingMachineStructure> structures = new ArrayList<>();
-//    private final HashMultimap<ComponentType<?>, LivingMachineComponent> componentMap = HashMultimap.create();
     private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
     private final EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
 
-//    protected FailureManager failureManager = new Fa
     protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
     private final float rateMultiplier = 1;
 
@@ -44,6 +42,8 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected float power;
     protected float repairAmount;
+
+    protected boolean updateProcess = false;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -65,11 +65,6 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         nbt.putLong("age", age);
         degradationManager.writeNbt(nbt);
     }
-
-//    private boolean counting = false;
-//    private int countTicks = 0;
-//    private FloatArrayList estimatedDegradation;
-//    private long estimatedTicks;
 
     protected void tickDegradation()
     {
@@ -209,7 +204,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected void processStructure()
     {
-        // Is this bad? Should I be using AtomicDouble and AtomicInteger in single-threaded code? Leave your answer in the comments.
+        // Is this bad? Should I be using AtomicDouble and AtomicInteger in single-threaded code? Leave your answer in the comments below.
 
         EnumMap<StructureProperty, AtomicInteger> present = new EnumMap<>(StructureProperty.class);
         for (var structure : structures)

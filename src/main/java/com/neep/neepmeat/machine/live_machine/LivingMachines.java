@@ -5,7 +5,7 @@ import com.neep.meatlib.registry.BlockRegistry;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
-import com.neep.neepmeat.api.live_machine.TestLivingMachineBE;
+import com.neep.neepmeat.machine.live_machine.block.entity.TestLivingMachineBE;
 import com.neep.neepmeat.block.MachineBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import com.neep.neepmeat.machine.live_machine.block.*;
