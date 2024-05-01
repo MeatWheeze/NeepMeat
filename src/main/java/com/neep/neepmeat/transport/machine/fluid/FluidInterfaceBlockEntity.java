@@ -1,8 +1,8 @@
 package com.neep.neepmeat.transport.machine.fluid;
 
+import com.neep.neepmeat.api.storage.LazyBlockApiCache;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.transport.block.fluid_transport.FluidInterfaceBlock;
-import net.fabricmc.fabric.api.lookup.v1.block.BlockApiCache;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -12,7 +12,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -22,11 +21,14 @@ import java.util.Iterator;
 @SuppressWarnings("UnstableApiUsage")
 public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<FluidVariant>
 {
-    protected BlockApiCache<Storage<FluidVariant>, Direction> cache;
+    protected final LazyBlockApiCache<Storage<FluidVariant>, Direction> cache;
 
     public FluidInterfaceBlockEntity(BlockEntityType type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        Direction facing = getCachedState().get(FluidInterfaceBlock.FACING);
+        BlockPos offset = pos.offset(facing);
+        this.cache = LazyBlockApiCache.of(FluidStorage.SIDED, offset, this::getWorld, facing::getOpposite);
     }
 
     public FluidInterfaceBlockEntity(BlockPos pos, BlockState state)
@@ -49,19 +51,10 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
     @Override
     public long insert(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
-        if (cache == null)
-        {
-            updateApiCache(getPos(), getCachedState());
-        }
-        Direction facing = getCachedState().get(FluidInterfaceBlock.FACING);
-        Storage<FluidVariant> storage = cache.find(world.getBlockState(pos.offset(facing)), facing);
+        Storage<FluidVariant> storage = cache.find();
         if (storage != null)
         {
             return storage.insert(resource, maxAmount, transaction);
-        }
-        else
-        {
-            cache = null;
         }
         return 0;
     }
@@ -69,11 +62,7 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
     @Override
     public long extract(FluidVariant resource, long maxAmount, TransactionContext transaction)
     {
-        if (cache == null)
-        {
-            updateApiCache(getPos(), getCachedState());
-        }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
+        Storage<FluidVariant> storage = cache.find();
         if (storage != null)
         {
             return storage.extract(resource, maxAmount, transaction);
@@ -84,29 +73,11 @@ public class FluidInterfaceBlockEntity extends BlockEntity implements Storage<Fl
     @Override
     public Iterator<StorageView<FluidVariant>> iterator()
     {
-        if (cache == null)
-        {
-            updateApiCache(getPos(), getCachedState());
-        }
-        Storage<FluidVariant> storage = cache.find(getCachedState().get(FluidInterfaceBlock.FACING));
+        Storage<FluidVariant> storage = cache.find();
         if (storage != null)
         {
             return storage.iterator();
         }
         return Collections.emptyIterator();
-    }
-
-    public void updateApiCache(BlockPos pos, BlockState state)
-    {
-        if (getWorld() == null || !(getWorld() instanceof ServerWorld))
-            return;
-
-        Direction direction = state.get(FluidInterfaceBlock.FACING);
-        cache = BlockApiCache.create(FluidStorage.SIDED, (ServerWorld) getWorld(), pos.offset(direction));
-    }
-
-    public boolean hasCache()
-    {
-        return cache != null;
     }
 }
