@@ -1,5 +1,7 @@
 package com.neep.neepmeat.machine.live_machine;
 
+import com.neep.neepmeat.api.live_machine.ComponentType;
+import com.neep.neepmeat.api.live_machine.Process;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.BitSet;
@@ -8,16 +10,43 @@ import java.util.Map;
 
 public class Processes
 {
-    private final Map<BitSet, Entry> entries = new HashMap<>();
+    private static final Processes INSTANCE = new Processes();
 
-    @Nullable
-    public Entry getFirstMatch(BitSet bits)
+    public static Processes getInstance()
     {
-        return null;
+        return INSTANCE;
     }
 
-    public static class Entry
-    {
+    private final Map<BitSet, Process> entries = new HashMap<>();
 
+    public void register(Process process)
+    {
+        register(process, process.getRequired().toArray(new ComponentType<?>[0]));
+    }
+
+    public void register(BitSet bitSet, Process process)
+    {
+        entries.put(bitSet, process);
+    }
+
+    public void register(Process process, ComponentType<?>... types)
+    {
+        BitSet bitSet = new BitSet();
+        for (ComponentType<?> type : types)
+        {
+            bitSet.set(type.getBitIdx());
+        }
+        register(bitSet, process);
+    }
+
+    @Nullable
+    public Process getFirstMatch(BitSet bits)
+    {
+        return entries.get(bits);
+    }
+
+    public static void init()
+    {
+        getInstance().register(new CrusherProcess());
     }
 }

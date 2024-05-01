@@ -2,13 +2,8 @@ package com.neep.neepmeat.machine.live_machine.block.entity;
 
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
-import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
-import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
@@ -24,44 +19,44 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
     {
         super.serverTick();
 
-        withComponents(LivingMachineComponents.LARGEST_HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
-        {
-            var hoppers = result.t1();
-            var crushers = result.t2();
-            var itemOutputs = result.t3();
-
-            if (power < 0.1)
-            {
-                return;
-            }
-
-            float progressIncrement = getProgressIncrement() / crushers.size() * 4;
-
-            InventoryStorage input = hoppers.iterator().next().getStorage(null);
-            Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
-
-            boolean hasInput = input.nonEmptyIterator().hasNext();
-            try (Transaction transaction = Transaction.openOuter())
-            {
-                for (var crusher : crushers)
-                {
-                    try (Transaction inner = transaction.openNested())
-                    {
-                        CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
-
-                        if (hasInput && slot.isEmpty())
-                            StorageUtil.move(input, slot, v -> true, 1, inner);
-
-                        if (!slot.isEmpty())
-                        {
-                            slot.tick(progressIncrement, output, inner);
-                        }
-                        inner.commit();
-                    }
-                }
-                transaction.commit();
-            }
-        });
+//        withComponents(LivingMachineComponents.LARGEST_HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
+//        {
+//            var hoppers = result.t1();
+//            var crushers = result.t2();
+//            var itemOutputs = result.t3();
+//
+//            if (power < 0.1)
+//            {
+//                return;
+//            }
+//
+//            float progressIncrement = getProgressIncrement() / crushers.size() * 4;
+//
+//            InventoryStorage input = hoppers.iterator().next().getStorage(null);
+//            Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
+//
+//            boolean hasInput = input.nonEmptyIterator().hasNext();
+//            try (Transaction transaction = Transaction.openOuter())
+//            {
+//                for (var crusher : crushers)
+//                {
+//                    try (Transaction inner = transaction.openNested())
+//                    {
+//                        CrusherSegmentBlockEntity.InputSlot slot = crusher.getStorage();
+//
+//                        if (hasInput && slot.isEmpty())
+//                            StorageUtil.move(input, slot, v -> true, 1, inner);
+//
+//                        if (!slot.isEmpty())
+//                        {
+//                            slot.tick(progressIncrement, output, inner);
+//                        }
+//                        inner.commit();
+//                    }
+//                }
+//                transaction.commit();
+//            }
+//        });
     }
 
 

@@ -68,5 +68,7 @@ public class LivingMachines
         ItemStorage.SIDED.registerForBlockEntity(ItemOutputPortBlockEntity::getStorage, ITEM_OUTPUT_PORT_BE);
 
         TEST_LIVING_MACHINE_BE = register("test_living_machine", (p, s) -> new TestLivingMachineBE(LivingMachines.TEST_LIVING_MACHINE_BE, p, s), NMBlocks.TEST_LIVING_MACHINE);
+
+        Processes.init();
     }
 }

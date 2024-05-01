@@ -7,9 +7,9 @@ import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.Processes;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
-import it.unimi.dsi.fastutil.floats.FloatArrayList;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -28,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
-    protected List<LivingMachineStructure> structures = new ArrayList<>();
+    protected final List<LivingMachineStructure> structures = new ArrayList<>();
     private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
     private final EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
@@ -43,7 +44,8 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     protected float power;
     protected float repairAmount;
 
-    protected boolean updateProcess = false;
+    protected boolean updateProcess = true;
+    @Nullable private Process process;
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -105,40 +107,28 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
         var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
 
-        // Debug counter
-//        if (power > 0 && !motors1.isEmpty() && !counting && degradationManager.getDegradation() < 0.75)
-//        {
-//            counting = true;
-//            estimatedDegradation = degradationManager.storeRul();
-//            estimatedTicks = estimatedDegradation.size();
-//            NeepMeat.LOGGER.info("Started counting");
-//        }
-
         if (world.getTime() % 20 == 0 && !motors1.isEmpty())
         {
             NeepMeat.LOGGER.info("Age: {}, Efficiency: {}, Rate: {}", 100 * degradationManager.getDegradation(), 100 * getEfficiency(), 100 * 20 * degradationRate(degradationManager.getDegradation()));
         }
 
-//        if (counting)
-//        {
-//            NeepMeat.LOGGER.info("True: {}, expected: {}", estimatedDegradation.getFloat(countTicks), degradationManager.getDegradation());
-//        }
-
         degradationManager.tick();
-
-//        if (counting)
-//        {
-//            if (degradationManager.getDegradation() >= 0.75 && counting)
-//            {
-//                NeepMeat.LOGGER.info("Took {} ticks to reach 25%. Expected: {} ticks", countTicks, estimatedTicks);
-//                counting = false;
-//            }
-//            countTicks++;
-//        }
     }
 
     public void serverTick()
     {
+        if (age % updateInterval == 0)
+        {
+            updateStructure();
+        }
+
+        if (updateProcess)
+        {
+            this.process = Processes.getInstance().getFirstMatch(currentComponents);
+            updateProcess = false;
+        }
+
+
         age++;
         tickDegradation();
 
@@ -167,6 +157,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
                 if (component.componentRemoved())
                 {
                     removeComponent(component);
+                    updateProcess = true;
                 }
                 else
                 {
@@ -180,9 +171,9 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             ++i;
         }
 
-        if (age % updateInterval == 0)
+        if (process != null)
         {
-            updateStructure();
+            process.serverTick(this);
         }
     }
 
@@ -200,6 +191,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         search(getPos());
         processStructure();
+        updateProcess = true;
     }
 
     protected void processStructure()
@@ -234,7 +226,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     public <T extends LivingMachineComponent> Collection<T> getComponent(ComponentType<T> type)
     {
-        int idx = type.getId();
+        int idx = type.getBitIdx();
         if (!currentComponents.get(idx))
             return Collections.emptySet();
 
@@ -243,7 +235,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected void addComponent(LivingMachineComponent component)
     {
-        int idx = component.getComponentType().getId();
+        int idx = component.getComponentType().getBitIdx();
 
         if (componentMap[idx] == null)
             componentMap[idx] = new HashSet<>();
@@ -254,7 +246,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected void removeComponent(LivingMachineComponent component)
     {
-        int idx = component.getComponentType().getId();
+        int idx = component.getComponentType().getBitIdx();
         if (!currentComponents.get(idx))
             return;
 
