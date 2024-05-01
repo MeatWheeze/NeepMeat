@@ -11,7 +11,6 @@ import net.minecraft.data.server.recipe.RecipeJsonProvider;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.DyeItem;
 import net.minecraft.util.DyeColor;
-import software.bernie.geckolib3.core.util.Color;
 
 import java.util.function.Consumer;
 
@@ -26,14 +25,6 @@ public class PaintedCorrugatedAsbestosBlock extends PaintedBlockManager.PaintedB
     protected BlockItem makeItem()
     {
         return new BaseBlockItem(this, registryName, ItemSettings.block(), new MeatlibItemSettings().tags(NMTags.PAINTED_CORRUGATED_ASBESTOS).group(NMItemGroups.GENERAL));
-    }
-
-    @Override
-    public int getRawCol()
-    {
-        Color c = Color.ofOpaque(col.getFireworkColor());
-        c = c.brighter(4);
-        return c.getColor();
     }
 
     @Override
