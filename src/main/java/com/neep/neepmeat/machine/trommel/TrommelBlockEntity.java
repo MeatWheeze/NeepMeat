@@ -3,7 +3,7 @@ package com.neep.neepmeat.machine.trommel;
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.api.multiblock.ControllerBlockEntity;
 import com.neep.neepmeat.init.NMBlockEntities;
-import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
+import com.neep.neepmeat.machine.small_trommel.SmallTrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -34,7 +34,7 @@ public class TrommelBlockEntity extends SyncableBlockEntity implements Controlle
         this(NMBlockEntities.TROMMEL, pos, state);
     }
 
-    public TrommelStorage getStorage()
+    public SmallTrommelStorage getStorage()
     {
 //        return storage;
         return null;

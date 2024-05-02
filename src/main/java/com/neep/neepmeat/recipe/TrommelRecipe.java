@@ -7,12 +7,12 @@ import com.neep.meatlib.recipe.MeatRecipeType;
 import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
-import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.SingleVariantStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.fluid.Fluid;
@@ -44,7 +44,7 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
     @Override
     public boolean matches(TrommelStorage inventory)
     {
-        WritableSingleFluidStorage storage = inventory.input();
+        SingleVariantStorage<FluidVariant> storage = inventory.input();
         return fluidInput.test(storage) && fluidInput.amount() <= storage.getAmount();
     }
 

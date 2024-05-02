@@ -8,7 +8,6 @@ import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.Processes;
-import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
@@ -30,6 +29,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
 {
+    private final Random random = Random.create();
+
     protected final List<LivingMachineStructure> structures = new ArrayList<>();
     private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
@@ -47,6 +48,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
     protected boolean updateProcess = true;
     @Nullable private Process process;
+
 
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -406,5 +408,10 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
 
             ++i;
         }
+    }
+
+    public Random getRandom()
+    {
+        return random;
     }
 }

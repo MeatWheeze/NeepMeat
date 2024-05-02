@@ -35,7 +35,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     public static long CONVERT_MIN = 100;
     public static long BASE_AMOUNT = 9000;
 
-    public TrommelStorage storage;
+    public SmallTrommelStorage storage;
     public FluidVariant currentFluid;
 
     protected int totalProgress;
@@ -49,7 +49,7 @@ public class SmallTrommelBlockEntity extends SyncableBlockEntity implements Moto
     public SmallTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
-        storage = new TrommelStorage(this);
+        storage = new SmallTrommelStorage(this);
         this.random = new Random(pos.asLong());
     }
 

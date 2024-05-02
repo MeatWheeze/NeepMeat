@@ -113,7 +113,7 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
             var storage = new TestLivingMachineBE.SimpleCrushingStorage(this, output);
             if (recipe != null)
             {
-                progress = progress + progressIncrement;
+                progress += progressIncrement;
                 if (progress >= recipe.getTime())
                 {
                     if (recipe.takeInputs(storage, transaction))

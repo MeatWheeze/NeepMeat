@@ -21,7 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.world.World;
 
 @SuppressWarnings("UnstableApiUsage")
-public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVariant>
+public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVariant> implements StorageView<FluidVariant>
 {
     public static final String KEY_RESOURCE = "resource";
     public static final String KEY_AMOUNT = "amount";
@@ -188,7 +188,7 @@ public class WritableSingleFluidStorage extends SingleVariantStorage<FluidVarian
         nbt.putLong(KEY_CAPACITY, capacity);
     }
 
-    public NbtCompound readNbt(NbtCompound nbt)
+    public NbtCompound readNbt(NbtCompound nbt) // TODO: make this return void
     {
         this.variant = readFluidVariant(nbt);
         this.amount = readAmount(nbt);
