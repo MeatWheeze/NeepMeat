@@ -4,8 +4,8 @@ import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
-import com.neep.neepmeat.machine.large_crusher.LargeCrusherBlockEntity;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.component.ItemInputComponent;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
@@ -18,7 +18,7 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class LargestHopperBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
+public class LargestHopperBlockEntity extends SyncableBlockEntity implements ItemInputComponent
 {
     private final ImplementedInventory inventory = ImplementedInventory.ofSize(4, this::sync);
     private final InventoryStorage inventoryStorage = InventoryStorage.of(inventory, null);
@@ -63,7 +63,7 @@ public class LargestHopperBlockEntity extends SyncableBlockEntity implements Liv
     @Override
     public ComponentType<? extends LivingMachineComponent> getComponentType()
     {
-        return LivingMachineComponents.LARGEST_HOPPER;
+        return LivingMachineComponents.ITEM_INPUT;
     }
 
     public void insertEntity(ItemEntity itemEntity)

@@ -2,6 +2,7 @@ package com.neep.neepmeat.machine.live_machine;
 
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.meatlib.registry.BlockRegistry;
+import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.live_machine.StructureProperty;
@@ -34,9 +35,11 @@ public class LivingMachines
             StructureProperty.MASS, new StructureProperty.Entry(500f),
             StructureProperty.SELF_REPAIR, new StructureProperty.Entry(StructureProperty.Function.ADD, 0.000001f)), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
 
-    public static final Block MOTOR_PORT = BlockRegistry.queue(new MotorPortBlock("motor_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block INTEGRATION_PORT = BlockRegistry.queue(new IntegrationPortBlock("integration_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
-    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new ItemOutputPortBlock("item_output_port", ItemSettings.block(), FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block MOTOR_PORT = BlockRegistry.queue(new PortBlock<>("motor_port", ItemSettings.block(), () ->  LivingMachines.MOTOR_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block INTEGRATION_PORT = BlockRegistry.queue(new PortBlock<>("integration_port", ItemSettings.block(), () -> LivingMachines.INTEGRATION_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block ITEM_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("item_output_port", ItemSettings.block(), () -> LivingMachines.ITEM_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block FLUID_INPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_input_port", ItemSettings.block(), () -> LivingMachines.FLUID_INPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
+    public static final Block FLUID_OUTPUT_PORT = BlockRegistry.queue(new PortBlock<>("fluid_output_port", ItemSettings.block(), () -> LivingMachines.FLUID_OUTPUT_PORT_BE, FabricBlockSettings.copyOf(MACHINE_SETTINGS)));
     public static final BigBlock<CrusherSegmentBlock.CrusherSegmentStructureBlock> CRUSHER_SEGMENT = BlockRegistry.queue(new CrusherSegmentBlock("crusher_segment", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
     public static final BigBlock<?> LARGE_TROMMEL = BlockRegistry.queue(new LargeTrommelBlock("large_trommel",FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
     public static final BigBlock<LargestHopperBlock.StructureBlock> LARGEST_HOPPER = BlockRegistry.queue(new LargestHopperBlock("largest_hopper", FabricBlockSettings.copyOf(MACHINE_SETTINGS), ItemSettings.block()));
@@ -49,6 +52,8 @@ public class LivingMachines
 
     public static BlockEntityType<TestLivingMachineBE> TEST_LIVING_MACHINE_BE;
     public static BlockEntityType<ItemOutputPortBlockEntity> ITEM_OUTPUT_PORT_BE;
+    public static BlockEntityType<FluidInputPortBlockEntity> FLUID_INPUT_PORT_BE;
+    public static BlockEntityType<FluidOutputPortBlockEntity> FLUID_OUTPUT_PORT_BE;
 
     public static void init()
     {
@@ -67,6 +72,15 @@ public class LivingMachines
         ITEM_OUTPUT_PORT_BE = register("item_output_port", (p, s) -> new ItemOutputPortBlockEntity(ITEM_OUTPUT_PORT_BE, p, s), ITEM_OUTPUT_PORT);
         LivingMachineComponent.LOOKUP.registerSelf(LivingMachines.ITEM_OUTPUT_PORT_BE);
         ItemStorage.SIDED.registerForBlockEntity(ItemOutputPortBlockEntity::getStorage, ITEM_OUTPUT_PORT_BE);
+
+        FLUID_INPUT_PORT_BE = register("fluid_input_port", (p, s) -> new FluidInputPortBlockEntity(FLUID_INPUT_PORT_BE, p, s), FLUID_INPUT_PORT);
+        LivingMachineComponent.LOOKUP.registerSelf(FLUID_INPUT_PORT_BE);
+        FluidStorage.SIDED.registerForBlockEntity(FluidInputPortBlockEntity::getStorage, FLUID_INPUT_PORT_BE);
+
+        FLUID_OUTPUT_PORT_BE = register("fluid_output_port", (p, s) -> new FluidOutputPortBlockEntity(FLUID_OUTPUT_PORT_BE, p, s), FLUID_OUTPUT_PORT);
+        LivingMachineComponent.LOOKUP.registerSelf(FLUID_OUTPUT_PORT_BE);
+        FluidStorage.SIDED.registerForBlockEntity(FluidOutputPortBlockEntity::getStorage, FLUID_OUTPUT_PORT_BE);
+        FluidPump.SIDED.registerForBlockEntity(FluidOutputPortBlockEntity::getPump, FLUID_OUTPUT_PORT_BE);
 
         TEST_LIVING_MACHINE_BE = register("test_living_machine", (p, s) -> new TestLivingMachineBE(LivingMachines.TEST_LIVING_MACHINE_BE, p, s), NMBlocks.TEST_LIVING_MACHINE);
 

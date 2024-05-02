@@ -136,7 +136,10 @@
   "block.neepmeat.motor_port": "Motor Port",
   "block.neepmeat.integration_port": "Integration Port",
   "block.neepmeat.item_output_port": "Item Output Port",
+  "block.neepmeat.fluid_input_port": "Fluid Input Port",
+  "block.neepmeat.fluid_output_port": "Fluid Output Port",
   "block.neepmeat.crusher_segment": "Crusher Segment",
+  "block.neepmeat.large_trommel": "Large Trommel",
   "block.neepmeat.largest_hopper": "Largest Hopper",
 
   "block.neepmeat.meat_steel_block": "Meat Steel Block",

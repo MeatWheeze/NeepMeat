@@ -215,6 +215,13 @@ public class NMBlockEntities
                                  FabricBlockEntityTypeBuilder.create(factory, block).build());
     }
 
+    public static <T extends net.minecraft.block.entity.BlockEntity> BlockEntityType<T> register(String id, BlockEntityType<T> type)
+    {
+        return Registry.register(
+                Registries.BLOCK_ENTITY_TYPE, new Identifier(NeepMeat.NAMESPACE, id),
+                type);
+    }
+
     @SuppressWarnings("UnstableApiUsage")
     public static void initialise()
     {

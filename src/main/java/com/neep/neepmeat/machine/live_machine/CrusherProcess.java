@@ -4,7 +4,6 @@ import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
@@ -17,7 +16,7 @@ public class CrusherProcess implements Process
     @Override
     public void serverTick(LivingMachineBlockEntity be)
     {
-        be.withComponents(LivingMachineComponents.LARGEST_HOPPER, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
+        be.withComponents(LivingMachineComponents.ITEM_INPUT, LivingMachineComponents.CRUSHER_SEGMENT, LivingMachineComponents.ITEM_OUTPUT, LivingMachineComponents.MOTOR_PORT).ifPresent(result ->
         {
             var hoppers = result.t1();
             var crushers = result.t2();
@@ -30,7 +29,7 @@ public class CrusherProcess implements Process
 
             float progressIncrement = be.getProgressIncrement() / crushers.size() * 4;
 
-            InventoryStorage input = hoppers.iterator().next().getStorage(null);
+            Storage<ItemVariant> input = hoppers.iterator().next().getStorage(null);
             Storage<ItemVariant> output = itemOutputs.iterator().next().getStorage(null);
 
             boolean hasInput = input.nonEmptyIterator().hasNext();
@@ -61,7 +60,7 @@ public class CrusherProcess implements Process
     public List<ComponentType<?>> getRequired()
     {
         return List.of(
-                LivingMachineComponents.LARGEST_HOPPER,
+                LivingMachineComponents.ITEM_INPUT,
                 LivingMachineComponents.CRUSHER_SEGMENT,
                 LivingMachineComponents.ITEM_OUTPUT,
                 LivingMachineComponents.MOTOR_PORT

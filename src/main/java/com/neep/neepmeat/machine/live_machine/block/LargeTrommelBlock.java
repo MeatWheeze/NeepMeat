@@ -11,6 +11,8 @@ import com.neep.neepmeat.api.big_block.BigBlock;
 import com.neep.neepmeat.api.big_block.BigBlockPattern;
 import com.neep.neepmeat.api.big_block.BigBlockStructure;
 import com.neep.neepmeat.api.big_block.BigBlockStructureEntity;
+import com.neep.neepmeat.api.live_machine.LivingMachineStructure;
+import com.neep.neepmeat.api.live_machine.StructureProperty;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import com.neep.neepmeat.machine.motor.MotorEntity;
@@ -37,9 +39,10 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.EnumMap;
 import java.util.Map;
 
-public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTrommelBlock.LargeTrommelStructureBlockEntity>> implements MeatlibBlock, BlockEntityProvider
+public class LargeTrommelBlock extends BigBlock<LargeTrommelBlock.StructureBlock> implements MeatlibBlock, BlockEntityProvider
 {
     private final String registryName;
 
@@ -75,7 +78,7 @@ public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTr
     }
 
     @Override
-    protected BigBlockStructure.Simple<LargeTrommelStructureBlockEntity> registerStructureBlock()
+    protected StructureBlock registerStructureBlock()
     {
         // Oh, crumbs
         BigBlockStructure.BlockEntityRegisterererer<LargeTrommelStructureBlockEntity> registerererer = b -> Registry.register(
@@ -83,7 +86,7 @@ public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTr
                 FabricBlockEntityTypeBuilder.create(
                         (p, s) -> new LargeTrommelStructureBlockEntity(b.getBlockEntityType(), p, s), this).build());
 
-            return BlockRegistry.queue(new BigBlockStructure.Simple<>(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
+            return BlockRegistry.queue(new StructureBlock(this, FabricBlockSettings.copyOf(this), registerererer), "large_trommel_structure");
     }
 
     @Override
@@ -135,33 +138,19 @@ public class LargeTrommelBlock extends BigBlock<BigBlockStructure.Simple<LargeTr
         return LivingMachines.LARGE_TROMMEL_BE.instantiate(pos, state);
     }
 
-//    @Nullable
-//    @Override
-//    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type)
-//    {
-//        return MiscUtil.checkType(type, NMBlockEntities.LARGE_MOTOR, (world1, pos, state1, blockEntity) -> blockEntity.serverTick(), null, world);
-//    }
-//
-//    @Nullable
-//    @Override
-//    public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
-//    {
-//        return NMBlockEntities.LARGE_MOTOR.instantiate(pos, state);
-//    }
+    public static class StructureBlock extends BigBlockStructure<LargeTrommelStructureBlockEntity> implements LivingMachineStructure
+    {
+        public StructureBlock(BigBlock<?> parent, Settings settings, BlockEntityRegisterererer<LargeTrommelStructureBlockEntity> registerBlockEntity)
+        {
+            super(parent, settings, registerBlockEntity);
+        }
 
-//    public static class LargeTrommelStructureBlock extends BigBlockStructure<LargeTrommelStructureBlockEntity>
-//    {
-//        public LargeTrommelStructureBlock(BigBlock<?> parent, Settings settings)
-//        {
-//            super(parent, settings);
-//        }
-//
-//        @Override
-//        protected BlockEntityType<LargeTrommelStructureBlockEntity> registerBlockEntity()
-//        {
-//            return null;
-//        }
-//    }
+        @Override
+        public EnumMap<StructureProperty, StructureProperty.Entry> getProperties()
+        {
+            return new EnumMap<>(StructureProperty.class);
+        }
+    }
 
     public static class LargeTrommelStructureBlockEntity extends BigBlockStructureEntity
     {

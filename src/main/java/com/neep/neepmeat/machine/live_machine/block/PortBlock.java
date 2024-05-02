@@ -6,15 +6,21 @@ import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
-public class IntegrationPortBlock extends BaseFacingBlock implements BlockEntityProvider
+import java.util.function.Supplier;
+
+public class PortBlock<T extends BlockEntity> extends BaseFacingBlock implements BlockEntityProvider
 {
-    public IntegrationPortBlock(String registryName, ItemSettings itemSettings, Settings settings)
+    private final Supplier<BlockEntityType<T>> factory;
+
+    public PortBlock(String registryName, ItemSettings itemSettings, Supplier<BlockEntityType<T>> factory, Settings settings)
     {
         super(registryName, itemSettings, settings);
+        this.factory = factory;
     }
 
     @Override
@@ -30,6 +36,6 @@ public class IntegrationPortBlock extends BaseFacingBlock implements BlockEntity
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state)
     {
-        return LivingMachines.INTEGRATION_PORT_BE.instantiate(pos, state);
+        return factory.get().instantiate(pos, state);
     }
 }
