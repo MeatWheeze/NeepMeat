@@ -8,8 +8,9 @@ import com.neep.neepmeat.api.storage.WritableSingleFluidStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
+import com.neep.neepmeat.machine.small_trommel.TrommelRecipe;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
-import com.neep.neepmeat.recipe.TrommelRecipe;
+import com.neep.neepmeat.recipe.NormalTrommelRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -19,13 +20,14 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.TransactionContext;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import org.jetbrains.annotations.Nullable;
 
 public class LargeTrommelBlockEntity extends SyncableBlockEntity implements LivingMachineComponent, PoweredComponent
 {
     private float progressIncrement;
-    private final InputSlot inputSlot = new InputSlot(9000, this::sync);
+    private final InputSlot inputSlot = new InputSlot(TrommelRecipe.INPUT_AMOUNT, this::sync);
 
     public LargeTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -111,6 +113,8 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
             {
                 StorageWrapper wrapper = new StorageWrapper(this, output, itemOutput);
                 recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, wrapper).orElse(null);
+                if (recipe == null)
+                    recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.FAT_TROMMEL, wrapper).orElse(null);
             }
         }
 
@@ -119,6 +123,8 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
         {
             super.writeNbt(nbt);
             nbt.putFloat("progress", progress);
+            if (recipe != null)
+                nbt.putString("recipe", recipe.getId().toString());
         }
 
         @Override
@@ -126,6 +132,11 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
         {
             super.readNbt(nbt);
             this.progress = nbt.getFloat("progress");
+            if (nbt.contains("recipe"))
+                this.recipe = (TrommelRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(nbt.getString("recipe"))).orElse(null);
+            else
+                this.recipe = null;
+
             return nbt;
         }
     }

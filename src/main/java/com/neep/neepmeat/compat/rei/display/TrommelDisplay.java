@@ -1,7 +1,7 @@
 package com.neep.neepmeat.compat.rei.display;
 
 import com.neep.neepmeat.compat.rei.NMREIPlugin;
-import com.neep.neepmeat.recipe.TrommelRecipe;
+import com.neep.neepmeat.recipe.NormalTrommelRecipe;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;
@@ -15,9 +15,9 @@ import java.util.Optional;
 
 public class TrommelDisplay extends BasicDisplay
 {
-    private TrommelRecipe recipe;
+    private NormalTrommelRecipe recipe;
 
-    public TrommelDisplay(TrommelRecipe recipe)
+    public TrommelDisplay(NormalTrommelRecipe recipe)
     {
         this(
                 List.of(
@@ -42,7 +42,7 @@ public class TrommelDisplay extends BasicDisplay
         super(input, output);
     }
 
-    public TrommelRecipe getRecipe()
+    public NormalTrommelRecipe getRecipe()
     {
         return recipe;
     }

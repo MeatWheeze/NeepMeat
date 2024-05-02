@@ -2,7 +2,7 @@ package com.neep.neepmeat.compat.emi.recipe;
 
 import com.neep.neepmeat.compat.emi.NMEmiPlugin;
 import com.neep.neepmeat.compat.emi.helper.EmiIngredientHelper;
-import com.neep.neepmeat.recipe.TrommelRecipe;
+import com.neep.neepmeat.recipe.NormalTrommelRecipe;
 import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.render.EmiTexture;
@@ -21,9 +21,9 @@ public class TrommelEmiRecipe implements EmiRecipe {
     private final List<EmiIngredient> input;
     private final List<EmiStack> output;
 
-    private final TrommelRecipe recipe;
+    private final NormalTrommelRecipe recipe;
 
-    public TrommelEmiRecipe(TrommelRecipe recipe) {
+    public TrommelEmiRecipe(NormalTrommelRecipe recipe) {
         this.recipe = recipe;
 
         this.id = recipe.getId();

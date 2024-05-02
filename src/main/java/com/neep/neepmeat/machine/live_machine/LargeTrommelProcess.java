@@ -3,6 +3,7 @@ package com.neep.neepmeat.machine.live_machine;
 import com.neep.neepmeat.api.live_machine.ComponentType;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.live_machine.Process;
+import com.neep.neepmeat.machine.small_trommel.TrommelRecipe;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -63,9 +64,9 @@ public class LargeTrommelProcess implements Process
                                 StorageView<FluidVariant> input = inputViews.get(be.getRandom().nextInt(inputViews.size()));
                                 // Transfer
                                 FluidVariant variant = input.getResource();
-                                long extracted = input.extract(variant, 9000, inner);
+                                long extracted = input.extract(variant, TrommelRecipe.INPUT_AMOUNT, inner);
                                 long inserted = slot.insert(variant, extracted, inner);
-                                if (inserted == 9000 && slot.getAmount() == 9000)
+                                if (inserted == TrommelRecipe.INPUT_AMOUNT && slot.getAmount() == TrommelRecipe.INPUT_AMOUNT)
                                     inner.commit();
                             }
                         }

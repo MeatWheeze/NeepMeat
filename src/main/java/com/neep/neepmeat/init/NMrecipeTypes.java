@@ -49,8 +49,11 @@ public class NMrecipeTypes
     public static final RecipeSerializer<EnlighteningRecipe> ENLIGHTENING_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "enlightening", new EnlighteningRecipe.Serializer(EnlighteningRecipe::new));
     public static final RecipeType<EnlighteningRecipe> ENLIGHTENING = RecipeRegistry.registerType(NeepMeat.NAMESPACE, "enlightening");
 
-    public static final MeatRecipeSerialiser<TrommelRecipe> TROMMEL_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "trommel", new TrommelRecipe.Serializer(TrommelRecipe::new));
-    public static final MeatRecipeType<TrommelRecipe> TROMMEL = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "trommel");
+    public static final MeatRecipeSerialiser<NormalTrommelRecipe> TROMMEL_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "trommel", new NormalTrommelRecipe.Serializer(NormalTrommelRecipe::new));
+    public static final MeatRecipeType<NormalTrommelRecipe> TROMMEL = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "trommel");
+
+    public static final MeatRecipeSerialiser<FatTrommelRecipe> FAT_TROMMEL_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "fat_trommel", new FatTrommelRecipe.Serializer());
+    public static final MeatRecipeType<FatTrommelRecipe> FAT_TROMMEL = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "fat_trommel");
 
     public static final MeatRecipeSerialiser<GeneralSurgeryRecipe> SURGERY_SERIALIZER = RecipeRegistry.registerMeatlibSerializer(NeepMeat.NAMESPACE, "surgery", new GeneralSurgeryRecipe.Serializer());
     public static final MeatRecipeType<GeneralSurgeryRecipe> SURGERY = RecipeRegistry.registerMeatlibType(NeepMeat.NAMESPACE, "surgery");

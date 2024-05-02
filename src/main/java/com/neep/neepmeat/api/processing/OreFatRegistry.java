@@ -13,6 +13,7 @@ import net.minecraft.util.registry.Registry;
 import net.minecraft.tag.TagKey;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -50,26 +51,31 @@ public class OreFatRegistry
         return ENTRIES;
     }
 
+    @Nullable
     public static Entry getFromInput(Item item)
     {
         return ENTRIES.stream().filter(e -> item.getDefaultStack().isIn(e.tag)).findFirst().orElse(null);
     }
 
+    @Nullable
     public static Entry getFromOutput(Item item)
     {
         return ENTRIES.stream().filter(e -> e.result.equals(item)).findFirst().orElse(null);
     }
 
+    @Nullable
     public static Entry getFromOutput(Identifier id)
     {
         return ENTRIES.stream().filter(e -> e.result.equals(Registry.ITEM.get(id))).findFirst().orElse(null);
     }
 
+    @Nullable
     public static Entry getFromInput(Identifier id)
     {
         return getFromInput(Registry.ITEM.get(id));
     }
 
+    @Nullable
     public static Entry getFromVariant(FluidVariant variant)
     {
         if (variant.getObject() instanceof OreFatFluidFactory.Main)

@@ -8,6 +8,7 @@ import com.neep.meatlib.recipe.ingredient.RecipeInput;
 import com.neep.meatlib.recipe.ingredient.RecipeInputs;
 import com.neep.meatlib.recipe.ingredient.RecipeOutputImpl;
 import com.neep.neepmeat.init.NMrecipeTypes;
+import com.neep.neepmeat.machine.small_trommel.TrommelRecipe;
 import com.neep.neepmeat.machine.small_trommel.TrommelStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
@@ -26,14 +27,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @SuppressWarnings("UnstableApiUsage")
-public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
+public class NormalTrommelRecipe implements TrommelRecipe
 {
     protected final Identifier id;
     protected final RecipeInput<Fluid> fluidInput;
     protected final RecipeOutputImpl<Fluid> fluidOutput;
     protected final RecipeOutputImpl<Item> itemOutput;
 
-    public TrommelRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Fluid> fluidOutput, @Nullable RecipeOutputImpl<Item> itemOutput)
+    public NormalTrommelRecipe(Identifier id, RecipeInput<Fluid> fluidInput, RecipeOutputImpl<Fluid> fluidOutput, @Nullable RecipeOutputImpl<Item> itemOutput)
     {
         this.fluidInput = fluidInput;
         this.fluidOutput = fluidOutput;
@@ -128,17 +129,17 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
         return false;
     }
 
-    public static class Serializer implements MeatRecipeSerialiser<TrommelRecipe>
+    public static class Serializer implements MeatRecipeSerialiser<NormalTrommelRecipe>
     {
-        RecipeFactory<TrommelRecipe> factory;
+        RecipeFactory<NormalTrommelRecipe> factory;
 
-        public Serializer(RecipeFactory<TrommelRecipe> recipeFactory)
+        public Serializer(RecipeFactory<NormalTrommelRecipe> recipeFactory)
         {
             this.factory = recipeFactory;
         }
 
         @Override
-        public TrommelRecipe read(Identifier id, JsonObject json)
+        public NormalTrommelRecipe read(Identifier id, JsonObject json)
         {
             JsonObject fluidInputElement = JsonHelper.getObject(json, "input");
             RecipeInput<Fluid> fluidInput = RecipeInput.fromJsonRegistry(RecipeInputs.FLUID, fluidInputElement);
@@ -157,7 +158,7 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
         }
 
         @Override
-        public TrommelRecipe read(Identifier id, PacketByteBuf buf)
+        public NormalTrommelRecipe read(Identifier id, PacketByteBuf buf)
         {
             RecipeInput<Fluid> fluidInput = RecipeInput.fromBuffer(buf);
             RecipeOutputImpl<Fluid> fluidOutput = RecipeOutputImpl.fromBuffer(Registry.FLUID, buf);
@@ -167,7 +168,7 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
         }
 
         @Override
-        public void write(PacketByteBuf buf, TrommelRecipe recipe)
+        public void write(PacketByteBuf buf, NormalTrommelRecipe recipe)
         {
             recipe.fluidInput.write(buf);
             recipe.fluidOutput.write(Registry.FLUID, buf);
@@ -175,7 +176,7 @@ public class TrommelRecipe implements MeatlibRecipe<TrommelStorage>
         }
 
         @FunctionalInterface
-        public interface RecipeFactory<T extends TrommelRecipe>
+        public interface RecipeFactory<T extends NormalTrommelRecipe>
         {
             T create(Identifier id, RecipeInput<Fluid> in, RecipeOutputImpl<Fluid> out, RecipeOutputImpl<Item> itemOut);
         }
