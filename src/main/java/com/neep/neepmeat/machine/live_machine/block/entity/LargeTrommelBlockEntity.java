@@ -22,12 +22,15 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Supplier;
 
 public class LargeTrommelBlockEntity extends SyncableBlockEntity implements LivingMachineComponent, PoweredComponent
 {
     private float progressIncrement;
-    private final InputSlot inputSlot = new InputSlot(TrommelRecipe.INPUT_AMOUNT, this::sync);
+    private final InputSlot inputSlot = new InputSlot(TrommelRecipe.INPUT_AMOUNT, this::sync, this::getWorld);
 
     public LargeTrommelBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -38,12 +41,16 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
     public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
+        nbt.putFloat("progress_increment", progressIncrement);
+        inputSlot.writeNbt(nbt);
     }
 
     @Override
     public void readNbt(NbtCompound nbt)
     {
         super.readNbt(nbt);
+        this.progressIncrement = nbt.getFloat("progress_increment");
+        inputSlot.readNbt(nbt);
     }
 
     @Override
@@ -83,13 +90,16 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
 
     public static class InputSlot extends WritableSingleFluidStorage implements StorageView<FluidVariant>
     {
+        private final Supplier<World> worldGetter;
         @Nullable private TrommelRecipe recipe;
         private float progress;
-        private final float totalProgress = 30; // TODO: Hardcoded for now, the same as the small trommel.
+        public final float totalProgress = 30; // TODO: Hardcoded for now, the same as the small trommel.
+        public long recipeStartTime;
 
-        public InputSlot(long capacity, Runnable finalCallback)
+        public InputSlot(long capacity, Runnable finalCallback, Supplier<World> worldGetter)
         {
             super(capacity, finalCallback);
+            this.worldGetter = worldGetter;
         }
 
         public void tick(float progressIncrement, Storage<FluidVariant> output, Storage<ItemVariant> itemOutput, TransactionContext transaction)
@@ -115,6 +125,9 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
                 recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.TROMMEL, wrapper).orElse(null);
                 if (recipe == null)
                     recipe = MeatlibRecipes.getInstance().getFirstMatch(NMrecipeTypes.FAT_TROMMEL, wrapper).orElse(null);
+
+                if (recipe != null)
+                    recipeStartTime = worldGetter.get().getTime();
             }
         }
 
@@ -122,6 +135,7 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
         public void writeNbt(NbtCompound nbt)
         {
             super.writeNbt(nbt);
+            nbt.putLong("recipe_start_time", recipeStartTime);
             nbt.putFloat("progress", progress);
             if (recipe != null)
                 nbt.putString("recipe", recipe.getId().toString());
@@ -131,6 +145,7 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
         public NbtCompound readNbt(NbtCompound nbt)
         {
             super.readNbt(nbt);
+            this.recipeStartTime = nbt.getLong("recipe_start_time");
             this.progress = nbt.getFloat("progress");
             if (nbt.contains("recipe"))
                 this.recipe = (TrommelRecipe) MeatlibRecipes.getInstance().get(Identifier.tryParse(nbt.getString("recipe"))).orElse(null);

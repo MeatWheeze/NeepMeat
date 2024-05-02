@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.instance.LargeTrommelInstance;
 import com.neep.neepmeat.client.instance.RoboticArmInstance;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
+import com.neep.neepmeat.client.renderer.block.LargeTrommelRenderer;
 import com.neep.neepmeat.client.renderer.block.LargestHopperRenderer;
 import com.neep.neepmeat.client.renderer.entity.LimbEntityInstance;
 import com.neep.neepmeat.init.NMBlockEntities;
@@ -43,6 +44,7 @@ public class NMInstances
         InstancedRenderRegistry.configure(LivingMachines.CRUSHER_SEGMENT_BE).factory(CrusherSegmentInstance::new).apply();
 
         InstancedRenderRegistry.configure(LivingMachines.LARGE_TROMMEL_BE).factory(LargeTrommelInstance::new).apply();
+        BlockEntityRendererFactories.register(LivingMachines.LARGE_TROMMEL_BE, LargeTrommelRenderer::new);
 
         BlockEntityRendererFactories.register(LivingMachines.LARGEST_HOPPER_BE, LargestHopperRenderer::new);
 
