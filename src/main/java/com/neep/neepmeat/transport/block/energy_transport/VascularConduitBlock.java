@@ -109,8 +109,10 @@ public class VascularConduitBlock extends AbstractPipeBlock implements BlockEnti
             updatePosition(world, pos, state, VascularConduitEntity.UpdateReason.CHANGED);
         }
 
+        // Update if an acceptor has been placed or if something has been destroyed.
+        // There is no way of telling whether the update was caused by a destroyed acceptor.
         var acceptor = BloodAcceptor.SIDED.find(world, sourcePos, dir);
-        if (acceptor != null)
+        if (acceptor != null || world.getBlockState(sourcePos).isAir())
         {
             // This is executed before getStateForNeighborUpdate, so the new connection must be made manually,
             BlockState newState = addConnection(world, pos, state, dir);
