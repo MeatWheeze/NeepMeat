@@ -78,10 +78,20 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
     {
         super.onEntityCollision(state, world, pos, entity);
-        if (!world.isClient() && world.getTime() % 2 == 0 && entity instanceof ItemEntity itemEntity && world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be)
+        if (!world.isClient() && world.getTime() % 2 == 0 &&
+                entity.isOnGround() &&
+                entity instanceof ItemEntity itemEntity &&
+                world.getBlockEntity(pos) instanceof LargestHopperBlockEntity be
+        )
         {
             be.insertEntity(itemEntity);
         }
+    }
+
+    @Override
+    public void onLandedUpon(World world, BlockState state, BlockPos pos, Entity entity, float fallDistance)
+    {
+        super.onLandedUpon(world, state, pos, entity, fallDistance);
     }
 
     @Override
@@ -106,6 +116,24 @@ public class LargestHopperBlock extends BigBlock<LargestHopperBlock.StructureBlo
         {
             return NMBlockEntities.register("largest_hopper_structure", (p, s) -> new StructureBlockEntity(getBlockEntityType(), p, s), this);
         }
+
+        @Override
+        public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity)
+        {
+            super.onEntityCollision(state, world, pos, entity);
+            if (!world.isClient() && world.getTime() % 2 == 0 &&
+                    entity.isOnGround() &&
+                    entity instanceof ItemEntity itemEntity &&
+                    world.getBlockEntity(pos) instanceof StructureBlockEntity be
+            )
+            {
+                if (world.getBlockEntity(be.getControllerPos()) instanceof LargestHopperBlockEntity cbe)
+                {
+                    cbe.insertEntity(itemEntity);
+                }
+            }
+        }
+
     }
 
     static class StructureBlockEntity extends BigBlockStructureEntity
