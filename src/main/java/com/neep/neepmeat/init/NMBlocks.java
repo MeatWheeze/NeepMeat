@@ -102,6 +102,7 @@ public class NMBlocks
     public static final AbstractBlock.Settings FLUID_PIPE_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(1.1f).sounds(NMSoundGroups.METAL);
     public static final AbstractBlock.Settings VASCULAR_CONDUIT_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(1.1f).sounds(NMSoundGroups.METAL);
     public static final AbstractBlock.Settings MACHINE_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).nonOpaque().solidBlock(InventoryDetectorBlock::never);
+    public static final AbstractBlock.Settings OPAQUE_MACHINE_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(3.0f).sounds(NMSoundGroups.MECHANICAL_MACHINE).solidBlock(InventoryDetectorBlock::never);
 //    public static final AbstractBlock.Settings VAT_SETTINGS = MeatlibBlockSettings.of(Material.METAL).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final AbstractBlock.Settings FLUID_MACHINE_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(2.5f).sounds(NMSoundGroups.MECHANICAL_MACHINE);
     public static final AbstractBlock.Settings ITEM_PIPE_SETTINGS = MeatlibBlockSettings.create(Material.METAL, PICKAXE_MINEABLE).strength(1.1f).sounds(BlockSoundGroup.METAL);

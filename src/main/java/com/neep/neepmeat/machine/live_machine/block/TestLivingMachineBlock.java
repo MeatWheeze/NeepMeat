@@ -46,6 +46,16 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
     }
 
     @Override
+    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved)
+    {
+        if (world.getBlockEntity(pos) instanceof LivingMachineBlockEntity be)
+        {
+            be.onBlockRemoved();
+        }
+        super.onStateReplaced(state, world, pos, newState, moved);
+    }
+
+    @Override
     public String getRegistryName()
     {
         return name;

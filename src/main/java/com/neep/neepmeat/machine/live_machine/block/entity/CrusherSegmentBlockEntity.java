@@ -8,6 +8,7 @@ import com.neep.neepmeat.api.live_machine.LivingMachineComponent;
 import com.neep.neepmeat.api.storage.WritableStackStorage;
 import com.neep.neepmeat.init.NMrecipeTypes;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
+import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import com.neep.neepmeat.recipe.GrindingRecipe;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
@@ -24,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements LivingMachineComponent
+public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements LivingMachineComponent, PoweredComponent
 {
     private final InputSlot slot = new InputSlot(this::sync);
     private float progressIncrement;
@@ -75,11 +76,13 @@ public class CrusherSegmentBlockEntity extends SyncableBlockEntity implements Li
         return slot;
     }
 
+    @Override
     public float progressIncrement()
     {
         return progressIncrement;
     }
 
+    @Override
     public void setProgressIncrement(float progressIncrement)
     {
         if (progressIncrement != this.progressIncrement)

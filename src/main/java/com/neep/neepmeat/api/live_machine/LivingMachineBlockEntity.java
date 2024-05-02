@@ -10,6 +10,7 @@ import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
 import com.neep.neepmeat.machine.live_machine.Processes;
 import com.neep.neepmeat.machine.live_machine.block.entity.CrusherSegmentBlockEntity;
 import com.neep.neepmeat.machine.live_machine.block.entity.MotorPortBlockEntity;
+import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
@@ -161,9 +162,9 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
                 }
                 else
                 {
-                    if (component instanceof CrusherSegmentBlockEntity be)
+                    if (component instanceof PoweredComponent powered)
                     {
-                        be.setProgressIncrement(getProgressIncrement());
+                        powered.setProgressIncrement(getProgressIncrement());
                     }
                 }
             }
@@ -264,9 +265,13 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             currentComponents.clear(i);
             var component = componentMap[i];
             if (component == null)
+            {
                 NeepMeat.LOGGER.error("Something has gone horribly wrong");
+            }
             else
+            {
                 componentMap[i].clear();
+            }
 
             ++i;
         }
@@ -373,5 +378,33 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public double getRulHours()
     {
         return degradationManager.estimateRul() / (20 * 3600.0);
+    }
+
+    public void onBlockRemoved()
+    {
+        // Remove all components and set their power to 0.
+        int i = currentComponents.nextSetBit(0);
+        while (i != -1 && i <currentComponents.length())
+        {
+            i = currentComponents.nextSetBit(i);
+
+            currentComponents.clear(i);
+            var component = componentMap[i];
+            if (component == null)
+            {
+                NeepMeat.LOGGER.error("Something has gone horribly wrong");
+            }
+            else
+            {
+                componentMap[i].forEach(c ->
+                {
+                    if (c instanceof PoweredComponent poweredComponent)
+                        poweredComponent.setProgressIncrement(0);
+                });
+                componentMap[i].clear();
+            }
+
+            ++i;
+        }
     }
 }
