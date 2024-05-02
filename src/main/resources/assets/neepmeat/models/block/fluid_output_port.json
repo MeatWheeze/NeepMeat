@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "front": "neepmeat:block/living_machine/fluid_output",
+    "side": "neepmeat:block/machine_block",
+    "top": "neepmeat:block/machine_block"
+  }
+}
