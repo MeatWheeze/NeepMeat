@@ -3,6 +3,7 @@ package com.neep.neepmeat.transport.block.fluid_transport;
 import com.neep.meatlib.block.BaseFacingBlock;
 import com.neep.meatlib.item.ItemSettings;
 import com.neep.neepmeat.init.NMBlockEntities;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.item.FluidComponentItem;
 import com.neep.neepmeat.transport.machine.fluid.PumpBlockEntity;
 import com.neep.neepmeat.transport.machine.fluid.TankBlockEntity;
@@ -17,6 +18,9 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -28,8 +32,12 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
 {
+    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+
     public PumpBlock(String itemName, ItemSettings itemSettings, Settings settings)
     {
         super(itemName, itemSettings.factory(FluidComponentItem::new), settings.nonOpaque());
@@ -48,7 +56,7 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
         if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
         {
             boolean powered = world.isReceivingRedstonePower(pos);
-            be.setActive(powered);
+            be.updatePowered(powered);
             be.updateCache();
 //            world.updateNeighbors(pos, this);
         }
@@ -58,9 +66,10 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
     public void onBlockAdded(BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify)
     {
         super.onBlockAdded(state, world, pos, oldState, notify);
-        if (world.getBlockEntity(pos) instanceof PumpBlockEntity be)
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof PumpBlockEntity be)
         {
             be.updateCache();
+            be.updatePowered(world.isReceivingRedstonePower(pos));
         }
     }
 
@@ -83,37 +92,26 @@ public class PumpBlock extends BaseFacingBlock implements BlockEntityProvider
         if (ItemUtil.playerHoldingPipe(player, hand))
             return ActionResult.PASS;
 
-        PumpBlockEntity be = (PumpBlockEntity) world.getBlockEntity(pos);
-        if (!world.isClient)
+        if (!world.isClient() && world.getBlockEntity(pos) instanceof PumpBlockEntity be)
         {
-            if (!player.isSneaking())
+            if (player.isSneaking())
             {
+                be.changeMode();
+                world.playSound(null, pos, NMSounds.CLICK, SoundCategory.BLOCKS, 1, 1);
             }
             else
             {
-//                System.out.println("All ticking fluid networks:");
-//                for (PipeNetwork network : PipeNetwork.LOADED_NETWORKS)
-//                {
-////                    System.out.println(network.connectedNodes);
-//                    System.out.print("\n" + network.getUUID() + " nodes: ");
-////                    if (network instanceof PipeNetworkImpl1 impl1)
-////                    {
-////                        for (Supplier<FluidNode> supplier : impl1.getNodes())
-////                        {
-////                            System.out.print(supplier.get());
-////                        }
-////                    }
-//                    if (network instanceof PipeNetworkImpl impl2)
-//                    {
-//                        System.out.print("\n");
-//                        impl2.getGraph().getVertices().forEach((k, v) -> System.out.print(BlockPos.fromLong(k) + ": " + v.toString() + "\n"));
-//                    }
-//                    System.out.print("\n");
-//                }
+                TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
             }
-            TankBlockEntity.showContents((ServerPlayerEntity) player, world, pos, be.getBuffer(null));
         }
         return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder)
+    {
+        super.appendProperties(builder);
+        builder.add(ACTIVE);
     }
 
     @Override

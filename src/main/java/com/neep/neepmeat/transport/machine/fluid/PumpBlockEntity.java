@@ -36,6 +36,8 @@ public class PumpBlockEntity extends SyncableBlockEntity
     protected FluidPump frontPump = FluidPump.of(-0.5f, () -> frontMode, true);
     protected FluidPump backPump = FluidPump.of(0.5f, () -> backMode, true);
 
+    protected boolean activeWithoutRedstone = false;
+
     public PumpBlockEntity(BlockPos pos, BlockState state)
     {
         super(NMBlockEntities.PUMP, pos, state);
@@ -55,17 +57,30 @@ public class PumpBlockEntity extends SyncableBlockEntity
         super.setWorld(world);
     }
 
-    public void setActive(boolean active)
+    public boolean isActive()
     {
-        if (!active)
-        {
-            frontMode = AcceptorModes.NONE;
-            backMode = AcceptorModes.NONE;
-        }
-        else
+        return getCachedState().get(PumpBlock.ACTIVE);
+    }
+
+    public void updatePowered(boolean powered)
+    {
+        boolean active = powered != activeWithoutRedstone;
+        updateActive(active);
+    }
+
+    private void updateActive(boolean active)
+    {
+        world.setBlockState(pos, getCachedState().with(PumpBlock.ACTIVE, active));
+
+        if (active)
         {
             frontMode = AcceptorModes.PUSH;
             backMode = AcceptorModes.PULL;
+        }
+        else
+        {
+            frontMode = AcceptorModes.NONE;
+            backMode = AcceptorModes.NONE;
         }
 
         this.markDirty();
@@ -80,6 +95,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
         tag.putInt(BACK_MODE, backMode.getId());
         tag.putBoolean("hasFrontStorage", hasFrontStorage);
         tag.putBoolean("hasRearStorage", hasRearStorage);
+        tag.putBoolean("activeWithoutRedstone", activeWithoutRedstone);
     }
 
     @Override
@@ -91,6 +107,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
         this.backMode = AcceptorModes.byId(tag.getInt(BACK_MODE));
         this.hasFrontStorage = tag.getBoolean("hasFrontStorage");
         this.hasRearStorage = tag.getBoolean("hasRearStorage");
+        this.activeWithoutRedstone = tag.getBoolean("activeWithoutRedstone");
     }
 
     @Nullable
@@ -133,6 +150,7 @@ public class PumpBlockEntity extends SyncableBlockEntity
     }
 
     // I resent making pumps ticked, it undermines the whole point of ticking fluid networks.
+    // [2024] Not anymore! Now EVERYTHING is ticking. EVERY BLOCK IS TICKED NOW. NO MORE OPTIMISATION! I JUST WANT THINGS TO WORK!
     public void tick()
     {
         Direction facing = getCachedState().get(PumpBlock.FACING);
@@ -156,5 +174,12 @@ public class PumpBlockEntity extends SyncableBlockEntity
                 long tr2 = StorageUtil.move(buffer, frontStorage, v -> true, transfer, null);
             }
         }
+    }
+
+    public void changeMode()
+    {
+        activeWithoutRedstone = !activeWithoutRedstone;
+        updatePowered(getWorld().isReceivingRedstonePower(pos));
+        markDirty();
     }
 }
