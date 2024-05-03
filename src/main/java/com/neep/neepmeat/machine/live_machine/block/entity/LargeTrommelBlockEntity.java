@@ -85,7 +85,11 @@ public class LargeTrommelBlockEntity extends SyncableBlockEntity implements Livi
     @Override
     public void setProgressIncrement(float progressIncrement)
     {
-        this.progressIncrement = progressIncrement;
+        if (progressIncrement != this.progressIncrement)
+        {
+            this.progressIncrement = progressIncrement;
+            sync();
+        }
     }
 
     public static class InputSlot extends WritableSingleFluidStorage implements StorageView<FluidVariant>

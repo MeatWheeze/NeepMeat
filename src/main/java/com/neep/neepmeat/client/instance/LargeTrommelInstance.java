@@ -9,12 +9,15 @@ import com.jozufozu.flywheel.util.AnimationTickHolder;
 import com.neep.neepmeat.client.NMExtraModels;
 import com.neep.neepmeat.machine.live_machine.block.LargeTrommelBlock;
 import com.neep.neepmeat.machine.live_machine.block.entity.LargeTrommelBlockEntity;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 
 public class LargeTrommelInstance extends BlockEntityInstance<LargeTrommelBlockEntity> implements DynamicInstance
 {
     private final ModelData mesh;
+    private float rotSpeedRadians;
+    private float rotation;
 
     public LargeTrommelInstance(MaterialManager materialManager, LargeTrommelBlockEntity blockEntity)
     {
@@ -25,11 +28,17 @@ public class LargeTrommelInstance extends BlockEntityInstance<LargeTrommelBlockE
     @Override
     public void beginFrame()
     {
-        float rot = blockEntity.getCachedState().get(LargeTrommelBlock.FACING).asRotation()+ 180;
+        if (!MinecraftClient.getInstance().isPaused())
+        {
+            rotSpeedRadians = MathHelper.lerp(0.1f, rotSpeedRadians, blockEntity.progressIncrement() * 0.1f);
+            rotation += rotSpeedRadians;
+        }
+
+        float rot = blockEntity.getCachedState().get(LargeTrommelBlock.FACING).asRotation() + 180;
         mesh.loadIdentity().translate(getInstancePosition())
                 .rotateCentered(Direction.DOWN, rot * MathHelper.PI / 180)
                 .translate(1, 1, 0)
-                .rotate(Direction.NORTH, (world.getTime() + AnimationTickHolder.getPartialTicks()) / 10)
+                .rotate(Direction.NORTH, rotation)
                 .translate(-1, -1, 0)
         ;
     }
