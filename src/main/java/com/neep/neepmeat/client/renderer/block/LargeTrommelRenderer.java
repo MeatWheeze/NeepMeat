@@ -33,16 +33,10 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
     @Override
     public void render(LargeTrommelBlockEntity be, float tickDelta, MatrixStack matrices, VertexConsumerProvider vcp, int light, int overlay)
     {
-//        double progressTicks = (be.getStorage().recipeStartTime + (long) (be.getStorage().totalProgress / be.progressIncrement())) - be.getWorld().getTime() - tickDelta;
-
-
         FluidVariant fluidVariant = be.getStorage().variant;
-//        fluidVariant = FluidVariant.of(Fluids.LAVA);
         Direction facing = be.getCachedState().get(LargeTrommelBlock.FACING);
         if (!fluidVariant.isBlank() && be.progressIncrement() > 0)
         {
-            long diff = be.getWorld().getTime() - be.getStorage().recipeStartTime;
-            float total = be.getStorage().totalProgress / be.progressIncrement();
             float progress = (be.getWorld().getTime() - be.getStorage().recipeStartTime) / (be.getStorage().totalProgress / be.progressIncrement());
 
             matrices.translate(0.5, 0.5, 0.5);
@@ -72,8 +66,6 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
             return;
         }
 
-        MatrixStack.Entry entry = matrices.peek();
-
         Renderer renderer = RendererAccess.INSTANCE.getRenderer();
 
         float u0 = sprite.getMinU();
@@ -92,10 +84,12 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
         float x2 = -0.4f;
         float x3 = 1.4f;
 
+        // Needs three sections to cover the entire length without stretching the texture.
         for (int i = 0; i < 3; ++i)
         {
             float z = i;
 
+            // Top face
             emitter.pos(0, new Vector3f(x1, y1, z + 0)).uv(0, u1, v0);
             emitter.pos(1, new Vector3f(x0, y1, z + 0)).uv(1, u0, v0);
             emitter.pos(2, new Vector3f(x0, y1, z + 1)).uv(2, u0, v1);
@@ -104,6 +98,7 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
 
+            // Right face (looking from the trommel's controller block)
             emitter.pos(0, new Vector3f(x0, y1, z + 0)).uv(0, u1, v0);
             emitter.pos(1, new Vector3f(x2, y0, z + 0)).uv(1, u0, v0);
             emitter.pos(2, new Vector3f(x2, y0, z + 1)).uv(2, u0, v1);
@@ -112,71 +107,14 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
 
+            // Left face
             emitter.pos(1, new Vector3f(x1, y1, z + 0)).uv(1, u1, v0);
             emitter.pos(0, new Vector3f(x3, y0, z + 0)).uv(0, u0, v0);
             emitter.pos(3, new Vector3f(x3, y0, z + 1)).uv(3, u0, v1);
             emitter.pos(2, new Vector3f(x1, y1, z + 1)).uv(2, u1, v1);
-
             quad = emitter.toBakedQuad(sprite);
             consumer.quad(matrices.peek(), quad, cr, cg, cb, light, OverlayTexture.DEFAULT_UV);
             emitter.emit();
         }
     }
-
-//    public static void renderFluidColumn(VertexConsumerProvider vcp, MatrixStack matrices, FluidVariant fluid, float scaleY, int light)
-//    {
-//        Sprite sprite = FluidVariantRendering.getSprite(fluid);
-//        if (sprite == null)
-//            return;
-//
-//        VertexConsumer consumer = vcp.getBuffer(RenderLayers.getEntityBlockLayer(Blocks.BLACK_STAINED_GLASS.getDefaultState(), false));
-//
-//        int col = FluidVariantRendering.getColor(fluid);
-//
-//        float cr = ((col >> 16) & 255) / 256f;
-//        float cg = ((col >> 8) & 255) / 256f;
-//        float cb = (col & 255) / 256f;
-//
-//        if (fluid.isBlank() || scaleY == 0)
-//        {
-//            return;
-//        }
-//
-//        float radius = 0.75f;
-//
-//        float u0, u1, v0, v1;
-//        float k = 0;
-//
-//        float things = 2;
-//
-//        MatrixStack.Entry entry = matrices.peek();
-//        Matrix4f position = entry.getPositionMatrix();
-//        Matrix3f normal = entry.getNormalMatrix();
-//
-//        float g = 1;
-//
-//        float l = radius;
-//        for (int seg = 1; seg <= 8; ++seg)
-//        {
-//            float o = MathHelper.sin(seg * 6.2831855F / 8.0F) * radius;
-//            float p = MathHelper.cos(seg * 6.2831855F / 8.0F) * radius;
-//
-//            u0 = sprite.getMinU();
-//            u1 = sprite.getMaxU();
-//            v0 = sprite.getMinV();
-//            v1 = sprite.getMaxV();
-//
-//            consumer.vertex(position, k, l, 0.0F).color(255, 255, 255, 255)
-//                    .texture(u0, v0).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal, 0.0F, 1.0F, 0.0F).next();
-//            consumer.vertex(position, k, l, g).color(255, 255, 255, 255)
-//                    .texture(u0, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal, 0.0F, 1.0F, 0.0F).next();
-//            consumer.vertex(position, o, p, g).color(255, 255, 255, 255)
-//                    .texture(u1, v1).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal, 0.0F, 1.0F, 0.0F).next();
-//            consumer.vertex(position, o, p, 0.0F).color(255, 255, 255, 255)
-//                    .texture(u1, v0).overlay(OverlayTexture.DEFAULT_UV).light(light).normal(normal, 0.0F, 1.0F, 0.0F).next();
-//
-//            k = o;
-//            l = p;
-//        }
-//    }
 }
