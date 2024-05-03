@@ -3,6 +3,6 @@
   "textures": {
     "front": "neepmeat:block/living_machine/integration_port",
     "side": "neepmeat:block/living_machine/base_machine_block",
-    "top": "neepmeat:block/living_machine/base_machine_block"
+    "top": "neepmeat:block/living_machine/base_machine_block_top"
   }
 }

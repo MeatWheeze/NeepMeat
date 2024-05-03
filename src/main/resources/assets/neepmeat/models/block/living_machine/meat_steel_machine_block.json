@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "neepmeat:block/living_machine/meat_steel_machine_block"
+  }
+}

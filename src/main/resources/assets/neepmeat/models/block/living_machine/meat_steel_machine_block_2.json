@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "neepmeat:block/living_machine/meat_steel_machine_block",
+    "bottom": "neepmeat:block/living_machine/meat_steel_machine_block",
+    "side": "neepmeat:block/living_machine/meat_steel_machine_block_2"
+  }
+}
