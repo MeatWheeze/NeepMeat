@@ -213,5 +213,10 @@
   "scalpel_hit": { "subtitle": "subtitles.neepmeat.scalpel.hit",
     "sounds": [
       "neepmeat:scalpel_hit"
+    ]},
+
+  "wrench_click": { "subtitle": "subtitles.neepmeat.wrench.click",
+    "sounds": [
+      "neepmeat:wrench_click"
     ]}
 }

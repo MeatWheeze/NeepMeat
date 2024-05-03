@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 import com.neep.meatlib.block.BaseBlock;
 import com.neep.meatlib.item.ItemSettings;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
 import com.neep.neepmeat.transport.fluid_network.PipeProperties;
 import com.neep.neepmeat.util.NMMaths;
@@ -14,6 +15,9 @@ import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -191,6 +195,7 @@ public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggab
             boolean connected = state.get(DIR_TO_CONNECTION.get(changeDirection)) == PipeConnectionType.SIDE;
             BlockState newState = state.with(DIR_TO_CONNECTION.get(changeDirection), connected ? PipeConnectionType.FORCED : PipeConnectionType.SIDE);
             world.setBlockState(pos, newState);
+            world.playSound(null, pos, connectionChangeSound(world, state, pos), SoundCategory.BLOCKS, 1, 1);
             onConnectionUpdate(world, state, newState, pos, player);
 
             return ActionResult.SUCCESS;
@@ -242,6 +247,11 @@ public abstract class AbstractPipeBlock extends BaseBlock implements Waterloggab
     public void onConnectionUpdate(World world, BlockState state, BlockState newState, BlockPos pos, PlayerEntity entity)
     {
 
+    }
+
+    public SoundEvent connectionChangeSound(World world, BlockState state, BlockPos pos)
+    {
+        return NMSounds.WRENCH_CLICK;
     }
 
     @Override
