@@ -1,7 +1,6 @@
 package com.neep.neepmeat.machine.fluid_rationer;
 
 import com.neep.meatlib.blockentity.SyncableBlockEntity;
-import com.neep.meatlib.storage.MeatlibStorageUtil;
 import com.neep.neepmeat.api.FluidPump;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.init.NMBlocks;
@@ -13,7 +12,7 @@ import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.StorageUtil;
+import net.fabricmc.fabric.api.transfer.v1.storage.StorageView;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
@@ -35,11 +34,9 @@ import org.jetbrains.annotations.Nullable;
 public class FluidRationerBlockEntity extends SyncableBlockEntity implements ExtendedScreenHandlerFactory
 {
     protected final FluidRationerStorage outputStorage;
-    protected final FluidPump outPump = FluidPump.of(-0.1f, this::getOutMode, true);
-
     protected AcceptorModes inMode = AcceptorModes.PULL;
     protected AcceptorModes outMode = AcceptorModes.EXTRACT_ONLY;
-
+    protected final FluidPump outPump = FluidPump.of(-0.1f, this::getOutMode, true);
     protected State state;
 
     protected BlockApiCache<Storage<FluidVariant>, Direction> cache;
@@ -52,10 +49,10 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
         public int get(int index)
         {
             return switch (index)
-                    {
-                        case 0 -> targetAmount;
-                        default -> 0;
-                    };
+            {
+                case 0 -> targetAmount;
+                default -> 0;
+            };
         }
 
         @Override
@@ -94,9 +91,11 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
 
     protected void tickInput()
     {
-        if (cache == null) updateCache();
+        if (cache == null)
+            updateCache();
 
-        if (cache == null) return;
+        if (cache == null)  // Not sure why this might happen, but who knows.
+            return;
 
         if (state == State.IDLE && world.getTime() % 2 == 0)
         {
@@ -105,18 +104,27 @@ public class FluidRationerBlockEntity extends SyncableBlockEntity implements Ext
                 Direction back = getCachedState().get(FluidRationerBlock.FACING).getOpposite();
                 Storage<FluidVariant> storage = cache.find(back);
 
-                // Find a fluid in the connected tank with an amount that matches the target
-                FluidVariant variant = MeatlibStorageUtil.findExtractableResource(storage, (t, v, a) -> a >= targetAmount, transaction);
-                if (variant != null)
+                if (storage == null)
+                    return;
+
+                for (StorageView<FluidVariant> view : storage)
                 {
-                    if (StorageUtil.move(storage, outputStorage, this.outputStorage::matchesFilter, targetAmount, transaction) == targetAmount)
+                    FluidVariant variant = view.getResource();
+                    if (!view.isResourceBlank() && view.getAmount() >= targetAmount && outputStorage.matchesFilter(variant))
                     {
-                        state = State.PUSHING;
-                        inMode = AcceptorModes.NONE;
-                        outMode = AcceptorModes.PUSH;
-                        transaction.commit();
+                        long extracted = view.extract(variant, targetAmount, transaction);
+                        if (extracted == targetAmount)
+                        {
+                            if (outputStorage.insert(variant, targetAmount, transaction) == targetAmount)
+                            {
+                                state = State.PUSHING;
+                                inMode = AcceptorModes.NONE;
+                                outMode = AcceptorModes.PUSH;
+                                transaction.commit();
+                                break;
+                            }
+                        }
                     }
-                    else transaction.abort();
                 }
             }
         }
