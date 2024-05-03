@@ -20,6 +20,8 @@ import net.fabricmc.fabric.api.transfer.v1.transaction.base.SnapshotParticipant;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.world.World;
@@ -51,7 +53,11 @@ public class PipetteItem extends BaseItem
                 try (Transaction transaction = Transaction.openOuter())
                 {
                     FluidVariant resource = StorageUtil.findExtractableResource(itemStorage, transaction);
-                    if (resource != null && !resource.isBlank()) itemStorage.extract(resource, Long.MAX_VALUE, transaction);
+                    if (resource != null && !resource.isBlank())
+                    {
+                        itemStorage.extract(resource, Long.MAX_VALUE, transaction);
+                        world.playSound(null, context.getBlockPos(), SoundEvents.ENTITY_PLAYER_SPLASH_HIGH_SPEED, SoundCategory.PLAYERS, 0.2f, 1);
+                    }
                     transaction.commit();
                 }
             }
@@ -60,11 +66,13 @@ public class PipetteItem extends BaseItem
                 // Transfer to or from block
                 if (StorageUtil.move(blockStorage, itemStorage, variant -> true, Long.MAX_VALUE, null) > 0)
                 {
+                    world.playSound(null, context.getBlockPos(), SoundEvents.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 0.2f, 1);
                     return ActionResult.SUCCESS;
                 }
 
                 if (StorageUtil.move(itemStorage, blockStorage, variant -> true, Long.MAX_VALUE, null) > 0)
                 {
+                    world.playSound(null, context.getBlockPos(), SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 0.2f, 1);
                     return ActionResult.SUCCESS;
                 }
             }
