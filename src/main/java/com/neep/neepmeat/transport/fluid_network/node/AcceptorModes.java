@@ -57,9 +57,9 @@ public enum AcceptorModes
         return flow < 0 ? PUSH : flow > 0 ? PULL : INSERT_EXTRACT;
     }
 
-    AcceptorModes(int id, float pressure)
+    AcceptorModes(int id, float flow)
     {
-        this.flow = pressure;
+        this.flow = flow;
         this.id = id;
     }
 

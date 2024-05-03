@@ -212,7 +212,7 @@ public class FluidNode implements PipeFlowComponent
         if (!hasPump || !getPump().getMode().isDriving())
             return pressureHeight;
 
-        return getPump().getMode() == AcceptorModes.PUSH ? 15 : -15;
+        return getPump().getMode() == AcceptorModes.PUSH ? 20 : -20;
     }
 
     @Override

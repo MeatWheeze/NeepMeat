@@ -6,6 +6,7 @@ import com.neep.neepmeat.transport.FluidTransport;
 import com.neep.neepmeat.transport.api.pipe.AbstractPipeBlock;
 import com.neep.neepmeat.transport.api.pipe.FluidPipe;
 import com.neep.neepmeat.transport.fluid_network.PipeConnectionType;
+import com.neep.neepmeat.transport.fluid_network.node.BlockPipeVertex;
 import com.neep.neepmeat.transport.machine.fluid.FluidPipeBlockEntity;
 import com.neep.neepmeat.util.MiscUtil;
 import net.fabricmc.api.EnvType;
@@ -29,6 +30,7 @@ import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -177,13 +179,14 @@ public class FluidPipeBlock extends AbstractPipeBlock implements BlockEntityProv
         {
             if (!world.isClient() && world.getBlockEntity(pos) instanceof FluidPipeBlockEntity<?> be)
             {
-//                if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
-//                {
+                if (be.getPipeVertex() instanceof BlockPipeVertex vertex && !vertex.canSimplify())
+                {
+                    player.sendMessage(Text.of("Amount: " + vertex.getAmount() + ", Pump height: " + vertex.getPumpHeight() + ", Total height: " + vertex.getTotalHeight()));
 //                    System.out.println(vertex.getAmount());
 //                    System.out.println(vertex.getVariant());
 //                    System.out.println(vertex.getPumpHeight());
 //                    System.out.println(vertex.getTotalHeight());
-//                }
+                }
 
 //                Collection<FluidNode> nodes = FluidNodeManager.getInstance(world).getNodes(pos);
 //                FluidNode node = nodes.iterator().next();
