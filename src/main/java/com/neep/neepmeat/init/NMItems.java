@@ -79,7 +79,7 @@ public class NMItems
 
     public static Item PIPETTE = ItemRegistry.queue(new PipetteItem("pipette", TooltipSupplier.hidden(3), new MeatlibItemSettings().group(NMItemGroups.GENERAL).maxCount(1)));
 
-    public static Item PINKDRINK = new BaseCraftingItem("pinkdrink", 1, new MeatlibItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
+    public static Item PINKDRINK = new PinkdrinkItem("pinkdrink", 1, new MeatlibItemSettings().group(NMItemGroups.FOOD).food(NMFoodComponents.PINKDRINK));
 
     public static Item CAN = new BaseCraftingItem("can", 0, new MeatlibItemSettings().group(NMItemGroups.FOOD));
     public static Item CARTON = new BaseCraftingItem("carton", 0, new MeatlibItemSettings().group(NMItemGroups.FOOD));
