@@ -78,7 +78,7 @@ public class LargeTrommelRenderer implements BlockEntityRenderer<LargeTrommelBlo
         QuadEmitter emitter = builder.getEmitter();
 
         float y0 = 0.7f;
-        float y1 = 0.7f + 0.5f * level;
+        float y1 = 0.5f + 0.7f * level;
         float x0 = -0.2f;
         float x1 = 1.2f;
         float x2 = -0.4f;

@@ -19,6 +19,7 @@ import com.neep.neepmeat.client.renderer.*;
 import com.neep.neepmeat.client.renderer.block.AdvancedIntegratorRenderer;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
+import com.neep.neepmeat.client.screen.living_machine.ItemOutputScreen;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;
@@ -245,6 +246,9 @@ public class NeepMeatClient implements ClientModInitializer
         HandledScreens.register(ScreenHandlerInit.FLUID_RATIONER, FluidRationerScreen::new);
         HandledScreens.register(ScreenHandlerInit.SEPARATOR, SeparatorScreen::new);
         HandledScreens.register(ScreenHandlerInit.UPGRADE_MANAGER, UpgradeManagerScreen::new);
+
+        HandledScreens.register(ScreenHandlerInit.ITEM_OUTPUT, ItemOutputScreen::new);
+
         HandledScreens.register(ScreenHandlerInit.PLC, PLCProgramScreen::new);
     }
 

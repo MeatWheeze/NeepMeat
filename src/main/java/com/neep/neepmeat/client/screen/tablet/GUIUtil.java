@@ -1,19 +1,54 @@
 package com.neep.neepmeat.client.screen.tablet;
 
+import com.neep.neepmeat.NeepMeat;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class GUIUtil
+public interface GUIUtil
 {
-    public static void renderBorder(MatrixStack matrices, int x, int y, int dx, int dy, int col, int offset)
+    Identifier INVENTORY_BACKGROUND = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
+
+    static void renderBorder(MatrixStack context, int x, int y, int dx, int dy, int col, int offset)
     {
-        drawHorizontalLine1(matrices, x - offset, x + dx + offset, y - offset, col);
-        drawVerticalLine1(matrices, x - offset, y - offset, y + dy + offset, col);
-        drawHorizontalLine1(matrices, x - offset, x + dx + offset, y + dy + offset, col);
-        drawVerticalLine1(matrices, x + dx + offset, y - offset, y + dy + offset, col);
+        drawHorizontalLine1(context, x - offset, x + dx + offset, y - offset, col);
+        drawVerticalLine1(context, x - offset, y - offset, y + dy + offset, col);
+        drawHorizontalLine1(context, x - offset, x + dx + offset, y + dy + offset, col);
+        drawVerticalLine1(context, x + dx + offset, y - offset, y + dy + offset, col);
     }
 
-    public static void drawHorizontalLine1(MatrixStack matrices, int x1, int x2, int y, int color)
+    static void drawCenteredText(MatrixStack context, TextRenderer textRenderer, Text text, float centerX, float y, int color, boolean shadow)
+    {
+//        OrderedText orderedText = text.asOrderedText();
+        drawText(context, textRenderer, text, centerX - textRenderer.getWidth(text) / 2f, y, color, shadow);
+    }
+
+
+    static int drawText(MatrixStack context, TextRenderer textRenderer, Text text, float x, float y, int color, boolean shadow)
+    {
+        int i = textRenderer.draw( text, x, y, color, shadow, context.getMatrices().peek().getPositionMatrix(), context.getVertexConsumers(),
+                TextRenderer.TextLayerType.NORMAL, 0, 15728880 );
+        return i;
+    }
+
+    static int drawText(MatrixStack context, TextRenderer textRenderer, OrderedText text, float x, float y, int color, boolean shadow)
+    {
+        int i = textRenderer.draw( text, x, y, color, shadow, context.peek().getPositionMatrix(), context.getVertexConsumers(),
+                TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+        return i;
+    }
+
+    static int drawText(MatrixStack context, TextRenderer textRenderer, String text, float x, float y, int color, boolean shadow)
+    {
+        int i = textRenderer.draw( text, x, y, color, shadow, context.peek().getPositionMatrix(), context.getVertexConsumers(),
+                TextRenderer.TextLayerType.NORMAL, 0, 15728880);
+        return i;
+    }
+
+    static void drawHorizontalLine1(MatrixStack matrices, int x1, int x2, int y, int color)
     {
         if (x2 < x1)
         {
@@ -33,5 +68,10 @@ public class GUIUtil
             y2 = i;
         }
         DrawableHelper.fill(matrices, x, y1 + 1, x + 1, y2, color);
+    }
+
+    static void drawInventoryBackground(MatrixStack context, int x, int y)
+    {
+        DrawableHelper.drawTexture(context, x, y, 0, 0, 176, 90, INVENTORY_BACKGROUND);
     }
 }
