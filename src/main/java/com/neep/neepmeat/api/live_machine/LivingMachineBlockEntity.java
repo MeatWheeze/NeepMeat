@@ -365,7 +365,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         }
 
         if (power > getRatedPower())
-            rate += (rateMultiplier * (0.00002f * power / getRatedPower()));
+            rate += (rateMultiplier * (0.000007f * power / getRatedPower()));
         else
             rate += (rateMultiplier * (0.000005f));
 

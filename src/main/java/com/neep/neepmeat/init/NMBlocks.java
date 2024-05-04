@@ -117,7 +117,7 @@ public class NMBlocks
 
     public static PaintedBlockManager<?> SMOOTH_TILE = new PaintedBlockManager<>("smooth_tile", SmoothTileBlock::new ,MeatlibBlockSettings.create(Material.STONE).hardness(3.0f));
 
-    public static Block TEST_LIVING_MACHINE = BlockRegistry.queueWithItem(new TestLivingMachineBlock("test_living_machine", FabricBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
+    public static Block TEST_LIVING_MACHINE = BlockRegistry.queueWithItem(new TestLivingMachineBlock("test_living_machine", MeatlibBlockSettings.copyOf(MACHINE_SETTINGS)), ItemSettings.block());
 
     public static Block POLISHED_IRON_BRICKS = new BaseBuildingBlock("polished_metal_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
     public static Block POLISHED_MERAL_SMALL_BRICKS = new BaseBuildingBlock("polished_metal_small_bricks", true, MeatlibBlockSettings.create(Material.METAL).strength(3.0f).sounds(NMSoundGroups.METAL));
