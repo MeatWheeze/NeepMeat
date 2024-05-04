@@ -2,6 +2,7 @@ package com.neep.neepmeat.transport.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.NMTextField;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.block.energy_transport.entity.VSCBlockEntity;
 import com.neep.neepmeat.transport.screen_handler.VSCScreenHandler;
@@ -20,8 +21,6 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
     private final Identifier TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/vsc.png");
     private static final Text TOOLTIP = Text.translatable("screen." + NeepMeat.NAMESPACE + ".vsc.text.power");
 
-    private TextField textField;
-
     public VSCScreen(VSCScreenHandler handler, PlayerInventory inventory, Text title)
     {
         super(handler, inventory, title);
@@ -35,7 +34,7 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
 
         super.init();
 
-        textField = new TextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""))
+        NMTextField textField = new NMTextField(this.textRenderer, x + 6, y + 7, 3 * 18, 17, Text.of(""))
         {
             @Override
             public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
@@ -44,14 +43,21 @@ public class VSCScreen extends HandledScreen<VSCScreenHandler>
                 if (isMouseOver(mouseX, mouseY))
                     VSCScreen.this.renderTooltip(matrices, TOOLTIP, mouseX, mouseY);
             }
-        };
+        }.drawFancyBackground(false);
         textField.setText(Integer.toString(handler.getProperty(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal())));
         textField.setDrawsBackground(false);
 
         textField.setChangedListener(s ->
         {
-            int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
-            ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), parsed));
+            try
+            {
+                int parsed = !s.isEmpty() && s.matches("[0-9]*") ? Integer.parseInt(s) : 0;
+                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), parsed));
+            }
+            catch (NumberFormatException e)
+            {
+                ClientPlayNetworking.send(ScreenPropertyC2SPacket.ID, ScreenPropertyC2SPacket.Client.create(VSCBlockEntity.VSCDelegate.Names.POWER_FLOW_EJ.ordinal(), 0));
+            }
         });
         this.addDrawableChild(textField);
     }

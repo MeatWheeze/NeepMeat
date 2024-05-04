@@ -2,6 +2,9 @@ package com.neep.neepmeat.transport.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.client.screen.NMTextField;
+import com.neep.neepmeat.client.screen.button.NMButtonWidget;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.network.ScreenPropertyC2SPacket;
 import com.neep.neepmeat.transport.screen_handler.LimiterValveScreenHandler;
 import net.fabricmc.api.EnvType;
@@ -36,7 +39,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
     protected static final Text MB_MODE = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.mb");
     protected static final MutableText MB_MODE_INFO = Text.translatable("screen." + NeepMeat.NAMESPACE + ".limiter_valve.text.mb_info").formatted(Formatting.GRAY);
 
-    protected TextField textField;
+    protected NMTextField textField;
 
     public LimiterValveScreen(LimiterValveScreenHandler handler, PlayerInventory inventory, Text title)
     {
@@ -61,7 +64,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         int buttonY = y + (backgroundHeight - buttonHeight) / 2;
         int textFieldX = buttonX + buttonWidth + spacer;
 
-        textField = new TextField(this.textRenderer, textFieldX, buttonY, textFieldWidth, buttonHeight, Text.of(""))
+        textField = new NMTextField(this.textRenderer, textFieldX, buttonY, textFieldWidth, buttonHeight, Text.of(""))
         {
             @Override
             public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
@@ -69,6 +72,12 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
                 LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
                 super.renderTooltip(matrices, mouseX, mouseY);
             }
+            //            @Override
+//            public void renderTooltip(DrawContext matrices, int mouseX, int mouseY)
+//            {
+//                LimiterValveScreen.this.renderTooltip(matrices, RATE, mouseX, mouseY);
+//                super.renderTooltip(matrices, mouseX, mouseY);
+//            }
         };
         textField.setText(Integer.toString(handler.getProperty(LimiterValveScreenHandler.PROP_MAX_AMOUNT)));
 
@@ -79,7 +88,7 @@ public class LimiterValveScreen extends HandledScreen<LimiterValveScreenHandler>
         });
         this.addDrawableChild(textField);
 
-        this.addDrawableChild(new ButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {})
+        this.addDrawableChild(new NMButtonWidget(buttonX, buttonY, buttonWidth, buttonHeight, getButtonText(), button -> {}, textSupplier -> getButtonText().copy())
         {
             @Override
             public void onPress()

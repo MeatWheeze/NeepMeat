@@ -1,5 +1,6 @@
-package com.neep.neepmeat.client.screen;
+package com.neep.neepmeat.client.screen.button;
 
+import com.neep.neepmeat.client.screen.button.NMButtonWidget;
 import net.minecraft.text.Text;
 
 public class NMToggleButtonWidget extends NMButtonWidget

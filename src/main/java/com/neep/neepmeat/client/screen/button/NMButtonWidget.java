@@ -1,4 +1,4 @@
-package com.neep.neepmeat.client.screen;
+package com.neep.neepmeat.client.screen.button;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.neep.neepmeat.NeepMeat;
@@ -13,22 +13,32 @@ import net.minecraft.util.Identifier;
 
 public class NMButtonWidget extends ButtonWidget
 {
-    public static final Identifier WIDGETS_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
+    public static final Identifier NM_WIDGETS_TEXTURE = new Identifier(NeepMeat.NAMESPACE, "textures/gui/inventory_background.png");
+    private boolean showBackground = true;
 
     public NMButtonWidget(int x, int y, int width, int height, Text message, PressAction onPress, NarrationSupplier narrationSupplier)
     {
         super(x, y, width, height, message, onPress, narrationSupplier);
     }
 
+    public NMButtonWidget showBackground(boolean background)
+    {
+        this.showBackground = background;
+        return this;
+    }
+
     @Override
     protected void renderButton(DrawContext matrices, int mouseX, int mouseY, float delta)
     {
         MinecraftClient minecraftClient = MinecraftClient.getInstance();
-        matrices.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
-        RenderSystem.enableBlend();
-        RenderSystem.enableDepthTest();
-        matrices.drawNineSlicedTexture(WIDGETS_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
-        matrices.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        if (showBackground)
+        {
+            matrices.setShaderColor(1.0F, 1.0F, 1.0F, this.alpha);
+            RenderSystem.enableBlend();
+            RenderSystem.enableDepthTest();
+            matrices.drawNineSlicedTexture(NM_WIDGETS_TEXTURE, this.getX(), this.getY(), this.getWidth(), this.getHeight(), 20, 4, 200, 20, 0, this.getTextureY());
+            matrices.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        }
 
         int borderCol = isHovered() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
         GUIUtil.renderBorder(matrices, getX() + 3, getY() + 3, width - 4 * 2 + 1, height - 4 * 2 + 1, borderCol, 0);

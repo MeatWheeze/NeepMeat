@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen.button;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
@@ -9,10 +10,11 @@ import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.ClickableWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
 
-public class TextToggleWidget extends ButtonWidget
+public class TextToggleWidget extends ClickableWidget implements GUIUtil
 {
     public static final ButtonWidget.TooltipSupplier EMPTY = (button, matrices, mouseX, mouseY) -> {};
 
@@ -52,25 +54,12 @@ public class TextToggleWidget extends ButtonWidget
     }
 
     @Override
-    public void appendNarrations(NarrationMessageBuilder builder)
+    public void renderButton(DrawContext context, int mouseX, int mouseY, float delta)
     {
-        this.appendDefaultNarrations(builder);
-        this.tooltipSupplier.supply(text -> builder.put(NarrationPart.HINT, text));
-    }
-
-    @Override
-    public void renderTooltip(MatrixStack matrices, int mouseX, int mouseY)
-    {
-        this.tooltipSupplier.onTooltip(this, matrices, mouseX, mouseY);
-    }
-
-    @Override
-    public void renderButton(MatrixStack matrices, int mouseX, int mouseY, float delta)
-    {
-        this.renderMain(matrices, mouseX, mouseY, delta);
+        this.renderMain(context, mouseX, mouseY, delta);
         if (this.isHovered())
         {
-            this.renderTooltip(matrices, mouseX, mouseY);
+            this.renderTooltip(context, mouseX, mouseY);
         }
     }
 
@@ -81,19 +70,30 @@ public class TextToggleWidget extends ButtonWidget
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, this.alpha);
-        int i = this.getYImage(this.isToggled());
+        int i = this.getYImage(toggled);
+//        int i = 0; // TODO
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.enableDepthTest();
-        this.drawTexture(matrices, this.x, this.y, 0, 46 + i * 20, this.width / 2, this.height);
-        this.drawTexture(matrices, this.x + this.width / 2, this.y, 200 - this.width / 2, 46 + i * 20, this.width / 2, this.height);
-        this.renderBackground(matrices, minecraftClient, mouseX, mouseY);
-        int j = this.active ? 0xFFFFFF : 0xA0A0A0;
-        ClickableWidget.drawCenteredText(matrices, textRenderer, this.getMessage(), this.x + this.width / 2, this.y + (this.height - 8) / 2, j | MathHelper.ceil(this.alpha * 255.0f) << 24);
+
+        int borderCol = isHovered() || toggled ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
+        int textCol = isHovered() ? PLCCols.SELECTED.col : PLCCols.BORDER.col;
+
+        matrices.drawTexture(NM_WIDGETS_TEXTURE, getX(), getY(), 0, 90, this.width / 2, this.height);
+        matrices.drawTexture(NM_WIDGETS_TEXTURE, getX() + this.width / 2, getY(), 200 - this.width / 2, 90, this.width / 2, this.height);
+
+        GUIUtil.renderBorder(matrices, getX() + 3, getY() + 3, width - 4 * 2 + 1, height - 4 * 2 + 1, borderCol, 0);
+
+        GUIUtil.drawCenteredText(matrices, textRenderer, this.getMessage(), getX() + this.width / 2f, getY() + (this.height - 8) / 2f, textCol, false);
+    }
+
+    int getYImage(boolean toggled)
+    {
+        return toggled ? 2 : 1;
     }
 
     public interface ToggleAction
     {
-        void onToggle(ButtonWidget button, boolean toggled);
+        void onToggle(TextToggleWidget button, boolean toggled);
     }
 }

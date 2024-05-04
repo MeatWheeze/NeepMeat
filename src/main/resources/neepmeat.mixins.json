@@ -25,7 +25,8 @@
     "GameRendererMixin",
     "HeldItemRendererMixin",
     "InGameHudMixin",
-    "ParticleManagerMixin"
+    "ParticleManagerMixin",
+    "TextFieldWidgetAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

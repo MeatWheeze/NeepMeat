@@ -103,9 +103,17 @@ public class AssemblerScreen extends HandledScreen<AssemblerScreenHandler>
         this.addDrawableChild(new TextToggleWidget(this.x + 7, this.y + 93, 110, 20, Text.translatable("button." + NeepMeat.NAMESPACE + ".assembler.select"),
                 handler.getProperty(2) > 0, (b, t) ->
         {
-
             buttonPress(AssemblerScreenHandler.ID_TOGGLE_SELECT);
         }));
+
+//        this.addDrawableChild(ButtonWidget.builder(Text.translatable("container.neepmeat.assembler.display"), button ->
+//        {
+//
+//        })
+//            .dimensions(x + 7, y + 93, 110, 20)
+//            .build());
+
+//        addDrawableChild(new ToggleButtonWidget(this.x + 7, this.y + 93, 110, 20, handler.getProperty(2) > 0));
     }
 
     public void buttonPress(int id)
