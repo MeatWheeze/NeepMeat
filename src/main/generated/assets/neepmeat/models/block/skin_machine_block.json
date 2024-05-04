@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "neepmeat:block/living_machine/skin_machine_block"
+  }
+}

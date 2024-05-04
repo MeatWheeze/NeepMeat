@@ -3,13 +3,14 @@ package com.neep.neepmeat.client.datagen;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.neep.meatlib.datagen.MeatLibDataGen;
+import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.live_machine.LivingMachineBlock;
 import com.neep.neepmeat.init.NMBlocks;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import com.neep.neepmeat.machine.live_machine.LivingMachines;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.block.Block;
-import net.minecraft.data.client.BlockStateModelGenerator;
-import net.minecraft.data.client.BlockStateSupplier;
-import net.minecraft.data.client.ItemModelGenerator;
+import net.minecraft.data.client.*;
 import net.minecraft.util.Identifier;
 
 public class NMModelProvider extends FabricModelProvider
@@ -42,6 +43,11 @@ public class NMModelProvider extends FabricModelProvider
 //            blockStateModelGenerator.blockStateCollector.accept(new SimpleBlockStateSupplier(block, ));
 //            blockStateModelGenerator.item(block);
         }
+
+        blockStateModelGenerator.registerSingleton(LivingMachines.SKIN_MACHINE_BLOCK,
+                TextureMap.all(new Identifier(NeepMeat.NAMESPACE, "block/living_machine/skin_machine_block")),
+                TexturedModel.CUBE_ALL.get(LivingMachines.SKIN_MACHINE_BLOCK).getModel());
+//                TexturedModel.CUBE_ALL.upload(LivingMachines.SKIN_MACHINE_BLOCK, blockStateModelGenerator.modelCollector));
     }
 
     @Override
