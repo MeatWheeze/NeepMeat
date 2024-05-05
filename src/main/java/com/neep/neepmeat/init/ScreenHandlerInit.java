@@ -30,6 +30,7 @@ public class ScreenHandlerInit
     public static ScreenHandlerType<ItemOutputScreenHandler> ITEM_OUTPUT;
 
     public static ScreenHandlerType<PLCScreenHandler> PLC;
+    public static ScreenHandlerType<LivingMachineScreenHandler> LIVING_MACHINE;
 
     public static void registerScreenHandlers()
     {
@@ -45,6 +46,7 @@ public class ScreenHandlerInit
         FLUID_RATIONER = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "fluid_rationer"), FLUID_RATIONER);
         SEPARATOR = Registry.register(Registry.SCREEN_HANDLER, new Identifier(NeepMeat.NAMESPACE, "separator"), SEPARATOR);
 
+        LIVING_MACHINE = register(NeepMeat.NAMESPACE, "living_machine", LivingMachineScreenHandler::new);
         ITEM_OUTPUT = register(NeepMeat.NAMESPACE, "item_output", ItemOutputScreenHandler::new);
 
         PLC = registerExtended(NeepMeat.NAMESPACE, "plc", PLCScreenHandler::new);

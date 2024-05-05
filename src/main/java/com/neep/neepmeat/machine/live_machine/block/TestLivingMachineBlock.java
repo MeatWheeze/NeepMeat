@@ -5,6 +5,7 @@ import com.neep.neepmeat.api.live_machine.LivingMachineBlock;
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.machine.live_machine.LivingMachines;
+import com.neep.neepmeat.machine.live_machine.block.entity.TestLivingMachineBE;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -31,14 +32,21 @@ public class TestLivingMachineBlock extends LivingMachineBlock implements Meatli
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit)
     {
-        if (world.getBlockEntity(pos) instanceof LivingMachineBlockEntity be)
+        if (world.getBlockEntity(pos) instanceof TestLivingMachineBE be)
         {
             if (!world.isClient())
             {
-                player.sendMessage(Text.of("Rated power: ").copy().append(PowerUtils.perUnitToText(be.getRatedPower())));
-                player.sendMessage((PowerUtils.perUnitToLabelText(be.getPower())));
-                player.sendMessage(Text.of("Efficiency: " + Math.round(be.getEfficiency() * 100) + "%"));
-                player.sendMessage(Text.of("RUL: " + new DecimalFormat("###.##").format(be.getRulHours()) + "hr"));
+                if (player.isSneaking())
+                {
+                    player.sendMessage(Text.of("Rated power: ").copy().append(PowerUtils.perUnitToText(be.getRatedPower())));
+                    player.sendMessage((PowerUtils.perUnitToLabelText(be.getPower())));
+                    player.sendMessage(Text.of("Efficiency: " + Math.round(be.getEfficiency() * 100) + "%"));
+                    player.sendMessage(Text.of("RUL: " + new DecimalFormat("###.##").format(be.getRulHours()) + "hr"));
+                }
+                else
+                {
+                    player.openHandledScreen(be);
+                }
             }
             return ActionResult.SUCCESS;
         }

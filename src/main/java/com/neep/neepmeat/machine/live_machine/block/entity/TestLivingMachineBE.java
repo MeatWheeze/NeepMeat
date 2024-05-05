@@ -2,13 +2,20 @@ package com.neep.neepmeat.machine.live_machine.block.entity;
 
 import com.neep.neepmeat.api.live_machine.LivingMachineBlockEntity;
 import com.neep.neepmeat.machine.grinder.IGrinderStorage;
+import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.BlockPos;
+import org.jetbrains.annotations.Nullable;
 
-public class TestLivingMachineBE extends LivingMachineBlockEntity
+public class TestLivingMachineBE extends LivingMachineBlockEntity implements NamedScreenHandlerFactory
 {
     public TestLivingMachineBE(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
@@ -57,6 +64,19 @@ public class TestLivingMachineBE extends LivingMachineBlockEntity
 //                transaction.commit();
 //            }
 //        });
+    }
+
+    @Override
+    public Text getDisplayName()
+    {
+        return Text.empty();
+    }
+
+    @Nullable
+    @Override
+    public ScreenHandler createMenu(int syncId, PlayerInventory playerInventory, PlayerEntity player)
+    {
+        return new LivingMachineScreenHandler(playerInventory, syncId);
     }
 
 
