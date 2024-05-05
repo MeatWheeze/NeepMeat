@@ -20,6 +20,7 @@ import com.neep.neepmeat.client.renderer.block.AdvancedIntegratorRenderer;
 import com.neep.neepmeat.client.renderer.entity.*;
 import com.neep.neepmeat.client.screen.*;
 import com.neep.neepmeat.client.screen.living_machine.ItemOutputScreen;
+import com.neep.neepmeat.client.screen.living_machine.LivingMachineScreen;
 import com.neep.neepmeat.client.screen.plc.PLCProgramScreen;
 import com.neep.neepmeat.client.world.NMDimensionEffects;
 import com.neep.neepmeat.init.*;

@@ -758,6 +758,11 @@
   "screen.neepmeat.content_detector.regulate.desc": "Stays powered until all filter items have left",
   "screen.neepmeat.content_detector.absolute.desc": "Stays powered only while conditions are met",
 
+  "screen.neepmeat.living_machine.rated_power": "Rated power",
+  "screen.neepmeat.living_machine.power": "Supplied power",
+  "screen.neepmeat.living_machine.efficiency": "Efficiency",
+  "screen.neepmeat.living_machine.rul": "Remaining useful life",
+
   "category.neepmeat.pressing": "Pressing",
   "category.neepmeat.grinding": "Crushing",
   "category.neepmeat.advanced_crushing": "Advanced Crushing",

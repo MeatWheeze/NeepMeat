@@ -383,6 +383,15 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         return degradationManager.estimateRul() / (20 * 3600.0);
     }
 
+    public long getRulSecs()
+    {
+        long ticks = degradationManager.estimateRul();
+        if (ticks == -1)
+            return -1;
+
+        return ticks / 20;
+    }
+
     public void onBlockRemoved()
     {
         // Remove all components and set their power to 0.

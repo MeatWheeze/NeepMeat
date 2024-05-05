@@ -1,6 +1,7 @@
 package com.neep.neepmeat.client.screen.util;
 
 import com.neep.neepmeat.api.plc.PLCCols;
+import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.Drawable;
 

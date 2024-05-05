@@ -50,6 +50,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -63,6 +64,23 @@ public class NeepMeat implements ModInitializer
 	public static final Logger LOGGER = LogManager.getLogger(NAMESPACE);
 
 //	public static final String disableGeckoExamples = System.setProperty(GeckoLibMod.DISABLE_EXAMPLES_PROPERTY_KEY, "true");
+
+	public static Text translationKey(String prefix, String things)
+	{
+		return Text.translatable(prefix + "." + NAMESPACE + "." + things);
+	}
+
+	public static Text translationKey(String prefix, String... things)
+	{
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < things.length; ++i)
+		{
+			builder.append(things[i]);
+			if (i <= things.length - 1)
+				builder.append('.');
+		}
+		return Text.translatable(prefix + "." + NAMESPACE + "." + builder);
+	}
 
 	@Override
 	public void onInitialize()
