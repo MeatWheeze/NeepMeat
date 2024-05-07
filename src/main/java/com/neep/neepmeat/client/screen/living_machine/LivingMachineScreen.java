@@ -3,21 +3,46 @@ package com.neep.neepmeat.client.screen.living_machine;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.Rectangle;
+import com.neep.neepmeat.network.plc.PLCSyncThings;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.FabricPacket;
+import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
+import net.fabricmc.fabric.api.networking.v1.PacketSender;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.narration.NarrationMessageBuilder;
+import net.minecraft.client.network.ClientPlayNetworkHandler;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.network.PacketByteBuf;
 import net.minecraft.text.Text;
 
+@Environment(EnvType.CLIENT)
 public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandler>
 {
     private final MetricsPane metricsPane;
+    private final GraphPane graphPane;
 
     public LivingMachineScreen(LivingMachineScreenHandler handler, PlayerInventory inventory, Text title)
     {
         super(handler, inventory, title);
         this.metricsPane = new MetricsPane(handler);
+        this.graphPane = new GraphPane(handler);
+
+        ClientPlayNetworking.registerReceiver(LivingMachineScreenHandler.GRAPH_SYNC_ID, this::receive);
+    }
+
+    void receive(MinecraftClient client, ClientPlayNetworkHandler handler, PacketByteBuf buf, PacketSender responseSender)
+    {
+        PacketByteBuf copy = PacketByteBufs.copy(buf);
+        client.execute(() ->
+        {
+            graphPane.update(copy);
+        });
     }
 
     @Override
@@ -32,9 +57,12 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
         float fraction = 0.4f;
         int metricsWidth = (int) (fraction * withoutPadding.w());
         int graphsWidth = (int) ((1 - fraction) * withoutPadding.w());
+
         metricsPane.init(new Rectangle.Mutable(withoutPadding).setW(metricsWidth));
         addDrawableChild(metricsPane);
-        var graphs = addDrawable(new Border(new Rectangle.Immutable(metricsPane.border.x() + metricsPane.border.w() + 1, withoutPadding.y(), graphsWidth, withoutPadding.h()), 2, () -> PLCCols.BORDER.col));
+
+        graphPane.init(new Rectangle.Immutable(metricsPane.border.x() + metricsPane.border.w() + 1, withoutPadding.y(), graphsWidth, withoutPadding.h()));
+        addDrawableChild(graphPane);
     }
 
     @Override
@@ -53,7 +81,15 @@ public class LivingMachineScreen extends HandledScreen<LivingMachineScreenHandle
     protected void handledScreenTick()
     {
         super.handledScreenTick();
+        metricsPane.tick();
+        graphPane.tick();
+    }
 
+    @Override
+    public void close()
+    {
+        super.close();
+        ClientPlayNetworking.unregisterReceiver(LivingMachineScreenHandler.GRAPH_SYNC_ID);
     }
 
     static abstract class PaneWidget implements Drawable, Element, Selectable

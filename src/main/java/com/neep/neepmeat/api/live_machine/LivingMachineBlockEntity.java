@@ -3,7 +3,11 @@ package com.neep.neepmeat.api.live_machine;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
 import com.google.common.util.concurrent.AtomicDouble;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.neep.meatlib.blockentity.SyncableBlockEntity;
 import com.neep.neepmeat.NeepMeat;
+import com.neep.neepmeat.api.live_machine.metrics.DataLog;
 import com.neep.neepmeat.api.processing.PowerUtils;
 import com.neep.neepmeat.init.NMFluids;
 import com.neep.neepmeat.machine.live_machine.LivingMachineComponents;
@@ -13,10 +17,9 @@ import com.neep.neepmeat.machine.live_machine.component.PoweredComponent;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidVariant;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
@@ -28,17 +31,35 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-public abstract class LivingMachineBlockEntity extends BlockEntity implements ComponentHolder
+public abstract class LivingMachineBlockEntity extends SyncableBlockEntity implements ComponentHolder
 {
+    // This looks incredibly cursed
+    public static Codec<EnumMap<StructureProperty, AtomicDouble>> PROPERTIES_CODEC = RecordCodecBuilder
+            .create(instance ->
+                    instance.group(
+                            Codec.list(StructureProperty.CODEC).fieldOf("keys").forGetter(o -> new ArrayList<>(o.keySet())),
+                            Codec.list(Codec.DOUBLE).fieldOf("values").forGetter(o -> o.values().stream().map(AtomicDouble::get).toList())
+                    ).apply(instance, (keys, values) ->
+                    {
+                        EnumMap<StructureProperty, AtomicDouble> map = new EnumMap<>(StructureProperty.class);
+                        for (int i = 0; i < keys.size(); ++i)
+                        {
+                            map.put(keys.get(i), new AtomicDouble(values.get(i)));
+                        }
+                        return map;
+                    }));
+
     private final Random random = Random.create();
 
     protected final List<LivingMachineStructure> structures = new ArrayList<>();
     private final Collection<LivingMachineComponent>[] componentMap = (Collection<LivingMachineComponent>[]) Array.newInstance(Collection.class, ComponentType.Simple.NEXT_ID);
     private final BitSet currentComponents = new BitSet(); // Active components marked in one-hot codes
-    private final EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
+    private EnumMap<StructureProperty, AtomicDouble> properties = new EnumMap<>(StructureProperty.class);
 
     protected DegradationManager degradationManager = new DegradationManager(this::degradationRate, Random.create());
     private final float rateMultiplier = 1;
+
+    private final DataLog dataLog;
 
     protected long age = 0;
     protected int updateInterval = 80;
@@ -54,6 +75,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public LivingMachineBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state)
     {
         super(type, pos, state);
+        dataLog = new DataLog(500, 40);
     }
 
     @Override
@@ -61,14 +83,18 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     {
         super.readNbt(nbt);
         this.age = nbt.getLong("age");
+        this.properties = PROPERTIES_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound("properties")).result().orElseGet(() -> new EnumMap<>(StructureProperty.class));
+        this.power = nbt.getFloat("power");
         degradationManager.readNbt(nbt);
     }
 
     @Override
-    protected void writeNbt(NbtCompound nbt)
+    public void writeNbt(NbtCompound nbt)
     {
         super.writeNbt(nbt);
         nbt.putLong("age", age);
+        PROPERTIES_CODEC.encodeStart(NbtOps.INSTANCE, properties).get().ifLeft(r -> nbt.put("properties", r));
+        nbt.putFloat("power", power);
         degradationManager.writeNbt(nbt);
     }
 
@@ -124,6 +150,7 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         if (age % updateInterval == 0)
         {
             updateStructure();
+            sync();
         }
 
         if (updateProcess)
@@ -179,6 +206,8 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
         {
             process.serverTick(this);
         }
+
+        dataLog.log(getWorld().getTime(), this);
     }
 
 //    public Multimap<ComponentType<?>, LivingMachineComponent> getComponents()
@@ -365,7 +394,9 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
             return rate;
         }
 
-        if (power > getRatedPower())
+        if (power > getRatedPower() * 2)
+            rate += (rateMultiplier * (0.00001f * power / getRatedPower()));
+        else if (power > getRatedPower())
             rate += (rateMultiplier * (0.000007f * power / getRatedPower()));
         else
             rate += (rateMultiplier * (0.000005f));
@@ -423,5 +454,15 @@ public abstract class LivingMachineBlockEntity extends BlockEntity implements Co
     public Random getRandom()
     {
         return random;
+    }
+
+    public DataLog getDataLog()
+    {
+        return dataLog;
+    }
+
+    public long getAge()
+    {
+        return age;
     }
 }

@@ -1,6 +1,5 @@
 package com.neep.neepmeat.client.screen.living_machine;
 
-import com.neep.meatlib.item.MeatlibItem;
 import com.neep.neepmeat.NeepMeat;
 import com.neep.neepmeat.api.plc.PLCCols;
 import com.neep.neepmeat.api.processing.PowerUtils;
@@ -77,6 +76,18 @@ public class MetricsPane extends LivingMachineScreen.PaneWidget
         if (secs == -1)
             return "infinite";
 
-        return Duration.ofSeconds(secs).toString();
+        Duration duration = Duration.ofSeconds(secs);
+        if (duration.toHoursPart() > 0)
+        {
+            return duration.toHoursPart() + "hr " + duration.toMinutesPart() + "m";
+        }
+        else if (duration.toMinutesPart() > 0)
+        {
+            return duration.toMinutesPart() + "m " + duration.toSecondsPart() + "s";
+        }
+        else
+        {
+            return duration.toSecondsPart() + "s";
+        }
     }
 }
