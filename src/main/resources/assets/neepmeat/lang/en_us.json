@@ -761,6 +761,7 @@
   "screen.neepmeat.living_machine.rated_power": "Rated power",
   "screen.neepmeat.living_machine.power": "Supplied power",
   "screen.neepmeat.living_machine.efficiency": "Efficiency",
+  "screen.neepmeat.living_machine.health": "Health",
   "screen.neepmeat.living_machine.rul": "Remaining useful life",
 
   "category.neepmeat.pressing": "Pressing",

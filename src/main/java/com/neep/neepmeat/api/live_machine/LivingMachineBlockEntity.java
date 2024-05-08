@@ -137,10 +137,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
 
         var motors1 = getComponent(LivingMachineComponents.MOTOR_PORT);
 
-        if (world.getTime() % 20 == 0 && !motors1.isEmpty())
-        {
-            NeepMeat.LOGGER.info("Age: {}, Efficiency: {}, Rate: {}", 100 * degradationManager.getDegradation(), 100 * getEfficiency(), 100 * 20 * degradationRate(degradationManager.getDegradation()));
-        }
+//        if (world.getTime() % 20 == 0 && !motors1.isEmpty())
+//        {
+//            NeepMeat.LOGGER.info("Age: {}, Efficiency: {}, Rate: {}", 100 * degradationManager.getDegradation(), 100 * getEfficiency(), 100 * 20 * degradationRate(degradationManager.getDegradation()));
+//        }
 
         degradationManager.tick();
     }
@@ -373,7 +373,7 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
         // Take into account performance degradation and block types
 //        return getProperty(StructureProperty.SPEED)
 //                * (1 - degradationManager.getDegradation());
-        return  (1 - degradationManager.getDegradation());
+        return (float) (1 - Math.pow(degradationManager.getDegradation(), 4));
     }
 
     public float getSelfRepair()
@@ -464,5 +464,10 @@ public abstract class LivingMachineBlockEntity extends SyncableBlockEntity imple
     public long getAge()
     {
         return age;
+    }
+
+    public float getHealth()
+    {
+        return 1 - degradationManager.getDegradation();
     }
 }

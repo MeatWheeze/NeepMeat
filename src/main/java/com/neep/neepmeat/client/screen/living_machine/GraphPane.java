@@ -6,6 +6,7 @@ import com.neep.neepmeat.client.screen.tablet.GUIUtil;
 import com.neep.neepmeat.client.screen.util.Border;
 import com.neep.neepmeat.client.screen.util.Rectangle;
 import com.neep.neepmeat.screen_handler.LivingMachineScreenHandler;
+import it.unimi.dsi.fastutil.objects.ObjectIntPair;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
@@ -13,12 +14,14 @@ import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.network.PacketByteBuf;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.ColorHelper;
 import net.minecraft.util.math.MathHelper;
 import org.joml.Matrix4f;
 
 import java.text.DecimalFormat;
 import java.time.Duration;
+import java.util.List;
 
 public class GraphPane extends LivingMachineScreen.PaneWidget
 {
@@ -59,20 +62,30 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
     {
         super.render(context, mouseX, mouseY, delta);
 
-//        long timeEnd = 8;
-//        long timeStart = 0;
         long[] time = dataView.time();
-        double[] efficiency = dataView.efficiency();
-//        long[] time = new long[]{0, 1, 2, 3, 4};
-//        float[] efficiency = new float[]{0.5f, 0.1f, 0.9f, 1, 0};
 
         long period = dataView.capacity() * 40L;
         long timeStart = time.length > 0 ? time[0] : 0;
         long timeEnd = timeStart + period;
 
-        long endTime = 0;
+        long endTime = drawCurve(context, time, dataView.efficiency(), timeStart, timeEnd, PLCCols.SELECTED.col);
+        drawCurve(context, time, dataView.health(), timeStart, timeEnd, PLCCols.BORDER.col);
+
+        drawYScale(context, 0, 1, yFormat);
+        drawTimeScale(context, 0, period, endTime, timeFormat);
+        drawLegend(context, dataView.getLegend());
+    }
+
+    private long drawCurve(DrawContext context, long[] time, double[] yVals, long timeStart, long timeEnd, int col)
+    {
+        long period = timeEnd - timeStart;
+
+        long highestTime = 0;
         for (int i = 0; i < time.length; ++i)
         {
+            if (i % 2 == 0)
+                continue;
+
             long t1 = time[i];
 
             if (t1 >= timeStart && t1 < timeEnd && i + 1 < time.length)
@@ -82,10 +95,10 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
                 if (t2 <= timeStart || t2 > timeEnd)
                     break;
 
-                endTime = t2 - timeStart;
+                highestTime = t2 - timeStart;
 
-                float y1 = (float) efficiency[i];
-                float y2 = (float) efficiency[i + 1];
+                float y1 = (float) yVals[i];
+                float y2 = (float) yVals[i + 1];
 
 //                float period = timeEnd - timeStart;
                 float xStride = (float) plotBounds.w();
@@ -96,12 +109,42 @@ public class GraphPane extends LivingMachineScreen.PaneWidget
                 float y1Scaled = plotBounds.y() + plotBounds.h() - y1 * yStride;
                 float y2Scaled = plotBounds.y() + plotBounds.h() - y2 * yStride;
 
-                drawLine(context, t1Scaled, y1Scaled, t2Scaled, y2Scaled, 0.5f, PLCCols.BORDER.col);
+                drawLine(context, t1Scaled, y1Scaled, t2Scaled, y2Scaled, 0.5f, col);
             }
         }
+        return highestTime;
+    }
 
-        drawYScale(context, 0, 1, yFormat);
-        drawTimeScale(context, 0, period, endTime, timeFormat);
+    private void drawLegend(DrawContext context, List<ObjectIntPair<Text>> entries)
+    {
+//        float entryPadding = 5;
+//        float totalWidth = 0;
+//        for (var entry : entries)
+//        {
+//            totalWidth += textRenderer.getWidth(entry.key()) + entryPadding;
+//        }
+
+        MatrixStack matrices = context.getMatrices();
+        float scale = 0.7f;
+        for (int i = 0; i < entries.size(); ++i)
+        {
+            var entry = entries.get(i);
+
+            Text name = entry.left();
+            int col = entry.rightInt();
+
+            int squareWidth = (int) (textRenderer.fontHeight * scale);
+            float legendWidth = textRenderer.getWidth(name) * scale + squareWidth + 1;
+            float y = (windowBounds.y() - textRenderer.fontHeight * scale);
+            float x = plotBounds.x() + (i + 0.5f) * ((float) plotBounds.w() / (entries.size())) - legendWidth / 2;
+
+            context.fill((int) x, (int) y, (int) x + squareWidth, (int) y + squareWidth, col);
+            matrices.push();
+            matrices.translate(x + squareWidth + 1, y, 0);
+            matrices.scale(scale, scale, 1);
+            GUIUtil.drawText(context, textRenderer, name, 0, 0, PLCCols.SELECTED.col, false);
+            matrices.pop();
+        }
     }
 
     private void drawTimeScale(DrawContext context, long lower, long upper, long zero, DecimalFormat format)
