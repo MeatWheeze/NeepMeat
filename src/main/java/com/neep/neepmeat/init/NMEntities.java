@@ -9,6 +9,8 @@ import com.neep.neepmeat.entity.bovine_horror.AcidSprayEntity;
 import com.neep.neepmeat.entity.bovine_horror.BovineHorrorEntity;
 import com.neep.neepmeat.entity.hound.HoundEntity;
 import com.neep.neepmeat.entity.keeper.KeeperEntity;
+import com.neep.neepmeat.entity.scutter.FarmingScutter;
+import com.neep.neepmeat.entity.scutter.ScutterEntity;
 import com.neep.neepmeat.entity.worm.WormEntity;
 import com.neep.neepmeat.machine.phage_ray.PhageRayEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -29,6 +31,8 @@ public class NMEntities
     public static EntityType<AcidSprayEntity> ACID_SPRAY;
     public static EntityType<WormEntity.WormSegment> WORM_SEGMENT;
     public static EntityType<LimbEntity> LIMB;
+
+    public static EntityType<FarmingScutter> FARMING_SCUTTER;
 
     public static EntityType<PhageRayEntity> PHAGE_RAY;
 
@@ -68,5 +72,10 @@ public class NMEntities
 
         LIMB = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "limb", FabricEntityTypeBuilder.create(SpawnGroup.MISC, LimbEntity::new)
                 .dimensions(EntityDimensions.fixed(0.9f, 0.9f)).trackedUpdateRate(1).build());
+
+        FARMING_SCUTTER = EntityRegistry.registerEntity(NeepMeat.NAMESPACE, "farming_scutter", FabricEntityTypeBuilder.create(SpawnGroup.MISC, FarmingScutter::new)
+                .dimensions(EntityDimensions.fixed(0.8f, 0.5f)).trackedUpdateRate(1).build());
+        FabricDefaultAttributeRegistry.register(FARMING_SCUTTER, FarmingScutter.createMobAttributes());
+
     }
 }

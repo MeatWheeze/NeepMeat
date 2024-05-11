@@ -238,7 +238,7 @@ public abstract class SimpleEntity extends Entity
         return this.getVelocity();
     }
 
-    protected float getMovementSpeed()
+    public float getMovementSpeed()
     {
         return 0.1f;
     }

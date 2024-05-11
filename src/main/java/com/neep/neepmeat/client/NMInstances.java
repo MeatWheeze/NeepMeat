@@ -4,6 +4,7 @@ import com.jozufozu.flywheel.backend.instancing.InstancedRenderRegistry;
 import com.neep.neepmeat.client.instance.LargeFanInstance;
 import com.neep.neepmeat.client.instance.LargeTrommelInstance;
 import com.neep.neepmeat.client.instance.RoboticArmInstance;
+import com.neep.neepmeat.client.instance.FarmingScutterInstance;
 import com.neep.neepmeat.client.renderer.LinearOscillatorInstance;
 import com.neep.neepmeat.client.renderer.RoboticArmRenderer;
 import com.neep.neepmeat.client.renderer.block.LargeTrommelRenderer;
@@ -68,5 +69,6 @@ public class NMInstances
 
         InstancedRenderRegistry.configure(NMEntities.LIMB).factory(LimbEntityInstance::new).apply();
 
+        InstancedRenderRegistry.configure(NMEntities.FARMING_SCUTTER).factory(FarmingScutterInstance::new).apply();
     }
 }
