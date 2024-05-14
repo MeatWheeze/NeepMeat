@@ -1,0 +1,18 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "resource": "minecraft:ancient_debris",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:netherite_scrap",
+    "amount": 1
+  },
+  "extra": {
+    "resource": "minecraft:netherite_scrap",
+    "amount": 1,
+    "chance": 0.5
+  },
+  "experience": 5,
+  "processtime": 40
+}

@@ -1,0 +1,14 @@
+{
+  "type": "neepmeat:grinding",
+  "input": {
+    "tag": "minecraft:lapis_ores",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:lapis_lazuli",
+    "min": 4,
+    "max": 5
+  },
+  "experience": 2,
+  "processtime": 40
+}

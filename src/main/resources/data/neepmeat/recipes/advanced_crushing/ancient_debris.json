@@ -1,0 +1,13 @@
+{
+  "type": "neepmeat:advanced_crushing",
+  "input": {
+    "resource": "minecraft:ancient_debris",
+    "amount": 1
+  },
+  "output": {
+    "resource": "minecraft:netherite_scrap",
+    "amount": 2
+  },
+  "experience": 5,
+  "processtime": 40
+}
