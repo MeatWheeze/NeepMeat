@@ -89,7 +89,7 @@ public class MixerBlockEntity extends MotorisedMachineBlockEntity
     {
         this.currentRecipe = recipe;
         this.currentRecipeId = recipe != null ? recipe.id : null;
-        this.cooldownTicks = 10;
+        this.cooldownTicks = 2;
     }
 
     public MixingRecipe getCurrentRecipe()
