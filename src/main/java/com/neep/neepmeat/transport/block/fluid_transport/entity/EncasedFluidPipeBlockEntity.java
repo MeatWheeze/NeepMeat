@@ -26,6 +26,14 @@ public class EncasedFluidPipeBlockEntity<T extends PipeVertex & NbtSerialisable>
     }
 
     @Override
+    public NbtCompound toInitialChunkDataNbt()
+    {
+        var nbt = super.toInitialChunkDataNbt();
+        writeNbt(nbt);
+        return nbt;
+    }
+
+    @Override
     public void tick()
     {
         super.tick();
