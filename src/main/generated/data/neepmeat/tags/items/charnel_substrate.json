@@ -6,6 +6,10 @@
       "required": false
     },
     {
+      "id": "#c:raw_fish",
+      "required": false
+    },
+    {
       "id": "#chestcavity:salvageable_human_organ_meat",
       "required": false
     },

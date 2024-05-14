@@ -30,6 +30,7 @@ public class NMItemTagProvider extends FabricTagProvider.ItemTagProvider
     @Override
     protected void generateTags()
     {
+        getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(NMTags.RAW_FISH);
         getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(NMTags.RAW_MEAT);
         getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("chestcavity", "salvageable_human_organ_meat")));
         getOrCreateTagBuilder(NMTags.CHARNEL_COMPACTOR).addOptionalTag(TagKey.of(Registry.ITEM.getKey(), new Identifier("chestcavity", "salvageable_animal_organ_meat")));
