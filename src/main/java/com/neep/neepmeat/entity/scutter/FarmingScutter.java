@@ -101,4 +101,10 @@ public class FarmingScutter extends ScutterEntity
     {
         return targets;
     }
+
+    @Override
+    public boolean cannotDespawn()
+    {
+        return true;
+    }
 }
