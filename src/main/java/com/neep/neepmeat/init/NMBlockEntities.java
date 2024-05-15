@@ -7,6 +7,7 @@ import com.neep.neepmeat.api.machine.MotorisedBlock;
 import com.neep.neepmeat.api.storage.FluidBuffer;
 import com.neep.neepmeat.block.ChuteBlock;
 import com.neep.neepmeat.block.HoldingTrackBlock;
+import com.neep.neepmeat.block.PlayerControlTrack;
 import com.neep.neepmeat.block.entity.*;
 import com.neep.neepmeat.machine.Heatable;
 import com.neep.neepmeat.machine.HeatableFurnace;
@@ -202,6 +203,7 @@ public class NMBlockEntities
     public static BlockEntityType<UpgradeManagerBlockEntity> UPGRADE_MANAGER;
 
     public static BlockEntityType<? extends HoldingTrackBlock.HoldingTrackBlockEntity> HOLDING_TRACK;
+    public static BlockEntityType<? extends PlayerControlTrack.TrackBlockEntity> CONTROL_TRACK;
     public static BlockEntityType<?> VASCULAR_CONDUIT;
     public static BlockEntityType<?> ENCASED_VASCULAR_CONDUIT;
     public static BlockEntityType<VSCBlockEntity> VSC;
@@ -475,6 +477,7 @@ public class NMBlockEntities
 
 
         HOLDING_TRACK = register("holding_track", (p, s) -> new HoldingTrackBlock.HoldingTrackBlockEntity(HOLDING_TRACK, p, s), NMBlocks.HOLDING_TRACK);
+        CONTROL_TRACK = register("control_track", (p, s) -> new PlayerControlTrack.TrackBlockEntity(CONTROL_TRACK, p, s), NMBlocks.CONTROL_TRACK);
 
         ItemStorage.SIDED.registerSelf(BUFFER);
         FluidStorage.SIDED.registerSelf(FLUID_INTERFACE);

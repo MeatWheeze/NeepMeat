@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "neepmeat:holding_track"
+    "neepmeat:holding_track",
+    "neepmeat:control_track"
   ]
 }

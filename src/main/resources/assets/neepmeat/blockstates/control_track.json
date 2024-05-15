@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "powered=true,shape=east_west": {
+      "model": "neepmeat:block/control_track/control_track_on",
+      "y": 90
+    },
+    "powered=false,shape=east_west": {
+      "model": "neepmeat:block/control_track/control_track",
+      "y": 90
+    },
+    "powered=true,shape=north_south": {
+      "model": "neepmeat:block/control_track/control_track_on",
+      "y": -180
+    },
+    "powered=false,shape=north_south": {
+      "model": "neepmeat:block/control_track/control_track",
+      "y": -180
+    }
+  }
+}

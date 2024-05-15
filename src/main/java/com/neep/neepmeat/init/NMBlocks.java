@@ -352,6 +352,7 @@ public class NMBlocks
 //    public static Block ROUTE_TEST = BlockRegistry.queue(new RouteTestBlock("routing_test", MeatlibBlockSettings.of(Material.METAL)));
 
     public static Block HOLDING_TRACK = BlockRegistry.queue(new HoldingTrackBlock("holding_track", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL)));
+    public static Block CONTROL_TRACK = BlockRegistry.queue(new PlayerControlTrack("control_track", block().tooltip(TooltipSupplier.simple(1)), MeatlibBlockSettings.copyOf(Blocks.RAIL)));
 
     public static boolean never(BlockState state, BlockView world, BlockPos pos)
     {
