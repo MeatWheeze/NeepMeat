@@ -21,12 +21,14 @@ public class EmitRedstoneInstruction implements Instruction
 {
     private final Argument target;
     private final int strength;
+    private final boolean useStack;
     private final LazyBlockApiCache<RedstoneInterface, Direction> redstoneCache;
 
-    public EmitRedstoneInstruction(Supplier<World> world, Argument argument, int strength)
+    public EmitRedstoneInstruction(Supplier<World> world, Argument argument, int strength, boolean useStack)
     {
         this.target = argument;
         this.strength = strength;
+        this.useStack = useStack;
         this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, world, target);
     }
 
@@ -34,6 +36,7 @@ public class EmitRedstoneInstruction implements Instruction
     {
         this.target = Argument.fromNbt(nbt.getCompound("target"));
         this.strength = nbt.getInt("strength");
+        this.useStack = nbt.getBoolean("use_stack");
         this.redstoneCache = LazyBlockApiCache.of(RedstoneInterface.LOOKUP, world, target);
     }
 
@@ -42,6 +45,7 @@ public class EmitRedstoneInstruction implements Instruction
     {
         nbt.put("target", target.toNbt());
         nbt.putInt("strength", strength);
+        nbt.putBoolean("use_stack", useStack);
         return nbt;
     }
 
@@ -61,7 +65,7 @@ public class EmitRedstoneInstruction implements Instruction
         RedstoneInterface redstone = redstoneCache.find();
         if (redstone != null)
         {
-            redstone.setEmittedStrength(strength);
+            redstone.setEmittedStrength(useStack ? plc.variableStack().popInt() : strength);
         }
         plc.advanceCounter();
     }
@@ -81,13 +85,16 @@ public class EmitRedstoneInstruction implements Instruction
 
         view.fastForward();
         if (!TokenView.isDigit(view.peek()))
-            throw new NeepASM.ParseException("expected strength integer");
+        {
+            parser.assureLineEnd(view);
+
+            return ((world, source, program) ->
+                    program.addBack(new EmitRedstoneInstruction(() -> world, target, 0, true)));
+        }
 
         int strength = view.nextInteger();
 
         return ((world, source, program) ->
-        {
-            program.addBack(new EmitRedstoneInstruction(() -> world, target, strength));
-        });
+                program.addBack(new EmitRedstoneInstruction(() -> world, target, strength, false)));
     }
 }

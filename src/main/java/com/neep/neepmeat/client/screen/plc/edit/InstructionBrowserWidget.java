@@ -314,7 +314,7 @@ public class InstructionBrowserWidget implements Element, Drawable, ParentElemen
         {
             InstructionBrowserWidget.this.disableScissor();
             InstructionAttributes.InstructionTooltip tooltip = InstructionAttributes.get(provider);
-            int width = 200;
+            int width = 230;
             int tx = x - width - 5;
             if (tooltip != InstructionAttributes.InstructionTooltip.EMPTY)
             {

@@ -528,7 +528,7 @@
       {"type": "code", "text": "a_macro Hello there, Something else"},
       {"type": "text", "text": "\nAs shown above, arguments supplied when expanding the macro must be separated by commas. This allows spaces in the arguments you provide. Any text can be a macro argument, including aliases.\nThe above example will say 'Hello there.' and then 'Something else'."},
       {"type": "text", "text": "\nA more complex example follows. This will check whether the input slots of two furnaces have less than 8 items in and will transfer 8 items from the input storage if this is the case.\n"},
-      {"type": "code", "text": "%alias furn1 = @(1 2 1 U)"},
+      {"type": "code", "text": "%alias input = @(1 2 1 U)"},
       {"type": "code", "text": "%alias furn1 = @(1 2 3 U)"},
       {"type": "code", "text": "%alias furn2 = @(1 2 4 U)"},
       {"type": "code", "text": "\n%macro check_furnace furnace"},
