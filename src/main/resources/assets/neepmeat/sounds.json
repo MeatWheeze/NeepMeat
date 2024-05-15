@@ -192,6 +192,11 @@
     ]
   },
 
+  "deposit_items": { "subtitle": "subtitles.neepmeat.deposit_items",
+    "sounds": [
+      "neepmeat:deposit_items"
+    ]},
+
   "phage_ray_charge": { "subtitle": "subtitles.neepmeat.phage_ray.charge",
     "sounds": [
       "neepmeat:phage_ray_charge"

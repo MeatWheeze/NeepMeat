@@ -251,14 +251,14 @@
   "block.neepmeat.encased_vascular_conduit": "Encased Vascular Conduit",
   "block.neepmeat.encased_vascular_conduit.lore_0": "Takes on the model shape of the block it is right-clicked with.",
   "block.neepmeat.vsc": "Vascular Source Converter",
-  "block.neepmeat.vsc.lore_0": "Consumes a configurable amount of power from a vascular network and emits it from the front. Useful for controlling the speed of motors.\nDisabled by redstone by default. Right-click while sneaking to toggle.",
+  "block.neepmeat.vsc.lore_0": "Consumes a configurable amount of power from a vascular network and emits it from the front. Useful for controlling the speed of motors.\n§eDisabled by redstone by default. Right-click while sneaking to toggle.",
   "screen.neepmeat.vsc.text.power": "Target output power",
 
   "block.neepmeat.power_emitter": "Creative Power Emitter",
   "block.neepmeat.power_emitter.lore_0": "Emits 100eJ/t into a vascular network.",
 
   "block.neepmeat.pump": "Redstone Pump",
-  "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.",
+  "block.neepmeat.pump.lore_0": "Pumps fluid quickly through pipes.\n§eEnabled by redstone by default. Right-click while sneaking to toggle.",
 
   "block.neepmeat.item_pump": "Item Pump",
   "block.neepmeat.item_pump.lore_0": "Requests and ejects stacks of sixteen into connected pipes.",
@@ -501,9 +501,7 @@
 
   "item.neepmeat.pipette": "Pipette",
   "item.neepmeat.pipette.full": "Pipette: %s (%s mb)",
-  "item.neepmeat.pipette.lore_0": "Holds up to one bucket of fluid.",
-  "item.neepmeat.pipette.lore_1": "Use on a block to extract or deposit fluid.",
-  "item.neepmeat.pipette.lore_2": "Shift-click to dump contents.",
+  "item.neepmeat.pipette.lore_0": "Holds up to one bucket of fluid.\nUse on a block to extract or deposit fluid.\n§eSneak-click on a block that cannot contain fluid to dump contents.",
 
   "item.neepmeat.refractory_brick": "Refractory Brick",
 
@@ -800,46 +798,48 @@
 
   "advancements.neepmeat.main.root.title": "NEEPMeat",
   "advancements.neepmeat.main.root.desc": "Conquer nature, usurp the Divine.",
-  "advancements.neepmeat.main.root.description": "Conquer nature, usurp the Divine.",
 
   "advancements.neepmeat.main.obtain_guide.title": "RTFM",
-  "advancements.neepmeat.main.obtain_guide.description": "Craft your Owner's Manual with Rotten Flesh and a book.",
+  "advancements.neepmeat.main.obtain_guide.desc": "Craft your Owner's Manual with Rotten Flesh and a book.",
 
   "advancements.neepmeat.main.obtain_integrator.title": "Angel's Egg",
-  "advancements.neepmeat.main.obtain_integrator.description": "Obtain an Integrator Egg from a dungeon chest.",
+  "advancements.neepmeat.main.obtain_integrator.desc": "Obtain an Integrator Egg from a dungeon chest.",
 
   "advancements.neepmeat.main.obtain_asbestos.title": "Your Fibrous Friend",
   "advancements.neepmeat.main.obtain_asbestos.desc": "Find some asbestos.",
 
   "advancements.neepmeat.main.place_grinder.title": "Scrunch Scrunch",
-  "advancements.neepmeat.main.place_grinder.description": "Place a Crusher.",
+  "advancements.neepmeat.main.place_grinder.desc": "Place a Crusher.",
 
   "advancements.neepmeat.main.enlightenment.title": "How Enlightening",
-  "advancements.neepmeat.main.enlightenment.description": "Use a Pedestal connected to an Integrator to produce strange new forms.",
+  "advancements.neepmeat.main.enlightenment.desc": "Use a Pedestal connected to an Integrator to produce strange new forms.",
 
   "advancements.neepmeat.main.obtain_enlightened_brain.title": "Grant Us Eyes!",
-  "advancements.neepmeat.main.obtain_enlightened_brain.description": "Advance a brain to its Enlightened form.",
+  "advancements.neepmeat.main.obtain_enlightened_brain.desc": "Advance a brain to its Enlightened form.",
 
   "advancements.neepmeat.main.obtain_whisper_flour.title": "The Yeast of Thoughts and Minds",
-  "advancements.neepmeat.main.obtain_whisper_flour.description": "Crush some Whisper Wheat into Whisper Flour.",
+  "advancements.neepmeat.main.obtain_whisper_flour.desc": "Crush some Whisper Wheat into Whisper Flour.",
 
   "advancements.neepmeat.main.place_hydraulic_press.title": "Hydraulic Press Channel",
-  "advancements.neepmeat.main.place_hydraulic_press.description": "Obtain a Hydraulic Press.",
+  "advancements.neepmeat.main.place_hydraulic_press.desc": "Obtain a Hydraulic Press.",
 
   "advancements.neepmeat.main.obtain_whisper_brass.title": "Wh- Where's The Zinc?",
-  "advancements.neepmeat.main.obtain_whisper_brass.description": "Smelt some Whisper Brass.",
+  "advancements.neepmeat.main.obtain_whisper_brass.desc": "Smelt some Whisper Brass.",
 
-  "advancements.neepmeat.main.obtain_item_pipe.title": "Marginal Efficiency Gain",
-  "advancements.neepmeat.main.obtain_item_pipe.description": "Craft some Item Pipes.",
+  "advancements.neepmeat.main.place_item_pipe.title": "Marginal Efficiency Gain",
+  "advancements.neepmeat.main.place_item_pipe.desc": "Craft some Item Pipes.",
 
   "advancements.neepmeat.main.place_ejector.title": "Vaguely Familiar",
-  "advancements.neepmeat.main.place_ejector.description": "Use an Ejector to insert items into pipes.",
+  "advancements.neepmeat.main.place_ejector.desc": "Use an Ejector to insert items into pipes.",
 
   "advancements.neepmeat.main.obtain_meat_bucket.title": "Very Original",
-  "advancements.neepmeat.main.obtain_meat_bucket.description": "Fill a bucket with meat.",
+  "advancements.neepmeat.main.obtain_meat_bucket.desc": "Fill a bucket with meat.",
+
+  "advancements.neepmeat.main.obtain_plc.title": "compütre",
+  "advancements.neepmeat.main.obtain_plc.desc": "Create and use a PLC.",
 
   "advancements.neepmeat.main.obtain_power_flower_seeds.title": "The Seeds of Doom",
-  "advancements.neepmeat.main.obtain_power_flower_seeds.description": "Obtain Power Flower Seeds.",
+  "advancements.neepmeat.main.obtain_power_flower_seeds.desc": "Obtain Power Flower Seeds.",
 
   "key.neepmeat.category.neepmeat": "NEEPMeat",
   "key.neepmeat.transform": "Tool Transform",
@@ -889,11 +889,15 @@
   "subtitles.neepmeat.combine_instruction_apply": "Combine completed",
   "subtitles.neepmeat.inject_instruction_apply": "Inject completed",
 
-  "subtitles.neepmeat.phage_ray_charge": "Phage Ray charges",
-  "subtitles.neepmeat.phage_ray_running": "Phage Ray active",
+  "subtitles.neepmeat.deposit_items": "Deposit items",
+
+  "subtitles.neepmeat.phage_ray.charge": "Phage Ray charges",
+  "subtitles.neepmeat.phage_ray.running": "Phage Ray active",
 
   "subtitles.neepmeat.vivisection_complete": "Vivisection completes",
   "subtitles.neepmeat.scalpel_hit": "Scalpel attack",
+
+  "subtitles.neepmeat.wrench.click": "Wrench clicks",
 
   "subtitles.neepmeat.big_lever_on": "Big lever clicks on",
   "subtitles.neepmeat.big_lever_off": "Big lever clicks off"

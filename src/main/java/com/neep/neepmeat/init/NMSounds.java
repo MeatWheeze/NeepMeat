@@ -43,6 +43,8 @@ public class NMSounds
     public static SoundEvent IMPLANT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "implant_instruction_apply");
     public static SoundEvent INJECT_INSTRUCTION_APPLY = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "inject");
 
+    public static SoundEvent DEPOSIT_ITEMS = SoundRegistry.registerSound(NeepMeat.NAMESPACE, "deposit_items");
+
     public static SoundEvent FUSION_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_fire");
     public static SoundEvent FUSION_BLAST_FIRE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_blast_fire");
     public static SoundEvent FUSION_BLAST_CHARGE = SoundRegistry.registerSound(MeatWeapons.NAMESPACE, "fusion_blast_charge");

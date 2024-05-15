@@ -2,6 +2,7 @@ package com.neep.neepmeat.entity.scutter;
 
 import com.neep.meatlib.inventory.ImplementedInventory;
 import com.neep.neepmeat.init.NMItems;
+import com.neep.neepmeat.init.NMSounds;
 import com.neep.neepmeat.util.ItemUtil;
 import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
@@ -21,6 +22,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.nbt.NbtHelper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -89,6 +91,9 @@ public class FarmingScutter extends ScutterEntity
     {
         super.writeNbt(nbt);
         inventory.writeNbt(nbt);
+        nbt.put("home", NbtHelper.fromBlockPos(homePos));
+        if (storagePos != null)
+            nbt.put("storage", NbtHelper.fromBlockPos(storagePos));
         return nbt;
     }
 
@@ -97,6 +102,9 @@ public class FarmingScutter extends ScutterEntity
     {
         super.readNbt(nbt);
         inventory.readNbt(nbt);
+        this.homePos = NbtHelper.toBlockPos(nbt.getCompound("home"));
+        if (nbt.contains("storage"))
+            this.storagePos = NbtHelper.toBlockPos(nbt.getCompound("storage"));
     }
 
     @Override
@@ -173,7 +181,7 @@ public class FarmingScutter extends ScutterEntity
                     long transferred = StorageUtil.move(storage, homeStorage, v -> true, Long.MAX_VALUE, transaction);
                     if (transferred > 0)
                     {
-                        getWorld().playSound(this, getBlockPos(), SoundEvents.BLOCK_BEEHIVE_ENTER, SoundCategory.NEUTRAL, 1, 1);
+                        getWorld().playSound(this, getBlockPos(), NMSounds.DEPOSIT_ITEMS, SoundCategory.NEUTRAL, 1, 1);
                         transaction.commit();
                     }
                 }
@@ -216,6 +224,6 @@ public class FarmingScutter extends ScutterEntity
 
     public boolean isAtHome()
     {
-        return getPos().isInRange(getHomePos().toCenterPos(), 2);
+        return getPos().isInRange(getHomePos().toCenterPos(), 1.1);
     }
 }
