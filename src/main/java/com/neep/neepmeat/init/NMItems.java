@@ -108,6 +108,7 @@ public class NMItems
     public static Item NETWORKING_TOOL = new NetworkingToolItem("networking_tool", TooltipSupplier.hidden(3), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
     public static Item DOSIMETER = new DosimeterItem("dosimeter", TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL));
 
+    public static Item FARMING_SCUTTER = ItemRegistry.queue(new FarmingScutterItem("farming_scutter", () -> NMEntities.FARMING_SCUTTER, TooltipSupplier.hidden(1), new MeatlibItemSettings().group(NMItemGroups.GENERAL)));
 
     public static Item DEBUG_ITEM = ItemRegistry.queue(new DebugItem("debug", new MeatlibItemSettings().group(NMItemGroups.GENERAL)));
 

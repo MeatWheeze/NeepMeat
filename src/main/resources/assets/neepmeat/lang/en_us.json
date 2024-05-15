@@ -639,6 +639,9 @@
   "item.neepmeat.goggles": "AR Goggles",
   "item.neepmeat.lore_0": "Reveals the unseen",
 
+  "item.neepmeat.farming_scutter": "Farming Scutter",
+  "entity.neepmeat.farming_scutter": "Farming Scutter",
+
   "entity.neepmeat.glome": "Glome",
   "entity.neepmeat.hound": "Hound",
   "entity.neepmeat.bovine_horror": "The Bovine Horror",

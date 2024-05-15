@@ -1,16 +1,19 @@
 package com.neep.neepmeat.entity.scutter;
 
+import com.neep.neepmeat.init.NMItems;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.CropBlock;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -50,7 +53,13 @@ public class FarmingScutter extends ScutterEntity
     {
         if (player.isSneaking())
         {
+            if (!player.isCreative())
+            {
+                dropItem(NMItems.FARMING_SCUTTER);
+            }
+
             remove(RemovalReason.DISCARDED);
+
             return ActionResult.SUCCESS;
         }
         return super.interactAt(player, hitPos, hand);
@@ -61,35 +70,9 @@ public class FarmingScutter extends ScutterEntity
     {
         super.tick();
 
-//        if (!getWorld().isClient())
-//            goalSelector.tick();
-
         targets.removeIf(p -> !isGrownCrop(getWorld().getBlockState(p)));
 
         tickMovement();
-    }
-
-    @Override
-    protected void playStepSound(BlockPos pos, BlockState state)
-    {
-    }
-
-    @Override
-    public boolean canTakeDamage()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean damage(DamageSource source, float amount)
-    {
-        return false;
-    }
-
-    @Override
-    protected boolean shouldFollowLeash()
-    {
-        return false;
     }
 
     public void addTargets(Collection<BlockPos> nearest)
@@ -102,9 +85,10 @@ public class FarmingScutter extends ScutterEntity
         return targets;
     }
 
+    @Nullable
     @Override
-    public boolean cannotDespawn()
+    public ItemStack getPickBlockStack()
     {
-        return true;
+        return new ItemStack(NMItems.FARMING_SCUTTER);
     }
 }
