@@ -19,6 +19,7 @@ public class AbstractMinecartEntityMixin implements AbstractMinecartEntityAccess
     @Unique
     private Vec3d controllerVelocity = Vec3d.ZERO;
 
+    // Passenger velocity is reset at some point after this is called.
     @Inject(method = "moveOnRail", at = @At("HEAD"))
     void onMoveOnRail(BlockPos pos, BlockState state, CallbackInfo ci)
     {

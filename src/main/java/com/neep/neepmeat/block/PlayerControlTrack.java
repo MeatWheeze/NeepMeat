@@ -6,6 +6,7 @@ import com.neep.meatlib.registry.ItemRegistry;
 import com.neep.neepmeat.interfaces.AbstractMinecartEntityAccess;
 import com.neep.neepmeat.init.NMBlockEntities;
 import com.neep.neepmeat.util.MiscUtil;
+import net.minecraft.block.AbstractRailBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockState;
@@ -118,35 +119,87 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
             super(type, pos, state);
         }
 
+        @Nullable
+        private Direction getDirection(AbstractMinecartEntity minecart)
+        {
+            boolean playerPassenger = minecart.getFirstPassenger() instanceof PlayerEntity;
+
+            if (playerPassenger)
+            {
+                Vec3d playerVel = ((AbstractMinecartEntityAccess) minecart).neepmeat$getControllerVelocity();
+                if (playerVel.horizontalLengthSquared() > 0)
+                {
+                    Direction direction = Direction.getFacing(playerVel.x, 0, playerVel.z);
+                    BlockState offsetState = world.getBlockState(pos.offset(direction));
+
+                    if (isRail(offsetState))
+                        return direction;
+
+                    // Fall back to minecart velocity
+                }
+            }
+
+            Vec3d minecartVel = minecart.getVelocity();
+            if (minecartVel.horizontalLengthSquared() > 0)
+            {
+                Direction direction = Direction.getFacing(minecartVel.x, 0, minecartVel.z);
+                BlockState offsetState = world.getBlockState(pos.offset(direction));
+
+                if (isRail(offsetState))
+                    return direction;
+
+                // Search for a valid adjacent rail that isn't the input direction.
+                BlockPos.Mutable mutable = pos.mutableCopy();
+                for (Direction face : Direction.values())
+                {
+                    if (face.getAxis().isVertical() || face == direction.getOpposite())
+                        continue;
+
+                    mutable.set(pos, face);
+
+                    if (isRail(world, mutable))
+                        return face;
+                }
+
+                // Derail if there are no output rails.
+                return direction;
+            }
+
+            return null;
+        }
+
         public void serverTick()
         {
-//            boolean powered = getCachedState().get(POWERED);
-////            AxialDirection direction = getCachedState().get(FACING);
-//            RailShape railShape = getCachedState().get(SHAPE);
-//
             Box box = new Box(getPos());
-
-            double x = pos.getX() + 0.5;
-            double y = pos.getY();
-            double z = pos.getZ() + 0.5;
 
             world.getNonSpectatingEntities(AbstractMinecartEntity.class, box).forEach(minecart ->
             {
                 RailShape shape = world.getBlockState(pos).get(RAIL_SHAPE_NO_SLOPE);
-                boolean playerPassenger = minecart.getFirstPassenger() instanceof PlayerEntity;
-                Vec3d controlVel = minecart.getVelocity();
-                if (playerPassenger)
-                {
-                    Vec3d playerVel = ((AbstractMinecartEntityAccess) minecart).neepmeat$getControllerVelocity();
-                    if (playerVel.horizontalLengthSquared() > 0)
-                    {
-                        controlVel = playerVel;
-                    }
-                }
+//                boolean playerPassenger = minecart.getFirstPassenger() instanceof PlayerEntity;
+//                Vec3d controlVel = minecart.getVelocity();
+//                if (playerPassenger)
+//                {
+//                    Vec3d playerVel = ((AbstractMinecartEntityAccess) minecart).neepmeat$getControllerVelocity();
+//                    if (playerVel.horizontalLengthSquared() > 0)
+//                    {
+//                        controlVel = playerVel;
+//                    }
+//                }
+//
+//                if (controlVel.horizontalLengthSquared() > 0)
+//                {
+//                    Direction direction = Direction.getFacing(controlVel.x, 0, controlVel.z);
+//                    BlockState offsetState = world.getBlockState(pos.offset(direction));
+//
+//                    if (!AbstractRailBlock.isRail(offsetState))
+//                    {
+//                        controlVel = minecart.getVelocity();
+//                        direction = Direction.getFacing(controlVel.x, 0, controlVel.z);
+//                    }
 
-                if (controlVel.horizontalLengthSquared() > 0)
+                Direction direction = getDirection(minecart);
+                if (direction != null)
                 {
-                    Direction direction = Direction.getFacing(controlVel.x, 0, controlVel.z);
                     if (direction == Direction.NORTH || direction == Direction.SOUTH)
                     {
                         if (shape != RailShape.NORTH_SOUTH)
