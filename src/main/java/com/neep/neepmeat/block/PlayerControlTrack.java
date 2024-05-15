@@ -81,7 +81,6 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                 be.setCachedState(newState);
             });
         }
-
     }
 
     @Override
@@ -133,9 +132,8 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
 
             world.getNonSpectatingEntities(AbstractMinecartEntity.class, box).forEach(minecart ->
             {
-                RailShape shape = getCachedState().get(RAIL_SHAPE_NO_SLOPE);
+                RailShape shape = world.getBlockState(pos).get(RAIL_SHAPE_NO_SLOPE);
                 boolean playerPassenger = minecart.getFirstPassenger() instanceof PlayerEntity;
-                boolean playerOverride = false;
                 Vec3d controlVel = minecart.getVelocity();
                 if (playerPassenger)
                 {
@@ -143,14 +141,12 @@ public class PlayerControlTrack extends BaseRailBlock implements BlockEntityProv
                     if (playerVel.horizontalLengthSquared() > 0)
                     {
                         controlVel = playerVel;
-                        playerOverride = true;
                     }
                 }
 
                 if (controlVel.horizontalLengthSquared() > 0)
                 {
                     Direction direction = Direction.getFacing(controlVel.x, 0, controlVel.z);
-                    System.out.println(direction);
                     if (direction == Direction.NORTH || direction == Direction.SOUTH)
                     {
                         if (shape != RailShape.NORTH_SOUTH)

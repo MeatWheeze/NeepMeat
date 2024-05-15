@@ -12,6 +12,7 @@
     "EnchantmentTargetMixins$Weapon",
     "FurnaceAccessor",
     "LivingEntityMixin",
+    "RailPlacementHelperMixin",
     "ServerPlayNetworkHandlerMixin",
     "ServerWorldMixin",
     "WorldChunkMixin"
