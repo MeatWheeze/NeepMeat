@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "si ",
+    "ebb",
+    "mmm"
+  ],
+  "key": {
+    "s": {
+      "item": "minecraft:wheat_seeds"
+    },
+    "b": {
+      "item": "neepmeat:internal_components"
+    },
+    "i": {
+      "item": "neepmeat:integration_charge_crude"
+    },
+    "e": {
+      "item": "neepmeat:enlightened_brain"
+    },
+    "m": {
+      "item": "neepmeat:meat_scrap"
+    }
+  },
+  "result": {
+    "item": "neepmeat:farming_scutter",
+    "count": 1
+  }
+}
